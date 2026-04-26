@@ -81,7 +81,7 @@ const socials = [
   { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/zhemongrowth" },
   { icon: Facebook, label: "Facebook", href: "https://www.facebook.com/zhemongrowth/" },
   { icon: Youtube, label: "YouTube", href: "https://www.youtube.com/@zhemongrowth" },
-  { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/8801756004037" },
+  { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/message/5GSNUYK6CSDCN1" },
   { icon: Mail, label: "Email", href: "mailto:zhemongrowth@gmail.com" },
 ];
 
@@ -186,7 +186,7 @@ const ProjectLead = () => {
             {/* CTA */}
             <div className="mt-10 flex gap-4 flex-wrap">
               <Button variant="hero" size="lg" asChild>
-                <a href="https://wa.me/8801756004037" target="_blank" rel="noreferrer">
+                <a href="https://wa.me/message/5GSNUYK6CSDCN1" target="_blank" rel="noreferrer">
                   Book Direct on WhatsApp
                   <ArrowRight />
                 </a>
@@ -343,7 +343,7 @@ const ProjectLead = () => {
             </div>
             <div className="flex flex-col gap-3">
               <Button variant="hero" size="lg" asChild>
-                <a href="https://wa.me/8801756004037" target="_blank" rel="noreferrer">
+                <a href="https://wa.me/message/5GSNUYK6CSDCN1" target="_blank" rel="noreferrer">
                   Book Direct
                   <ArrowRight />
                 </a>
