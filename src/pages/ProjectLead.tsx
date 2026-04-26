@@ -2,13 +2,48 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Linkedin, Award, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Linkedin,
+  Award,
+  Sparkles,
+  Facebook,
+  Youtube,
+  Mail,
+  MessageCircle,
+  MapPin,
+  GraduationCap,
+  Briefcase,
+} from "lucide-react";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
 
 const metrics = [
   { value: "4.85L+", label: "Organic Views" },
   { value: "82%", label: "Organic Reach" },
   { value: "45%+", label: "Engagement Growth" },
+];
+
+const expertise = [
+  {
+    title: "AI & Business Automation",
+    description:
+      "GoHighLevel (GHL) workflows, Make.com and webhook integrations, automated sales and lead pipelines built with ChatGPT and Lovable.",
+  },
+  {
+    title: "Business Consultancy",
+    description:
+      "7-phase, data-driven cash-flow systems and business operating systems optimized for retail and superstore environments.",
+  },
+  {
+    title: "Digital Growth",
+    description:
+      "Data-driven marketing campaigns, Meta Ads management, and narrative-driven content branding for compounding reach.",
+  },
+  {
+    title: "Leadership & Storytelling",
+    description:
+      "Narrative leadership, community orchestration, and human-centered corporate communication that builds brand authority.",
+  },
 ];
 
 const portfolio = [
@@ -35,19 +70,19 @@ const portfolio = [
   },
 ];
 
-const systems = [
-  {
-    title: "Content Operating System",
-    description: "Editorial calendars, design pipelines, and reels production turned into a weekly machine.",
-  },
-  {
-    title: "Paid + Organic Stack",
-    description: "Meta ads layered over high-trust organic content for compounding lead flow.",
-  },
-  {
-    title: "Authority Engine",
-    description: "LinkedIn + Reels + AI copywriting wired into one founder-brand growth loop.",
-  },
+const leadership = [
+  { role: "Organizing Secretary", org: "National Debate Federation Bangladesh (NDF-BD)" },
+  { role: "Founder & Life Member", org: "Pabna Debate Society (PDS)" },
+  { role: "Member & Organizer", org: "Pabna Nagarik Committee (Full Permanent Committee)" },
+  { role: "Program Director", org: "Citizen Unity Gathering — Dhaka, March 2026" },
+];
+
+const socials = [
+  { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/zhemongrowth" },
+  { icon: Facebook, label: "Facebook", href: "https://www.facebook.com/zhemongrowth/" },
+  { icon: Youtube, label: "YouTube", href: "https://www.youtube.com/@zhemongrowth" },
+  { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/8801756004037" },
+  { icon: Mail, label: "Email", href: "mailto:zhemongrowth@gmail.com" },
 ];
 
 const ProjectLead = () => {
@@ -67,7 +102,7 @@ const ProjectLead = () => {
             <div className="relative rounded-[2rem] overflow-hidden glass-strong p-2">
               <img
                 src={emonPortrait}
-                alt="Zahid Hasan Emon — Project Lead at TrendFlux Digital"
+                alt="Zahid Hasan Emon — Digital Transformation & Growth Operator"
                 width={1024}
                 height={1024}
                 className="w-full h-full object-cover rounded-[1.6rem] aspect-square"
@@ -97,21 +132,38 @@ const ProjectLead = () => {
             </h1>
 
             <p className="text-gold mt-3 text-lg font-semibold">
-              AI-Powered Digital Growth Operator & Brand Architect
+              Digital Transformation & Growth Operator
             </p>
 
+            <div className="flex flex-wrap gap-x-5 gap-y-2 mt-4 text-xs text-foreground/60">
+              <span className="flex items-center gap-1.5">
+                <Briefcase className="w-3.5 h-3.5 text-primary" />
+                Founder & CEO — TrendFlux Digital
+              </span>
+              <span className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-primary" />
+                Dhaka, Bangladesh
+              </span>
+              <span className="flex items-center gap-1.5">
+                <GraduationCap className="w-3.5 h-3.5 text-primary" />
+                BSc IT — Jahangirnagar University
+              </span>
+            </div>
+
             <p className="text-foreground/75 mt-6 leading-relaxed">
-              Zahid Hasan Emon is a results-driven digital growth specialist
-              focused on building scalable systems that transform attention into
-              measurable business outcomes. His work combines AI automation,
-              performance marketing, content systems, and brand architecture.
+              Zahid Hasan Emon is a data-driven Digital Transformation & Growth
+              Operator dedicated to replacing manual workflows with structured,
+              AI-powered business operating systems. He blends technical
+              expertise with actionable business strategy to deliver high-value,
+              automated solutions across retail, corporate and digital sectors.
             </p>
 
             <p className="text-foreground/55 mt-4 leading-relaxed">
-              Proven track record managing global brands across US & UK markets —
-              achieving 4.85 Lakh+ organic views and 82% organic reach without
-              paid ads. Specialized in turning fragmented marketing into
-              structured growth systems.
+              Complementing his academic background in Information Technology,
+              his extensive experience in debate and civic organization has
+              cultivated a unique strength in narrative leadership and
+              human-centered communication — driving sustainable growth through
+              global AI automation consultancy and productized digital services.
             </p>
 
             {/* METRICS */}
@@ -133,22 +185,75 @@ const ProjectLead = () => {
 
             {/* CTA */}
             <div className="mt-10 flex gap-4 flex-wrap">
-              <Button variant="hero" size="lg">
-                View Full Portfolio
-                <ArrowRight />
+              <Button variant="hero" size="lg" asChild>
+                <a href="https://wa.me/8801756004037" target="_blank" rel="noreferrer">
+                  Book Direct on WhatsApp
+                  <ArrowRight />
+                </a>
               </Button>
-              <Button variant="outline" size="lg">
-                <Linkedin />
-                Connect on LinkedIn
+              <Button variant="outline" size="lg" asChild>
+                <a
+                  href="https://www.linkedin.com/in/zhemongrowth"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Linkedin />
+                  Connect on LinkedIn
+                </a>
               </Button>
+            </div>
+
+            {/* SOCIALS */}
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              {socials.map(({ icon: Icon, label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={label}
+                  className="w-10 h-10 rounded-full glass flex items-center justify-center text-foreground/70 hover:text-primary hover:border-primary/40 transition-all"
+                >
+                  <Icon className="w-4 h-4" />
+                </a>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* PORTFOLIO HIGHLIGHTS */}
+      {/* CORE EXPERTISE */}
       <section className="px-6 lg:px-10 py-24">
         <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
+              Core Expertise & Skills
+            </p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold max-w-3xl mx-auto">
+              Where AI, automation & <span className="text-gradient">business strategy</span> converge
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {expertise.map((e, i) => (
+              <div key={e.title} className="glass glass-hover rounded-3xl p-7">
+                <div className="font-display text-4xl text-gradient font-bold opacity-80">
+                  0{i + 1}
+                </div>
+                <h3 className="font-display text-xl font-bold mt-3">{e.title}</h3>
+                <p className="text-foreground/65 mt-3 leading-relaxed text-sm">
+                  {e.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PORTFOLIO HIGHLIGHTS */}
+      <section className="px-6 lg:px-10 py-24 relative">
+        <div className="absolute inset-0 bg-gradient-hero opacity-50" aria-hidden />
+        <div className="relative max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
             <div>
               <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
@@ -165,11 +270,10 @@ const ProjectLead = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {portfolio.map((p, i) => (
+            {portfolio.map((p) => (
               <article
                 key={p.title}
                 className="glass glass-hover rounded-3xl p-7 group"
-                style={{ animationDelay: `${i * 0.08}s` }}
               >
                 <span className="text-[10px] uppercase tracking-[0.3em] text-primary">
                   {p.tag}
@@ -185,30 +289,31 @@ const ProjectLead = () => {
         </div>
       </section>
 
-      {/* SYSTEMS HE BUILT */}
-      <section className="px-6 lg:px-10 py-24 relative">
-        <div className="absolute inset-0 bg-gradient-hero opacity-50" aria-hidden />
-        <div className="relative max-w-7xl mx-auto">
+      {/* LEADERSHIP & COMMUNITY */}
+      <section className="px-6 lg:px-10 py-24">
+        <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
-              Systems He Built
+              Leadership & Community Engagement
             </p>
             <h2 className="font-display text-3xl md:text-5xl font-bold max-w-3xl mx-auto">
-              Operator-grade frameworks behind every{" "}
-              <span className="text-gradient">growth result</span>
+              Civic leadership behind the <span className="text-gradient">growth operator</span>
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-5">
-            {systems.map((s, i) => (
-              <div key={s.title} className="glass glass-hover rounded-3xl p-7">
-                <div className="font-display text-5xl text-gradient font-bold opacity-80">
-                  0{i + 1}
+          <div className="grid md:grid-cols-2 gap-5">
+            {leadership.map((l) => (
+              <div
+                key={l.org}
+                className="glass glass-hover rounded-2xl p-6 flex items-start gap-4"
+              >
+                <div className="w-10 h-10 rounded-xl bg-gradient-cyan/20 border border-primary/30 flex items-center justify-center shrink-0">
+                  <Award className="w-4 h-4 text-primary" />
                 </div>
-                <h3 className="font-display text-xl font-bold mt-4">{s.title}</h3>
-                <p className="text-foreground/60 mt-3 leading-relaxed text-sm">
-                  {s.description}
-                </p>
+                <div>
+                  <p className="text-gold font-semibold text-sm">{l.role}</p>
+                  <p className="text-foreground/75 mt-1">{l.org}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -232,11 +337,16 @@ const ProjectLead = () => {
                 Skip the gatekeepers. Get a 30-minute strategy session with Zahid
                 Hasan Emon to map your growth system blueprint.
               </p>
+              <p className="text-foreground/50 mt-3 text-sm">
+                zhemongrowth@gmail.com · WhatsApp +880 1756 004037
+              </p>
             </div>
             <div className="flex flex-col gap-3">
-              <Button variant="hero" size="lg">
-                Book Direct
-                <ArrowRight />
+              <Button variant="hero" size="lg" asChild>
+                <a href="https://wa.me/8801756004037" target="_blank" rel="noreferrer">
+                  Book Direct
+                  <ArrowRight />
+                </a>
               </Button>
               <Button variant="outline" size="lg" asChild>
                 <Link to="/">Back to TrendFlux</Link>
