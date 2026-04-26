@@ -188,16 +188,66 @@ const Index = () => {
             content. <span className="text-gradient">It needs a growth system.</span>
           </p>
           <a
-            href="#"
+            href="https://wa.me/8801756004037"
+            target="_blank"
+            rel="noreferrer"
             className="mt-10 inline-flex rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
           >
-            Book Your Growth Session Today.
+            Book Your Growth Session Today
           </a>
         </div>
 
-        <div className="mx-auto mt-12 flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-foreground/50 md:flex-row">
-          <p className="font-semibold text-foreground">TrendFlux Digital</p>
-          <p>© 2026 TrendFlux Digital. All rights reserved.</p>
+        {/* Contact block */}
+        <div className="mx-auto mt-12 max-w-7xl border-t border-border pt-8">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-foreground/60">
+            <a
+              href="https://www.linkedin.com/in/zhemongrowth"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-gold transition-colors"
+            >
+              LinkedIn: /in/zhemongrowth
+            </a>
+            <span className="text-foreground/20">·</span>
+            <a
+              href="https://www.facebook.com/zhemongrowth/"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-gold transition-colors"
+            >
+              Facebook: /zhemongrowth
+            </a>
+            <span className="text-foreground/20">·</span>
+            <a
+              href="https://www.youtube.com/@zhemongrowth"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-gold transition-colors"
+            >
+              YouTube: @zhemongrowth
+            </a>
+            <span className="text-foreground/20">·</span>
+            <a
+              href="https://wa.me/8801756004037"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-gold transition-colors"
+            >
+              WhatsApp: +8801756004037
+            </a>
+            <span className="text-foreground/20">·</span>
+            <a
+              href="mailto:zhemongrowth@gmail.com"
+              className="hover:text-gold transition-colors"
+            >
+              zhemongrowth@gmail.com
+            </a>
+          </div>
+
+          <div className="mt-8 flex flex-col items-center justify-between gap-3 text-sm text-foreground/50 md:flex-row">
+            <p className="font-semibold text-foreground">TrendFlux Digital</p>
+            <p>© 2026 TrendFlux Digital. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </main>
