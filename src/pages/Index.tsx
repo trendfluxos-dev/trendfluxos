@@ -188,7 +188,7 @@ const Index = () => {
             content. <span className="text-gradient">It needs a growth system.</span>
           </p>
           <a
-            href="https://wa.me/8801756004037"
+            href="https://wa.me/message/5GSNUYK6CSDCN1"
             target="_blank"
             rel="noreferrer"
             className="mt-10 inline-flex rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
@@ -228,7 +228,7 @@ const Index = () => {
             </a>
             <span className="text-foreground/20">·</span>
             <a
-              href="https://wa.me/8801756004037"
+              href="https://wa.me/message/5GSNUYK6CSDCN1"
               target="_blank"
               rel="noreferrer"
               className="hover:text-gold transition-colors"
