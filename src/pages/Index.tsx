@@ -14,9 +14,25 @@ import {
   Youtube,
   MessageCircle,
   Mail,
+  MoreHorizontal,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
+type PressItem = {
+  outlet: string;
+  headline: string;
+  href: string;
+  context: string;
+};
 
 type Category =
   | "All"
@@ -116,6 +132,7 @@ const stats = [
 
 const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
+  const [activePress, setActivePress] = useState<PressItem | null>(null);
 
   const filterTabs: Category[] = [
     "All",
@@ -403,73 +420,101 @@ const Index = () => {
                     outlet: "Desh Rupantor",
                     headline: "'মায়ের নিষেধ আছে' তাই কোনো চাঁদার ভাগ নিতেন না ছাত্রলীগ নেতা",
                     href: "https://www.deshrupantor.com",
+                    context:
+                      "Profile of the student leader who refused to accept any share of campus extortion money, citing his mother's lifelong instruction never to take what isn't his.",
                   },
                   {
                     outlet: "Desh Rupantor",
                     headline: "জাহাঙ্গীরনগরের হলে সাবেক ছাত্রলীগ সভাপতির ভাইয়ের 'অপকর্মের সাম্রাজ্য'!",
                     href: "https://www.deshrupantor.com",
+                    context:
+                      "Investigative report on the network of misconduct allegedly run inside a Jahangirnagar University residential hall by the brother of a former student-wing president.",
                   },
                   {
                     outlet: "Prothom Alo",
                     headline: "সংবাদ সম্মেলনে নির্যাতনের বর্ণনা দিলেন জাহাঙ্গীরনগর বিশ্ববিদ্যালয়ের ছাত্রলীগ নেতা",
                     href: "https://www.prothomalo.com",
+                    context:
+                      "Coverage of the press conference where the Jahangirnagar University student leader publicly described the torture and intimidation he faced for refusing to participate in extortion.",
                   },
                   {
                     outlet: "Dhaka Tribune",
                     headline: "জাহাঙ্গীরনগর বিশ্ববিদ্যালয়: বারবার পার পেয়ে বেপরোয়া ছাত্রলীগ",
                     href: "https://www.dhakatribune.com",
+                    context:
+                      "Analysis of how repeated impunity emboldened the campus student-wing faction at Jahangirnagar University, with the whistleblower's stand cited as a turning point.",
                   },
                   {
                     outlet: "Samakal",
                     headline: "জাবির হলে ছাত্রলীগ নেতাকে নির্যাতনের অভিযোগ",
                     href: "https://samakal.com",
+                    context:
+                      "Report documenting the formal allegation of torture against a student leader inside a Jahangirnagar University residential hall.",
                   },
                   {
                     outlet: "Kalbela",
                     headline: "জাবি ছাত্রলীগের নেতাকে মারধরের অভিযোগ",
                     href: "https://kalbela.com",
+                    context:
+                      "Coverage of the physical assault complaint filed by the JU student leader after refusing to take part in the extortion network.",
                   },
                   {
                     outlet: "Kalbela",
                     headline: "জাবির হলে মাদকের থাবা, নিয়ন্ত্রণে ছাত্রলীগ",
                     href: "https://kalbela.com",
+                    context:
+                      "Investigation into drug activity inside JU halls and the student-wing faction controlling it — the same network the whistleblower stood against.",
                   },
                   {
                     outlet: "Dhaka Post",
                     headline: "জাবিতে ছাত্রলীগ নেতাকে আটকে রেখে নির্যাতন",
                     href: "https://www.dhakapost.com",
+                    context:
+                      "Report on the confinement and torture of the JU student leader inside a campus hall as retaliation for his refusal to comply.",
                   },
                   {
                     outlet: "Channel 24",
                     headline: "জাবি ছাত্রলীগের অপরাধনামা: ক্যাম্পাস যেনো ধর্ষণ আর চাঁদাবাজির আস্তানা!",
                     href: "https://www.channel24bd.tv",
+                    context:
+                      "Television report cataloguing the pattern of violence and extortion attributed to the JU student-wing faction, contextualising the whistleblower's stand.",
                   },
                   {
                     outlet: "BanglaNews24",
                     headline: "জয়ের ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ, নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা",
                     href: "https://www.banglanews24.com",
+                    context:
+                      "Report on the formal torture allegation against the brother of a former national student-wing president, with the JU leader publicly seeking protection.",
                   },
                   {
                     outlet: "Dhaka Mail",
                     headline: "ছাত্রলীগের সাবেক সভাপতি জয়ের ছোট ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ",
                     href: "https://dhakamail.com",
+                    context:
+                      "Coverage of the torture allegation filed against the younger brother of a former national student-wing president, naming the campus hall where it occurred.",
                   },
                   {
                     outlet: "Dhaka Mail",
                     headline: "জাবির আবাসিক হলে শিক্ষার্থীদের ওপর নির্যাতন, ছাত্র ইউনিয়নের উদ্বেগ",
                     href: "https://dhakamail.com",
+                    context:
+                      "Report on the wider concern raised by the Students' Union over violence against students in JU residential halls, referencing this case.",
                   },
                   {
                     outlet: "Janakantha",
                     headline: "জাবিতে ছাত্রলীগ নেতাকে নির্যাতন, তদন্ত কমিটি",
                     href: "https://www.dailyjanakantha.com",
+                    context:
+                      "Report announcing the formation of an inquiry committee following the documented torture of the JU student leader.",
                   },
                   {
                     outlet: "Dainik Shiksha",
                     headline: "ভিসির কাছে জীবনের নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা",
                     href: "https://www.dainikshiksha.com",
+                    context:
+                      "Report on the JU student leader formally requesting protection of his life from the Vice-Chancellor after sustained threats.",
                   },
-                ] as { outlet: string; headline: string; href: string }[],
+                ] as PressItem[],
               },
               {
                 phase: "Phase 04",
@@ -505,28 +550,36 @@ const Index = () => {
 
                   {item.press && (
                     <div className="mt-6">
-                      <p className="mb-3 text-xs uppercase tracking-[0.25em] text-foreground/40">
-                        Press Coverage · {item.press.length} headlines
-                      </p>
+                      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+                        <p className="text-xs uppercase tracking-[0.25em] text-foreground/40">
+                          Press Coverage · {item.press.length} headlines
+                        </p>
+                        <p className="text-xs text-foreground/40">
+                          Click any headline for context, then read the original report.
+                        </p>
+                      </div>
                       <div className="grid gap-3 sm:grid-cols-2">
                         {item.press.map((p, idx) => (
-                          <a
+                          <button
+                            type="button"
                             key={`${p.outlet}-${idx}`}
-                            href={p.href}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 hover:border-gold/40 hover:bg-gold/5 transition-all"
+                            onClick={() => setActivePress(p)}
+                            className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 text-left hover:border-gold/40 hover:bg-gold/5 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
                           >
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-semibold uppercase tracking-wider text-gold">
                                 {p.outlet}
                               </span>
-                              <ArrowUpRight className="h-3.5 w-3.5 text-foreground/40 transition-all group-hover/card:text-gold group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
+                              <MoreHorizontal className="h-4 w-4 text-foreground/40 transition-colors group-hover/card:text-gold" />
                             </div>
                             <p className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground">
                               {p.headline}
                             </p>
-                          </a>
+                            <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
+                              More details
+                              <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
+                            </span>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -537,6 +590,56 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Press coverage details modal */}
+      <Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>
+        <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-xl">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+          <DialogHeader className="space-y-3 pt-2 text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+              {activePress?.outlet}
+            </p>
+            <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
+              {activePress?.headline}
+            </DialogTitle>
+          </DialogHeader>
+
+          <p className="text-sm leading-relaxed text-foreground/70">
+            {activePress?.context}
+          </p>
+
+          <div className="flex flex-wrap gap-2">
+            {["Bangladesh", "National Press", "2023–2024 coverage"].map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-border bg-foreground/[0.04] px-3 py-1 text-[11px] uppercase tracking-wider text-foreground/60"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <p className="text-[11px] text-foreground/40">
+            Link opens the outlet's homepage. Article-level deep links can be added later.
+          </p>
+
+          <DialogFooter className="gap-2 sm:gap-3">
+            <Button
+              variant="ghost"
+              onClick={() => setActivePress(null)}
+            >
+              Close
+            </Button>
+            {activePress && (
+              <Button variant="gold" asChild>
+                <a href={activePress.href} target="_blank" rel="noreferrer noopener">
+                  Read on {activePress.outlet} <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Case Studies */}
       <section id="cases" className="relative px-6 py-24 md:px-12 lg:px-20">
