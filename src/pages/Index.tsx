@@ -26,6 +26,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { QuoteDialog } from "@/components/QuoteDialog";
 
 type PressItem = {
   outlet: string;
@@ -133,6 +134,7 @@ const stats = [
 const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const [activePress, setActivePress] = useState<PressItem | null>(null);
+  const [quoteOpen, setQuoteOpen] = useState(false);
 
   const filterTabs: Category[] = [
     "All",
@@ -178,12 +180,13 @@ const Index = () => {
             <Link to="/project-lead" className="hover:text-gold transition-colors">Project Lead</Link>
           </div>
 
-          <a
-            href="#contact"
+          <button
+            type="button"
+            onClick={() => setQuoteOpen(true)}
             className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
           >
             Start Operations
-          </a>
+          </button>
         </div>
       </nav>
 
@@ -208,12 +211,13 @@ const Index = () => {
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a
-              href="#contact"
+            <button
+              type="button"
+              onClick={() => setQuoteOpen(true)}
               className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
             >
               Start Operations <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
             <a
               href="#cases"
               className="rounded-full border border-foreground/15 px-8 py-4 font-semibold text-foreground transition hover:scale-105 hover:border-primary/60 hover:bg-foreground/5"
@@ -591,6 +595,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Quote request modal */}
+      <QuoteDialog open={quoteOpen} onOpenChange={setQuoteOpen} />
+
       {/* Press coverage details modal */}
       <Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>
         <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-xl">
@@ -716,14 +723,13 @@ const Index = () => {
           <p className="mx-auto mt-6 max-w-xl text-foreground/60">
             Limited partnerships open each quarter. Let's architect yours.
           </p>
-          <a
-            href="https://wa.me/message/5GSNUYK6CSDCN1"
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
+            onClick={() => setQuoteOpen(true)}
             className="mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
           >
             Start Operations <ArrowRight className="w-4 h-4" />
-          </a>
+          </button>
         </div>
 
         {/* Contact icons */}
