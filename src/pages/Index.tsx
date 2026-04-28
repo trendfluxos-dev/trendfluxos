@@ -26,6 +26,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { QuoteDialog } from "@/components/QuoteDialog";
 
 type PressItem = {
   outlet: string;
