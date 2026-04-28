@@ -361,6 +361,109 @@ const Index = () => {
             </Link>
           </div>
         </div>
+
+        {/* Timeline */}
+        <div className="mx-auto mt-24 max-w-5xl">
+          <div className="mb-12 text-center">
+            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
+              — The Journey
+            </p>
+            <h3 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+              From <span className="text-gradient">whistleblower</span> to growth operator
+            </h3>
+          </div>
+
+          <div className="relative pl-10 md:pl-14">
+            {/* Vertical line */}
+            <div
+              className="absolute left-3 md:left-5 top-2 bottom-2 w-px bg-gradient-to-b from-gold/60 via-primary/40 to-transparent"
+              aria-hidden
+            />
+
+            {[
+              {
+                phase: "Phase 01",
+                year: "Foundation",
+                title: "A Maternal Legacy of Honesty",
+                desc: "Raised under an uncompromising principle: never take what isn't yours, never trade integrity for convenience. The ethical compass that would later define every business decision.",
+              },
+              {
+                phase: "Phase 02",
+                year: "University Years",
+                title: "The Stand Against Corruption",
+                desc: "At Jahangirnagar University, refused to participate in extortion networks operating inside campus halls. Faced direct threats and physical pressure rather than compromise core values.",
+              },
+              {
+                phase: "Phase 03",
+                year: "Public Record",
+                title: "Recognized by National Media",
+                desc: "Featured across Bangladesh's leading outlets as an unyielding whistleblower — turning a personal stand into a documented public record of integrity.",
+                press: [
+                  { name: "Desh Rupantor", href: "https://www.deshrupantor.com" },
+                  { name: "Prothom Alo", href: "https://www.prothomalo.com" },
+                  { name: "Dhaka Tribune", href: "https://www.dhakatribune.com" },
+                  { name: "Samakal", href: "https://samakal.com" },
+                  { name: "Kalbela", href: "https://kalbela.com" },
+                  { name: "Dhaka Post", href: "https://www.dhakapost.com" },
+                  { name: "Channel 24", href: "https://www.channel24bd.tv" },
+                  { name: "BanglaNews24", href: "https://www.banglanews24.com" },
+                  { name: "Dhaka Mail", href: "https://dhakamail.com" },
+                  { name: "Janakantha", href: "https://www.dailyjanakantha.com" },
+                  { name: "Dainik Shiksha", href: "https://www.dainikshiksha.com" },
+                ] as { name: string; href: string }[],
+              },
+              {
+                phase: "Phase 04",
+                year: "Today",
+                title: "TrendFlux Digital",
+                desc: "That same battle-tested resilience now powers a growth operations studio built on radical transparency, ethical execution, and the courage to stand firm for every client we partner with.",
+              },
+            ].map((item, i, arr) => (
+              <div
+                key={item.phase}
+                className={`relative ${i !== arr.length - 1 ? "pb-10" : ""} animate-fade-up`}
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
+                {/* Marker */}
+                <div className="absolute -left-10 md:-left-14 top-1 flex h-7 w-7 items-center justify-center">
+                  <span className="absolute h-7 w-7 rounded-full bg-gold/25 blur-md animate-pulse" aria-hidden />
+                  <span className="absolute h-5 w-5 rounded-full bg-gold/20" aria-hidden />
+                  <span className="relative h-3 w-3 rounded-full bg-gold shadow-gold ring-4 ring-background" />
+                </div>
+
+                <div className="rounded-2xl glass glass-hover p-6">
+                  <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.25em]">
+                    <span className="font-semibold text-gold">{item.phase}</span>
+                    <span className="text-foreground/30">·</span>
+                    <span className="text-foreground/50">{item.year}</span>
+                  </div>
+                  <h4 className="font-display mt-3 text-xl font-bold md:text-2xl">
+                    {item.title}
+                  </h4>
+                  <p className="mt-3 text-sm leading-relaxed text-foreground/65 md:text-base">
+                    {item.desc}
+                  </p>
+
+                  {item.press && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {item.press.map((p) => (
+                        <a
+                          key={p.name}
+                          href={p.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-full border border-border bg-foreground/5 px-3 py-1 text-xs text-foreground/70 hover:text-gold hover:border-gold/40 hover:bg-gold/5 transition-all"
+                        >
+                          {p.name} ↗
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Case Studies */}

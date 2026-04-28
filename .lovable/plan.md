@@ -1,64 +1,44 @@
 ## Goal
 
-Rebuild `src/pages/Index.tsx` as a single cinematic homepage matching the new copy you provided — Hero → Stats → Services Directory (with filter) → Founder block → Case Studies → Final CTA → Footer. Reuse the existing dark/cyan/gold design system already in `index.css` (glass, text-gradient, gold, primary).
+Add a vertical timeline below the Project Lead quote in the "Meet the Project Lead" section on the homepage. It tells Zahid Hasan Emon's story in 4 phases with glowing gold markers, plus a press coverage strip linking to the major outlets that covered the story.
 
-## What changes
+## Where it lives
 
-### 1. Navbar (top, glass pill)
-- Logo (`trendflux-logo.png`) + "TrendFlux Digital"
-- Links: Services · Founder · Case Studies · Project Lead (route `/project-lead`)
-- Right CTA: "Start Operations" → scrolls to `#contact`
+Inside the existing `#founder` section in `src/pages/Index.tsx`, directly below the current quote + portrait grid. No new files, no new dependencies, no changes to `ProjectLead.tsx`.
 
-### 2. Hero
-- Eyebrow chip: "Now accepting Q3 partnerships"
-- Headline: "Digital Transformation & Growth Operations" (with "Growth Operations" in `text-gradient`)
-- Sub: "We engineer resilient growth engines for ambitious brands — pairing performance media, automation, and ecosystem design into one cinematic operating system."
-- Buttons: "Start Operations" (gold) · "View Case Studies" (outline)
-- Stats row (3 glass cards): `$8.4M` Ad spend managed · `+312%` Avg. growth lift · `47` Operations launched
+## Timeline structure (4 phases)
 
-### 3. Services Directory
-- Eyebrow: "— Services Directory"
-- Heading: "Built like an operating system. Filed for clarity."
-- Filter chips: All (6) · Business Automation (2) · Meta Ads Management (2) · Ecosystem Design (2) — client-side filter via `useState`
-- 6 service cards in a grid, each with: index `01`–`06`, category tag, title, description, outcome metric in gold:
-  1. Business Automation — Workflow Intelligence Systems — "Avg. 70% time reclaimed"
-  2. Business Automation — CRM & Sales Orchestration — "3.2x lead conversion"
-  3. Meta Ads Management — Performance Creative Labs — "Avg. +45% ROAS lift"
-  4. Meta Ads Management — Full-Funnel Paid Strategy — "Sub-$8 CAC achieved"
-  5. Ecosystem Design — Brand Operating Systems — "12-month roadmaps"
-  6. Ecosystem Design — Tech Stack Architecture — "Zero-vendor-lock builds"
+1. **Phase 01 — Foundation**
+   *A Maternal Legacy of Honesty*
+   Raised under an uncompromising principle: never take what isn't yours, never trade integrity for convenience.
 
-### 4. Founder block (split layout)
-- Left: portrait `src/assets/zahid-hasan-emon.jpg` in a glass frame with cyan/gold glow, small caption pill "Founder & CEO · Zahid Hasan Emon"
-- Right: eyebrow "— Meet the Founder", name "Zahid Hasan Emon", the integrity quote, signature line "Zahid Hasan Emon · Founder, TrendFlux Digital", and a "Read full profile →" link to `/project-lead`
+2. **Phase 02 — University Years**
+   *The Stand Against Corruption*
+   At Jahangirnagar University, refused to participate in extortion networks operating inside campus halls. Faced direct threats and physical pressure rather than compromise.
 
-### 5. Case Studies — Selected Narratives
-- Eyebrow: "— Selected Narratives"
-- Heading: "Operations that moved the needle." with right-aligned "All Case Studies →" link
-- Grid of 6 cards, each with: `CASE / 0X`, year range `2024 — 2026`, big metric headline + subline, project title, tech stack pills, "View Narrative →" hover reveal
-  1. Lumen Apparel — DTC Scale Sprint · +45% ROAS in 90 days · Meta Ads, Klaviyo, Shopify, GA4
-  2. Northbeam Logistics — Ops Overhaul · −62% Manual Hours across 4 departments · Make, HubSpot, Airtable, Slack API
-  3. Vault Finance — Funnel Rebuild · 3.4x Pipeline qualified MQL → SQL · Webflow, Salesforce, Segment
-  4. Aurora Skincare — Creative Engine · $1.2M Revenue single-quarter Meta · Meta Ads, Triple Whale, Figma
-  5. Forge Industries — Ecosystem Reset · 8 → 1 Stack consolidation playbook · Notion, Zapier, Linear, Stripe
-  6. Helio Health — Conversion Lab · +128% Sign-ups at flat ad spend · Meta Ads, Webflow, Mixpanel
+3. **Phase 03 — Public Record**
+   *Recognized by National Media*
+   Featured across Bangladesh's leading outlets as an unyielding whistleblower. Followed by a chip strip of press logos (text pills) linking to each outlet's homepage:
+   - Desh Rupantor · Prothom Alo · Dhaka Tribune · Samakal · Kalbela · Dhaka Post · Channel 24 · BanglaNews24 · Dhaka Mail · Janakantha · Dainik Shiksha
+   Each pill opens the outlet in a new tab.
 
-### 6. Final CTA + Footer (`#contact`)
-- Big glass card: "Ready to operate at full velocity?" / "Limited partnerships open each quarter. Let's architect yours." / "Start Operations" → `https://wa.me/message/5GSNUYK6CSDCN1`
-- Keep existing social icon row (LinkedIn, Facebook, YouTube, WhatsApp, Email)
-- Footer line: logo + "TrendFlux Digital" / "© 2026 — Built on integrity"
+4. **Phase 04 — Today**
+   *TrendFlux Digital*
+   That same battle-tested resilience now powers a growth operations studio built on radical transparency and ethical execution.
 
-## Technical notes
+## Visual design
 
-- Single file rewrite: `src/pages/Index.tsx`. No new components, no new packages.
-- Reuse existing classes: `glass`, `glass-strong`, `glass-hover`, `text-gradient`, `bg-gold`, `text-gold`, `shadow-gold`, `animate-fade-up`, `hero-glow`, `grid-dots`.
-- Filter state: `const [filter, setFilter] = useState<'All' | 'Business Automation' | 'Meta Ads Management' | 'Ecosystem Design'>('All')`; counts derived from the services array.
-- Icons from `lucide-react` already in use: `Workflow`, `Users`, `Sparkles`, `Target`, `Layers`, `Cpu`, `ArrowRight`, `ArrowUpRight`, plus existing `Linkedin/Facebook/Youtube/MessageCircle/Mail`.
-- Responsive: services grid `md:grid-cols-2 lg:grid-cols-3`; case studies `md:grid-cols-2 lg:grid-cols-3`; founder block `lg:grid-cols-2`.
-- `ProjectLead.tsx` is left untouched; only linked from navbar and founder block.
-- All copy used verbatim from your message.
+- Section heading above the timeline: small gold eyebrow `— The Journey`, then `From whistleblower to growth operator` (with "whistleblower" in the cyan/gold gradient).
+- Vertical line down the left side using a gradient (`from-gold/60 via-primary/40 to-transparent`).
+- Each phase = a glass card with a glowing **gold dot marker** on the line: a small solid gold dot with a soft pulsing gold halo behind it, ringed by `bg-background` so it sits cleanly on the line.
+- Card content: phase label (gold) + year/era (muted), title (display font), description, and on Phase 03 a wrap of press chips.
+- Stagger entrance animation per card using the existing `animate-fade-up` with incremental `animationDelay`.
+- Mobile: line shifts inward; cards stack full width.
+
+All styling via existing semantic tokens (`gold`, `primary`, `foreground`, `border`, `glass`, `glass-hover`, `shadow-gold`, `text-gradient`). No hard-coded hex.
 
 ## Out of scope
 
-- No new routes, no backend, no real "All Case Studies" page (link scrolls to the section for now).
-- Case study tech stack and metrics are display-only (no detail pages).
+- No new route, no per-article deep links (only outlet homepages — the article-level URLs you shared are reference numbers, not real URLs).
+- No images of newspaper clippings.
+- No changes to the Project Lead page.
