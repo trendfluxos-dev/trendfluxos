@@ -595,6 +595,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Quote request modal */}
+      <QuoteDialog open={quoteOpen} onOpenChange={setQuoteOpen} />
+
       {/* Press coverage details modal */}
       <Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>
         <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-xl">
