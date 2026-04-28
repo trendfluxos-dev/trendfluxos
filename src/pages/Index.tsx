@@ -420,73 +420,101 @@ const Index = () => {
                     outlet: "Desh Rupantor",
                     headline: "'মায়ের নিষেধ আছে' তাই কোনো চাঁদার ভাগ নিতেন না ছাত্রলীগ নেতা",
                     href: "https://www.deshrupantor.com",
+                    context:
+                      "Profile of the student leader who refused to accept any share of campus extortion money, citing his mother's lifelong instruction never to take what isn't his.",
                   },
                   {
                     outlet: "Desh Rupantor",
                     headline: "জাহাঙ্গীরনগরের হলে সাবেক ছাত্রলীগ সভাপতির ভাইয়ের 'অপকর্মের সাম্রাজ্য'!",
                     href: "https://www.deshrupantor.com",
+                    context:
+                      "Investigative report on the network of misconduct allegedly run inside a Jahangirnagar University residential hall by the brother of a former student-wing president.",
                   },
                   {
                     outlet: "Prothom Alo",
                     headline: "সংবাদ সম্মেলনে নির্যাতনের বর্ণনা দিলেন জাহাঙ্গীরনগর বিশ্ববিদ্যালয়ের ছাত্রলীগ নেতা",
                     href: "https://www.prothomalo.com",
+                    context:
+                      "Coverage of the press conference where the Jahangirnagar University student leader publicly described the torture and intimidation he faced for refusing to participate in extortion.",
                   },
                   {
                     outlet: "Dhaka Tribune",
                     headline: "জাহাঙ্গীরনগর বিশ্ববিদ্যালয়: বারবার পার পেয়ে বেপরোয়া ছাত্রলীগ",
                     href: "https://www.dhakatribune.com",
+                    context:
+                      "Analysis of how repeated impunity emboldened the campus student-wing faction at Jahangirnagar University, with the whistleblower's stand cited as a turning point.",
                   },
                   {
                     outlet: "Samakal",
                     headline: "জাবির হলে ছাত্রলীগ নেতাকে নির্যাতনের অভিযোগ",
                     href: "https://samakal.com",
+                    context:
+                      "Report documenting the formal allegation of torture against a student leader inside a Jahangirnagar University residential hall.",
                   },
                   {
                     outlet: "Kalbela",
                     headline: "জাবি ছাত্রলীগের নেতাকে মারধরের অভিযোগ",
                     href: "https://kalbela.com",
+                    context:
+                      "Coverage of the physical assault complaint filed by the JU student leader after refusing to take part in the extortion network.",
                   },
                   {
                     outlet: "Kalbela",
                     headline: "জাবির হলে মাদকের থাবা, নিয়ন্ত্রণে ছাত্রলীগ",
                     href: "https://kalbela.com",
+                    context:
+                      "Investigation into drug activity inside JU halls and the student-wing faction controlling it — the same network the whistleblower stood against.",
                   },
                   {
                     outlet: "Dhaka Post",
                     headline: "জাবিতে ছাত্রলীগ নেতাকে আটকে রেখে নির্যাতন",
                     href: "https://www.dhakapost.com",
+                    context:
+                      "Report on the confinement and torture of the JU student leader inside a campus hall as retaliation for his refusal to comply.",
                   },
                   {
                     outlet: "Channel 24",
                     headline: "জাবি ছাত্রলীগের অপরাধনামা: ক্যাম্পাস যেনো ধর্ষণ আর চাঁদাবাজির আস্তানা!",
                     href: "https://www.channel24bd.tv",
+                    context:
+                      "Television report cataloguing the pattern of violence and extortion attributed to the JU student-wing faction, contextualising the whistleblower's stand.",
                   },
                   {
                     outlet: "BanglaNews24",
                     headline: "জয়ের ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ, নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা",
                     href: "https://www.banglanews24.com",
+                    context:
+                      "Report on the formal torture allegation against the brother of a former national student-wing president, with the JU leader publicly seeking protection.",
                   },
                   {
                     outlet: "Dhaka Mail",
                     headline: "ছাত্রলীগের সাবেক সভাপতি জয়ের ছোট ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ",
                     href: "https://dhakamail.com",
+                    context:
+                      "Coverage of the torture allegation filed against the younger brother of a former national student-wing president, naming the campus hall where it occurred.",
                   },
                   {
                     outlet: "Dhaka Mail",
                     headline: "জাবির আবাসিক হলে শিক্ষার্থীদের ওপর নির্যাতন, ছাত্র ইউনিয়নের উদ্বেগ",
                     href: "https://dhakamail.com",
+                    context:
+                      "Report on the wider concern raised by the Students' Union over violence against students in JU residential halls, referencing this case.",
                   },
                   {
                     outlet: "Janakantha",
                     headline: "জাবিতে ছাত্রলীগ নেতাকে নির্যাতন, তদন্ত কমিটি",
                     href: "https://www.dailyjanakantha.com",
+                    context:
+                      "Report announcing the formation of an inquiry committee following the documented torture of the JU student leader.",
                   },
                   {
                     outlet: "Dainik Shiksha",
                     headline: "ভিসির কাছে জীবনের নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা",
                     href: "https://www.dainikshiksha.com",
+                    context:
+                      "Report on the JU student leader formally requesting protection of his life from the Vice-Chancellor after sustained threats.",
                   },
-                ] as { outlet: string; headline: string; href: string }[],
+                ] as PressItem[],
               },
               {
                 phase: "Phase 04",
