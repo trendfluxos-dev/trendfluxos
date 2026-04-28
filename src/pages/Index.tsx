@@ -399,18 +399,77 @@ const Index = () => {
                 title: "Recognized by National Media",
                 desc: "Featured across Bangladesh's leading outlets as an unyielding whistleblower — turning a personal stand into a documented public record of integrity.",
                 press: [
-                  { name: "Desh Rupantor", href: "https://www.deshrupantor.com" },
-                  { name: "Prothom Alo", href: "https://www.prothomalo.com" },
-                  { name: "Dhaka Tribune", href: "https://www.dhakatribune.com" },
-                  { name: "Samakal", href: "https://samakal.com" },
-                  { name: "Kalbela", href: "https://kalbela.com" },
-                  { name: "Dhaka Post", href: "https://www.dhakapost.com" },
-                  { name: "Channel 24", href: "https://www.channel24bd.tv" },
-                  { name: "BanglaNews24", href: "https://www.banglanews24.com" },
-                  { name: "Dhaka Mail", href: "https://dhakamail.com" },
-                  { name: "Janakantha", href: "https://www.dailyjanakantha.com" },
-                  { name: "Dainik Shiksha", href: "https://www.dainikshiksha.com" },
-                ] as { name: string; href: string }[],
+                  {
+                    outlet: "Desh Rupantor",
+                    headline: "'মায়ের নিষেধ আছে' তাই কোনো চাঁদার ভাগ নিতেন না ছাত্রলীগ নেতা",
+                    href: "https://www.deshrupantor.com",
+                  },
+                  {
+                    outlet: "Desh Rupantor",
+                    headline: "জাহাঙ্গীরনগরের হলে সাবেক ছাত্রলীগ সভাপতির ভাইয়ের 'অপকর্মের সাম্রাজ্য'!",
+                    href: "https://www.deshrupantor.com",
+                  },
+                  {
+                    outlet: "Prothom Alo",
+                    headline: "সংবাদ সম্মেলনে নির্যাতনের বর্ণনা দিলেন জাহাঙ্গীরনগর বিশ্ববিদ্যালয়ের ছাত্রলীগ নেতা",
+                    href: "https://www.prothomalo.com",
+                  },
+                  {
+                    outlet: "Dhaka Tribune",
+                    headline: "জাহাঙ্গীরনগর বিশ্ববিদ্যালয়: বারবার পার পেয়ে বেপরোয়া ছাত্রলীগ",
+                    href: "https://www.dhakatribune.com",
+                  },
+                  {
+                    outlet: "Samakal",
+                    headline: "জাবির হলে ছাত্রলীগ নেতাকে নির্যাতনের অভিযোগ",
+                    href: "https://samakal.com",
+                  },
+                  {
+                    outlet: "Kalbela",
+                    headline: "জাবি ছাত্রলীগের নেতাকে মারধরের অভিযোগ",
+                    href: "https://kalbela.com",
+                  },
+                  {
+                    outlet: "Kalbela",
+                    headline: "জাবির হলে মাদকের থাবা, নিয়ন্ত্রণে ছাত্রলীগ",
+                    href: "https://kalbela.com",
+                  },
+                  {
+                    outlet: "Dhaka Post",
+                    headline: "জাবিতে ছাত্রলীগ নেতাকে আটকে রেখে নির্যাতন",
+                    href: "https://www.dhakapost.com",
+                  },
+                  {
+                    outlet: "Channel 24",
+                    headline: "জাবি ছাত্রলীগের অপরাধনামা: ক্যাম্পাস যেনো ধর্ষণ আর চাঁদাবাজির আস্তানা!",
+                    href: "https://www.channel24bd.tv",
+                  },
+                  {
+                    outlet: "BanglaNews24",
+                    headline: "জয়ের ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ, নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা",
+                    href: "https://www.banglanews24.com",
+                  },
+                  {
+                    outlet: "Dhaka Mail",
+                    headline: "ছাত্রলীগের সাবেক সভাপতি জয়ের ছোট ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ",
+                    href: "https://dhakamail.com",
+                  },
+                  {
+                    outlet: "Dhaka Mail",
+                    headline: "জাবির আবাসিক হলে শিক্ষার্থীদের ওপর নির্যাতন, ছাত্র ইউনিয়নের উদ্বেগ",
+                    href: "https://dhakamail.com",
+                  },
+                  {
+                    outlet: "Janakantha",
+                    headline: "জাবিতে ছাত্রলীগ নেতাকে নির্যাতন, তদন্ত কমিটি",
+                    href: "https://www.dailyjanakantha.com",
+                  },
+                  {
+                    outlet: "Dainik Shiksha",
+                    headline: "ভিসির কাছে জীবনের নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা",
+                    href: "https://www.dainikshiksha.com",
+                  },
+                ] as { outlet: string; headline: string; href: string }[],
               },
               {
                 phase: "Phase 04",
@@ -445,18 +504,31 @@ const Index = () => {
                   </p>
 
                   {item.press && (
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {item.press.map((p) => (
-                        <a
-                          key={p.name}
-                          href={p.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-full border border-border bg-foreground/5 px-3 py-1 text-xs text-foreground/70 hover:text-gold hover:border-gold/40 hover:bg-gold/5 transition-all"
-                        >
-                          {p.name} ↗
-                        </a>
-                      ))}
+                    <div className="mt-6">
+                      <p className="mb-3 text-xs uppercase tracking-[0.25em] text-foreground/40">
+                        Press Coverage · {item.press.length} headlines
+                      </p>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {item.press.map((p, idx) => (
+                          <a
+                            key={`${p.outlet}-${idx}`}
+                            href={p.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 hover:border-gold/40 hover:bg-gold/5 transition-all"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-semibold uppercase tracking-wider text-gold">
+                                {p.outlet}
+                              </span>
+                              <ArrowUpRight className="h-3.5 w-3.5 text-foreground/40 transition-all group-hover/card:text-gold group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
+                            </div>
+                            <p className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground">
+                              {p.headline}
+                            </p>
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
