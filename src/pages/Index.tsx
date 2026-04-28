@@ -180,12 +180,13 @@ const Index = () => {
             <Link to="/project-lead" className="hover:text-gold transition-colors">Project Lead</Link>
           </div>
 
-          <a
-            href="#contact"
+          <button
+            type="button"
+            onClick={() => setQuoteOpen(true)}
             className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
           >
             Start Operations
-          </a>
+          </button>
         </div>
       </nav>
 
