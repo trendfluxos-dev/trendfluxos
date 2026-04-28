@@ -720,14 +720,13 @@ const Index = () => {
           <p className="mx-auto mt-6 max-w-xl text-foreground/60">
             Limited partnerships open each quarter. Let's architect yours.
           </p>
-          <a
-            href="https://wa.me/message/5GSNUYK6CSDCN1"
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
+            onClick={() => setQuoteOpen(true)}
             className="mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
           >
             Start Operations <ArrowRight className="w-4 h-4" />
-          </a>
+          </button>
         </div>
 
         {/* Contact icons */}
