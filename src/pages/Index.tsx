@@ -591,6 +591,56 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Press coverage details modal */}
+      <Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>
+        <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-xl">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+          <DialogHeader className="space-y-3 pt-2 text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+              {activePress?.outlet}
+            </p>
+            <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
+              {activePress?.headline}
+            </DialogTitle>
+          </DialogHeader>
+
+          <p className="text-sm leading-relaxed text-foreground/70">
+            {activePress?.context}
+          </p>
+
+          <div className="flex flex-wrap gap-2">
+            {["Bangladesh", "National Press", "2023–2024 coverage"].map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-border bg-foreground/[0.04] px-3 py-1 text-[11px] uppercase tracking-wider text-foreground/60"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <p className="text-[11px] text-foreground/40">
+            Link opens the outlet's homepage. Article-level deep links can be added later.
+          </p>
+
+          <DialogFooter className="gap-2 sm:gap-3">
+            <Button
+              variant="ghost"
+              onClick={() => setActivePress(null)}
+            >
+              Close
+            </Button>
+            {activePress && (
+              <Button variant="gold" asChild>
+                <a href={activePress.href} target="_blank" rel="noreferrer noopener">
+                  Read on {activePress.outlet} <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Case Studies */}
       <section id="cases" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
