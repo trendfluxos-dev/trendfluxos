@@ -14,9 +14,25 @@ import {
   Youtube,
   MessageCircle,
   Mail,
+  MoreHorizontal,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
+type PressItem = {
+  outlet: string;
+  headline: string;
+  href: string;
+  context: string;
+};
 
 type Category =
   | "All"
