@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { z } from "zod";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, CheckCircle2, Mail, CalendarClock, Rocket, Send } from "lucide-react";
 import {
   Dialog,
   DialogContent,
