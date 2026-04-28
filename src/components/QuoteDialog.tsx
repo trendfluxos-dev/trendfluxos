@@ -76,10 +76,23 @@ export const QuoteDialog = ({ open, onOpenChange }: Props) => {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState<FormState | null>(null);
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
+  };
+
+  const handleOpenChange = (next: boolean) => {
+    if (!next) {
+      // Reset on close so reopening starts clean
+      setTimeout(() => {
+        setForm(initialState);
+        setErrors({});
+        setSubmitted(null);
+      }, 200);
+    }
+    onOpenChange(next);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,12 +126,39 @@ export const QuoteDialog = ({ open, onOpenChange }: Props) => {
         title: "Operations initiated",
         description: "We'll be in touch within one business day.",
       });
-      setForm(initialState);
-      onOpenChange(false);
+      setSubmitted({ ...parsed.data });
     } finally {
       setSubmitting(false);
     }
   };
+
+  const timeline = [
+    {
+      icon: CheckCircle2,
+      title: "Request received",
+      time: "Just now",
+      desc: "Your brief is logged in our intake queue.",
+      done: true,
+    },
+    {
+      icon: Mail,
+      title: "Strategy review",
+      time: "Within 24 hours",
+      desc: "Our team audits your site and objective fit.",
+    },
+    {
+      icon: CalendarClock,
+      title: "Discovery call",
+      time: "Day 2–3",
+      desc: "30-min call to align on KPIs, budget, and scope.",
+    },
+    {
+      icon: Rocket,
+      title: "Operation blueprint",
+      time: "Day 5",
+      desc: "Custom growth roadmap delivered to your inbox.",
+    },
+  ];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
