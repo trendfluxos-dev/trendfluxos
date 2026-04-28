@@ -132,6 +132,7 @@ const stats = [
 
 const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
+  const [activePress, setActivePress] = useState<PressItem | null>(null);
 
   const filterTabs: Category[] = [
     "All",
