@@ -550,28 +550,36 @@ const Index = () => {
 
                   {item.press && (
                     <div className="mt-6">
-                      <p className="mb-3 text-xs uppercase tracking-[0.25em] text-foreground/40">
-                        Press Coverage · {item.press.length} headlines
-                      </p>
+                      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+                        <p className="text-xs uppercase tracking-[0.25em] text-foreground/40">
+                          Press Coverage · {item.press.length} headlines
+                        </p>
+                        <p className="text-xs text-foreground/40">
+                          Click any headline for context, then read the original report.
+                        </p>
+                      </div>
                       <div className="grid gap-3 sm:grid-cols-2">
                         {item.press.map((p, idx) => (
-                          <a
+                          <button
+                            type="button"
                             key={`${p.outlet}-${idx}`}
-                            href={p.href}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 hover:border-gold/40 hover:bg-gold/5 transition-all"
+                            onClick={() => setActivePress(p)}
+                            className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 text-left hover:border-gold/40 hover:bg-gold/5 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
                           >
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-semibold uppercase tracking-wider text-gold">
                                 {p.outlet}
                               </span>
-                              <ArrowUpRight className="h-3.5 w-3.5 text-foreground/40 transition-all group-hover/card:text-gold group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
+                              <MoreHorizontal className="h-4 w-4 text-foreground/40 transition-colors group-hover/card:text-gold" />
                             </div>
                             <p className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground">
                               {p.headline}
                             </p>
-                          </a>
+                            <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
+                              More details
+                              <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
+                            </span>
+                          </button>
                         ))}
                       </div>
                     </div>
