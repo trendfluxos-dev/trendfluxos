@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Settings, ArrowUpRight, Sparkles, Hexagon } from "lucide-react";
+import { Settings, ArrowUpRight, Sparkles, Hexagon, Linkedin, Facebook, Youtube, MessageCircle, Mail } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
 
 const cases = [
@@ -201,49 +201,25 @@ const Index = () => {
 
         {/* Contact block */}
         <div className="mx-auto mt-12 max-w-7xl border-t border-border pt-8">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-foreground/60">
-            <a
-              href="https://www.linkedin.com/in/zhemongrowth"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-gold transition-colors"
-            >
-              LinkedIn: /in/zhemongrowth
-            </a>
-            <span className="text-foreground/20">·</span>
-            <a
-              href="https://www.facebook.com/zhemongrowth/"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-gold transition-colors"
-            >
-              Facebook: /zhemongrowth
-            </a>
-            <span className="text-foreground/20">·</span>
-            <a
-              href="https://www.youtube.com/@zhemongrowth"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-gold transition-colors"
-            >
-              YouTube: @zhemongrowth
-            </a>
-            <span className="text-foreground/20">·</span>
-            <a
-              href="https://wa.me/message/5GSNUYK6CSDCN1"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-gold transition-colors"
-            >
-              WhatsApp: +8801756004037
-            </a>
-            <span className="text-foreground/20">·</span>
-            <a
-              href="mailto:zhemongrowth@gmail.com"
-              className="hover:text-gold transition-colors"
-            >
-              zhemongrowth@gmail.com
-            </a>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {[
+              { Icon: Linkedin, href: "https://www.linkedin.com/in/zhemongrowth", label: "LinkedIn" },
+              { Icon: Facebook, href: "https://www.facebook.com/zhemongrowth/", label: "Facebook" },
+              { Icon: Youtube, href: "https://www.youtube.com/@zhemongrowth", label: "YouTube" },
+              { Icon: MessageCircle, href: "https://wa.me/message/5GSNUYK6CSDCN1", label: "WhatsApp" },
+              { Icon: Mail, href: "mailto:zhemongrowth@gmail.com", label: "Email" },
+            ].map(({ Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={label}
+                className="w-11 h-11 rounded-full glass flex items-center justify-center text-foreground/70 hover:text-gold hover:border-gold/40 hover:scale-110 transition-all"
+              >
+                <Icon className="w-5 h-5" />
+              </a>
+            ))}
           </div>
 
           <div className="mt-8 flex flex-col items-center justify-between gap-3 text-sm text-foreground/50 md:flex-row">
