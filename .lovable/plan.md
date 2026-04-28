@@ -1,44 +1,71 @@
+# Press Coverage — "More details" Modal
+
 ## Goal
 
-Add a vertical timeline below the Project Lead quote in the "Meet the Project Lead" section on the homepage. It tells Zahid Hasan Emon's story in 4 phases with glowing gold markers, plus a press coverage strip linking to the major outlets that covered the story.
+Make every press coverage card in the Phase 03 section open a polished modal with the full headline, outlet attribution, and short context — with a clear primary action that opens the outlet in a new tab. This turns the grid from "looks clickable" into a real interactive press kit.
 
 ## Where it lives
 
-Inside the existing `#founder` section in `src/pages/Index.tsx`, directly below the current quote + portrait grid. No new files, no new dependencies, no changes to `ProjectLead.tsx`.
+All changes inside the existing Phase 03 timeline block in `src/pages/Index.tsx`. No new routes, no new components extracted, no changes to article URLs (each modal's "Read on [Outlet]" button opens the outlet homepage, matching current behavior).
 
-## Timeline structure (4 phases)
+## Interaction
 
-1. **Phase 01 — Foundation**
-   *A Maternal Legacy of Honesty*
-   Raised under an uncompromising principle: never take what isn't yours, never trade integrity for convenience.
+1. User sees the 14 press cards in a 2-column grid (unchanged).
+2. Each card is now a `<button>` (not an `<a>`) — clicking it opens a centered modal.
+3. Cards get a subtle "More details →" affordance in the corner so the action is obvious.
+4. Above the grid, a one-line helper appears: *Click any headline for context, then read the original report.*
 
-2. **Phase 02 — University Years**
-   *The Stand Against Corruption*
-   At Jahangirnagar University, refused to participate in extortion networks operating inside campus halls. Faced direct threats and physical pressure rather than compromise.
+## Modal contents
 
-3. **Phase 03 — Public Record**
-   *Recognized by National Media*
-   Featured across Bangladesh's leading outlets as an unyielding whistleblower. Followed by a chip strip of press logos (text pills) linking to each outlet's homepage:
-   - Desh Rupantor · Prothom Alo · Dhaka Tribune · Samakal · Kalbela · Dhaka Post · Channel 24 · BanglaNews24 · Dhaka Mail · Janakantha · Dainik Shiksha
-   Each pill opens the outlet in a new tab.
+Built with the existing `Dialog` primitive from `src/components/ui/dialog.tsx` (already in the project).
 
-4. **Phase 04 — Today**
-   *TrendFlux Digital*
-   That same battle-tested resilience now powers a growth operations studio built on radical transparency and ethical execution.
+Each modal shows:
+- **Outlet name** as a small gold eyebrow (e.g. *Desh Rupantor*)
+- **Full Bangla headline** as the dialog title (display font, larger, leading-snug)
+- **Short English context line** — a 1–2 sentence neutral summary of what the report covered (e.g. "Coverage of the campus extortion network and the student leader who refused to participate."). Written generically per headline so we don't fabricate quotes.
+- **Meta row**: small badges for `Bangladesh` · `National Press` · `2023–2024 coverage`
+- **Primary CTA**: gold button `Read on [Outlet] ↗` → opens outlet homepage in a new tab (`target="_blank"`, `rel="noreferrer noopener"`)
+- **Secondary CTA**: ghost `Close`
+- A short footnote: *Link opens the outlet's homepage. Article-level deep links can be added later.*
+
+Only one modal component is rendered; it's controlled by a single `useState<PressItem | null>` so we don't mount 14 dialogs.
 
 ## Visual design
 
-- Section heading above the timeline: small gold eyebrow `— The Journey`, then `From whistleblower to growth operator` (with "whistleblower" in the cyan/gold gradient).
-- Vertical line down the left side using a gradient (`from-gold/60 via-primary/40 to-transparent`).
-- Each phase = a glass card with a glowing **gold dot marker** on the line: a small solid gold dot with a soft pulsing gold halo behind it, ringed by `bg-background` so it sits cleanly on the line.
-- Card content: phase label (gold) + year/era (muted), title (display font), description, and on Phase 03 a wrap of press chips.
-- Stagger entrance animation per card using the existing `animate-fade-up` with incremental `animationDelay`.
-- Mobile: line shifts inward; cards stack full width.
+- Dialog uses existing `glass` styling with a gold top border accent and `shadow-gold` glow.
+- Outlet eyebrow in `text-gold` uppercase tracking-wider.
+- Headline in display font, `text-2xl md:text-3xl`, `leading-snug`.
+- Body text muted-foreground.
+- Primary button uses existing `variant="gold"`; secondary uses `variant="ghost"`.
+- Cards in the grid get a subtle `MoreHorizontal` (or "More details →") label that slides in on hover, replacing the current `ArrowUpRight` icon.
+- Fully keyboard accessible (Dialog handles focus trap + ESC).
 
-All styling via existing semantic tokens (`gold`, `primary`, `foreground`, `border`, `glass`, `glass-hover`, `shadow-gold`, `text-gradient`). No hard-coded hex.
+## Data shape
+
+The existing `press` array on Phase 03 gets one optional field added:
+
+```ts
+type PressItem = {
+  outlet: string;
+  headline: string;          // Bangla
+  href: string;              // outlet homepage
+  context: string;           // NEW — short English summary, 1–2 sentences
+};
+```
+
+Context lines are written per headline and kept neutral/factual (no invented quotes, no claims beyond what the headline already states).
 
 ## Out of scope
 
-- No new route, no per-article deep links (only outlet homepages — the article-level URLs you shared are reference numbers, not real URLs).
-- No images of newspaper clippings.
-- No changes to the Project Lead page.
+- No per-article deep URLs (user confirmed: outlet homepages for now).
+- No screenshots or thumbnails of articles.
+- No translation of the Bangla headline into English inside the modal — only a short context note.
+- No share buttons, no copy-link button.
+- No changes to the other timeline phases.
+
+## Technical notes
+
+- Import `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter` from `@/components/ui/dialog`.
+- Replace each card's `<a>` with `<button onClick={() => setActivePress(item)}>`.
+- Render one `<Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>` after the grid.
+- Keep all existing animations, gradients, and glass styling.
