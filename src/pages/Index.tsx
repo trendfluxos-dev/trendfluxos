@@ -1,344 +1,112 @@
-import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Workflow,
-  Users,
-  Sparkles,
-  Target,
-  Layers,
-  Cpu,
-  Linkedin,
-  Facebook,
-  Youtube,
-  MessageCircle,
-  Mail,
-} from "lucide-react";
+import { Settings, ArrowUpRight, Sparkles, Hexagon, Linkedin, Facebook, Youtube, MessageCircle, Mail } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
-import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
-
-type Category =
-  | "All"
-  | "Business Automation"
-  | "Meta Ads Management"
-  | "Ecosystem Design";
-
-const services = [
-  {
-    category: "Business Automation" as const,
-    icon: Workflow,
-    title: "Workflow Intelligence Systems",
-    desc: "End-to-end automation pipelines that eliminate manual overhead and unlock operational velocity.",
-    outcome: "Avg. 70% time reclaimed",
-  },
-  {
-    category: "Business Automation" as const,
-    icon: Users,
-    title: "CRM & Sales Orchestration",
-    desc: "Custom-engineered CRM stacks that turn cold pipelines into predictable revenue engines.",
-    outcome: "3.2x lead conversion",
-  },
-  {
-    category: "Meta Ads Management" as const,
-    icon: Sparkles,
-    title: "Performance Creative Labs",
-    desc: "Data-driven creative testing frameworks designed to scale ROAS without sacrificing brand integrity.",
-    outcome: "Avg. +45% ROAS lift",
-  },
-  {
-    category: "Meta Ads Management" as const,
-    icon: Target,
-    title: "Full-Funnel Paid Strategy",
-    desc: "Surgical audience architecture and bid strategy across Meta's full ecosystem.",
-    outcome: "Sub-$8 CAC achieved",
-  },
-  {
-    category: "Ecosystem Design" as const,
-    icon: Layers,
-    title: "Brand Operating Systems",
-    desc: "Holistic brand-to-product ecosystems engineered for compounding growth.",
-    outcome: "12-month roadmaps",
-  },
-  {
-    category: "Ecosystem Design" as const,
-    icon: Cpu,
-    title: "Tech Stack Architecture",
-    desc: "Future-proof infrastructure decisions that align tooling with strategic intent.",
-    outcome: "Zero-vendor-lock builds",
-  },
-];
 
 const cases = [
-  {
-    metric: "+45% ROAS",
-    sub: "in 90 days",
-    title: "Lumen Apparel — DTC Scale Sprint",
-    stack: ["Meta Ads", "Klaviyo", "Shopify", "GA4"],
-  },
-  {
-    metric: "−62% Manual Hours",
-    sub: "across 4 departments",
-    title: "Northbeam Logistics — Ops Overhaul",
-    stack: ["Make", "HubSpot", "Airtable", "Slack API"],
-  },
-  {
-    metric: "3.4x Pipeline",
-    sub: "qualified MQL → SQL",
-    title: "Vault Finance — Funnel Rebuild",
-    stack: ["Webflow", "Salesforce", "Segment"],
-  },
-  {
-    metric: "$1.2M Revenue",
-    sub: "single-quarter Meta",
-    title: "Aurora Skincare — Creative Engine",
-    stack: ["Meta Ads", "Triple Whale", "Figma"],
-  },
-  {
-    metric: "8 → 1 Stack",
-    sub: "consolidation playbook",
-    title: "Forge Industries — Ecosystem Reset",
-    stack: ["Notion", "Zapier", "Linear", "Stripe"],
-  },
-  {
-    metric: "+128% Sign-ups",
-    sub: "at flat ad spend",
-    title: "Helio Health — Conversion Lab",
-    stack: ["Meta Ads", "Webflow", "Mixpanel"],
-  },
+  "Education Brand Growth System (+45% Engagement)",
+  "Retail Lead Generation Funnel (High-Intent Capture)",
+  "Personal Brand Authority Engine (Organic Visibility)",
 ];
 
-const stats = [
-  { value: "$8.4M", label: "Ad spend managed" },
-  { value: "+312%", label: "Avg. growth lift" },
-  { value: "47", label: "Operations launched" },
+const modules = [
+  {
+    icon: Settings,
+    title: "AI Business Automation",
+    desc: "Automate repetitive workflows, client handling, and internal operations using AI-powered systems.",
+  },
+  {
+    icon: ArrowUpRight,
+    title: "Meta Ads & Lead Gen",
+    desc: "Build paid acquisition systems that attract qualified leads and convert attention into revenue.",
+  },
+  {
+    icon: Sparkles,
+    title: "CRM & WhatsApp Automation",
+    desc: "Connect lead capture, follow-up, booking, and client nurturing into one structured workflow.",
+  },
+  {
+    icon: Hexagon,
+    title: "Growth Analytics",
+    desc: "Track performance, identify growth gaps, and make better decisions through clear KPI dashboards.",
+  },
 ];
 
 const Index = () => {
-  const [filter, setFilter] = useState<Category>("All");
-
-  const filterTabs: Category[] = [
-    "All",
-    "Business Automation",
-    "Meta Ads Management",
-    "Ecosystem Design",
-  ];
-
-  const counts = useMemo(
-    () => ({
-      All: services.length,
-      "Business Automation": services.filter((s) => s.category === "Business Automation").length,
-      "Meta Ads Management": services.filter((s) => s.category === "Meta Ads Management").length,
-      "Ecosystem Design": services.filter((s) => s.category === "Ecosystem Design").length,
-    }),
-    []
-  );
-
-  const visibleServices =
-    filter === "All" ? services : services.filter((s) => s.category === filter);
-
   return (
     <main className="min-h-screen bg-background text-foreground font-sans overflow-hidden">
-      {/* Background ambient glow */}
+      {/* Background Effects */}
       <div className="fixed inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 right-0 w-[520px] h-[520px] bg-primary/20 blur-[160px]" />
-        <div className="absolute bottom-0 left-0 w-[520px] h-[520px] bg-primary-glow/15 blur-[160px]" />
-        <div className="absolute top-1/3 left-1/2 w-[420px] h-[420px] bg-gold/10 blur-[180px]" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 blur-[140px]" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary-glow/15 blur-[140px]" />
+        <div className="absolute top-1/3 left-1/2 w-[400px] h-[400px] bg-gold/10 blur-[160px]" />
       </div>
 
       {/* Navbar */}
-      <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-7xl rounded-full glass-strong">
-        <div className="flex items-center justify-between px-5 md:px-8 py-3.5">
+      <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-7xl rounded-full glass-strong">
+        <div className="flex items-center justify-between px-5 md:px-8 py-4">
           <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight">
             <img src={trendfluxLogo} alt="TrendFlux Digital logo" className="h-8 w-8 object-contain" />
             TrendFlux <span className="text-gradient">Digital</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-sm text-foreground/70">
-            <a href="#services" className="hover:text-gold transition-colors">Services</a>
-            <a href="#founder" className="hover:text-gold transition-colors">Founder</a>
-            <a href="#cases" className="hover:text-gold transition-colors">Case Studies</a>
-            <Link to="/project-lead" className="hover:text-gold transition-colors">Project Lead</Link>
+            <a href="#systems" className="hover:text-gold transition-colors">
+              Systems
+            </a>
+            <a href="#cases" className="hover:text-gold transition-colors">
+              Case Studies
+            </a>
+            <a href="#modules" className="hover:text-gold transition-colors">
+              Modules
+            </a>
+            <Link to="/project-lead" className="hover:text-gold transition-colors">
+              Project Lead
+            </Link>
           </div>
 
           <a
-            href="#contact"
+            href="#book"
             className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
           >
-            Start Operations
+            Book Strategy Call
           </a>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="relative flex min-h-screen items-center px-6 pt-32 pb-16 md:px-12 lg:px-20">
+      <section
+        id="systems"
+        className="relative flex min-h-screen items-center px-6 pt-32 md:px-12 lg:px-20"
+      >
         <div className="mx-auto max-w-6xl text-center animate-fade-up">
-          <div className="mb-6 inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-primary">
-            <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-            Now accepting Q3 partnerships
+          <div className="mb-6 inline-flex glass rounded-full px-5 py-2 text-sm text-foreground/70">
+            AI-Powered Digital Growth & Automation Consultancy
           </div>
 
           <h1 className="font-display mx-auto max-w-5xl text-5xl font-black leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
-            Digital Transformation
-            <br />
-            & <span className="text-gradient">Growth Operations</span>
+            Architecting{" "}
+            <span className="text-gradient">AI-Powered Digital Growth</span>{" "}
+            Systems.
           </h1>
 
-          <p className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-foreground/60 md:text-lg">
-            We engineer resilient growth engines for ambitious brands — pairing
-            performance media, automation, and ecosystem design into one
-            cinematic operating system.
+          <p className="mx-auto mt-8 max-w-3xl text-lg leading-relaxed text-foreground/60 md:text-xl">
+            We combine AI automation, paid media, and CRM workflows to build
+            scalable business ecosystems that compound over time.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
-              href="#contact"
-              className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
+              href="#book"
+              className="rounded-full bg-gold px-8 py-4 font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
             >
-              Start Operations <ArrowRight className="w-4 h-4" />
+              Book Strategy Call
             </a>
             <a
               href="#cases"
               className="rounded-full border border-foreground/15 px-8 py-4 font-semibold text-foreground transition hover:scale-105 hover:border-primary/60 hover:bg-foreground/5"
             >
-              View Case Studies
+              Explore Growth Systems
             </a>
-          </div>
-
-          {/* Stats */}
-          <div className="mx-auto mt-20 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
-            {stats.map((s) => (
-              <div key={s.label} className="rounded-2xl glass p-6 text-center">
-                <div className="font-display text-3xl font-bold text-gradient md:text-4xl">
-                  {s.value}
-                </div>
-                <div className="mt-2 text-xs uppercase tracking-[0.25em] text-foreground/50">
-                  {s.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Directory */}
-      <section id="services" className="relative px-6 py-24 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 max-w-3xl">
-            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-              — Services Directory
-            </p>
-            <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
-              Built like an operating system.{" "}
-              <span className="text-gradient">Filed for clarity.</span>
-            </h2>
-          </div>
-
-          {/* Filter tabs */}
-          <div className="mb-10 flex flex-wrap gap-2">
-            {filterTabs.map((tab) => {
-              const active = filter === tab;
-              return (
-                <button
-                  key={tab}
-                  onClick={() => setFilter(tab)}
-                  className={`rounded-full px-4 py-2 text-sm transition-all ${
-                    active
-                      ? "bg-gold text-gold-foreground shadow-gold"
-                      : "glass text-foreground/70 hover:text-foreground hover:border-primary/40"
-                  }`}
-                >
-                  {tab}
-                  <span className={`ml-2 text-xs ${active ? "text-gold-foreground/70" : "text-foreground/40"}`}>
-                    {counts[tab]}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {visibleServices.map((s, i) => {
-              const Icon = s.icon;
-              const idx = services.indexOf(s) + 1;
-              return (
-                <article
-                  key={s.title}
-                  className="group rounded-3xl glass glass-hover p-7 flex flex-col"
-                >
-                  <div className="flex items-start justify-between">
-                    <span className="font-display text-sm text-foreground/40">
-                      {String(idx).padStart(2, "0")}
-                    </span>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/15 text-gold">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                  </div>
-                  <p className="mt-6 text-xs uppercase tracking-[0.25em] text-primary">
-                    {s.category}
-                  </p>
-                  <h3 className="font-display mt-2 text-2xl font-bold leading-tight">
-                    {s.title}
-                  </h3>
-                  <p className="mt-4 text-sm leading-relaxed text-foreground/60">
-                    {s.desc}
-                  </p>
-                  <div className="mt-6 border-t border-border pt-4">
-                    <p className="font-semibold text-gold text-sm">{s.outcome}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Founder */}
-      <section id="founder" className="relative px-6 py-24 md:px-12 lg:px-20">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
-          {/* Portrait */}
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
-            <div className="relative overflow-hidden rounded-[2rem] glass-strong p-2">
-              <img
-                src={emonPortrait}
-                alt="Zahid Hasan Emon, Founder of TrendFlux Digital"
-                className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
-              />
-              <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
-                <span className="text-gold font-semibold">Founder & CEO</span>
-                <span className="mx-2 text-foreground/30">·</span>
-                <span className="text-foreground/80">Zahid Hasan Emon</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div>
-            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-              — Meet the Founder
-            </p>
-            <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Zahid Hasan Emon
-            </h2>
-            <blockquote className="mt-8 border-l-2 border-gold/60 pl-6 text-lg leading-relaxed text-foreground/75 md:text-xl">
-              "Rooted in a maternal legacy of absolute honesty, TrendFlux Digital
-              is built on uncompromising integrity and relentless resilience. My
-              journey from an IT background taught me that true growth requires
-              the courage to stand firm. We don't just run campaigns; we build
-              resilient, transparent growth engines."
-            </blockquote>
-            <div className="mt-8 flex items-center gap-3 text-sm text-foreground/60">
-              <span className="font-display font-semibold text-foreground">Zahid Hasan Emon</span>
-              <span className="text-foreground/30">·</span>
-              <span>Founder, TrendFlux Digital</span>
-            </div>
-            <Link
-              to="/project-lead"
-              className="mt-8 inline-flex items-center gap-2 text-primary hover:text-gold transition-colors"
-            >
-              Read full profile <ArrowUpRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </section>
@@ -346,89 +114,92 @@ const Index = () => {
       {/* Case Studies */}
       <section id="cases" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-                — Selected Narratives
-              </p>
-              <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
-                Operations that{" "}
-                <span className="text-gradient">moved the needle.</span>
-              </h2>
-            </div>
-            <a
-              href="#cases"
-              className="inline-flex items-center gap-2 text-sm text-foreground/70 hover:text-gold transition-colors"
-            >
-              All Case Studies <ArrowUpRight className="w-4 h-4" />
-            </a>
+          <div className="mb-12 max-w-3xl">
+            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
+              The Operator&apos;s Casebook
+            </p>
+            <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
+              Systems built for visibility, leads, and authority.
+            </h2>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {cases.map((c, i) => (
+          <div className="grid gap-6 md:grid-cols-3">
+            {cases.map((item, index) => (
               <article
-                key={c.title}
-                className="group flex min-h-[340px] flex-col rounded-3xl glass glass-hover p-7"
+                key={item}
+                className="group min-h-[300px] rounded-3xl glass glass-hover p-7"
               >
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-foreground/40">
-                  <span className="text-primary">CASE / {String(i + 1).padStart(2, "0")}</span>
-                  <span>2024 — 2026</span>
+                <div className="mb-10 flex h-12 w-12 items-center justify-center rounded-2xl glass text-gold font-display font-bold">
+                  0{index + 1}
                 </div>
-
-                <div className="mt-8">
-                  <p className="font-display text-3xl font-bold text-gradient leading-none">
-                    {c.metric}
-                  </p>
-                  <p className="mt-2 text-sm text-foreground/60">{c.sub}</p>
-                </div>
-
-                <h3 className="font-display mt-6 text-xl font-bold leading-snug">
-                  {c.title}
+                <h3 className="font-display text-2xl font-bold leading-tight">
+                  {item}
                 </h3>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {c.stack.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-border bg-foreground/5 px-3 py-1 text-xs text-foreground/70"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-auto pt-6">
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary opacity-70 group-hover:opacity-100 transition">
-                    View Narrative <ArrowRight className="w-4 h-4" />
-                  </span>
-                </div>
+                <p className="mt-5 text-foreground/60">
+                  A structured growth system designed to replace scattered
+                  marketing activity with measurable execution.
+                </p>
+                <p className="mt-8 translate-y-2 text-sm font-semibold text-primary opacity-0 transition group-hover:translate-y-0 group-hover:opacity-100">
+                  View System →
+                </p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Final CTA + Footer */}
-      <footer id="contact" className="relative px-6 py-24 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-6xl rounded-[2rem] glass-strong p-10 text-center md:p-16">
-          <h2 className="font-display mx-auto max-w-3xl text-3xl font-bold leading-tight md:text-5xl">
-            Ready to operate at{" "}
-            <span className="text-gradient">full velocity?</span>
-          </h2>
-          <p className="mx-auto mt-6 max-w-xl text-foreground/60">
-            Limited partnerships open each quarter. Let's architect yours.
+      {/* Modules */}
+      <section id="modules" className="relative px-6 py-24 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-12 max-w-3xl">
+            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-primary">
+              Service Modules
+            </p>
+            <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
+              Modular execution for modern growth.
+            </h2>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {modules.map((item) => {
+              const Icon = item.icon;
+              return (
+                <article
+                  key={item.title}
+                  className="rounded-3xl glass p-7 transition hover:-translate-y-1 hover:border-primary/40 hover:bg-foreground/[0.07]"
+                >
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gold/15 text-gold">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold">{item.title}</h3>
+                  <p className="mt-4 max-w-xl leading-relaxed text-foreground/60">
+                    {item.desc}
+                  </p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <footer id="book" className="relative px-6 py-24 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-6xl rounded-[2rem] glass-strong p-8 text-center md:p-16">
+          <p className="mx-auto max-w-3xl font-display text-2xl font-semibold leading-snug text-foreground md:text-4xl">
+            The Operator&apos;s Promise: Your business does not need more random
+            content. <span className="text-gradient">It needs a growth system.</span>
           </p>
           <a
             href="https://wa.me/message/5GSNUYK6CSDCN1"
             target="_blank"
             rel="noreferrer"
-            className="mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
+            className="mt-10 inline-flex rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
           >
-            Start Operations <ArrowRight className="w-4 h-4" />
+            Book Your Growth Session Today
           </a>
         </div>
 
-        {/* Contact icons */}
+        {/* Contact block */}
         <div className="mx-auto mt-12 max-w-7xl border-t border-border pt-8">
           <div className="flex flex-wrap items-center justify-center gap-4">
             {[
@@ -456,7 +227,7 @@ const Index = () => {
               <img src={trendfluxLogo} alt="TrendFlux Digital logo" className="h-7 w-7 object-contain" />
               <p className="font-semibold text-foreground">TrendFlux Digital</p>
             </div>
-            <p>© 2026 — Built on integrity</p>
+            <p>© 2026 TrendFlux Digital. All rights reserved.</p>
           </div>
         </div>
       </footer>
