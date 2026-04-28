@@ -316,17 +316,37 @@ const Index = () => {
           {/* Content */}
           <div>
             <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-              — Meet the Founder
+              — Meet the Project Lead
             </p>
             <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Zahid Hasan Emon
+              Meet the Project Lead:{" "}
+              <span className="text-gradient">Zahid Hasan Emon</span>
             </h2>
-            <blockquote className="mt-8 border-l-2 border-gold/60 pl-6 text-lg leading-relaxed text-foreground/75 md:text-xl">
-              "Rooted in a maternal legacy of absolute honesty, TrendFlux Digital
-              is built on uncompromising integrity and relentless resilience. My
-              journey from an IT background taught me that true growth requires
-              the courage to stand firm. We don't just run campaigns; we build
-              resilient, transparent growth engines."
+            <blockquote className="mt-8 border-l-2 border-gold/60 pl-6 text-base leading-relaxed text-foreground/75 md:text-lg space-y-4">
+              <p>
+                "My journey to founding TrendFlux Digital wasn't just built on IT
+                engineering and data analytics—it was forged in the crucible of
+                extreme adversity. Rooted in a deep maternal legacy of absolute
+                honesty, I made a historic stand against systemic corruption
+                during my university years.
+              </p>
+              <p>
+                Recognized by national media like{" "}
+                <span className="text-gold font-semibold">Desh Rupantor</span>{" "}
+                as an unyielding whistleblower, I chose to face insurmountable
+                pressure rather than compromise my ethical values. Today, that
+                same battle-tested resilience forms the absolute core of
+                TrendFlux Digital.
+              </p>
+              <p>
+                When you partner with us, you are gaining a strategic partner
+                who values{" "}
+                <span className="text-foreground font-semibold">
+                  radical transparency, ethical execution, and the courage to
+                  stand firm
+                </span>{" "}
+                for your success."
+              </p>
             </blockquote>
             <div className="mt-8 flex items-center gap-3 text-sm text-foreground/60">
               <span className="font-display font-semibold text-foreground">Zahid Hasan Emon</span>
