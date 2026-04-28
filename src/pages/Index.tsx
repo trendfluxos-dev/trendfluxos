@@ -211,12 +211,13 @@ const Index = () => {
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a
-              href="#contact"
+            <button
+              type="button"
+              onClick={() => setQuoteOpen(true)}
               className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
             >
               Start Operations <ArrowRight className="w-4 h-4" />
-            </a>
+            </button>
             <a
               href="#cases"
               className="rounded-full border border-foreground/15 px-8 py-4 font-semibold text-foreground transition hover:scale-105 hover:border-primary/60 hover:bg-foreground/5"
