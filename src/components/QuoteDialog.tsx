@@ -126,7 +126,7 @@ export const QuoteDialog = ({ open, onOpenChange }: Props) => {
         title: "Operations initiated",
         description: "We'll be in touch within one business day.",
       });
-      setSubmitted({ ...parsed.data });
+      setSubmitted({ ...form, ...parsed.data });
     } finally {
       setSubmitting(false);
     }
