@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MessageCircle, Facebook, Mail, Phone, Linkedin } from "lucide-react";
+import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart } from "lucide-react";
 import profile from "@/assets/marriage/profile.jpg";
 import photo1 from "@/assets/marriage/photo1.jpg";
 import photo2 from "@/assets/marriage/photo2.jpg";
@@ -51,27 +51,31 @@ const Marriage = () => {
   );
 
   return (
-    <main className="min-h-screen text-white" style={{
-      background: "radial-gradient(circle at top, hsl(var(--gold) / 0.16), transparent 35%), linear-gradient(180deg, #0B1F3A 0%, #07182e 100%)",
-      backgroundAttachment: "fixed",
-    }}>
+    <main
+      className="min-h-screen text-white"
+      style={{
+        background:
+          "radial-gradient(ellipse at top, rgba(220,38,38,0.22), transparent 45%), radial-gradient(ellipse at bottom, rgba(220,38,38,0.10), transparent 55%), linear-gradient(180deg, #0a0a0a 0%, #14060a 50%, #000000 100%)",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <div className="max-w-5xl mx-auto px-5">
         {/* Lang toggle */}
         <div className="sticky top-2 z-20 flex justify-end pt-3">
           <button
             onClick={() => setBangla((b) => !b)}
-            className="px-4 py-2 rounded-full border border-gold/60 text-gold bg-[#07182e]/70 backdrop-blur text-sm font-semibold hover:bg-gold hover:text-[#07182e] transition"
+            className="px-4 py-2 rounded-full border border-red-500/60 text-white bg-black/70 backdrop-blur text-sm font-semibold hover:bg-red-600 hover:border-red-600 transition"
           >
             {bangla ? "English" : "বাংলা"}
           </button>
         </div>
 
         {/* Availability Banner */}
-        <div className="mt-4 rounded-2xl border border-gold/50 bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 px-5 py-4 text-center shadow-[0_8px_30px_rgba(200,169,81,0.25)]">
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold">
+        <div className="mt-4 rounded-2xl border border-red-500/50 bg-gradient-to-r from-red-600/20 via-white/5 to-red-600/20 px-5 py-4 text-center shadow-[0_8px_30px_rgba(220,38,38,0.25)]">
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-red-400">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-gold"></span>
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
             </span>
             {t("Available for Marriage", "বিবাহের জন্য প্রস্তুত")}
           </div>
@@ -81,7 +85,7 @@ const Marriage = () => {
               "একজন আন্তরিক, সুশীল ও সুন্দরী (সাহা-সুন্দরী) জীবনসঙ্গী খুঁজছি।"
             )}
           </p>
-          <p className="mt-1 text-sm text-[#f4e8bd]">
+          <p className="mt-1 text-sm text-white/70">
             {t(
               "Serious proposals from respectful families are warmly welcomed.",
               "সম্মানিত পরিবার থেকে আন্তরিক প্রস্তাব সাদরে আমন্ত্রিত।"
@@ -91,21 +95,24 @@ const Marriage = () => {
 
         {/* Hero */}
         <section className="text-center pt-8 pb-10">
-          <img
-            src={profile}
-            alt="Zahid Hasan Emon"
-            className="w-[150px] h-[150px] rounded-full object-cover mx-auto border-4 border-gold shadow-2xl"
-          />
-          <h1 className="mt-5 text-4xl md:text-5xl font-bold text-gold tracking-wide">
+          <div className="relative mx-auto w-[160px] h-[160px]">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black blur-md opacity-60" aria-hidden />
+            <img
+              src={profile}
+              alt="Zahid Hasan Emon"
+              className="relative w-[150px] h-[150px] rounded-full object-cover mx-auto border-4 border-white shadow-[0_0_40px_rgba(220,38,38,0.55)]"
+            />
+          </div>
+          <h1 className="mt-5 text-4xl md:text-5xl font-bold tracking-wide bg-gradient-to-r from-white via-red-400 to-white bg-clip-text text-transparent">
             {t("Zahid Hasan Emon", "জাহিদ হাসান ইমন")}
           </h1>
-          <p className="mt-3 text-[#d9e2f1] text-base md:text-lg">
+          <p className="mt-3 text-white/80 text-base md:text-lg">
             {t(
               "AI-Powered Digital Growth Specialist | Brand Architect | Growth Systems Operator",
               "এআই-পাওয়ার্ড ডিজিটাল গ্রোথ স্পেশালিস্ট | ব্র্যান্ড আর্কিটেক্ট | গ্রোথ সিস্টেম অপারেটর"
             )}
           </p>
-          <p className="mt-2 text-[#f4e8bd] italic">
+          <p className="mt-2 text-red-300/90 italic">
             {t(
               "Faith • Integrity • Responsibility • Long-term Commitment",
               "বিশ্বাস • সততা • দায়িত্ববোধ • দীর্ঘমেয়াদি অঙ্গীকার"
@@ -116,20 +123,20 @@ const Marriage = () => {
             <a
               href={`https://wa.me/8801410004037?text=${waMsg}`}
               target="_blank" rel="noreferrer"
-              className="inline-flex items-center gap-2 bg-gold text-[#07182e] px-5 py-3 rounded-full font-bold hover:opacity-90 transition"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-red-700 via-red-600 to-red-700 text-white px-5 py-3 rounded-full font-bold hover:brightness-110 shadow-[0_10px_30px_-10px_rgba(220,38,38,0.7)] transition"
             >
               <MessageCircle className="w-4 h-4" /> WhatsApp
             </a>
             <a
               href="https://facebook.com/zhemongrowth"
               target="_blank" rel="noreferrer"
-              className="inline-flex items-center gap-2 border border-gold text-gold px-5 py-3 rounded-full font-bold hover:bg-gold hover:text-[#07182e] transition"
+              className="inline-flex items-center gap-2 border border-white/40 text-white px-5 py-3 rounded-full font-bold hover:bg-white hover:text-black transition"
             >
               <Facebook className="w-4 h-4" /> Facebook
             </a>
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 border border-gold text-gold px-5 py-3 rounded-full font-bold hover:bg-gold hover:text-[#07182e] transition"
+              className="inline-flex items-center gap-2 border border-red-500/60 text-red-300 px-5 py-3 rounded-full font-bold hover:bg-red-600 hover:text-white hover:border-red-600 transition"
             >
               <Mail className="w-4 h-4" /> {t("Contact", "যোগাযোগ")}
             </a>
@@ -141,10 +148,10 @@ const Marriage = () => {
           <div className="grid sm:grid-cols-2 gap-x-6">
             {info.map((row, i) => (
               <div key={i} className="py-3 border-b border-white/10">
-                <span className="text-[#f1d98c] font-semibold">
+                <span className="text-red-400 font-semibold">
                   <T en={row.label.en} bn={row.label.bn} bangla={bangla} />:
                 </span>{" "}
-                <span className="text-[#d9e2f1]">
+                <span className="text-white/85">
                   <T en={row.value.en} bn={row.value.bn} bangla={bangla} />
                 </span>
               </div>
@@ -154,7 +161,7 @@ const Marriage = () => {
 
         {/* About */}
         <Card title={t("About Me", "আমার সম্পর্কে")}>
-          <p className="leading-relaxed text-[#d9e2f1]">
+          <p className="leading-relaxed text-white/85">
             {t(
               "I am a responsible, family-oriented, and growth-focused person. I believe in building a stable, respectful, and meaningful life guided by faith, integrity, and long-term commitment.",
               "আমি একজন দায়িত্বশীল, পরিবারমুখী এবং লক্ষ্যভিত্তিক মানুষ। বিশ্বাস, সততা এবং দীর্ঘমেয়াদি অঙ্গীকারের ভিত্তিতে একটি স্থির, সম্মানজনক ও অর্থবহ জীবন গড়ে তুলতে বিশ্বাস করি।"
@@ -164,9 +171,9 @@ const Marriage = () => {
 
         {/* Family */}
         <Card title={t("Family Background", "পারিবারিক তথ্য")}>
-          <ul className="space-y-2 list-disc pl-6">
+          <ul className="space-y-2 list-disc pl-6 marker:text-red-500">
             {family.map((f, i) => (
-              <li key={i} className="text-[#d9e2f1]">
+              <li key={i} className="text-white/85">
                 <T en={f.en} bn={f.bn} bangla={bangla} />
               </li>
             ))}
@@ -175,9 +182,9 @@ const Marriage = () => {
 
         {/* Education */}
         <Card title={t("Educational Qualification", "শিক্ষাগত যোগ্যতা")}>
-          <ul className="space-y-2 list-disc pl-6">
+          <ul className="space-y-2 list-disc pl-6 marker:text-red-500">
             {education.map((e, i) => (
-              <li key={i} className="text-[#d9e2f1]">
+              <li key={i} className="text-white/85">
                 <T en={e.en} bn={e.bn} bangla={bangla} />
               </li>
             ))}
@@ -186,7 +193,7 @@ const Marriage = () => {
 
         {/* Professional */}
         <Card title={t("Professional Overview", "পেশাগত পরিচিতি")}>
-          <p className="leading-relaxed text-[#d9e2f1]">
+          <p className="leading-relaxed text-white/85">
             {t(
               "Professionally, I work in AI-powered digital growth systems, brand strategy, automation, funnel architecture, and business transformation. My work focuses on helping businesses create structured and scalable growth systems.",
               "পেশাগতভাবে আমি এআই-পাওয়ার্ড ডিজিটাল গ্রোথ সিস্টেম, ব্র্যান্ড স্ট্র্যাটেজি, অটোমেশন, ফানেল আর্কিটেকচার এবং বিজনেস ট্রান্সফরমেশন নিয়ে কাজ করি। ব্যবসাকে স্ট্রাকচার্ড ও স্কেলেবল গ্রোথ সিস্টেমে রূপান্তর করাই আমার কাজের মূল ফোকাস।"
@@ -196,9 +203,9 @@ const Marriage = () => {
 
         {/* Attributes */}
         <Card title={t("Personal Attributes", "ব্যক্তিগত গুণাবলি")}>
-          <ul className="space-y-2 list-disc pl-6">
+          <ul className="space-y-2 list-disc pl-6 marker:text-red-500">
             {attributes.map((a, i) => (
-              <li key={i} className="text-[#d9e2f1]">
+              <li key={i} className="text-white/85">
                 <T en={a.en} bn={a.bn} bangla={bangla} />
               </li>
             ))}
@@ -207,9 +214,9 @@ const Marriage = () => {
 
         {/* Expectation */}
         <Card title={t("Expectation from Life Partner", "জীবনসঙ্গীর প্রত্যাশা")}>
-          <p className="leading-relaxed text-[#d9e2f1]">
+          <p className="leading-relaxed text-white/85">
             {t(
-              "Looking for a well-educated, fair-skinned (forsha), and beautiful life partner who carries a modern outlook with cultural grace. She should be open-minded, flexible, emotionally mature, and family-oriented — someone who values honesty, mutual respect, shared growth, and balances tradition with the modern era comfortably.",
+              "Looking for a well-educated, fair-skinned, and beautiful life partner who carries a modern outlook with cultural grace. She should be open-minded, flexible, emotionally mature, and family-oriented — someone who values honesty, mutual respect, shared growth, and balances tradition with the modern era comfortably.",
               "একজন শিক্ষিত, ফর্সা ও সুন্দরী জীবনসঙ্গী খুঁজছি, যিনি আধুনিক দৃষ্টিভঙ্গির পাশাপাশি সাংস্কৃতিক মার্জিতাও ধারণ করেন। তিনি হবেন উদারমনা, ফ্লেক্সিবল, মানসিকভাবে পরিপক্ব ও পরিবারমুখী — যিনি সততা, পারস্পরিক সম্মান, একসাথে বেড়ে ওঠার মানসিকতা এবং ঐতিহ্য ও আধুনিক যুগের ভারসাম্য সহজভাবে বজায় রাখতে পারেন।"
             )}
           </p>
@@ -223,7 +230,7 @@ const Marriage = () => {
                 key={i}
                 src={src}
                 alt={`Zahid Hasan Emon photo ${i + 1}`}
-                className="w-full h-72 object-cover rounded-2xl border border-gold/30"
+                className="w-full h-72 object-cover rounded-2xl border border-red-500/30 hover:border-red-500/70 transition"
               />
             ))}
           </div>
@@ -231,28 +238,28 @@ const Marriage = () => {
 
         {/* Contact */}
         <Card title={t("Contact Information", "যোগাযোগ")}>
-          <ul className="space-y-3 text-[#d9e2f1]" id="contact">
+          <ul className="space-y-3 text-white/85" id="contact">
             <li className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-gold" />
-              <a className="hover:text-gold" href="https://wa.me/8801410004037" target="_blank" rel="noreferrer">
+              <Phone className="w-4 h-4 text-red-400" />
+              <a className="hover:text-red-400 transition" href="https://wa.me/8801410004037" target="_blank" rel="noreferrer">
                 WhatsApp: +8801410004037
               </a>
             </li>
             <li className="flex items-center gap-3">
-              <Mail className="w-4 h-4 text-gold" />
-              <a className="hover:text-gold" href="mailto:zhemongrowth@gmail.com">
+              <Mail className="w-4 h-4 text-red-400" />
+              <a className="hover:text-red-400 transition" href="mailto:zhemongrowth@gmail.com">
                 zhemongrowth@gmail.com
               </a>
             </li>
             <li className="flex items-center gap-3">
-              <Facebook className="w-4 h-4 text-gold" />
-              <a className="hover:text-gold" href="https://facebook.com/zhemongrowth" target="_blank" rel="noreferrer">
+              <Facebook className="w-4 h-4 text-red-400" />
+              <a className="hover:text-red-400 transition" href="https://facebook.com/zhemongrowth" target="_blank" rel="noreferrer">
                 facebook.com/zhemongrowth
               </a>
             </li>
             <li className="flex items-center gap-3">
-              <Linkedin className="w-4 h-4 text-gold" />
-              <a className="hover:text-gold" href="https://linkedin.com/in/zhemongrowth" target="_blank" rel="noreferrer">
+              <Linkedin className="w-4 h-4 text-red-400" />
+              <a className="hover:text-red-400 transition" href="https://linkedin.com/in/zhemongrowth" target="_blank" rel="noreferrer">
                 linkedin.com/in/zhemongrowth
               </a>
             </li>
@@ -260,7 +267,7 @@ const Marriage = () => {
         </Card>
 
         {/* Selective sharing notice */}
-        <p className="text-center mt-10 mb-4 text-sm text-[#f4e8bd]/80 italic px-4">
+        <p className="text-center mt-10 mb-4 text-sm text-white/60 italic px-4">
           {t(
             "This profile is shared selectively for respectful family consideration.",
             "এই প্রোফাইলটি সম্মানজনক পারিবারিক বিবেচনার জন্য সীমিতভাবে শেয়ার করা হয়েছে।"
@@ -269,9 +276,9 @@ const Marriage = () => {
 
         {/* Premium Footer */}
         <footer className="mb-10 mt-2">
-          <div className="marriage-footer-card mx-auto max-w-2xl text-center rounded-3xl px-6 py-8 border border-gold/40 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur-md">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold/50 bg-gold/10 text-gold text-xs font-bold uppercase tracking-[0.2em]">
-              <span className="text-base leading-none">✔</span>
+          <div className="marriage-footer-card mx-auto max-w-2xl text-center rounded-3xl px-6 py-8 border border-red-500/40 bg-gradient-to-br from-black/80 via-[#1a0507]/90 to-black/80 backdrop-blur-md shadow-[0_30px_80px_-20px_rgba(220,38,38,0.45)]">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/50 bg-red-600/10 text-red-300 text-xs font-bold uppercase tracking-[0.2em]">
+              <Heart className="h-3.5 w-3.5 fill-current" />
               {t("Privately Curated Profile", "ব্যক্তিগতভাবে নির্বাচিত প্রোফাইল")}
             </div>
             <p className="mt-4 text-base md:text-lg font-semibold text-white">
@@ -280,7 +287,7 @@ const Marriage = () => {
                 "TrendFlux এর মাধ্যমে পরিমার্জিত একটি ব্যক্তিগত প্রোফাইল"
               )}
             </p>
-            <p className="mt-3 text-[#f4e8bd] italic text-sm md:text-base">
+            <p className="mt-3 text-white/70 italic text-sm md:text-base">
               {t(
                 "“Striving for excellence in every aspect of life, with faith, integrity, and purpose.”",
                 "“বিশ্বাস, সততা ও উদ্দেশ্যবোধের সঙ্গে জীবনের প্রতিটি ক্ষেত্রে উৎকর্ষের পথে এগিয়ে চলা।”"
@@ -290,7 +297,7 @@ const Marriage = () => {
               href="https://instagram.com/studiobrandtoki"
               target="_blank"
               rel="noreferrer"
-              className="mt-5 inline-block text-xs uppercase tracking-[0.3em] text-gold/80 hover:text-gold transition"
+              className="mt-5 inline-block text-xs uppercase tracking-[0.3em] text-red-300/80 hover:text-red-300 transition"
             >
               @studiobrandtoki
             </a>
@@ -303,8 +310,13 @@ const Marriage = () => {
 
 const Card = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section className="my-6">
-    <h2 className="text-gold text-2xl font-bold mb-3">{title}</h2>
-    <div className="rounded-3xl p-6 border border-gold/20 bg-white/[0.065] backdrop-blur-md shadow-[0_12px_35px_rgba(0,0,0,0.18)]">
+    <div className="flex items-center gap-3 mb-3">
+      <span className="h-1.5 w-8 rounded-full bg-gradient-to-r from-red-600 via-white to-black" aria-hidden />
+      <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-red-400 bg-clip-text text-transparent">
+        {title}
+      </h2>
+    </div>
+    <div className="rounded-3xl p-6 border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-[0_12px_35px_rgba(0,0,0,0.4)] hover:border-red-500/30 transition">
       {children}
     </div>
   </section>
