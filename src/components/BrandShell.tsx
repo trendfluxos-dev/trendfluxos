@@ -19,14 +19,28 @@ export const BrandShell = ({
   const meta = tierMeta[tier];
   return (
     <main
-      className="min-h-screen text-white"
+      className="relative min-h-screen text-white overflow-hidden"
       style={{
         background:
           "radial-gradient(circle at top, hsl(var(--gold) / 0.14), transparent 40%), linear-gradient(180deg, #0B1F3A 0%, #07182e 100%)",
       }}
     >
-      <header className="max-w-6xl mx-auto px-5 pt-6 flex items-center justify-between">
-        <Link to="/" className="text-xs uppercase tracking-[0.3em] text-gold/80 hover:text-gold">
+      {/* Decorative ambient layer */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute -top-40 -left-40 w-[520px] h-[520px] rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, hsl(var(--gold) / 0.18), transparent 65%)" }}
+        />
+        <div
+          className="absolute -bottom-40 -right-40 w-[560px] h-[560px] rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, hsl(187 100% 50% / 0.10), transparent 65%)" }}
+        />
+        <div className="absolute inset-0 brand-grid-overlay opacity-60" />
+        <div className="absolute inset-0 brand-noise" />
+      </div>
+
+      <header className="relative max-w-6xl mx-auto px-5 pt-6 flex items-center justify-between">
+        <Link to="/" className="text-xs uppercase tracking-[0.3em] text-gold/80 hover:text-gold transition">
           ← TrendFlux
         </Link>
         <div className="text-right">
@@ -35,9 +49,12 @@ export const BrandShell = ({
         </div>
       </header>
 
-      <div className={`mx-auto mt-3 h-px max-w-6xl bg-gradient-to-r ${meta.tone}`} />
+      <div className="relative mx-auto mt-3 h-px max-w-6xl overflow-hidden">
+        <div className={`absolute inset-0 bg-gradient-to-r ${meta.tone}`} />
+        <div className="absolute inset-0 brand-divider-shimmer" />
+      </div>
 
-      <div className="max-w-6xl mx-auto px-5 pb-20">{children}</div>
+      <div className="relative max-w-6xl mx-auto px-5 pb-20">{children}</div>
 
       <BrandFunnelFooter active={tier} />
     </main>
