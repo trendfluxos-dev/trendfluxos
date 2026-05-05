@@ -1,71 +1,62 @@
-# Press Coverage — "More details" Modal
+# Smart Decoration Pass — TrendFlux Brand Tier Pages
 
-## Goal
+Goal: elevate `/brand-open`, `/trendflux-talent`, `/luxe-veil` (and the shared `BrandShell`) with tasteful, tier-appropriate decoration — without changing copy, structure, or backend logic. Each tier should feel visually distinct yet share the unified gold + navy system.
 
-Make every press coverage card in the Phase 03 section open a polished modal with the full headline, outlet attribution, and short context — with a clear primary action that opens the outlet in a new tab. This turns the grid from "looks clickable" into a real interactive press kit.
+## Design intent per tier
 
-## Where it lives
-
-All changes inside the existing Phase 03 timeline block in `src/pages/Index.tsx`. No new routes, no new components extracted, no changes to article URLs (each modal's "Read on [Outlet]" button opens the outlet homepage, matching current behavior).
-
-## Interaction
-
-1. User sees the 14 press cards in a 2-column grid (unchanged).
-2. Each card is now a `<button>` (not an `<a>`) — clicking it opens a centered modal.
-3. Cards get a subtle "More details →" affordance in the corner so the action is obvious.
-4. Above the grid, a one-line helper appears: *Click any headline for context, then read the original report.*
-
-## Modal contents
-
-Built with the existing `Dialog` primitive from `src/components/ui/dialog.tsx` (already in the project).
-
-Each modal shows:
-- **Outlet name** as a small gold eyebrow (e.g. *Desh Rupantor*)
-- **Full Bangla headline** as the dialog title (display font, larger, leading-snug)
-- **Short English context line** — a 1–2 sentence neutral summary of what the report covered (e.g. "Coverage of the campus extortion network and the student leader who refused to participate."). Written generically per headline so we don't fabricate quotes.
-- **Meta row**: small badges for `Bangladesh` · `National Press` · `2023–2024 coverage`
-- **Primary CTA**: gold button `Read on [Outlet] ↗` → opens outlet homepage in a new tab (`target="_blank"`, `rel="noreferrer noopener"`)
-- **Secondary CTA**: ghost `Close`
-- A short footnote: *Link opens the outlet's homepage. Article-level deep links can be added later.*
-
-Only one modal component is rendered; it's controlled by a single `useState<PressItem | null>` so we don't mount 14 dialogs.
-
-## Visual design
-
-- Dialog uses existing `glass` styling with a gold top border accent and `shadow-gold` glow.
-- Outlet eyebrow in `text-gold` uppercase tracking-wider.
-- Headline in display font, `text-2xl md:text-3xl`, `leading-snug`.
-- Body text muted-foreground.
-- Primary button uses existing `variant="gold"`; secondary uses `variant="ghost"`.
-- Cards in the grid get a subtle `MoreHorizontal` (or "More details →") label that slides in on hover, replacing the current `ArrowUpRight` icon.
-- Fully keyboard accessible (Dialog handles focus trap + ESC).
-
-## Data shape
-
-The existing `press` array on Phase 03 gets one optional field added:
-
-```ts
-type PressItem = {
-  outlet: string;
-  headline: string;          // Bangla
-  href: string;              // outlet homepage
-  context: string;           // NEW — short English summary, 1–2 sentences
-};
+```
+OPEN      → bold, energetic   → gold sweeps, halftone dots, ticker strip
+PLATFORM  → confident, modern → orbital rings, soft grid, glow halos
+PRIVATE   → quiet, luxurious  → silk gradient, subtle noise, hairline crest
 ```
 
-Context lines are written per headline and kept neutral/factual (no invented quotes, no claims beyond what the headline already states).
+## Changes
+
+### 1. `src/components/BrandShell.tsx` (shared)
+- Add a fixed decorative background layer behind `children`:
+  - Soft top-left gold radial + bottom-right navy radial (per-tier intensity via `tier` prop).
+  - Subtle SVG noise overlay (low opacity) for depth.
+  - Faint gold hairline grid (1px @ 6% opacity) clipped to viewport.
+- Animate the divider line under header (gold gradient sweep, 6s loop, `prefers-reduced-motion` safe).
+- Funnel footer: add tiny tier number medallions and a hover gold-shimmer.
+
+### 2. `src/pages/BrandOpen.tsx`
+- Wrap hero in a decorative frame:
+  - Halftone dot pattern (CSS radial-gradient) behind the bilingual logo lockup.
+  - Two diagonal gold "speed lines" (SVG) flanking the title.
+- Convert the 3 feature cards to use a top gold accent bar + number `01/02/03`.
+- Add a thin marquee strip above testimonials: rotating words "BOLD · CLEAR · LOUD · SEEN · FELT" (CSS animation, pause on hover).
+
+### 3. `src/pages/TrendfluxTalent.tsx`
+- Upgrade the TF lens monogram:
+  - Add a third rotating outer ring (slow, 30s) with tick marks.
+  - Animated gold orbit dot circling the rings.
+  - Subtle conic-gradient glow behind the lens.
+- Feature cards: gradient border (gold → transparent) using `mask-composite` trick, hover lift.
+- "Join" CTA section: add corner brackets (┌ ┐ └ ┘) in gold for a "framed" platform feel.
+
+### 4. `src/pages/LuxeVeil.tsx`
+- Locked state:
+  - Add silk-like animated gradient backdrop behind the veil SVG (slow, 20s).
+  - Surround invitation card with a hairline gold double-border + tiny corner crests.
+  - Replace plain divider above "Request Invitation" with an ornamental gold `◆ ─── ◆` separator.
+- Unlocked state:
+  - Add a soft floating particle layer (6–8 dots, gentle drift via CSS keyframes).
+  - Wrap testimonials in a "chapter" frame with serif drop-cap quote marks.
+- Refine veil SVG: add a faint inner monogram glow pulse (4s).
+
+### 5. Motion & accessibility
+- All new animations respect `@media (prefers-reduced-motion: reduce)` (disable transforms/loops).
+- No layout shift; decoration uses `absolute` + `pointer-events-none` + `aria-hidden`.
+- No new dependencies; pure Tailwind + inline SVG + a few keyframes added to `src/index.css` (or `tailwind.config.ts` if cleaner).
 
 ## Out of scope
+- No copy changes, no new routes, no backend changes, no logo redesign.
+- `Index.tsx`, `ProjectLead.tsx`, admin page untouched (already polished).
 
-- No per-article deep URLs (user confirmed: outlet homepages for now).
-- No screenshots or thumbnails of articles.
-- No translation of the Bangla headline into English inside the modal — only a short context note.
-- No share buttons, no copy-link button.
-- No changes to the other timeline phases.
-
-## Technical notes
-
-- Import `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter` from `@/components/ui/dialog`.
-- Replace each card's `<a>` with `<button onClick={() => setActivePress(item)}>`.
-- Render one `<Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>` after the grid.
-- Keep all existing animations, gradients, and glass styling.
+## Files touched
+- `src/index.css` — 3–4 new keyframes (shimmer, drift, silk, marquee) + reduced-motion guard
+- `src/components/BrandShell.tsx` — background decoration layer + animated divider
+- `src/pages/BrandOpen.tsx` — halftone, speed lines, numbered cards, marquee strip
+- `src/pages/TrendfluxTalent.tsx` — monogram orbit, gradient-border cards, CTA brackets
+- `src/pages/LuxeVeil.tsx` — silk backdrop, ornamental separator, particle layer, veil pulse

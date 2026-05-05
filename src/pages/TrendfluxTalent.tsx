@@ -30,8 +30,40 @@ const TrendfluxTalent = () => {
         {/* Monogram lens mark */}
         <div className="mt-12 flex justify-center">
           <div className="relative w-44 h-44">
+            <div
+              aria-hidden
+              className="absolute -inset-6 rounded-full"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, hsl(var(--gold) / 0.0), hsl(var(--gold) / 0.35), hsl(var(--gold) / 0.0) 60%)",
+                filter: "blur(18px)",
+              }}
+            />
             <div className="absolute inset-0 rounded-full border border-gold/70" />
             <div className="absolute inset-2 rounded-full border border-gold/40" />
+            {/* Outer ticked ring */}
+            <svg
+              viewBox="0 0 100 100"
+              className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] brand-spin-slower text-gold/50"
+            >
+              <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.3" />
+              {Array.from({ length: 24 }).map((_, i) => (
+                <line
+                  key={i}
+                  x1="50"
+                  y1="2"
+                  x2="50"
+                  y2={i % 6 === 0 ? "6" : "4"}
+                  stroke="currentColor"
+                  strokeWidth="0.4"
+                  transform={`rotate(${i * 15} 50 50)`}
+                />
+              ))}
+            </svg>
+            {/* Orbit dot */}
+            <div aria-hidden className="absolute inset-0 flex items-center justify-center">
+              <span className="block w-2 h-2 rounded-full bg-gold shadow-[0_0_12px_hsl(var(--gold)/0.8)] brand-orbit-dot" />
+            </div>
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="font-display text-6xl font-bold text-gold tracking-tighter">
                 TF
@@ -75,7 +107,7 @@ const TrendfluxTalent = () => {
         ].map(({ icon: I, t, d }) => (
           <div
             key={t}
-            className="rounded-2xl border border-gold/25 bg-gradient-to-b from-white/[0.05] to-transparent p-6 hover:border-gold/60 transition"
+            className="brand-card-gradient-border rounded-2xl p-6 hover:-translate-y-0.5 transition-transform"
           >
             <I className="w-5 h-5 text-gold" />
             <h3 className="mt-3 font-semibold text-white">{t}</h3>
@@ -84,7 +116,12 @@ const TrendfluxTalent = () => {
         ))}
       </section>
 
-      <section id="join" className="mt-12 rounded-3xl border border-gold/30 bg-white/[0.04] p-8 text-center">
+      <section id="join" className="relative mt-12 rounded-3xl border border-gold/30 bg-white/[0.04] p-8 text-center">
+        {/* Corner brackets */}
+        <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/70" />
+        <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/70" />
+        <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/70" />
+        <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/70" />
         <h2 className="font-display text-2xl md:text-3xl text-white">
           Become part of the next wave of <span className="text-gold">creator-led</span> brands.
         </h2>

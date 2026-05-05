@@ -56,14 +56,34 @@ const LuxeVeil = () => {
 
   return (
     <BrandShell tier="private">
-      <section className="pt-16 pb-12 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.35em] text-gold">
+      <section className="relative pt-16 pb-12 text-center">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[420px] brand-silk rounded-[2rem]" />
+        {/* Floating particles */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          {[
+            { l: "12%", t: "30%", dx: "20px", dy: "-80px", dur: "14s", d: "0s" },
+            { l: "82%", t: "22%", dx: "-25px", dy: "-90px", dur: "16s", d: "2s" },
+            { l: "30%", t: "70%", dx: "30px", dy: "-110px", dur: "18s", d: "4s" },
+            { l: "70%", t: "65%", dx: "-15px", dy: "-100px", dur: "15s", d: "1s" },
+            { l: "50%", t: "40%", dx: "10px", dy: "-120px", dur: "20s", d: "3s" },
+            { l: "20%", t: "55%", dx: "-20px", dy: "-90px", dur: "17s", d: "5s" },
+          ].map((p, i) => (
+            <span
+              key={i}
+              className="brand-particle absolute block w-1 h-1 rounded-full bg-gold/70"
+              style={{ left: p.l, top: p.t, ["--dx" as never]: p.dx, ["--dy" as never]: p.dy, ["--dur" as never]: p.dur, ["--delay" as never]: p.d }}
+            />
+          ))}
+        </div>
+
+        <div className="relative inline-flex items-center gap-2 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.35em] text-gold">
           <Lock className="w-3 h-3" /> Private · Invite Only
         </div>
 
-        <div className="mt-14 flex justify-center">
-          <div className="relative w-56 h-56">
+        <div className="relative mt-14 flex justify-center">
+          <div className="relative w-56 h-56 brand-pulse-soft">
             <div className="absolute inset-0 rounded-full border border-gold/60" />
+            <div className="absolute inset-3 rounded-full border border-gold/25" />
             <div className="absolute inset-0 flex items-center justify-center">
               <svg viewBox="0 0 200 200" className="w-44 h-44">
                 <defs>
@@ -81,25 +101,30 @@ const LuxeVeil = () => {
           </div>
         </div>
 
-        <h1 className="mt-10 font-display text-5xl md:text-6xl font-bold tracking-[0.25em] text-gold">
+        <h1 className="relative mt-10 font-display text-5xl md:text-6xl font-bold tracking-[0.25em] text-gold">
           LUXE VEIL
         </h1>
-        <p className="mt-4 text-sm uppercase tracking-[0.4em] text-white/70">
+        <p className="relative mt-4 text-sm uppercase tracking-[0.4em] text-white/70">
           — A Private Experience by TrendFlux
         </p>
-        <p className="mx-auto mt-10 max-w-xl text-base md:text-lg text-white/70 italic leading-relaxed">
-          “Beyond visibility lies discretion. A quiet space, curated for those who already know.”
+        <p className="relative mx-auto mt-10 max-w-xl text-base md:text-lg text-white/70 italic leading-relaxed">
+          "Beyond visibility lies discretion. A quiet space, curated for those who already know."
         </p>
       </section>
 
       {!unlocked ? (
-        <section className="mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#07182e]/70 backdrop-blur p-8 text-center">
-          <KeyRound className="w-6 h-6 text-gold mx-auto" />
-          <h2 className="mt-3 font-display text-xl text-white">Enter your invitation</h2>
-          <p className="mt-2 text-xs text-white/55">
+        <section className="relative mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#07182e]/70 backdrop-blur p-8 text-center">
+          {/* Inner hairline + corner crests */}
+          <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.4rem] border border-gold/15" />
+          <span aria-hidden className="absolute -top-2 left-1/2 -translate-x-1/2 text-gold/70 text-xs">◆</span>
+          <span aria-hidden className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-gold/70 text-xs">◆</span>
+
+          <KeyRound className="relative w-6 h-6 text-gold mx-auto" />
+          <h2 className="relative mt-3 font-display text-xl text-white">Enter your invitation</h2>
+          <p className="relative mt-2 text-xs text-white/55">
             Access to Luxe Veil is granted by code. Don't have one? Request below.
           </p>
-          <form onSubmit={tryUnlock} className="mt-5 space-y-3">
+          <form onSubmit={tryUnlock} className="relative mt-5 space-y-3">
             <input
               value={code}
               onChange={(e) => setCode(e.target.value)}
@@ -115,11 +140,23 @@ const LuxeVeil = () => {
               Unlock Experience
             </button>
           </form>
+
+          {/* Ornamental separator */}
+          <div className="relative mt-7 flex items-center gap-3 text-gold/60">
+            <span className="text-xs">◆</span>
+            <span className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+            <span className="text-xs">◆</span>
+          </div>
+
           <RequestInviteForm />
         </section>
       ) : (
         <>
-          <section className="mt-2 mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur p-8 text-center">
+          <section className="relative mt-2 mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur p-8 text-center">
+            <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
+            <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
+            <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/60" />
+            <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/60" />
             <p className="text-[11px] uppercase tracking-[0.35em] text-gold/70">
               Welcome · Selectively Curated
             </p>
