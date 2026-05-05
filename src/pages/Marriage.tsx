@@ -53,6 +53,7 @@ const Marriage = () => {
   return (
     <main className="min-h-screen text-white" style={{
       background: "radial-gradient(circle at top, hsl(var(--gold) / 0.16), transparent 35%), linear-gradient(180deg, #0B1F3A 0%, #07182e 100%)",
+      backgroundAttachment: "fixed",
     }}>
       <div className="max-w-5xl mx-auto px-5">
         {/* Lang toggle */}
