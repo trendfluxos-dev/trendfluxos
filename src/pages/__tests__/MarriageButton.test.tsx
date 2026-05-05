@@ -50,7 +50,7 @@ describe("A Sincere Introduction button", () => {
     fireEvent.click(btn);
 
     await waitFor(() => {
-      expect(screen.getByText(/a sincere introduction/i)).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
     expect(screen.getByLabelText(/your name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/whatsapp number/i)).toBeInTheDocument();
