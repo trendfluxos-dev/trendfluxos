@@ -216,6 +216,19 @@
   box-shadow: 0 0 0 3px hsl(var(--background)), 0 0 0 5px hsl(var(--gold)), 0 0 30px hsl(var(--gold) / 0.5);
 }
 
+@keyframes marriageFooterGlow {
+  0%   { box-shadow: 0 0 0px hsl(var(--gold) / 0.2); }
+  50%  { box-shadow: 0 0 24px hsl(var(--gold) / 0.6); }
+  100% { box-shadow: 0 0 0px hsl(var(--gold) / 0.2); }
+}
+.marriage-footer-card {
+  animation: marriageFooterGlow 3.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marriage-footer-card { animation: none !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marriage-glow-btn,
   .marriage-glow-btn:hover {
