@@ -253,5 +253,3 @@ const RequestInviteForm = () => {
 };
 
 export default LuxeVeil;
-
-export default LuxeVeil;
