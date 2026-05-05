@@ -864,39 +864,42 @@ const Index = () => {
           <div className="mx-auto mt-5 grid max-w-3xl gap-3 sm:grid-cols-3">
             <Link
               to="/brand-open"
-              className="group rounded-2xl border border-gold/20 bg-white/[0.03] p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/5"
+              className="tier-card tier-card-1 relative overflow-hidden rounded-2xl border border-gold/20 bg-white/[0.03] p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/5"
             >
-              <div className="flex items-center justify-between">
+              <span className="tier-sheen" aria-hidden />
+              <div className="relative flex items-center justify-between">
                 <Megaphone className="h-5 w-5 text-gold" />
                 <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">01 · Open</span>
               </div>
-              <h3 className="mt-3 font-display text-lg font-semibold text-foreground">Brand Tok</h3>
-              <p className="mt-1 text-xs text-foreground/55">Mass storytelling for everyone.</p>
+              <h3 className="relative mt-3 font-display text-lg font-semibold text-foreground">Brand Tok</h3>
+              <p className="relative mt-1 text-xs text-foreground/55">Mass storytelling for everyone.</p>
             </Link>
 
             <Link
               to="/trendflux-talent"
-              className="group rounded-2xl border border-gold/20 bg-white/[0.03] p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/5"
+              className="tier-card tier-card-2 relative overflow-hidden rounded-2xl border border-gold/20 bg-white/[0.03] p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/5"
             >
-              <div className="flex items-center justify-between">
+              <span className="tier-sheen" aria-hidden />
+              <div className="relative flex items-center justify-between">
                 <Users className="h-5 w-5 text-gold" />
                 <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">02 · Platform</span>
               </div>
-              <h3 className="mt-3 font-display text-lg font-semibold text-foreground">TrendFlux Talent</h3>
-              <p className="mt-1 text-xs text-foreground/55">Creator network for serious brands.</p>
+              <h3 className="relative mt-3 font-display text-lg font-semibold text-foreground">TrendFlux Talent</h3>
+              <p className="relative mt-1 text-xs text-foreground/55">Creator network for serious brands.</p>
             </Link>
 
             <div
               aria-disabled
               title="Luxe Veil is invite-only"
-              className="relative cursor-not-allowed rounded-2xl border border-gold/30 bg-[#07182e]/60 p-5 text-left opacity-90"
+              className="tier-card tier-card-3 relative cursor-not-allowed overflow-hidden rounded-2xl border border-gold/30 bg-[#07182e]/60 p-5 text-left"
             >
-              <div className="flex items-center justify-between">
-                <Lock className="h-5 w-5 text-gold" />
+              <span className="tier-sheen" aria-hidden />
+              <div className="relative flex items-center justify-between">
+                <Lock className="h-5 w-5 text-gold tier-lock-icon" />
                 <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">03 · Secret</span>
               </div>
-              <h3 className="mt-3 font-display text-lg font-semibold text-gold">Luxe Veil</h3>
-              <p className="mt-1 text-xs text-foreground/55">Invitation only. By referral.</p>
+              <h3 className="relative mt-3 font-display text-lg font-semibold text-gold">Luxe Veil</h3>
+              <p className="relative mt-1 text-xs text-foreground/55">Invitation only. By referral.</p>
               <span className="absolute right-3 bottom-3 text-[9px] uppercase tracking-[0.3em] text-gold/60">
                 Locked
               </span>
