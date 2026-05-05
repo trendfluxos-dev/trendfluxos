@@ -197,6 +197,7 @@ const Index = () => {
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
+  const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
   const { items: dbPress } = usePressItems();
 
   const filterTabs: Category[] = [
