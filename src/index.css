@@ -403,3 +403,25 @@
 @media (prefers-reduced-motion: reduce) {
   .tier-card, .tier-sheen::before, .tier-lock-icon { animation: none !important; opacity: 1 !important; }
 }
+
+/* Pause sequence on hover/focus and spotlight that card */
+.tier-card:hover,
+.tier-card:focus-visible,
+.tier-card:focus-within {
+  animation-play-state: paused, paused;
+  opacity: 1 !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: 0 22px 70px hsl(var(--gold) / 0.45) !important;
+  border-color: hsl(var(--gold) / 0.95) !important;
+  outline: none;
+  z-index: 2;
+}
+.tier-card:hover .tier-sheen::before,
+.tier-card:focus-visible .tier-sheen::before,
+.tier-card:focus-within .tier-sheen::before {
+  animation-play-state: paused;
+}
+.tier-card:hover .tier-lock-icon,
+.tier-card:focus-within .tier-lock-icon {
+  animation-play-state: paused;
+}
