@@ -258,12 +258,42 @@ const Marriage = () => {
           </ul>
         </Card>
 
-        {/* Footer */}
-        <footer className="text-center py-10 text-[#f4e8bd] italic">
+        {/* Selective sharing notice */}
+        <p className="text-center mt-10 mb-4 text-sm text-[#f4e8bd]/80 italic px-4">
           {t(
-            "“Striving for excellence in every aspect of life, with faith, integrity, and purpose.”",
-            "“বিশ্বাস, সততা ও উদ্দেশ্যবোধের সঙ্গে জীবনের প্রতিটি ক্ষেত্রে উৎকর্ষের পথে এগিয়ে চলা।”"
+            "This profile is shared selectively for respectful family consideration.",
+            "এই প্রোফাইলটি সম্মানজনক পারিবারিক বিবেচনার জন্য সীমিতভাবে শেয়ার করা হয়েছে।"
           )}
+        </p>
+
+        {/* Premium Footer */}
+        <footer className="mb-10 mt-2">
+          <div className="marriage-footer-card mx-auto max-w-2xl text-center rounded-3xl px-6 py-8 border border-gold/40 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold/50 bg-gold/10 text-gold text-xs font-bold uppercase tracking-[0.2em]">
+              <span className="text-base leading-none">✔</span>
+              {t("Privately Curated Profile", "ব্যক্তিগতভাবে নির্বাচিত প্রোফাইল")}
+            </div>
+            <p className="mt-4 text-base md:text-lg font-semibold text-white">
+              {t(
+                "Curated by TrendFlux — A Private Experience",
+                "TrendFlux এর মাধ্যমে পরিমার্জিত একটি ব্যক্তিগত প্রোফাইল"
+              )}
+            </p>
+            <p className="mt-3 text-[#f4e8bd] italic text-sm md:text-base">
+              {t(
+                "“Striving for excellence in every aspect of life, with faith, integrity, and purpose.”",
+                "“বিশ্বাস, সততা ও উদ্দেশ্যবোধের সঙ্গে জীবনের প্রতিটি ক্ষেত্রে উৎকর্ষের পথে এগিয়ে চলা।”"
+              )}
+            </p>
+            <a
+              href="https://instagram.com/studiobrandtoki"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-5 inline-block text-xs uppercase tracking-[0.3em] text-gold/80 hover:text-gold transition"
+            >
+              @studiobrandtoki
+            </a>
+          </div>
         </footer>
       </div>
     </main>
