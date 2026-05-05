@@ -1,17 +1,36 @@
 import { useEffect, useState } from "react";
 import { BrandShell } from "@/components/BrandShell";
-import { Lock, Mail, KeyRound } from "lucide-react";
+import { Lock, Mail, KeyRound, Loader2 } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
+import { z } from "zod";
 
 const VALID_CODES = ["LUXE2026", "VEIL-INVITE", "TRENDFLUX-PRIVATE"];
 const STORAGE_KEY = "luxe_veil_unlocked";
+
+const requestSchema = z.object({
+  name: z.string().trim().min(2, "Please enter your name").max(80),
+  email: z.string().trim().email("Invalid email").max(160),
+  reference: z.string().trim().max(120).optional().or(z.literal("")),
+  message: z.string().trim().min(10, "Tell us a little more").max(800),
+});
 
 const LuxeVeil = () => {
   useSeo({
     title: "Luxe Veil — A Private Experience by TrendFlux",
     description:
       "An invite-only sanctuary for discerning clients. Luxe Veil is the private tier of the TrendFlux ecosystem — discretion, emotion, and craftsmanship.",
+  });
+  useJsonLd({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Luxe Veil",
+    provider: { "@type": "Organization", name: "TrendFlux" },
+    serviceType: "Private, invite-only brand experience",
+    areaServed: "Worldwide",
+    description: "Invitation-only premium brand experience by TrendFlux for discerning clients.",
+    url: typeof window !== "undefined" ? window.location.href.split("#")[0] : undefined,
   });
 
   const [unlocked, setUnlocked] = useState(false);
