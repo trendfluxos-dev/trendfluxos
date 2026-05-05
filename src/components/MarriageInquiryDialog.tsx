@@ -76,21 +76,31 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
     }
 
     setSubmitting(true);
-    const { error } = await supabase.from("marriage_inquiries").insert({
-      name: parsed.data.name,
-      country_code: parsed.data.country_code,
-      whatsapp: parsed.data.whatsapp,
-      dress_colors: parsed.data.dress_colors,
-    });
+    const { data: inserted, error } = await supabase
+      .from("marriage_inquiries")
+      .insert({
+        name: parsed.data.name,
+        country_code: parsed.data.country_code,
+        whatsapp: parsed.data.whatsapp,
+        dress_colors: parsed.data.dress_colors,
+      })
+      .select("id")
+      .single();
     setSubmitting(false);
 
-    if (error) {
+    if (error || !inserted) {
       toast({
         title: "Submission failed",
         description: "Please try again in a moment.",
         variant: "destructive",
       });
       return;
+    }
+
+    try {
+      localStorage.setItem("marriage_inquiry_id", inserted.id);
+    } catch {
+      // ignore storage errors
     }
 
     toast({
@@ -101,6 +111,7 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
     navigate("/marriage", {
       state: {
         inquirer: {
+          id: inserted.id,
           name: parsed.data.name,
           country_code: parsed.data.country_code,
           whatsapp: parsed.data.whatsapp,
