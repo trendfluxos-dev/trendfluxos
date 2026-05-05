@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import MarriageInquiryDialog from "@/components/MarriageInquiryDialog";
 import {
   ArrowRight,
   Linkedin,
@@ -15,6 +17,7 @@ import {
   MapPin,
   GraduationCap,
   Briefcase,
+  Heart,
 } from "lucide-react";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
 
