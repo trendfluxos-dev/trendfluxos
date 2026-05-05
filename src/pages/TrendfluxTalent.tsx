@@ -1,7 +1,14 @@
 import { BrandShell } from "@/components/BrandShell";
 import { Camera, Users, Sparkles, ArrowUpRight } from "lucide-react";
+import { useSeo } from "@/hooks/useSeo";
+import { Testimonials } from "@/components/Testimonials";
 
 const TrendfluxTalent = () => {
+  useSeo({
+    title: "TrendFlux Talent — Brand Promoters & Creator Community BD",
+    description:
+      "AI-powered creator-led growth for Bangladeshi brands. A curated network of promoters, models and digital storytellers in Dhaka.",
+  });
   return (
     <BrandShell tier="platform">
       <section className="pt-14 pb-10 text-center">
