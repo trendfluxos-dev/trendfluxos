@@ -262,10 +262,6 @@ const Index = () => {
       {/* Hero */}
       <section className="relative flex min-h-screen items-center px-6 pt-32 pb-16 md:px-12 lg:px-20">
         <div className="mx-auto max-w-6xl text-center animate-fade-up">
-          <div className="mb-6 inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-primary">
-            <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-            Now accepting Q3 partnerships
-          </div>
 
           <h1 className="font-display mx-auto max-w-5xl text-5xl font-black leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             Digital Transformation
