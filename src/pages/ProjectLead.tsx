@@ -90,8 +90,10 @@ const socials = [
 ];
 
 const ProjectLead = () => {
+  const [marriageOpen, setMarriageOpen] = useState(false);
   return (
     <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <MarriageInquiryDialog open={marriageOpen} onOpenChange={setMarriageOpen} />
       <Navbar />
 
       {/* HERO / ABOUT */}
@@ -208,9 +210,8 @@ const ProjectLead = () => {
               <TooltipProvider delayDuration={150}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Link
-                      to="/marriage"
-                      aria-label="View marriage profile — Zahid Hasan Emon is available for marriage"
+                    <button
+                      type="button"
                       onClick={() => {
                         try {
                           const w = window as unknown as { dataLayer?: unknown[]; gtag?: (...a: unknown[]) => void; plausible?: (...a: unknown[]) => void };
@@ -218,17 +219,19 @@ const ProjectLead = () => {
                           w.gtag?.("event", "marriage_button_clicked", { location: "project_lead_cta" });
                           w.plausible?.("marriage_button_clicked", { props: { location: "project_lead_cta" } });
                         } catch { /* no-op */ }
+                        setMarriageOpen(true);
                       }}
+                      aria-label="Open a sincere marriage introduction form"
                       className="marriage-glow-btn relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-gold-foreground"
                     >
                       <span className="relative z-10 flex items-center gap-2">
-                        <span aria-hidden className="text-base">💍</span>
-                        Available for Marriage
+                        <Heart className="h-4 w-4 fill-current" aria-hidden />
+                        A Sincere Introduction
                       </span>
-                    </Link>
+                    </button>
                   </TooltipTrigger>
                   <TooltipContent side="top" className="max-w-xs text-xs">
-                    Open the marriage profile — full bio, family background & contact details for serious proposals.
+                    Share a quick intro — then the private marriage profile opens for your respectful consideration.
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
