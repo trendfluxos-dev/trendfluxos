@@ -747,67 +747,78 @@ const Index = () => {
 
       {/* Case study detail modal */}
       <Dialog open={!!activeCase} onOpenChange={(o) => !o && setActiveCase(null)}>
-        <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+        <DialogContent
+          className="glass border-gold/30 shadow-gold sm:max-w-2xl max-h-[90vh] overflow-y-auto"
+          aria-labelledby="case-modal-title"
+          aria-describedby="case-modal-desc"
+        >
+          <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           <DialogHeader className="space-y-3 pt-2 text-left">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+              <span className="sr-only">Category: </span>
               {activeCase?.category}
             </p>
-            <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
+            <DialogTitle id="case-modal-title" className="font-display text-2xl leading-snug md:text-3xl">
               {activeCase?.title}
             </DialogTitle>
+            <DialogDescription id="case-modal-desc" className="text-sm text-foreground/70">
+              {activeCase?.description}
+            </DialogDescription>
           </DialogHeader>
 
           {activeCase && (
             <div className="space-y-5 text-sm leading-relaxed text-foreground/75">
               {/* Compact KPI summary */}
-              <div className="rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent p-5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold/80">
+              <section
+                aria-labelledby="kpi-heading"
+                className="rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent p-5"
+              >
+                <h3 id="kpi-heading" className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold/80">
                   Headline Outcome
-                </p>
+                </h3>
                 <p className="font-display mt-1.5 text-xl font-bold leading-tight text-gradient md:text-2xl">
                   {activeCase.results[0]}
                 </p>
-                <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <dl className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
                   {activeCase.results.map((r, idx) => (
                     <div
                       key={r}
                       className="rounded-lg border border-border bg-background/40 p-3"
                     >
-                      <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-foreground/40">
+                      <dt className="text-[9px] font-semibold uppercase tracking-[0.25em] text-foreground/40">
                         KPI {String(idx + 1).padStart(2, "0")}
-                      </p>
-                      <p className="mt-1 flex items-start gap-1.5 text-xs font-semibold text-foreground/90">
-                        <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+                      </dt>
+                      <dd className="mt-1 flex items-start gap-1.5 text-xs font-semibold text-foreground/90">
+                        <CheckCircle2 aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
                         <span>{r}</span>
-                      </p>
+                      </dd>
                     </div>
                   ))}
-                </div>
-              </div>
+                </dl>
+              </section>
 
               <Section label="Situation" body={activeCase.situation} />
               <Section label="Problem" body={activeCase.problem} />
               <Section label="Solution" body={activeCase.solution} />
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
+              <section aria-labelledby="results-heading">
+                <h3 id="results-heading" className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
                   Results
-                </p>
+                </h3>
                 <ul className="mt-2 space-y-2">
                   {activeCase.results.map((r) => (
                     <li key={r} className="flex items-start gap-2">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                       <span>{r}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
-              <div className="rounded-xl border border-gold/30 bg-gold/5 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
+              </section>
+              <section aria-labelledby="insight-heading" className="rounded-xl border border-gold/30 bg-gold/5 p-4">
+                <h3 id="insight-heading" className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
                   Key Insight
-                </p>
+                </h3>
                 <p className="mt-2 text-foreground/85">{activeCase.insight}</p>
-              </div>
+              </section>
             </div>
           )}
 
