@@ -15,6 +15,7 @@ import {
   MessageCircle,
   Mail,
   MoreHorizontal,
+  CheckCircle2,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
