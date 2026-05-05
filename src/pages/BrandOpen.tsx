@@ -1,6 +1,7 @@
 import { BrandShell } from "@/components/BrandShell";
 import { Megaphone, Sparkles, Zap } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
 
 const BrandOpen = () => {
@@ -8,6 +9,16 @@ const BrandOpen = () => {
     title: "Brand Tok — Helping Brands Tell Their Stories | TrendFlux",
     description:
       "Bold, communication-first storytelling for Bangladeshi brands. Modern geometry, flat gold, built for ads, social and mass reach.",
+  });
+  useJsonLd({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Brand Tok",
+    provider: { "@type": "Organization", name: "TrendFlux", url: "https://trendfluxdigital.lovable.app" },
+    serviceType: "Brand storytelling & mass-reach campaigns",
+    areaServed: "Bangladesh",
+    description: "Bold, communication-first brand storytelling for ads, social, and mass awareness.",
+    url: typeof window !== "undefined" ? window.location.href.split("#")[0] : undefined,
   });
   return (
     <BrandShell tier="open">

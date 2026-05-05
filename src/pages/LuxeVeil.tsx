@@ -1,17 +1,36 @@
 import { useEffect, useState } from "react";
 import { BrandShell } from "@/components/BrandShell";
-import { Lock, Mail, KeyRound } from "lucide-react";
+import { Lock, Mail, KeyRound, Loader2 } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
+import { z } from "zod";
 
 const VALID_CODES = ["LUXE2026", "VEIL-INVITE", "TRENDFLUX-PRIVATE"];
 const STORAGE_KEY = "luxe_veil_unlocked";
+
+const requestSchema = z.object({
+  name: z.string().trim().min(2, "Please enter your name").max(80),
+  email: z.string().trim().email("Invalid email").max(160),
+  reference: z.string().trim().max(120).optional().or(z.literal("")),
+  message: z.string().trim().min(10, "Tell us a little more").max(800),
+});
 
 const LuxeVeil = () => {
   useSeo({
     title: "Luxe Veil — A Private Experience by TrendFlux",
     description:
       "An invite-only sanctuary for discerning clients. Luxe Veil is the private tier of the TrendFlux ecosystem — discretion, emotion, and craftsmanship.",
+  });
+  useJsonLd({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Luxe Veil",
+    provider: { "@type": "Organization", name: "TrendFlux" },
+    serviceType: "Private, invite-only brand experience",
+    areaServed: "Worldwide",
+    description: "Invitation-only premium brand experience by TrendFlux for discerning clients.",
+    url: typeof window !== "undefined" ? window.location.href.split("#")[0] : undefined,
   });
 
   const [unlocked, setUnlocked] = useState(false);
@@ -96,12 +115,7 @@ const LuxeVeil = () => {
               Unlock Experience
             </button>
           </form>
-          <a
-            href="mailto:zhemongrowth@gmail.com?subject=Luxe%20Veil%20Invitation%20Request"
-            className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-gold/80 hover:text-gold"
-          >
-            <Mail className="w-3 h-3" /> Request Invitation
-          </a>
+          <RequestInviteForm />
         </section>
       ) : (
         <>
@@ -141,6 +155,100 @@ const LuxeVeil = () => {
         </>
       )}
     </BrandShell>
+  );
+};
+
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+const RequestInviteForm = () => {
+  const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [done, setDone] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", reference: "", message: "" });
+  const [errs, setErrs] = useState<Record<string, string>>({});
+
+  if (done) {
+    return (
+      <p className="mt-6 text-xs uppercase tracking-[0.3em] text-gold">
+        ✓ Request received — we'll be in touch privately.
+      </p>
+    );
+  }
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-gold/80 hover:text-gold"
+      >
+        <Mail className="w-3 h-3" /> Request Invitation
+      </button>
+    );
+  }
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const parsed = requestSchema.safeParse(form);
+    if (!parsed.success) {
+      const fe: Record<string, string> = {};
+      parsed.error.issues.forEach((i) => (fe[i.path[0] as string] = i.message));
+      setErrs(fe);
+      return;
+    }
+    setErrs({});
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from("luxe_veil_requests").insert({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        reference: parsed.data.reference || null,
+        message: parsed.data.message,
+      });
+      if (error) throw error;
+      // Best-effort email notification (no-op if function not deployed yet)
+      supabase.functions
+        .invoke("send-luxe-veil-request", { body: parsed.data })
+        .catch(() => undefined);
+      setDone(true);
+    } catch {
+      toast({ title: "Could not submit", description: "Please try again or email zhemongrowth@gmail.com.", variant: "destructive" });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const field = "w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30";
+
+  return (
+    <form onSubmit={submit} className="mt-6 text-left space-y-3">
+      <div>
+        <input className={field} placeholder="Your name" value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        {errs.name && <p className="mt-1 text-[11px] text-red-300">{errs.name}</p>}
+      </div>
+      <div>
+        <input type="email" className={field} placeholder="Email" value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })} />
+        {errs.email && <p className="mt-1 text-[11px] text-red-300">{errs.email}</p>}
+      </div>
+      <input className={field} placeholder="Referred by (optional)" value={form.reference}
+        onChange={(e) => setForm({ ...form, reference: e.target.value })} />
+      <div>
+        <textarea rows={4} className={field} placeholder="Briefly, why Luxe Veil?" value={form.message}
+          onChange={(e) => setForm({ ...form, message: e.target.value })} />
+        {errs.message && <p className="mt-1 text-[11px] text-red-300">{errs.message}</p>}
+      </div>
+      <button
+        type="submit"
+        disabled={submitting}
+        className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-50 inline-flex items-center justify-center gap-2"
+      >
+        {submitting && <Loader2 className="w-3 h-3 animate-spin" />}
+        Submit Request
+      </button>
+    </form>
   );
 };
 

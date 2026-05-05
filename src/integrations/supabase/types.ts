@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      luxe_veil_requests: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          reference: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          reference?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          reference?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       press_items: {
         Row: {
           context: string

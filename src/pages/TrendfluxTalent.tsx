@@ -1,6 +1,7 @@
 import { BrandShell } from "@/components/BrandShell";
 import { Camera, Users, Sparkles, ArrowUpRight } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
 
 const TrendfluxTalent = () => {
@@ -8,6 +9,16 @@ const TrendfluxTalent = () => {
     title: "TrendFlux Talent — Brand Promoters & Creator Community BD",
     description:
       "AI-powered creator-led growth for Bangladeshi brands. A curated network of promoters, models and digital storytellers in Dhaka.",
+  });
+  useJsonLd({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "TrendFlux Talent",
+    alternateName: "Brand Promoters & Creator Community BD",
+    url: typeof window !== "undefined" ? window.location.href.split("#")[0] : undefined,
+    description: "AI-powered creator-led growth platform connecting Bangladeshi brands with curated promoters, models, and digital storytellers.",
+    areaServed: "Bangladesh",
+    parentOrganization: { "@type": "Organization", name: "TrendFlux" },
   });
   return (
     <BrandShell tier="platform">
