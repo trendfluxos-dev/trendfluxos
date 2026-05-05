@@ -681,16 +681,19 @@ const Index = () => {
                 className="group flex flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
                 style={{ animationDelay: `${i * 0.06}s` }}
               >
-                <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
-                  <img
-                    src={c.thumbnail}
-                    alt={`${c.category} icon`}
-                    loading="lazy"
-                    width={512}
-                    height={320}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
+                  {/* Subtle dotted grid */}
+                  <div
+                    className="absolute inset-0 opacity-40"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(hsl(var(--gold) / 0.18) 1px, transparent 1px)",
+                      backgroundSize: "14px 14px",
+                    }}
+                    aria-hidden
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+                  <c.Icon className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
                 </div>
 
                 <div className="flex flex-1 flex-col p-7">
