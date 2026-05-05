@@ -88,42 +88,100 @@ const services = [
   },
 ];
 
-const cases = [
+import caseOrganic from "@/assets/case-organic.jpg";
+import caseContent from "@/assets/case-content.jpg";
+import caseGlobal from "@/assets/case-global.jpg";
+import caseAutomation from "@/assets/case-automation.jpg";
+import caseSme from "@/assets/case-sme.jpg";
+import caseBrand from "@/assets/case-brand.jpg";
+
+type CaseStudy = {
+  category: string;
+  title: string;
+  description: string;
+  results: string[];
+  thumbnail: string;
+  situation: string;
+  problem: string;
+  solution: string;
+  insight: string;
+};
+
+const caseStudies: CaseStudy[] = [
   {
-    metric: "+45% ROAS",
-    sub: "in 90 days",
-    title: "Lumen Apparel — DTC Scale Sprint",
-    stack: ["Meta Ads", "Klaviyo", "Shopify", "GA4"],
+    category: "Organic Growth System",
+    title: "Scaling Organic Reach to 485K+",
+    description:
+      "Built a structured content system that generated massive organic reach without paid ads.",
+    results: ["485K+ video views", "80%+ organic reach", "45%+ engagement growth"],
+    thumbnail: caseOrganic,
+    situation: "The brand lacked visibility and had no structured content approach.",
+    problem: "Inconsistent posting, low engagement, and no audience targeting.",
+    solution:
+      "Developed a reels-first content system using hooks, storytelling, and structured scheduling.",
+    insight: "Content success is driven by structure and psychology — not volume.",
   },
   {
-    metric: "−62% Manual Hours",
-    sub: "across 4 departments",
-    title: "Northbeam Logistics — Ops Overhaul",
-    stack: ["Make", "HubSpot", "Airtable", "Slack API"],
+    category: "Content Engine",
+    title: "200+ Digital Asset Production System",
+    description:
+      "Created a scalable content production engine using templates and AI-assisted workflows.",
+    results: ["200+ assets delivered", "Faster content execution", "Consistent brand identity"],
+    thumbnail: caseContent,
+    situation: "Manual asset production was slow and inconsistent across campaigns.",
+    problem: "Bottlenecked design output, off-brand variations, missed launch windows.",
+    solution:
+      "Built a templated production engine combining Figma systems, Canva libraries, and AI copy workflows.",
+    insight: "Systems out-produce talent when speed and consistency both matter.",
   },
   {
-    metric: "3.4x Pipeline",
-    sub: "qualified MQL → SQL",
-    title: "Vault Finance — Funnel Rebuild",
-    stack: ["Webflow", "Salesforce", "Segment"],
+    category: "Global Strategy",
+    title: "Multi-Market Digital Strategy (US/UK)",
+    description:
+      "Optimized content and marketing strategy for international audience targeting.",
+    results: ["Improved engagement", "Market-aligned content", "Better audience targeting"],
+    thumbnail: caseGlobal,
+    situation: "A single-market playbook was being copy-pasted across geographies.",
+    problem: "Tone, references, and offers didn't resonate with US/UK audiences.",
+    solution:
+      "Rebuilt positioning, creative, and channel mix per market with localized creative variants.",
+    insight: "Global growth is local execution — not translated copy.",
   },
   {
-    metric: "$1.2M Revenue",
-    sub: "single-quarter Meta",
-    title: "Aurora Skincare — Creative Engine",
-    stack: ["Meta Ads", "Triple Whale", "Figma"],
+    category: "Automation Funnel",
+    title: "WhatsApp Lead Conversion System",
+    description: "Built an automated funnel to convert inquiries into booked strategy calls.",
+    results: ["Faster response time", "Higher lead engagement", "Increased booking rate"],
+    thumbnail: caseAutomation,
+    situation: "Inbound leads were dropping off before reaching a human.",
+    problem: "Slow replies, no qualification, no follow-up sequence.",
+    solution:
+      "Wired a WhatsApp + CRM automation that qualified, nurtured, and booked calls 24/7.",
+    insight: "Speed-to-lead is the cheapest conversion lever most brands ignore.",
   },
   {
-    metric: "8 → 1 Stack",
-    sub: "consolidation playbook",
-    title: "Forge Industries — Ecosystem Reset",
-    stack: ["Notion", "Zapier", "Linear", "Stripe"],
+    category: "SME Growth",
+    title: "SME Growth System Architecture",
+    description: "Designed structured growth systems for SMEs targeting scalable operations.",
+    results: ["Clear funnel structure", "CRM integration", "Scalable business model"],
+    thumbnail: caseSme,
+    situation: "Owner-led SME with strong service but no repeatable acquisition model.",
+    problem: "Revenue depended entirely on referrals and founder hustle.",
+    solution:
+      "Architected a top-to-bottom funnel with CRM, content, and outbound playbooks.",
+    insight: "SMEs scale when founders escape every step of the customer journey.",
   },
   {
-    metric: "+128% Sign-ups",
-    sub: "at flat ad spend",
-    title: "Helio Health — Conversion Lab",
-    stack: ["Meta Ads", "Webflow", "Mixpanel"],
+    category: "Personal Brand",
+    title: "Authority-Based Personal Brand System",
+    description: "Built positioning and content strategy for strong authority and engagement.",
+    results: ["Clear niche positioning", "Strong audience connection", "Consistent brand identity"],
+    thumbnail: caseBrand,
+    situation: "Talented operator with no recognizable public voice or positioning.",
+    problem: "Generic content, no clear ICP, no compounding inbound.",
+    solution:
+      "Defined a sharp niche thesis and built a content engine around proof-driven storytelling.",
+    insight: "Authority compounds when every post reinforces one undeniable thesis.",
   },
 ];
 
