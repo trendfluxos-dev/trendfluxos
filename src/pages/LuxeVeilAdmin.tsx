@@ -7,7 +7,11 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, LogOut, Check, X, Mail, Search, RefreshCw } from "lucide-react";
+import { Loader2, LogOut, Check, X, Mail, Search, RefreshCw, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
+
+const PAGE_SIZE = 10;
+type SortField = "created_at" | "name" | "email" | "status";
+type SortDir = "asc" | "desc";
 
 type RequestStatus = "pending" | "approved" | "rejected";
 type Req = {
@@ -31,9 +35,14 @@ export default function LuxeVeilAdmin() {
   const [authChecked, setAuthChecked] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [rows, setRows] = useState<Req[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | RequestStatus>("all");
   const [q, setQ] = useState("");
+  const [page, setPage] = useState(0);
+  const [sortField, setSortField] = useState<SortField>("created_at");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [counts, setCounts] = useState({ all: 0, pending: 0, approved: 0, rejected: 0 });
 
   useEffect(() => {
     const init = async () => {
@@ -56,18 +65,65 @@ export default function LuxeVeilAdmin() {
 
   const load = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const from = page * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    let query = supabase
       .from("luxe_veil_requests")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*", { count: "exact" })
+      .order(sortField, { ascending: sortDir === "asc" })
+      .range(from, to);
+
+    if (filter !== "all") query = query.eq("status", filter);
+    if (q.trim()) {
+      const s = `%${q.trim().replace(/[%_]/g, "")}%`;
+      query = query.or(`name.ilike.${s},email.ilike.${s},message.ilike.${s},reference.ilike.${s}`);
+    }
+
+    const { data, error, count } = await query;
     if (error) toast.error(error.message);
-    else setRows((data ?? []) as Req[]);
+    else {
+      setRows((data ?? []) as Req[]);
+      setTotal(count ?? 0);
+    }
     setLoading(false);
+  };
+
+  const loadCounts = async () => {
+    const statuses: RequestStatus[] = ["pending", "approved", "rejected"];
+    const all = await supabase.from("luxe_veil_requests").select("*", { count: "exact", head: true });
+    const results = await Promise.all(
+      statuses.map((s) =>
+        supabase.from("luxe_veil_requests").select("*", { count: "exact", head: true }).eq("status", s)
+      )
+    );
+    setCounts({
+      all: all.count ?? 0,
+      pending: results[0].count ?? 0,
+      approved: results[1].count ?? 0,
+      rejected: results[2].count ?? 0,
+    });
   };
 
   useEffect(() => {
     if (hasAccess) load();
-  }, [hasAccess]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasAccess, page, sortField, sortDir, filter]);
+
+  // Debounce search
+  useEffect(() => {
+    if (!hasAccess) return;
+    const t = setTimeout(() => {
+      setPage(0);
+      load();
+    }, 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q]);
+
+  useEffect(() => {
+    if (hasAccess) loadCounts();
+  }, [hasAccess, rows]);
 
   const setStatus = async (id: string, status: RequestStatus) => {
     const prev = rows;
@@ -101,24 +157,14 @@ export default function LuxeVeilAdmin() {
     );
   }
 
-  const filtered = rows.filter((r) => {
-    if (filter !== "all" && r.status !== filter) return false;
-    if (!q.trim()) return true;
-    const s = q.toLowerCase();
-    return (
-      r.name.toLowerCase().includes(s) ||
-      r.email.toLowerCase().includes(s) ||
-      (r.reference ?? "").toLowerCase().includes(s) ||
-      r.message.toLowerCase().includes(s)
-    );
-  });
-
-  const counts = {
-    all: rows.length,
-    pending: rows.filter((r) => r.status === "pending").length,
-    approved: rows.filter((r) => r.status === "approved").length,
-    rejected: rows.filter((r) => r.status === "rejected").length,
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const toggleSort = (f: SortField) => {
+    if (sortField === f) setSortDir(sortDir === "asc" ? "desc" : "asc");
+    else { setSortField(f); setSortDir("desc"); }
+    setPage(0);
   };
+  const sortIcon = (f: SortField) =>
+    sortField === f ? (sortDir === "asc" ? <ArrowUp className="inline h-3 w-3 ml-1" /> : <ArrowDown className="inline h-3 w-3 ml-1" />) : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -155,13 +201,28 @@ export default function LuxeVeilAdmin() {
           </Select>
         </div>
 
+        {/* Sort bar */}
+        <div className="flex flex-wrap items-center gap-2 text-xs text-foreground/60">
+          <span className="uppercase tracking-[0.2em]">Sort by:</span>
+          {(["created_at", "name", "email", "status"] as SortField[]).map((f) => (
+            <button
+              key={f}
+              onClick={() => toggleSort(f)}
+              className={`px-3 py-1 rounded-full border ${sortField === f ? "border-gold text-gold" : "border-border hover:border-foreground/40"}`}
+            >
+              {f === "created_at" ? "Date" : f.charAt(0).toUpperCase() + f.slice(1)}
+              {sortIcon(f)}
+            </button>
+          ))}
+        </div>
+
         {loading ? (
           <Loader2 className="h-5 w-5 animate-spin text-gold" />
-        ) : filtered.length === 0 ? (
+        ) : rows.length === 0 ? (
           <p className="text-sm text-foreground/50 py-12 text-center">No requests match.</p>
         ) : (
           <div className="space-y-3">
-            {filtered.map((r) => (
+            {rows.map((r) => (
               <div key={r.id} className="rounded-xl glass p-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -198,6 +259,24 @@ export default function LuxeVeilAdmin() {
                 <p className="mt-3 text-sm text-foreground/80 whitespace-pre-wrap leading-relaxed">{r.message}</p>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {total > PAGE_SIZE && (
+          <div className="flex items-center justify-between pt-4 border-t border-border">
+            <p className="text-xs text-foreground/50">
+              Showing {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, total)} of {total}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-xs text-foreground/60">Page {page + 1} / {totalPages}</span>
+              <Button size="sm" variant="outline" disabled={page + 1 >= totalPages} onClick={() => setPage((p) => p + 1)}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         )}
       </main>
