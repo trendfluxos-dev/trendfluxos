@@ -201,13 +201,28 @@ export default function LuxeVeilAdmin() {
           </Select>
         </div>
 
+        {/* Sort bar */}
+        <div className="flex flex-wrap items-center gap-2 text-xs text-foreground/60">
+          <span className="uppercase tracking-[0.2em]">Sort by:</span>
+          {(["created_at", "name", "email", "status"] as SortField[]).map((f) => (
+            <button
+              key={f}
+              onClick={() => toggleSort(f)}
+              className={`px-3 py-1 rounded-full border ${sortField === f ? "border-gold text-gold" : "border-border hover:border-foreground/40"}`}
+            >
+              {f === "created_at" ? "Date" : f.charAt(0).toUpperCase() + f.slice(1)}
+              {sortIcon(f)}
+            </button>
+          ))}
+        </div>
+
         {loading ? (
           <Loader2 className="h-5 w-5 animate-spin text-gold" />
-        ) : filtered.length === 0 ? (
+        ) : rows.length === 0 ? (
           <p className="text-sm text-foreground/50 py-12 text-center">No requests match.</p>
         ) : (
           <div className="space-y-3">
-            {filtered.map((r) => (
+            {rows.map((r) => (
               <div key={r.id} className="rounded-xl glass p-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -244,6 +259,24 @@ export default function LuxeVeilAdmin() {
                 <p className="mt-3 text-sm text-foreground/80 whitespace-pre-wrap leading-relaxed">{r.message}</p>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {total > PAGE_SIZE && (
+          <div className="flex items-center justify-between pt-4 border-t border-border">
+            <p className="text-xs text-foreground/50">
+              Showing {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, total)} of {total}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-xs text-foreground/60">Page {page + 1} / {totalPages}</span>
+              <Button size="sm" variant="outline" disabled={page + 1 >= totalPages} onClick={() => setPage((p) => p + 1)}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         )}
       </main>
