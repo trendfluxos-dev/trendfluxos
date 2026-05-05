@@ -463,12 +463,27 @@ const Index = () => {
                         <button
                           type="button"
                           onClick={() => setPressOpenFor(item.phase)}
-                          className="group inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/5 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-gold hover:bg-gold/10 hover:border-gold/60 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
+                          className="group relative inline-flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl border border-gold/40 bg-gradient-to-r from-gold/10 via-gold/5 to-transparent px-6 py-5 text-left shadow-gold/20 hover:border-gold/70 hover:shadow-gold focus:outline-none focus:ring-2 focus:ring-gold/60 transition-all md:w-auto md:px-8"
                           aria-expanded={false}
                         >
-                          <MoreHorizontal className="h-4 w-4" />
-                          View Press Coverage · {item.press.length}
-                          <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                          <span className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-gold via-gold/60 to-transparent" aria-hidden />
+                          <span className="flex items-center gap-4">
+                            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold/15 ring-1 ring-gold/40 group-hover:bg-gold/25 transition-colors">
+                              <MoreHorizontal className="h-5 w-5 text-gold" />
+                            </span>
+                            <span className="flex flex-col">
+                              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold/80">
+                                Press Coverage
+                              </span>
+                              <span className="font-display text-lg font-bold text-foreground md:text-xl">
+                                View {item.press.length} National Headlines
+                              </span>
+                              <span className="mt-0.5 text-xs text-foreground/55">
+                                Click to reveal verified outlet reports
+                              </span>
+                            </span>
+                          </span>
+                          <ArrowUpRight className="h-5 w-5 shrink-0 text-gold transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                         </button>
                       ) : (
                         <div className="animate-fade-up">
