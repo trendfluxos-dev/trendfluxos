@@ -20,6 +20,7 @@ export default function Admin() {
   const [userId, setUserId] = useState<string | null>(null);
   const { items, loading, refresh } = usePressItems(true);
   const [rows, setRows] = useState<Row[]>([]);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const init = async () => {
