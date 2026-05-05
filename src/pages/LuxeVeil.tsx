@@ -56,14 +56,34 @@ const LuxeVeil = () => {
 
   return (
     <BrandShell tier="private">
-      <section className="pt-16 pb-12 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.35em] text-gold">
+      <section className="relative pt-16 pb-12 text-center">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[420px] brand-silk rounded-[2rem]" />
+        {/* Floating particles */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          {[
+            { l: "12%", t: "30%", dx: "20px", dy: "-80px", dur: "14s", d: "0s" },
+            { l: "82%", t: "22%", dx: "-25px", dy: "-90px", dur: "16s", d: "2s" },
+            { l: "30%", t: "70%", dx: "30px", dy: "-110px", dur: "18s", d: "4s" },
+            { l: "70%", t: "65%", dx: "-15px", dy: "-100px", dur: "15s", d: "1s" },
+            { l: "50%", t: "40%", dx: "10px", dy: "-120px", dur: "20s", d: "3s" },
+            { l: "20%", t: "55%", dx: "-20px", dy: "-90px", dur: "17s", d: "5s" },
+          ].map((p, i) => (
+            <span
+              key={i}
+              className="brand-particle absolute block w-1 h-1 rounded-full bg-gold/70"
+              style={{ left: p.l, top: p.t, ["--dx" as never]: p.dx, ["--dy" as never]: p.dy, ["--dur" as never]: p.dur, ["--delay" as never]: p.d }}
+            />
+          ))}
+        </div>
+
+        <div className="relative inline-flex items-center gap-2 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.35em] text-gold">
           <Lock className="w-3 h-3" /> Private · Invite Only
         </div>
 
-        <div className="mt-14 flex justify-center">
-          <div className="relative w-56 h-56">
+        <div className="relative mt-14 flex justify-center">
+          <div className="relative w-56 h-56 brand-pulse-soft">
             <div className="absolute inset-0 rounded-full border border-gold/60" />
+            <div className="absolute inset-3 rounded-full border border-gold/25" />
             <div className="absolute inset-0 flex items-center justify-center">
               <svg viewBox="0 0 200 200" className="w-44 h-44">
                 <defs>
@@ -81,14 +101,14 @@ const LuxeVeil = () => {
           </div>
         </div>
 
-        <h1 className="mt-10 font-display text-5xl md:text-6xl font-bold tracking-[0.25em] text-gold">
+        <h1 className="relative mt-10 font-display text-5xl md:text-6xl font-bold tracking-[0.25em] text-gold">
           LUXE VEIL
         </h1>
-        <p className="mt-4 text-sm uppercase tracking-[0.4em] text-white/70">
+        <p className="relative mt-4 text-sm uppercase tracking-[0.4em] text-white/70">
           — A Private Experience by TrendFlux
         </p>
-        <p className="mx-auto mt-10 max-w-xl text-base md:text-lg text-white/70 italic leading-relaxed">
-          “Beyond visibility lies discretion. A quiet space, curated for those who already know.”
+        <p className="relative mx-auto mt-10 max-w-xl text-base md:text-lg text-white/70 italic leading-relaxed">
+          "Beyond visibility lies discretion. A quiet space, curated for those who already know."
         </p>
       </section>
 
