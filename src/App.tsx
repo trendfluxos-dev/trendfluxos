@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.tsx";
 import ProjectLead from "./pages/ProjectLead.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
+import LuxeVeilAdmin from "./pages/LuxeVeilAdmin.tsx";
 import PressDetail from "./pages/PressDetail.tsx";
 import Marriage from "./pages/Marriage.tsx";
 import BrandOpen from "./pages/BrandOpen.tsx";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/project-lead" element={<ProjectLead />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/luxe-veil" element={<LuxeVeilAdmin />} />
           <Route path="/press/:id" element={<PressDetail />} />
           <Route path="/marriage" element={<Marriage />} />
           <Route path="/brand-open" element={<BrandOpen />} />
