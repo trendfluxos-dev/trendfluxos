@@ -742,6 +742,32 @@ const Index = () => {
 
           {activeCase && (
             <div className="space-y-5 text-sm leading-relaxed text-foreground/75">
+              {/* Compact KPI summary */}
+              <div className="rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent p-5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold/80">
+                  Headline Outcome
+                </p>
+                <p className="font-display mt-1.5 text-xl font-bold leading-tight text-gradient md:text-2xl">
+                  {activeCase.results[0]}
+                </p>
+                <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                  {activeCase.results.map((r, idx) => (
+                    <div
+                      key={r}
+                      className="rounded-lg border border-border bg-background/40 p-3"
+                    >
+                      <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-foreground/40">
+                        KPI {String(idx + 1).padStart(2, "0")}
+                      </p>
+                      <p className="mt-1 flex items-start gap-1.5 text-xs font-semibold text-foreground/90">
+                        <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+                        <span>{r}</span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <Section label="Situation" body={activeCase.situation} />
               <Section label="Problem" body={activeCase.problem} />
               <Section label="Solution" body={activeCase.solution} />
