@@ -717,10 +717,10 @@ const Index = () => {
                     {c.description}
                   </p>
 
-                  <ul className="mt-5 space-y-2">
+                  <ul aria-label={`Key results for ${c.title}`} className="mt-5 space-y-2">
                     {c.results.map((r) => (
                       <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                        <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                         <span>{r}</span>
                       </li>
                     ))}
@@ -730,15 +730,17 @@ const Index = () => {
                     <button
                       type="button"
                       onClick={() => setActiveCase(c)}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2"
+                      aria-label={`View full case study: ${c.title}`}
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
                     >
-                      View Case Study <ArrowRight className="h-4 w-4" />
+                      View Case Study <ArrowRight aria-hidden className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
               </article>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
