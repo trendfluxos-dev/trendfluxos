@@ -10,6 +10,9 @@ import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
 import PressDetail from "./pages/PressDetail.tsx";
 import Marriage from "./pages/Marriage.tsx";
+import BrandOpen from "./pages/BrandOpen.tsx";
+import TrendfluxTalent from "./pages/TrendfluxTalent.tsx";
+import LuxeVeil from "./pages/LuxeVeil.tsx";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +29,9 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           <Route path="/press/:id" element={<PressDetail />} />
           <Route path="/marriage" element={<Marriage />} />
+          <Route path="/brand-open" element={<BrandOpen />} />
+          <Route path="/trendflux-talent" element={<TrendfluxTalent />} />
+          <Route path="/luxe-veil" element={<LuxeVeil />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
