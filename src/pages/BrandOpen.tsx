@@ -22,13 +22,27 @@ const BrandOpen = () => {
   });
   return (
     <BrandShell tier="open">
-      <section className="pt-14 pb-10 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
+      <section className="relative pt-14 pb-10 text-center">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-10 h-72 brand-halftone opacity-70" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
+          <svg className="absolute left-2 top-24 w-40 h-40 text-gold/40" viewBox="0 0 100 100" fill="none">
+            <path d="M0 80 L80 0" stroke="currentColor" strokeWidth="0.6" />
+            <path d="M10 90 L90 10" stroke="currentColor" strokeWidth="0.6" />
+            <path d="M20 100 L100 20" stroke="currentColor" strokeWidth="0.6" />
+          </svg>
+          <svg className="absolute right-2 top-24 w-40 h-40 text-gold/40 -scale-x-100" viewBox="0 0 100 100" fill="none">
+            <path d="M0 80 L80 0" stroke="currentColor" strokeWidth="0.6" />
+            <path d="M10 90 L90 10" stroke="currentColor" strokeWidth="0.6" />
+            <path d="M20 100 L100 20" stroke="currentColor" strokeWidth="0.6" />
+          </svg>
+        </div>
+
+        <div className="relative inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
           <Megaphone className="w-3 h-3" /> Open · Mass Awareness
         </div>
 
         {/* Logo mark */}
-        <div className="mt-10 flex flex-col items-center">
+        <div className="relative mt-10 flex flex-col items-center">
           <div className="relative">
             <div className="absolute inset-0 blur-2xl bg-gold/20 rounded-full" />
             <div className="relative flex items-end justify-center">
@@ -48,7 +62,7 @@ const BrandOpen = () => {
           </p>
         </div>
 
-        <p className="mx-auto mt-10 max-w-xl text-base md:text-lg text-white/75 leading-relaxed">
+        <p className="relative mx-auto mt-10 max-w-xl text-base md:text-lg text-white/75 leading-relaxed">
           Bold, communication-first storytelling for brands ready to be seen.
           Modern geometry, flat gold, and zero noise — built for ads, social, and mass reach.
         </p>
@@ -59,17 +73,39 @@ const BrandOpen = () => {
           { icon: Megaphone, t: "Mass Reach", d: "Campaigns engineered for scroll-stopping clarity." },
           { icon: Zap, t: "Bold Geometry", d: "Refined edges, balanced weight, instantly readable." },
           { icon: Sparkles, t: "Story First", d: "Every asset carries a story, not just a message." },
-        ].map(({ icon: I, t, d }) => (
+        ].map(({ icon: I, t, d }, i) => (
           <div
             key={t}
-            className="rounded-2xl border border-gold/20 bg-white/[0.04] p-5 hover:border-gold/50 transition"
+            className="relative overflow-hidden rounded-2xl border border-gold/20 bg-white/[0.04] p-5 hover:border-gold/50 hover:-translate-y-0.5 transition-all"
           >
-            <I className="w-5 h-5 text-gold" />
+            <div aria-hidden className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+            <div className="flex items-center justify-between">
+              <I className="w-5 h-5 text-gold" />
+              <span className="font-display text-xs tracking-[0.3em] text-gold/60">
+                0{i + 1}
+              </span>
+            </div>
             <h3 className="mt-3 font-semibold text-white">{t}</h3>
             <p className="mt-1 text-sm text-white/60">{d}</p>
           </div>
         ))}
       </section>
+
+      {/* Marquee strip */}
+      <div className="brand-marquee mt-12 overflow-hidden border-y border-gold/15 py-3">
+        <div className="brand-marquee-track flex gap-10 whitespace-nowrap text-[11px] uppercase tracking-[0.45em] text-gold/70">
+          {Array.from({ length: 2 }).map((_, k) => (
+            <div key={k} className="flex gap-10 shrink-0">
+              {["BOLD", "CLEAR", "LOUD", "SEEN", "FELT", "SCROLL-STOPPING", "BANGLA · ENGLISH", "BUILT TO BE SHARED"].map((w) => (
+                <span key={w} className="flex items-center gap-10">
+                  {w} <span className="text-gold/40">◆</span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <Testimonials
         items={[
           {
