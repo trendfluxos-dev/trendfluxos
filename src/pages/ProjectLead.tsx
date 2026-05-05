@@ -202,16 +202,33 @@ const ProjectLead = () => {
                   Connect on LinkedIn
                 </a>
               </Button>
-              <Link
-                to="/marriage"
-                aria-label="View marriage profile — Zahid Hasan Emon is available for marriage"
-                className="marriage-glow-btn relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-gold-foreground"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <span aria-hidden className="text-base">💍</span>
-                  Available for Marriage
-                </span>
-              </Link>
+              <TooltipProvider delayDuration={150}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      to="/marriage"
+                      aria-label="View marriage profile — Zahid Hasan Emon is available for marriage"
+                      onClick={() => {
+                        try {
+                          const w = window as unknown as { dataLayer?: unknown[]; gtag?: (...a: unknown[]) => void; plausible?: (...a: unknown[]) => void };
+                          w.dataLayer?.push({ event: "marriage_button_clicked", location: "project_lead_cta" });
+                          w.gtag?.("event", "marriage_button_clicked", { location: "project_lead_cta" });
+                          w.plausible?.("marriage_button_clicked", { props: { location: "project_lead_cta" } });
+                        } catch { /* no-op */ }
+                      }}
+                      className="marriage-glow-btn relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-gold-foreground"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        <span aria-hidden className="text-base">💍</span>
+                        Available for Marriage
+                      </span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="max-w-xs text-xs">
+                    Open the marriage profile — full bio, family background & contact details for serious proposals.
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
 
             {/* SOCIALS */}
