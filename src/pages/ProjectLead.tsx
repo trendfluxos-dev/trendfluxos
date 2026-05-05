@@ -201,6 +201,16 @@ const ProjectLead = () => {
                   Connect on LinkedIn
                 </a>
               </Button>
+              <Link
+                to="/marriage"
+                aria-label="View marriage profile — Zahid Hasan Emon is available for marriage"
+                className="marriage-glow-btn relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-gold-foreground"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <span aria-hidden className="text-base">💍</span>
+                  Available for Marriage
+                </span>
+              </Link>
             </div>
 
             {/* SOCIALS */}

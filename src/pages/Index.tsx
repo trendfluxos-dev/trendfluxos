@@ -450,15 +450,6 @@ const Index = () => {
               >
                 Read full profile <ArrowUpRight className="w-4 h-4" />
               </Link>
-              <Link
-                to="/marriage"
-                className="marriage-glow-btn relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg overflow-hidden"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <span className="text-base">💍</span>
-                  Available for Marriage
-                </span>
-              </Link>
             </div>
           </div>
         </div>
