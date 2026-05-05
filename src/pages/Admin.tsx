@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, LogOut, Save } from "lucide-react";
+import { Loader2, Plus, Trash2, LogOut, Save, Eye } from "lucide-react";
 import { usePressItems, type PressItem } from "@/hooks/usePressItems";
+import { PressItemPreview } from "@/components/PressItemPreview";
 
 type Row = PressItem & { _dirty?: boolean; _new?: boolean };
 
