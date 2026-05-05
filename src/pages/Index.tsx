@@ -580,7 +580,7 @@ const Index = () => {
                               {p.headline}
                             </p>
                             <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
-                              Explore details
+                              More details
                               <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
                             </span>
                           </button>
