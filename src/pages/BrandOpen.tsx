@@ -1,7 +1,14 @@
 import { BrandShell } from "@/components/BrandShell";
 import { Megaphone, Sparkles, Zap } from "lucide-react";
+import { useSeo } from "@/hooks/useSeo";
+import { Testimonials } from "@/components/Testimonials";
 
 const BrandOpen = () => {
+  useSeo({
+    title: "Brand Tok — Helping Brands Tell Their Stories | TrendFlux",
+    description:
+      "Bold, communication-first storytelling for Bangladeshi brands. Modern geometry, flat gold, built for ads, social and mass reach.",
+  });
   return (
     <BrandShell tier="open">
       <section className="pt-14 pb-10 text-center">
