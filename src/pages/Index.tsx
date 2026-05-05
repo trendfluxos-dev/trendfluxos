@@ -692,7 +692,10 @@ const Index = () => {
                     }}
                     aria-hidden
                   />
-                  <c.Icon className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105" />
+                  <c.Icon
+                    aria-label={`${c.category} category illustration`}
+                    className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
                 </div>
 
