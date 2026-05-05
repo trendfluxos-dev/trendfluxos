@@ -459,43 +459,65 @@ const Index = () => {
 
                   {item.press && item.press.length > 0 && (
                     <div className="mt-6">
-                      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-                        <p className="text-xs uppercase tracking-[0.25em] text-foreground/40">
-                          Press Coverage · {item.press.length} headlines
-                        </p>
-                        <p className="text-xs text-foreground/40">
-                          Click any headline for context, then read the original report.
-                        </p>
-                      </div>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {item.press.map((p, idx) => (
-                          <Link
-                            key={`${p.outlet}-${idx}`}
-                            to={p.id ? `/press/${p.id}` : "#"}
-                            onClick={(e) => {
-                              if (!p.id) {
-                                e.preventDefault();
-                                setActivePress(p);
-                              }
-                            }}
-                            className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 text-left hover:border-gold/40 hover:bg-gold/5 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-semibold uppercase tracking-wider text-gold">
-                                {p.outlet}
-                              </span>
-                              <MoreHorizontal className="h-4 w-4 text-foreground/40 transition-colors group-hover/card:text-gold" />
-                            </div>
-                            <p className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground">
-                              {p.headline}
+                      {pressOpenFor !== item.phase ? (
+                        <button
+                          type="button"
+                          onClick={() => setPressOpenFor(item.phase)}
+                          className="group inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/5 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-gold hover:bg-gold/10 hover:border-gold/60 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
+                          aria-expanded={false}
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                          View Press Coverage · {item.press.length}
+                          <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                        </button>
+                      ) : (
+                        <div className="animate-fade-up">
+                          <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+                            <p className="text-xs uppercase tracking-[0.25em] text-foreground/40">
+                              Press Coverage · {item.press.length} headlines
                             </p>
-                            <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
-                              Explore details
-                              <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
-                            </span>
-                          </Link>
-                        ))}
-                      </div>
+                            <button
+                              type="button"
+                              onClick={() => setPressOpenFor(null)}
+                              className="text-xs uppercase tracking-wider text-foreground/40 hover:text-gold transition-colors"
+                            >
+                              Hide
+                            </button>
+                          </div>
+                          <p className="mb-3 text-xs text-foreground/40">
+                            Click any headline for context, then read the original report.
+                          </p>
+                          <div className="grid gap-3 sm:grid-cols-2">
+                            {item.press.map((p, idx) => (
+                              <Link
+                                key={`${p.outlet}-${idx}`}
+                                to={p.id ? `/press/${p.id}` : "#"}
+                                onClick={(e) => {
+                                  if (!p.id) {
+                                    e.preventDefault();
+                                    setActivePress(p);
+                                  }
+                                }}
+                                className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 text-left hover:border-gold/40 hover:bg-gold/5 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-semibold uppercase tracking-wider text-gold">
+                                    {p.outlet}
+                                  </span>
+                                  <MoreHorizontal className="h-4 w-4 text-foreground/40 transition-colors group-hover/card:text-gold" />
+                                </div>
+                                <p className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground">
+                                  {p.headline}
+                                </p>
+                                <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
+                                  Explore details
+                                  <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
