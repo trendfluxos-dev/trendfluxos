@@ -8,6 +8,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import type { PressItem } from "@/hooks/usePressItems";
 
 type Props = {
@@ -25,6 +26,8 @@ type Props = {
  */
 export function PressItemPreview({ item, open, onOpenChange }: Props) {
   const [detailOpen, setDetailOpen] = useState(false);
+  const [asPublished, setAsPublished] = useState(true);
+  const visible = asPublished ? item.published !== false : true;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -43,36 +46,56 @@ export function PressItemPreview({ item, open, onOpenChange }: Props) {
           </DialogTitle>
         </DialogHeader>
 
+        <div className="flex items-center justify-between rounded-lg border border-border bg-foreground/[0.03] px-3 py-2">
+          <div>
+            <p className="text-xs font-medium text-foreground/80">Preview as published</p>
+            <p className="text-[11px] text-foreground/50">
+              When on, unpublished items are hidden — exactly like visitors see it.
+            </p>
+          </div>
+          <Switch checked={asPublished} onCheckedChange={setAsPublished} />
+        </div>
+
         {/* Card preview — mirrors src/pages/Index.tsx lines 469-490 */}
         <div className="mt-2">
           <p className="mb-2 text-[11px] uppercase tracking-[0.25em] text-foreground/40">
             Card in the Press Coverage grid
           </p>
-          <div className="rounded-2xl border border-border bg-background/40 p-4">
-            <button
-              type="button"
-              onClick={() => setDetailOpen(true)}
-              className="group/card flex w-full flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 text-left hover:border-gold/40 hover:bg-gold/5 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gold">
-                  {item.outlet || "Outlet name"}
+          {visible ? (
+            <div className="rounded-2xl border border-border bg-background/40 p-4">
+              <button
+                type="button"
+                onClick={() => setDetailOpen(true)}
+                className="group/card flex w-full flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 text-left hover:border-gold/40 hover:bg-gold/5 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-gold">
+                    {item.outlet || "Outlet name"}
+                  </span>
+                  <MoreHorizontal className="h-4 w-4 text-foreground/40 transition-colors group-hover/card:text-gold" />
+                </div>
+                <p className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground">
+                  {item.headline || "Headline will appear here"}
+                </p>
+                <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
+                  Explore details
+                  <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
                 </span>
-                <MoreHorizontal className="h-4 w-4 text-foreground/40 transition-colors group-hover/card:text-gold" />
-              </div>
-              <p className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground">
-                {item.headline || "Headline will appear here"}
+              </button>
+              <p className="mt-3 text-[11px] text-foreground/40">
+                <Eye className="mr-1 inline h-3 w-3" />
+                Click the card to preview the detail modal.
               </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
-                Explore details
-                <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
-              </span>
-            </button>
-            <p className="mt-3 text-[11px] text-foreground/40">
-              <Eye className="mr-1 inline h-3 w-3" />
-              Click the card to preview the detail modal.
-            </p>
-          </div>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-border bg-background/40 p-8 text-center">
+              <p className="text-sm font-medium text-foreground/70">Hidden from visitors</p>
+              <p className="mt-1 text-xs text-foreground/50">
+                This item is unpublished, so it does not render on the homepage. Toggle off
+                "Preview as published" to see the draft anyway.
+              </p>
+            </div>
+          )}
         </div>
 
         <DialogFooter>
