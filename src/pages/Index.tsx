@@ -674,11 +674,16 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <ul
+            role="list"
+            aria-label="Case studies"
+            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
+          >
             {caseStudies.map((c, i) => (
+              <li key={c.title}>
               <article
-                key={c.title}
-                className="group flex flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
+                aria-labelledby={`case-${i}-title`}
+                className="group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
                 style={{ animationDelay: `${i * 0.06}s` }}
               >
                 <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
