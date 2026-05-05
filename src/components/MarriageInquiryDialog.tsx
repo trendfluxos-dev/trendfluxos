@@ -61,7 +61,11 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
     }
 
     setSubmitting(true);
-    const { error } = await supabase.from("marriage_inquiries").insert(parsed.data);
+    const { error } = await supabase.from("marriage_inquiries").insert({
+      name: parsed.data.name,
+      country_code: parsed.data.country_code,
+      whatsapp: parsed.data.whatsapp,
+    });
     setSubmitting(false);
 
     if (error) {
