@@ -107,7 +107,23 @@ export default function LuxeVeilAdmin() {
 
   useEffect(() => {
     if (hasAccess) load();
-  }, [hasAccess]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasAccess, page, sortField, sortDir, filter]);
+
+  // Debounce search
+  useEffect(() => {
+    if (!hasAccess) return;
+    const t = setTimeout(() => {
+      setPage(0);
+      load();
+    }, 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q]);
+
+  useEffect(() => {
+    if (hasAccess) loadCounts();
+  }, [hasAccess, rows]);
 
   const setStatus = async (id: string, status: RequestStatus) => {
     const prev = rows;
