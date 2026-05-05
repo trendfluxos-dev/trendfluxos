@@ -137,6 +137,7 @@ const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const { items: dbPress } = usePressItems();
 
   const filterTabs: Category[] = [
