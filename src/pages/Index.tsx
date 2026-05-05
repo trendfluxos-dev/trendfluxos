@@ -486,7 +486,7 @@ const Index = () => {
                   {
                     outlet: "BanglaNews24",
                     headline: "জয়ের ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ, নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা",
-                    href: "https://www.banglanews24.com/education/news/bd/1197220.details",
+                    href: "https://www.banglanews24.com",
                     context:
                       "Report on the formal torture allegation against the brother of a former national student-wing president, with the JU leader publicly seeking protection.",
                   },
@@ -507,7 +507,7 @@ const Index = () => {
                   {
                     outlet: "Janakantha",
                     headline: "জাবিতে ছাত্রলীগ নেতাকে নির্যাতন, তদন্ত কমিটি",
-                    href: "https://www.dailyjanakantha.com",
+                    href: "https://www.banglanews24.com/education/news/bd/1197220.details",
                     context:
                       "Report announcing the formation of an inquiry committee following the documented torture of the JU student leader.",
                   },
