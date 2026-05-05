@@ -89,19 +89,23 @@ const services = [
   },
 ];
 
-import caseOrganic from "@/assets/case-organic.jpg";
-import caseContent from "@/assets/case-content.jpg";
-import caseGlobal from "@/assets/case-global.jpg";
-import caseAutomation from "@/assets/case-automation.jpg";
-import caseSme from "@/assets/case-sme.jpg";
-import caseBrand from "@/assets/case-brand.jpg";
+import {
+  OrganicGrowthIcon,
+  ContentEngineIcon,
+  GlobalStrategyIcon,
+  AutomationFunnelIcon,
+  SmeGrowthIcon,
+  PersonalBrandIcon,
+} from "@/components/CaseIcons";
+
+type CaseIcon = (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
 
 type CaseStudy = {
   category: string;
   title: string;
   description: string;
   results: string[];
-  thumbnail: string;
+  Icon: CaseIcon;
   situation: string;
   problem: string;
   solution: string;
@@ -115,7 +119,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "Built a structured content system that generated massive organic reach without paid ads.",
     results: ["485K+ video views", "80%+ organic reach", "45%+ engagement growth"],
-    thumbnail: caseOrganic,
+    Icon: OrganicGrowthIcon,
     situation: "The brand lacked visibility and had no structured content approach.",
     problem: "Inconsistent posting, low engagement, and no audience targeting.",
     solution:
@@ -128,7 +132,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "Created a scalable content production engine using templates and AI-assisted workflows.",
     results: ["200+ assets delivered", "Faster content execution", "Consistent brand identity"],
-    thumbnail: caseContent,
+    Icon: ContentEngineIcon,
     situation: "Manual asset production was slow and inconsistent across campaigns.",
     problem: "Bottlenecked design output, off-brand variations, missed launch windows.",
     solution:
@@ -141,7 +145,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "Optimized content and marketing strategy for international audience targeting.",
     results: ["Improved engagement", "Market-aligned content", "Better audience targeting"],
-    thumbnail: caseGlobal,
+    Icon: GlobalStrategyIcon,
     situation: "A single-market playbook was being copy-pasted across geographies.",
     problem: "Tone, references, and offers didn't resonate with US/UK audiences.",
     solution:
@@ -153,7 +157,7 @@ const caseStudies: CaseStudy[] = [
     title: "WhatsApp Lead Conversion System",
     description: "Built an automated funnel to convert inquiries into booked strategy calls.",
     results: ["Faster response time", "Higher lead engagement", "Increased booking rate"],
-    thumbnail: caseAutomation,
+    Icon: AutomationFunnelIcon,
     situation: "Inbound leads were dropping off before reaching a human.",
     problem: "Slow replies, no qualification, no follow-up sequence.",
     solution:
@@ -165,7 +169,7 @@ const caseStudies: CaseStudy[] = [
     title: "SME Growth System Architecture",
     description: "Designed structured growth systems for SMEs targeting scalable operations.",
     results: ["Clear funnel structure", "CRM integration", "Scalable business model"],
-    thumbnail: caseSme,
+    Icon: SmeGrowthIcon,
     situation: "Owner-led SME with strong service but no repeatable acquisition model.",
     problem: "Revenue depended entirely on referrals and founder hustle.",
     solution:
@@ -177,7 +181,7 @@ const caseStudies: CaseStudy[] = [
     title: "Authority-Based Personal Brand System",
     description: "Built positioning and content strategy for strong authority and engagement.",
     results: ["Clear niche positioning", "Strong audience connection", "Consistent brand identity"],
-    thumbnail: caseBrand,
+    Icon: PersonalBrandIcon,
     situation: "Talented operator with no recognizable public voice or positioning.",
     problem: "Generic content, no clear ICP, no compounding inbound.",
     solution:
@@ -677,16 +681,19 @@ const Index = () => {
                 className="group flex flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
                 style={{ animationDelay: `${i * 0.06}s` }}
               >
-                <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
-                  <img
-                    src={c.thumbnail}
-                    alt={`${c.category} icon`}
-                    loading="lazy"
-                    width={512}
-                    height={320}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
+                  {/* Subtle dotted grid */}
+                  <div
+                    className="absolute inset-0 opacity-40"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(hsl(var(--gold) / 0.18) 1px, transparent 1px)",
+                      backgroundSize: "14px 14px",
+                    }}
+                    aria-hidden
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+                  <c.Icon className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
                 </div>
 
                 <div className="flex flex-1 flex-col p-7">
