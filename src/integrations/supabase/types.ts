@@ -44,6 +44,30 @@ export type Database = {
         }
         Relationships: []
       }
+      marriage_inquiries: {
+        Row: {
+          country_code: string
+          created_at: string
+          id: string
+          name: string
+          whatsapp: string
+        }
+        Insert: {
+          country_code: string
+          created_at?: string
+          id?: string
+          name: string
+          whatsapp: string
+        }
+        Update: {
+          country_code?: string
+          created_at?: string
+          id?: string
+          name?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
       press_items: {
         Row: {
           context: string
