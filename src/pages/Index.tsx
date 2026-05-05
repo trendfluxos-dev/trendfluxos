@@ -476,7 +476,7 @@ const Index = () => {
                                 Press Coverage
                               </span>
                               <span className="font-display text-lg font-bold text-foreground md:text-xl">
-                                View 14 National Headlines
+                                View {item.press.length} National Headlines
                               </span>
                               <span className="mt-0.5 text-xs text-foreground/55">
                                 Click to reveal verified outlet reports
