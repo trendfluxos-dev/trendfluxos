@@ -65,6 +65,29 @@ const Marriage = () => {
           </button>
         </div>
 
+        {/* Availability Banner */}
+        <div className="mt-4 rounded-2xl border border-gold/50 bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 px-5 py-4 text-center shadow-[0_8px_30px_rgba(200,169,81,0.25)]">
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-gold"></span>
+            </span>
+            {t("Available for Marriage", "বিবাহের জন্য প্রস্তুত")}
+          </div>
+          <p className="mt-2 text-base md:text-lg font-semibold text-white">
+            {t(
+              "Currently seeking a sincere, well-mannered & beautiful (shaa-sundori) life partner.",
+              "একজন আন্তরিক, সুশীল ও সুন্দরী (সাহা-সুন্দরী) জীবনসঙ্গী খুঁজছি।"
+            )}
+          </p>
+          <p className="mt-1 text-sm text-[#f4e8bd]">
+            {t(
+              "Serious proposals from respectful families are warmly welcomed.",
+              "সম্মানিত পরিবার থেকে আন্তরিক প্রস্তাব সাদরে আমন্ত্রিত।"
+            )}
+          </p>
+        </div>
+
         {/* Hero */}
         <section className="text-center pt-8 pb-10">
           <img
