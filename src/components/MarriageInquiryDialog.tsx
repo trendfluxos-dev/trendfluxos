@@ -25,10 +25,17 @@ const COUNTRY_CODES = [
   { code: "+92", label: "🇵🇰 +92 Pakistan" },
 ];
 
+const DRESS_COLORS = [
+  { id: "black", label: "Black", swatch: "#000000", ring: "ring-white/60" },
+  { id: "white", label: "White", swatch: "#ffffff", ring: "ring-white" },
+  { id: "red", label: "Red", swatch: "#dc2626", ring: "ring-red-400" },
+] as const;
+
 const schema = z.object({
   name: z.string().trim().min(2, "Name is too short").max(80, "Name is too long"),
   country_code: z.string().trim().regex(/^\+\d{1,4}$/, "Pick a country code"),
   whatsapp: z.string().trim().regex(/^\d{6,15}$/, "WhatsApp number must be 6–15 digits"),
+  dress_colors: z.array(z.enum(["black", "white", "red"])).min(1, "Pick at least one preferred color"),
 });
 
 type Props = {
@@ -40,9 +47,16 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
   const [name, setName] = useState("");
   const [countryCode, setCountryCode] = useState("+880");
   const [whatsapp, setWhatsapp] = useState("");
+  const [dressColors, setDressColors] = useState<string[]>(["black", "white", "red"]);
   const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const toggleColor = (id: string) => {
+    setDressColors((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,6 +64,7 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
       name,
       country_code: countryCode,
       whatsapp: whatsapp.replace(/\D/g, ""),
+      dress_colors: dressColors,
     });
     if (!parsed.success) {
       toast({
@@ -65,6 +80,7 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
       name: parsed.data.name,
       country_code: parsed.data.country_code,
       whatsapp: parsed.data.whatsapp,
+      dress_colors: parsed.data.dress_colors,
     });
     setSubmitting(false);
 
@@ -156,6 +172,36 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
                   className="bg-white/5 border-white/15 text-white placeholder:text-white/40 focus-visible:ring-red-500/60 focus-visible:border-red-500/60"
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-white/85">Preferred Dress Colors</Label>
+              <div className="flex flex-wrap gap-2">
+                {DRESS_COLORS.map((c) => {
+                  const active = dressColors.includes(c.id);
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => toggleColor(c.id)}
+                      aria-pressed={active}
+                      className={`group inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                        active
+                          ? "border-red-500/80 bg-white/10 text-white shadow-[0_0_18px_-4px_rgba(220,38,38,0.55)]"
+                          : "border-white/15 bg-white/5 text-white/65 hover:text-white hover:border-white/40"
+                      }`}
+                    >
+                      <span
+                        className={`h-4 w-4 rounded-full border border-white/30 ${active ? "ring-2 ring-offset-2 ring-offset-black " + c.ring : ""}`}
+                        style={{ background: c.swatch }}
+                        aria-hidden
+                      />
+                      {c.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-[11px] text-white/45">Tap to toggle. Default: black, white & red.</p>
             </div>
 
             <button

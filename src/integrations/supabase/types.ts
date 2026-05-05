@@ -48,6 +48,7 @@ export type Database = {
         Row: {
           country_code: string
           created_at: string
+          dress_colors: string[]
           id: string
           name: string
           whatsapp: string
@@ -55,6 +56,7 @@ export type Database = {
         Insert: {
           country_code: string
           created_at?: string
+          dress_colors?: string[]
           id?: string
           name: string
           whatsapp: string
@@ -62,6 +64,7 @@ export type Database = {
         Update: {
           country_code?: string
           created_at?: string
+          dress_colors?: string[]
           id?: string
           name?: string
           whatsapp?: string
