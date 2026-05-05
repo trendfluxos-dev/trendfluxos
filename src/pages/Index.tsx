@@ -455,7 +455,7 @@ const Index = () => {
                     {item.desc}
                   </p>
 
-                  {item.press && (
+                  {item.press && item.press.length > 0 && (
                     <div className="mt-6">
                       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
                         <p className="text-xs uppercase tracking-[0.25em] text-foreground/40">
