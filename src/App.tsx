@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.tsx";
 import ProjectLead from "./pages/ProjectLead.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
+import PressDetail from "./pages/PressDetail.tsx";
 
 const queryClient = new QueryClient();
 
