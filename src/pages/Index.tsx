@@ -30,6 +30,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import { usePressItems } from "@/hooks/usePressItems";
 
 type PressItem = {
+  id?: string;
   outlet: string;
   headline: string;
   href: string;
