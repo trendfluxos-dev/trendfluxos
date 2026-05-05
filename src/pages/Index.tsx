@@ -505,7 +505,7 @@ const Index = () => {
                       "Report on the wider concern raised by the Students' Union over violence against students in JU residential halls, referencing this case.",
                   },
                   {
-                    outlet: "Janakantha",
+                    outlet: "BanglaNews24",
                     headline: "জাবিতে ছাত্রলীগ নেতাকে নির্যাতন, তদন্ত কমিটি",
                     href: "https://www.banglanews24.com/education/news/bd/1197220.details",
                     context:
