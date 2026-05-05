@@ -26,6 +26,8 @@ type Props = {
  */
 export function PressItemPreview({ item, open, onOpenChange }: Props) {
   const [detailOpen, setDetailOpen] = useState(false);
+  const [asPublished, setAsPublished] = useState(true);
+  const visible = asPublished ? item.published !== false : true;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -43,6 +45,16 @@ export function PressItemPreview({ item, open, onOpenChange }: Props) {
             )}
           </DialogTitle>
         </DialogHeader>
+
+        <div className="flex items-center justify-between rounded-lg border border-border bg-foreground/[0.03] px-3 py-2">
+          <div>
+            <p className="text-xs font-medium text-foreground/80">Preview as published</p>
+            <p className="text-[11px] text-foreground/50">
+              When on, unpublished items are hidden — exactly like visitors see it.
+            </p>
+          </div>
+          <Switch checked={asPublished} onCheckedChange={setAsPublished} />
+        </div>
 
         {/* Card preview — mirrors src/pages/Index.tsx lines 469-490 */}
         <div className="mt-2">
