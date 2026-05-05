@@ -13,8 +13,8 @@ const info: { label: Bi; value: Bi }[] = [
   { label: { en: "Date of Birth", bn: "জন্ম তারিখ" }, value: { en: "5 May 1998", bn: "৫ মে ১৯৯৮" } },
   { label: { en: "Age", bn: "বয়স" }, value: { en: "27 Years (Approx.)", bn: "প্রায় ২৭ বছর" } },
   { label: { en: "Height", bn: "উচ্চতা" }, value: { en: "5 Feet 5 Inches", bn: "৫ ফুট ৫ ইঞ্চি" } },
-  { label: { en: "Weight", bn: "ওজন" }, value: { en: "Approx. 60 KG", bn: "প্রায় ৬০ কেজি" } },
-  { label: { en: "Blood Group", bn: "রক্তের গ্রুপ" }, value: { en: "B+", bn: "বি পজিটিভ" } },
+  { label: { en: "Weight", bn: "ওজন" }, value: { en: "Approx. 68 KG", bn: "প্রায় ৬৮ কেজি" } },
+  { label: { en: "Blood Group", bn: "রক্তের গ্রুপ" }, value: { en: "AB+", bn: "এবি পজিটিভ" } },
   { label: { en: "Religion", bn: "ধর্ম" }, value: { en: "Islam", bn: "ইসলাম" } },
   { label: { en: "Nationality", bn: "জাতীয়তা" }, value: { en: "Bangladeshi", bn: "বাংলাদেশি" } },
   { label: { en: "Present Address", bn: "বর্তমান ঠিকানা" }, value: { en: "Dhaka, Bangladesh", bn: "ঢাকা, বাংলাদেশ" } },
@@ -208,8 +208,8 @@ const Marriage = () => {
         <Card title={t("Expectation from Life Partner", "জীবনসঙ্গীর প্রত্যাশা")}>
           <p className="leading-relaxed text-[#d9e2f1]">
             {t(
-              "Seeking a well-educated, respectful, understanding, and family-oriented life partner who values honesty, moral character, emotional maturity, and mutual growth.",
-              "একজন শিক্ষিত, ভদ্র, বুঝদার এবং পরিবারমুখী জীবনসঙ্গী প্রত্যাশা করি, যিনি সততা, ভালো চরিত্র, মানসিক পরিপক্বতা এবং পারস্পরিক উন্নয়নকে গুরুত্ব দেন।"
+              "Looking for a well-educated, fair-skinned (forsha), and beautiful life partner who carries a modern outlook with cultural grace. She should be open-minded, flexible, emotionally mature, and family-oriented — someone who values honesty, mutual respect, shared growth, and balances tradition with the modern era comfortably.",
+              "একজন শিক্ষিত, ফর্সা ও সুন্দরী জীবনসঙ্গী খুঁজছি, যিনি আধুনিক দৃষ্টিভঙ্গির পাশাপাশি সাংস্কৃতিক মার্জিতাও ধারণ করেন। তিনি হবেন উদারমনা, ফ্লেক্সিবল, মানসিকভাবে পরিপক্ব ও পরিবারমুখী — যিনি সততা, পারস্পরিক সম্মান, একসাথে বেড়ে ওঠার মানসিকতা এবং ঐতিহ্য ও আধুনিক যুগের ভারসাম্য সহজভাবে বজায় রাখতে পারেন।"
             )}
           </p>
         </Card>
