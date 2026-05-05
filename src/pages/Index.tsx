@@ -709,7 +709,7 @@ const Index = () => {
                     {c.category}
                   </span>
 
-                  <h3 className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
+                  <h3 id={`case-${i}-title`} className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
                     {c.title}
                   </h3>
 
