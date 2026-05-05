@@ -76,7 +76,9 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
     }
 
     setSubmitting(true);
+    const newId = (crypto as Crypto).randomUUID();
     const { error } = await supabase.from("marriage_inquiries").insert({
+      id: newId,
       name: parsed.data.name,
       country_code: parsed.data.country_code,
       whatsapp: parsed.data.whatsapp,
@@ -93,6 +95,12 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
       return;
     }
 
+    try {
+      localStorage.setItem("marriage_inquiry_id", newId);
+    } catch {
+      // ignore storage errors
+    }
+
     toast({
       title: "Thank you 💍",
       description: "Opening the marriage profile for you…",
@@ -101,6 +109,7 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
     navigate("/marriage", {
       state: {
         inquirer: {
+          id: newId,
           name: parsed.data.name,
           country_code: parsed.data.country_code,
           whatsapp: parsed.data.whatsapp,

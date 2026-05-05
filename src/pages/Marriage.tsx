@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import profile from "@/assets/marriage/profile.jpg";
 import photo1 from "@/assets/marriage/photo1.jpg";
 import photo2 from "@/assets/marriage/photo2.jpg";
@@ -46,8 +47,35 @@ const attributes: Bi[] = [
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
   const location = useLocation();
-  const inquirer = (location.state as { inquirer?: { name: string; country_code: string; whatsapp: string; dress_colors?: string[] } } | null)?.inquirer;
+  type Inquirer = { id?: string; name: string; country_code: string; whatsapp: string; dress_colors?: string[] };
+  const stateInquirer = (location.state as { inquirer?: Inquirer } | null)?.inquirer ?? null;
+  const [inquirer, setInquirer] = useState<Inquirer | null>(stateInquirer);
   const t = (en: string, bn: string) => (bangla ? bn : en);
+
+  useEffect(() => {
+    if (stateInquirer?.id) {
+      try { localStorage.setItem("marriage_inquiry_id", stateInquirer.id); } catch { /* ignore */ }
+      return;
+    }
+    if (inquirer) return;
+    let cancelled = false;
+    const id = (() => { try { return localStorage.getItem("marriage_inquiry_id"); } catch { return null; } })();
+    if (!id) return;
+    (async () => {
+      const { data, error } = await supabase.functions.invoke<{ inquiry: Inquirer | null }>(
+        "get-marriage-inquiry",
+        { body: { id } },
+      );
+      if (cancelled) return;
+      if (error || !data?.inquiry) {
+        try { localStorage.removeItem("marriage_inquiry_id"); } catch { /* ignore */ }
+        return;
+      }
+      setInquirer(data.inquiry);
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const greetingName = inquirer?.name?.split(" ")[0];
   const inquirerWa = inquirer ? `${inquirer.country_code}${inquirer.whatsapp}` : null;
