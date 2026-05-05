@@ -468,10 +468,15 @@ const Index = () => {
                       </div>
                       <div className="grid gap-3 sm:grid-cols-2">
                         {item.press.map((p, idx) => (
-                          <button
-                            type="button"
+                          <Link
                             key={`${p.outlet}-${idx}`}
-                            onClick={() => setActivePress(p)}
+                            to={p.id ? `/press/${p.id}` : "#"}
+                            onClick={(e) => {
+                              if (!p.id) {
+                                e.preventDefault();
+                                setActivePress(p);
+                              }
+                            }}
                             className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 text-left hover:border-gold/40 hover:bg-gold/5 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
                           >
                             <div className="flex items-center justify-between">
@@ -487,7 +492,7 @@ const Index = () => {
                               Explore details
                               <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
                             </span>
-                          </button>
+                          </Link>
                         ))}
                       </div>
                     </div>
