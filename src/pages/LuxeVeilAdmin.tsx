@@ -7,7 +7,11 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, LogOut, Check, X, Mail, Search, RefreshCw } from "lucide-react";
+import { Loader2, LogOut, Check, X, Mail, Search, RefreshCw, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
+
+const PAGE_SIZE = 10;
+type SortField = "created_at" | "name" | "email" | "status";
+type SortDir = "asc" | "desc";
 
 type RequestStatus = "pending" | "approved" | "rejected";
 type Req = {
@@ -31,9 +35,14 @@ export default function LuxeVeilAdmin() {
   const [authChecked, setAuthChecked] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [rows, setRows] = useState<Req[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | RequestStatus>("all");
   const [q, setQ] = useState("");
+  const [page, setPage] = useState(0);
+  const [sortField, setSortField] = useState<SortField>("created_at");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [counts, setCounts] = useState({ all: 0, pending: 0, approved: 0, rejected: 0 });
 
   useEffect(() => {
     const init = async () => {
