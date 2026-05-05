@@ -833,4 +833,13 @@ const Index = () => {
   );
 };
 
+const Section = ({ label, body }: { label: string; body: string }) => (
+  <div>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
+      {label}
+    </p>
+    <p className="mt-2 text-foreground/75">{body}</p>
+  </div>
+);
+
 export default Index;
