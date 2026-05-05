@@ -119,7 +119,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "Built a structured content system that generated massive organic reach without paid ads.",
     results: ["485K+ video views", "80%+ organic reach", "45%+ engagement growth"],
-    thumbnail: caseOrganic,
+    Icon: OrganicGrowthIcon,
     situation: "The brand lacked visibility and had no structured content approach.",
     problem: "Inconsistent posting, low engagement, and no audience targeting.",
     solution:
@@ -132,7 +132,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "Created a scalable content production engine using templates and AI-assisted workflows.",
     results: ["200+ assets delivered", "Faster content execution", "Consistent brand identity"],
-    thumbnail: caseContent,
+    Icon: ContentEngineIcon,
     situation: "Manual asset production was slow and inconsistent across campaigns.",
     problem: "Bottlenecked design output, off-brand variations, missed launch windows.",
     solution:
@@ -145,7 +145,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "Optimized content and marketing strategy for international audience targeting.",
     results: ["Improved engagement", "Market-aligned content", "Better audience targeting"],
-    thumbnail: caseGlobal,
+    Icon: GlobalStrategyIcon,
     situation: "A single-market playbook was being copy-pasted across geographies.",
     problem: "Tone, references, and offers didn't resonate with US/UK audiences.",
     solution:
@@ -157,7 +157,7 @@ const caseStudies: CaseStudy[] = [
     title: "WhatsApp Lead Conversion System",
     description: "Built an automated funnel to convert inquiries into booked strategy calls.",
     results: ["Faster response time", "Higher lead engagement", "Increased booking rate"],
-    thumbnail: caseAutomation,
+    Icon: AutomationFunnelIcon,
     situation: "Inbound leads were dropping off before reaching a human.",
     problem: "Slow replies, no qualification, no follow-up sequence.",
     solution:
@@ -169,7 +169,7 @@ const caseStudies: CaseStudy[] = [
     title: "SME Growth System Architecture",
     description: "Designed structured growth systems for SMEs targeting scalable operations.",
     results: ["Clear funnel structure", "CRM integration", "Scalable business model"],
-    thumbnail: caseSme,
+    Icon: SmeGrowthIcon,
     situation: "Owner-led SME with strong service but no repeatable acquisition model.",
     problem: "Revenue depended entirely on referrals and founder hustle.",
     solution:
@@ -181,7 +181,7 @@ const caseStudies: CaseStudy[] = [
     title: "Authority-Based Personal Brand System",
     description: "Built positioning and content strategy for strong authority and engagement.",
     results: ["Clear niche positioning", "Strong audience connection", "Consistent brand identity"],
-    thumbnail: caseBrand,
+    Icon: PersonalBrandIcon,
     situation: "Talented operator with no recognizable public voice or positioning.",
     problem: "Generic content, no clear ICP, no compounding inbound.",
     solution:
