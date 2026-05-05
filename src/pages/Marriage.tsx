@@ -45,10 +45,15 @@ const attributes: Bi[] = [
 
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
+  const location = useLocation();
+  const inquirer = (location.state as { inquirer?: { name: string; country_code: string; whatsapp: string; dress_colors?: string[] } } | null)?.inquirer;
   const t = (en: string, bn: string) => (bangla ? bn : en);
 
+  const greetingName = inquirer?.name?.split(" ")[0];
+  const inquirerWa = inquirer ? `${inquirer.country_code}${inquirer.whatsapp}` : null;
+
   const waMsg = encodeURIComponent(
-    "Assalamu Alaikum,\n\nThank you for visiting Zahid Hasan Emon's marriage profile.\n\nFor further discussion, please share:\n• Basic introduction\n• Family background\n• Contact number\n\nWe will get back to you shortly."
+    `Assalamu Alaikum${inquirer ? `, ${inquirer.name}` : ""},\n\nThank you for visiting Zahid Hasan Emon's marriage profile.${inquirerWa ? `\nYour contact on file: ${inquirerWa}` : ""}\n\nFor further discussion, please share:\n• Basic introduction\n• Family background\n• Contact number\n\nWe will get back to you shortly.`
   );
 
   return (
