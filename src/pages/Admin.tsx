@@ -204,6 +204,14 @@ export default function Admin() {
         ))}
         <Button onClick={refresh} variant="outline" size="sm">Refresh</Button>
       </main>
+
+      {previewIndex !== null && rows[previewIndex] && (
+        <PressItemPreview
+          item={rows[previewIndex]}
+          open={previewIndex !== null}
+          onOpenChange={(o) => !o && setPreviewIndex(null)}
+        />
+      )}
     </div>
   );
 }
