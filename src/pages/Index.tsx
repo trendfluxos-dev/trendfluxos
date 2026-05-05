@@ -16,6 +16,8 @@ import {
   Mail,
   MoreHorizontal,
   CheckCircle2,
+  Megaphone,
+  Lock,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
@@ -834,6 +836,19 @@ const Index = () => {
       {/* Final CTA + Footer */}
       <footer id="contact" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-6xl rounded-[2rem] glass-strong p-10 text-center md:p-16">
+          {/* Brand monogram */}
+          <div className="mx-auto mb-7 flex flex-col items-center">
+            <div className="relative">
+              <div aria-hidden className="absolute -inset-6 rounded-full bg-gold/20 blur-2xl" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-gold text-gold-foreground shadow-gold">
+                <span className="font-display text-2xl font-extrabold tracking-tight">TF</span>
+              </div>
+            </div>
+            <p className="mt-3 text-[10px] uppercase tracking-[0.4em] text-gold/80">
+              TrendFlux Ecosystem
+            </p>
+          </div>
+
           <h2 className="font-display mx-auto max-w-3xl text-3xl font-bold leading-tight md:text-5xl">
             Ready to operate at{" "}
             <span className="text-gradient">full velocity?</span>
@@ -841,6 +856,53 @@ const Index = () => {
           <p className="mx-auto mt-6 max-w-xl text-foreground/60">
             Limited partnerships open each quarter. Let's architect yours.
           </p>
+
+          <p className="mx-auto mt-10 text-[10px] uppercase tracking-[0.4em] text-foreground/40">
+            ◆ Choose your tier ◆
+          </p>
+
+          <div className="mx-auto mt-5 grid max-w-3xl gap-3 sm:grid-cols-3">
+            <Link
+              to="/brand-open"
+              className="group rounded-2xl border border-gold/20 bg-white/[0.03] p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/5"
+            >
+              <div className="flex items-center justify-between">
+                <Megaphone className="h-5 w-5 text-gold" />
+                <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">01 · Open</span>
+              </div>
+              <h3 className="mt-3 font-display text-lg font-semibold text-foreground">Brand Tok</h3>
+              <p className="mt-1 text-xs text-foreground/55">Mass storytelling for everyone.</p>
+            </Link>
+
+            <Link
+              to="/trendflux-talent"
+              className="group rounded-2xl border border-gold/20 bg-white/[0.03] p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/5"
+            >
+              <div className="flex items-center justify-between">
+                <Users className="h-5 w-5 text-gold" />
+                <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">02 · Platform</span>
+              </div>
+              <h3 className="mt-3 font-display text-lg font-semibold text-foreground">TrendFlux Talent</h3>
+              <p className="mt-1 text-xs text-foreground/55">Creator network for serious brands.</p>
+            </Link>
+
+            <div
+              aria-disabled
+              title="Luxe Veil is invite-only"
+              className="relative cursor-not-allowed rounded-2xl border border-gold/30 bg-[#07182e]/60 p-5 text-left opacity-90"
+            >
+              <div className="flex items-center justify-between">
+                <Lock className="h-5 w-5 text-gold" />
+                <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">03 · Secret</span>
+              </div>
+              <h3 className="mt-3 font-display text-lg font-semibold text-gold">Luxe Veil</h3>
+              <p className="mt-1 text-xs text-foreground/55">Invitation only. By referral.</p>
+              <span className="absolute right-3 bottom-3 text-[9px] uppercase tracking-[0.3em] text-gold/60">
+                Locked
+              </span>
+            </div>
+          </div>
+
           <button
             type="button"
             onClick={() => setQuoteOpen(true)}
