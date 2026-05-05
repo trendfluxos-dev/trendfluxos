@@ -105,7 +105,7 @@ type CaseStudy = {
   title: string;
   description: string;
   results: string[];
-  thumbnail: string;
+  Icon: CaseIcon;
   situation: string;
   problem: string;
   solution: string;
