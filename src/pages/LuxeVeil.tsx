@@ -113,13 +113,18 @@ const LuxeVeil = () => {
       </section>
 
       {!unlocked ? (
-        <section className="mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#07182e]/70 backdrop-blur p-8 text-center">
-          <KeyRound className="w-6 h-6 text-gold mx-auto" />
-          <h2 className="mt-3 font-display text-xl text-white">Enter your invitation</h2>
-          <p className="mt-2 text-xs text-white/55">
+        <section className="relative mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#07182e]/70 backdrop-blur p-8 text-center">
+          {/* Inner hairline + corner crests */}
+          <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.4rem] border border-gold/15" />
+          <span aria-hidden className="absolute -top-2 left-1/2 -translate-x-1/2 text-gold/70 text-xs">◆</span>
+          <span aria-hidden className="absolute -bottom-2 left-1/2 -translate-x-1/2 text-gold/70 text-xs">◆</span>
+
+          <KeyRound className="relative w-6 h-6 text-gold mx-auto" />
+          <h2 className="relative mt-3 font-display text-xl text-white">Enter your invitation</h2>
+          <p className="relative mt-2 text-xs text-white/55">
             Access to Luxe Veil is granted by code. Don't have one? Request below.
           </p>
-          <form onSubmit={tryUnlock} className="mt-5 space-y-3">
+          <form onSubmit={tryUnlock} className="relative mt-5 space-y-3">
             <input
               value={code}
               onChange={(e) => setCode(e.target.value)}
@@ -135,11 +140,23 @@ const LuxeVeil = () => {
               Unlock Experience
             </button>
           </form>
+
+          {/* Ornamental separator */}
+          <div className="relative mt-7 flex items-center gap-3 text-gold/60">
+            <span className="text-xs">◆</span>
+            <span className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+            <span className="text-xs">◆</span>
+          </div>
+
           <RequestInviteForm />
         </section>
       ) : (
         <>
-          <section className="mt-2 mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur p-8 text-center">
+          <section className="relative mt-2 mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur p-8 text-center">
+            <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
+            <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
+            <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/60" />
+            <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/60" />
             <p className="text-[11px] uppercase tracking-[0.35em] text-gold/70">
               Welcome · Selectively Curated
             </p>
