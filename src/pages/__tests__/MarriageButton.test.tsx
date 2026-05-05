@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import ProjectLead from "../ProjectLead";
 
-// jsdom doesn't implement these — needed by Radix Tooltip / shadcn UI
+// jsdom doesn't implement these — needed by Radix Tooltip / Dialog
 beforeEach(() => {
   if (!(window as any).PointerEvent) {
     (window as any).PointerEvent = class extends Event {} as any;
@@ -20,7 +20,7 @@ const renderPage = () =>
     </MemoryRouter>
   );
 
-describe("Available for Marriage button", () => {
+describe("A Sincere Introduction button", () => {
   it("fires marriage_button_clicked on dataLayer when clicked", () => {
     const dataLayer: any[] = [];
     (window as any).dataLayer = dataLayer;
@@ -29,8 +29,8 @@ describe("Available for Marriage button", () => {
 
     renderPage();
 
-    const btn = screen.getByRole("link", {
-      name: /available for marriage/i,
+    const btn = screen.getByRole("button", {
+      name: /sincere marriage introduction|sincere introduction/i,
     });
     fireEvent.click(btn);
 
@@ -42,22 +42,25 @@ describe("Available for Marriage button", () => {
     );
   });
 
-  it("shows tooltip content on keyboard focus", async () => {
+  it("opens the introduction dialog with name and WhatsApp fields when clicked", async () => {
     renderPage();
-    const btn = screen.getByRole("link", { name: /available for marriage/i });
-
-    btn.focus();
+    const btn = screen.getByRole("button", {
+      name: /sincere marriage introduction|sincere introduction/i,
+    });
+    fireEvent.click(btn);
 
     await waitFor(() => {
-      expect(
-        screen.getAllByText(/open the marriage profile/i).length
-      ).toBeGreaterThan(0);
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
+    expect(screen.getByLabelText(/your name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/whatsapp number/i)).toBeInTheDocument();
   });
 
-  it("shows tooltip content on hover", async () => {
+  it("shows tooltip content on hover/focus", async () => {
     renderPage();
-    const btn = screen.getByRole("link", { name: /available for marriage/i });
+    const btn = screen.getByRole("button", {
+      name: /sincere marriage introduction|sincere introduction/i,
+    });
 
     fireEvent.pointerEnter(btn);
     fireEvent.mouseEnter(btn);
@@ -65,7 +68,7 @@ describe("Available for Marriage button", () => {
 
     await waitFor(() => {
       expect(
-        screen.getAllByText(/open the marriage profile/i).length
+        screen.getAllByText(/private marriage profile|share a quick intro/i).length
       ).toBeGreaterThan(0);
     });
   });

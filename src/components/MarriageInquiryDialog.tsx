@@ -98,7 +98,16 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
       description: "Opening the marriage profile for you…",
     });
     onOpenChange(false);
-    navigate("/marriage");
+    navigate("/marriage", {
+      state: {
+        inquirer: {
+          name: parsed.data.name,
+          country_code: parsed.data.country_code,
+          whatsapp: parsed.data.whatsapp,
+          dress_colors: parsed.data.dress_colors,
+        },
+      },
+    });
   };
 
   return (

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart } from "lucide-react";
 import profile from "@/assets/marriage/profile.jpg";
 import photo1 from "@/assets/marriage/photo1.jpg";
@@ -44,10 +45,15 @@ const attributes: Bi[] = [
 
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
+  const location = useLocation();
+  const inquirer = (location.state as { inquirer?: { name: string; country_code: string; whatsapp: string; dress_colors?: string[] } } | null)?.inquirer;
   const t = (en: string, bn: string) => (bangla ? bn : en);
 
+  const greetingName = inquirer?.name?.split(" ")[0];
+  const inquirerWa = inquirer ? `${inquirer.country_code}${inquirer.whatsapp}` : null;
+
   const waMsg = encodeURIComponent(
-    "Assalamu Alaikum,\n\nThank you for visiting Zahid Hasan Emon's marriage profile.\n\nFor further discussion, please share:\n• Basic introduction\n• Family background\n• Contact number\n\nWe will get back to you shortly."
+    `Assalamu Alaikum${inquirer ? `, ${inquirer.name}` : ""},\n\nThank you for visiting Zahid Hasan Emon's marriage profile.${inquirerWa ? `\nYour contact on file: ${inquirerWa}` : ""}\n\nFor further discussion, please share:\n• Basic introduction\n• Family background\n• Contact number\n\nWe will get back to you shortly.`
   );
 
   return (
@@ -69,6 +75,42 @@ const Marriage = () => {
             {bangla ? "English" : "বাংলা"}
           </button>
         </div>
+
+        {/* Personalized welcome */}
+        {inquirer && (
+          <div className="mt-4 rounded-2xl border border-white/15 bg-gradient-to-r from-black/70 via-[#1a0507]/80 to-black/70 px-5 py-4 backdrop-blur shadow-[0_10px_30px_-10px_rgba(220,38,38,0.5)] flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center text-black font-bold border border-white/30">
+                {greetingName?.[0]?.toUpperCase() ?? "♥"}
+              </div>
+              <div>
+                <p className="text-white font-semibold">
+                  {t(`Welcome, ${greetingName} 💍`, `স্বাগতম, ${greetingName} 💍`)}
+                </p>
+                <p className="text-xs text-white/60">
+                  {t("WhatsApp on file:", "WhatsApp:")}{" "}
+                  <span className="text-red-300 font-medium">{inquirerWa}</span>
+                  {inquirer.dress_colors && inquirer.dress_colors.length > 0 && (
+                    <>
+                      {" · "}
+                      {t("Preferred:", "পছন্দ:")}{" "}
+                      <span className="text-white/80">{inquirer.dress_colors.join(", ")}</span>
+                    </>
+                  )}
+                </p>
+              </div>
+            </div>
+            <a
+              href={`https://wa.me/${inquirerWa?.replace("+", "")}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-white shadow-[0_8px_24px_-8px_rgba(220,38,38,0.7)] hover:brightness-110 transition"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              {t("Chat on WhatsApp", "WhatsApp চ্যাট")}
+            </a>
+          </div>
+        )}
 
         {/* Availability Banner */}
         <div className="mt-4 rounded-2xl border border-red-500/50 bg-gradient-to-r from-red-600/20 via-white/5 to-red-600/20 px-5 py-4 text-center shadow-[0_8px_30px_rgba(220,38,38,0.25)]">
