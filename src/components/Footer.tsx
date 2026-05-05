@@ -49,8 +49,15 @@ const Footer = () => {
           </h4>
           <ul className="space-y-3 text-sm text-foreground/70">
             <li><Link to="/project-lead" className="hover:text-primary transition-colors">Project Lead</Link></li>
+            <li><Link to="/brand-open" className="hover:text-primary transition-colors">Brand Tok</Link></li>
+            <li><Link to="/trendflux-talent" className="hover:text-primary transition-colors">TrendFlux Talent</Link></li>
+            <li>
+              <Link to="/luxe-veil" className="hover:text-primary transition-colors inline-flex items-center gap-1">
+                <span className="w-1 h-1 rounded-full bg-primary/60" /> Luxe Veil
+                <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/40 ml-1">(Private)</span>
+              </Link>
+            </li>
             <li><a href="#cases" className="hover:text-primary transition-colors">Case Studies</a></li>
-            <li><a href="#" className="hover:text-primary transition-colors">Book a Call</a></li>
             <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
           </ul>
         </div>
