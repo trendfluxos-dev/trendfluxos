@@ -491,7 +491,7 @@ const Index = () => {
                       "Report on the formal torture allegation against the brother of a former national student-wing president, with the JU leader publicly seeking protection.",
                   },
                   {
-                    outlet: "Dhaka Mail",
+                    outlet: "Daily Inqilab",
                     headline: "ছাত্রলীগের সাবেক সভাপতি জয়ের ছোট ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ",
                     href: "https://dailyinqilab.com/bangladesh/news/605977",
                     context:
@@ -507,14 +507,14 @@ const Index = () => {
                   {
                     outlet: "Janakantha",
                     headline: "জাবিতে ছাত্রলীগ নেতাকে নির্যাতন, তদন্ত কমিটি",
-                    href: "https://www.banglanews24.com/education/news/bd/1197220.details",
+                    href: "https://www.dailyjanakantha.com",
                     context:
                       "Report announcing the formation of an inquiry committee following the documented torture of the JU student leader.",
                   },
                   {
                     outlet: "Dainik Shiksha",
                     headline: "ভিসির কাছে জীবনের নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা",
-                    href: "https://www.ittefaq.com.bd/661213/",
+                    href: "https://www.dainikshiksha.com/%E0%A6%9C%E0%A6%BE%E0%A6%AC%E0%A6%BF-%E0%A6%9B%E0%A6%BE%E0%A6%A4%E0%A7%8D%E0%A6%B0%E0%A6%B2%E0%A7%80%E0%A6%97-%E0%A6%A8%E0%A7%87%E0%A6%A4%E0%A6%BE-%E0%A6%89%E0%A6%AA%E0%A6%BE%E0%A6%9A%E0%A6%BE%E0%A6%B0%E0%A7%8D%E0%A6%AF%E0%A7%87%E0%A6%B0-%E0%A6%95%E0%A6%BE%E0%A6%9B%E0%A7%87-%E0%A6%9C%E0%A7%80%E0%A6%AC%E0%A6%A8%E0%A7%87%E0%A6%B0-%E0%A6%A8%E0%A6%BF%E0%A6%B0%E0%A6%BE%E0%A6%AA%E0%A6%A4%E0%A7%8D%E0%A6%A4%E0%A6%BE-%E0%A6%9A%E0%A6%BE%E0%A6%87%E0%A6%B2%E0%A7%87%E0%A6%A8/260584/",
                     context:
                       "Report on the JU student leader formally requesting protection of his life from the Vice-Chancellor after sustained threats.",
                   },
