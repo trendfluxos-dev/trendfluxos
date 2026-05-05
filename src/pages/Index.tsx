@@ -15,6 +15,7 @@ import {
   MessageCircle,
   Mail,
   MoreHorizontal,
+  CheckCircle2,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
@@ -88,42 +89,100 @@ const services = [
   },
 ];
 
-const cases = [
+import caseOrganic from "@/assets/case-organic.jpg";
+import caseContent from "@/assets/case-content.jpg";
+import caseGlobal from "@/assets/case-global.jpg";
+import caseAutomation from "@/assets/case-automation.jpg";
+import caseSme from "@/assets/case-sme.jpg";
+import caseBrand from "@/assets/case-brand.jpg";
+
+type CaseStudy = {
+  category: string;
+  title: string;
+  description: string;
+  results: string[];
+  thumbnail: string;
+  situation: string;
+  problem: string;
+  solution: string;
+  insight: string;
+};
+
+const caseStudies: CaseStudy[] = [
   {
-    metric: "+45% ROAS",
-    sub: "in 90 days",
-    title: "Lumen Apparel — DTC Scale Sprint",
-    stack: ["Meta Ads", "Klaviyo", "Shopify", "GA4"],
+    category: "Organic Growth System",
+    title: "Scaling Organic Reach to 485K+",
+    description:
+      "Built a structured content system that generated massive organic reach without paid ads.",
+    results: ["485K+ video views", "80%+ organic reach", "45%+ engagement growth"],
+    thumbnail: caseOrganic,
+    situation: "The brand lacked visibility and had no structured content approach.",
+    problem: "Inconsistent posting, low engagement, and no audience targeting.",
+    solution:
+      "Developed a reels-first content system using hooks, storytelling, and structured scheduling.",
+    insight: "Content success is driven by structure and psychology — not volume.",
   },
   {
-    metric: "−62% Manual Hours",
-    sub: "across 4 departments",
-    title: "Northbeam Logistics — Ops Overhaul",
-    stack: ["Make", "HubSpot", "Airtable", "Slack API"],
+    category: "Content Engine",
+    title: "200+ Digital Asset Production System",
+    description:
+      "Created a scalable content production engine using templates and AI-assisted workflows.",
+    results: ["200+ assets delivered", "Faster content execution", "Consistent brand identity"],
+    thumbnail: caseContent,
+    situation: "Manual asset production was slow and inconsistent across campaigns.",
+    problem: "Bottlenecked design output, off-brand variations, missed launch windows.",
+    solution:
+      "Built a templated production engine combining Figma systems, Canva libraries, and AI copy workflows.",
+    insight: "Systems out-produce talent when speed and consistency both matter.",
   },
   {
-    metric: "3.4x Pipeline",
-    sub: "qualified MQL → SQL",
-    title: "Vault Finance — Funnel Rebuild",
-    stack: ["Webflow", "Salesforce", "Segment"],
+    category: "Global Strategy",
+    title: "Multi-Market Digital Strategy (US/UK)",
+    description:
+      "Optimized content and marketing strategy for international audience targeting.",
+    results: ["Improved engagement", "Market-aligned content", "Better audience targeting"],
+    thumbnail: caseGlobal,
+    situation: "A single-market playbook was being copy-pasted across geographies.",
+    problem: "Tone, references, and offers didn't resonate with US/UK audiences.",
+    solution:
+      "Rebuilt positioning, creative, and channel mix per market with localized creative variants.",
+    insight: "Global growth is local execution — not translated copy.",
   },
   {
-    metric: "$1.2M Revenue",
-    sub: "single-quarter Meta",
-    title: "Aurora Skincare — Creative Engine",
-    stack: ["Meta Ads", "Triple Whale", "Figma"],
+    category: "Automation Funnel",
+    title: "WhatsApp Lead Conversion System",
+    description: "Built an automated funnel to convert inquiries into booked strategy calls.",
+    results: ["Faster response time", "Higher lead engagement", "Increased booking rate"],
+    thumbnail: caseAutomation,
+    situation: "Inbound leads were dropping off before reaching a human.",
+    problem: "Slow replies, no qualification, no follow-up sequence.",
+    solution:
+      "Wired a WhatsApp + CRM automation that qualified, nurtured, and booked calls 24/7.",
+    insight: "Speed-to-lead is the cheapest conversion lever most brands ignore.",
   },
   {
-    metric: "8 → 1 Stack",
-    sub: "consolidation playbook",
-    title: "Forge Industries — Ecosystem Reset",
-    stack: ["Notion", "Zapier", "Linear", "Stripe"],
+    category: "SME Growth",
+    title: "SME Growth System Architecture",
+    description: "Designed structured growth systems for SMEs targeting scalable operations.",
+    results: ["Clear funnel structure", "CRM integration", "Scalable business model"],
+    thumbnail: caseSme,
+    situation: "Owner-led SME with strong service but no repeatable acquisition model.",
+    problem: "Revenue depended entirely on referrals and founder hustle.",
+    solution:
+      "Architected a top-to-bottom funnel with CRM, content, and outbound playbooks.",
+    insight: "SMEs scale when founders escape every step of the customer journey.",
   },
   {
-    metric: "+128% Sign-ups",
-    sub: "at flat ad spend",
-    title: "Helio Health — Conversion Lab",
-    stack: ["Meta Ads", "Webflow", "Mixpanel"],
+    category: "Personal Brand",
+    title: "Authority-Based Personal Brand System",
+    description: "Built positioning and content strategy for strong authority and engagement.",
+    results: ["Clear niche positioning", "Strong audience connection", "Consistent brand identity"],
+    thumbnail: caseBrand,
+    situation: "Talented operator with no recognizable public voice or positioning.",
+    problem: "Generic content, no clear ICP, no compounding inbound.",
+    solution:
+      "Defined a sharp niche thesis and built a content engine around proof-driven storytelling.",
+    insight: "Authority compounds when every post reinforces one undeniable thesis.",
   },
 ];
 
@@ -138,6 +197,7 @@ const Index = () => {
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
+  const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
   const { items: dbPress } = usePressItems();
 
   const filterTabs: Category[] = [
@@ -598,67 +658,125 @@ const Index = () => {
       {/* Case Studies */}
       <section id="cases" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-                — Selected Narratives
-              </p>
-              <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
-                Operations that{" "}
-                <span className="text-gradient">moved the needle.</span>
-              </h2>
-            </div>
-            <a
-              href="#cases"
-              className="inline-flex items-center gap-2 text-sm text-foreground/70 hover:text-gold transition-colors"
-            >
-              All Case Studies <ArrowUpRight className="w-4 h-4" />
-            </a>
+          <div className="mb-14 text-center">
+            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
+              — Proven Growth Systems & Results
+            </p>
+            <h2 className="font-display mx-auto max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
+              Real systems. <span className="text-gradient">Real outcomes.</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-base text-foreground/65">
+              Real execution. Here's how I turn strategy into measurable growth.
+            </p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {cases.map((c, i) => (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {caseStudies.map((c, i) => (
               <article
                 key={c.title}
-                className="group flex min-h-[340px] flex-col rounded-3xl glass glass-hover p-7"
+                className="group flex flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
+                style={{ animationDelay: `${i * 0.06}s` }}
               >
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-foreground/40">
-                  <span className="text-primary">CASE / {String(i + 1).padStart(2, "0")}</span>
-                  <span>2024 — 2026</span>
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
+                  <img
+                    src={c.thumbnail}
+                    alt={`${c.category} icon`}
+                    loading="lazy"
+                    width={512}
+                    height={320}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                 </div>
 
-                <div className="mt-8">
-                  <p className="font-display text-3xl font-bold text-gradient leading-none">
-                    {c.metric}
-                  </p>
-                  <p className="mt-2 text-sm text-foreground/60">{c.sub}</p>
-                </div>
-
-                <h3 className="font-display mt-6 text-xl font-bold leading-snug">
-                  {c.title}
-                </h3>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {c.stack.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-border bg-foreground/5 px-3 py-1 text-xs text-foreground/70"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-auto pt-6">
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary opacity-70 group-hover:opacity-100 transition">
-                    View Narrative <ArrowRight className="w-4 h-4" />
+                <div className="flex flex-1 flex-col p-7">
+                  <span className="inline-flex w-fit items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
+                    {c.category}
                   </span>
+
+                  <h3 className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
+                    {c.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-relaxed text-foreground/65">
+                    {c.description}
+                  </p>
+
+                  <ul className="mt-5 space-y-2">
+                    {c.results.map((r) => (
+                      <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                        <span>{r}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto pt-6">
+                    <button
+                      type="button"
+                      onClick={() => setActiveCase(c)}
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2"
+                    >
+                      View Case Study <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Case study detail modal */}
+      <Dialog open={!!activeCase} onOpenChange={(o) => !o && setActiveCase(null)}>
+        <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+          <DialogHeader className="space-y-3 pt-2 text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+              {activeCase?.category}
+            </p>
+            <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
+              {activeCase?.title}
+            </DialogTitle>
+          </DialogHeader>
+
+          {activeCase && (
+            <div className="space-y-5 text-sm leading-relaxed text-foreground/75">
+              <Section label="Situation" body={activeCase.situation} />
+              <Section label="Problem" body={activeCase.problem} />
+              <Section label="Solution" body={activeCase.solution} />
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
+                  Results
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {activeCase.results.map((r) => (
+                    <li key={r} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-xl border border-gold/30 bg-gold/5 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
+                  Key Insight
+                </p>
+                <p className="mt-2 text-foreground/85">{activeCase.insight}</p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2 sm:gap-3">
+            <Button variant="ghost" onClick={() => setActiveCase(null)}>
+              Close
+            </Button>
+            <Button variant="gold" onClick={() => { setActiveCase(null); setQuoteOpen(true); }}>
+              Build Something Similar <ArrowRight className="h-4 w-4" />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Final CTA + Footer */}
       <footer id="contact" className="relative px-6 py-24 md:px-12 lg:px-20">
@@ -714,5 +832,14 @@ const Index = () => {
     </main>
   );
 };
+
+const Section = ({ label, body }: { label: string; body: string }) => (
+  <div>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
+      {label}
+    </p>
+    <p className="mt-2 text-foreground/75">{body}</p>
+  </div>
+);
 
 export default Index;
