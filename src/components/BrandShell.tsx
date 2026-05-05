@@ -68,24 +68,33 @@ const BrandFunnelFooter = ({ active }: { active: Tier }) => {
     { id: "private", name: "Luxe Veil", path: "/luxe-veil", tag: "Private" },
   ];
   return (
-    <footer className="border-t border-gold/15 mt-10">
+    <footer className="relative border-t border-gold/15 mt-10">
       <div className="max-w-6xl mx-auto px-5 py-8">
         <p className="text-center text-[10px] uppercase tracking-[0.4em] text-gold/60 mb-5">
-          The TrendFlux Brand Funnel
+          ◆ The TrendFlux Brand Funnel ◆
         </p>
         <div className="grid grid-cols-3 gap-3">
           {items.map((it, i) => (
             <Link
               key={it.id}
               to={it.path}
-              className={`group rounded-2xl border px-4 py-4 text-center transition ${
+              className={`group relative overflow-hidden rounded-2xl border px-4 py-4 text-center transition ${
                 active === it.id
                   ? "border-gold bg-gold/10"
                   : "border-gold/20 hover:border-gold/60 hover:bg-gold/5"
               }`}
             >
-              <div className="text-[9px] tracking-[0.3em] uppercase text-gold/70">
-                0{i + 1} · {it.tag}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 skew-x-12 bg-gradient-to-r from-transparent via-gold/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-[300%] transition-all duration-700"
+              />
+              <div className="flex items-center justify-center gap-2">
+                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold/40 text-[9px] text-gold/80">
+                  {i + 1}
+                </span>
+                <div className="text-[9px] tracking-[0.3em] uppercase text-gold/70">
+                  {it.tag}
+                </div>
               </div>
               <div className="mt-1 text-sm font-semibold text-white">{it.name}</div>
             </Link>
