@@ -1,7 +1,14 @@
 import { BrandShell } from "@/components/BrandShell";
 import { Megaphone, Sparkles, Zap } from "lucide-react";
+import { useSeo } from "@/hooks/useSeo";
+import { Testimonials } from "@/components/Testimonials";
 
 const BrandOpen = () => {
+  useSeo({
+    title: "Brand Tok — Helping Brands Tell Their Stories | TrendFlux",
+    description:
+      "Bold, communication-first storytelling for Bangladeshi brands. Modern geometry, flat gold, built for ads, social and mass reach.",
+  });
   return (
     <BrandShell tier="open">
       <section className="pt-14 pb-10 text-center">
@@ -52,6 +59,28 @@ const BrandOpen = () => {
           </div>
         ))}
       </section>
+      <Testimonials
+        items={[
+          {
+            quote: "Brand Tok turned our Eid campaign into a city-wide conversation. Reach tripled in 10 days.",
+            name: "Tanvir Ahmed",
+            role: "Founder, Dhanmondi Apparel · Dhaka",
+            outcome: "3.2× organic reach in 10 days",
+          },
+          {
+            quote: "The visual system finally made our brand feel premium without losing mass appeal.",
+            name: "Rumana Karim",
+            role: "Marketing Lead, Gulshan F&B Co.",
+            outcome: "+47% engagement on launch reel",
+          },
+          {
+            quote: "From scroll-stopping reels to OOH — every asset spoke the same language.",
+            name: "Sakib Hossain",
+            role: "Brand Manager, Bashundhara Retail",
+            outcome: "2.1× CTR on paid social",
+          },
+        ]}
+      />
     </BrandShell>
   );
 };

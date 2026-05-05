@@ -1,7 +1,14 @@
 import { BrandShell } from "@/components/BrandShell";
 import { Camera, Users, Sparkles, ArrowUpRight } from "lucide-react";
+import { useSeo } from "@/hooks/useSeo";
+import { Testimonials } from "@/components/Testimonials";
 
 const TrendfluxTalent = () => {
+  useSeo({
+    title: "TrendFlux Talent — Brand Promoters & Creator Community BD",
+    description:
+      "AI-powered creator-led growth for Bangladeshi brands. A curated network of promoters, models and digital storytellers in Dhaka.",
+  });
   return (
     <BrandShell tier="platform">
       <section className="pt-14 pb-10 text-center">
@@ -74,6 +81,29 @@ const TrendfluxTalent = () => {
           A platform built for serious creators and serious brands — luxury, system, authority.
         </p>
       </section>
+      <Testimonials
+        title="Creators & Brands Already Inside"
+        items={[
+          {
+            quote: "Onboarding to TrendFlux Talent connected us with three creators who actually understood our brand voice.",
+            name: "Nazia Rahman",
+            role: "Co-founder, Banani Skincare Studio",
+            outcome: "12 UGC pieces in 3 weeks",
+          },
+          {
+            quote: "The AI matching saved us months of manual scouting. We launched in Dhaka and ranked top 5 in our niche.",
+            name: "Imran Chowdhury",
+            role: "Growth Lead, Uttara D2C Brand",
+            outcome: "5× ROAS on first campaign",
+          },
+          {
+            quote: "As a creator, this is the first platform that treated me like a partner, not a freelancer.",
+            name: "Mehzabin Akter",
+            role: "Lifestyle Creator, 180k followers · Dhaka",
+            outcome: "4 long-term brand deals signed",
+          },
+        ]}
+      />
     </BrandShell>
   );
 };
