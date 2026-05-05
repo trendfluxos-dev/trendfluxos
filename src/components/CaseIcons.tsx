@@ -8,12 +8,19 @@ import type { SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
-const baseProps: IconProps = {
+const baseProps = {
   viewBox: "0 0 200 200",
   fill: "none",
   xmlns: "http://www.w3.org/2000/svg",
-  "aria-hidden": true,
-};
+} as const;
+
+function withA11y(props: IconProps) {
+  // If the consumer passes aria-label, expose as a labeled image; otherwise hide decoratively.
+  if (props["aria-label"]) {
+    return { role: "img" as const, ...props };
+  }
+  return { "aria-hidden": true as const, focusable: false as const, ...props };
+}
 
 const stroke = "hsl(var(--gold))";
 const strokeSoft = "hsl(var(--gold) / 0.35)";
