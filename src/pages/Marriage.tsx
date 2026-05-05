@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart } from "lucide-react";
 import profile from "@/assets/marriage/profile.jpg";
 import photo1 from "@/assets/marriage/photo1.jpg";
