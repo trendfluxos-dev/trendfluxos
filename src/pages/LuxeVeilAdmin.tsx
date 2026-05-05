@@ -157,24 +157,14 @@ export default function LuxeVeilAdmin() {
     );
   }
 
-  const filtered = rows.filter((r) => {
-    if (filter !== "all" && r.status !== filter) return false;
-    if (!q.trim()) return true;
-    const s = q.toLowerCase();
-    return (
-      r.name.toLowerCase().includes(s) ||
-      r.email.toLowerCase().includes(s) ||
-      (r.reference ?? "").toLowerCase().includes(s) ||
-      r.message.toLowerCase().includes(s)
-    );
-  });
-
-  const counts = {
-    all: rows.length,
-    pending: rows.filter((r) => r.status === "pending").length,
-    approved: rows.filter((r) => r.status === "approved").length,
-    rejected: rows.filter((r) => r.status === "rejected").length,
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const toggleSort = (f: SortField) => {
+    if (sortField === f) setSortDir(sortDir === "asc" ? "desc" : "asc");
+    else { setSortField(f); setSortDir("desc"); }
+    setPage(0);
   };
+  const sortIcon = (f: SortField) =>
+    sortField === f ? (sortDir === "asc" ? <ArrowUp className="inline h-3 w-3 ml-1" /> : <ArrowDown className="inline h-3 w-3 ml-1" />) : null;
 
   return (
     <div className="min-h-screen bg-background">
