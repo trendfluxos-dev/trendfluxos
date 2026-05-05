@@ -174,6 +174,36 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
               </div>
             </div>
 
+            <div className="space-y-2">
+              <Label className="text-white/85">Preferred Dress Colors</Label>
+              <div className="flex flex-wrap gap-2">
+                {DRESS_COLORS.map((c) => {
+                  const active = dressColors.includes(c.id);
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      onClick={() => toggleColor(c.id)}
+                      aria-pressed={active}
+                      className={`group inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                        active
+                          ? "border-red-500/80 bg-white/10 text-white shadow-[0_0_18px_-4px_rgba(220,38,38,0.55)]"
+                          : "border-white/15 bg-white/5 text-white/65 hover:text-white hover:border-white/40"
+                      }`}
+                    >
+                      <span
+                        className={`h-4 w-4 rounded-full border border-white/30 ${active ? "ring-2 ring-offset-2 ring-offset-black " + c.ring : ""}`}
+                        style={{ background: c.swatch }}
+                        aria-hidden
+                      />
+                      {c.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-[11px] text-white/45">Tap to toggle. Default: black, white & red.</p>
+            </div>
+
             <button
               type="submit"
               disabled={submitting}
