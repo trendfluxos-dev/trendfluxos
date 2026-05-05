@@ -443,12 +443,23 @@ const Index = () => {
               <span className="text-foreground/30">·</span>
               <span>Founder, TrendFlux Digital</span>
             </div>
-            <Link
-              to="/project-lead"
-              className="mt-8 inline-flex items-center gap-2 text-primary hover:text-gold transition-colors"
-            >
-              Read full profile <ArrowUpRight className="w-4 h-4" />
-            </Link>
+            <div className="mt-8 flex flex-wrap items-center gap-5">
+              <Link
+                to="/project-lead"
+                className="inline-flex items-center gap-2 text-primary hover:text-gold transition-colors"
+              >
+                Read full profile <ArrowUpRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/marriage"
+                className="marriage-glow-btn relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white shadow-lg overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <span className="text-base">💍</span>
+                  Available for Marriage
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
 
