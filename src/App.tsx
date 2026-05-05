@@ -9,6 +9,7 @@ import ProjectLead from "./pages/ProjectLead.tsx";
 import Auth from "./pages/Auth.tsx";
 import Admin from "./pages/Admin.tsx";
 import PressDetail from "./pages/PressDetail.tsx";
+import Marriage from "./pages/Marriage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/press/:id" element={<PressDetail />} />
+          <Route path="/marriage" element={<Marriage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
