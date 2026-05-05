@@ -25,6 +25,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { QuoteDialog } from "@/components/QuoteDialog";
@@ -674,11 +675,16 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <ul
+            role="list"
+            aria-label="Case studies"
+            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
+          >
             {caseStudies.map((c, i) => (
+              <li key={c.title}>
               <article
-                key={c.title}
-                className="group flex flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
+                aria-labelledby={`case-${i}-title`}
+                className="group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
                 style={{ animationDelay: `${i * 0.06}s` }}
               >
                 <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
@@ -692,7 +698,10 @@ const Index = () => {
                     }}
                     aria-hidden
                   />
-                  <c.Icon className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105" />
+                  <c.Icon
+                    aria-label={`${c.category} category illustration`}
+                    className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
                 </div>
 
@@ -701,7 +710,7 @@ const Index = () => {
                     {c.category}
                   </span>
 
-                  <h3 className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
+                  <h3 id={`case-${i}-title`} className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
                     {c.title}
                   </h3>
 
@@ -709,10 +718,10 @@ const Index = () => {
                     {c.description}
                   </p>
 
-                  <ul className="mt-5 space-y-2">
+                  <ul aria-label={`Key results for ${c.title}`} className="mt-5 space-y-2">
                     {c.results.map((r) => (
                       <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                        <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                         <span>{r}</span>
                       </li>
                     ))}
@@ -722,81 +731,94 @@ const Index = () => {
                     <button
                       type="button"
                       onClick={() => setActiveCase(c)}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2"
+                      aria-label={`View full case study: ${c.title}`}
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
                     >
-                      View Case Study <ArrowRight className="h-4 w-4" />
+                      View Case Study <ArrowRight aria-hidden className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
               </article>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
       {/* Case study detail modal */}
       <Dialog open={!!activeCase} onOpenChange={(o) => !o && setActiveCase(null)}>
-        <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+        <DialogContent
+          className="glass border-gold/30 shadow-gold sm:max-w-2xl max-h-[90vh] overflow-y-auto"
+          aria-labelledby="case-modal-title"
+          aria-describedby="case-modal-desc"
+        >
+          <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
           <DialogHeader className="space-y-3 pt-2 text-left">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+              <span className="sr-only">Category: </span>
               {activeCase?.category}
             </p>
-            <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
+            <DialogTitle id="case-modal-title" className="font-display text-2xl leading-snug md:text-3xl">
               {activeCase?.title}
             </DialogTitle>
+            <DialogDescription id="case-modal-desc" className="text-sm text-foreground/70">
+              {activeCase?.description}
+            </DialogDescription>
           </DialogHeader>
 
           {activeCase && (
             <div className="space-y-5 text-sm leading-relaxed text-foreground/75">
               {/* Compact KPI summary */}
-              <div className="rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent p-5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold/80">
+              <section
+                aria-labelledby="kpi-heading"
+                className="rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent p-5"
+              >
+                <h3 id="kpi-heading" className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold/80">
                   Headline Outcome
-                </p>
+                </h3>
                 <p className="font-display mt-1.5 text-xl font-bold leading-tight text-gradient md:text-2xl">
                   {activeCase.results[0]}
                 </p>
-                <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <dl className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
                   {activeCase.results.map((r, idx) => (
                     <div
                       key={r}
                       className="rounded-lg border border-border bg-background/40 p-3"
                     >
-                      <p className="text-[9px] font-semibold uppercase tracking-[0.25em] text-foreground/40">
+                      <dt className="text-[9px] font-semibold uppercase tracking-[0.25em] text-foreground/40">
                         KPI {String(idx + 1).padStart(2, "0")}
-                      </p>
-                      <p className="mt-1 flex items-start gap-1.5 text-xs font-semibold text-foreground/90">
-                        <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+                      </dt>
+                      <dd className="mt-1 flex items-start gap-1.5 text-xs font-semibold text-foreground/90">
+                        <CheckCircle2 aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
                         <span>{r}</span>
-                      </p>
+                      </dd>
                     </div>
                   ))}
-                </div>
-              </div>
+                </dl>
+              </section>
 
               <Section label="Situation" body={activeCase.situation} />
               <Section label="Problem" body={activeCase.problem} />
               <Section label="Solution" body={activeCase.solution} />
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
+              <section aria-labelledby="results-heading">
+                <h3 id="results-heading" className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
                   Results
-                </p>
+                </h3>
                 <ul className="mt-2 space-y-2">
                   {activeCase.results.map((r) => (
                     <li key={r} className="flex items-start gap-2">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                       <span>{r}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
-              <div className="rounded-xl border border-gold/30 bg-gold/5 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
+              </section>
+              <section aria-labelledby="insight-heading" className="rounded-xl border border-gold/30 bg-gold/5 p-4">
+                <h3 id="insight-heading" className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
                   Key Insight
-                </p>
+                </h3>
                 <p className="mt-2 text-foreground/85">{activeCase.insight}</p>
-              </div>
+              </section>
             </div>
           )}
 

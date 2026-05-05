@@ -8,12 +8,19 @@ import type { SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
-const baseProps: IconProps = {
+const baseProps = {
   viewBox: "0 0 200 200",
   fill: "none",
   xmlns: "http://www.w3.org/2000/svg",
-  "aria-hidden": true,
-};
+} as const;
+
+function withA11y(props: IconProps) {
+  // If the consumer passes aria-label, expose as a labeled image; otherwise hide decoratively.
+  if (props["aria-label"]) {
+    return { role: "img" as const, ...props };
+  }
+  return { "aria-hidden": true as const, focusable: false as const, ...props };
+}
 
 const stroke = "hsl(var(--gold))";
 const strokeSoft = "hsl(var(--gold) / 0.35)";
@@ -36,7 +43,7 @@ function Frame({ children }: { children: React.ReactNode }) {
 }
 
 export const OrganicGrowthIcon = (props: IconProps) => (
-  <svg {...baseProps} {...props}>
+  <svg {...baseProps} {...withA11y(props)}>
     <Frame>
       {/* Baseline grid */}
       {[60, 90, 120, 150].map((y) => (
@@ -74,7 +81,7 @@ export const OrganicGrowthIcon = (props: IconProps) => (
 );
 
 export const ContentEngineIcon = (props: IconProps) => (
-  <svg {...baseProps} {...props}>
+  <svg {...baseProps} {...withA11y(props)}>
     <Frame>
       {/* Stacked content tiles */}
       {[0, 1, 2, 3, 4].map((i) => (
@@ -96,7 +103,7 @@ export const ContentEngineIcon = (props: IconProps) => (
 );
 
 export const GlobalStrategyIcon = (props: IconProps) => (
-  <svg {...baseProps} {...props}>
+  <svg {...baseProps} {...withA11y(props)}>
     <Frame>
       <circle cx="100" cy="100" r="50" stroke={stroke} strokeWidth="1.2" />
       {/* Latitudes */}
@@ -118,7 +125,7 @@ export const GlobalStrategyIcon = (props: IconProps) => (
 );
 
 export const AutomationFunnelIcon = (props: IconProps) => (
-  <svg {...baseProps} {...props}>
+  <svg {...baseProps} {...withA11y(props)}>
     <Frame>
       {/* Funnel */}
       <path
@@ -147,7 +154,7 @@ export const AutomationFunnelIcon = (props: IconProps) => (
 );
 
 export const SmeGrowthIcon = (props: IconProps) => (
-  <svg {...baseProps} {...props}>
+  <svg {...baseProps} {...withA11y(props)}>
     <Frame>
       {/* Pyramid blueprint */}
       <path d="M60 150 L100 50 L140 150 Z" stroke={stroke} strokeWidth="1.4" />
@@ -166,7 +173,7 @@ export const SmeGrowthIcon = (props: IconProps) => (
 );
 
 export const PersonalBrandIcon = (props: IconProps) => (
-  <svg {...baseProps} {...props}>
+  <svg {...baseProps} {...withA11y(props)}>
     <Frame>
       {/* Shield */}
       <path
