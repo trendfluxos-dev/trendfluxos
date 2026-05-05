@@ -7,8 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, LogOut, Save } from "lucide-react";
+import { Loader2, Plus, Trash2, LogOut, Save, Eye } from "lucide-react";
 import { usePressItems, type PressItem } from "@/hooks/usePressItems";
+import { PressItemPreview } from "@/components/PressItemPreview";
 
 type Row = PressItem & { _dirty?: boolean; _new?: boolean };
 
@@ -19,6 +20,7 @@ export default function Admin() {
   const [userId, setUserId] = useState<string | null>(null);
   const { items, loading, refresh } = usePressItems(true);
   const [rows, setRows] = useState<Row[]>([]);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -187,6 +189,9 @@ export default function Admin() {
                 </div>
               </div>
               <div className="flex gap-2">
+                <Button size="sm" variant="outline" onClick={() => setPreviewIndex(i)}>
+                  <Eye className="h-4 w-4 mr-1" />Preview
+                </Button>
                 <Button size="sm" variant="outline" onClick={() => deleteRow(i)}>
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -199,6 +204,14 @@ export default function Admin() {
         ))}
         <Button onClick={refresh} variant="outline" size="sm">Refresh</Button>
       </main>
+
+      {previewIndex !== null && rows[previewIndex] && (
+        <PressItemPreview
+          item={rows[previewIndex]}
+          open={previewIndex !== null}
+          onOpenChange={(o) => !o && setPreviewIndex(null)}
+        />
+      )}
     </div>
   );
 }
