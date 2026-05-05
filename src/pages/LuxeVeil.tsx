@@ -115,12 +115,7 @@ const LuxeVeil = () => {
               Unlock Experience
             </button>
           </form>
-          <a
-            href="mailto:zhemongrowth@gmail.com?subject=Luxe%20Veil%20Invitation%20Request"
-            className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-gold/80 hover:text-gold"
-          >
-            <Mail className="w-3 h-3" /> Request Invitation
-          </a>
+          <RequestInviteForm />
         </section>
       ) : (
         <>
