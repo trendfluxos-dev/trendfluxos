@@ -658,67 +658,125 @@ const Index = () => {
       {/* Case Studies */}
       <section id="cases" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-                — Selected Narratives
-              </p>
-              <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
-                Operations that{" "}
-                <span className="text-gradient">moved the needle.</span>
-              </h2>
-            </div>
-            <a
-              href="#cases"
-              className="inline-flex items-center gap-2 text-sm text-foreground/70 hover:text-gold transition-colors"
-            >
-              All Case Studies <ArrowUpRight className="w-4 h-4" />
-            </a>
+          <div className="mb-14 text-center">
+            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
+              — Proven Growth Systems & Results
+            </p>
+            <h2 className="font-display mx-auto max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
+              Real systems. <span className="text-gradient">Real outcomes.</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-base text-foreground/65">
+              Real execution. Here's how I turn strategy into measurable growth.
+            </p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {cases.map((c, i) => (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {caseStudies.map((c, i) => (
               <article
                 key={c.title}
-                className="group flex min-h-[340px] flex-col rounded-3xl glass glass-hover p-7"
+                className="group flex flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
+                style={{ animationDelay: `${i * 0.06}s` }}
               >
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-foreground/40">
-                  <span className="text-primary">CASE / {String(i + 1).padStart(2, "0")}</span>
-                  <span>2024 — 2026</span>
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-border">
+                  <img
+                    src={c.thumbnail}
+                    alt={`${c.category} icon`}
+                    loading="lazy"
+                    width={512}
+                    height={320}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
                 </div>
 
-                <div className="mt-8">
-                  <p className="font-display text-3xl font-bold text-gradient leading-none">
-                    {c.metric}
-                  </p>
-                  <p className="mt-2 text-sm text-foreground/60">{c.sub}</p>
-                </div>
-
-                <h3 className="font-display mt-6 text-xl font-bold leading-snug">
-                  {c.title}
-                </h3>
-
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {c.stack.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full border border-border bg-foreground/5 px-3 py-1 text-xs text-foreground/70"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-auto pt-6">
-                  <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary opacity-70 group-hover:opacity-100 transition">
-                    View Narrative <ArrowRight className="w-4 h-4" />
+                <div className="flex flex-1 flex-col p-7">
+                  <span className="inline-flex w-fit items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
+                    {c.category}
                   </span>
+
+                  <h3 className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
+                    {c.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-relaxed text-foreground/65">
+                    {c.description}
+                  </p>
+
+                  <ul className="mt-5 space-y-2">
+                    {c.results.map((r) => (
+                      <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                        <span>{r}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto pt-6">
+                    <button
+                      type="button"
+                      onClick={() => setActiveCase(c)}
+                      className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2"
+                    >
+                      View Case Study <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Case study detail modal */}
+      <Dialog open={!!activeCase} onOpenChange={(o) => !o && setActiveCase(null)}>
+        <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+          <DialogHeader className="space-y-3 pt-2 text-left">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
+              {activeCase?.category}
+            </p>
+            <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
+              {activeCase?.title}
+            </DialogTitle>
+          </DialogHeader>
+
+          {activeCase && (
+            <div className="space-y-5 text-sm leading-relaxed text-foreground/75">
+              <Section label="Situation" body={activeCase.situation} />
+              <Section label="Problem" body={activeCase.problem} />
+              <Section label="Solution" body={activeCase.solution} />
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
+                  Results
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {activeCase.results.map((r) => (
+                    <li key={r} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="rounded-xl border border-gold/30 bg-gold/5 p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
+                  Key Insight
+                </p>
+                <p className="mt-2 text-foreground/85">{activeCase.insight}</p>
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="gap-2 sm:gap-3">
+            <Button variant="ghost" onClick={() => setActiveCase(null)}>
+              Close
+            </Button>
+            <Button variant="gold" onClick={() => { setActiveCase(null); setQuoteOpen(true); }}>
+              Build Something Similar <ArrowRight className="h-4 w-4" />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Final CTA + Footer */}
       <footer id="contact" className="relative px-6 py-24 md:px-12 lg:px-20">
