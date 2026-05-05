@@ -89,12 +89,16 @@ const services = [
   },
 ];
 
-import caseOrganic from "@/assets/case-organic.jpg";
-import caseContent from "@/assets/case-content.jpg";
-import caseGlobal from "@/assets/case-global.jpg";
-import caseAutomation from "@/assets/case-automation.jpg";
-import caseSme from "@/assets/case-sme.jpg";
-import caseBrand from "@/assets/case-brand.jpg";
+import {
+  OrganicGrowthIcon,
+  ContentEngineIcon,
+  GlobalStrategyIcon,
+  AutomationFunnelIcon,
+  SmeGrowthIcon,
+  PersonalBrandIcon,
+} from "@/components/CaseIcons";
+
+type CaseIcon = (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
 
 type CaseStudy = {
   category: string;
