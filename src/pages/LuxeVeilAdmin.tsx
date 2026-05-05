@@ -65,13 +65,44 @@ export default function LuxeVeilAdmin() {
 
   const load = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const from = page * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    let query = supabase
       .from("luxe_veil_requests")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*", { count: "exact" })
+      .order(sortField, { ascending: sortDir === "asc" })
+      .range(from, to);
+
+    if (filter !== "all") query = query.eq("status", filter);
+    if (q.trim()) {
+      const s = `%${q.trim().replace(/[%_]/g, "")}%`;
+      query = query.or(`name.ilike.${s},email.ilike.${s},message.ilike.${s},reference.ilike.${s}`);
+    }
+
+    const { data, error, count } = await query;
     if (error) toast.error(error.message);
-    else setRows((data ?? []) as Req[]);
+    else {
+      setRows((data ?? []) as Req[]);
+      setTotal(count ?? 0);
+    }
     setLoading(false);
+  };
+
+  const loadCounts = async () => {
+    const statuses: RequestStatus[] = ["pending", "approved", "rejected"];
+    const all = await supabase.from("luxe_veil_requests").select("*", { count: "exact", head: true });
+    const results = await Promise.all(
+      statuses.map((s) =>
+        supabase.from("luxe_veil_requests").select("*", { count: "exact", head: true }).eq("status", s)
+      )
+    );
+    setCounts({
+      all: all.count ?? 0,
+      pending: results[0].count ?? 0,
+      approved: results[1].count ?? 0,
+      rejected: results[2].count ?? 0,
+    });
   };
 
   useEffect(() => {
