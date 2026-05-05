@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { MessageCircle, Facebook, Mail, Phone, Linkedin } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { Helmet } from "react-helmet-async";
+import { MessageCircle, Facebook, Mail, Phone, Linkedin, X, ChevronLeft, ChevronRight, Pencil, Check } from "lucide-react";
 import profile from "@/assets/marriage/profile.jpg";
 import photo1 from "@/assets/marriage/photo1.jpg";
 import photo2 from "@/assets/marriage/photo2.jpg";
@@ -42,18 +43,81 @@ const attributes: Bi[] = [
   { en: "Maintains balance between career and personal life", bn: "ক্যারিয়ার ও ব্যক্তিগত জীবনের মধ্যে ভারসাম্য বজায় রাখে" },
 ];
 
+const gallery = [photo1, photo2, photo3];
+
+const DEFAULT_WA_MSG = `Assalamu Alaikum,
+
+Thank you for visiting Zahid Hasan Emon's marriage profile.
+
+For further discussion, please share:
+• Basic introduction
+• Family background
+• Contact number
+
+We will get back to you shortly.`;
+
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
-  const t = (en: string, bn: string) => (bangla ? bn : en);
+  const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const waMsg = encodeURIComponent(
-    "Assalamu Alaikum,\n\nThank you for visiting Zahid Hasan Emon's marriage profile.\n\nFor further discussion, please share:\n• Basic introduction\n• Family background\n• Contact number\n\nWe will get back to you shortly."
-  );
+  const [waMsg, setWaMsg] = useState<string>(() => {
+    if (typeof window === "undefined") return DEFAULT_WA_MSG;
+    return localStorage.getItem("marriage_wa_msg") || DEFAULT_WA_MSG;
+  });
+  const [editingMsg, setEditingMsg] = useState(false);
+  const [draftMsg, setDraftMsg] = useState(waMsg);
+
+  const t = (en: string, bn: string) => (bangla ? bn : en);
+  const waLink = `https://wa.me/8801410004037?text=${encodeURIComponent(waMsg)}`;
+
+  const closeLightbox = useCallback(() => setLightbox(null), []);
+  const next = useCallback(() => setLightbox((i) => (i === null ? null : (i + 1) % gallery.length)), []);
+  const prev = useCallback(() => setLightbox((i) => (i === null ? null : (i - 1 + gallery.length) % gallery.length)), []);
+
+  useEffect(() => {
+    if (lightbox === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [lightbox, closeLightbox, next, prev]);
+
+  const ogUrl = typeof window !== "undefined" ? `${window.location.origin}/marriage-og.jpg` : "/marriage-og.jpg";
+  const pageUrl = typeof window !== "undefined" ? `${window.location.origin}/marriage` : "";
+  const seoTitle = "Zahid Hasan Emon — Marriage Profile";
+  const seoDesc = "Marriage profile of Zahid Hasan Emon — AI-Powered Digital Growth Specialist, Brand Architect & Growth Systems Operator. Faith • Integrity • Responsibility • Long-term Commitment.";
 
   return (
     <main className="min-h-screen text-white" style={{
       background: "radial-gradient(circle at top, hsl(var(--gold) / 0.16), transparent 35%), linear-gradient(180deg, #0B1F3A 0%, #07182e 100%)",
     }}>
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDesc} />
+        <link rel="canonical" href={pageUrl} />
+        {/* OpenGraph */}
+        <meta property="og:type" content="profile" />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDesc} />
+        <meta property="og:image" content={ogUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:site_name" content="Zahid Hasan Emon" />
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={seoDesc} />
+        <meta name="twitter:image" content={ogUrl} />
+      </Helmet>
+
       <div className="max-w-5xl mx-auto px-5">
         {/* Lang toggle */}
         <div className="sticky top-2 z-20 flex justify-end pt-3">
@@ -90,7 +154,7 @@ const Marriage = () => {
 
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <a
-              href={`https://wa.me/8801410004037?text=${waMsg}`}
+              href={waLink}
               target="_blank" rel="noreferrer"
               className="inline-flex items-center gap-2 bg-gold text-[#07182e] px-5 py-3 rounded-full font-bold hover:opacity-90 transition"
             >
@@ -194,15 +258,79 @@ const Marriage = () => {
         {/* Gallery */}
         <Card title={t("Photo Gallery", "ছবি")}>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[photo1, photo2, photo3].map((src, i) => (
-              <img
+            {gallery.map((src, i) => (
+              <button
                 key={i}
-                src={src}
-                alt={`Zahid Hasan Emon photo ${i + 1}`}
-                className="w-full h-72 object-cover rounded-2xl border border-gold/30"
-              />
+                type="button"
+                onClick={() => setLightbox(i)}
+                className="group relative overflow-hidden rounded-2xl border border-gold/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                aria-label={`Open photo ${i + 1}`}
+              >
+                <img
+                  src={src}
+                  alt={`Zahid Hasan Emon photo ${i + 1}`}
+                  className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <span className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition" aria-hidden />
+              </button>
             ))}
           </div>
+        </Card>
+
+        {/* WhatsApp Auto-Message Editor */}
+        <Card title={t("WhatsApp Auto-Message", "হোয়াটসঅ্যাপ অটো-মেসেজ")}>
+          <p className="text-sm text-[#d9e2f1]/80 mb-3">
+            {t(
+              "This message will be prefilled when someone clicks the WhatsApp button. Saved on this device.",
+              "কেউ হোয়াটসঅ্যাপ বাটনে ক্লিক করলে এই মেসেজটি স্বয়ংক্রিয়ভাবে যাবে। এই ডিভাইসে সংরক্ষিত।"
+            )}
+          </p>
+          {editingMsg ? (
+            <div className="space-y-3">
+              <textarea
+                value={draftMsg}
+                onChange={(e) => setDraftMsg(e.target.value)}
+                rows={9}
+                className="w-full rounded-xl bg-[#07182e]/60 border border-gold/30 p-4 text-[#d9e2f1] focus:outline-none focus:border-gold"
+              />
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    setWaMsg(draftMsg);
+                    localStorage.setItem("marriage_wa_msg", draftMsg);
+                    setEditingMsg(false);
+                  }}
+                  className="inline-flex items-center gap-2 bg-gold text-[#07182e] px-4 py-2 rounded-full font-bold text-sm"
+                >
+                  <Check className="w-4 h-4" /> {t("Save", "সংরক্ষণ")}
+                </button>
+                <button
+                  onClick={() => { setDraftMsg(waMsg); setEditingMsg(false); }}
+                  className="inline-flex items-center gap-2 border border-gold/50 text-gold px-4 py-2 rounded-full font-bold text-sm"
+                >
+                  {t("Cancel", "বাতিল")}
+                </button>
+                <button
+                  onClick={() => setDraftMsg(DEFAULT_WA_MSG)}
+                  className="inline-flex items-center gap-2 border border-white/20 text-[#d9e2f1] px-4 py-2 rounded-full text-sm"
+                >
+                  {t("Reset to default", "ডিফল্টে ফিরুন")}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <pre className="whitespace-pre-wrap font-sans rounded-xl bg-[#07182e]/60 border border-gold/20 p-4 text-[#d9e2f1] text-sm">
+                {waMsg}
+              </pre>
+              <button
+                onClick={() => { setDraftMsg(waMsg); setEditingMsg(true); }}
+                className="inline-flex items-center gap-2 border border-gold text-gold px-4 py-2 rounded-full font-bold text-sm hover:bg-gold hover:text-[#07182e] transition"
+              >
+                <Pencil className="w-4 h-4" /> {t("Edit message", "মেসেজ এডিট করুন")}
+              </button>
+            </div>
+          )}
         </Card>
 
         {/* Contact */}
@@ -210,7 +338,7 @@ const Marriage = () => {
           <ul className="space-y-3 text-[#d9e2f1]" id="contact">
             <li className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-gold" />
-              <a className="hover:text-gold" href="https://wa.me/8801410004037" target="_blank" rel="noreferrer">
+              <a className="hover:text-gold" href={waLink} target="_blank" rel="noreferrer">
                 WhatsApp: +8801410004037
               </a>
             </li>
@@ -243,6 +371,48 @@ const Marriage = () => {
           )}
         </footer>
       </div>
+
+      {/* Lightbox */}
+      {lightbox !== null && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Photo viewer"
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in"
+          onClick={closeLightbox}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+            aria-label="Close"
+            className="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); prev(); }}
+            aria-label="Previous"
+            className="absolute left-3 md:left-8 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <img
+            src={gallery[lightbox]}
+            alt={`Zahid Hasan Emon photo ${lightbox + 1}`}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-[85vh] max-w-[90vw] object-contain rounded-2xl border border-gold/40 shadow-2xl"
+          />
+          <button
+            onClick={(e) => { e.stopPropagation(); next(); }}
+            aria-label="Next"
+            className="absolute right-3 md:right-8 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-[#f4e8bd] text-sm">
+            {lightbox + 1} / {gallery.length}
+          </div>
+        </div>
+      )}
     </main>
   );
 };
