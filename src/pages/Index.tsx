@@ -27,6 +27,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import { usePressItems } from "@/hooks/usePressItems";
 
 type PressItem = {
   outlet: string;
