@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import luxeVeilSpa from "@/assets/luxe-veil-spa.jpg";
 import { BrandShell } from "@/components/BrandShell";
-import { Lock, Mail, KeyRound, Loader2 } from "lucide-react";
+import { Lock, Mail, KeyRound, Loader2, ShieldCheck, BadgeCheck, Sparkles, Leaf } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
