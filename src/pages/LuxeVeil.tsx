@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import luxeVeilSpa from "@/assets/luxe-veil-spa.jpg";
 import { BrandShell } from "@/components/BrandShell";
 import { Lock, Mail, KeyRound, Loader2 } from "lucide-react";
