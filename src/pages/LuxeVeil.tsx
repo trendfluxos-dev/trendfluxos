@@ -374,8 +374,20 @@ const ErrorBanner = React.forwardRef<HTMLDivElement, {
 
   // Move keyboard focus to the Retry button as soon as the banner mounts,
   // so keyboard users land on the recovery action immediately.
+  // On unmount (error cleared), return focus to whatever was focused before
+  // the banner appeared, so keyboard users aren't dropped into nowhere.
   useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     retryRef.current?.focus();
+    return () => {
+      if (
+        previouslyFocused &&
+        previouslyFocused !== document.body &&
+        document.contains(previouslyFocused)
+      ) {
+        previouslyFocused.focus();
+      }
+    };
   }, []);
 
   return (
