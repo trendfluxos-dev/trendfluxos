@@ -727,7 +727,10 @@ const Index = () => {
                                   </span>
                                   <MoreHorizontal className="h-4 w-4 text-foreground/40 transition-colors group-hover/card:text-gold" />
                                 </div>
-                                <p className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground">
+                                <p
+                                  lang="bn"
+                                  className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground [word-break:keep-all] [overflow-wrap:normal] hyphens-none"
+                                >
                                   {p.headline}
                                 </p>
                                 <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
