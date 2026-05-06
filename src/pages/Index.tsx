@@ -31,6 +31,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import { ResumeButton } from "@/components/ResumeButton";
 import { usePressItems } from "@/hooks/usePressItems";
 
 type PressItem = {
@@ -519,14 +520,7 @@ const Index = () => {
                 <span className="mx-2 text-foreground/30">·</span>
                 <span className="text-foreground/80">Zahid Hasan Emon</span>
               </div>
-              <a
-                href="https://zhemonbrand-compasslabs.lovable.app"
-                target="_blank"
-                rel="noreferrer"
-                className="absolute bottom-6 right-6 inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-xs font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
-              >
-                Resume / CV <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
+              <ResumeButton />
             </div>
           </div>
 
