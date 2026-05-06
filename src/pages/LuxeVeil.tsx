@@ -152,19 +152,7 @@ const LuxeVeil = () => {
         </section>
       ) : (
         <>
-          <section className="relative mt-2 mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur p-8 text-center">
-            <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
-            <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
-            <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/60" />
-            <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/60" />
-            <p className="text-[11px] uppercase tracking-[0.35em] text-gold/70">
-              Welcome · Selectively Curated
-            </p>
-            <p className="mt-4 text-white/75 leading-relaxed">
-              Luxe Veil is reserved for a small circle of clients seeking discretion,
-              emotion, and craftsmanship at the highest level. Your access has been recognised.
-            </p>
-          </section>
+          <LuxeVeilExperience />
 
           <Testimonials
             title="Whispers from Inside the Veil"
@@ -288,5 +276,184 @@ const RequestInviteForm = () => {
     </form>
   );
 };
+
+const PHONE = "+8801972818761";
+const WHATSAPP = "https://wa.me/8801972818761";
+
+type Service = { name: string; desc: string; tiers: { dur: string; price: string }[] };
+
+const MASSAGES: Service[] = [
+  { name: "Swedish Massage", desc: "Full-body relaxation to ease stress", tiers: [{ dur: "30 min", price: "4,000৳" }, { dur: "60 min", price: "7,000৳" }] },
+  { name: "Aromatherapy Massage", desc: "Essential oils for deep calm & balance", tiers: [{ dur: "60 min", price: "7,500৳" }] },
+  { name: "Deep Tissue Massage", desc: "Targets muscle stiffness & pain relief", tiers: [{ dur: "30 min", price: "5,000৳" }, { dur: "60 min", price: "9,000৳" }] },
+  { name: "Thai Massage", desc: "Stretching & pressure for flexibility and energy", tiers: [{ dur: "30 min", price: "4,500৳" }, { dur: "60 min", price: "9,000৳" }] },
+  { name: "Hot Stone Massage", desc: "Warm therapy to melt away stress", tiers: [{ dur: "30 min", price: "4,500৳" }, { dur: "60 min", price: "8,500৳" }] },
+  { name: "Couple Massage", desc: "Shared relaxation in a calming environment", tiers: [{ dur: "30 min", price: "5,000৳" }, { dur: "60 min", price: "9,500৳" }] },
+];
+
+const SPECIALTY: Service[] = [
+  { name: "Body Scrub & Spa", desc: "Skin renewal for a smooth, radiant glow", tiers: [{ dur: "60 min", price: "8,000৳" }, { dur: "90 min", price: "12,000৳" }] },
+  { name: "Shiatsu Massage", desc: "Precision Japanese pressure-point therapy", tiers: [{ dur: "60 min", price: "7,500৳" }] },
+  { name: "Ayurvedic Massage", desc: "Herbal oil detox and relaxation", tiers: [{ dur: "90 min", price: "10,500৳" }] },
+  { name: "Lomi Lomi Massage", desc: "Flowing Hawaiian therapy for deep relaxation", tiers: [{ dur: "90 min", price: "11,500৳" }] },
+  { name: "Sports Massage", desc: "Recovery-focused muscle therapy", tiers: [{ dur: "60 min", price: "7,500৳" }] },
+  { name: "Bamboo Massage", desc: "Heated bamboo technique for circulation", tiers: [{ dur: "90 min", price: "10,000৳" }] },
+];
+
+const SIGNATURE: Service[] = [
+  { name: "Dry / Thai Massage", desc: "Signature dry & Thai technique", tiers: [{ dur: "30 min", price: "4,000৳" }, { dur: "60 min", price: "7,500৳" }, { dur: "90 min", price: "11,000৳" }] },
+  { name: "Thai Oil & Aroma Massage", desc: "Aromatic oils with Thai pressure", tiers: [{ dur: "30 min", price: "4,500৳" }, { dur: "60 min", price: "8,500৳" }, { dur: "90 min", price: "12,000৳" }] },
+  { name: "Body to Body (B2B) Massage", desc: "Premium signature body therapy", tiers: [{ dur: "30 min", price: "5,000৳" }, { dur: "60 min", price: "9,500৳" }, { dur: "90 min", price: "13,000৳" }] },
+];
+
+const ServiceGrid = ({ items }: { items: Service[] }) => (
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {items.map((s) => (
+      <div key={s.name} className="relative rounded-2xl border border-gold/25 bg-[#07182e]/60 p-5 hover:border-gold/60 transition">
+        <h4 className="font-display text-lg text-gold">{s.name}</h4>
+        <p className="mt-1 text-xs text-white/60 leading-relaxed">{s.desc}</p>
+        <ul className="mt-3 space-y-1 text-sm text-white/85">
+          {s.tiers.map((t) => (
+            <li key={t.dur} className="flex items-center justify-between border-t border-gold/10 pt-1.5">
+              <span className="text-white/60">⏱ {t.dur}</span>
+              <span className="font-semibold text-gold">{t.price}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+);
+
+const SectionHeader = ({ eyebrow, title }: { eyebrow: string; title: string }) => (
+  <div className="text-center mb-8">
+    <p className="text-[10px] uppercase tracking-[0.4em] text-gold/70">{eyebrow}</p>
+    <h3 className="mt-2 font-display text-2xl md:text-3xl text-white">{title}</h3>
+    <span className="mt-3 inline-block w-16 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+  </div>
+);
+
+const LuxeVeilExperience = () => (
+  <div className="space-y-16">
+    {/* Welcome / Hero */}
+    <section className="relative mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur p-8 md:p-12 text-center overflow-hidden">
+      <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
+      <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
+      <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/60" />
+      <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/60" />
+      <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">Relax · Refresh · Rejuvenate 🌸</p>
+      <h2 className="mt-4 font-display text-3xl md:text-4xl text-white leading-tight">
+        Your Private Sanctuary of <span className="text-gold">Relaxation & Wellness</span> 🌿
+      </h2>
+      <p className="mt-5 text-white/70 leading-relaxed max-w-xl mx-auto">
+        Step away from the noise of everyday life and enter a refined space of calm,
+        comfort, and care at LUXE VEIL. Every experience is crafted to restore balance,
+        ease tension, and elevate your well-being.
+      </p>
+      <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/80">
+        <span>💆‍♀️ Feel the calm.</span>
+        <span>💆‍♂️ Feel the care.</span>
+        <span>✨ Feel renewed.</span>
+      </div>
+      <div className="mt-7 flex flex-wrap justify-center gap-3">
+        <a href={`tel:${PHONE}`} className="bg-gold text-[#07182e] px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+          📞 Book Now
+        </a>
+        <a href={WHATSAPP} target="_blank" rel="noreferrer" className="border border-gold/60 text-gold px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition">
+          📲 WhatsApp
+        </a>
+      </div>
+      <p className="mt-3 text-xs text-white/50">{PHONE}</p>
+    </section>
+
+    {/* About */}
+    <section className="mx-auto max-w-3xl text-center">
+      <SectionHeader eyebrow="About Us" title="Wellness is essential — not optional" />
+      <p className="text-white/70 leading-relaxed">
+        At LUXE VEIL, we focus on delivering a discreet, premium experience designed to
+        reduce stress, release deep muscle tension, improve circulation, and restore
+        energy & mental clarity.
+      </p>
+      <ul className="mt-5 grid sm:grid-cols-2 gap-3 text-sm text-white/80 text-left max-w-md mx-auto">
+        <li className="flex gap-2"><span className="text-gold">✦</span> Reduce stress</li>
+        <li className="flex gap-2"><span className="text-gold">✦</span> Release deep muscle tension</li>
+        <li className="flex gap-2"><span className="text-gold">✦</span> Improve circulation</li>
+        <li className="flex gap-2"><span className="text-gold">✦</span> Restore energy & clarity</li>
+      </ul>
+      <p className="mt-6 text-xs uppercase tracking-[0.3em] text-gold/70">👤 Proprietor: MD Jony</p>
+    </section>
+
+    {/* Massage Therapies */}
+    <section>
+      <SectionHeader eyebrow="🌿 Massage Therapies" title="Our Services" />
+      <ServiceGrid items={MASSAGES} />
+    </section>
+
+    {/* Specialty */}
+    <section>
+      <SectionHeader eyebrow="🌺 Specialty & Premium" title="Premium Treatments" />
+      <ServiceGrid items={SPECIALTY} />
+    </section>
+
+    {/* Signature */}
+    <section>
+      <SectionHeader eyebrow="💆 Signature" title="Signature Packages" />
+      <ServiceGrid items={SIGNATURE} />
+    </section>
+
+    {/* Why Choose */}
+    <section className="mx-auto max-w-3xl">
+      <SectionHeader eyebrow="Why Choose" title="Why LUXE VEIL" />
+      <ul className="grid sm:grid-cols-2 gap-3 text-sm text-white/85">
+        {[
+          "Skilled & professional therapists",
+          "Clean, discreet & শান্ত পরিবেশ",
+          "Premium experience with fair pricing",
+          "সহজ বুকিং (Call / WhatsApp)",
+          "Privacy-focused service",
+        ].map((w) => (
+          <li key={w} className="flex gap-2 items-start rounded-xl border border-gold/20 bg-[#07182e]/50 p-4">
+            <span className="text-gold">✔</span>
+            <span lang={/[\u0980-\u09FF]/.test(w) ? "bn" : undefined}>{w}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {/* CTA */}
+    <section className="relative mx-auto max-w-2xl rounded-3xl border border-gold/40 bg-gradient-to-br from-[#0b1f3a]/80 to-[#07182e]/90 p-8 text-center">
+      <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">💌 Book Your Experience</p>
+      <h3 className="mt-3 font-display text-2xl text-white">Reserve Your Sanctuary</h3>
+      <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <a href={`tel:${PHONE}`} className="bg-gold text-[#07182e] px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+          📞 {PHONE}
+        </a>
+        <a href={WHATSAPP} target="_blank" rel="noreferrer" className="border border-gold/60 text-gold px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition">
+          📲 WhatsApp Available
+        </a>
+      </div>
+    </section>
+
+    {/* Bangla */}
+    <section lang="bn" className="mx-auto max-w-2xl text-center rounded-3xl border border-gold/25 bg-[#07182e]/50 p-8">
+      <p className="text-[11px] uppercase tracking-[0.35em] text-gold/70">বাংলায়</p>
+      <h3 className="mt-3 font-display text-2xl text-white">আরাম, প্রশান্তি আর নতুন উদ্যম ✨</h3>
+      <p className="mt-4 text-white/75 leading-relaxed">
+        সারা দিনের ক্লান্তি দূর করতে চলে আসুন LUXE VEIL-এ।
+        আপনার শরীর ও মনকে নতুন করে অনুভব করুন আমাদের প্রিমিয়াম সার্ভিসের মাধ্যমে।
+      </p>
+      <p className="mt-4 text-sm text-gold/90">
+        🌿 রিল্যাক্স করুন • রিফ্রেশ হোন • নিজেকে নতুনভাবে আবিষ্কার করুন
+      </p>
+    </section>
+
+    {/* Footer */}
+    <footer className="text-center pt-6 pb-2 border-t border-gold/15">
+      <p className="font-display text-lg text-gold tracking-[0.3em]">LUXE VEIL</p>
+      <p className="mt-1 text-xs text-white/60">Luxury Spa & Wellness Experience 🌺</p>
+      <p className="mt-2 text-xs text-white/70">📞 {PHONE}</p>
+    </footer>
+  </div>
+);
 
 export default LuxeVeil;
