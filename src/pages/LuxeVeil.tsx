@@ -518,6 +518,13 @@ const ContactForm = () => {
       <textarea rows={3} className={field} placeholder="How can we help?" value={form.message}
         onChange={(e) => setForm({ ...form, message: e.target.value })} />
       {err && <p className="text-[11px] text-red-300">{err}</p>}
+      {sendErr && (
+        <ErrorBanner
+          error={sendErr}
+          retrying={sending}
+          onRetry={() => doSend(form.name.trim(), form.whatsapp.trim(), form.message.trim())}
+        />
+      )}
       <button
         type="submit"
         disabled={sending}
