@@ -359,12 +359,9 @@ const LuxeVeilExperience = () => (
         <span>💆‍♂️ Feel the care.</span>
         <span>✨ Feel renewed.</span>
       </div>
-      <div className="mt-7 flex flex-wrap justify-center gap-3">
-        <a href={`tel:${PHONE}`} className="bg-gold text-[#07182e] px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
-          📞 Book Now
-        </a>
-        <a href={WHATSAPP} target="_blank" rel="noreferrer" className="border border-gold/60 text-gold px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition">
-          📲 WhatsApp
+      <div className="mt-7 flex justify-center">
+        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+          ✈️ Book on Telegram
         </a>
       </div>
       <p className="mt-3 text-xs text-white/50">{PHONE}</p>
