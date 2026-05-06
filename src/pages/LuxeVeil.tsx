@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import luxeVeilSpa from "@/assets/luxe-veil-spa.jpg";
+import luxeVeilLogo from "@/assets/luxe-veil-logo.png";
 import { BrandShell } from "@/components/BrandShell";
 import { Lock, Mail, KeyRound, Loader2, ShieldCheck, BadgeCheck, Sparkles, Leaf } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
@@ -86,17 +87,12 @@ const LuxeVeil = () => {
             <div className="absolute inset-0 rounded-full border border-gold/60" />
             <div className="absolute inset-3 rounded-full border border-gold/25" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <svg viewBox="0 0 200 200" className="w-44 h-44">
-                <defs>
-                  <linearGradient id="veil" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="hsl(43 70% 70%)" stopOpacity="0.95" />
-                    <stop offset="100%" stopColor="hsl(43 53% 45%)" stopOpacity="0.4" />
-                  </linearGradient>
-                </defs>
-                <text x="50%" y="58%" textAnchor="middle" fontFamily="serif" fontWeight="700" fontSize="110" fill="hsl(43 53% 55% / 0.18)">TF</text>
-                <path d="M100 30 C 70 60, 60 90, 75 120 C 85 145, 80 165, 100 175 C 120 165, 115 145, 125 120 C 140 90, 130 60, 100 30 Z" fill="url(#veil)" opacity="0.85" />
-                <path d="M100 35 C 85 70, 80 110, 100 170" stroke="hsl(43 70% 75%)" strokeWidth="0.6" fill="none" opacity="0.7" />
-              </svg>
+              <img
+                src={luxeVeilLogo}
+                alt="Luxe Veil — A Private Experience by TrendFlux"
+                className="w-44 h-44 object-contain rounded-full"
+                loading="eager"
+              />
             </div>
             <div className="absolute -inset-4 rounded-full bg-gold/15 blur-3xl -z-10" />
           </div>
@@ -105,9 +101,15 @@ const LuxeVeil = () => {
         <h1 className="relative mt-10 font-display text-5xl md:text-6xl font-bold tracking-[0.25em] text-gold">
           LUXE VEIL
         </h1>
-        <p className="relative mt-4 text-sm uppercase tracking-[0.4em] text-white/70">
+        <a
+          href="https://www.facebook.com/luxeveil/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="A Private Experience by TrendFlux — Visit Luxe Veil on Facebook"
+          className="relative mt-4 inline-block text-sm uppercase tracking-[0.4em] text-white/70 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold rounded"
+        >
           — A Private Experience by TrendFlux
-        </p>
+        </a>
         <p className="relative mx-auto mt-10 max-w-xl text-base md:text-lg text-white/70 italic leading-relaxed">
           "Beyond visibility lies discretion. A quiet space, curated for those who already know."
         </p>
