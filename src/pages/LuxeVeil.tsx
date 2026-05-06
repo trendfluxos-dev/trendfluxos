@@ -329,13 +329,20 @@ const EntryPopup = () => {
     setOpen(false);
   };
 
-  const submit = (e: React.FormEvent) => {
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const name = form.name.trim();
     const wa = form.whatsapp.trim();
     if (name.length < 2) return setErr("Please enter your name");
     if (!/^[+\d][\d\s-]{6,}$/.test(wa)) return setErr("Please enter a valid WhatsApp number");
     setErr("");
+    setSending(true);
+    const res = await sendToTelegram({ name, whatsapp: wa });
+    setSending(false);
+    if (!res.ok) return setErr(res.error || "Could not send. Please try again.");
     try {
       const lead = { name, whatsapp: wa, ts: new Date().toISOString() };
       const list = JSON.parse(localStorage.getItem("luxe_veil_leads") || "[]");
@@ -343,8 +350,8 @@ const EntryPopup = () => {
       localStorage.setItem("luxe_veil_leads", JSON.stringify(list));
     } catch {}
     sessionStorage.setItem("luxe_veil_entry_seen", "1");
-    sendToTelegram({ name, whatsapp: wa });
-    setOpen(false);
+    setSent(true);
+    setTimeout(() => setOpen(false), 1600);
   };
 
   return (
@@ -358,32 +365,40 @@ const EntryPopup = () => {
           ×
         </button>
         <p className="text-[10px] uppercase tracking-[0.4em] text-gold/80">🌸 Welcome to Luxe Veil</p>
-        <h3 className="mt-3 font-display text-xl text-white">Join Our Private Telegram</h3>
+        <h3 className="mt-3 font-display text-xl text-white">Connect with us privately</h3>
         <p className="mt-2 text-xs text-white/60">
-          Share your details and we'll connect you instantly.
+          Share your details — our concierge will reach out shortly.
         </p>
-        <form onSubmit={submit} className="mt-5 space-y-3 text-left">
-          <input
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            placeholder="Your name"
-            className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
-          />
-          <input
-            value={form.whatsapp}
-            onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-            placeholder="WhatsApp number"
-            inputMode="tel"
-            className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
-          />
-          {err && <p className="text-[11px] text-red-300">{err}</p>}
-          <button
-            type="submit"
-            className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
-          >
-            ✈️ Continue to Telegram
-          </button>
-        </form>
+        {sent ? (
+          <div className="mt-6 rounded-xl border border-gold/40 bg-gold/10 p-4 text-sm text-gold">
+            ✓ Sent — your details are with our team.
+          </div>
+        ) : (
+          <form onSubmit={submit} className="mt-5 space-y-3 text-left">
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="Your name"
+              className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
+            />
+            <input
+              value={form.whatsapp}
+              onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+              placeholder="WhatsApp number"
+              inputMode="tel"
+              className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
+            />
+            {err && <p className="text-[11px] text-red-300">{err}</p>}
+            <button
+              type="submit"
+              disabled={sending}
+              className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
+            >
+              {sending && <Loader2 className="w-3 h-3 animate-spin" />}
+              {sending ? "Sending…" : "Send to Concierge"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
