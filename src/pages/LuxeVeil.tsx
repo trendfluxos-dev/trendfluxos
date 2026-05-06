@@ -382,7 +382,7 @@ const LuxeVeilExperience = () => (
         <li className="flex gap-2"><span className="text-gold">✦</span> Improve circulation</li>
         <li className="flex gap-2"><span className="text-gold">✦</span> Restore energy & clarity</li>
       </ul>
-      <p className="mt-6 text-xs uppercase tracking-[0.3em] text-gold/70">👤 Proprietor: MD Jony</p>
+      
     </section>
 
     {/* Massage Therapies */}
