@@ -405,9 +405,12 @@ const ContactForm = () => {
       localStorage.setItem("luxe_veil_contacts", JSON.stringify(list));
     } catch {}
     sendToTelegram({ name, whatsapp: wa, message: msg });
-    toast({ title: "Opening Telegram", description: "Your message is ready — paste & send." });
+    toast({ title: "Opening Telegram", description: "Your message is copied — redirecting to the group." });
     setDone(true);
     setForm({ name: "", whatsapp: "", message: "" });
+    setTimeout(() => {
+      window.location.href = TELEGRAM_GROUP;
+    }, 1200);
   };
 
   if (done) {
