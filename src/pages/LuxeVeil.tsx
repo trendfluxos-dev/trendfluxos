@@ -587,12 +587,12 @@ const ContactForm = () => {
 
   if (done) {
     return (
-      <div className="mt-6 rounded-2xl border border-gold/40 bg-[#0c2218]/70 p-6 text-center">
-        <p className="text-sm text-gold uppercase tracking-[0.25em]">✓ Message Sent</p>
-        <p className="mt-2 text-xs text-white/70">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
+      <div className="mt-6 rounded-2xl border border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream))] p-6 text-center">
+        <p className="text-sm text-[hsl(var(--lv-gold))] uppercase tracking-[0.25em] font-semibold">✓ Message Sent</p>
+        <p className="mt-2 text-xs text-[hsl(var(--lv-ink-soft))]">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
         <button
           onClick={() => setDone(false)}
-          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold/80 hover:text-gold"
+          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-[hsl(var(--lv-ink))] hover:text-[hsl(var(--lv-gold))]"
         >
           Send another
         </button>
@@ -600,7 +600,7 @@ const ContactForm = () => {
     );
   }
 
-  const field = "w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30";
+  const field = "w-full bg-white border border-[hsl(var(--lv-hairline))] focus:border-[hsl(var(--lv-gold))] rounded-xl px-4 py-2.5 text-sm text-[hsl(var(--lv-ink))] outline-none placeholder:text-[hsl(var(--lv-ink)/0.4)]";
 
   return (
     <form onSubmit={submit} className="mt-6 mx-auto max-w-md text-left space-y-3">
@@ -611,7 +611,7 @@ const ContactForm = () => {
       <textarea rows={3} className={field} placeholder="How can we help?" value={form.message}
         onChange={(e) => setForm({ ...form, message: e.target.value })} />
       <TargetSelect targets={targets} value={target} onChange={setTarget} />
-      {err && <p className="text-[11px] text-red-300">{err}</p>}
+      {err && <p className="text-[11px] text-red-600">{err}</p>}
       {sendErr && (
         <ErrorBanner
           error={sendErr}
@@ -622,7 +622,7 @@ const ContactForm = () => {
       <button
         type="submit"
         disabled={sending}
-        className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
+        className="w-full bg-[hsl(var(--lv-ink))] text-white py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-[hsl(var(--lv-ink)/0.9)] transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
       >
         {sending && <Loader2 className="w-3 h-3 animate-spin" />}
         {sending ? "Sending…" : "Send Message"}
