@@ -581,10 +581,13 @@ const ContactForm = () => {
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
   const [sendErr, setSendErr] = useState("");
+  const [errorNonce, setErrorNonce] = useState(0);
   const [sending, setSending] = useState(false);
   const [target, setTarget] = useState("");
   const targets = useChatTargets();
+  const sendAnotherRef = useRef<HTMLButtonElement>(null);
   useEffect(() => { if (!target && targets[0]) setTarget(targets[0].key); }, [targets, target]);
+  useEffect(() => { if (done) sendAnotherRef.current?.focus(); }, [done]);
 
   const doSend = async (name: string, wa: string, msg: string) => {
     setSendErr("");
@@ -593,6 +596,7 @@ const ContactForm = () => {
     setSending(false);
     if (!res.ok) {
       setSendErr(res.error || "Could not send. Please try again.");
+      setErrorNonce((n) => n + 1);
       return;
     }
     try {
