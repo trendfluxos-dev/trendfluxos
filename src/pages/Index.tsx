@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -295,6 +295,23 @@ const Index = () => {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
+  const [veilOpen, setVeilOpen] = useState(false);
+  const [veilCode, setVeilCode] = useState("");
+  const [veilError, setVeilError] = useState("");
+  const navigate = useNavigate();
+  const VALID_VEIL_CODES = ["LUXE2026", "VEIL-INVITE", "TRENDFLUX-PRIVATE"];
+  const submitVeilCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (VALID_VEIL_CODES.includes(veilCode.trim().toUpperCase())) {
+      try { localStorage.setItem("luxe_veil_unlocked", "1"); } catch { /* ignore */ }
+      setVeilOpen(false);
+      setVeilCode("");
+      setVeilError("");
+      navigate("/luxe-veil");
+    } else {
+      setVeilError("Invalid invitation code. Please check with your host.");
+    }
+  };
   const { items: dbPress } = usePressItems();
   const [headlineId, setHeadlineId] = useState<string>(() => {
     if (typeof window === "undefined") return HEADLINE_VARIANTS[0].id;
@@ -1037,10 +1054,11 @@ const Index = () => {
               <p className="relative mt-1 text-xs text-foreground/55">Creator network for serious brands.</p>
             </Link>
 
-            <div
-              aria-disabled
+            <button
+              type="button"
+              onClick={() => { setVeilError(""); setVeilOpen(true); }}
               title="Luxe Veil is invite-only"
-              className="tier-card tier-card-3 relative cursor-not-allowed overflow-hidden rounded-2xl border border-gold/30 bg-[#07182e]/60 p-5 text-left"
+              className="tier-card tier-card-3 relative overflow-hidden rounded-2xl border border-gold/30 bg-[#07182e]/60 p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/70 hover:bg-gold/5"
             >
               <span className="tier-sheen" aria-hidden />
               <div className="relative flex items-center justify-between">
@@ -1052,7 +1070,7 @@ const Index = () => {
               <span className="absolute right-3 bottom-3 text-[9px] uppercase tracking-[0.3em] text-gold/60">
                 Locked
               </span>
-            </div>
+            </button>
           </div>
 
           <button
@@ -1096,6 +1114,45 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Luxe Veil invitation code dialog */}
+      <Dialog open={veilOpen} onOpenChange={setVeilOpen}>
+        <DialogContent className="border-gold/40 bg-[#0c2218] text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 font-display text-gold">
+              <Lock className="h-4 w-4" /> Enter your invitation
+            </DialogTitle>
+            <DialogDescription className="text-white/60">
+              Luxe Veil is invite-only. Enter your code to access the private experience.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={submitVeilCode} className="mt-2 space-y-3">
+            <input
+              autoFocus
+              value={veilCode}
+              onChange={(e) => setVeilCode(e.target.value)}
+              placeholder="INVITE CODE"
+              aria-label="Invitation code"
+              className="w-full rounded-full border border-gold/40 bg-transparent px-5 py-3 text-center text-sm uppercase tracking-[0.3em] text-white outline-none focus:border-gold"
+            />
+            {veilError && (
+              <p role="alert" aria-live="assertive" className="text-xs text-red-300">{veilError}</p>
+            )}
+            <button
+              type="submit"
+              className="w-full rounded-full bg-gold py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#0c2218] transition hover:opacity-90"
+            >
+              Unlock Experience
+            </button>
+            <p className="text-center text-[10px] uppercase tracking-[0.3em] text-white/40">
+              Don't have a code?{" "}
+              <Link to="/luxe-veil" className="text-gold/80 hover:text-gold" onClick={() => setVeilOpen(false)}>
+                Request invitation
+              </Link>
+            </p>
+          </form>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
