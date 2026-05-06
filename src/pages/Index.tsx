@@ -1114,6 +1114,45 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Luxe Veil invitation code dialog */}
+      <Dialog open={veilOpen} onOpenChange={setVeilOpen}>
+        <DialogContent className="border-gold/40 bg-[#0c2218] text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 font-display text-gold">
+              <Lock className="h-4 w-4" /> Enter your invitation
+            </DialogTitle>
+            <DialogDescription className="text-white/60">
+              Luxe Veil is invite-only. Enter your code to access the private experience.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={submitVeilCode} className="mt-2 space-y-3">
+            <input
+              autoFocus
+              value={veilCode}
+              onChange={(e) => setVeilCode(e.target.value)}
+              placeholder="INVITE CODE"
+              aria-label="Invitation code"
+              className="w-full rounded-full border border-gold/40 bg-transparent px-5 py-3 text-center text-sm uppercase tracking-[0.3em] text-white outline-none focus:border-gold"
+            />
+            {veilError && (
+              <p role="alert" aria-live="assertive" className="text-xs text-red-300">{veilError}</p>
+            )}
+            <button
+              type="submit"
+              className="w-full rounded-full bg-gold py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#0c2218] transition hover:opacity-90"
+            >
+              Unlock Experience
+            </button>
+            <p className="text-center text-[10px] uppercase tracking-[0.3em] text-white/40">
+              Don't have a code?{" "}
+              <Link to="/luxe-veil" className="text-gold/80 hover:text-gold" onClick={() => setVeilOpen(false)}>
+                Request invitation
+              </Link>
+            </p>
+          </form>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
