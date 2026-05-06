@@ -458,7 +458,27 @@ const ContactForm = () => {
   const [form, setForm] = useState({ name: "", whatsapp: "", message: "" });
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
+  const [sendErr, setSendErr] = useState("");
   const [sending, setSending] = useState(false);
+
+  const doSend = async (name: string, wa: string, msg: string) => {
+    setSendErr("");
+    setSending(true);
+    const res = await sendToTelegram({ name, whatsapp: wa, message: msg });
+    setSending(false);
+    if (!res.ok) {
+      setSendErr(res.error || "Could not send. Please try again.");
+      return;
+    }
+    try {
+      const lead = { name, whatsapp: wa, message: msg, ts: new Date().toISOString() };
+      const list = JSON.parse(localStorage.getItem("luxe_veil_contacts") || "[]");
+      list.push(lead);
+      localStorage.setItem("luxe_veil_contacts", JSON.stringify(list));
+    } catch {}
+    setDone(true);
+    setForm({ name: "", whatsapp: "", message: "" });
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -469,18 +489,7 @@ const ContactForm = () => {
     if (!/^[+\d][\d\s-]{6,}$/.test(wa)) return setErr("Please enter a valid WhatsApp number");
     if (msg.length < 5) return setErr("Please add a short message");
     setErr("");
-    setSending(true);
-    const res = await sendToTelegram({ name, whatsapp: wa, message: msg });
-    setSending(false);
-    if (!res.ok) return setErr(res.error || "Could not send. Please try again.");
-    try {
-      const lead = { name, whatsapp: wa, message: msg, ts: new Date().toISOString() };
-      const list = JSON.parse(localStorage.getItem("luxe_veil_contacts") || "[]");
-      list.push(lead);
-      localStorage.setItem("luxe_veil_contacts", JSON.stringify(list));
-    } catch {}
-    setDone(true);
-    setForm({ name: "", whatsapp: "", message: "" });
+    await doSend(name, wa, msg);
   };
 
   if (done) {
