@@ -114,7 +114,7 @@ const LuxeVeil = () => {
       </section>
 
       {!unlocked ? (
-        <section className="relative mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#07182e]/70 backdrop-blur p-8 text-center">
+        <section className="relative mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#0c2218]/70 backdrop-blur p-8 text-center">
           {/* Inner hairline + corner crests */}
           <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.4rem] border border-gold/15" />
           <span aria-hidden className="absolute -top-2 left-1/2 -translate-x-1/2 text-gold/70 text-xs">◆</span>
@@ -136,7 +136,7 @@ const LuxeVeil = () => {
             {error && <p className="text-xs text-red-300">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
+              className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
             >
               Unlock Experience
             </button>
@@ -269,7 +269,7 @@ const RequestInviteForm = () => {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-50 inline-flex items-center justify-center gap-2"
+        className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-50 inline-flex items-center justify-center gap-2"
       >
         {submitting && <Loader2 className="w-3 h-3 animate-spin" />}
         Submit Request
@@ -356,7 +356,7 @@ const EntryPopup = () => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-3xl border border-gold/40 bg-[#07182e] p-7 text-center shadow-2xl">
+      <div className="relative w-full max-w-md rounded-3xl border border-gold/40 bg-[#0c2218] p-7 text-center shadow-2xl">
         <button
           onClick={close}
           aria-label="Close"
@@ -392,7 +392,7 @@ const EntryPopup = () => {
             <button
               type="submit"
               disabled={sending}
-              className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
+              className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
             >
               {sending && <Loader2 className="w-3 h-3 animate-spin" />}
               {sending ? "Sending…" : "Send to Concierge"}
@@ -435,7 +435,7 @@ const ContactForm = () => {
 
   if (done) {
     return (
-      <div className="mt-6 rounded-2xl border border-gold/40 bg-[#07182e]/70 p-6 text-center">
+      <div className="mt-6 rounded-2xl border border-gold/40 bg-[#0c2218]/70 p-6 text-center">
         <p className="text-sm text-gold uppercase tracking-[0.25em]">✓ Message Sent</p>
         <p className="mt-2 text-xs text-white/70">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
         <button
@@ -462,7 +462,7 @@ const ContactForm = () => {
       <button
         type="submit"
         disabled={sending}
-        className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
+        className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
       >
         {sending && <Loader2 className="w-3 h-3 animate-spin" />}
         {sending ? "Sending…" : "Send Message"}
@@ -500,7 +500,7 @@ const SIGNATURE: Service[] = [
 const ServiceGrid = ({ items }: { items: Service[] }) => (
   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {items.map((s) => (
-      <div key={s.name} className="relative rounded-2xl border border-gold/25 bg-[#07182e]/60 p-5 hover:border-gold/60 transition">
+      <div key={s.name} className="relative rounded-2xl border border-gold/25 bg-[#0c2218]/60 p-5 hover:border-gold/60 transition">
         <h4 className="font-display text-lg text-gold">{s.name}</h4>
         <p className="mt-1 text-xs text-white/60 leading-relaxed">{s.desc}</p>
         <ul className="mt-3 space-y-1 text-sm text-white/85">
@@ -553,7 +553,7 @@ const LuxeVeilExperience = () => (
     {/* Welcome / Hero */}
     <section className="relative mx-auto max-w-4xl rounded-3xl border border-gold/30 overflow-hidden">
       <img src={luxeVeilSpa} alt="Luxe Veil spa interior" width={1920} height={1080} className="absolute inset-0 w-full h-full object-cover opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0b1f3a]/85 via-[#07182e]/80 to-[#0b1f3a]/90" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#11331f]/85 via-[#0c2218]/80 to-[#11331f]/90" />
       <div className="relative p-8 md:p-12 text-center">
       <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
       <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
@@ -574,7 +574,7 @@ const LuxeVeilExperience = () => (
         <span>✨ Feel renewed.</span>
       </div>
       <div className="mt-7 flex flex-wrap justify-center gap-3">
-        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0c2218] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
           📞 Contact
         </a>
         <CopyPhoneButton />
@@ -628,7 +628,7 @@ const LuxeVeilExperience = () => (
           "সহজ বুকিং (Call / WhatsApp)",
           "Privacy-focused service",
         ].map((w) => (
-          <li key={w} className="flex gap-2 items-start rounded-xl border border-gold/20 bg-[#07182e]/50 p-4">
+          <li key={w} className="flex gap-2 items-start rounded-xl border border-gold/20 bg-[#0c2218]/50 p-4">
             <span className="text-gold">✔</span>
             <span lang={/[\u0980-\u09FF]/.test(w) ? "bn" : undefined}>{w}</span>
           </li>
@@ -637,11 +637,11 @@ const LuxeVeilExperience = () => (
     </section>
 
     {/* CTA */}
-    <section id="contact" className="relative mx-auto max-w-2xl rounded-3xl border border-gold/40 bg-gradient-to-br from-[#0b1f3a]/80 to-[#07182e]/90 p-8 text-center scroll-mt-24">
+    <section id="contact" className="relative mx-auto max-w-2xl rounded-3xl border border-gold/40 bg-gradient-to-br from-[#11331f]/80 to-[#0c2218]/90 p-8 text-center scroll-mt-24">
       <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">💌 Book Your Experience</p>
       <h3 className="mt-3 font-display text-2xl text-white">Reserve Your Sanctuary</h3>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0c2218] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
           ✈️ Contact on Telegram
         </a>
         <CopyPhoneButton />
@@ -650,7 +650,7 @@ const LuxeVeilExperience = () => (
     </section>
 
     {/* Bangla */}
-    <section lang="bn" className="mx-auto max-w-2xl text-center rounded-3xl border border-gold/25 bg-[#07182e]/50 p-8">
+    <section lang="bn" className="mx-auto max-w-2xl text-center rounded-3xl border border-gold/25 bg-[#0c2218]/50 p-8">
       <p className="text-[11px] uppercase tracking-[0.35em] text-gold/70">বাংলায়</p>
       <h3 className="mt-3 font-display text-2xl text-white">আরাম, প্রশান্তি আর নতুন উদ্যম ✨</h3>
       <p className="mt-4 text-white/75 leading-relaxed">
