@@ -374,8 +374,20 @@ const ErrorBanner = React.forwardRef<HTMLDivElement, {
 
   // Move keyboard focus to the Retry button as soon as the banner mounts,
   // so keyboard users land on the recovery action immediately.
+  // On unmount (error cleared), return focus to whatever was focused before
+  // the banner appeared, so keyboard users aren't dropped into nowhere.
   useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     retryRef.current?.focus();
+    return () => {
+      if (
+        previouslyFocused &&
+        previouslyFocused !== document.body &&
+        document.contains(previouslyFocused)
+      ) {
+        previouslyFocused.focus();
+      }
+    };
   }, []);
 
   return (
@@ -436,6 +448,7 @@ const EntryPopup = () => {
   const [form, setForm] = useState({ name: "", whatsapp: "" });
   const [err, setErr] = useState("");
   const [sendErr, setSendErr] = useState("");
+  const [errorNonce, setErrorNonce] = useState(0);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [target, setTarget] = useState("");
@@ -463,6 +476,7 @@ const EntryPopup = () => {
     setSending(false);
     if (!res.ok) {
       setSendErr(res.error || "Could not send. Please try again.");
+      setErrorNonce((n) => n + 1);
       return;
     }
     try {
@@ -502,11 +516,16 @@ const EntryPopup = () => {
           Share your details — our concierge will reach out shortly.
         </p>
         {sent ? (
-          <div className="mt-6 rounded-xl border border-gold/40 bg-gold/10 p-4 text-sm text-gold">
+          <div
+            className="mt-6 rounded-xl border border-gold/40 bg-gold/10 p-4 text-sm text-gold"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             ✓ Sent — your details are with our team.
           </div>
         ) : (
-          <form onSubmit={submit} className="mt-5 space-y-3 text-left">
+          <form onSubmit={submit} aria-busy={sending} className="mt-5 space-y-3 text-left">
             <input
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -521,17 +540,30 @@ const EntryPopup = () => {
               className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
             />
             <TargetSelect targets={targets} value={target} onChange={setTarget} />
-            {err && <p className="text-[11px] text-red-300">{err}</p>}
+            {err && (
+              <p
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                className="text-[11px] text-red-300"
+              >
+                {err}
+              </p>
+            )}
             {sendErr && (
               <ErrorBanner
+                id="entry-send-error"
                 error={sendErr}
                 retrying={sending}
                 onRetry={() => doSend(form.name.trim(), form.whatsapp.trim())}
               />
             )}
+            <SrLive key={`entry-${errorNonce}`} message={sendErr} />
             <button
               type="submit"
               disabled={sending}
+              aria-invalid={!!sendErr}
+              aria-describedby={sendErr ? "entry-send-error" : undefined}
               className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
             >
               {sending && <Loader2 className="w-3 h-3 animate-spin" />}
@@ -549,10 +581,13 @@ const ContactForm = () => {
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
   const [sendErr, setSendErr] = useState("");
+  const [errorNonce, setErrorNonce] = useState(0);
   const [sending, setSending] = useState(false);
   const [target, setTarget] = useState("");
   const targets = useChatTargets();
+  const sendAnotherRef = useRef<HTMLButtonElement>(null);
   useEffect(() => { if (!target && targets[0]) setTarget(targets[0].key); }, [targets, target]);
+  useEffect(() => { if (done) sendAnotherRef.current?.focus(); }, [done]);
 
   const doSend = async (name: string, wa: string, msg: string) => {
     setSendErr("");
@@ -561,6 +596,7 @@ const ContactForm = () => {
     setSending(false);
     if (!res.ok) {
       setSendErr(res.error || "Could not send. Please try again.");
+      setErrorNonce((n) => n + 1);
       return;
     }
     try {
@@ -587,12 +623,18 @@ const ContactForm = () => {
 
   if (done) {
     return (
-      <div className="mt-6 rounded-2xl border border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream))] p-6 text-center">
+      <div
+        className="mt-6 rounded-2xl border border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream))] p-6 text-center"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <p className="text-sm text-[hsl(var(--lv-gold))] uppercase tracking-[0.25em] font-semibold">✓ Message Sent</p>
         <p className="mt-2 text-xs text-[hsl(var(--lv-ink-soft))]">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
         <button
+          ref={sendAnotherRef}
           onClick={() => setDone(false)}
-          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-[hsl(var(--lv-ink))] hover:text-[hsl(var(--lv-gold))]"
+          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-[hsl(var(--lv-ink))] hover:text-[hsl(var(--lv-gold))] focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--lv-gold))] rounded"
         >
           Send another
         </button>
@@ -603,7 +645,7 @@ const ContactForm = () => {
   const field = "w-full bg-white border border-[hsl(var(--lv-hairline))] focus:border-[hsl(var(--lv-gold))] rounded-xl px-4 py-2.5 text-sm text-[hsl(var(--lv-ink))] outline-none placeholder:text-[hsl(var(--lv-ink)/0.4)]";
 
   return (
-    <form onSubmit={submit} className="mt-6 mx-auto max-w-md text-left space-y-3">
+    <form onSubmit={submit} aria-busy={sending} className="mt-6 mx-auto max-w-md text-left space-y-3">
       <input className={field} placeholder="Your name" value={form.name}
         onChange={(e) => setForm({ ...form, name: e.target.value })} />
       <input className={field} placeholder="WhatsApp number" inputMode="tel" value={form.whatsapp}
@@ -611,17 +653,30 @@ const ContactForm = () => {
       <textarea rows={3} className={field} placeholder="How can we help?" value={form.message}
         onChange={(e) => setForm({ ...form, message: e.target.value })} />
       <TargetSelect targets={targets} value={target} onChange={setTarget} />
-      {err && <p className="text-[11px] text-red-600">{err}</p>}
+      {err && (
+        <p
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          className="text-[11px] text-red-600"
+        >
+          {err}
+        </p>
+      )}
       {sendErr && (
         <ErrorBanner
+          id="contact-send-error"
           error={sendErr}
           retrying={sending}
           onRetry={() => doSend(form.name.trim(), form.whatsapp.trim(), form.message.trim())}
         />
       )}
+      <SrLive key={`contact-${errorNonce}`} message={sendErr} />
       <button
         type="submit"
         disabled={sending}
+        aria-invalid={!!sendErr}
+        aria-describedby={sendErr ? "contact-send-error" : undefined}
         className="w-full bg-[hsl(var(--lv-ink))] text-white py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-[hsl(var(--lv-ink)/0.9)] transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
       >
         {sending && <Loader2 className="w-3 h-3 animate-spin" />}
