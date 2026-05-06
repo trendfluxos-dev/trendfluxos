@@ -564,12 +564,14 @@ const Index = () => {
             </p>
             <h3
               key={`title-${headline.id}`}
+              lang={headline.id === "satyer-pakshe" ? "bn" : undefined}
               className="font-display text-3xl font-bold tracking-tight md:text-4xl animate-fade-in"
             >
               {headline.timeline}
             </h3>
             <p
               key={`tag-${headline.id}`}
+              lang={/[\u0980-\u09FF]/.test(headline.pressTagline) ? "bn" : undefined}
               className="mt-3 text-sm text-foreground/55 md:text-base animate-fade-in"
             >
               {headline.pressTagline}
@@ -582,12 +584,14 @@ const Index = () => {
               </span>
               {HEADLINE_VARIANTS.map((v) => {
                 const active = v.id === headline.id;
+                const isBn = /[\u0980-\u09FF]/.test(v.label);
                 return (
                   <button
                     key={v.id}
                     type="button"
                     onClick={() => selectHeadline(v.id)}
                     aria-pressed={active}
+                    lang={isBn ? "bn" : undefined}
                     className={`rounded-full border px-3 py-1 text-[11px] transition-colors ${
                       active
                         ? "border-gold bg-gold/15 text-gold"
@@ -704,6 +708,7 @@ const Index = () => {
                           </div>
                           <p
                             key={`press-tag-${headline.id}`}
+                            lang={/[\u0980-\u09FF]/.test(headline.pressTagline) ? "bn" : undefined}
                             className="mb-3 text-xs text-foreground/40 animate-fade-in"
                           >
                             {headline.pressTagline}
@@ -729,7 +734,7 @@ const Index = () => {
                                 </div>
                                 <p
                                   lang="bn"
-                                  className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground [word-break:keep-all] [overflow-wrap:normal] hyphens-none"
+                                  className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground"
                                 >
                                   {p.headline}
                                 </p>

@@ -86,6 +86,7 @@ const Marriage = () => {
 
   return (
     <main
+      lang={bangla ? "bn" : "en"}
       className="min-h-screen text-white"
       style={{
         background:
