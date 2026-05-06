@@ -31,6 +31,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import { ResumeButton } from "@/components/ResumeButton";
 import { usePressItems } from "@/hooks/usePressItems";
 
 type PressItem = {
