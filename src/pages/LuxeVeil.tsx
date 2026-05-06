@@ -368,6 +368,7 @@ const LuxeVeilExperience = () => (
         </a>
       </div>
       <p className="mt-3 text-xs text-white/50">{PHONE}</p>
+      </div>
     </section>
 
     {/* About */}
