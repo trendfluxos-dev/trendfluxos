@@ -702,7 +702,10 @@ const Index = () => {
                               Hide
                             </button>
                           </div>
-                          <p className="mb-3 text-xs text-foreground/40">
+                          <p
+                            key={`press-tag-${headline.id}`}
+                            className="mb-3 text-xs text-foreground/40 animate-fade-in"
+                          >
                             {headline.pressTagline}
                           </p>
                           <div className="grid gap-3 sm:grid-cols-2">
