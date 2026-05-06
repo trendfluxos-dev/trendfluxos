@@ -426,7 +426,7 @@ const EntryPopup = () => {
   const doSend = async (name: string, wa: string) => {
     setSendErr("");
     setSending(true);
-    const res = await sendToTelegram({ name, whatsapp: wa });
+    const res = await sendToTelegram({ name, whatsapp: wa, target });
     setSending(false);
     if (!res.ok) {
       setSendErr(res.error || "Could not send. Please try again.");
