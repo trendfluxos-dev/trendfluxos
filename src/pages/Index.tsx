@@ -562,10 +562,16 @@ const Index = () => {
             <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
               — The Journey
             </p>
-            <h3 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+            <h3
+              key={`title-${headline.id}`}
+              className="font-display text-3xl font-bold tracking-tight md:text-4xl animate-fade-in"
+            >
               {headline.timeline}
             </h3>
-            <p className="mt-3 text-sm text-foreground/55 md:text-base">
+            <p
+              key={`tag-${headline.id}`}
+              className="mt-3 text-sm text-foreground/55 md:text-base animate-fade-in"
+            >
               {headline.pressTagline}
             </p>
 
