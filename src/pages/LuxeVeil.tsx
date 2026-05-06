@@ -577,6 +577,7 @@ const ContactForm = () => {
         onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} />
       <textarea rows={3} className={field} placeholder="How can we help?" value={form.message}
         onChange={(e) => setForm({ ...form, message: e.target.value })} />
+      <TargetSelect targets={targets} value={target} onChange={setTarget} />
       {err && <p className="text-[11px] text-red-300">{err}</p>}
       {sendErr && (
         <ErrorBanner
