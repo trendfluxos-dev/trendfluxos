@@ -282,6 +282,28 @@ const PHONE = "+8801972813761";
 const TELEGRAM = "https://t.me/luxe_veil";
 const TELEGRAM_GROUP = "https://t.me/+GAMSK09w_6Q3MGQ1";
 
+const buildTelegramMessage = (d: { name: string; whatsapp: string; message?: string }) => {
+  const lines = [
+    "🌸 New Luxe Veil Inquiry",
+    `👤 Name: ${d.name}`,
+    `📱 WhatsApp: ${d.whatsapp}`,
+  ];
+  if (d.message) lines.push(`💬 Message: ${d.message}`);
+  return lines.join("\n");
+};
+
+const telegramShareUrl = (text: string) =>
+  `https://t.me/share/url?url=${encodeURIComponent(TELEGRAM_GROUP)}&text=${encodeURIComponent(text)}`;
+
+const sendToTelegram = async (data: { name: string; whatsapp: string; message?: string }) => {
+  const text = buildTelegramMessage(data);
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {}
+  // Open share sheet (lets user pick the group and pre-fills the text)
+  window.open(telegramShareUrl(text), "_blank", "noopener,noreferrer");
+};
+
 const EntryPopup = () => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", whatsapp: "" });
