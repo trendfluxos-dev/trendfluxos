@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import luxeVeilSpa from "@/assets/luxe-veil-spa.jpg";
 import luxeVeilLogo from "@/assets/luxe-veil-logo.png";
+import luxeVeilOg from "@/assets/luxe-veil-og.jpg";
 import { BrandShell } from "@/components/BrandShell";
 import { Lock, Mail, KeyRound, Loader2, ShieldCheck, BadgeCheck, Sparkles, Leaf } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
+import { SocialShare } from "@/components/SocialShare";
 import { z } from "zod";
 
 const VALID_CODES = ["LUXE2026", "VEIL-INVITE", "TRENDFLUX-PRIVATE"];
@@ -19,23 +21,62 @@ const requestSchema = z.object({
 });
 
 const LuxeVeil = () => {
+  const pageUrl = typeof window !== "undefined" ? window.location.href.split("#")[0] : "https://trendfluxdigital.lovable.app/luxe-veil";
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://trendfluxdigital.lovable.app";
+  const ogImageAbs = `${origin}${luxeVeilOg}`;
+  const logoAbs = `${origin}${luxeVeilLogo}`;
+
   useSeo({
     title: "Luxe Veil — Luxury Spa & Wellness Experience by TrendFlux",
     description:
       "Luxe Veil — a private, invite-only luxury spa & wellness sanctuary by TrendFlux. Discreet, refined, and curated for discerning clients.",
-    image: luxeVeilLogo,
+    image: luxeVeilOg,
+    imageWidth: 1200,
+    imageHeight: 630,
+    imageType: "image/jpeg",
+    imageAlt: "Luxe Veil — Luxury Spa & Wellness by TrendFlux",
+    siteName: "Luxe Veil",
     type: "website",
   });
-  useJsonLd({
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: "Luxe Veil",
-    provider: { "@type": "Organization", name: "TrendFlux" },
-    serviceType: "Private, invite-only brand experience",
-    areaServed: "Worldwide",
-    description: "Invitation-only premium brand experience by TrendFlux for discerning clients.",
-    url: typeof window !== "undefined" ? window.location.href.split("#")[0] : undefined,
-  });
+
+  useJsonLd(
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Luxe Veil",
+        legalName: "Luxe Veil by TrendFlux",
+        url: pageUrl,
+        logo: logoAbs,
+        image: ogImageAbs,
+        parentOrganization: { "@type": "Organization", name: "TrendFlux" },
+        sameAs: ["https://www.facebook.com/luxeveil/"],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": `${pageUrl}#localbusiness`,
+        name: "Luxe Veil",
+        description: "Private, invite-only luxury spa & wellness sanctuary by TrendFlux.",
+        url: pageUrl,
+        image: ogImageAbs,
+        logo: logoAbs,
+        telephone: "+8801972813761",
+        priceRange: "$$$$",
+        address: { "@type": "PostalAddress", addressCountry: "BD" },
+        sameAs: ["https://www.facebook.com/luxeveil/"],
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Luxe Veil",
+        url: pageUrl,
+        publisher: { "@type": "Organization", name: "TrendFlux" },
+      },
+    ],
+    "ld-json-luxe-veil",
+  );
+
 
   const [unlocked, setUnlocked] = useState(false);
   const [code, setCode] = useState("");
