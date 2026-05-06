@@ -278,8 +278,8 @@ const RequestInviteForm = () => {
   );
 };
 
-const PHONE = "+8801972818761";
-const WHATSAPP = "https://wa.me/8801972818761";
+const PHONE = "+8801972813761";
+const TELEGRAM = "https://t.me/luxe_veil";
 
 type Service = { name: string; desc: string; tiers: { dur: string; price: string }[] };
 
