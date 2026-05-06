@@ -104,6 +104,7 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, hsl(var(--lv-gold) / 0.7), transparent);
   }
+}
 
 @layer base {
   * {
