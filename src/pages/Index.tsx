@@ -199,6 +199,96 @@ const stats = [
   { value: "47", label: "Operations launched" },
 ];
 
+type HeadlineVariant = {
+  id: string;
+  label: string;
+  timeline: React.ReactNode;
+  pressTagline: string;
+};
+
+const HEADLINE_VARIANTS: HeadlineVariant[] = [
+  {
+    id: "stand-spotlight",
+    label: "From Stand to Spotlight",
+    timeline: (
+      <>
+        From <span className="text-gradient">Stand</span> to Spotlight
+      </>
+    ),
+    pressTagline: "A stand turned into a documented public record.",
+  },
+  {
+    id: "integrity-fire",
+    label: "Integrity Under Fire",
+    timeline: (
+      <>
+        <span className="text-gradient">Integrity</span> Under Fire
+      </>
+    ),
+    pressTagline: "Tested under pressure, verified by national outlets.",
+  },
+  {
+    id: "whistleblower-focus",
+    label: "Whistleblower in Focus",
+    timeline: (
+      <>
+        <span className="text-gradient">Whistleblower</span> in Focus
+      </>
+    ),
+    pressTagline: "An unyielding voice, captured on the public record.",
+  },
+  {
+    id: "truth-headlines",
+    label: "Truth That Made Headlines",
+    timeline: (
+      <>
+        <span className="text-gradient">Truth</span> That Made Headlines
+      </>
+    ),
+    pressTagline: "When silence broke, the headlines followed.",
+  },
+  {
+    id: "stand-echoed",
+    label: "A Stand That Echoed",
+    timeline: (
+      <>
+        A <span className="text-gradient">Stand</span> That Echoed
+      </>
+    ),
+    pressTagline: "One stand, echoed across Bangladesh's leading outlets.",
+  },
+  {
+    id: "satyer-pakshe",
+    label: "সত্যের পক্ষে দাঁড়ানো",
+    timeline: (
+      <>
+        <span className="text-gradient">সত্যের পক্ষে</span> দাঁড়ানো — National Spotlight
+      </>
+    ),
+    pressTagline: "একটা অবস্থান, সারা দেশের আলোচনায়।",
+  },
+  {
+    id: "stand-speak-spotlight",
+    label: "Stand. Speak. Spotlight.",
+    timeline: (
+      <>
+        <span className="text-gradient">Stand.</span> Speak. Spotlight.
+      </>
+    ),
+    pressTagline: "Stand taken. Voice raised. Spotlight earned.",
+  },
+  {
+    id: "unyielding-truth",
+    label: "Unyielding Truth",
+    timeline: (
+      <>
+        <span className="text-gradient">Unyielding</span> Truth
+      </>
+    ),
+    pressTagline: "Documented courage — outlet by outlet.",
+  },
+];
+
 const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const [activePress, setActivePress] = useState<PressItem | null>(null);
@@ -206,6 +296,20 @@ const Index = () => {
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
   const { items: dbPress } = usePressItems();
+  const [headlineId, setHeadlineId] = useState<string>(() => {
+    if (typeof window === "undefined") return HEADLINE_VARIANTS[0].id;
+    return localStorage.getItem("headline_variant") || HEADLINE_VARIANTS[0].id;
+  });
+  const headline =
+    HEADLINE_VARIANTS.find((v) => v.id === headlineId) ?? HEADLINE_VARIANTS[0];
+  const selectHeadline = (id: string) => {
+    setHeadlineId(id);
+    try {
+      localStorage.setItem("headline_variant", id);
+    } catch {
+      /* ignore */
+    }
+  };
 
   const filterTabs: Category[] = [
     "All",
