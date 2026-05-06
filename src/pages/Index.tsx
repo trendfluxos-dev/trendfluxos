@@ -729,7 +729,7 @@ const Index = () => {
                                 </div>
                                 <p
                                   lang="bn"
-                                  className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground [word-break:keep-all] [overflow-wrap:normal] hyphens-none"
+                                  className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground"
                                 >
                                   {p.headline}
                                 </p>
