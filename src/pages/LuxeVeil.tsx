@@ -517,11 +517,14 @@ const ContactForm = () => {
   const [err, setErr] = useState("");
   const [sendErr, setSendErr] = useState("");
   const [sending, setSending] = useState(false);
+  const [target, setTarget] = useState("");
+  const targets = useChatTargets();
+  useEffect(() => { if (!target && targets[0]) setTarget(targets[0].key); }, [targets, target]);
 
   const doSend = async (name: string, wa: string, msg: string) => {
     setSendErr("");
     setSending(true);
-    const res = await sendToTelegram({ name, whatsapp: wa, message: msg });
+    const res = await sendToTelegram({ name, whatsapp: wa, message: msg, target });
     setSending(false);
     if (!res.ok) {
       setSendErr(res.error || "Could not send. Please try again.");
