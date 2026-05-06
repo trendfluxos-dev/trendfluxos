@@ -295,8 +295,10 @@ const buildTelegramMessage = (d: { name: string; whatsapp: string; message?: str
 const telegramShareUrl = (text: string) =>
   `https://t.me/share/url?url=${encodeURIComponent(TELEGRAM_GROUP)}&text=${encodeURIComponent(text)}`;
 
+type ChatTarget = { key: string; label: string };
+
 const sendToTelegram = async (
-  data: { name: string; whatsapp: string; message?: string },
+  data: { name: string; whatsapp: string; message?: string; target?: string },
 ): Promise<{ ok: boolean; error?: string }> => {
   try {
     const { data: res, error } = await supabase.functions.invoke("telegram-submit", {
@@ -309,6 +311,57 @@ const sendToTelegram = async (
     return { ok: false, error: e instanceof Error ? e.message : "Network error" };
   }
 };
+
+const useChatTargets = () => {
+  const [targets, setTargets] = useState<ChatTarget[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase.functions.invoke("telegram-submit", {
+          body: null,
+          method: "GET" as never,
+        }).catch(() => ({ data: null as never }));
+        // Fallback: call via fetch with ?action=targets
+        const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/telegram-submit?action=targets`;
+        const res = await fetch(url, {
+          headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
+        });
+        const j = await res.json();
+        if (!cancelled && j?.ok && Array.isArray(j.targets)) setTargets(j.targets);
+        else if (!cancelled && data && (data as any).ok && Array.isArray((data as any).targets)) {
+          setTargets((data as any).targets);
+        }
+      } catch { /* ignore */ }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+  return targets;
+};
+
+const TargetSelect = ({
+  targets, value, onChange,
+}: { targets: ChatTarget[]; value: string; onChange: (v: string) => void }) => {
+  if (targets.length <= 1) return null;
+  return (
+    <div>
+      <label className="block text-[10px] uppercase tracking-[0.3em] text-gold/70 mb-1.5">
+        Route to
+      </label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-[#0c2218] border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none"
+      >
+        {targets.map((t) => (
+          <option key={t.key} value={t.key}>{t.label}</option>
+        ))}
+        <option value="all">All groups</option>
+      </select>
+    </div>
+  );
+};
+
 
 const ErrorBanner = ({
   error,
