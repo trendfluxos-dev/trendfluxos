@@ -128,15 +128,31 @@ const Marriage = () => {
                 </p>
               </div>
             </div>
-            <a
-              href={`https://wa.me/${inquirerWa?.replace("+", "")}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-white shadow-[0_8px_24px_-8px_rgba(220,38,38,0.7)] hover:brightness-110 transition"
-            >
-              <MessageCircle className="h-3.5 w-3.5" />
-              {t("Chat on WhatsApp", "WhatsApp চ্যাট")}
-            </a>
+            <div className="flex items-center gap-2">
+              <a
+                href={`https://wa.me/${inquirerWa?.replace("+", "")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-white shadow-[0_8px_24px_-8px_rgba(220,38,38,0.7)] hover:brightness-110 transition"
+              >
+                <MessageCircle className="h-3.5 w-3.5" />
+                {t("Chat on WhatsApp", "WhatsApp চ্যাট")}
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  try { localStorage.removeItem("marriage_inquiry_id"); } catch { /* ignore */ }
+                  setInquirer(null);
+                  if (location.state) {
+                    window.history.replaceState({}, "");
+                  }
+                }}
+                className="inline-flex items-center rounded-full border border-white/30 bg-black/40 px-3 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-white/80 hover:bg-white hover:text-black transition"
+                aria-label={t("Clear saved profile", "সংরক্ষিত প্রোফাইল মুছুন")}
+              >
+                {t("Clear saved profile", "মুছে ফেলুন")}
+              </button>
+            </div>
           </div>
         )}
 
