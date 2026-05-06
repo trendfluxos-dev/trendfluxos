@@ -439,7 +439,7 @@ const Index = () => {
             <div className="mt-8 flex items-center gap-3 text-sm text-foreground/60">
               <span className="font-display font-semibold text-foreground">Zahid Hasan Emon</span>
               <span className="text-foreground/30">·</span>
-              <span>Founder, TrendFlux Digital</span>
+              <span>Brand Architect, TrendFlux Digital</span>
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-5">
               <Link
