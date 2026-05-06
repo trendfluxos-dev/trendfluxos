@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import luxeVeilSpa from "@/assets/luxe-veil-spa.jpg";
 import { BrandShell } from "@/components/BrandShell";
-import { Lock, Mail, KeyRound, Loader2 } from "lucide-react";
+import { Lock, Mail, KeyRound, Loader2, ShieldCheck, BadgeCheck, Sparkles, Leaf } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
@@ -798,23 +798,39 @@ const WhatsAppPill = () => {
   );
 };
 
-const TrustStrip = () => (
-  <div className="border-y border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream)/0.5)]">
-    <div className="mx-auto max-w-5xl px-4 py-5 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-      {[
-        { label: "Certified therapists" },
-        { label: "Hygiene-first rooms" },
-        { label: "Natural oils & herbs" },
-        { label: "Discreet & private" },
-      ].map((t) => (
-        <div key={t.label} className="flex items-center justify-center gap-2 text-xs md:text-sm text-[hsl(var(--lv-ink))]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--lv-gold))]" aria-hidden="true" />
-          {t.label}
-        </div>
-      ))}
+const TrustStrip = () => {
+  const items = [
+    { Icon: ShieldCheck, label: "Discreet", sub: "Private & confidential" },
+    { Icon: BadgeCheck, label: "Certified", sub: "Trained therapists" },
+    { Icon: Sparkles, label: "Premium", sub: "Hygiene-first rooms" },
+    { Icon: Leaf, label: "Natural", sub: "Pure oils & herbs" },
+  ];
+  return (
+    <div className="border-y border-[hsl(var(--lv-hairline))] bg-gradient-to-b from-[hsl(var(--lv-ivory))] to-[hsl(var(--lv-cream)/0.6)]">
+      <div className="mx-auto max-w-5xl px-4 py-7 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        {items.map(({ Icon, label, sub }) => (
+          <div
+            key={label}
+            className="group relative flex flex-col items-center text-center gap-2 rounded-2xl border border-[hsl(var(--lv-hairline))] bg-white/60 backdrop-blur-md px-4 py-5 shadow-[0_1px_0_rgba(255,255,255,0.8)_inset,0_8px_24px_-12px_rgba(12,34,24,0.15)] transition hover:bg-white/80 hover:-translate-y-0.5"
+          >
+            <span
+              aria-hidden="true"
+              className="flex items-center justify-center w-10 h-10 rounded-full border border-[hsl(var(--lv-gold)/0.4)] bg-[hsl(var(--lv-gold)/0.08)] text-[hsl(var(--lv-gold))]"
+            >
+              <Icon className="w-5 h-5" strokeWidth={1.5} />
+            </span>
+            <p className="font-display text-sm md:text-base text-[hsl(var(--lv-ink))] tracking-wide">
+              {label}
+            </p>
+            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-[hsl(var(--lv-ink-soft))]">
+              {sub}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const LuxeVeilExperience = () => (
   <div className="space-y-0">
