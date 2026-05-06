@@ -404,7 +404,8 @@ const ContactForm = () => {
       list.push(lead);
       localStorage.setItem("luxe_veil_contacts", JSON.stringify(list));
     } catch {}
-    toast({ title: "Message received", description: "We'll be in touch privately." });
+    sendToTelegram({ name, whatsapp: wa, message: msg });
+    toast({ title: "Opening Telegram", description: "Your message is ready — paste & send." });
     setDone(true);
     setForm({ name: "", whatsapp: "", message: "" });
   };
