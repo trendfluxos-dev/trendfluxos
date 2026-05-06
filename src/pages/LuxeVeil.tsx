@@ -334,6 +334,29 @@ const SectionHeader = ({ eyebrow, title }: { eyebrow: string; title: string }) =
   </div>
 );
 
+const CopyPhoneButton = () => {
+  const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(PHONE);
+      setCopied(true);
+      toast({ title: "Phone copied", description: PHONE });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: "Could not copy", description: PHONE, variant: "destructive" });
+    }
+  };
+  return (
+    <button
+      onClick={copy}
+      className="border border-gold/60 text-gold px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition"
+    >
+      {copied ? "✓ Copied" : "📋 Copy Phone"}
+    </button>
+  );
+};
+
 const LuxeVeilExperience = () => (
   <div className="space-y-16">
     {/* Welcome / Hero */}
