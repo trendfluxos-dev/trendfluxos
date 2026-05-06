@@ -487,6 +487,7 @@ const EntryPopup = () => {
               inputMode="tel"
               className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
             />
+            <TargetSelect targets={targets} value={target} onChange={setTarget} />
             {err && <p className="text-[11px] text-red-300">{err}</p>}
             {sendErr && (
               <ErrorBanner
