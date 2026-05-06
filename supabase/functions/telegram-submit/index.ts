@@ -2,16 +2,46 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 };
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/telegram";
-
 const BOT_USERNAME = "LuxeVeil_Bot";
 const GROUP_INVITE = "https://t.me/+GAMSK09w_6Q3MGQ1";
 
 function escapeHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+type ChatTarget = { key: string; label: string; chat_id: string };
+
+/**
+ * Parse TELEGRAM_CHAT_IDS / TELEGRAM_CHAT_ID into a list of targets.
+ * Supported formats (comma-separated):
+ *   "-100123,−100456"                      -> default,target_2,…
+ *   "main:-100123,vip:-100456"             -> labelled
+ *   "Main Group=-100123, VIP=-100456"      -> labelled (= or :)
+ */
+function parseTargets(): ChatTarget[] {
+  const raw =
+    Deno.env.get("TELEGRAM_CHAT_IDS") ??
+    Deno.env.get("TELEGRAM_CHAT_ID") ??
+    "";
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((entry, i) => {
+      const m = entry.match(/^([^:=]+)[:=](.+)$/);
+      if (m) {
+        const label = m[1].trim();
+        const key = label.toLowerCase().replace(/[^a-z0-9]+/g, "_");
+        return { key, label, chat_id: m[2].trim() };
+      }
+      const key = i === 0 ? "default" : `target_${i + 1}`;
+      const label = i === 0 ? "Main" : `Target ${i + 1}`;
+      return { key, label, chat_id: entry };
+    });
 }
 
 function tgHeaders(lovableKey: string, tgKey: string) {
@@ -48,8 +78,8 @@ function chatNotFoundGuidance(chatId: string) {
     next_steps: [
       `1. Open ${GROUP_INVITE} and join the group as the admin.`,
       `2. Add @${BOT_USERNAME} to the group as a member (and promote to admin so it can post).`,
-      `3. Send any message in the group, then run the bot-access check again — it will auto-detect the correct chat ID.`,
-      `4. Update the TELEGRAM_CHAT_ID secret with the detected ID (a negative number like -1001234567890).`,
+      `3. Send any message in the group, then run the bot-access check again.`,
+      `4. Update the TELEGRAM_CHAT_ID / TELEGRAM_CHAT_IDS secret with the detected ID.`,
     ],
   };
 }
@@ -60,22 +90,32 @@ Deno.serve(async (req) => {
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const TELEGRAM_API_KEY = Deno.env.get("TELEGRAM_API_KEY");
-    const TELEGRAM_CHAT_ID = Deno.env.get("TELEGRAM_CHAT_ID") ?? "";
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
     if (!TELEGRAM_API_KEY) throw new Error("TELEGRAM_API_KEY not configured");
 
+    const targets = parseTargets();
     const url = new URL(req.url);
     const action = url.searchParams.get("action") ?? "";
+
+    // ---- List configured targets ----
+    if (action === "targets") {
+      return new Response(
+        JSON.stringify({
+          ok: true,
+          targets: targets.map((t) => ({ key: t.key, label: t.label })),
+        }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     // ---- Bot-access diagnostic check ----
     if (action === "check" || req.method === "GET") {
       const result: Record<string, unknown> = {
         bot_username: BOT_USERNAME,
         group_invite: GROUP_INVITE,
-        configured_chat_id: TELEGRAM_CHAT_ID || null,
+        configured_targets: targets.map((t) => ({ key: t.key, label: t.label, chat_id: t.chat_id })),
       };
 
-      // 1. Confirm the bot identity
       const me = await callTg("getMe", {}, LOVABLE_API_KEY, TELEGRAM_API_KEY);
       result.bot = me.data?.result ?? me.data;
       if (!me.res.ok || !me.data?.ok) {
@@ -85,45 +125,38 @@ Deno.serve(async (req) => {
         );
       }
 
-      // 2. Try getChat with the configured ID
-      let chatOk = false;
-      if (TELEGRAM_CHAT_ID) {
-        const chat = await callTg(
-          "getChat",
-          { chat_id: TELEGRAM_CHAT_ID },
-          LOVABLE_API_KEY,
-          TELEGRAM_API_KEY,
-        );
-        result.chat = chat.data?.result ?? chat.data;
-        chatOk = chat.res.ok && chat.data?.ok;
-      }
+      const checks = await Promise.all(
+        targets.map(async (t) => {
+          const c = await callTg("getChat", { chat_id: t.chat_id }, LOVABLE_API_KEY, TELEGRAM_API_KEY);
+          return {
+            key: t.key,
+            label: t.label,
+            chat_id: t.chat_id,
+            ok: c.res.ok && c.data?.ok,
+            chat: c.data?.result ?? null,
+            error: c.data?.ok ? null : c.data?.description ?? "unknown",
+          };
+        }),
+      );
+      result.target_checks = checks;
 
-      // 3. If chat lookup failed, scan recent updates for groups the bot can see
-      if (!chatOk) {
+      const allOk = checks.length > 0 && checks.every((c) => c.ok);
+      if (!allOk) {
         const upd = await callTg(
           "getUpdates",
           { limit: 50, allowed_updates: ["message", "my_chat_member", "channel_post"] },
-          LOVABLE_API_KEY,
-          TELEGRAM_API_KEY,
+          LOVABLE_API_KEY, TELEGRAM_API_KEY,
         );
         const seen = new Map<string, { id: number; title?: string; type?: string }>();
         for (const u of (upd.data?.result ?? []) as Array<Record<string, any>>) {
-          const c =
-            u.message?.chat ??
-            u.edited_message?.chat ??
-            u.my_chat_member?.chat ??
-            u.channel_post?.chat;
+          const c = u.message?.chat ?? u.edited_message?.chat ?? u.my_chat_member?.chat ?? u.channel_post?.chat;
           if (c?.id && (c.type === "group" || c.type === "supergroup" || c.type === "channel")) {
             seen.set(String(c.id), { id: c.id, title: c.title, type: c.type });
           }
         }
         result.detected_groups = Array.from(seen.values());
         return new Response(
-          JSON.stringify({
-            ok: false,
-            ...chatNotFoundGuidance(TELEGRAM_CHAT_ID || "(not set)"),
-            ...result,
-          }),
+          JSON.stringify({ ok: false, ...chatNotFoundGuidance(targets[0]?.chat_id ?? "(none)"), ...result }),
           { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
         );
       }
@@ -134,13 +167,14 @@ Deno.serve(async (req) => {
       );
     }
 
-    // ---- Normal submission flow ----
-    if (!TELEGRAM_CHAT_ID) throw new Error("TELEGRAM_CHAT_ID not configured");
+    // ---- Submission flow ----
+    if (targets.length === 0) throw new Error("No TELEGRAM_CHAT_ID configured");
 
     const body = await req.json().catch(() => ({}));
     const name = String(body.name ?? "").trim().slice(0, 120);
     const whatsapp = String(body.whatsapp ?? "").trim().slice(0, 40);
     const message = String(body.message ?? "").trim().slice(0, 1000);
+    const requestedTarget = String(body.target ?? "").trim().toLowerCase();
 
     if (name.length < 2 || whatsapp.length < 6) {
       return new Response(
@@ -149,56 +183,78 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Resolve which targets to send to.
+    // - "all" or empty target with multiple groups -> broadcast to all
+    // - specific key -> single target
+    // - default (no target, single group) -> that one
+    let chosen: ChatTarget[];
+    if (requestedTarget === "all") {
+      chosen = targets;
+    } else if (requestedTarget) {
+      const found = targets.find((t) => t.key === requestedTarget);
+      if (!found) {
+        return new Response(
+          JSON.stringify({
+            ok: false,
+            error: `Unknown target "${requestedTarget}"`,
+            available: targets.map((t) => ({ key: t.key, label: t.label })),
+          }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+      chosen = [found];
+    } else {
+      chosen = [targets[0]];
+    }
+
     const text =
       `🌸 <b>New Luxe Veil Inquiry</b>\n` +
       `👤 <b>Name:</b> ${escapeHtml(name)}\n` +
       `📱 <b>WhatsApp:</b> ${escapeHtml(whatsapp)}` +
       (message ? `\n💬 <b>Message:</b> ${escapeHtml(message)}` : "");
 
-    const { res: tgRes, data } = await callTg(
-      "sendMessage",
-      {
-        chat_id: TELEGRAM_CHAT_ID,
-        text,
-        parse_mode: "HTML",
-        disable_web_page_preview: true,
-      },
-      LOVABLE_API_KEY,
-      TELEGRAM_API_KEY,
+    const results = await Promise.all(
+      chosen.map(async (t) => {
+        const { res, data } = await callTg(
+          "sendMessage",
+          { chat_id: t.chat_id, text, parse_mode: "HTML", disable_web_page_preview: true },
+          LOVABLE_API_KEY, TELEGRAM_API_KEY,
+        );
+        return {
+          key: t.key,
+          label: t.label,
+          ok: res.ok && data?.ok,
+          status: res.status,
+          message_id: data?.result?.message_id ?? null,
+          error: data?.ok ? null : data?.description ?? "Telegram failed",
+        };
+      }),
     );
 
-    if (!tgRes.ok || !data.ok) {
-      const desc: string = data?.description ?? "";
-      const isChatNotFound =
-        tgRes.status === 400 && /chat not found/i.test(desc);
-      console.error("Telegram error", tgRes.status, data);
+    const successes = results.filter((r) => r.ok);
+    const failures = results.filter((r) => !r.ok);
 
-      if (isChatNotFound) {
-        return new Response(
-          JSON.stringify({
-            ok: false,
-            error: "chat_not_found",
-            telegram_description: desc,
-            guidance: chatNotFoundGuidance(TELEGRAM_CHAT_ID),
-            hint:
-              "Call this function with ?action=check to auto-detect the correct chat ID after adding the bot to the group.",
-          }),
-          { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-        );
-      }
-
+    if (successes.length === 0) {
+      const first = failures[0];
+      const isChatNotFound = first?.error && /chat not found/i.test(first.error);
       return new Response(
         JSON.stringify({
           ok: false,
-          error: desc || "Telegram failed",
-          status: tgRes.status,
+          error: isChatNotFound ? "chat_not_found" : (first?.error ?? "Telegram failed"),
+          results,
+          ...(isChatNotFound ? { guidance: chatNotFoundGuidance(chosen[0].chat_id) } : {}),
         }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
     return new Response(
-      JSON.stringify({ ok: true, message_id: data.result?.message_id }),
+      JSON.stringify({
+        ok: true,
+        delivered: successes.length,
+        total: results.length,
+        results,
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (e) {
