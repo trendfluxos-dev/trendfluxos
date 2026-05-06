@@ -87,6 +87,29 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "cv11";
+    /* Safer wrapping defaults for mixed Latin + Bengali/Unicode text */
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: none;
+  }
+
+  /* Bengali / Indic clusters must not break mid-word */
+  :lang(bn),
+  [lang="bn"] {
+    font-family: "Noto Sans Bengali", "Hind Siliguri", "SolaimanLipi",
+      "Kalpurush", system-ui, sans-serif;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    line-break: strict;
+    hyphens: none;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern", "liga", "calt";
+  }
+
+  /* Long URLs / tokens should still wrap so they never overflow */
+  a[href], code, pre {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   ::selection {
