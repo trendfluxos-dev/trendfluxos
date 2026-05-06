@@ -381,7 +381,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Founder */}
+      {/* Brand Architect */}
       <section id="founder" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
           {/* Portrait */}
@@ -390,11 +390,11 @@ const Index = () => {
             <div className="relative overflow-hidden rounded-[2rem] glass-strong p-2">
               <img
                 src={emonPortrait}
-                alt="Zahid Hasan Emon, Founder of TrendFlux Digital"
+                alt="Zahid Hasan Emon, Brand Architect of TrendFlux Digital"
                 className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
               />
               <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
-                <span className="text-gold font-semibold">Founder & CEO</span>
+                <span className="text-gold font-semibold">Brand Architect</span>
                 <span className="mx-2 text-foreground/30">·</span>
                 <span className="text-foreground/80">Zahid Hasan Emon</span>
               </div>
@@ -404,10 +404,10 @@ const Index = () => {
           {/* Content */}
           <div>
             <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-              — Meet the Project Lead
+              — Meet the Brand Architect
             </p>
             <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Meet the Project Lead:{" "}
+              Brand Architect:{" "}
               <span className="text-gradient">Zahid Hasan Emon</span>
             </h2>
             <blockquote className="mt-8 border-l-2 border-gold/60 pl-6 text-base leading-relaxed text-foreground/75 md:text-lg space-y-4">
@@ -439,7 +439,7 @@ const Index = () => {
             <div className="mt-8 flex items-center gap-3 text-sm text-foreground/60">
               <span className="font-display font-semibold text-foreground">Zahid Hasan Emon</span>
               <span className="text-foreground/30">·</span>
-              <span>Founder, TrendFlux Digital</span>
+              <span>Brand Architect, TrendFlux Digital</span>
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-5">
               <Link
