@@ -280,6 +280,148 @@ const RequestInviteForm = () => {
 
 const PHONE = "+8801972813761";
 const TELEGRAM = "https://t.me/luxe_veil";
+const TELEGRAM_GROUP = "https://t.me/+GAMSK09w_6Q3MGQ1";
+
+const EntryPopup = () => {
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ name: "", whatsapp: "" });
+  const [err, setErr] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("luxe_veil_entry_seen") === "1") return;
+    const t = setTimeout(() => setOpen(true), 800);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!open) return null;
+
+  const close = () => {
+    sessionStorage.setItem("luxe_veil_entry_seen", "1");
+    setOpen(false);
+  };
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const name = form.name.trim();
+    const wa = form.whatsapp.trim();
+    if (name.length < 2) return setErr("Please enter your name");
+    if (!/^[+\d][\d\s-]{6,}$/.test(wa)) return setErr("Please enter a valid WhatsApp number");
+    setErr("");
+    try {
+      const lead = { name, whatsapp: wa, ts: new Date().toISOString() };
+      const list = JSON.parse(localStorage.getItem("luxe_veil_leads") || "[]");
+      list.push(lead);
+      localStorage.setItem("luxe_veil_leads", JSON.stringify(list));
+    } catch {}
+    sessionStorage.setItem("luxe_veil_entry_seen", "1");
+    window.open(TELEGRAM_GROUP, "_blank", "noopener,noreferrer");
+    setOpen(false);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+      <div className="relative w-full max-w-md rounded-3xl border border-gold/40 bg-[#07182e] p-7 text-center shadow-2xl">
+        <button
+          onClick={close}
+          aria-label="Close"
+          className="absolute top-3 right-4 text-gold/60 hover:text-gold text-xl leading-none"
+        >
+          ×
+        </button>
+        <p className="text-[10px] uppercase tracking-[0.4em] text-gold/80">🌸 Welcome to Luxe Veil</p>
+        <h3 className="mt-3 font-display text-xl text-white">Join Our Private Telegram</h3>
+        <p className="mt-2 text-xs text-white/60">
+          Share your details and we'll connect you instantly.
+        </p>
+        <form onSubmit={submit} className="mt-5 space-y-3 text-left">
+          <input
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            placeholder="Your name"
+            className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
+          />
+          <input
+            value={form.whatsapp}
+            onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+            placeholder="WhatsApp number"
+            inputMode="tel"
+            className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
+          />
+          {err && <p className="text-[11px] text-red-300">{err}</p>}
+          <button
+            type="submit"
+            className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
+          >
+            ✈️ Continue to Telegram
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const ContactForm = () => {
+  const { toast } = useToast();
+  const [form, setForm] = useState({ name: "", whatsapp: "", message: "" });
+  const [done, setDone] = useState(false);
+  const [err, setErr] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const name = form.name.trim();
+    const wa = form.whatsapp.trim();
+    const msg = form.message.trim();
+    if (name.length < 2) return setErr("Please enter your name");
+    if (!/^[+\d][\d\s-]{6,}$/.test(wa)) return setErr("Please enter a valid WhatsApp number");
+    if (msg.length < 5) return setErr("Please add a short message");
+    setErr("");
+    try {
+      const lead = { name, whatsapp: wa, message: msg, ts: new Date().toISOString() };
+      const list = JSON.parse(localStorage.getItem("luxe_veil_contacts") || "[]");
+      list.push(lead);
+      localStorage.setItem("luxe_veil_contacts", JSON.stringify(list));
+    } catch {}
+    toast({ title: "Message received", description: "We'll be in touch privately." });
+    setDone(true);
+    setForm({ name: "", whatsapp: "", message: "" });
+  };
+
+  if (done) {
+    return (
+      <div className="mt-6 rounded-2xl border border-gold/40 bg-[#07182e]/70 p-6 text-center">
+        <p className="text-sm text-gold uppercase tracking-[0.25em]">✓ Thank you</p>
+        <p className="mt-2 text-xs text-white/70">Your request has been received. We'll reach out shortly.</p>
+        <button
+          onClick={() => setDone(false)}
+          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold/80 hover:text-gold"
+        >
+          Send another
+        </button>
+      </div>
+    );
+  }
+
+  const field = "w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30";
+
+  return (
+    <form onSubmit={submit} className="mt-6 mx-auto max-w-md text-left space-y-3">
+      <input className={field} placeholder="Your name" value={form.name}
+        onChange={(e) => setForm({ ...form, name: e.target.value })} />
+      <input className={field} placeholder="WhatsApp number" inputMode="tel" value={form.whatsapp}
+        onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} />
+      <textarea rows={3} className={field} placeholder="How can we help?" value={form.message}
+        onChange={(e) => setForm({ ...form, message: e.target.value })} />
+      {err && <p className="text-[11px] text-red-300">{err}</p>}
+      <button
+        type="submit"
+        className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
+      >
+        Send Message
+      </button>
+    </form>
+  );
+};
 
 type Service = { name: string; desc: string; tiers: { dur: string; price: string }[] };
 
@@ -359,6 +501,7 @@ const CopyPhoneButton = () => {
 
 const LuxeVeilExperience = () => (
   <div className="space-y-16">
+    <EntryPopup />
     {/* Welcome / Hero */}
     <section className="relative mx-auto max-w-4xl rounded-3xl border border-gold/30 overflow-hidden">
       <img src={luxeVeilSpa} alt="Luxe Veil spa interior" width={1920} height={1080} className="absolute inset-0 w-full h-full object-cover opacity-40" />
@@ -450,14 +593,12 @@ const LuxeVeilExperience = () => (
       <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">💌 Book Your Experience</p>
       <h3 className="mt-3 font-display text-2xl text-white">Reserve Your Sanctuary</h3>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <a href={`tel:${PHONE}`} className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
-          📞 Call {PHONE}
-        </a>
-        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="border border-gold/60 text-gold px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition">
-          ✈️ Telegram
+        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+          ✈️ Contact on Telegram
         </a>
         <CopyPhoneButton />
       </div>
+      <ContactForm />
     </section>
 
     {/* Bangla */}
