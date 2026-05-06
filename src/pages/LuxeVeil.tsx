@@ -800,35 +800,65 @@ const WhatsAppPill = () => {
 
 const TrustStrip = () => {
   const items = [
-    { Icon: ShieldCheck, label: "Discreet", sub: "Private & confidential" },
-    { Icon: BadgeCheck, label: "Certified", sub: "Trained therapists" },
-    { Icon: Sparkles, label: "Premium", sub: "Hygiene-first rooms" },
-    { Icon: Leaf, label: "Natural", sub: "Pure oils & herbs" },
+    {
+      Icon: ShieldCheck,
+      label: "Discreet",
+      sub: "Private & confidential",
+      sr: "Discreet service: every visit is fully private and confidential.",
+    },
+    {
+      Icon: BadgeCheck,
+      label: "Certified",
+      sub: "Trained therapists",
+      sr: "Certified, professionally trained therapists.",
+    },
+    {
+      Icon: Sparkles,
+      label: "Premium",
+      sub: "Hygiene-first rooms",
+      sr: "Premium experience with hygiene-first treatment rooms.",
+    },
+    {
+      Icon: Leaf,
+      label: "Natural",
+      sub: "Pure oils & herbs",
+      sr: "Natural treatments using pure oils and herbs.",
+    },
   ];
   return (
-    <div className="border-y border-[hsl(var(--lv-hairline))] bg-gradient-to-b from-[hsl(var(--lv-ivory))] to-[hsl(var(--lv-cream)/0.6)]">
-      <div className="mx-auto max-w-5xl px-4 py-7 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-        {items.map(({ Icon, label, sub }) => (
-          <div
+    <section
+      aria-labelledby="lv-trust-heading"
+      className="border-y border-[hsl(var(--lv-hairline))] bg-gradient-to-b from-[hsl(var(--lv-ivory))] to-[hsl(var(--lv-cream)/0.6)]"
+    >
+      <h2 id="lv-trust-heading" className="sr-only">
+        Why guests choose Luxe Veil
+      </h2>
+      <ul
+        role="list"
+        className="mx-auto max-w-5xl px-4 py-7 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4"
+      >
+        {items.map(({ Icon, label, sub, sr }) => (
+          <li
             key={label}
             className="group relative flex flex-col items-center text-center gap-2 rounded-2xl border border-[hsl(var(--lv-hairline))] bg-white/60 backdrop-blur-md px-4 py-5 shadow-[0_1px_0_rgba(255,255,255,0.8)_inset,0_8px_24px_-12px_rgba(12,34,24,0.15)] transition hover:bg-white/80 hover:-translate-y-0.5"
           >
+            <span className="sr-only">{sr}</span>
             <span
               aria-hidden="true"
               className="flex items-center justify-center w-10 h-10 rounded-full border border-[hsl(var(--lv-gold)/0.4)] bg-[hsl(var(--lv-gold)/0.08)] text-[hsl(var(--lv-gold))]"
             >
               <Icon className="w-5 h-5" strokeWidth={1.5} />
             </span>
-            <p className="font-display text-sm md:text-base text-[hsl(var(--lv-ink))] tracking-wide">
+            <p aria-hidden="true" className="font-display text-sm md:text-base text-[hsl(var(--lv-ink))] tracking-wide">
               {label}
             </p>
-            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-[hsl(var(--lv-ink-soft))]">
+            <p aria-hidden="true" className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-[hsl(var(--lv-ink-soft))]">
               {sub}
             </p>
-          </div>
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
 
