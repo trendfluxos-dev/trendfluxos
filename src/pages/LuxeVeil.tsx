@@ -516,11 +516,16 @@ const EntryPopup = () => {
           Share your details — our concierge will reach out shortly.
         </p>
         {sent ? (
-          <div className="mt-6 rounded-xl border border-gold/40 bg-gold/10 p-4 text-sm text-gold">
+          <div
+            className="mt-6 rounded-xl border border-gold/40 bg-gold/10 p-4 text-sm text-gold"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             ✓ Sent — your details are with our team.
           </div>
         ) : (
-          <form onSubmit={submit} className="mt-5 space-y-3 text-left">
+          <form onSubmit={submit} aria-busy={sending} className="mt-5 space-y-3 text-left">
             <input
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -535,17 +540,30 @@ const EntryPopup = () => {
               className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
             />
             <TargetSelect targets={targets} value={target} onChange={setTarget} />
-            {err && <p className="text-[11px] text-red-300">{err}</p>}
+            {err && (
+              <p
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                className="text-[11px] text-red-300"
+              >
+                {err}
+              </p>
+            )}
             {sendErr && (
               <ErrorBanner
+                id="entry-send-error"
                 error={sendErr}
                 retrying={sending}
                 onRetry={() => doSend(form.name.trim(), form.whatsapp.trim())}
               />
             )}
+            <SrLive key={`entry-${errorNonce}`} message={sendErr} />
             <button
               type="submit"
               disabled={sending}
+              aria-invalid={!!sendErr}
+              aria-describedby={sendErr ? "entry-send-error" : undefined}
               className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
             >
               {sending && <Loader2 className="w-3 h-3 animate-spin" />}
