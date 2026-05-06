@@ -295,13 +295,19 @@ const buildTelegramMessage = (d: { name: string; whatsapp: string; message?: str
 const telegramShareUrl = (text: string) =>
   `https://t.me/share/url?url=${encodeURIComponent(TELEGRAM_GROUP)}&text=${encodeURIComponent(text)}`;
 
-const sendToTelegram = async (data: { name: string; whatsapp: string; message?: string }) => {
-  const text = buildTelegramMessage(data);
+const sendToTelegram = async (
+  data: { name: string; whatsapp: string; message?: string },
+): Promise<{ ok: boolean; error?: string }> => {
   try {
-    await navigator.clipboard.writeText(text);
-  } catch {}
-  // Open share sheet (lets user pick the group and pre-fills the text)
-  window.open(telegramShareUrl(text), "_blank", "noopener,noreferrer");
+    const { data: res, error } = await supabase.functions.invoke("telegram-submit", {
+      body: data,
+    });
+    if (error) return { ok: false, error: error.message };
+    if (res && res.ok) return { ok: true };
+    return { ok: false, error: (res && res.error) || "Failed to send" };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Network error" };
+  }
 };
 
 const EntryPopup = () => {
