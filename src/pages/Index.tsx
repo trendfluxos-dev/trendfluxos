@@ -563,8 +563,36 @@ const Index = () => {
               — The Journey
             </p>
             <h3 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
-              From <span className="text-gradient">Stand</span> to Spotlight
+              {headline.timeline}
             </h3>
+            <p className="mt-3 text-sm text-foreground/55 md:text-base">
+              {headline.pressTagline}
+            </p>
+
+            {/* Headline variants selector */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mr-1">
+                Headline:
+              </span>
+              {HEADLINE_VARIANTS.map((v) => {
+                const active = v.id === headline.id;
+                return (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => selectHeadline(v.id)}
+                    aria-pressed={active}
+                    className={`rounded-full border px-3 py-1 text-[11px] transition-colors ${
+                      active
+                        ? "border-gold bg-gold/15 text-gold"
+                        : "border-foreground/15 text-foreground/55 hover:border-gold/40 hover:text-gold"
+                    }`}
+                  >
+                    {v.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="relative pl-10 md:pl-14">
