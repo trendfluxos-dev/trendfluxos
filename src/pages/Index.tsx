@@ -562,10 +562,16 @@ const Index = () => {
             <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
               — The Journey
             </p>
-            <h3 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+            <h3
+              key={`title-${headline.id}`}
+              className="font-display text-3xl font-bold tracking-tight md:text-4xl animate-fade-in"
+            >
               {headline.timeline}
             </h3>
-            <p className="mt-3 text-sm text-foreground/55 md:text-base">
+            <p
+              key={`tag-${headline.id}`}
+              className="mt-3 text-sm text-foreground/55 md:text-base animate-fade-in"
+            >
               {headline.pressTagline}
             </p>
 
@@ -696,7 +702,10 @@ const Index = () => {
                               Hide
                             </button>
                           </div>
-                          <p className="mb-3 text-xs text-foreground/40">
+                          <p
+                            key={`press-tag-${headline.id}`}
+                            className="mb-3 text-xs text-foreground/40 animate-fade-in"
+                          >
                             {headline.pressTagline}
                           </p>
                           <div className="grid gap-3 sm:grid-cols-2">
