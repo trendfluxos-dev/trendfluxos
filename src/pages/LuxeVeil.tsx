@@ -405,6 +405,9 @@ const EntryPopup = () => {
   const [sendErr, setSendErr] = useState("");
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [target, setTarget] = useState("");
+  const targets = useChatTargets();
+  useEffect(() => { if (!target && targets[0]) setTarget(targets[0].key); }, [targets, target]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
