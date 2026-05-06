@@ -501,6 +501,7 @@ const CopyPhoneButton = () => {
 
 const LuxeVeilExperience = () => (
   <div className="space-y-16">
+    <EntryPopup />
     {/* Welcome / Hero */}
     <section className="relative mx-auto max-w-4xl rounded-3xl border border-gold/30 overflow-hidden">
       <img src={luxeVeilSpa} alt="Luxe Veil spa interior" width={1920} height={1080} className="absolute inset-0 w-full h-full object-cover opacity-40" />
