@@ -363,40 +363,73 @@ const TargetSelect = ({
 };
 
 
-const ErrorBanner = ({
-  error,
-  onRetry,
-  retrying,
-}: { error: string; onRetry: () => void; retrying: boolean }) => {
+const ErrorBanner = React.forwardRef<HTMLDivElement, {
+  error: string;
+  onRetry: () => void;
+  retrying: boolean;
+  id?: string;
+}>(({ error, onRetry, retrying, id }, ref) => {
   const waText = encodeURIComponent("Hi Luxe Veil — I'd like to inquire.");
+  const retryRef = useRef<HTMLButtonElement>(null);
+
+  // Move keyboard focus to the Retry button as soon as the banner mounts,
+  // so keyboard users land on the recovery action immediately.
+  useEffect(() => {
+    retryRef.current?.focus();
+  }, []);
+
   return (
-    <div className="rounded-xl border border-red-400/40 bg-red-500/10 p-3 text-left">
+    <div
+      ref={ref}
+      id={id}
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      tabIndex={-1}
+      className="rounded-xl border border-red-400/40 bg-red-500/10 p-3 text-left focus:outline-none focus:ring-2 focus:ring-red-300/60"
+    >
       <p className="text-[11px] uppercase tracking-[0.25em] text-red-200 font-semibold">
-        ⚠ Couldn't send
+        <span aria-hidden="true">⚠ </span>
+        <span className="sr-only">Error: </span>
+        Couldn't send
       </p>
       <p className="mt-1 text-[11px] text-red-100/90 break-words">{error}</p>
       <div className="mt-3 flex flex-wrap gap-2">
         <button
+          ref={retryRef}
           type="button"
           onClick={onRetry}
           disabled={retrying}
-          className="inline-flex items-center gap-1.5 rounded-full bg-gold text-[#0c2218] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 disabled:opacity-60"
+          aria-label={retrying ? "Retrying to send your message" : "Retry sending your message"}
+          aria-busy={retrying}
+          className="inline-flex items-center gap-1.5 rounded-full bg-gold text-[#0c2218] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c2218]"
         >
-          {retrying && <Loader2 className="w-3 h-3 animate-spin" />}
+          {retrying && <Loader2 className="w-3 h-3 animate-spin" aria-hidden="true" />}
           {retrying ? "Retrying…" : "Retry"}
         </button>
         <a
           href={`https://wa.me/${PHONE.replace(/\D/g, "")}?text=${waText}`}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center rounded-full border border-gold/50 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold hover:bg-gold/10"
+          aria-label="Contact us on WhatsApp instead (opens in a new tab)"
+          className="inline-flex items-center rounded-full border border-gold/50 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold hover:bg-gold/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c2218]"
         >
           WhatsApp instead
         </a>
       </div>
     </div>
   );
-};
+});
+ErrorBanner.displayName = "ErrorBanner";
+
+// Visually hidden live region for inline validation errors so screen readers
+// announce them without relying on a visible banner.
+const SrLive = ({ message }: { message: string }) => (
+  <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+    {message}
+  </div>
+);
+
 
 const EntryPopup = () => {
   const [open, setOpen] = useState(false);
