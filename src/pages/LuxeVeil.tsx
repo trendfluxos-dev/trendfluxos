@@ -457,15 +457,18 @@ const LuxeVeilExperience = () => (
     </section>
 
     {/* CTA */}
-    <section className="relative mx-auto max-w-2xl rounded-3xl border border-gold/40 bg-gradient-to-br from-[#0b1f3a]/80 to-[#07182e]/90 p-8 text-center">
+    <section id="contact" className="relative mx-auto max-w-2xl rounded-3xl border border-gold/40 bg-gradient-to-br from-[#0b1f3a]/80 to-[#07182e]/90 p-8 text-center scroll-mt-24">
       <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">💌 Book Your Experience</p>
       <h3 className="mt-3 font-display text-2xl text-white">Reserve Your Sanctuary</h3>
-      <div className="mt-6 flex justify-center">
-        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
-          ✈️ Message on Telegram
+      <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <a href={`tel:${PHONE}`} className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+          📞 Call {PHONE}
         </a>
+        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="border border-gold/60 text-gold px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition">
+          ✈️ Telegram
+        </a>
+        <CopyPhoneButton />
       </div>
-      <p className="mt-3 text-xs text-white/50">{PHONE}</p>
     </section>
 
     {/* Bangla */}
