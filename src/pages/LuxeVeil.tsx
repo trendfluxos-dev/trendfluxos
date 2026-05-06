@@ -784,18 +784,19 @@ const CopyPhoneButton = () => {
 };
 
 const WhatsAppPill = () => {
-  const wa = `https://wa.me/${PHONE.replace(/\D/g, "")}?text=${encodeURIComponent("Hi Luxe Veil — I'd like to book.")}`;
+  const tg = "https://t.me/luxeveil";
   return (
     <a
-      href={wa}
+      href={tg}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--lv-ink))] text-white px-5 py-2.5 text-xs font-semibold tracking-wide hover:bg-[hsl(var(--lv-ink)/0.9)] transition shadow-sm"
+      aria-label="Connect with Luxe Veil on Telegram (opens in a new tab)"
+      className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--lv-ink))] text-white px-5 py-2.5 text-xs font-semibold tracking-wide hover:bg-[hsl(var(--lv-ink)/0.9)] transition shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
     >
       <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
-        <path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12a11.9 11.9 0 0 0 1.64 6L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52ZM12 22a9.93 9.93 0 0 1-5.07-1.39l-.36-.21-3.67.96.98-3.58-.23-.37A9.94 9.94 0 1 1 22 12c0 5.52-4.48 10-10 10Zm5.47-7.47c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.79-1.67-2.09-.17-.3-.02-.46.13-.61.13-.13.3-.34.45-.51.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37s-1.04 1.02-1.04 2.49 1.07 2.89 1.22 3.09c.15.2 2.1 3.21 5.1 4.5.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35Z"/>
+        <path d="M9.78 15.27 9.6 19a.62.62 0 0 0 1.05.46l2.18-2.09 4.52 3.31c.83.46 1.42.22 1.63-.77l2.96-13.86c.28-1.27-.46-1.77-1.27-1.47L2.4 10.2c-1.24.49-1.22 1.18-.22 1.5l4.6 1.43L17.5 6.7c.5-.32.96-.14.58.21l-8.3 7.36Z"/>
       </svg>
-      WhatsApp Booking
+      Connect on Telegram
     </a>
   );
 };
