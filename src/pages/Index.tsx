@@ -459,7 +459,7 @@ const Index = () => {
               — The Journey
             </p>
             <h3 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
-              From <span className="text-gradient">whistleblower</span> to growth operator
+              From <span className="text-gradient">Stand</span> to Spotlight
             </h3>
           </div>
 
