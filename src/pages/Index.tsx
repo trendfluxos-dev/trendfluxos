@@ -582,12 +582,14 @@ const Index = () => {
               </span>
               {HEADLINE_VARIANTS.map((v) => {
                 const active = v.id === headline.id;
+                const isBn = /[\u0980-\u09FF]/.test(v.label);
                 return (
                   <button
                     key={v.id}
                     type="button"
                     onClick={() => selectHeadline(v.id)}
                     aria-pressed={active}
+                    lang={isBn ? "bn" : undefined}
                     className={`rounded-full border px-3 py-1 text-[11px] transition-colors ${
                       active
                         ? "border-gold bg-gold/15 text-gold"
