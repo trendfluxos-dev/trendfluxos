@@ -405,12 +405,12 @@ const EntryPopup = () => {
 };
 
 const ContactForm = () => {
-  const { toast } = useToast();
   const [form, setForm] = useState({ name: "", whatsapp: "", message: "" });
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
+  const [sending, setSending] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const name = form.name.trim();
     const wa = form.whatsapp.trim();
@@ -419,26 +419,25 @@ const ContactForm = () => {
     if (!/^[+\d][\d\s-]{6,}$/.test(wa)) return setErr("Please enter a valid WhatsApp number");
     if (msg.length < 5) return setErr("Please add a short message");
     setErr("");
+    setSending(true);
+    const res = await sendToTelegram({ name, whatsapp: wa, message: msg });
+    setSending(false);
+    if (!res.ok) return setErr(res.error || "Could not send. Please try again.");
     try {
       const lead = { name, whatsapp: wa, message: msg, ts: new Date().toISOString() };
       const list = JSON.parse(localStorage.getItem("luxe_veil_contacts") || "[]");
       list.push(lead);
       localStorage.setItem("luxe_veil_contacts", JSON.stringify(list));
     } catch {}
-    sendToTelegram({ name, whatsapp: wa, message: msg });
-    toast({ title: "Opening Telegram", description: "Your message is copied — redirecting to the group." });
     setDone(true);
     setForm({ name: "", whatsapp: "", message: "" });
-    setTimeout(() => {
-      window.location.href = TELEGRAM_GROUP;
-    }, 1200);
   };
 
   if (done) {
     return (
       <div className="mt-6 rounded-2xl border border-gold/40 bg-[#07182e]/70 p-6 text-center">
-        <p className="text-sm text-gold uppercase tracking-[0.25em]">✓ Thank you</p>
-        <p className="mt-2 text-xs text-white/70">Your request has been received. We'll reach out shortly.</p>
+        <p className="text-sm text-gold uppercase tracking-[0.25em]">✓ Message Sent</p>
+        <p className="mt-2 text-xs text-white/70">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
         <button
           onClick={() => setDone(false)}
           className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold/80 hover:text-gold"
@@ -462,9 +461,11 @@ const ContactForm = () => {
       {err && <p className="text-[11px] text-red-300">{err}</p>}
       <button
         type="submit"
-        className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
+        disabled={sending}
+        className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
       >
-        Send Message
+        {sending && <Loader2 className="w-3 h-3 animate-spin" />}
+        {sending ? "Sending…" : "Send Message"}
       </button>
     </form>
   );
