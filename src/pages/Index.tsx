@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -295,6 +295,23 @@ const Index = () => {
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
+  const [veilOpen, setVeilOpen] = useState(false);
+  const [veilCode, setVeilCode] = useState("");
+  const [veilError, setVeilError] = useState("");
+  const navigate = useNavigate();
+  const VALID_VEIL_CODES = ["LUXE2026", "VEIL-INVITE", "TRENDFLUX-PRIVATE"];
+  const submitVeilCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (VALID_VEIL_CODES.includes(veilCode.trim().toUpperCase())) {
+      try { localStorage.setItem("luxe_veil_unlocked", "1"); } catch { /* ignore */ }
+      setVeilOpen(false);
+      setVeilCode("");
+      setVeilError("");
+      navigate("/luxe-veil");
+    } else {
+      setVeilError("Invalid invitation code. Please check with your host.");
+    }
+  };
   const { items: dbPress } = usePressItems();
   const [headlineId, setHeadlineId] = useState<string>(() => {
     if (typeof window === "undefined") return HEADLINE_VARIANTS[0].id;
@@ -1037,10 +1054,11 @@ const Index = () => {
               <p className="relative mt-1 text-xs text-foreground/55">Creator network for serious brands.</p>
             </Link>
 
-            <div
-              aria-disabled
+            <button
+              type="button"
+              onClick={() => { setVeilError(""); setVeilOpen(true); }}
               title="Luxe Veil is invite-only"
-              className="tier-card tier-card-3 relative cursor-not-allowed overflow-hidden rounded-2xl border border-gold/30 bg-[#07182e]/60 p-5 text-left"
+              className="tier-card tier-card-3 relative overflow-hidden rounded-2xl border border-gold/30 bg-[#07182e]/60 p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/70 hover:bg-gold/5"
             >
               <span className="tier-sheen" aria-hidden />
               <div className="relative flex items-center justify-between">
@@ -1052,7 +1070,7 @@ const Index = () => {
               <span className="absolute right-3 bottom-3 text-[9px] uppercase tracking-[0.3em] text-gold/60">
                 Locked
               </span>
-            </div>
+            </button>
           </div>
 
           <button
