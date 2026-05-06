@@ -623,12 +623,18 @@ const ContactForm = () => {
 
   if (done) {
     return (
-      <div className="mt-6 rounded-2xl border border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream))] p-6 text-center">
+      <div
+        className="mt-6 rounded-2xl border border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream))] p-6 text-center"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <p className="text-sm text-[hsl(var(--lv-gold))] uppercase tracking-[0.25em] font-semibold">✓ Message Sent</p>
         <p className="mt-2 text-xs text-[hsl(var(--lv-ink-soft))]">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
         <button
+          ref={sendAnotherRef}
           onClick={() => setDone(false)}
-          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-[hsl(var(--lv-ink))] hover:text-[hsl(var(--lv-gold))]"
+          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-[hsl(var(--lv-ink))] hover:text-[hsl(var(--lv-gold))] focus:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--lv-gold))] rounded"
         >
           Send another
         </button>
@@ -639,7 +645,7 @@ const ContactForm = () => {
   const field = "w-full bg-white border border-[hsl(var(--lv-hairline))] focus:border-[hsl(var(--lv-gold))] rounded-xl px-4 py-2.5 text-sm text-[hsl(var(--lv-ink))] outline-none placeholder:text-[hsl(var(--lv-ink)/0.4)]";
 
   return (
-    <form onSubmit={submit} className="mt-6 mx-auto max-w-md text-left space-y-3">
+    <form onSubmit={submit} aria-busy={sending} className="mt-6 mx-auto max-w-md text-left space-y-3">
       <input className={field} placeholder="Your name" value={form.name}
         onChange={(e) => setForm({ ...form, name: e.target.value })} />
       <input className={field} placeholder="WhatsApp number" inputMode="tel" value={form.whatsapp}
@@ -647,17 +653,30 @@ const ContactForm = () => {
       <textarea rows={3} className={field} placeholder="How can we help?" value={form.message}
         onChange={(e) => setForm({ ...form, message: e.target.value })} />
       <TargetSelect targets={targets} value={target} onChange={setTarget} />
-      {err && <p className="text-[11px] text-red-600">{err}</p>}
+      {err && (
+        <p
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          className="text-[11px] text-red-600"
+        >
+          {err}
+        </p>
+      )}
       {sendErr && (
         <ErrorBanner
+          id="contact-send-error"
           error={sendErr}
           retrying={sending}
           onRetry={() => doSend(form.name.trim(), form.whatsapp.trim(), form.message.trim())}
         />
       )}
+      <SrLive key={`contact-${errorNonce}`} message={sendErr} />
       <button
         type="submit"
         disabled={sending}
+        aria-invalid={!!sendErr}
+        aria-describedby={sendErr ? "contact-send-error" : undefined}
         className="w-full bg-[hsl(var(--lv-ink))] text-white py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-[hsl(var(--lv-ink)/0.9)] transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
       >
         {sending && <Loader2 className="w-3 h-3 animate-spin" />}
