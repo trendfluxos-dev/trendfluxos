@@ -114,7 +114,7 @@ const LuxeVeil = () => {
       </section>
 
       {!unlocked ? (
-        <section className="relative mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#07182e]/70 backdrop-blur p-8 text-center">
+        <section className="relative mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#0c2218]/70 backdrop-blur p-8 text-center">
           {/* Inner hairline + corner crests */}
           <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.4rem] border border-gold/15" />
           <span aria-hidden className="absolute -top-2 left-1/2 -translate-x-1/2 text-gold/70 text-xs">◆</span>
@@ -136,7 +136,7 @@ const LuxeVeil = () => {
             {error && <p className="text-xs text-red-300">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
+              className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
             >
               Unlock Experience
             </button>
@@ -269,7 +269,7 @@ const RequestInviteForm = () => {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-50 inline-flex items-center justify-center gap-2"
+        className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-50 inline-flex items-center justify-center gap-2"
       >
         {submitting && <Loader2 className="w-3 h-3 animate-spin" />}
         Submit Request
@@ -295,13 +295,19 @@ const buildTelegramMessage = (d: { name: string; whatsapp: string; message?: str
 const telegramShareUrl = (text: string) =>
   `https://t.me/share/url?url=${encodeURIComponent(TELEGRAM_GROUP)}&text=${encodeURIComponent(text)}`;
 
-const sendToTelegram = async (data: { name: string; whatsapp: string; message?: string }) => {
-  const text = buildTelegramMessage(data);
+const sendToTelegram = async (
+  data: { name: string; whatsapp: string; message?: string },
+): Promise<{ ok: boolean; error?: string }> => {
   try {
-    await navigator.clipboard.writeText(text);
-  } catch {}
-  // Open share sheet (lets user pick the group and pre-fills the text)
-  window.open(telegramShareUrl(text), "_blank", "noopener,noreferrer");
+    const { data: res, error } = await supabase.functions.invoke("telegram-submit", {
+      body: data,
+    });
+    if (error) return { ok: false, error: error.message };
+    if (res && res.ok) return { ok: true };
+    return { ok: false, error: (res && res.error) || "Failed to send" };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : "Network error" };
+  }
 };
 
 const EntryPopup = () => {
@@ -323,13 +329,20 @@ const EntryPopup = () => {
     setOpen(false);
   };
 
-  const submit = (e: React.FormEvent) => {
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const name = form.name.trim();
     const wa = form.whatsapp.trim();
     if (name.length < 2) return setErr("Please enter your name");
     if (!/^[+\d][\d\s-]{6,}$/.test(wa)) return setErr("Please enter a valid WhatsApp number");
     setErr("");
+    setSending(true);
+    const res = await sendToTelegram({ name, whatsapp: wa });
+    setSending(false);
+    if (!res.ok) return setErr(res.error || "Could not send. Please try again.");
     try {
       const lead = { name, whatsapp: wa, ts: new Date().toISOString() };
       const list = JSON.parse(localStorage.getItem("luxe_veil_leads") || "[]");
@@ -337,13 +350,13 @@ const EntryPopup = () => {
       localStorage.setItem("luxe_veil_leads", JSON.stringify(list));
     } catch {}
     sessionStorage.setItem("luxe_veil_entry_seen", "1");
-    sendToTelegram({ name, whatsapp: wa });
-    setOpen(false);
+    setSent(true);
+    setTimeout(() => setOpen(false), 1600);
   };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-3xl border border-gold/40 bg-[#07182e] p-7 text-center shadow-2xl">
+      <div className="relative w-full max-w-md rounded-3xl border border-gold/40 bg-[#0c2218] p-7 text-center shadow-2xl">
         <button
           onClick={close}
           aria-label="Close"
@@ -352,44 +365,52 @@ const EntryPopup = () => {
           ×
         </button>
         <p className="text-[10px] uppercase tracking-[0.4em] text-gold/80">🌸 Welcome to Luxe Veil</p>
-        <h3 className="mt-3 font-display text-xl text-white">Join Our Private Telegram</h3>
+        <h3 className="mt-3 font-display text-xl text-white">Connect with us privately</h3>
         <p className="mt-2 text-xs text-white/60">
-          Share your details and we'll connect you instantly.
+          Share your details — our concierge will reach out shortly.
         </p>
-        <form onSubmit={submit} className="mt-5 space-y-3 text-left">
-          <input
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            placeholder="Your name"
-            className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
-          />
-          <input
-            value={form.whatsapp}
-            onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-            placeholder="WhatsApp number"
-            inputMode="tel"
-            className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
-          />
-          {err && <p className="text-[11px] text-red-300">{err}</p>}
-          <button
-            type="submit"
-            className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
-          >
-            ✈️ Continue to Telegram
-          </button>
-        </form>
+        {sent ? (
+          <div className="mt-6 rounded-xl border border-gold/40 bg-gold/10 p-4 text-sm text-gold">
+            ✓ Sent — your details are with our team.
+          </div>
+        ) : (
+          <form onSubmit={submit} className="mt-5 space-y-3 text-left">
+            <input
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="Your name"
+              className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
+            />
+            <input
+              value={form.whatsapp}
+              onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+              placeholder="WhatsApp number"
+              inputMode="tel"
+              className="w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30"
+            />
+            {err && <p className="text-[11px] text-red-300">{err}</p>}
+            <button
+              type="submit"
+              disabled={sending}
+              className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
+            >
+              {sending && <Loader2 className="w-3 h-3 animate-spin" />}
+              {sending ? "Sending…" : "Send to Concierge"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
 };
 
 const ContactForm = () => {
-  const { toast } = useToast();
   const [form, setForm] = useState({ name: "", whatsapp: "", message: "" });
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
+  const [sending, setSending] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const name = form.name.trim();
     const wa = form.whatsapp.trim();
@@ -398,26 +419,25 @@ const ContactForm = () => {
     if (!/^[+\d][\d\s-]{6,}$/.test(wa)) return setErr("Please enter a valid WhatsApp number");
     if (msg.length < 5) return setErr("Please add a short message");
     setErr("");
+    setSending(true);
+    const res = await sendToTelegram({ name, whatsapp: wa, message: msg });
+    setSending(false);
+    if (!res.ok) return setErr(res.error || "Could not send. Please try again.");
     try {
       const lead = { name, whatsapp: wa, message: msg, ts: new Date().toISOString() };
       const list = JSON.parse(localStorage.getItem("luxe_veil_contacts") || "[]");
       list.push(lead);
       localStorage.setItem("luxe_veil_contacts", JSON.stringify(list));
     } catch {}
-    sendToTelegram({ name, whatsapp: wa, message: msg });
-    toast({ title: "Opening Telegram", description: "Your message is copied — redirecting to the group." });
     setDone(true);
     setForm({ name: "", whatsapp: "", message: "" });
-    setTimeout(() => {
-      window.location.href = TELEGRAM_GROUP;
-    }, 1200);
   };
 
   if (done) {
     return (
-      <div className="mt-6 rounded-2xl border border-gold/40 bg-[#07182e]/70 p-6 text-center">
-        <p className="text-sm text-gold uppercase tracking-[0.25em]">✓ Thank you</p>
-        <p className="mt-2 text-xs text-white/70">Your request has been received. We'll reach out shortly.</p>
+      <div className="mt-6 rounded-2xl border border-gold/40 bg-[#0c2218]/70 p-6 text-center">
+        <p className="text-sm text-gold uppercase tracking-[0.25em]">✓ Message Sent</p>
+        <p className="mt-2 text-xs text-white/70">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
         <button
           onClick={() => setDone(false)}
           className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold/80 hover:text-gold"
@@ -441,9 +461,11 @@ const ContactForm = () => {
       {err && <p className="text-[11px] text-red-300">{err}</p>}
       <button
         type="submit"
-        className="w-full bg-gold text-[#07182e] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
+        disabled={sending}
+        className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
       >
-        Send Message
+        {sending && <Loader2 className="w-3 h-3 animate-spin" />}
+        {sending ? "Sending…" : "Send Message"}
       </button>
     </form>
   );
@@ -478,7 +500,7 @@ const SIGNATURE: Service[] = [
 const ServiceGrid = ({ items }: { items: Service[] }) => (
   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {items.map((s) => (
-      <div key={s.name} className="relative rounded-2xl border border-gold/25 bg-[#07182e]/60 p-5 hover:border-gold/60 transition">
+      <div key={s.name} className="relative rounded-2xl border border-gold/25 bg-[#0c2218]/60 p-5 hover:border-gold/60 transition">
         <h4 className="font-display text-lg text-gold">{s.name}</h4>
         <p className="mt-1 text-xs text-white/60 leading-relaxed">{s.desc}</p>
         <ul className="mt-3 space-y-1 text-sm text-white/85">
@@ -531,7 +553,7 @@ const LuxeVeilExperience = () => (
     {/* Welcome / Hero */}
     <section className="relative mx-auto max-w-4xl rounded-3xl border border-gold/30 overflow-hidden">
       <img src={luxeVeilSpa} alt="Luxe Veil spa interior" width={1920} height={1080} className="absolute inset-0 w-full h-full object-cover opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0b1f3a]/85 via-[#07182e]/80 to-[#0b1f3a]/90" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#11331f]/85 via-[#0c2218]/80 to-[#11331f]/90" />
       <div className="relative p-8 md:p-12 text-center">
       <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
       <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
@@ -552,7 +574,7 @@ const LuxeVeilExperience = () => (
         <span>✨ Feel renewed.</span>
       </div>
       <div className="mt-7 flex flex-wrap justify-center gap-3">
-        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0c2218] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
           📞 Contact
         </a>
         <CopyPhoneButton />
@@ -606,7 +628,7 @@ const LuxeVeilExperience = () => (
           "সহজ বুকিং (Call / WhatsApp)",
           "Privacy-focused service",
         ].map((w) => (
-          <li key={w} className="flex gap-2 items-start rounded-xl border border-gold/20 bg-[#07182e]/50 p-4">
+          <li key={w} className="flex gap-2 items-start rounded-xl border border-gold/20 bg-[#0c2218]/50 p-4">
             <span className="text-gold">✔</span>
             <span lang={/[\u0980-\u09FF]/.test(w) ? "bn" : undefined}>{w}</span>
           </li>
@@ -615,11 +637,11 @@ const LuxeVeilExperience = () => (
     </section>
 
     {/* CTA */}
-    <section id="contact" className="relative mx-auto max-w-2xl rounded-3xl border border-gold/40 bg-gradient-to-br from-[#0b1f3a]/80 to-[#07182e]/90 p-8 text-center scroll-mt-24">
+    <section id="contact" className="relative mx-auto max-w-2xl rounded-3xl border border-gold/40 bg-gradient-to-br from-[#11331f]/80 to-[#0c2218]/90 p-8 text-center scroll-mt-24">
       <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">💌 Book Your Experience</p>
       <h3 className="mt-3 font-display text-2xl text-white">Reserve Your Sanctuary</h3>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0c2218] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
           ✈️ Contact on Telegram
         </a>
         <CopyPhoneButton />
@@ -628,7 +650,7 @@ const LuxeVeilExperience = () => (
     </section>
 
     {/* Bangla */}
-    <section lang="bn" className="mx-auto max-w-2xl text-center rounded-3xl border border-gold/25 bg-[#07182e]/50 p-8">
+    <section lang="bn" className="mx-auto max-w-2xl text-center rounded-3xl border border-gold/25 bg-[#0c2218]/50 p-8">
       <p className="text-[11px] uppercase tracking-[0.35em] text-gold/70">বাংলায়</p>
       <h3 className="mt-3 font-display text-2xl text-white">আরাম, প্রশান্তি আর নতুন উদ্যম ✨</h3>
       <p className="mt-4 text-white/75 leading-relaxed">
