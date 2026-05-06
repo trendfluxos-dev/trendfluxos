@@ -697,7 +697,7 @@ const Index = () => {
                             </button>
                           </div>
                           <p className="mb-3 text-xs text-foreground/40">
-                            Click any headline for context, then read the original report.
+                            {headline.pressTagline}
                           </p>
                           <div className="grid gap-3 sm:grid-cols-2">
                             {item.press.map((p, idx) => (
