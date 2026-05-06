@@ -564,12 +564,14 @@ const Index = () => {
             </p>
             <h3
               key={`title-${headline.id}`}
+              lang={headline.id === "satyer-pakshe" ? "bn" : undefined}
               className="font-display text-3xl font-bold tracking-tight md:text-4xl animate-fade-in"
             >
               {headline.timeline}
             </h3>
             <p
               key={`tag-${headline.id}`}
+              lang={/[\u0980-\u09FF]/.test(headline.pressTagline) ? "bn" : undefined}
               className="mt-3 text-sm text-foreground/55 md:text-base animate-fade-in"
             >
               {headline.pressTagline}
