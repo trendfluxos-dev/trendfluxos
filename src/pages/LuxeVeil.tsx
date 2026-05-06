@@ -310,10 +310,48 @@ const sendToTelegram = async (
   }
 };
 
+const ErrorBanner = ({
+  error,
+  onRetry,
+  retrying,
+}: { error: string; onRetry: () => void; retrying: boolean }) => {
+  const waText = encodeURIComponent("Hi Luxe Veil — I'd like to inquire.");
+  return (
+    <div className="rounded-xl border border-red-400/40 bg-red-500/10 p-3 text-left">
+      <p className="text-[11px] uppercase tracking-[0.25em] text-red-200 font-semibold">
+        ⚠ Couldn't send
+      </p>
+      <p className="mt-1 text-[11px] text-red-100/90 break-words">{error}</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={onRetry}
+          disabled={retrying}
+          className="inline-flex items-center gap-1.5 rounded-full bg-gold text-[#0c2218] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 disabled:opacity-60"
+        >
+          {retrying && <Loader2 className="w-3 h-3 animate-spin" />}
+          {retrying ? "Retrying…" : "Retry"}
+        </button>
+        <a
+          href={`https://wa.me/${PHONE.replace(/\D/g, "")}?text=${waText}`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center rounded-full border border-gold/50 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold hover:bg-gold/10"
+        >
+          WhatsApp instead
+        </a>
+      </div>
+    </div>
+  );
+};
+
 const EntryPopup = () => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", whatsapp: "" });
   const [err, setErr] = useState("");
+  const [sendErr, setSendErr] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -329,20 +367,15 @@ const EntryPopup = () => {
     setOpen(false);
   };
 
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const name = form.name.trim();
-    const wa = form.whatsapp.trim();
-    if (name.length < 2) return setErr("Please enter your name");
-    if (!/^[+\d][\d\s-]{6,}$/.test(wa)) return setErr("Please enter a valid WhatsApp number");
-    setErr("");
+  const doSend = async (name: string, wa: string) => {
+    setSendErr("");
     setSending(true);
     const res = await sendToTelegram({ name, whatsapp: wa });
     setSending(false);
-    if (!res.ok) return setErr(res.error || "Could not send. Please try again.");
+    if (!res.ok) {
+      setSendErr(res.error || "Could not send. Please try again.");
+      return;
+    }
     try {
       const lead = { name, whatsapp: wa, ts: new Date().toISOString() };
       const list = JSON.parse(localStorage.getItem("luxe_veil_leads") || "[]");
