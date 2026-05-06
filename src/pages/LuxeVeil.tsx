@@ -587,12 +587,12 @@ const ContactForm = () => {
 
   if (done) {
     return (
-      <div className="mt-6 rounded-2xl border border-gold/40 bg-[#0c2218]/70 p-6 text-center">
-        <p className="text-sm text-gold uppercase tracking-[0.25em]">✓ Message Sent</p>
-        <p className="mt-2 text-xs text-white/70">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
+      <div className="mt-6 rounded-2xl border border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream))] p-6 text-center">
+        <p className="text-sm text-[hsl(var(--lv-gold))] uppercase tracking-[0.25em] font-semibold">✓ Message Sent</p>
+        <p className="mt-2 text-xs text-[hsl(var(--lv-ink-soft))]">Your inquiry has been delivered to our concierge. We'll be in touch shortly.</p>
         <button
           onClick={() => setDone(false)}
-          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold/80 hover:text-gold"
+          className="mt-4 text-[11px] uppercase tracking-[0.3em] text-[hsl(var(--lv-ink))] hover:text-[hsl(var(--lv-gold))]"
         >
           Send another
         </button>
@@ -600,7 +600,7 @@ const ContactForm = () => {
     );
   }
 
-  const field = "w-full bg-transparent border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/30";
+  const field = "w-full bg-white border border-[hsl(var(--lv-hairline))] focus:border-[hsl(var(--lv-gold))] rounded-xl px-4 py-2.5 text-sm text-[hsl(var(--lv-ink))] outline-none placeholder:text-[hsl(var(--lv-ink)/0.4)]";
 
   return (
     <form onSubmit={submit} className="mt-6 mx-auto max-w-md text-left space-y-3">
@@ -611,7 +611,7 @@ const ContactForm = () => {
       <textarea rows={3} className={field} placeholder="How can we help?" value={form.message}
         onChange={(e) => setForm({ ...form, message: e.target.value })} />
       <TargetSelect targets={targets} value={target} onChange={setTarget} />
-      {err && <p className="text-[11px] text-red-300">{err}</p>}
+      {err && <p className="text-[11px] text-red-600">{err}</p>}
       {sendErr && (
         <ErrorBanner
           error={sendErr}
@@ -622,7 +622,7 @@ const ContactForm = () => {
       <button
         type="submit"
         disabled={sending}
-        className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
+        className="w-full bg-[hsl(var(--lv-ink))] text-white py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-[hsl(var(--lv-ink)/0.9)] transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
       >
         {sending && <Loader2 className="w-3 h-3 animate-spin" />}
         {sending ? "Sending…" : "Send Message"}
@@ -660,14 +660,17 @@ const SIGNATURE: Service[] = [
 const ServiceGrid = ({ items }: { items: Service[] }) => (
   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {items.map((s) => (
-      <div key={s.name} className="relative rounded-2xl border border-gold/25 bg-[#0c2218]/60 p-5 hover:border-gold/60 transition">
-        <h4 className="font-display text-lg text-gold">{s.name}</h4>
-        <p className="mt-1 text-xs text-white/60 leading-relaxed">{s.desc}</p>
-        <ul className="mt-3 space-y-1 text-sm text-white/85">
+      <div
+        key={s.name}
+        className="relative rounded-2xl border border-[hsl(var(--lv-hairline))] bg-white/70 p-5 shadow-sm hover:shadow-md hover:border-[hsl(var(--lv-gold)/0.6)] transition"
+      >
+        <h4 className="font-display text-lg text-[hsl(var(--lv-ink))]">{s.name}</h4>
+        <p className="mt-1 text-xs text-[hsl(var(--lv-ink-soft))] leading-relaxed">{s.desc}</p>
+        <ul className="mt-3 space-y-1 text-sm">
           {s.tiers.map((t) => (
-            <li key={t.dur} className="flex items-center justify-between border-t border-gold/10 pt-1.5">
-              <span className="text-white/60">⏱ {t.dur}</span>
-              <span className="font-semibold text-gold">{t.price}</span>
+            <li key={t.dur} className="flex items-center justify-between border-t border-[hsl(var(--lv-hairline))] pt-1.5">
+              <span className="text-[hsl(var(--lv-ink-soft))]">⏱ {t.dur}</span>
+              <span className="font-semibold text-[hsl(var(--lv-gold))]">{t.price}</span>
             </li>
           ))}
         </ul>
@@ -676,13 +679,29 @@ const ServiceGrid = ({ items }: { items: Service[] }) => (
   </div>
 );
 
-const SectionHeader = ({ eyebrow, title }: { eyebrow: string; title: string }) => (
-  <div className="text-center mb-8">
-    <p className="text-[10px] uppercase tracking-[0.4em] text-gold/70">{eyebrow}</p>
-    <h3 className="mt-2 font-display text-2xl md:text-3xl text-white">{title}</h3>
-    <span className="mt-3 inline-block w-16 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-  </div>
-);
+const SectionHeader = ({ eyebrow, title, accent }: { eyebrow: string; title: string; accent?: string }) => {
+  // If accent provided, render as italic gold serif word inside the title where {accent} appears
+  const renderTitle = () => {
+    if (!accent || !title.includes(accent)) return <>{title}</>;
+    const [before, after] = title.split(accent);
+    return (
+      <>
+        {before}
+        <em className="lv-italic-gold">{accent}</em>
+        {after}
+      </>
+    );
+  };
+  return (
+    <div className="text-center mb-8">
+      <p className="lv-eyebrow">{eyebrow}</p>
+      <h3 className="mt-2 font-display text-3xl md:text-4xl text-[hsl(var(--lv-ink))] leading-tight">
+        {renderTitle()}
+      </h3>
+      <span className="mt-3 lv-divider" />
+    </div>
+  );
+};
 
 const CopyPhoneButton = () => {
   const { toast } = useToast();
@@ -700,132 +719,188 @@ const CopyPhoneButton = () => {
   return (
     <button
       onClick={copy}
-      className="border border-gold/60 text-gold px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition"
+      className="border border-[hsl(var(--lv-ink)/0.3)] text-[hsl(var(--lv-ink))] px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-[hsl(var(--lv-ink)/0.05)] transition"
     >
       {copied ? "✓ Copied" : "📋 Copy Phone"}
     </button>
   );
 };
 
+const WhatsAppPill = () => {
+  const wa = `https://wa.me/${PHONE.replace(/\D/g, "")}?text=${encodeURIComponent("Hi Luxe Veil — I'd like to book.")}`;
+  return (
+    <a
+      href={wa}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--lv-ink))] text-white px-5 py-2.5 text-xs font-semibold tracking-wide hover:bg-[hsl(var(--lv-ink)/0.9)] transition shadow-sm"
+    >
+      <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden="true">
+        <path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12a11.9 11.9 0 0 0 1.64 6L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.21-3.48-8.52ZM12 22a9.93 9.93 0 0 1-5.07-1.39l-.36-.21-3.67.96.98-3.58-.23-.37A9.94 9.94 0 1 1 22 12c0 5.52-4.48 10-10 10Zm5.47-7.47c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.95 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.79-1.67-2.09-.17-.3-.02-.46.13-.61.13-.13.3-.34.45-.51.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37s-1.04 1.02-1.04 2.49 1.07 2.89 1.22 3.09c.15.2 2.1 3.21 5.1 4.5.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35Z"/>
+      </svg>
+      WhatsApp Booking
+    </a>
+  );
+};
+
+const TrustStrip = () => (
+  <div className="border-y border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream)/0.5)]">
+    <div className="mx-auto max-w-5xl px-4 py-5 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      {[
+        { label: "Certified therapists" },
+        { label: "Hygiene-first rooms" },
+        { label: "Natural oils & herbs" },
+        { label: "Discreet & private" },
+      ].map((t) => (
+        <div key={t.label} className="flex items-center justify-center gap-2 text-xs md:text-sm text-[hsl(var(--lv-ink))]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--lv-gold))]" aria-hidden="true" />
+          {t.label}
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 const LuxeVeilExperience = () => (
-  <div className="space-y-16">
+  <div className="space-y-0">
     <EntryPopup />
-    {/* Welcome / Hero */}
-    <section className="relative mx-auto max-w-4xl rounded-3xl border border-gold/30 overflow-hidden">
+
+    {/* Light-themed navbar pill row */}
+    <div className="lv-light border-b border-[hsl(var(--lv-hairline))]">
+      <div className="mx-auto max-w-5xl px-4 py-3 flex items-center justify-between">
+        <p className="font-display text-sm md:text-base tracking-[0.3em] text-[hsl(var(--lv-ink))]">
+          LUXE <em className="lv-italic-gold not-italic md:italic">VEIL</em>
+        </p>
+        <WhatsAppPill />
+      </div>
+    </div>
+
+    {/* Welcome / Hero (kept dark) */}
+    <section className="relative mx-auto max-w-5xl mt-8 rounded-3xl border border-gold/30 overflow-hidden">
       <img src={luxeVeilSpa} alt="Luxe Veil spa interior" width={1920} height={1080} className="absolute inset-0 w-full h-full object-cover opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#11331f]/85 via-[#0c2218]/80 to-[#11331f]/90" />
-      <div className="relative p-8 md:p-12 text-center">
-      <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
-      <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
-      <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/60" />
-      <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/60" />
-      <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">Relax · Refresh · Rejuvenate 🌸</p>
-      <h2 className="mt-4 font-display text-3xl md:text-4xl text-white leading-tight">
-        Your Private Sanctuary of <span className="text-gold">Relaxation & Wellness</span> 🌿
-      </h2>
-      <p className="mt-5 text-white/70 leading-relaxed max-w-xl mx-auto">
-        Step away from the noise of everyday life and enter a refined space of calm,
-        comfort, and care at LUXE VEIL. Every experience is crafted to restore balance,
-        ease tension, and elevate your well-being.
-      </p>
-      <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/80">
-        <span>💆‍♀️ Feel the calm.</span>
-        <span>💆‍♂️ Feel the care.</span>
-        <span>✨ Feel renewed.</span>
-      </div>
-      <div className="mt-7 flex flex-wrap justify-center gap-3">
-        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0c2218] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
-          📞 Contact
-        </a>
-        <CopyPhoneButton />
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#11331f]/90 via-[#0c2218]/85 to-[#11331f]/95" />
+      <div className="relative p-8 md:p-14 text-center">
+        <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
+        <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
+        <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/60" />
+        <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/60" />
+        <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">Relax · Refresh · Rejuvenate</p>
+        <h2 className="mt-5 font-display text-4xl md:text-5xl text-white leading-[1.1] max-w-3xl mx-auto">
+          Your private sanctuary of{" "}
+          <em className="lv-italic-gold text-[1.05em]">relaxation</em>
+          <span> &amp; wellness.</span>
+        </h2>
+        <p className="mt-6 text-white/75 leading-relaxed max-w-xl mx-auto">
+          Step away from the noise of everyday life and enter a refined space of calm,
+          comfort, and care at LUXE VEIL.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0c2218] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+            Contact Concierge
+          </a>
+          <a href="#contact" className="border border-gold/60 text-gold px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition">
+            View Services
+          </a>
+        </div>
       </div>
     </section>
 
-    {/* About */}
-    <section className="mx-auto max-w-3xl text-center">
-      <SectionHeader eyebrow="About Us" title="Wellness is essential — not optional" />
-      <p className="text-white/70 leading-relaxed">
-        At LUXE VEIL, we focus on delivering a discreet, premium experience designed to
-        reduce stress, release deep muscle tension, improve circulation, and restore
-        energy & mental clarity.
-      </p>
-      <ul className="mt-5 grid sm:grid-cols-2 gap-3 text-sm text-white/80 text-left max-w-md mx-auto">
-        <li className="flex gap-2"><span className="text-gold">✦</span> Reduce stress</li>
-        <li className="flex gap-2"><span className="text-gold">✦</span> Release deep muscle tension</li>
-        <li className="flex gap-2"><span className="text-gold">✦</span> Improve circulation</li>
-        <li className="flex gap-2"><span className="text-gold">✦</span> Restore energy & clarity</li>
-      </ul>
-      
-    </section>
+    {/* Light body wrapper */}
+    <div className="lv-light mt-10 rounded-3xl">
+      <TrustStrip />
 
-    {/* Massage Therapies */}
-    <section>
-      <SectionHeader eyebrow="🌿 Massage Therapies" title="Our Services" />
-      <ServiceGrid items={MASSAGES} />
-    </section>
+      <div className="mx-auto max-w-5xl px-4 py-16 space-y-20">
+        {/* About */}
+        <section className="mx-auto max-w-3xl text-center">
+          <SectionHeader eyebrow="About Us" accent="essential" title="Wellness is essential — not optional" />
+          <p className="text-[hsl(var(--lv-ink-soft))] leading-relaxed">
+            At LUXE VEIL, we focus on delivering a discreet, premium experience designed to
+            reduce stress, release deep muscle tension, improve circulation, and restore
+            energy &amp; mental clarity.
+          </p>
+          <ul className="mt-6 grid sm:grid-cols-2 gap-3 text-sm text-[hsl(var(--lv-ink))] text-left max-w-md mx-auto">
+            <li className="flex gap-2"><span className="text-[hsl(var(--lv-gold))]">✦</span> Reduce stress</li>
+            <li className="flex gap-2"><span className="text-[hsl(var(--lv-gold))]">✦</span> Release deep muscle tension</li>
+            <li className="flex gap-2"><span className="text-[hsl(var(--lv-gold))]">✦</span> Improve circulation</li>
+            <li className="flex gap-2"><span className="text-[hsl(var(--lv-gold))]">✦</span> Restore energy &amp; clarity</li>
+          </ul>
+        </section>
 
-    {/* Specialty */}
-    <section>
-      <SectionHeader eyebrow="🌺 Specialty & Premium" title="Premium Treatments" />
-      <ServiceGrid items={SPECIALTY} />
-    </section>
+        {/* Massage Therapies */}
+        <section>
+          <SectionHeader eyebrow="Signature treatments" accent="body" title="Indulge body & mind." />
+          <ServiceGrid items={MASSAGES} />
+        </section>
 
-    {/* Signature */}
-    <section>
-      <SectionHeader eyebrow="💆 Signature" title="Signature Packages" />
-      <ServiceGrid items={SIGNATURE} />
-    </section>
+        {/* Specialty */}
+        <section className="lv-band rounded-3xl px-4 md:px-8 py-12 -mx-4 md:-mx-8">
+          <SectionHeader eyebrow="Specialty & Premium" accent="premium" title="Refined premium treatments" />
+          <ServiceGrid items={SPECIALTY} />
+        </section>
 
-    {/* Why Choose */}
-    <section className="mx-auto max-w-3xl">
-      <SectionHeader eyebrow="Why Choose" title="Why LUXE VEIL" />
-      <ul className="grid sm:grid-cols-2 gap-3 text-sm text-white/85">
-        {[
-          "Skilled & professional therapists",
-          "Clean, discreet & শান্ত পরিবেশ",
-          "Premium experience with fair pricing",
-          "সহজ বুকিং (Call / WhatsApp)",
-          "Privacy-focused service",
-        ].map((w) => (
-          <li key={w} className="flex gap-2 items-start rounded-xl border border-gold/20 bg-[#0c2218]/50 p-4">
-            <span className="text-gold">✔</span>
-            <span lang={/[\u0980-\u09FF]/.test(w) ? "bn" : undefined}>{w}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
+        {/* Signature */}
+        <section>
+          <SectionHeader eyebrow="Signature" accent="rituals" title="Curated signature rituals" />
+          <ServiceGrid items={SIGNATURE} />
+        </section>
 
-    {/* CTA */}
-    <section id="contact" className="relative mx-auto max-w-2xl rounded-3xl border border-gold/40 bg-gradient-to-br from-[#11331f]/80 to-[#0c2218]/90 p-8 text-center scroll-mt-24">
-      <p className="text-[11px] uppercase tracking-[0.4em] text-gold/80">💌 Book Your Experience</p>
-      <h3 className="mt-3 font-display text-2xl text-white">Reserve Your Sanctuary</h3>
-      <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0c2218] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
-          ✈️ Contact on Telegram
-        </a>
-        <CopyPhoneButton />
+        {/* Why Choose */}
+        <section className="mx-auto max-w-3xl">
+          <SectionHeader eyebrow="Why Choose" accent="LUXE" title="Why choose LUXE VEIL" />
+          <ul className="grid sm:grid-cols-2 gap-3 text-sm text-[hsl(var(--lv-ink))]">
+            {[
+              "Skilled & professional therapists",
+              "Clean, discreet & শান্ত পরিবেশ",
+              "Premium experience with fair pricing",
+              "সহজ বুকিং (Call / WhatsApp)",
+              "Privacy-focused service",
+            ].map((w) => (
+              <li key={w} className="flex gap-2 items-start rounded-xl border border-[hsl(var(--lv-hairline))] bg-white/70 p-4">
+                <span className="text-[hsl(var(--lv-gold))]">✔</span>
+                <span lang={/[\u0980-\u09FF]/.test(w) ? "bn" : undefined}>{w}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* CTA / Contact */}
+        <section
+          id="contact"
+          className="relative mx-auto max-w-2xl rounded-3xl border border-[hsl(var(--lv-hairline))] bg-white/80 p-8 text-center scroll-mt-24 shadow-sm"
+        >
+          <p className="lv-eyebrow">Book your experience</p>
+          <h3 className="mt-2 font-display text-3xl text-[hsl(var(--lv-ink))]">
+            Reserve your <em className="lv-italic-gold">sanctuary</em>
+          </h3>
+          <span className="mt-3 lv-divider" />
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-[hsl(var(--lv-ink))] text-white px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-[hsl(var(--lv-ink)/0.9)] transition">
+              Contact on Telegram
+            </a>
+            <CopyPhoneButton />
+          </div>
+          <ContactForm />
+        </section>
+
+        {/* Bangla */}
+        <section lang="bn" className="mx-auto max-w-2xl text-center rounded-3xl border border-[hsl(var(--lv-hairline))] bg-[hsl(var(--lv-cream))] p-8">
+          <p className="lv-eyebrow">বাংলায়</p>
+          <h3 className="mt-3 font-display text-2xl text-[hsl(var(--lv-ink))]">আরাম, প্রশান্তি আর নতুন উদ্যম ✨</h3>
+          <p className="mt-4 text-[hsl(var(--lv-ink-soft))] leading-relaxed">
+            সারা দিনের ক্লান্তি দূর করতে চলে আসুন LUXE VEIL-এ।
+            আপনার শরীর ও মনকে নতুন করে অনুভব করুন আমাদের প্রিমিয়াম সার্ভিসের মাধ্যমে।
+          </p>
+          <p className="mt-4 text-sm text-[hsl(var(--lv-gold))]">
+            🌿 রিল্যাক্স করুন • রিফ্রেশ হোন • নিজেকে নতুনভাবে আবিষ্কার করুন
+          </p>
+        </section>
       </div>
-      <ContactForm />
-    </section>
+    </div>
 
-    {/* Bangla */}
-    <section lang="bn" className="mx-auto max-w-2xl text-center rounded-3xl border border-gold/25 bg-[#0c2218]/50 p-8">
-      <p className="text-[11px] uppercase tracking-[0.35em] text-gold/70">বাংলায়</p>
-      <h3 className="mt-3 font-display text-2xl text-white">আরাম, প্রশান্তি আর নতুন উদ্যম ✨</h3>
-      <p className="mt-4 text-white/75 leading-relaxed">
-        সারা দিনের ক্লান্তি দূর করতে চলে আসুন LUXE VEIL-এ।
-        আপনার শরীর ও মনকে নতুন করে অনুভব করুন আমাদের প্রিমিয়াম সার্ভিসের মাধ্যমে।
-      </p>
-      <p className="mt-4 text-sm text-gold/90">
-        🌿 রিল্যাক্স করুন • রিফ্রেশ হোন • নিজেকে নতুনভাবে আবিষ্কার করুন
-      </p>
-    </section>
-
-    {/* Footer */}
-    <footer className="text-center pt-6 pb-2 border-t border-gold/15">
+    {/* Footer (kept dark to bookend) */}
+    <footer className="text-center pt-10 pb-4 mt-8 border-t border-gold/15">
       <p className="font-display text-lg text-gold tracking-[0.3em]">LUXE VEIL</p>
-      <p className="mt-1 text-xs text-white/60">Luxury Spa & Wellness Experience 🌺</p>
+      <p className="mt-1 text-xs text-white/60">Luxury Spa & Wellness Experience</p>
       <p className="mt-2 text-xs text-white/70">📞 {PHONE}</p>
     </footer>
   </div>

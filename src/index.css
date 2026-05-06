@@ -68,6 +68,41 @@
     --sidebar-accent-foreground: 40 30% 96%;
     --sidebar-border: 150 20% 18%;
     --sidebar-ring: 38 75% 58%;
+
+    /* Luxe Veil — light theme tokens (Spa Inn Bonani inspired) */
+    --lv-ivory: 40 45% 96%;          /* page bg */
+    --lv-cream: 38 38% 91%;          /* card bg */
+    --lv-cream-strong: 36 30% 85%;   /* alt band */
+    --lv-ink: 150 35% 10%;           /* deep green text */
+    --lv-ink-soft: 150 22% 28%;
+    --lv-gold: 38 65% 48%;           /* warm gold accent */
+    --lv-gold-soft: 38 75% 70%;
+    --lv-hairline: 36 28% 80%;
+  }
+}
+
+@layer components {
+  .lv-light { background: hsl(var(--lv-ivory)); color: hsl(var(--lv-ink)); }
+  .lv-card  { background: hsl(var(--lv-cream)); border: 1px solid hsl(var(--lv-hairline)); }
+  .lv-band  { background: hsl(var(--lv-cream)); }
+  .lv-italic-gold {
+    font-style: italic;
+    color: hsl(var(--lv-gold));
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    font-weight: 400;
+  }
+  .lv-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: hsl(var(--lv-gold));
+    font-weight: 600;
+  }
+  .lv-divider {
+    display: inline-block;
+    width: 56px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--lv-gold) / 0.7), transparent);
   }
 }
 
