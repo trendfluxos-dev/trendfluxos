@@ -337,7 +337,7 @@ const EntryPopup = () => {
       localStorage.setItem("luxe_veil_leads", JSON.stringify(list));
     } catch {}
     sessionStorage.setItem("luxe_veil_entry_seen", "1");
-    window.open(TELEGRAM_GROUP, "_blank", "noopener,noreferrer");
+    sendToTelegram({ name, whatsapp: wa });
     setOpen(false);
   };
 
