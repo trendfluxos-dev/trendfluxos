@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import luxeVeilSpa from "@/assets/luxe-veil-spa.jpg";
 import { BrandShell } from "@/components/BrandShell";
 import { Lock, Mail, KeyRound, Loader2 } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
@@ -336,7 +337,10 @@ const SectionHeader = ({ eyebrow, title }: { eyebrow: string; title: string }) =
 const LuxeVeilExperience = () => (
   <div className="space-y-16">
     {/* Welcome / Hero */}
-    <section className="relative mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur p-8 md:p-12 text-center overflow-hidden">
+    <section className="relative mx-auto max-w-4xl rounded-3xl border border-gold/30 overflow-hidden">
+      <img src={luxeVeilSpa} alt="Luxe Veil spa interior" width={1920} height={1080} className="absolute inset-0 w-full h-full object-cover opacity-40" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0b1f3a]/85 via-[#07182e]/80 to-[#0b1f3a]/90" />
+      <div className="relative p-8 md:p-12 text-center">
       <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
       <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
       <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/60" />
@@ -364,6 +368,7 @@ const LuxeVeilExperience = () => (
         </a>
       </div>
       <p className="mt-3 text-xs text-white/50">{PHONE}</p>
+      </div>
     </section>
 
     {/* About */}
