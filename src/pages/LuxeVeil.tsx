@@ -20,9 +20,11 @@ const requestSchema = z.object({
 
 const LuxeVeil = () => {
   useSeo({
-    title: "Luxe Veil — A Private Experience by TrendFlux",
+    title: "Luxe Veil — Luxury Spa & Wellness Experience by TrendFlux",
     description:
-      "An invite-only sanctuary for discerning clients. Luxe Veil is the private tier of the TrendFlux ecosystem — discretion, emotion, and craftsmanship.",
+      "Luxe Veil — a private, invite-only luxury spa & wellness sanctuary by TrendFlux. Discreet, refined, and curated for discerning clients.",
+    image: luxeVeilLogo,
+    type: "website",
   });
   useJsonLd({
     "@context": "https://schema.org",
@@ -977,11 +979,17 @@ const LuxeVeilExperience = () => (
             Reserve your <em className="lv-italic-gold">sanctuary</em>
           </h3>
           <span className="mt-3 lv-divider" />
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <div className="mt-6 flex flex-wrap justify-center items-center gap-3">
             <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-[hsl(var(--lv-ink))] text-white px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-[hsl(var(--lv-ink)/0.9)] transition">
               Contact on Telegram
             </a>
-            <CopyPhoneButton />
+            <a
+              href={`tel:${PHONE}`}
+              className="text-[hsl(var(--lv-ink))] font-semibold tracking-wide text-sm hover:text-[hsl(var(--lv-gold))] transition"
+              aria-label={`Call Luxe Veil at ${PHONE}`}
+            >
+              📞 {PHONE}
+            </a>
           </div>
           <ContactForm />
         </section>
