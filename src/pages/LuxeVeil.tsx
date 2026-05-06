@@ -282,6 +282,28 @@ const PHONE = "+8801972813761";
 const TELEGRAM = "https://t.me/luxe_veil";
 const TELEGRAM_GROUP = "https://t.me/+GAMSK09w_6Q3MGQ1";
 
+const buildTelegramMessage = (d: { name: string; whatsapp: string; message?: string }) => {
+  const lines = [
+    "🌸 New Luxe Veil Inquiry",
+    `👤 Name: ${d.name}`,
+    `📱 WhatsApp: ${d.whatsapp}`,
+  ];
+  if (d.message) lines.push(`💬 Message: ${d.message}`);
+  return lines.join("\n");
+};
+
+const telegramShareUrl = (text: string) =>
+  `https://t.me/share/url?url=${encodeURIComponent(TELEGRAM_GROUP)}&text=${encodeURIComponent(text)}`;
+
+const sendToTelegram = async (data: { name: string; whatsapp: string; message?: string }) => {
+  const text = buildTelegramMessage(data);
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {}
+  // Open share sheet (lets user pick the group and pre-fills the text)
+  window.open(telegramShareUrl(text), "_blank", "noopener,noreferrer");
+};
+
 const EntryPopup = () => {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ name: "", whatsapp: "" });
@@ -315,7 +337,7 @@ const EntryPopup = () => {
       localStorage.setItem("luxe_veil_leads", JSON.stringify(list));
     } catch {}
     sessionStorage.setItem("luxe_veil_entry_seen", "1");
-    window.open(TELEGRAM_GROUP, "_blank", "noopener,noreferrer");
+    sendToTelegram({ name, whatsapp: wa });
     setOpen(false);
   };
 
@@ -382,7 +404,8 @@ const ContactForm = () => {
       list.push(lead);
       localStorage.setItem("luxe_veil_contacts", JSON.stringify(list));
     } catch {}
-    toast({ title: "Message received", description: "We'll be in touch privately." });
+    sendToTelegram({ name, whatsapp: wa, message: msg });
+    toast({ title: "Opening Telegram", description: "Your message is ready — paste & send." });
     setDone(true);
     setForm({ name: "", whatsapp: "", message: "" });
   };
