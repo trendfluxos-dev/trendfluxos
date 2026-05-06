@@ -476,6 +476,7 @@ const EntryPopup = () => {
     setSending(false);
     if (!res.ok) {
       setSendErr(res.error || "Could not send. Please try again.");
+      setErrorNonce((n) => n + 1);
       return;
     }
     try {
