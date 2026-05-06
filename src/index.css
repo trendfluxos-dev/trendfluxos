@@ -88,7 +88,10 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "cv11";
     /* Safer wrapping defaults for mixed Latin + Bengali/Unicode text */
-    overflow-wrap: anywhere;
+    /* Safer wrapping defaults for mixed Latin + Bengali/Unicode text:
+       break-word only breaks strings that have no other break opportunity,
+       so normal English words like "TrendFlux" stay intact. */
+    overflow-wrap: break-word;
     word-break: normal;
     hyphens: none;
   }

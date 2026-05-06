@@ -14,7 +14,7 @@ const Navbar = () => {
     <header className="fixed top-0 inset-x-0 z-50">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 mt-4">
         <nav className="glass-strong rounded-full flex items-center justify-between px-5 py-3">
-          <Link to="/" className="flex items-center gap-2 font-display font-bold text-lg">
+          <Link to="/" className="flex items-center gap-2 font-display font-bold text-lg whitespace-nowrap shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-cyan animate-pulse-glow" />
             <span className="text-gradient">TrendFlux</span>
             <span className="text-foreground/60 font-normal">Digital</span>

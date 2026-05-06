@@ -343,7 +343,7 @@ const Index = () => {
       {/* Navbar */}
       <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-7xl rounded-full glass-strong">
         <div className="flex items-center justify-between px-5 md:px-8 py-3.5">
-          <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight">
+          <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight whitespace-nowrap shrink-0">
             <img src={trendfluxLogo} alt="TrendFlux Digital logo" className="h-8 w-8 object-contain" />
             TrendFlux <span className="text-gradient">Digital</span>
           </Link>
