@@ -246,7 +246,7 @@ const Index = () => {
 
           <div className="hidden md:flex items-center gap-8 text-sm text-foreground/70">
             <a href="#services" className="hover:text-gold transition-colors">Services</a>
-            <a href="#founder" className="hover:text-gold transition-colors">Founder</a>
+            <a href="#founder" className="hover:text-gold transition-colors">Brand Architect</a>
             <a href="#cases" className="hover:text-gold transition-colors">Case Studies</a>
             <Link to="/project-lead" className="hover:text-gold transition-colors">Project Lead</Link>
           </div>
