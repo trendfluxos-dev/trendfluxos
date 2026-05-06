@@ -24,7 +24,7 @@ const info: { label: Bi; value: Bi }[] = [
 ];
 
 const family: Bi[] = [
-  { en: "Father: Md. Mujahedul Islam — Retired Government Officer, Electro Medical Officer, Civil Surgeon Office.", bn: "পিতা: মো. মুজাহেদুল ইসলাম — অবসরপ্রাপ্ত সরকারি কর্মকর্তা, ইলেক্ট্রো মেডিকেল অফিসার, সিভিল সার্জন অফিস।" },
+  { en: "Father: Md. Mujahidul Islam — Retired Government Officer, Electro Medical Officer, Civil Surgeon Office.", bn: "পিতা: মো. মুজাহিদুল ইসলাম — অবসরপ্রাপ্ত সরকারি কর্মকর্তা, ইলেক্ট্রো মেডিকেল অফিসার, সিভিল সার্জন অফিস।" },
   { en: "Mother: Sharmin Akter Lucky — Housewife.", bn: "মাতা: শারমিন আক্তার লাকি — গৃহিণী।" },
   { en: "Siblings: 1 Sister.", bn: "ভাই-বোন: ১ বোন।" },
   { en: "Family is well-educated, culturally grounded, and socially respected.", bn: "পরিবার শিক্ষিত, সংস্কৃতিমনা এবং সামাজিকভাবে সম্মানিত।" },
