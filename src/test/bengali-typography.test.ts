@@ -15,7 +15,7 @@ describe("Global Bengali / Unicode typography", () => {
   });
 
   it("applies safer global wrapping defaults to body", () => {
-    expect(css).toMatch(/body\s*\{[^}]*overflow-wrap:\s*anywhere/s);
+    expect(css).toMatch(/body\s*\{[^}]*overflow-wrap:\s*break-word/s);
     expect(css).toMatch(/body\s*\{[^}]*hyphens:\s*none/s);
   });
 
