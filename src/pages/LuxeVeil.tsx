@@ -448,6 +448,7 @@ const EntryPopup = () => {
   const [form, setForm] = useState({ name: "", whatsapp: "" });
   const [err, setErr] = useState("");
   const [sendErr, setSendErr] = useState("");
+  const [errorNonce, setErrorNonce] = useState(0);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [target, setTarget] = useState("");
