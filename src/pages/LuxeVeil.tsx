@@ -152,19 +152,7 @@ const LuxeVeil = () => {
         </section>
       ) : (
         <>
-          <section className="relative mt-2 mx-auto max-w-3xl rounded-3xl border border-gold/30 bg-gradient-to-br from-[#0b1f3a]/80 via-[#07182e]/90 to-[#0b1f3a]/80 backdrop-blur p-8 text-center">
-            <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
-            <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
-            <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/60" />
-            <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/60" />
-            <p className="text-[11px] uppercase tracking-[0.35em] text-gold/70">
-              Welcome · Selectively Curated
-            </p>
-            <p className="mt-4 text-white/75 leading-relaxed">
-              Luxe Veil is reserved for a small circle of clients seeking discretion,
-              emotion, and craftsmanship at the highest level. Your access has been recognised.
-            </p>
-          </section>
+          <LuxeVeilExperience />
 
           <Testimonials
             title="Whispers from Inside the Veil"
