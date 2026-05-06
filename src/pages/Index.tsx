@@ -708,6 +708,7 @@ const Index = () => {
                           </div>
                           <p
                             key={`press-tag-${headline.id}`}
+                            lang={/[\u0980-\u09FF]/.test(headline.pressTagline) ? "bn" : undefined}
                             className="mb-3 text-xs text-foreground/40 animate-fade-in"
                           >
                             {headline.pressTagline}
