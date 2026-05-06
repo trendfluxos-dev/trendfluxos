@@ -1032,6 +1032,10 @@ const LuxeVeilExperience = () => (
               📞 {PHONE}
             </a>
           </div>
+          <div className="mt-6">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-[hsl(var(--lv-ink-soft))] mb-3">Share Luxe Veil</p>
+            <SocialShare title="Luxe Veil — Luxury Spa & Wellness by TrendFlux" source="luxe_veil_booking" />
+          </div>
           <ContactForm />
         </section>
 
