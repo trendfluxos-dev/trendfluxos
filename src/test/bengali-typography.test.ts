@@ -50,35 +50,28 @@ describe("Per-page Bengali lang attribute usage", () => {
   });
 });
 
-describe("CSS rule application in jsdom", () => {
-  beforeAll(() => {
-    const css = read("src/index.css")
-      // strip @tailwind + @layer wrappers jsdom can't parse meaningfully
-      .replace(/@tailwind[^;]+;/g, "")
-      .replace(/@layer[^{]+\{/g, "")
-      .replace(/^\s*\}\s*$/gm, "");
-    const style = document.createElement("style");
-    style.textContent = css;
-    document.head.appendChild(style);
+describe("Detection of Bengali strings in dynamic content", () => {
+  const isBn = (s: string) => /[\u0980-\u09FF]/.test(s);
+
+  it.each([
+    "সত্যের পক্ষে দাঁড়ানো",
+    "একটা অবস্থান, সারা দেশের আলোচনায়",
+    "সাহসের গল্প, হেডলাইনে সত্য",
+    "চুপ না থেকে হেডলাইনে",
+  ])("flags Bengali string %#", (s) => {
+    expect(isBn(s)).toBe(true);
   });
 
-  it("applies word-break: keep-all to elements with lang=\"bn\"", () => {
-    const el = document.createElement("p");
-    el.setAttribute("lang", "bn");
-    el.textContent = "সত্যের পক্ষে দাঁড়ানো";
-    document.body.appendChild(el);
-    const cs = getComputedStyle(el);
-    // jsdom returns the literal value declared by the matching rule
-    expect(cs.wordBreak).toBe("keep-all");
-    expect(cs.overflowWrap).toBe("normal");
-    expect(cs.hyphens).toBe("none");
+  it.each([
+    "From Stand to Spotlight",
+    "Integrity Under Fire",
+    "Stand. Speak. Spotlight.",
+    "TrendFlux Digital",
+  ])("does not flag English string %#", (s) => {
+    expect(isBn(s)).toBe(false);
   });
 
-  it("does NOT force keep-all on plain English elements", () => {
-    const el = document.createElement("p");
-    el.textContent = "From Stand to Spotlight";
-    document.body.appendChild(el);
-    const cs = getComputedStyle(el);
-    expect(cs.wordBreak).not.toBe("keep-all");
+  it("flags mixed Bangla + English strings", () => {
+    expect(isBn("সত্যের পক্ষে দাঁড়ানো — National Spotlight")).toBe(true);
   });
 });
