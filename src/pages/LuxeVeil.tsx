@@ -334,6 +334,29 @@ const SectionHeader = ({ eyebrow, title }: { eyebrow: string; title: string }) =
   </div>
 );
 
+const CopyPhoneButton = () => {
+  const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(PHONE);
+      setCopied(true);
+      toast({ title: "Phone copied", description: PHONE });
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: "Could not copy", description: PHONE, variant: "destructive" });
+    }
+  };
+  return (
+    <button
+      onClick={copy}
+      className="border border-gold/60 text-gold px-6 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition"
+    >
+      {copied ? "✓ Copied" : "📋 Copy Phone"}
+    </button>
+  );
+};
+
 const LuxeVeilExperience = () => (
   <div className="space-y-16">
     {/* Welcome / Hero */}
@@ -359,10 +382,11 @@ const LuxeVeilExperience = () => (
         <span>💆‍♂️ Feel the care.</span>
         <span>✨ Feel renewed.</span>
       </div>
-      <div className="mt-7 flex justify-center">
+      <div className="mt-7 flex flex-wrap justify-center gap-3">
         <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#07182e] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
           ✈️ Book on Telegram
         </a>
+        <CopyPhoneButton />
       </div>
       <p className="mt-3 text-xs text-white/50">{PHONE}</p>
       </div>
@@ -382,7 +406,7 @@ const LuxeVeilExperience = () => (
         <li className="flex gap-2"><span className="text-gold">✦</span> Improve circulation</li>
         <li className="flex gap-2"><span className="text-gold">✦</span> Restore energy & clarity</li>
       </ul>
-      <p className="mt-6 text-xs uppercase tracking-[0.3em] text-gold/70">👤 Proprietor: MD Jony</p>
+      
     </section>
 
     {/* Massage Therapies */}
