@@ -989,9 +989,13 @@ const Index = () => {
                 </div>
               </article>
               </li>
-            ))}
-          </ul>
-        </div>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </>
+          );
+        })()}
       </section>
 
       {/* Case study detail modal */}
