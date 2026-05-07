@@ -403,7 +403,10 @@ const Index = () => {
       </section>
 
       {/* Digital Impact Map */}
-      <DigitalImpactMap />
+      <DigitalImpactMap
+        matchingSlugs={matchingSlugs}
+        onResetFilters={() => setCaseFilters(EMPTY_FILTERS)}
+      />
 
       {/* Services Directory */}
       <section id="services" className="relative px-6 py-24 md:px-12 lg:px-20">
