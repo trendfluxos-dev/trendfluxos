@@ -14,6 +14,7 @@ import Marriage from "./pages/Marriage.tsx";
 import BrandOpen from "./pages/BrandOpen.tsx";
 import TrendfluxTalent from "./pages/TrendfluxTalent.tsx";
 import LuxeVeil from "./pages/LuxeVeil.tsx";
+import CaseStudyPage from "./pages/CaseStudyPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/brand-open" element={<BrandOpen />} />
           <Route path="/trendflux-talent" element={<TrendfluxTalent />} />
           <Route path="/luxe-veil" element={<LuxeVeil />} />
+          <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
