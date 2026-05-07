@@ -18,6 +18,8 @@ import {
   CheckCircle2,
   Megaphone,
   Lock,
+  Menu,
+  X,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
@@ -204,6 +206,7 @@ const Index = () => {
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [caseFilters, setCaseFilters] = useCaseFilters();
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [veilOpen, setVeilOpen] = useState(false);
