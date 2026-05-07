@@ -1046,7 +1046,14 @@ const Index = () => {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setStrategyOpen(true)}
+                          onClick={() => {
+                            track("consult_operator_click", {
+                              case_slug: c.slug,
+                              case_title: c.title,
+                              source: "case_card",
+                            });
+                            setStrategyOpen(true);
+                          }}
                           aria-label={`Consult an operator about ${c.title}`}
                           className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-foreground/20 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/85 transition-all duration-300 hover:border-gold/60 hover:text-gold hover:bg-gold/5"
                         >
