@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart } from "lucide-react";
+import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart, Copy, Check, User } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import profile from "@/assets/marriage/profile.jpg";
 import photo1 from "@/assets/marriage/photo1.jpg";
@@ -42,6 +43,30 @@ const attributes: Bi[] = [
   { en: "Strong communication and public speaking skills", bn: "ভালো যোগাযোগ দক্ষতা ও পাবলিক স্পিকিং অভিজ্ঞতা" },
   { en: "Growth-oriented mindset with long-term vision", bn: "দীর্ঘমেয়াদি লক্ষ্যসহ উন্নয়নমুখী মানসিকতা" },
   { en: "Maintains balance between career and personal life", bn: "ক্যারিয়ার ও ব্যক্তিগত জীবনের মধ্যে ভারসাম্য বজায় রাখে" },
+];
+
+type Reference = {
+  name: { en: string; bn: string };
+  role: { en: string; bn: string };
+  org?: { en: string; bn: string };
+  phone: string;
+  facebook?: string;
+};
+
+const references: Reference[] = [
+  {
+    name: { en: "Mr. Md. Abul Bashar Khan Jewel", bn: "জনাব মোঃ আবুল বাসার খান জুয়েল" },
+    role: { en: "General Secretary", bn: "সাধারণ সম্পাদক" },
+    org: { en: "Pabna Nagorik Committee (PNC)", bn: "পাবনা নাগরিক কমিটি (পিএনসি)" },
+    phone: "+8801716808074",
+    facebook: "https://www.facebook.com/bashar.k.jewel",
+  },
+  {
+    name: { en: "Mominul Islam Muktar", bn: "মমিনুল ইসলাম মুক্তার" },
+    role: { en: "Businessman, Social Worker", bn: "ব্যবসায়ী, সমাজসেবাকর্মী" },
+    phone: "+8801728870710",
+    facebook: "https://www.facebook.com/mukter.hossin.172235",
+  },
 ];
 
 const Marriage = () => {
@@ -353,6 +378,58 @@ const Marriage = () => {
           </ul>
         </Card>
 
+        {/* References */}
+        <Card title={t("Reference Mention", "রেফারেন্স মেনশন")}>
+          <p className="text-sm text-white/60 mb-4">
+            {t(
+              "You may verify this profile through the following respected references. Tap any name or number to copy.",
+              "নিচের সম্মানিত রেফারেন্সদের মাধ্যমে এই প্রোফাইল যাচাই করতে পারেন। নাম বা নম্বরে ক্লিক করে কপি করুন।"
+            )}
+          </p>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {references.map((r, i) => (
+              <div
+                key={i}
+                className="rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 transition flex flex-col gap-3"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
+                    <User className="h-4 w-4 text-black" />
+                  </div>
+                  <div className="min-w-0">
+                    <CopyChip value={bangla ? r.name.bn : r.name.en} label={bangla ? r.name.bn : r.name.en} bold />
+                    <p className="text-xs text-red-300 mt-1">
+                      {bangla ? r.role.bn : r.role.en}
+                      {r.org && <span className="text-white/60"> · {bangla ? r.org.bn : r.org.en}</span>}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <CopyChip value={r.phone} label={r.phone} icon={<Phone className="h-3.5 w-3.5" />} />
+                  <a
+                    href={`https://wa.me/${r.phone.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-3 py-1.5 text-xs font-bold text-white hover:brightness-110 transition"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
+                  </a>
+                  {r.facebook && (
+                    <a
+                      href={r.facebook}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white hover:text-black transition"
+                    >
+                      <Facebook className="h-3.5 w-3.5" /> Facebook
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
         {/* Selective sharing notice */}
         <p className="text-center mt-10 mb-4 text-sm text-white/60 italic px-4">
           {t(
@@ -392,6 +469,42 @@ const Marriage = () => {
         </footer>
       </div>
     </main>
+  );
+};
+
+const CopyChip = ({
+  value,
+  label,
+  icon,
+  bold,
+}: {
+  value: string;
+  label: string;
+  icon?: React.ReactNode;
+  bold?: boolean;
+}) => {
+  const [copied, setCopied] = useState(false);
+  const onCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      toast.success(`Copied: ${value}`);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
+  return (
+    <button
+      type="button"
+      onClick={onCopy}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs ${bold ? "text-white font-bold text-sm" : "text-white/90 font-semibold"} hover:border-red-500/60 hover:bg-red-600/15 transition max-w-full`}
+      title="Click to copy"
+    >
+      {icon}
+      <span className="truncate">{label}</span>
+      {copied ? <Check className="h-3.5 w-3.5 text-red-400" /> : <Copy className="h-3.5 w-3.5 text-white/50" />}
+    </button>
   );
 };
 
