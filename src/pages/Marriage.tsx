@@ -469,7 +469,43 @@ const Marriage = () => {
         </footer>
       </div>
     </main>
+);
+
+const CopyChip = ({
+  value,
+  label,
+  icon,
+  bold,
+}: {
+  value: string;
+  label: string;
+  icon?: React.ReactNode;
+  bold?: boolean;
+}) => {
+  const [copied, setCopied] = useState(false);
+  const onCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      toast.success(`Copied: ${value}`);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      toast.error("Copy failed");
+    }
+  };
+  return (
+    <button
+      type="button"
+      onClick={onCopy}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs ${bold ? "text-white font-bold text-sm" : "text-white/90 font-semibold"} hover:border-red-500/60 hover:bg-red-600/15 transition max-w-full`}
+      title="Click to copy"
+    >
+      {icon}
+      <span className="truncate">{label}</span>
+      {copied ? <Check className="h-3.5 w-3.5 text-red-400" /> : <Copy className="h-3.5 w-3.5 text-white/50" />}
+    </button>
   );
+};
 };
 
 const Card = ({ title, children }: { title: string; children: React.ReactNode }) => (
