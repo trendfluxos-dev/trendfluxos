@@ -36,6 +36,7 @@ import { usePressItems } from "@/hooks/usePressItems";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
+import { DigitalImpactMap } from "@/components/DigitalImpactMap";
 
 type PressItem = {
   id?: string;
