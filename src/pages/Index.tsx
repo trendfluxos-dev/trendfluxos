@@ -394,6 +394,7 @@ const Index = () => {
       <DigitalImpactMap
         matchingSlugs={matchingSlugs}
         onResetFilters={() => setCaseFilters(EMPTY_FILTERS)}
+        returnTo={`/${serializeFilters(caseFilters)}#cases`}
       />
 
       {/* Services Directory */}
