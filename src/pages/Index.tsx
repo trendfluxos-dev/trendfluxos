@@ -118,6 +118,11 @@ type CaseStudy = {
   problem: string;
   solution: string;
   insight: string;
+  /** Filter taxonomy */
+  service: "AI Automation" | "Paid Media" | "Funnels" | "Branding";
+  industry: "Education" | "Retail" | "SaaS" | "Personal Brand";
+  stack: ("Meta Ads" | "GoHighLevel" | "WhatsApp" | "CRM")[];
+  stage: "Startup" | "Growth" | "Scale" | "Enterprise";
 };
 
 const caseStudies: CaseStudy[] = [
