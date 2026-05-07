@@ -241,18 +241,29 @@ const Index = () => {
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
   const [veilError, setVeilError] = useState("");
+  const [veilVerifying, setVeilVerifying] = useState(false);
   const navigate = useNavigate();
-  const VALID_VEIL_CODES = ["LUXE2026", "VEIL-INVITE", "TRENDFLUX-PRIVATE"];
-  const submitVeilCode = (e: React.FormEvent) => {
+  const submitVeilCode = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (VALID_VEIL_CODES.includes(veilCode.trim().toUpperCase())) {
-      try { localStorage.setItem("luxe_veil_unlocked", "1"); } catch { /* ignore */ }
-      setVeilOpen(false);
-      setVeilCode("");
-      setVeilError("");
-      navigate("/luxe-veil");
-    } else {
-      setVeilError("Invalid invitation code. Please check with your host.");
+    if (veilVerifying) return;
+    setVeilVerifying(true);
+    setVeilError("");
+    try {
+      const { data, error } = await supabase.functions.invoke<{
+        ok: boolean; token?: string; error?: string;
+      }>("verify-invite", { body: { code: veilCode.trim() } });
+      if (error || !data?.ok || !data.token) {
+        setVeilError(data?.error || "Invalid invitation code. Please check with your host.");
+      } else {
+        try { localStorage.setItem("luxe_veil_token", data.token); } catch { /* ignore */ }
+        setVeilOpen(false);
+        setVeilCode("");
+        navigate("/luxe-veil");
+      }
+    } catch {
+      setVeilError("Could not verify invitation. Please try again.");
+    } finally {
+      setVeilVerifying(false);
     }
   };
   const { items: dbPress } = usePressItems();
