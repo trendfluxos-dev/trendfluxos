@@ -46,28 +46,54 @@ const attributes: Bi[] = [
 ];
 
 type Reference = {
-  name: { en: string; bn: string };
+  nameEn: string;
+  nameBn: string;
   role: { en: string; bn: string };
   org?: { en: string; bn: string };
-  phone: string;
+  phoneDisplay: string; // formatted, e.g. "+880 1716-808074"
+  phoneE164: string;    // dial-ready, e.g. "+8801716808074"
   facebook?: string;
 };
 
 const references: Reference[] = [
   {
-    name: { en: "Mr. Md. Abul Bashar Khan Jewel", bn: "জনাব মোঃ আবুল বাসার খান জুয়েল" },
+    nameEn: "Mr. Md. Abul Bashar Khan Jewel",
+    nameBn: "জনাব মোঃ আবুল বাসার খান জুয়েল",
     role: { en: "General Secretary", bn: "সাধারণ সম্পাদক" },
     org: { en: "Pabna Nagorik Committee (PNC)", bn: "পাবনা নাগরিক কমিটি (পিএনসি)" },
-    phone: "+8801716808074",
+    phoneDisplay: "+880 1716-808074",
+    phoneE164: "+8801716808074",
     facebook: "https://www.facebook.com/bashar.k.jewel",
   },
   {
-    name: { en: "Mominul Islam Muktar", bn: "মমিনুল ইসলাম মুক্তার" },
+    nameEn: "Mominul Islam Muktar",
+    nameBn: "মমিনুল ইসলাম মুক্তার",
     role: { en: "Businessman, Social Worker", bn: "ব্যবসায়ী, সমাজসেবাকর্মী" },
-    phone: "+8801728870710",
+    phoneDisplay: "+880 1728-870710",
+    phoneE164: "+8801728870710",
     facebook: "https://www.facebook.com/mukter.hossin.172235",
   },
 ];
+
+const trackReferenceEvent = (
+  event: "reference_copy" | "reference_call" | "reference_whatsapp" | "reference_facebook",
+  payload: { name: string; field?: "name" | "phone"; value?: string },
+) => {
+  try {
+    const data = { event, ...payload, ts: Date.now(), source: "marriage_reference" };
+    // @ts-expect-error global
+    window.dataLayer = window.dataLayer || [];
+    // @ts-expect-error global
+    window.dataLayer.push(data);
+    const endpoint = (import.meta as { env?: Record<string, string> }).env?.VITE_ANALYTICS_ENDPOINT;
+    if (endpoint && typeof navigator !== "undefined" && "sendBeacon" in navigator) {
+      navigator.sendBeacon(endpoint, new Blob([JSON.stringify(data)], { type: "application/json" }));
+    }
+  } catch {
+    /* noop */
+  }
+};
+
 
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
