@@ -413,47 +413,73 @@ const Marriage = () => {
             )}
           </p>
           <div className="grid sm:grid-cols-2 gap-4">
-            {references.map((r, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 transition flex flex-col gap-3"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
-                    <User className="h-4 w-4 text-black" />
+            {references.map((r, i) => {
+              const displayName = bangla ? r.nameBn : r.nameEn;
+              const dialDigits = r.phoneE164.replace(/\D/g, "");
+              return (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 transition flex flex-col gap-3"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
+                      <User className="h-4 w-4 text-black" />
+                    </div>
+                    <div className="min-w-0">
+                      <CopyChip
+                        value={r.nameEn}
+                        label={displayName}
+                        bold
+                        onCopied={() =>
+                          trackReferenceEvent("reference_copy", { name: r.nameEn, field: "name", value: r.nameEn })
+                        }
+                      />
+                      <p className="text-xs text-red-300 mt-1">
+                        {bangla ? r.role.bn : r.role.en}
+                        {r.org && <span className="text-white/60"> · {bangla ? r.org.bn : r.org.en}</span>}
+                      </p>
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <CopyChip value={bangla ? r.name.bn : r.name.en} label={bangla ? r.name.bn : r.name.en} bold />
-                    <p className="text-xs text-red-300 mt-1">
-                      {bangla ? r.role.bn : r.role.en}
-                      {r.org && <span className="text-white/60"> · {bangla ? r.org.bn : r.org.en}</span>}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <CopyChip value={r.phone} label={r.phone} icon={<Phone className="h-3.5 w-3.5" />} />
-                  <a
-                    href={`https://wa.me/${r.phone.replace(/\D/g, "")}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-3 py-1.5 text-xs font-bold text-white hover:brightness-110 transition"
-                  >
-                    <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
-                  </a>
-                  {r.facebook && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <CopyChip
+                      value={r.phoneDisplay}
+                      label={r.phoneDisplay}
+                      icon={<Phone className="h-3.5 w-3.5" />}
+                      onCopied={() =>
+                        trackReferenceEvent("reference_copy", { name: r.nameEn, field: "phone", value: r.phoneDisplay })
+                      }
+                    />
                     <a
-                      href={r.facebook}
+                      href={`tel:${r.phoneE164}`}
+                      onClick={() => trackReferenceEvent("reference_call", { name: r.nameEn, value: r.phoneE164 })}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-600/10 px-3 py-1.5 text-xs font-bold text-red-200 hover:bg-red-600 hover:text-white transition"
+                    >
+                      <Phone className="h-3.5 w-3.5" /> Call
+                    </a>
+                    <a
+                      href={`https://wa.me/${dialDigits}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white hover:text-black transition"
+                      onClick={() => trackReferenceEvent("reference_whatsapp", { name: r.nameEn, value: r.phoneE164 })}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-3 py-1.5 text-xs font-bold text-white hover:brightness-110 transition"
                     >
-                      <Facebook className="h-3.5 w-3.5" /> Facebook
+                      <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
                     </a>
-                  )}
+                    {r.facebook && (
+                      <a
+                        href={r.facebook}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => trackReferenceEvent("reference_facebook", { name: r.nameEn, value: r.facebook })}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white hover:text-black transition"
+                      >
+                        <Facebook className="h-3.5 w-3.5" /> Facebook
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              );
+            })}
         </Card>
 
         {/* Selective sharing notice */}
