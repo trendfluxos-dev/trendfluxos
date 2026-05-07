@@ -1080,6 +1080,9 @@ const Index = () => {
         </DialogContent>
       </Dialog>
 
+      {/* FAQ */}
+      <Faq />
+
       {/* Final CTA + Footer */}
       <footer id="contact" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-6xl rounded-[2rem] glass-strong p-10 text-center md:p-16">
