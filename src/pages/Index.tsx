@@ -1032,22 +1032,10 @@ const Index = () => {
       {/* Final CTA + Footer */}
       <footer id="contact" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-6xl rounded-[2rem] glass-strong p-10 text-center md:p-16">
-          {/* Brand monogram */}
-          <div className="mx-auto mb-7 flex flex-col items-center">
-            <div className="relative">
-              <div aria-hidden className="absolute -inset-6 rounded-full bg-gold/20 blur-2xl" />
-              <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-gold text-gold-foreground shadow-gold">
-                <span className="font-display text-2xl font-extrabold tracking-tight">TF</span>
-              </div>
-            </div>
-            <p className="mt-3 text-[10px] uppercase tracking-[0.4em] text-gold/80">
-              TrendFlux Ecosystem
-            </p>
-          </div>
-
           <h2 className="font-display mx-auto max-w-3xl text-3xl font-bold leading-tight md:text-5xl">
             Ready to operate at{" "}
-            <span className="text-gradient">full velocity?</span>
+            <span className="text-gradient">full velocity</span> of{" "}
+            <span className="text-gradient">{BRAND.name}</span>?
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-foreground/60">
             Limited partnerships open each quarter. Let's architect yours.
