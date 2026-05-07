@@ -312,6 +312,8 @@ const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [strategyOpen, setStrategyOpen] = useState(false);
+  const [caseFilters, setCaseFilters] = useState<CaseFilters>(EMPTY_FILTERS);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
   const [veilOpen, setVeilOpen] = useState(false);
