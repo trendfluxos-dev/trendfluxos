@@ -13,15 +13,15 @@ import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "luxe_veil_token";
 
-function isTokenValid(raw: string | null): boolean {
+async function verifyTokenRemote(raw: string | null): Promise<boolean> {
   if (!raw) return false;
-  const [b64] = raw.split(".");
-  if (!b64) return false;
   try {
-    const decoded = atob(b64.replace(/-/g, "+").replace(/_/g, "/"));
-    const m = decoded.match(/^luxe-veil:(\d+)$/);
-    if (!m) return false;
-    return Number(m[1]) > Date.now();
+    const { data, error } = await supabase.functions.invoke<{ ok: boolean }>(
+      "verify-invite?action=verify-token",
+      { body: { token: raw } },
+    );
+    if (error) return false;
+    return Boolean(data?.ok);
   } catch {
     return false;
   }
@@ -100,11 +100,17 @@ const LuxeVeil = () => {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const tok = localStorage.getItem(STORAGE_KEY);
-    if (isTokenValid(tok)) {
-      setUnlocked(true);
-    } else if (tok) {
-      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
-    }
+    if (!tok) return;
+    let cancelled = false;
+    (async () => {
+      const ok = await verifyTokenRemote(tok);
+      if (cancelled) return;
+      if (ok) setUnlocked(true);
+      else {
+        try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+      }
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   const tryUnlock = async (e: React.FormEvent) => {
