@@ -529,18 +529,21 @@ const CopyChip = ({
   label,
   icon,
   bold,
+  onCopied,
 }: {
   value: string;
   label: string;
   icon?: React.ReactNode;
   bold?: boolean;
+  onCopied?: () => void;
 }) => {
   const [copied, setCopied] = useState(false);
   const onCopy = async () => {
     try {
       await navigator.clipboard.writeText(value);
       setCopied(true);
-      toast.success(`Copied: ${value}`);
+      toast.success("Copied", { description: value });
+      onCopied?.();
       setTimeout(() => setCopied(false), 1600);
     } catch {
       toast.error("Copy failed");
