@@ -352,6 +352,33 @@ const Index = () => {
   const visibleServices =
     filter === "All" ? services : services.filter((s) => s.category === filter);
 
+  useSeo();
+  useJsonLd([
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: BRAND.name,
+      legalName: BRAND.legalName,
+      alternateName: BRAND.nameLead,
+      url: BRAND.url,
+      logo: `${BRAND.url}/favicon.ico`,
+      slogan: BRAND.tagline,
+      description: BRAND.description,
+      sameAs: [
+        "https://www.facebook.com/trendfluxdigital",
+        "https://www.linkedin.com/company/trendflux",
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: BRAND.name,
+      url: BRAND.url,
+      description: BRAND.description,
+      publisher: { "@type": "Organization", name: BRAND.legalName },
+    },
+  ]);
+
   return (
     <main className="min-h-screen bg-background text-foreground font-sans overflow-hidden">
       {/* Background ambient glow */}
@@ -365,8 +392,8 @@ const Index = () => {
       <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-7xl rounded-full glass-strong">
         <div className="flex items-center justify-between px-5 md:px-8 py-3.5">
           <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight whitespace-nowrap shrink-0">
-            <img src={trendfluxLogo} alt="TrendFlux Ecosystem logo" className="h-8 w-8 object-contain" />
-            TrendFlux <span className="text-gradient">Ecosystem</span>
+            <img src={trendfluxLogo} alt={`${BRAND.name} logo`} className="h-8 w-8 object-contain" />
+            {BRAND.nameLead} <span className="text-gradient">{BRAND.nameTrail}</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-sm text-foreground/70">
