@@ -1196,6 +1196,90 @@ const Index = () => {
         </DialogContent>
       </Dialog>
       <StrategySessionDialog open={strategyOpen} onOpenChange={setStrategyOpen} />
+
+      {/* Case study narrative modal */}
+      <Dialog open={!!narrativeCase} onOpenChange={(o) => !o && setNarrativeCase(null)}>
+        <DialogContent className="glass-strong border-gold/30 shadow-[0_30px_80px_-20px_hsl(var(--gold)/0.45)] sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+          {narrativeCase && (
+            <>
+              <DialogHeader className="space-y-3 pt-2 text-left">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
+                    {narrativeCase.category}
+                  </span>
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-foreground/50">
+                    {narrativeCase.map.city} · {narrativeCase.map.region}
+                  </span>
+                </div>
+                <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
+                  {narrativeCase.title}
+                </DialogTitle>
+                <DialogDescription className="text-sm leading-relaxed text-foreground/70">
+                  {narrativeCase.description}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {[
+                  { label: "Situation", value: narrativeCase.situation },
+                  { label: "Problem", value: narrativeCase.problem },
+                  { label: "Solution", value: narrativeCase.solution },
+                  { label: "Insight", value: narrativeCase.insight },
+                ].map((b) => (
+                  <div
+                    key={b.label}
+                    className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-4"
+                  >
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold">
+                      {b.label}
+                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-foreground/80">{b.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 rounded-2xl border border-gold/20 bg-gold/5 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold">
+                  Outcomes
+                </p>
+                <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
+                  {narrativeCase.results.map((r) => (
+                    <li key={r} className="flex items-start gap-2 text-sm text-foreground/85">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <DialogFooter className="gap-2 sm:gap-3 pt-2">
+                <Button variant="ghost" onClick={() => setNarrativeCase(null)}>
+                  Close
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setNarrativeCase(null);
+                    setStrategyOpen(true);
+                  }}
+                >
+                  Consult Operator
+                </Button>
+                <Button variant="gold" asChild>
+                  <Link
+                    to={`/case-studies/${narrativeCase.slug}`}
+                    state={{ from: `/${serializeFilters(caseFilters)}#cases` }}
+                    onClick={() => setNarrativeCase(null)}
+                  >
+                    Open Full Case Study <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
