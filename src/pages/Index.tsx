@@ -33,6 +33,9 @@ import {
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { ResumeButton } from "@/components/ResumeButton";
 import { usePressItems } from "@/hooks/usePressItems";
+import { useSeo } from "@/hooks/useSeo";
+import { useJsonLd } from "@/hooks/useJsonLd";
+import { BRAND } from "@/config/brand";
 
 type PressItem = {
   id?: string;
@@ -388,15 +391,13 @@ const Index = () => {
         <div className="mx-auto max-w-6xl text-center animate-fade-up">
 
           <h1 className="font-display mx-auto max-w-5xl text-5xl font-black leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
-            Digital Transformation
+            {BRAND.hero.headlineLead}
             <br />
-            & <span className="text-gradient">Growth Operations</span>
+            <span className="text-gradient">{BRAND.hero.headlineTrail}</span>
           </h1>
 
           <p className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-foreground/60 md:text-lg">
-            We engineer resilient growth engines for ambitious brands — pairing
-            performance media, automation, and ecosystem design into one
-            cinematic operating system.
+            {BRAND.hero.subheadline}
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -405,13 +406,13 @@ const Index = () => {
               onClick={() => setQuoteOpen(true)}
               className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
             >
-              Start Operations <ArrowRight className="w-4 h-4" />
+              {BRAND.hero.primaryCta} <ArrowRight className="w-4 h-4" />
             </button>
             <a
               href="#cases"
               className="rounded-full border border-foreground/15 px-8 py-4 font-semibold text-foreground transition hover:scale-105 hover:border-primary/60 hover:bg-foreground/5"
             >
-              View Case Studies
+              {BRAND.hero.secondaryCta}
             </a>
           </div>
 
