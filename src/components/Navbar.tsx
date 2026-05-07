@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { BRAND } from "@/config/brand";
 
 const links = [
   { label: "Systems", href: "/#services" },
@@ -16,8 +17,8 @@ const Navbar = () => {
         <nav className="glass-strong rounded-full flex items-center justify-between px-5 py-3">
           <Link to="/" className="flex items-center gap-2 font-display font-bold text-lg whitespace-nowrap shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-cyan animate-pulse-glow" />
-            <span className="text-gradient">TrendFlux</span>
-            <span className="text-foreground/60 font-normal">Ecosystem</span>
+            <span className="text-gradient">{BRAND.nameLead}</span>
+            <span className="text-foreground/60 font-normal">{BRAND.nameTrail}</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-7 text-sm text-foreground/70">
