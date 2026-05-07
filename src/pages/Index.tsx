@@ -1142,13 +1142,22 @@ const Index = () => {
             </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setQuoteOpen(true)}
-            className="mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
-          >
-            Start Operations <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setQuoteOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
+            >
+              Start Operations <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setStrategyOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-8 py-4 font-semibold text-foreground transition hover:border-primary/60 hover:bg-foreground/5"
+            >
+              Book a Growth Strategy Session
+            </button>
+          </div>
         </div>
 
         {/* Contact icons */}
