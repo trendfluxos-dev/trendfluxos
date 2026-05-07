@@ -460,6 +460,9 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Digital Impact Map */}
+      <DigitalImpactMap />
+
       {/* Services Directory */}
       <section id="services" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
