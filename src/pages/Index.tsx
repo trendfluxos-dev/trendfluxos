@@ -419,30 +419,30 @@ const Index = () => {
       </nav>
 
       {/* Hero */}
-      <section className="relative flex min-h-screen items-center px-6 pt-32 pb-16 md:px-12 lg:px-20">
+      <section className="relative flex min-h-screen items-center px-5 pt-28 pb-16 sm:px-6 sm:pt-32 md:px-12 lg:px-20">
         <div className="mx-auto max-w-6xl text-center animate-fade-up">
 
-          <h1 className="font-display mx-auto max-w-5xl text-5xl font-black leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
+          <h1 className="font-display mx-auto max-w-5xl text-4xl sm:text-5xl font-black leading-[1.05] sm:leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             {BRAND.hero.headlineLead}
             <br />
             <span className="text-gradient">{BRAND.hero.headlineTrail}</span>
           </h1>
 
-          <p className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-foreground/60 md:text-lg">
+          <p className="mx-auto mt-6 sm:mt-8 max-w-2xl text-sm sm:text-base leading-relaxed text-foreground/60 md:text-lg">
             {BRAND.hero.subheadline}
           </p>
 
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-8 sm:mt-10 flex flex-col items-stretch sm:items-center justify-center gap-3 sm:gap-4 sm:flex-row">
             <button
               type="button"
               onClick={() => setQuoteOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_36px_hsl(var(--gold)/0.55)] active:scale-95"
             >
               {BRAND.hero.primaryCta} <ArrowRight className="w-4 h-4" />
             </button>
             <a
               href="#cases"
-              className="rounded-full border border-foreground/15 px-8 py-4 font-semibold text-foreground transition hover:scale-105 hover:border-primary/60 hover:bg-foreground/5"
+              className="inline-flex items-center justify-center rounded-full border border-foreground/15 px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-foreground transition-all duration-300 hover:scale-[1.04] hover:border-gold/60 hover:bg-foreground/5"
             >
               {BRAND.hero.secondaryCta}
             </a>
