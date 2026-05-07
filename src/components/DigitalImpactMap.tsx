@@ -128,35 +128,43 @@ export const DigitalImpactMap = () => {
                       type="button"
                       aria-label={`${n.city} — ${cfg.label}`}
                       className={cn(
-                        "group absolute -translate-x-1/2 -translate-y-1/2 transition-opacity",
+                        "group absolute -translate-x-1/2 -translate-y-1/2 transition-opacity touch-manipulation",
+                        // bigger tap target on mobile (invisible padding)
+                        "p-2 -m-2",
                         dim ? "opacity-25" : "opacity-100"
                       )}
                       style={{ left: `${n.x}%`, top: `${n.y}%` }}
                     >
-                      <span className="relative flex h-3 w-3 items-center justify-center">
+                      <span className="relative flex h-3.5 w-3.5 items-center justify-center md:h-3 md:w-3">
                         <span className={cn("absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping", cfg.dot)} />
-                        <span className={cn("relative inline-flex h-3 w-3 rounded-full", cfg.dot)} />
+                        <span className={cn("relative inline-flex h-3.5 w-3.5 rounded-full md:h-3 md:w-3", cfg.dot)} />
                       </span>
                       <span
                         className={cn(
-                          "pointer-events-none mt-2 block whitespace-nowrap text-[10px] uppercase tracking-[0.18em] text-foreground/70 transition-colors group-hover:text-foreground"
+                          "pointer-events-none mt-2 block whitespace-nowrap text-[9px] uppercase tracking-[0.18em] text-foreground/70 transition-colors group-hover:text-foreground md:text-[10px]"
                         )}
                       >
                         {n.city}
                       </span>
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="top" className="max-w-[240px] border-foreground/10 bg-background/95 backdrop-blur">
+                  <TooltipContent
+                    side="top"
+                    align="center"
+                    collisionPadding={12}
+                    avoidCollisions
+                    className="z-50 max-w-[min(260px,calc(100vw-24px))] border-foreground/10 bg-background/95 backdrop-blur"
+                  >
                     <div className="flex items-start gap-2">
                       <Icon className={cn("mt-0.5 h-4 w-4 shrink-0", cfg.color)} />
-                      <div>
+                      <div className="min-w-0">
                         <p className="font-semibold text-foreground">{n.city}</p>
                         <p className="text-[11px] uppercase tracking-[0.18em] text-foreground/50">
                           {n.region}
                         </p>
                         <p className={cn("mt-1.5 text-xs font-medium", cfg.color)}>{cfg.label}</p>
-                        <p className="mt-1 text-xs text-foreground/70">{cfg.description}</p>
-                        <p className="mt-2 text-xs font-semibold text-foreground">
+                        <p className="mt-1 text-xs text-foreground/70 break-words">{cfg.description}</p>
+                        <p className="mt-2 text-xs font-semibold text-foreground break-words">
                           Outcome: <span className="font-normal text-foreground/80">{n.outcome}</span>
                         </p>
                       </div>

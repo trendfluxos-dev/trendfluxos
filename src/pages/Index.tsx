@@ -37,6 +37,9 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { DigitalImpactMap } from "@/components/DigitalImpactMap";
+import { Faq } from "@/components/Faq";
+import { StrategySessionDialog } from "@/components/StrategySessionDialog";
+import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterBar";
 
 type PressItem = {
   id?: string;
@@ -118,6 +121,11 @@ type CaseStudy = {
   problem: string;
   solution: string;
   insight: string;
+  /** Filter taxonomy */
+  service: "AI Automation" | "Paid Media" | "Funnels" | "Branding";
+  industry: "Education" | "Retail" | "SaaS" | "Personal Brand";
+  stack: ("Meta Ads" | "GoHighLevel" | "WhatsApp" | "CRM")[];
+  stage: "Startup" | "Growth" | "Scale" | "Enterprise";
 };
 
 const caseStudies: CaseStudy[] = [
@@ -133,6 +141,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Developed a reels-first content system using hooks, storytelling, and structured scheduling.",
     insight: "Content success is driven by structure and psychology — not volume.",
+    service: "Branding", industry: "Personal Brand", stack: ["Meta Ads"], stage: "Growth",
   },
   {
     category: "Content Engine",
@@ -146,6 +155,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Built a templated production engine combining Figma systems, Canva libraries, and AI copy workflows.",
     insight: "Systems out-produce talent when speed and consistency both matter.",
+    service: "AI Automation", industry: "SaaS", stack: ["CRM"], stage: "Scale",
   },
   {
     category: "Global Strategy",
@@ -159,6 +169,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Rebuilt positioning, creative, and channel mix per market with localized creative variants.",
     insight: "Global growth is local execution — not translated copy.",
+    service: "Paid Media", industry: "Retail", stack: ["Meta Ads", "CRM"], stage: "Scale",
   },
   {
     category: "Automation Funnel",
@@ -171,6 +182,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Wired a WhatsApp + CRM automation that qualified, nurtured, and booked calls 24/7.",
     insight: "Speed-to-lead is the cheapest conversion lever most brands ignore.",
+    service: "Funnels", industry: "Education", stack: ["WhatsApp", "GoHighLevel", "CRM"], stage: "Growth",
   },
   {
     category: "SME Growth",
@@ -183,6 +195,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Architected a top-to-bottom funnel with CRM, content, and outbound playbooks.",
     insight: "SMEs scale when founders escape every step of the customer journey.",
+    service: "Funnels", industry: "Retail", stack: ["GoHighLevel", "CRM"], stage: "Startup",
   },
   {
     category: "Personal Brand",
@@ -195,6 +208,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Defined a sharp niche thesis and built a content engine around proof-driven storytelling.",
     insight: "Authority compounds when every post reinforces one undeniable thesis.",
+    service: "Branding", industry: "Personal Brand", stack: ["Meta Ads"], stage: "Startup",
   },
 ];
 
@@ -298,6 +312,8 @@ const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [strategyOpen, setStrategyOpen] = useState(false);
+  const [caseFilters, setCaseFilters] = useState<CaseFilters>(EMPTY_FILTERS);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
   const [veilOpen, setVeilOpen] = useState(false);
@@ -863,7 +879,7 @@ const Index = () => {
       {/* Case Studies */}
       <section id="cases" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-14 text-center">
+          <div className="mb-10 text-center">
             <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
               — Proven Growth Systems & Results
             </p>
@@ -874,19 +890,46 @@ const Index = () => {
               Real execution. Here's how I turn strategy into measurable growth.
             </p>
           </div>
+        </div>
 
-          <ul
-            role="list"
-            aria-label="Case studies"
-            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
-          >
-            {caseStudies.map((c, i) => (
-              <li key={c.title}>
-              <article
-                aria-labelledby={`case-${i}-title`}
-                className="group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
-                style={{ animationDelay: `${i * 0.06}s` }}
-              >
+        {(() => {
+          const q = caseFilters.query.trim().toLowerCase();
+          const filtered = caseStudies.filter((c) => {
+            if (caseFilters.service && c.service !== caseFilters.service) return false;
+            if (caseFilters.industry && c.industry !== caseFilters.industry) return false;
+            if (caseFilters.stack && !c.stack.includes(caseFilters.stack as typeof c.stack[number])) return false;
+            if (caseFilters.stage && c.stage !== caseFilters.stage) return false;
+            if (q) {
+              const hay = `${c.title} ${c.description} ${c.category} ${c.service} ${c.industry} ${c.stack.join(" ")} ${c.stage}`.toLowerCase();
+              if (!hay.includes(q)) return false;
+            }
+            return true;
+          });
+          const hasActive =
+            !!(caseFilters.service || caseFilters.industry || caseFilters.stack || caseFilters.stage || q);
+          return (
+            <>
+              <FilterBar value={caseFilters} onChange={setCaseFilters} resultCount={hasActive ? filtered.length : undefined} />
+              <div className="mx-auto max-w-7xl mt-8">
+                {filtered.length === 0 ? (
+                  <p className="text-center text-foreground/60 py-12">
+                    No case studies match these filters. Try resetting.
+                  </p>
+                ) : (
+                  <ul
+                    role="list"
+                    aria-label="Case studies"
+                    className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
+                  >
+                    {filtered.map((c, i) => (
+                      <li key={c.title}>
+                      <article
+                        aria-labelledby={`case-${i}-title`}
+                        className={`group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up ${
+                          hasActive ? "ring-2 ring-gold/50 shadow-gold" : ""
+                        }`}
+                        style={{ animationDelay: `${i * 0.06}s` }}
+                      >
                 <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
                   {/* Subtle dotted grid */}
                   <div
@@ -940,9 +983,13 @@ const Index = () => {
                 </div>
               </article>
               </li>
-            ))}
-          </ul>
-        </div>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </>
+          );
+        })()}
       </section>
 
       {/* Case study detail modal */}
@@ -1033,6 +1080,9 @@ const Index = () => {
         </DialogContent>
       </Dialog>
 
+      {/* FAQ */}
+      <Faq />
+
       {/* Final CTA + Footer */}
       <footer id="contact" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-6xl rounded-[2rem] glass-strong p-10 text-center md:p-16">
@@ -1095,13 +1145,22 @@ const Index = () => {
             </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setQuoteOpen(true)}
-            className="mt-10 inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
-          >
-            Start Operations <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => setQuoteOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
+            >
+              Start Operations <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setStrategyOpen(true)}
+              className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-8 py-4 font-semibold text-foreground transition hover:border-primary/60 hover:bg-foreground/5"
+            >
+              Book a Growth Strategy Session
+            </button>
+          </div>
         </div>
 
         {/* Contact icons */}
@@ -1175,6 +1234,7 @@ const Index = () => {
           </form>
         </DialogContent>
       </Dialog>
+      <StrategySessionDialog open={strategyOpen} onOpenChange={setStrategyOpen} />
     </main>
   );
 };
