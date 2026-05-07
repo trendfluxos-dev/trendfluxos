@@ -44,6 +44,7 @@ import { StrategySessionDialog } from "@/components/StrategySessionDialog";
 import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterBar";
 import { useCaseFilters, serializeFilters } from "@/hooks/useCaseFilters";
 import type { CaseStudy } from "@/data/caseStudies";
+import { track } from "@/lib/analytics";
 
 type PressItem = {
   id?: string;
@@ -220,6 +221,12 @@ const Index = () => {
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     narrativeTriggerRef.current = e.currentTarget;
+    track("view_narrative_open", {
+      case_slug: c.slug,
+      case_title: c.title,
+      case_category: c.category,
+      source: "case_card",
+    });
     setNarrativeCase(c);
   };
 
@@ -304,6 +311,7 @@ const Index = () => {
   const matchingSlugs = caseFiltersActive ? filteredCases.map((c) => c.slug) : undefined;
 
   const handleNodeSelect = (slug: string) => {
+    track("map_node_click", { case_slug: slug });
     setHighlightedSlug(slug);
     // Scroll the cases section into view and clear highlight after a short window.
     requestAnimationFrame(() => {
@@ -1038,7 +1046,14 @@ const Index = () => {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setStrategyOpen(true)}
+                          onClick={() => {
+                            track("consult_operator_click", {
+                              case_slug: c.slug,
+                              case_title: c.title,
+                              source: "case_card",
+                            });
+                            setStrategyOpen(true);
+                          }}
                           aria-label={`Consult an operator about ${c.title}`}
                           className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-foreground/20 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/85 transition-all duration-300 hover:border-gold/60 hover:text-gold hover:bg-gold/5"
                         >
@@ -1294,6 +1309,13 @@ const Index = () => {
                 <Button
                   variant="ghost"
                   onClick={() => {
+                    if (narrativeCase) {
+                      track("consult_operator_click", {
+                        case_slug: narrativeCase.slug,
+                        case_title: narrativeCase.title,
+                        source: "narrative_modal",
+                      });
+                    }
                     closeNarrative();
                     setStrategyOpen(true);
                   }}

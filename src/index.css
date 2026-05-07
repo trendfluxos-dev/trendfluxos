@@ -485,6 +485,35 @@
   .tier-card, .tier-sheen::before, .tier-lock-icon { animation: none !important; opacity: 1 !important; }
 }
 
+/* Global reduced-motion: turn off ambient pulses/pings, shimmer, sheens, and
+   long card transforms. Preserve essential UI feedback (focus rings, hover
+   color changes) but remove looping/decorative motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Specifically silence the map node ping + ambient pulses */
+  .animate-ping,
+  .animate-pulse,
+  .animate-pulse-glow,
+  .animate-float,
+  .animate-orbit,
+  .animate-orbit-reverse {
+    animation: none !important;
+  }
+  /* Don't lift/scale cards on hover/highlight when motion is reduced */
+  .glass-hover:hover,
+  [id^="case-card-"]:hover,
+  [id^="case-card-"] {
+    transform: none !important;
+  }
+}
+
 /* Pause sequence on hover/focus and spotlight that card */
 .tier-card:hover,
 .tier-card:focus-visible,
