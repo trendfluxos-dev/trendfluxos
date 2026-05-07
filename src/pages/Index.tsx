@@ -1300,8 +1300,12 @@ const Index = () => {
                 >
                   Consult Operator
                 </Button>
-                <Button variant="gold" asChild ref={narrativeInitialFocusRef}>
+                <Button variant="gold" asChild>
                   <Link
+                    ref={(el) => {
+                      // The asChild Button passes its ref through to this anchor.
+                      narrativeInitialFocusRef.current = (el as unknown as HTMLButtonElement) ?? null;
+                    }}
                     to={`/case-studies/${narrativeCase.slug}`}
                     state={{ from: `/${serializeFilters(caseFilters)}#cases` }}
                     onClick={closeNarrative}
