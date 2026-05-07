@@ -37,6 +37,9 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { DigitalImpactMap } from "@/components/DigitalImpactMap";
+import { Faq } from "@/components/Faq";
+import { StrategySessionDialog } from "@/components/StrategySessionDialog";
+import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterBar";
 
 type PressItem = {
   id?: string;
