@@ -9,9 +9,23 @@ import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
 import { SocialShare } from "@/components/SocialShare";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
-const VALID_CODES = ["LUXE2026", "VEIL-INVITE", "TRENDFLUX-PRIVATE"];
-const STORAGE_KEY = "luxe_veil_unlocked";
+const STORAGE_KEY = "luxe_veil_token";
+
+function isTokenValid(raw: string | null): boolean {
+  if (!raw) return false;
+  const [b64] = raw.split(".");
+  if (!b64) return false;
+  try {
+    const decoded = atob(b64.replace(/-/g, "+").replace(/_/g, "/"));
+    const m = decoded.match(/^luxe-veil:(\d+)$/);
+    if (!m) return false;
+    return Number(m[1]) > Date.now();
+  } catch {
+    return false;
+  }
+}
 
 const requestSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80),
@@ -81,21 +95,39 @@ const LuxeVeil = () => {
   const [unlocked, setUnlocked] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
+  const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY) === "1") {
+    if (typeof window === "undefined") return;
+    const tok = localStorage.getItem(STORAGE_KEY);
+    if (isTokenValid(tok)) {
       setUnlocked(true);
+    } else if (tok) {
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
     }
   }, []);
 
-  const tryUnlock = (e: React.FormEvent) => {
+  const tryUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (VALID_CODES.includes(code.trim().toUpperCase())) {
-      localStorage.setItem(STORAGE_KEY, "1");
-      setUnlocked(true);
-      setError("");
-    } else {
-      setError("Invalid invitation code. Please check with your host.");
+    if (verifying) return;
+    setVerifying(true);
+    setError("");
+    try {
+      const { data, error: fnErr } = await supabase.functions.invoke<{
+        ok: boolean;
+        token?: string;
+        error?: string;
+      }>("verify-invite", { body: { code: code.trim() } });
+      if (fnErr || !data?.ok || !data.token) {
+        setError(data?.error || "Invalid invitation code. Please check with your host.");
+      } else {
+        try { localStorage.setItem(STORAGE_KEY, data.token); } catch { /* ignore */ }
+        setUnlocked(true);
+      }
+    } catch {
+      setError("Could not verify invitation. Please try again.");
+    } finally {
+      setVerifying(false);
     }
   };
 
