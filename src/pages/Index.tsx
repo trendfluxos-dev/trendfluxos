@@ -100,7 +100,7 @@ const services = [
   },
 ];
 
-import { caseStudies, type CaseStudy, CASE_STUDY_OPEN_EVENT } from "@/data/caseStudies";
+import { caseStudies } from "@/data/caseStudies";
 
 const stats = [
   { value: "$8.4M", label: "Ad spend managed" },
