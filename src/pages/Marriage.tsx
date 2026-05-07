@@ -110,12 +110,10 @@ const trackReferenceEvent = (
   let beaconOk = false;
   try {
     if (typeof window !== "undefined") {
-      // @ts-expect-error global
-      window.dataLayer = window.dataLayer || [];
-      // @ts-expect-error global
-      if (Array.isArray(window.dataLayer) && typeof window.dataLayer.push === "function") {
-        // @ts-expect-error global
-        window.dataLayer.push(data);
+      const w = window as unknown as { dataLayer: unknown[] };
+      w.dataLayer = w.dataLayer || [];
+      if (Array.isArray(w.dataLayer) && typeof w.dataLayer.push === "function") {
+        w.dataLayer.push(data);
         dataLayerOk = true;
       }
     }
