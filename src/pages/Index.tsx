@@ -1031,7 +1031,6 @@ const Index = () => {
                           Consult Operator
                         </button>
                       </div>
-                      </div>
                     </div>
                   </article>
                 </li>
