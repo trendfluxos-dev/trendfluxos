@@ -51,9 +51,19 @@ type Props = {
   onResetFilters?: () => void;
   /** Path (with query + hash) to return to when leaving a case study. */
   returnTo?: string;
+  /** When provided, clicking a node highlights the related case study instead of navigating away. */
+  onNodeSelect?: (slug: string) => void;
+  /** Currently highlighted slug — visually pulses the matching node. */
+  highlightedSlug?: string | null;
 };
 
-export const DigitalImpactMap = ({ matchingSlugs, onResetFilters, returnTo }: Props = {}) => {
+export const DigitalImpactMap = ({
+  matchingSlugs,
+  onResetFilters,
+  returnTo,
+  onNodeSelect,
+  highlightedSlug,
+}: Props = {}) => {
   const [active, setActive] = useState<System | "all">("all");
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const navigate = useNavigate();
@@ -70,6 +80,14 @@ export const DigitalImpactMap = ({ matchingSlugs, onResetFilters, returnTo }: Pr
 
   const openCaseStudy = (slug: string) => {
     navigate(`/case-studies/${slug}`, { state: { from: returnTo ?? "/#cases" } });
+  };
+
+  const handleNodeClick = (slug: string) => {
+    if (onNodeSelect) {
+      onNodeSelect(slug);
+    } else {
+      openCaseStudy(slug);
+    }
   };
 
   const focusNode = (i: number) => {
@@ -93,7 +111,7 @@ export const DigitalImpactMap = ({ matchingSlugs, onResetFilters, returnTo }: Pr
       focusNode(nodes.length - 1);
     } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      openCaseStudy(c.slug);
+      handleNodeClick(c.slug);
     }
   };
 
@@ -172,13 +190,14 @@ export const DigitalImpactMap = ({ matchingSlugs, onResetFilters, returnTo }: Pr
                       } Press Enter to open narrative.`}
                       aria-haspopup="dialog"
                       data-no-match={filteredOut || undefined}
-                      onClick={() => openCaseStudy(c.slug)}
+                      onClick={() => handleNodeClick(c.slug)}
                       onKeyDown={(e) => onNodeKeyDown(e, i, c)}
                       className={cn(
                         "group absolute -translate-x-1/2 -translate-y-1/2 transition-opacity touch-manipulation rounded-full",
                         "p-2 -m-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                         dim ? "opacity-25" : "opacity-100",
-                        filteredOut && "grayscale"
+                        filteredOut && "grayscale",
+                        highlightedSlug === c.slug && "scale-125 z-10"
                       )}
                       style={{ left: `${c.map.x}%`, top: `${c.map.y}%` }}
                     >
@@ -189,7 +208,8 @@ export const DigitalImpactMap = ({ matchingSlugs, onResetFilters, returnTo }: Pr
                         <span
                           className={cn(
                             "relative inline-flex h-3.5 w-3.5 rounded-full md:h-3 md:w-3",
-                            filteredOut ? "bg-foreground/30 ring-1 ring-dashed ring-foreground/40" : cfg.dot
+                            filteredOut ? "bg-foreground/30 ring-1 ring-dashed ring-foreground/40" : cfg.dot,
+                            highlightedSlug === c.slug && "ring-2 ring-gold ring-offset-2 ring-offset-background"
                           )}
                         />
                       </span>
