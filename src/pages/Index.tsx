@@ -43,6 +43,7 @@ import { Faq } from "@/components/Faq";
 import { StrategySessionDialog } from "@/components/StrategySessionDialog";
 import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterBar";
 import { useCaseFilters, serializeFilters } from "@/hooks/useCaseFilters";
+import type { CaseStudy } from "@/data/caseStudies";
 
 type PressItem = {
   id?: string;
@@ -209,6 +210,8 @@ const Index = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [caseFilters, setCaseFilters] = useCaseFilters();
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
+  const [highlightedSlug, setHighlightedSlug] = useState<string | null>(null);
+  const [narrativeCase, setNarrativeCase] = useState<CaseStudy | null>(null);
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
   const [veilError, setVeilError] = useState("");
@@ -285,6 +288,20 @@ const Index = () => {
     });
   }, [caseFilters]);
   const matchingSlugs = caseFiltersActive ? filteredCases.map((c) => c.slug) : undefined;
+
+  const handleNodeSelect = (slug: string) => {
+    setHighlightedSlug(slug);
+    // Scroll the cases section into view and clear highlight after a short window.
+    requestAnimationFrame(() => {
+      const el = document.getElementById(`case-card-${slug}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        document.getElementById("cases")?.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+    window.setTimeout(() => setHighlightedSlug((s) => (s === slug ? null : s)), 4000);
+  };
 
   useSeo();
   useJsonLd([
@@ -469,6 +486,8 @@ const Index = () => {
         matchingSlugs={matchingSlugs}
         onResetFilters={() => setCaseFilters(EMPTY_FILTERS)}
         returnTo={`/${serializeFilters(caseFilters)}#cases`}
+        onNodeSelect={handleNodeSelect}
+        highlightedSlug={highlightedSlug}
       />
 
       {/* Services Directory */}
