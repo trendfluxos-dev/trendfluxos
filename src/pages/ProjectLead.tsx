@@ -59,7 +59,7 @@ const portfolio = [
     metric: "4.85L+ Views",
   },
   {
-    title: "TrendFlux Digital",
+    title: "TrendFlux Ecosystem",
     tag: "Founder · Growth Studio",
     description:
       "AI-driven growth systems delivering 45%+ engagement growth across founder-led brands and consultancies.",
@@ -144,7 +144,7 @@ const ProjectLead = () => {
             <div className="flex flex-wrap gap-x-5 gap-y-2 mt-4 text-xs text-foreground/60">
               <span className="flex items-center gap-1.5">
                 <Briefcase className="w-3.5 h-3.5 text-primary" />
-                Founder & CEO — TrendFlux Digital
+                Founder & CEO — TrendFlux Ecosystem
               </span>
               <span className="flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-primary" />

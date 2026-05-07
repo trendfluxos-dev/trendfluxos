@@ -10,7 +10,7 @@ const Footer = () => {
           <Link to="/" className="flex items-center gap-2 font-display font-bold text-xl">
             <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-cyan" />
             <span className="text-gradient">TrendFlux</span>
-            <span className="text-foreground/60 font-normal">Digital</span>
+            <span className="text-foreground/60 font-normal">Ecosystem</span>
           </Link>
           <p className="text-foreground/60 mt-4 max-w-sm leading-relaxed">
             AI-powered growth systems for brands, founders, and businesses ready
@@ -64,7 +64,7 @@ const Footer = () => {
       </div>
 
       <div className="max-w-7xl mx-auto mt-12 pt-6 border-t border-border flex flex-col md:flex-row justify-between gap-4 text-xs text-foreground/40">
-        <p>© {new Date().getFullYear()} TrendFlux Digital. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} TrendFlux Ecosystem. All rights reserved.</p>
         <p>Built as a system, not a website.</p>
       </div>
     </footer>

@@ -24,7 +24,7 @@ const Hero = () => {
         </h1>
 
         <p className="mt-7 text-foreground/70 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-          TrendFlux Digital combines AI automation, paid media, content strategy,
+          TrendFlux Ecosystem combines AI automation, paid media, content strategy,
           CRM workflows, and brand architecture to build scalable business growth ecosystems.
         </p>
 

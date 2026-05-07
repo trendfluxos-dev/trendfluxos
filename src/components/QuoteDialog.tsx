@@ -274,7 +274,7 @@ export const QuoteDialog = ({ open, onOpenChange }: Props) => {
               </Button>
 
               <p className="text-[11px] text-foreground/40">
-                By submitting, you agree to be contacted by TrendFlux Digital about your request.
+                By submitting, you agree to be contacted by TrendFlux Ecosystem about your request.
               </p>
             </form>
           </>
