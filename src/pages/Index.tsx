@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -100,117 +100,7 @@ const services = [
   },
 ];
 
-import {
-  OrganicGrowthIcon,
-  ContentEngineIcon,
-  GlobalStrategyIcon,
-  AutomationFunnelIcon,
-  SmeGrowthIcon,
-  PersonalBrandIcon,
-} from "@/components/CaseIcons";
-
-type CaseIcon = (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
-
-type CaseStudy = {
-  category: string;
-  title: string;
-  description: string;
-  results: string[];
-  Icon: CaseIcon;
-  situation: string;
-  problem: string;
-  solution: string;
-  insight: string;
-  /** Filter taxonomy */
-  service: "AI Automation" | "Paid Media" | "Funnels" | "Branding";
-  industry: "Education" | "Retail" | "SaaS" | "Personal Brand";
-  stack: ("Meta Ads" | "GoHighLevel" | "WhatsApp" | "CRM")[];
-  stage: "Startup" | "Growth" | "Scale" | "Enterprise";
-};
-
-const caseStudies: CaseStudy[] = [
-  {
-    category: "Organic Growth System",
-    title: "Scaling Organic Reach to 485K+",
-    description:
-      "Built a structured content system that generated massive organic reach without paid ads.",
-    results: ["485K+ video views", "80%+ organic reach", "45%+ engagement growth"],
-    Icon: OrganicGrowthIcon,
-    situation: "The brand lacked visibility and had no structured content approach.",
-    problem: "Inconsistent posting, low engagement, and no audience targeting.",
-    solution:
-      "Developed a reels-first content system using hooks, storytelling, and structured scheduling.",
-    insight: "Content success is driven by structure and psychology — not volume.",
-    service: "Branding", industry: "Personal Brand", stack: ["Meta Ads"], stage: "Growth",
-  },
-  {
-    category: "Content Engine",
-    title: "200+ Digital Asset Production System",
-    description:
-      "Created a scalable content production engine using templates and AI-assisted workflows.",
-    results: ["200+ assets delivered", "Faster content execution", "Consistent brand identity"],
-    Icon: ContentEngineIcon,
-    situation: "Manual asset production was slow and inconsistent across campaigns.",
-    problem: "Bottlenecked design output, off-brand variations, missed launch windows.",
-    solution:
-      "Built a templated production engine combining Figma systems, Canva libraries, and AI copy workflows.",
-    insight: "Systems out-produce talent when speed and consistency both matter.",
-    service: "AI Automation", industry: "SaaS", stack: ["CRM"], stage: "Scale",
-  },
-  {
-    category: "Global Strategy",
-    title: "Multi-Market Digital Strategy (US/UK)",
-    description:
-      "Optimized content and marketing strategy for international audience targeting.",
-    results: ["Improved engagement", "Market-aligned content", "Better audience targeting"],
-    Icon: GlobalStrategyIcon,
-    situation: "A single-market playbook was being copy-pasted across geographies.",
-    problem: "Tone, references, and offers didn't resonate with US/UK audiences.",
-    solution:
-      "Rebuilt positioning, creative, and channel mix per market with localized creative variants.",
-    insight: "Global growth is local execution — not translated copy.",
-    service: "Paid Media", industry: "Retail", stack: ["Meta Ads", "CRM"], stage: "Scale",
-  },
-  {
-    category: "Automation Funnel",
-    title: "WhatsApp Lead Conversion System",
-    description: "Built an automated funnel to convert inquiries into booked strategy calls.",
-    results: ["Faster response time", "Higher lead engagement", "Increased booking rate"],
-    Icon: AutomationFunnelIcon,
-    situation: "Inbound leads were dropping off before reaching a human.",
-    problem: "Slow replies, no qualification, no follow-up sequence.",
-    solution:
-      "Wired a WhatsApp + CRM automation that qualified, nurtured, and booked calls 24/7.",
-    insight: "Speed-to-lead is the cheapest conversion lever most brands ignore.",
-    service: "Funnels", industry: "Education", stack: ["WhatsApp", "GoHighLevel", "CRM"], stage: "Growth",
-  },
-  {
-    category: "SME Growth",
-    title: "SME Growth System Architecture",
-    description: "Designed structured growth systems for SMEs targeting scalable operations.",
-    results: ["Clear funnel structure", "CRM integration", "Scalable business model"],
-    Icon: SmeGrowthIcon,
-    situation: "Owner-led SME with strong service but no repeatable acquisition model.",
-    problem: "Revenue depended entirely on referrals and founder hustle.",
-    solution:
-      "Architected a top-to-bottom funnel with CRM, content, and outbound playbooks.",
-    insight: "SMEs scale when founders escape every step of the customer journey.",
-    service: "Funnels", industry: "Retail", stack: ["GoHighLevel", "CRM"], stage: "Startup",
-  },
-  {
-    category: "Personal Brand",
-    title: "Authority-Based Personal Brand System",
-    description: "Built positioning and content strategy for strong authority and engagement.",
-    results: ["Clear niche positioning", "Strong audience connection", "Consistent brand identity"],
-    Icon: PersonalBrandIcon,
-    situation: "Talented operator with no recognizable public voice or positioning.",
-    problem: "Generic content, no clear ICP, no compounding inbound.",
-    solution:
-      "Defined a sharp niche thesis and built a content engine around proof-driven storytelling.",
-    insight: "Authority compounds when every post reinforces one undeniable thesis.",
-    service: "Branding", industry: "Personal Brand", stack: ["Meta Ads"], stage: "Startup",
-  },
-];
+import { caseStudies, type CaseStudy, CASE_STUDY_OPEN_EVENT } from "@/data/caseStudies";
 
 const stats = [
   { value: "$8.4M", label: "Ad spend managed" },
@@ -316,6 +206,18 @@ const Index = () => {
   const [caseFilters, setCaseFilters] = useState<CaseFilters>(EMPTY_FILTERS);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
+
+  // Allow other components (e.g. DigitalImpactMap) to open a case study by slug.
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const slug = (e as CustomEvent<{ slug: string }>).detail?.slug;
+      if (!slug) return;
+      const match = caseStudies.find((c) => c.slug === slug);
+      if (match) setActiveCase(match);
+    };
+    window.addEventListener(CASE_STUDY_OPEN_EVENT, handler);
+    return () => window.removeEventListener(CASE_STUDY_OPEN_EVENT, handler);
+  }, []);
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
   const [veilError, setVeilError] = useState("");
