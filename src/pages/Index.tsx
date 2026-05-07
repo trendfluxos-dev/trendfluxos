@@ -271,6 +271,30 @@ const Index = () => {
   const visibleServices =
     filter === "All" ? services : services.filter((s) => s.category === filter);
 
+  // Compute filtered case studies once so we can share with the map and the grid.
+  const caseFiltersActive = !!(
+    caseFilters.service ||
+    caseFilters.industry ||
+    caseFilters.stack ||
+    caseFilters.stage ||
+    caseFilters.query.trim()
+  );
+  const filteredCases = useMemo(() => {
+    const q = caseFilters.query.trim().toLowerCase();
+    return caseStudies.filter((c) => {
+      if (caseFilters.service && c.service !== caseFilters.service) return false;
+      if (caseFilters.industry && c.industry !== caseFilters.industry) return false;
+      if (caseFilters.stack && !c.stack.includes(caseFilters.stack as typeof c.stack[number])) return false;
+      if (caseFilters.stage && c.stage !== caseFilters.stage) return false;
+      if (q) {
+        const hay = `${c.title} ${c.description} ${c.category} ${c.service} ${c.industry} ${c.stack.join(" ")} ${c.stage}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [caseFilters]);
+  const matchingSlugs = caseFiltersActive ? filteredCases.map((c) => c.slug) : undefined;
+
   useSeo();
   useJsonLd([
     {
