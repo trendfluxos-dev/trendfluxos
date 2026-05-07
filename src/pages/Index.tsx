@@ -1309,6 +1309,13 @@ const Index = () => {
                 <Button
                   variant="ghost"
                   onClick={() => {
+                    if (narrativeCase) {
+                      track("consult_operator_click", {
+                        case_slug: narrativeCase.slug,
+                        case_title: narrativeCase.title,
+                        source: "narrative_modal",
+                      });
+                    }
                     closeNarrative();
                     setStrategyOpen(true);
                   }}
