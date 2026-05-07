@@ -1,13 +1,14 @@
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Cpu, Megaphone, Workflow, Layers, Sparkles, ArrowUpRight } from "lucide-react";
+import { Cpu, Megaphone, Workflow, Layers, Sparkles, ArrowUpRight, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { caseStudies, CASE_STUDY_OPEN_EVENT, type System, type CaseStudy } from "@/data/caseStudies";
+import { caseStudies, type System, type CaseStudy } from "@/data/caseStudies";
 
 const SYSTEMS: Record<
   System,
@@ -43,18 +44,31 @@ const SYSTEMS: Record<
   },
 };
 
-const openCaseStudy = (slug: string) => {
-  if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent(CASE_STUDY_OPEN_EVENT, { detail: { slug } }));
-  // Scroll to the case studies grid as a graceful fallback.
-  document.getElementById("cases")?.scrollIntoView({ behavior: "smooth", block: "start" });
+type Props = {
+  /** Slugs of case studies currently matching external filters. If undefined, all match. */
+  matchingSlugs?: string[];
+  /** Optional reset handler shown in the empty-state overlay. */
+  onResetFilters?: () => void;
 };
 
-export const DigitalImpactMap = () => {
+export const DigitalImpactMap = ({ matchingSlugs, onResetFilters }: Props = {}) => {
   const [active, setActive] = useState<System | "all">("all");
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const navigate = useNavigate();
 
-  const nodes = useMemo(() => caseStudies.filter((c) => c.map), [/* static */]);
+  const nodes = useMemo(() => caseStudies.filter((c) => c.map), []);
+  const matchSet = useMemo(
+    () => (matchingSlugs ? new Set(matchingSlugs) : null),
+    [matchingSlugs]
+  );
+  const filtersActive = matchSet !== null;
+  const matchedCount = filtersActive
+    ? nodes.filter((n) => matchSet!.has(n.slug)).length
+    : nodes.length;
+
+  const openCaseStudy = (slug: string) => {
+    navigate(`/case-studies/${slug}`);
+  };
 
   const focusNode = (i: number) => {
     const len = nodes.length;
