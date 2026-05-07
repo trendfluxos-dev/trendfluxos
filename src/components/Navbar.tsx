@@ -17,7 +17,7 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-2 font-display font-bold text-lg whitespace-nowrap shrink-0">
             <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-cyan animate-pulse-glow" />
             <span className="text-gradient">TrendFlux</span>
-            <span className="text-foreground/60 font-normal">Digital</span>
+            <span className="text-foreground/60 font-normal">Ecosystem</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-7 text-sm text-foreground/70">
