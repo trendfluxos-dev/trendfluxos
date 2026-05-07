@@ -18,9 +18,8 @@ const track = (network: string, url: string, source?: string) => {
       ts: Date.now(),
     };
     // GTM / GA4 dataLayer
-    const w = window as unknown as { dataLayer: unknown[] };
-    w.dataLayer = w.dataLayer || [];
-    w.dataLayer.push(payload);
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(payload);
     const endpoint = (import.meta as { env?: Record<string, string> }).env?.VITE_ANALYTICS_ENDPOINT;
     if (endpoint && typeof navigator !== "undefined" && "sendBeacon" in navigator) {
       const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
