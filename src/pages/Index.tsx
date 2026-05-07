@@ -44,6 +44,7 @@ import { StrategySessionDialog } from "@/components/StrategySessionDialog";
 import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterBar";
 import { useCaseFilters, serializeFilters } from "@/hooks/useCaseFilters";
 import type { CaseStudy } from "@/data/caseStudies";
+import { track } from "@/lib/analytics";
 
 type PressItem = {
   id?: string;
@@ -220,6 +221,12 @@ const Index = () => {
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     narrativeTriggerRef.current = e.currentTarget;
+    track("view_narrative_open", {
+      case_slug: c.slug,
+      case_title: c.title,
+      case_category: c.category,
+      source: "case_card",
+    });
     setNarrativeCase(c);
   };
 
@@ -304,6 +311,7 @@ const Index = () => {
   const matchingSlugs = caseFiltersActive ? filteredCases.map((c) => c.slug) : undefined;
 
   const handleNodeSelect = (slug: string) => {
+    track("map_node_click", { case_slug: slug });
     setHighlightedSlug(slug);
     // Scroll the cases section into view and clear highlight after a short window.
     requestAnimationFrame(() => {
