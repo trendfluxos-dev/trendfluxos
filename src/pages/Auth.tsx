@@ -15,7 +15,10 @@ export default function Auth() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate("/admin");
+      if (data.session) {
+        window.scrollTo({ top: 0, behavior: "auto" });
+        navigate("/", { replace: true });
+      }
     });
   }, [navigate]);
 
@@ -37,7 +40,8 @@ export default function Auth() {
         setMode("signin");
         return;
       }
-      navigate("/admin");
+      window.scrollTo({ top: 0, behavior: "auto" });
+      navigate("/", { replace: true });
     } catch (err: any) {
       toast.error(err.message ?? "Authentication failed");
     } finally {

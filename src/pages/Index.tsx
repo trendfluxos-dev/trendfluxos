@@ -18,6 +18,8 @@ import {
   CheckCircle2,
   Megaphone,
   Lock,
+  Menu,
+  X,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.png";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
@@ -204,6 +206,7 @@ const Index = () => {
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [caseFilters, setCaseFilters] = useCaseFilters();
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [veilOpen, setVeilOpen] = useState(false);
@@ -320,55 +323,126 @@ const Index = () => {
       </div>
 
       {/* Navbar */}
-      <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-7xl rounded-full glass-strong">
-        <div className="flex items-center justify-between px-5 md:px-8 py-3.5">
-          <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight whitespace-nowrap shrink-0">
-            <img src={trendfluxLogo} alt={`${BRAND.name} logo`} className="h-8 w-8 object-contain" />
-            {BRAND.nameLead} <span className="text-gradient">{BRAND.nameTrail}</span>
+      <nav className="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[96%] sm:w-[94%] max-w-7xl rounded-full glass-strong border border-foreground/10 shadow-elegant">
+        <div className="flex items-center justify-between px-4 sm:px-5 md:px-8 py-2.5 sm:py-3 md:py-3.5 gap-3">
+          <Link
+            to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="flex items-center gap-2 font-display text-base sm:text-lg font-bold tracking-tight whitespace-nowrap shrink-0 transition-opacity hover:opacity-90"
+          >
+            <img src={trendfluxLogo} alt={`${BRAND.name} logo`} className="h-7 w-7 sm:h-8 sm:w-8 object-contain" />
+            <span>{BRAND.nameLead}</span> <span className="text-gradient">{BRAND.nameTrail}</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8 text-sm text-foreground/70">
-            <a href="#services" className="hover:text-gold transition-colors">Services</a>
-            <a href="#founder" className="hover:text-gold transition-colors">Brand Architect</a>
-            <a href="#cases" className="hover:text-gold transition-colors">Case Studies</a>
-            <Link to="/project-lead" className="hover:text-gold transition-colors">Project Lead</Link>
+          <div className="hidden md:flex items-center gap-7 lg:gap-8 text-sm text-foreground/70">
+            {[
+              { href: "#services", label: "Services" },
+              { href: "#founder", label: "Brand Architect" },
+              { href: "#cases", label: "Case Studies" },
+            ].map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="relative py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+              >
+                {l.label}
+              </a>
+            ))}
+            <Link
+              to="/project-lead"
+              className="relative py-1 transition-colors duration-300 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Project Lead
+            </Link>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setQuoteOpen(true)}
-            className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
-          >
-            Start Operations
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setQuoteOpen(true)}
+              className="hidden sm:inline-flex rounded-full bg-gold px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+            >
+              Start Operations
+            </button>
+            <button
+              type="button"
+              aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen((o) => !o)}
+              className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-foreground/15 text-foreground/80 hover:text-gold hover:border-gold/40 transition-colors"
+            >
+              {mobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <div
+          className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-out ${
+            mobileNavOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="px-5 pb-4 pt-1 flex flex-col gap-1 text-sm">
+            {[
+              { href: "#services", label: "Services" },
+              { href: "#founder", label: "Brand Architect" },
+              { href: "#cases", label: "Case Studies" },
+            ].map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setMobileNavOpen(false)}
+                className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors"
+              >
+                {l.label}
+              </a>
+            ))}
+            <Link
+              to="/project-lead"
+              onClick={() => setMobileNavOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors"
+            >
+              Project Lead
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileNavOpen(false);
+                setQuoteOpen(true);
+              }}
+              className="mt-2 sm:hidden rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition active:scale-95"
+            >
+              Start Operations
+            </button>
+          </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="relative flex min-h-screen items-center px-6 pt-32 pb-16 md:px-12 lg:px-20">
+      <section className="relative flex min-h-screen items-center px-5 pt-28 pb-16 sm:px-6 sm:pt-32 md:px-12 lg:px-20">
         <div className="mx-auto max-w-6xl text-center animate-fade-up">
 
-          <h1 className="font-display mx-auto max-w-5xl text-5xl font-black leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
+          <h1 className="font-display mx-auto max-w-5xl text-4xl sm:text-5xl font-black leading-[1.05] sm:leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             {BRAND.hero.headlineLead}
             <br />
             <span className="text-gradient">{BRAND.hero.headlineTrail}</span>
           </h1>
 
-          <p className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-foreground/60 md:text-lg">
+          <p className="mx-auto mt-6 sm:mt-8 max-w-2xl text-sm sm:text-base leading-relaxed text-foreground/60 md:text-lg">
             {BRAND.hero.subheadline}
           </p>
 
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-8 sm:mt-10 flex flex-col items-stretch sm:items-center justify-center gap-3 sm:gap-4 sm:flex-row">
             <button
               type="button"
               onClick={() => setQuoteOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full bg-gold px-8 py-4 font-semibold text-gold-foreground shadow-gold transition hover:scale-105"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_36px_hsl(var(--gold)/0.55)] active:scale-95"
             >
               {BRAND.hero.primaryCta} <ArrowRight className="w-4 h-4" />
             </button>
             <a
               href="#cases"
-              className="rounded-full border border-foreground/15 px-8 py-4 font-semibold text-foreground transition hover:scale-105 hover:border-primary/60 hover:bg-foreground/5"
+              className="inline-flex items-center justify-center rounded-full border border-foreground/15 px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-foreground transition-all duration-300 hover:scale-[1.04] hover:border-gold/60 hover:bg-foreground/5"
             >
               {BRAND.hero.secondaryCta}
             </a>
