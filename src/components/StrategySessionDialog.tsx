@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Send } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 const SERVICES = [
   "AI Automation",
@@ -42,9 +43,18 @@ const schema = z.object({
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Optional case study slug that originated this booking. Threaded through analytics. */
+  sourceCaseSlug?: string | null;
+  /** Where the dialog was opened from, e.g. "case_card", "narrative_modal", "footer_cta". */
+  source?: string;
 };
 
-export const StrategySessionDialog = ({ open, onOpenChange }: Props) => {
+export const StrategySessionDialog = ({
+  open,
+  onOpenChange,
+  sourceCaseSlug = null,
+  source,
+}: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [interests, setInterests] = useState<string[]>([]);
@@ -68,10 +78,23 @@ export const StrategySessionDialog = ({ open, onOpenChange }: Props) => {
     }
     setSubmitting(true);
     try {
-      // Lightweight client-side analytics ping; replace with backend later.
-      const dataLayer = (window as unknown as { dataLayer?: unknown[] }).dataLayer;
-      dataLayer?.push?.({ event: "strategy_session_request", ...parsed.data });
+      // Funnel: request submitted (pre-confirmation).
+      track("strategy_session_request", {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        interests: parsed.data.interests.join(","),
+        case_slug: sourceCaseSlug ?? undefined,
+        source: source ?? undefined,
+      });
       await new Promise((r) => setTimeout(r, 600));
+      // Funnel: confirmed booking. Connected to originating case_slug for full-funnel reporting.
+      track("strategy_session_booked", {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        interests: parsed.data.interests.join(","),
+        case_slug: sourceCaseSlug ?? undefined,
+        source: source ?? undefined,
+      });
       toast.success("Request received", {
         description: "We'll reach out within 1 business day to schedule your session.",
       });

@@ -208,6 +208,11 @@ const Index = () => {
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
+  const [strategySource, setStrategySource] = useState<{ slug: string | null; source: string } | null>(null);
+  const openStrategy = (source: string, slug: string | null = null) => {
+    setStrategySource({ slug, source });
+    setStrategyOpen(true);
+  };
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [caseFilters, setCaseFilters] = useCaseFilters();
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
@@ -1052,7 +1057,7 @@ const Index = () => {
                               case_title: c.title,
                               source: "case_card",
                             });
-                            setStrategyOpen(true);
+                            openStrategy("case_card", c.slug);
                           }}
                           aria-label={`Consult an operator about ${c.title}`}
                           className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-foreground/20 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/85 transition-all duration-300 hover:border-gold/60 hover:text-gold hover:bg-gold/5"
@@ -1145,7 +1150,7 @@ const Index = () => {
             </button>
             <button
               type="button"
-              onClick={() => setStrategyOpen(true)}
+              onClick={() => openStrategy("footer_cta")}
               className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-8 py-4 font-semibold text-foreground transition hover:border-primary/60 hover:bg-foreground/5"
             >
               Book a Growth Strategy Session
@@ -1224,7 +1229,15 @@ const Index = () => {
           </form>
         </DialogContent>
       </Dialog>
-      <StrategySessionDialog open={strategyOpen} onOpenChange={setStrategyOpen} />
+      <StrategySessionDialog
+        open={strategyOpen}
+        onOpenChange={(o) => {
+          setStrategyOpen(o);
+          if (!o) setStrategySource(null);
+        }}
+        sourceCaseSlug={strategySource?.slug ?? null}
+        source={strategySource?.source}
+      />
 
       {/* Case study narrative modal */}
       <Dialog open={!!narrativeCase} onOpenChange={(o) => !o && closeNarrative()}>
@@ -1309,6 +1322,7 @@ const Index = () => {
                 <Button
                   variant="ghost"
                   onClick={() => {
+                    const slug = narrativeCase?.slug ?? null;
                     if (narrativeCase) {
                       track("consult_operator_click", {
                         case_slug: narrativeCase.slug,
@@ -1317,7 +1331,7 @@ const Index = () => {
                       });
                     }
                     closeNarrative();
-                    setStrategyOpen(true);
+                    openStrategy("narrative_modal", slug);
                   }}
                 >
                   Consult Operator
