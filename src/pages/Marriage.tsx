@@ -75,22 +75,72 @@ const references: Reference[] = [
   },
 ];
 
+const FALLBACK_ANALYTICS_KEY = "marriage_analytics_queue";
+
+const fallbackLog = (data: Record<string, unknown>) => {
+  // 1) Always log to console for debugging / manual capture
+  try {
+    // eslint-disable-next-line no-console
+    console.info("[analytics:fallback]", data);
+  } catch { /* noop */ }
+  // 2) Persist to localStorage queue (capped at 200 entries) so events survive
+  //    page reloads and can be flushed later by another tool.
+  try {
+    if (typeof localStorage === "undefined") return;
+    const raw = localStorage.getItem(FALLBACK_ANALYTICS_KEY);
+    const queue: unknown[] = raw ? JSON.parse(raw) : [];
+    queue.push(data);
+    while (queue.length > 200) queue.shift();
+    localStorage.setItem(FALLBACK_ANALYTICS_KEY, JSON.stringify(queue));
+  } catch { /* noop */ }
+  // 3) Dispatch a CustomEvent so any listener can hook in without a global.
+  try {
+    if (typeof window !== "undefined" && typeof CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("analytics:event", { detail: data }));
+    }
+  } catch { /* noop */ }
+};
+
 const trackReferenceEvent = (
   event: "reference_copy" | "reference_call" | "reference_whatsapp" | "reference_facebook",
   payload: { name: string; field?: "name" | "phone"; value?: string },
 ) => {
+  const data = { event, ...payload, ts: Date.now(), source: "marriage_reference" };
+  let dataLayerOk = false;
+  let beaconOk = false;
   try {
-    const data = { event, ...payload, ts: Date.now(), source: "marriage_reference" };
-    // @ts-expect-error global
-    window.dataLayer = window.dataLayer || [];
-    // @ts-expect-error global
-    window.dataLayer.push(data);
+    if (typeof window !== "undefined") {
+      // @ts-expect-error global
+      window.dataLayer = window.dataLayer || [];
+      // @ts-expect-error global
+      if (Array.isArray(window.dataLayer) && typeof window.dataLayer.push === "function") {
+        // @ts-expect-error global
+        window.dataLayer.push(data);
+        dataLayerOk = true;
+      }
+    }
+  } catch { /* noop */ }
+  try {
     const endpoint = (import.meta as { env?: Record<string, string> }).env?.VITE_ANALYTICS_ENDPOINT;
     if (endpoint && typeof navigator !== "undefined" && "sendBeacon" in navigator) {
-      navigator.sendBeacon(endpoint, new Blob([JSON.stringify(data)], { type: "application/json" }));
+      beaconOk = navigator.sendBeacon(
+        endpoint,
+        new Blob([JSON.stringify(data)], { type: "application/json" }),
+      );
+      // sendBeacon returns false if the browser refused to queue the request
+      if (!beaconOk && typeof fetch === "function") {
+        fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          keepalive: true,
+        }).then(() => { beaconOk = true; }).catch(() => { /* noop */ });
+      }
     }
-  } catch {
-    /* noop */
+  } catch { /* noop */ }
+  // Always run the fallback if neither primary path captured the event.
+  if (!dataLayerOk && !beaconOk) {
+    fallbackLog(data);
   }
 };
 
