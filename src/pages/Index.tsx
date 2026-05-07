@@ -903,6 +903,7 @@ const Index = () => {
                       <div className="mt-auto pt-6">
                         <Link
                           to={`/case-studies/${c.slug}`}
+                          state={{ from: `/${serializeFilters(caseFilters)}#cases` }}
                           aria-label={`View full case study: ${c.title}`}
                           className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
                         >
