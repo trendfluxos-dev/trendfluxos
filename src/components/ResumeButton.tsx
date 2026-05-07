@@ -20,8 +20,9 @@ const trackResumeEvent = (label: string, href: string) => {
   };
   // 1. dataLayer (GTM / GA4)
   try {
-    // @ts-expect-error optional global
-    (window.dataLayer = window.dataLayer || []).push(payload);
+    (window as unknown as { dataLayer: unknown[] }).dataLayer =
+      (window as unknown as { dataLayer?: unknown[] }).dataLayer || [];
+    (window as unknown as { dataLayer: unknown[] }).dataLayer.push(payload);
   } catch {
     /* ignore */
   }
