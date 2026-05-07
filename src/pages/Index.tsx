@@ -879,7 +879,7 @@ const Index = () => {
       {/* Case Studies */}
       <section id="cases" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-14 text-center">
+          <div className="mb-10 text-center">
             <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
               — Proven Growth Systems & Results
             </p>
@@ -890,13 +890,46 @@ const Index = () => {
               Real execution. Here's how I turn strategy into measurable growth.
             </p>
           </div>
+        </div>
 
-          <ul
-            role="list"
-            aria-label="Case studies"
-            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
-          >
-            {caseStudies.map((c, i) => (
+        {(() => {
+          const q = caseFilters.query.trim().toLowerCase();
+          const filtered = caseStudies.filter((c) => {
+            if (caseFilters.service && c.service !== caseFilters.service) return false;
+            if (caseFilters.industry && c.industry !== caseFilters.industry) return false;
+            if (caseFilters.stack && !c.stack.includes(caseFilters.stack as typeof c.stack[number])) return false;
+            if (caseFilters.stage && c.stage !== caseFilters.stage) return false;
+            if (q) {
+              const hay = `${c.title} ${c.description} ${c.category} ${c.service} ${c.industry} ${c.stack.join(" ")} ${c.stage}`.toLowerCase();
+              if (!hay.includes(q)) return false;
+            }
+            return true;
+          });
+          const hasActive =
+            !!(caseFilters.service || caseFilters.industry || caseFilters.stack || caseFilters.stage || q);
+          return (
+            <>
+              <FilterBar value={caseFilters} onChange={setCaseFilters} resultCount={hasActive ? filtered.length : undefined} />
+              <div className="mx-auto max-w-7xl mt-8">
+                {filtered.length === 0 ? (
+                  <p className="text-center text-foreground/60 py-12">
+                    No case studies match these filters. Try resetting.
+                  </p>
+                ) : (
+                  <ul
+                    role="list"
+                    aria-label="Case studies"
+                    className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
+                  >
+                    {filtered.map((c, i) => (
+                      <li key={c.title}>
+                      <article
+                        aria-labelledby={`case-${i}-title`}
+                        className={`group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up ${
+                          hasActive ? "ring-2 ring-gold/50 shadow-gold" : ""
+                        }`}
+                        style={{ animationDelay: `${i * 0.06}s` }}
+                      >
               <li key={c.title}>
               <article
                 aria-labelledby={`case-${i}-title`}
