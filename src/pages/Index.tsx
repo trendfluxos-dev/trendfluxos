@@ -45,6 +45,7 @@ import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterB
 import { useCaseFilters, serializeFilters } from "@/hooks/useCaseFilters";
 import type { CaseStudy } from "@/data/caseStudies";
 import { track } from "@/lib/analytics";
+import { supabase } from "@/integrations/supabase/client";
 
 type PressItem = {
   id?: string;
