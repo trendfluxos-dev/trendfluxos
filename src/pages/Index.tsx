@@ -363,7 +363,7 @@ const Index = () => {
         <div className="flex items-center justify-between px-5 md:px-8 py-3.5">
           <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight whitespace-nowrap shrink-0">
             <img src={trendfluxLogo} alt="TrendFlux Ecosystem logo" className="h-8 w-8 object-contain" />
-            TrendFlux <span className="text-gradient">Digital</span>
+            TrendFlux <span className="text-gradient">Ecosystem</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-sm text-foreground/70">
