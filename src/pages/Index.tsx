@@ -36,6 +36,7 @@ import { usePressItems } from "@/hooks/usePressItems";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
+import { DigitalImpactMap } from "@/components/DigitalImpactMap";
 
 type PressItem = {
   id?: string;
@@ -458,6 +459,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Digital Impact Map */}
+      <DigitalImpactMap />
 
       {/* Services Directory */}
       <section id="services" className="relative px-6 py-24 md:px-12 lg:px-20">
