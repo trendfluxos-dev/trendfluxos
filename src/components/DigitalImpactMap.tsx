@@ -49,9 +49,11 @@ type Props = {
   matchingSlugs?: string[];
   /** Optional reset handler shown in the empty-state overlay. */
   onResetFilters?: () => void;
+  /** Path (with query + hash) to return to when leaving a case study. */
+  returnTo?: string;
 };
 
-export const DigitalImpactMap = ({ matchingSlugs, onResetFilters }: Props = {}) => {
+export const DigitalImpactMap = ({ matchingSlugs, onResetFilters, returnTo }: Props = {}) => {
   const [active, setActive] = useState<System | "all">("all");
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const navigate = useNavigate();
@@ -67,7 +69,7 @@ export const DigitalImpactMap = ({ matchingSlugs, onResetFilters }: Props = {}) 
     : nodes.length;
 
   const openCaseStudy = (slug: string) => {
-    navigate(`/case-studies/${slug}`);
+    navigate(`/case-studies/${slug}`, { state: { from: returnTo ?? "/#cases" } });
   };
 
   const focusNode = (i: number) => {

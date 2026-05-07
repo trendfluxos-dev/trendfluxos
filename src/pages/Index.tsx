@@ -40,6 +40,7 @@ import { DigitalImpactMap } from "@/components/DigitalImpactMap";
 import { Faq } from "@/components/Faq";
 import { StrategySessionDialog } from "@/components/StrategySessionDialog";
 import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterBar";
+import { useCaseFilters, serializeFilters } from "@/hooks/useCaseFilters";
 
 type PressItem = {
   id?: string;
@@ -203,7 +204,7 @@ const Index = () => {
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
-  const [caseFilters, setCaseFilters] = useState<CaseFilters>(EMPTY_FILTERS);
+  const [caseFilters, setCaseFilters] = useCaseFilters();
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
@@ -393,6 +394,7 @@ const Index = () => {
       <DigitalImpactMap
         matchingSlugs={matchingSlugs}
         onResetFilters={() => setCaseFilters(EMPTY_FILTERS)}
+        returnTo={`/${serializeFilters(caseFilters)}#cases`}
       />
 
       {/* Services Directory */}
@@ -902,6 +904,7 @@ const Index = () => {
                       <div className="mt-auto pt-6">
                         <Link
                           to={`/case-studies/${c.slug}`}
+                          state={{ from: `/${serializeFilters(caseFilters)}#cases` }}
                           aria-label={`View full case study: ${c.title}`}
                           className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
                         >

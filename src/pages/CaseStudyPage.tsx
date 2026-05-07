@@ -1,6 +1,6 @@
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { caseStudies } from "@/data/caseStudies";
 import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
@@ -21,14 +21,36 @@ const Section = ({ label, body }: { label: string; body: string }) => (
 const CaseStudyPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const study = caseStudies.find((c) => c.slug === slug);
   const [quoteOpen, setQuoteOpen] = useState(false);
+
+  const fromState = (location.state as { from?: string } | null)?.from;
+  const backTarget = fromState ?? "/#cases";
+
+  // Scroll to top when arriving at a new case study
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+  }, [slug]);
+
+  const handleBack = () => {
+    // Prefer real history if it came from inside our app, fall back to filtered map.
+    if (fromState) {
+      navigate(fromState);
+    } else if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/#cases");
+    }
+  };
 
   useSeo({
     title: study
       ? `${study.title} — ${BRAND.name}`
       : `Case Study Not Found — ${BRAND.name}`,
     description: study?.description,
+    type: study ? "article" : "website",
+    canonical: study ? `${BRAND.url}/case-studies/${study.slug}` : undefined,
   });
 
   useJsonLd(
@@ -40,8 +62,38 @@ const CaseStudyPage = () => {
             headline: study.title,
             description: study.description,
             author: { "@type": "Organization", name: BRAND.legalName },
-            publisher: { "@type": "Organization", name: BRAND.legalName },
+            publisher: {
+              "@type": "Organization",
+              name: BRAND.legalName,
+              logo: { "@type": "ImageObject", url: `${BRAND.url}/favicon.ico` },
+            },
+            mainEntityOfPage: `${BRAND.url}/case-studies/${study.slug}`,
             articleSection: study.category,
+            keywords: [
+              study.service,
+              study.industry,
+              study.stage,
+              ...study.stack,
+            ].join(", "),
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: BRAND.url },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Case Studies",
+                item: `${BRAND.url}/#cases`,
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: study.title,
+                item: `${BRAND.url}/case-studies/${study.slug}`,
+              },
+            ],
           },
         ]
       : []
@@ -79,23 +131,26 @@ const CaseStudyPage = () => {
             <img src={trendfluxLogo} alt={`${BRAND.name} logo`} className="h-8 w-8 object-contain" />
             {BRAND.nameLead} <span className="text-gradient">{BRAND.nameTrail}</span>
           </Link>
-          <Link
-            to="/#cases"
-            className="hidden md:inline-flex items-center gap-1 text-sm text-foreground/70 hover:text-gold transition-colors"
+          <button
+            type="button"
+            onClick={handleBack}
+            className="hidden md:inline-flex items-center gap-1 text-sm text-foreground/70 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded-full px-3 py-1"
           >
-            <ArrowLeft className="h-4 w-4" /> All case studies
-          </Link>
+            <ArrowLeft className="h-4 w-4" /> Back to map
+          </button>
         </div>
       </nav>
 
       <article className="relative px-6 pt-32 pb-16 md:px-12 lg:px-20">
         <div className="mx-auto max-w-4xl">
-          <Link
-            to="/#cases"
-            className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.25em] text-foreground/55 hover:text-gold transition-colors mb-8"
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-1 text-xs uppercase tracking-[0.25em] text-foreground/55 hover:text-gold transition-colors mb-8 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
+            aria-label="Return to impact map and case studies"
           >
-            <ArrowLeft className="h-3 w-3" /> Back
-          </Link>
+            <ArrowLeft className="h-3 w-3" /> Back to map
+          </button>
 
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
             {study.category}
