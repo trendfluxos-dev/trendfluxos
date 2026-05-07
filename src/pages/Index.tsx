@@ -1234,6 +1234,7 @@ const Index = () => {
           </form>
         </DialogContent>
       </Dialog>
+      <StrategySessionDialog open={strategyOpen} onOpenChange={setStrategyOpen} />
     </main>
   );
 };
