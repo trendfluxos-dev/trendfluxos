@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart } from "lucide-react";
+import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart, Copy, Check, User } from "lucide-react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import profile from "@/assets/marriage/profile.jpg";
 import photo1 from "@/assets/marriage/photo1.jpg";
