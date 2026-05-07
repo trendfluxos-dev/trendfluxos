@@ -110,6 +110,17 @@ Deno.serve(async (req) => {
 
     // ---- Bot-access diagnostic check ----
     if (action === "check" || req.method === "GET") {
+      // Diagnostic check leaks internal chat IDs — gate it behind a shared
+      // secret so only the operator (who knows the secret) can run it.
+      const diagSecret = Deno.env.get("TELEGRAM_DIAG_SECRET");
+      const provided =
+        req.headers.get("X-Diag-Secret") ?? url.searchParams.get("diag_secret");
+      if (!diagSecret || provided !== diagSecret) {
+        return new Response(
+          JSON.stringify({ ok: false, error: "Unauthorized" }),
+          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
       const result: Record<string, unknown> = {
         bot_username: BOT_USERNAME,
         group_invite: GROUP_INVITE,
@@ -175,6 +186,15 @@ Deno.serve(async (req) => {
     const whatsapp = String(body.whatsapp ?? "").trim().slice(0, 40);
     const message = String(body.message ?? "").trim().slice(0, 1000);
     const requestedTarget = String(body.target ?? "").trim().toLowerCase();
+    // Honeypot field — legitimate clients leave it empty. Spam bots usually fill all inputs.
+    const honeypot = String(body.website ?? body.hp ?? "").trim();
+    if (honeypot) {
+      // Pretend success so bots don't retry, but do not actually deliver.
+      return new Response(
+        JSON.stringify({ ok: true, delivered: 0, total: 0, results: [] }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     if (name.length < 2 || whatsapp.length < 6) {
       return new Response(

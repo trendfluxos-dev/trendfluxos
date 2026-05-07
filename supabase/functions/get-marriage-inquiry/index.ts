@@ -61,6 +61,24 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Treat the random UUID as a short-lived bearer token: only the original
+    // submitter has it (we hand it back via navigation state + localStorage).
+    // Reject lookups for records older than 30 days so a leaked id has a
+    // bounded blast radius and cannot be used to enumerate historical PII.
+    const TTL_MS = 30 * 24 * 60 * 60 * 1000;
+    if (data && data.created_at) {
+      const ageMs = Date.now() - new Date(data.created_at as string).getTime();
+      if (ageMs > TTL_MS) {
+        return new Response(
+          JSON.stringify({ inquiry: null }),
+          {
+            status: 404,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          },
+        );
+      }
+    }
+
     return new Response(
       JSON.stringify({ inquiry: data ?? null }),
       {
