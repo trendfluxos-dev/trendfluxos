@@ -431,6 +431,83 @@ const Index = () => {
         </div>
       </section>
 
+      {/* TrendFlux Ecosystem */}
+      <section id="ecosystem" className="relative px-6 py-24 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">— The Ecosystem</p>
+            <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
+              TrendFlux <span className="text-gradient">Ecosystem</span>
+            </h2>
+            <p className="mt-5 text-base md:text-lg text-foreground/65 leading-relaxed">
+              Building interconnected brands across digital growth, talent
+              networks, and premium experiences.
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                title: "TrendFlux Digital",
+                tagline: "AI-powered growth systems",
+                href: "#services",
+                external: false,
+                Icon: Cpu,
+                accent: "from-primary/30 to-primary-glow/10",
+              },
+              {
+                title: "TrendFlux Talent",
+                tagline: "Creator & promoter ecosystem",
+                href: "/trendflux-talent",
+                external: false,
+                Icon: Users,
+                accent: "from-gold/25 to-primary/10",
+              },
+              {
+                title: "Luxe Veil",
+                tagline: "Private luxury wellness experience",
+                href: "/luxe-veil",
+                external: false,
+                Icon: Sparkles,
+                accent: "from-gold/30 to-primary-glow/10",
+              },
+            ].map(({ title, tagline, href, Icon, accent }) => {
+              const inner = (
+                <article
+                  className="group relative h-full rounded-3xl glass glass-hover p-7 flex flex-col overflow-hidden"
+                >
+                  <div
+                    className={`absolute inset-0 -z-10 opacity-60 bg-gradient-to-br ${accent} blur-2xl group-hover:opacity-90 transition`}
+                    aria-hidden
+                  />
+                  <div className="flex items-center justify-between">
+                    <div className="h-12 w-12 rounded-2xl glass flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-gold" />
+                    </div>
+                    <ArrowUpRight className="w-5 h-5 text-foreground/40 group-hover:text-gold group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition" />
+                  </div>
+                  <h3 className="font-display text-2xl font-bold mt-6">
+                    {title}
+                  </h3>
+                  <p className="mt-2 text-foreground/65 leading-relaxed">
+                    {tagline}
+                  </p>
+                  <span className="mt-6 inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.25em] text-gold/90">
+                    Explore <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </article>
+              );
+              return href.startsWith("/") ? (
+                <Link key={title} to={href} className="block h-full">{inner}</Link>
+              ) : (
+                <a key={title} href={href} className="block h-full">{inner}</a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+
       {/* Services Directory */}
       <section id="services" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
