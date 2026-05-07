@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -212,6 +212,20 @@ const Index = () => {
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [highlightedSlug, setHighlightedSlug] = useState<string | null>(null);
   const [narrativeCase, setNarrativeCase] = useState<CaseStudy | null>(null);
+  const narrativeTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const narrativeInitialFocusRef = useRef<HTMLButtonElement | null>(null);
+
+  const openNarrative = (
+    c: CaseStudy,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    narrativeTriggerRef.current = e.currentTarget;
+    setNarrativeCase(c);
+  };
+
+  const closeNarrative = () => {
+    setNarrativeCase(null);
+  };
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
   const [veilError, setVeilError] = useState("");
