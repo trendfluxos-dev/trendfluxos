@@ -45,6 +45,30 @@ const attributes: Bi[] = [
   { en: "Maintains balance between career and personal life", bn: "ক্যারিয়ার ও ব্যক্তিগত জীবনের মধ্যে ভারসাম্য বজায় রাখে" },
 ];
 
+type Reference = {
+  name: { en: string; bn: string };
+  role: { en: string; bn: string };
+  org?: { en: string; bn: string };
+  phone: string;
+  facebook?: string;
+};
+
+const references: Reference[] = [
+  {
+    name: { en: "Mr. Md. Abul Bashar Khan Jewel", bn: "জনাব মোঃ আবুল বাসার খান জুয়েল" },
+    role: { en: "General Secretary", bn: "সাধারণ সম্পাদক" },
+    org: { en: "Pabna Nagorik Committee (PNC)", bn: "পাবনা নাগরিক কমিটি (পিএনসি)" },
+    phone: "+8801716808074",
+    facebook: "https://www.facebook.com/bashar.k.jewel",
+  },
+  {
+    name: { en: "Mominul Islam Muktar", bn: "মমিনুল ইসলাম মুক্তার" },
+    role: { en: "Businessman, Social Worker", bn: "ব্যবসায়ী, সমাজসেবাকর্মী" },
+    phone: "+8801728870710",
+    facebook: "https://www.facebook.com/mukter.hossin.172235",
+  },
+];
+
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
   const location = useLocation();
