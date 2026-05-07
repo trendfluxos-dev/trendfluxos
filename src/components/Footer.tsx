@@ -10,7 +10,7 @@ const Footer = () => {
           <Link to="/" className="flex items-center gap-2 font-display font-bold text-xl">
             <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-cyan" />
             <span className="text-gradient">TrendFlux</span>
-            <span className="text-foreground/60 font-normal">Digital</span>
+            <span className="text-foreground/60 font-normal">Ecosystem</span>
           </Link>
           <p className="text-foreground/60 mt-4 max-w-sm leading-relaxed">
             AI-powered growth systems for brands, founders, and businesses ready
