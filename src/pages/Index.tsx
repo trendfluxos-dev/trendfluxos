@@ -821,103 +821,113 @@ const Index = () => {
           </div>
         </div>
 
-        {(() => {
-          const q = caseFilters.query.trim().toLowerCase();
-          const filtered = caseStudies.filter((c) => {
-            if (caseFilters.service && c.service !== caseFilters.service) return false;
-            if (caseFilters.industry && c.industry !== caseFilters.industry) return false;
-            if (caseFilters.stack && !c.stack.includes(caseFilters.stack as typeof c.stack[number])) return false;
-            if (caseFilters.stage && c.stage !== caseFilters.stage) return false;
-            if (q) {
-              const hay = `${c.title} ${c.description} ${c.category} ${c.service} ${c.industry} ${c.stack.join(" ")} ${c.stage}`.toLowerCase();
-              if (!hay.includes(q)) return false;
-            }
-            return true;
-          });
-          const hasActive =
-            !!(caseFilters.service || caseFilters.industry || caseFilters.stack || caseFilters.stage || q);
-          return (
-            <>
-              <FilterBar value={caseFilters} onChange={setCaseFilters} resultCount={hasActive ? filtered.length : undefined} />
-              <div className="mx-auto max-w-7xl mt-8">
-                {filtered.length === 0 ? (
-                  <p className="text-center text-foreground/60 py-12">
-                    No case studies match these filters. Try resetting.
-                  </p>
-                ) : (
-                  <ul
-                    role="list"
-                    aria-label="Case studies"
-                    className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
+        <FilterBar
+          value={caseFilters}
+          onChange={setCaseFilters}
+          resultCount={caseFiltersActive ? filteredCases.length : undefined}
+        />
+        <div className="mx-auto max-w-7xl mt-8">
+          {caseFiltersActive && (
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.25em] text-foreground/55">
+              <span aria-live="polite">
+                <span className="font-semibold text-foreground">{filteredCases.length}</span> of{" "}
+                {caseStudies.length} case studies match
+              </span>
+              <button
+                type="button"
+                onClick={() => setCaseFilters(EMPTY_FILTERS)}
+                className="text-gold hover:underline"
+              >
+                Clear filters
+              </button>
+            </div>
+          )}
+
+          {filteredCases.length === 0 ? (
+            <div className="text-center py-16 px-6 rounded-3xl glass border border-gold/30">
+              <p className="font-display text-2xl font-bold">No matching case studies</p>
+              <p className="mt-3 text-sm text-foreground/60 max-w-md mx-auto">
+                Try removing one of your filters or clearing the search to see all{" "}
+                {caseStudies.length} live growth systems.
+              </p>
+              <button
+                type="button"
+                onClick={() => setCaseFilters(EMPTY_FILTERS)}
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold-foreground hover:scale-105 transition"
+              >
+                Reset filters
+              </button>
+            </div>
+          ) : (
+            <ul
+              role="list"
+              aria-label="Case studies"
+              className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
+            >
+              {filteredCases.map((c, i) => (
+                <li key={c.title}>
+                  <article
+                    aria-labelledby={`case-${i}-title`}
+                    className={`group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up ${
+                      caseFiltersActive ? "ring-2 ring-gold/50 shadow-gold" : ""
+                    }`}
+                    style={{ animationDelay: `${i * 0.06}s` }}
                   >
-                    {filtered.map((c, i) => (
-                      <li key={c.title}>
-                      <article
-                        aria-labelledby={`case-${i}-title`}
-                        className={`group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up ${
-                          hasActive ? "ring-2 ring-gold/50 shadow-gold" : ""
-                        }`}
-                        style={{ animationDelay: `${i * 0.06}s` }}
-                      >
-                <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
-                  {/* Subtle dotted grid */}
-                  <div
-                    className="absolute inset-0 opacity-40"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(hsl(var(--gold) / 0.18) 1px, transparent 1px)",
-                      backgroundSize: "14px 14px",
-                    }}
-                    aria-hidden
-                  />
-                  <c.Icon
-                    aria-label={`${c.category} category illustration`}
-                    className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
-                </div>
+                    <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
+                      <div
+                        className="absolute inset-0 opacity-40"
+                        style={{
+                          backgroundImage:
+                            "radial-gradient(hsl(var(--gold) / 0.18) 1px, transparent 1px)",
+                          backgroundSize: "14px 14px",
+                        }}
+                        aria-hidden
+                      />
+                      <c.Icon
+                        aria-label={`${c.category} category illustration`}
+                        className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
+                    </div>
 
-                <div className="flex flex-1 flex-col p-7">
-                  <span className="inline-flex w-fit items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
-                    {c.category}
-                  </span>
+                    <div className="flex flex-1 flex-col p-7">
+                      <span className="inline-flex w-fit items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
+                        {c.category}
+                      </span>
 
-                  <h3 id={`case-${i}-title`} className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
-                    {c.title}
-                  </h3>
+                      <h3 id={`case-${i}-title`} className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
+                        {c.title}
+                      </h3>
 
-                  <p className="mt-3 text-sm leading-relaxed text-foreground/65">
-                    {c.description}
-                  </p>
+                      <p className="mt-3 text-sm leading-relaxed text-foreground/65">
+                        {c.description}
+                      </p>
 
-                  <ul aria-label={`Key results for ${c.title}`} className="mt-5 space-y-2">
-                    {c.results.map((r) => (
-                      <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
-                        <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                        <span>{r}</span>
-                      </li>
-                    ))}
-                  </ul>
+                      <ul aria-label={`Key results for ${c.title}`} className="mt-5 space-y-2">
+                        {c.results.map((r) => (
+                          <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
+                            <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                            <span>{r}</span>
+                          </li>
+                        ))}
+                      </ul>
 
-                  <div className="mt-auto pt-6">
-                    <Link
-                      to={`/case-studies/${c.slug}`}
-                      aria-label={`View full case study: ${c.title}`}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
-                    >
-                      View Case Study <ArrowRight aria-hidden className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-              </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </>
-          );
-        })()}
+                      <div className="mt-auto pt-6">
+                        <Link
+                          to={`/case-studies/${c.slug}`}
+                          aria-label={`View full case study: ${c.title}`}
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
+                        >
+                          View Case Study <ArrowRight aria-hidden className="h-4 w-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </section>
 
       {/* Case study detail modal */}
