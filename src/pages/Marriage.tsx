@@ -480,6 +480,7 @@ const Marriage = () => {
                 </div>
               );
             })}
+          </div>
         </Card>
 
         {/* Selective sharing notice */}
