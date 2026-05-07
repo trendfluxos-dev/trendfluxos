@@ -40,6 +40,7 @@ import { DigitalImpactMap } from "@/components/DigitalImpactMap";
 import { Faq } from "@/components/Faq";
 import { StrategySessionDialog } from "@/components/StrategySessionDialog";
 import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterBar";
+import { useCaseFilters, serializeFilters } from "@/hooks/useCaseFilters";
 
 type PressItem = {
   id?: string;
@@ -203,7 +204,7 @@ const Index = () => {
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [strategyOpen, setStrategyOpen] = useState(false);
-  const [caseFilters, setCaseFilters] = useState<CaseFilters>(EMPTY_FILTERS);
+  const [caseFilters, setCaseFilters] = useCaseFilters();
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
