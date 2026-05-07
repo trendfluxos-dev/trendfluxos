@@ -110,10 +110,9 @@ const trackReferenceEvent = (
   let beaconOk = false;
   try {
     if (typeof window !== "undefined") {
-      const w = window as unknown as { dataLayer: unknown[] };
-      w.dataLayer = w.dataLayer || [];
-      if (Array.isArray(w.dataLayer) && typeof w.dataLayer.push === "function") {
-        w.dataLayer.push(data);
+      window.dataLayer = window.dataLayer || [];
+      if (Array.isArray(window.dataLayer) && typeof window.dataLayer.push === "function") {
+        window.dataLayer.push(data);
         dataLayerOk = true;
       }
     }
