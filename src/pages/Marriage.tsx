@@ -46,28 +46,54 @@ const attributes: Bi[] = [
 ];
 
 type Reference = {
-  name: { en: string; bn: string };
+  nameEn: string;
+  nameBn: string;
   role: { en: string; bn: string };
   org?: { en: string; bn: string };
-  phone: string;
+  phoneDisplay: string; // formatted, e.g. "+880 1716-808074"
+  phoneE164: string;    // dial-ready, e.g. "+8801716808074"
   facebook?: string;
 };
 
 const references: Reference[] = [
   {
-    name: { en: "Mr. Md. Abul Bashar Khan Jewel", bn: "জনাব মোঃ আবুল বাসার খান জুয়েল" },
+    nameEn: "Mr. Md. Abul Bashar Khan Jewel",
+    nameBn: "জনাব মোঃ আবুল বাসার খান জুয়েল",
     role: { en: "General Secretary", bn: "সাধারণ সম্পাদক" },
     org: { en: "Pabna Nagorik Committee (PNC)", bn: "পাবনা নাগরিক কমিটি (পিএনসি)" },
-    phone: "+8801716808074",
+    phoneDisplay: "+880 1716-808074",
+    phoneE164: "+8801716808074",
     facebook: "https://www.facebook.com/bashar.k.jewel",
   },
   {
-    name: { en: "Mominul Islam Muktar", bn: "মমিনুল ইসলাম মুক্তার" },
+    nameEn: "Mominul Islam Muktar",
+    nameBn: "মমিনুল ইসলাম মুক্তার",
     role: { en: "Businessman, Social Worker", bn: "ব্যবসায়ী, সমাজসেবাকর্মী" },
-    phone: "+8801728870710",
+    phoneDisplay: "+880 1728-870710",
+    phoneE164: "+8801728870710",
     facebook: "https://www.facebook.com/mukter.hossin.172235",
   },
 ];
+
+const trackReferenceEvent = (
+  event: "reference_copy" | "reference_call" | "reference_whatsapp" | "reference_facebook",
+  payload: { name: string; field?: "name" | "phone"; value?: string },
+) => {
+  try {
+    const data = { event, ...payload, ts: Date.now(), source: "marriage_reference" };
+    // @ts-expect-error global
+    window.dataLayer = window.dataLayer || [];
+    // @ts-expect-error global
+    window.dataLayer.push(data);
+    const endpoint = (import.meta as { env?: Record<string, string> }).env?.VITE_ANALYTICS_ENDPOINT;
+    if (endpoint && typeof navigator !== "undefined" && "sendBeacon" in navigator) {
+      navigator.sendBeacon(endpoint, new Blob([JSON.stringify(data)], { type: "application/json" }));
+    }
+  } catch {
+    /* noop */
+  }
+};
+
 
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
@@ -387,46 +413,73 @@ const Marriage = () => {
             )}
           </p>
           <div className="grid sm:grid-cols-2 gap-4">
-            {references.map((r, i) => (
-              <div
-                key={i}
-                className="rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 transition flex flex-col gap-3"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
-                    <User className="h-4 w-4 text-black" />
+            {references.map((r, i) => {
+              const displayName = bangla ? r.nameBn : r.nameEn;
+              const dialDigits = r.phoneE164.replace(/\D/g, "");
+              return (
+                <div
+                  key={i}
+                  className="rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 transition flex flex-col gap-3"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
+                      <User className="h-4 w-4 text-black" />
+                    </div>
+                    <div className="min-w-0">
+                      <CopyChip
+                        value={r.nameEn}
+                        label={displayName}
+                        bold
+                        onCopied={() =>
+                          trackReferenceEvent("reference_copy", { name: r.nameEn, field: "name", value: r.nameEn })
+                        }
+                      />
+                      <p className="text-xs text-red-300 mt-1">
+                        {bangla ? r.role.bn : r.role.en}
+                        {r.org && <span className="text-white/60"> · {bangla ? r.org.bn : r.org.en}</span>}
+                      </p>
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <CopyChip value={bangla ? r.name.bn : r.name.en} label={bangla ? r.name.bn : r.name.en} bold />
-                    <p className="text-xs text-red-300 mt-1">
-                      {bangla ? r.role.bn : r.role.en}
-                      {r.org && <span className="text-white/60"> · {bangla ? r.org.bn : r.org.en}</span>}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <CopyChip value={r.phone} label={r.phone} icon={<Phone className="h-3.5 w-3.5" />} />
-                  <a
-                    href={`https://wa.me/${r.phone.replace(/\D/g, "")}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-3 py-1.5 text-xs font-bold text-white hover:brightness-110 transition"
-                  >
-                    <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
-                  </a>
-                  {r.facebook && (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <CopyChip
+                      value={r.phoneDisplay}
+                      label={r.phoneDisplay}
+                      icon={<Phone className="h-3.5 w-3.5" />}
+                      onCopied={() =>
+                        trackReferenceEvent("reference_copy", { name: r.nameEn, field: "phone", value: r.phoneDisplay })
+                      }
+                    />
                     <a
-                      href={r.facebook}
+                      href={`tel:${r.phoneE164}`}
+                      onClick={() => trackReferenceEvent("reference_call", { name: r.nameEn, value: r.phoneE164 })}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-600/10 px-3 py-1.5 text-xs font-bold text-red-200 hover:bg-red-600 hover:text-white transition"
+                    >
+                      <Phone className="h-3.5 w-3.5" /> Call
+                    </a>
+                    <a
+                      href={`https://wa.me/${dialDigits}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white hover:text-black transition"
+                      onClick={() => trackReferenceEvent("reference_whatsapp", { name: r.nameEn, value: r.phoneE164 })}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-3 py-1.5 text-xs font-bold text-white hover:brightness-110 transition"
                     >
-                      <Facebook className="h-3.5 w-3.5" /> Facebook
+                      <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
                     </a>
-                  )}
+                    {r.facebook && (
+                      <a
+                        href={r.facebook}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => trackReferenceEvent("reference_facebook", { name: r.nameEn, value: r.facebook })}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white hover:text-black transition"
+                      >
+                        <Facebook className="h-3.5 w-3.5" /> Facebook
+                      </a>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </Card>
 
@@ -477,18 +530,21 @@ const CopyChip = ({
   label,
   icon,
   bold,
+  onCopied,
 }: {
   value: string;
   label: string;
   icon?: React.ReactNode;
   bold?: boolean;
+  onCopied?: () => void;
 }) => {
   const [copied, setCopied] = useState(false);
   const onCopy = async () => {
     try {
       await navigator.clipboard.writeText(value);
       setCopied(true);
-      toast.success(`Copied: ${value}`);
+      toast.success("Copied", { description: value });
+      onCopied?.();
       setTimeout(() => setCopied(false), 1600);
     } catch {
       toast.error("Copy failed");
