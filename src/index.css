@@ -150,6 +150,30 @@
     background: hsl(var(--primary) / 0.3);
     color: hsl(var(--foreground));
   }
+
+  /* Consistent, premium focus ring for all clickable elements */
+  a, button, [role="button"], summary {
+    @apply outline-none;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  summary:focus-visible {
+    box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--gold) / 0.6);
+    border-radius: 0.5rem;
+  }
+
+  /* Smoother default transitions on all interactive surfaces */
+  a, button {
+    transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+  }
+
+  /* Ensure tap targets on mobile feel comfortable */
+  @media (max-width: 640px) {
+    button, a[role="button"], .btn, [data-tap] {
+      min-height: 40px;
+    }
+  }
 }
 
 @layer components {
