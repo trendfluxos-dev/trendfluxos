@@ -949,12 +949,31 @@ const Index = () => {
               {filteredCases.map((c, i) => (
                 <li key={c.title}>
                   <article
+                    id={`case-card-${c.slug}`}
                     aria-labelledby={`case-${i}-title`}
-                    className={`group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up ${
+                    className={`group relative flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_30px_80px_-20px_hsl(var(--gold)/0.45)] hover:border-gold/40 animate-fade-up ${
                       caseFiltersActive ? "ring-2 ring-gold/50 shadow-gold" : ""
+                    } ${
+                      highlightedSlug === c.slug
+                        ? "ring-2 ring-gold shadow-[0_0_60px_hsl(var(--gold)/0.55)] -translate-y-1.5 scale-[1.015]"
+                        : ""
                     }`}
                     style={{ animationDelay: `${i * 0.06}s` }}
                   >
+                    {/* premium top sheen */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    />
+                    {/* gradient halo on hover */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        background:
+                          "radial-gradient(600px circle at 50% -20%, hsl(var(--gold) / 0.18), transparent 40%)",
+                      }}
+                    />
                     <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
                       <div
                         className="absolute inset-0 opacity-40"
@@ -967,12 +986,12 @@ const Index = () => {
                       />
                       <c.Icon
                         aria-label={`${c.category} category illustration`}
-                        className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105"
+                        className="relative h-full w-full p-6 transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
                     </div>
 
-                    <div className="flex flex-1 flex-col p-7">
+                    <div className="relative flex flex-1 flex-col p-7">
                       <span className="inline-flex w-fit items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
                         {c.category}
                       </span>
@@ -994,15 +1013,24 @@ const Index = () => {
                         ))}
                       </ul>
 
-                      <div className="mt-auto pt-6">
-                        <Link
-                          to={`/case-studies/${c.slug}`}
-                          state={{ from: `/${serializeFilters(caseFilters)}#cases` }}
-                          aria-label={`View full case study: ${c.title}`}
-                          className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
+                      <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-2.5">
+                        <button
+                          type="button"
+                          onClick={() => setNarrativeCase(c)}
+                          aria-label={`View narrative for ${c.title}`}
+                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-gold px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-gold-foreground shadow-gold/30 transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_28px_hsl(var(--gold)/0.5)] active:scale-95"
                         >
-                          View Case Study <ArrowRight aria-hidden className="h-4 w-4" />
-                        </Link>
+                          View Narrative <ArrowUpRight aria-hidden className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setStrategyOpen(true)}
+                          aria-label={`Consult an operator about ${c.title}`}
+                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-foreground/20 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/85 transition-all duration-300 hover:border-gold/60 hover:text-gold hover:bg-gold/5"
+                        >
+                          Consult Operator
+                        </button>
+                      </div>
                       </div>
                     </div>
                   </article>
