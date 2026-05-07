@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -206,6 +206,18 @@ const Index = () => {
   const [caseFilters, setCaseFilters] = useState<CaseFilters>(EMPTY_FILTERS);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
+
+  // Allow other components (e.g. DigitalImpactMap) to open a case study by slug.
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const slug = (e as CustomEvent<{ slug: string }>).detail?.slug;
+      if (!slug) return;
+      const match = caseStudies.find((c) => c.slug === slug);
+      if (match) setActiveCase(match);
+    };
+    window.addEventListener(CASE_STUDY_OPEN_EVENT, handler);
+    return () => window.removeEventListener(CASE_STUDY_OPEN_EVENT, handler);
+  }, []);
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
   const [veilError, setVeilError] = useState("");
