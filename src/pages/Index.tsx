@@ -1030,7 +1030,7 @@ const Index = () => {
                       <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-2.5">
                         <button
                           type="button"
-                          onClick={() => setNarrativeCase(c)}
+                          onClick={(e) => openNarrative(c, e)}
                           aria-label={`View narrative for ${c.title}`}
                           className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-gold px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-gold-foreground shadow-gold/30 transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_28px_hsl(var(--gold)/0.5)] active:scale-95"
                         >
