@@ -362,7 +362,7 @@ const Index = () => {
       <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-7xl rounded-full glass-strong">
         <div className="flex items-center justify-between px-5 md:px-8 py-3.5">
           <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight whitespace-nowrap shrink-0">
-            <img src={trendfluxLogo} alt="TrendFlux Digital logo" className="h-8 w-8 object-contain" />
+            <img src={trendfluxLogo} alt="TrendFlux Ecosystem logo" className="h-8 w-8 object-contain" />
             TrendFlux <span className="text-gradient">Digital</span>
           </Link>
 
@@ -512,7 +512,7 @@ const Index = () => {
             <div className="relative overflow-hidden rounded-[2rem] glass-strong p-2">
               <img
                 src={emonPortrait}
-                alt="Zahid Hasan Emon, Brand Architect of TrendFlux Digital"
+                alt="Zahid Hasan Emon, Brand Architect of TrendFlux Ecosystem"
                 className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
               />
               <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
@@ -535,7 +535,7 @@ const Index = () => {
             </h2>
             <blockquote className="mt-8 border-l-2 border-gold/60 pl-6 text-base leading-relaxed text-foreground/75 md:text-lg space-y-4">
               <p>
-                "My journey to founding TrendFlux Digital wasn't just built on IT
+                "My journey to founding TrendFlux Ecosystem wasn't just built on IT
                 engineering and data analytics—it was forged in the crucible of
                 extreme adversity. Rooted in a deep maternal legacy of absolute
                 honesty, I made a historic stand against systemic corruption
@@ -547,7 +547,7 @@ const Index = () => {
                 as an unyielding whistleblower, I chose to face insurmountable
                 pressure rather than compromise my ethical values. Today, that
                 same battle-tested resilience forms the absolute core of
-                TrendFlux Digital.
+                TrendFlux Ecosystem.
               </p>
               <p>
                 When you partner with us, you are gaining a strategic partner
@@ -562,7 +562,7 @@ const Index = () => {
             <div className="mt-8 flex items-center gap-3 text-sm text-foreground/60">
               <span className="font-display font-semibold text-foreground">Zahid Hasan Emon</span>
               <span className="text-foreground/30">·</span>
-              <span>Brand Architect, TrendFlux Digital</span>
+              <span>Brand Architect, TrendFlux Ecosystem</span>
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-5">
               <Link
@@ -654,7 +654,7 @@ const Index = () => {
               {
                 phase: "Phase 04",
                 year: "Today",
-                title: "TrendFlux Digital",
+                title: "TrendFlux Ecosystem",
                 desc: "That same battle-tested resilience now powers a growth operations studio built on radical transparency, ethical execution, and the courage to stand firm for every client we partner with.",
               },
             ].map((item, i, arr) => (
@@ -1109,8 +1109,8 @@ const Index = () => {
 
           <div className="mt-8 flex flex-col items-center justify-between gap-3 text-sm text-foreground/50 md:flex-row">
             <div className="flex items-center gap-2">
-              <img src={trendfluxLogo} alt="TrendFlux Digital logo" className="h-7 w-7 object-contain" />
-              <p className="font-semibold text-foreground">TrendFlux Digital</p>
+              <img src={trendfluxLogo} alt="TrendFlux Ecosystem logo" className="h-7 w-7 object-contain" />
+              <p className="font-semibold text-foreground">TrendFlux Ecosystem</p>
             </div>
             <p>© 2026 — Built on integrity</p>
           </div>

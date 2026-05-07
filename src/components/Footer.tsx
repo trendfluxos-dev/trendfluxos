@@ -64,7 +64,7 @@ const Footer = () => {
       </div>
 
       <div className="max-w-7xl mx-auto mt-12 pt-6 border-t border-border flex flex-col md:flex-row justify-between gap-4 text-xs text-foreground/40">
-        <p>© {new Date().getFullYear()} TrendFlux Digital. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} TrendFlux Ecosystem. All rights reserved.</p>
         <p>Built as a system, not a website.</p>
       </div>
     </footer>
