@@ -469,7 +469,8 @@ const Marriage = () => {
         </footer>
       </div>
     </main>
-);
+  );
+};
 
 const CopyChip = ({
   value,
@@ -505,7 +506,6 @@ const CopyChip = ({
       {copied ? <Check className="h-3.5 w-3.5 text-red-400" /> : <Copy className="h-3.5 w-3.5 text-white/50" />}
     </button>
   );
-};
 };
 
 const Card = ({ title, children }: { title: string; children: React.ReactNode }) => (
