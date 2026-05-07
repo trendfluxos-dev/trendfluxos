@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -212,6 +212,20 @@ const Index = () => {
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [highlightedSlug, setHighlightedSlug] = useState<string | null>(null);
   const [narrativeCase, setNarrativeCase] = useState<CaseStudy | null>(null);
+  const narrativeTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const narrativeInitialFocusRef = useRef<HTMLButtonElement | null>(null);
+
+  const openNarrative = (
+    c: CaseStudy,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    narrativeTriggerRef.current = e.currentTarget;
+    setNarrativeCase(c);
+  };
+
+  const closeNarrative = () => {
+    setNarrativeCase(null);
+  };
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
   const [veilError, setVeilError] = useState("");
@@ -1016,7 +1030,7 @@ const Index = () => {
                       <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-2.5">
                         <button
                           type="button"
-                          onClick={() => setNarrativeCase(c)}
+                          onClick={(e) => openNarrative(c, e)}
                           aria-label={`View narrative for ${c.title}`}
                           className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-gold px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-gold-foreground shadow-gold/30 transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_28px_hsl(var(--gold)/0.5)] active:scale-95"
                         >
@@ -1198,8 +1212,28 @@ const Index = () => {
       <StrategySessionDialog open={strategyOpen} onOpenChange={setStrategyOpen} />
 
       {/* Case study narrative modal */}
-      <Dialog open={!!narrativeCase} onOpenChange={(o) => !o && setNarrativeCase(null)}>
-        <DialogContent className="glass-strong border-gold/30 shadow-[0_30px_80px_-20px_hsl(var(--gold)/0.45)] sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+      <Dialog open={!!narrativeCase} onOpenChange={(o) => !o && closeNarrative()}>
+        <DialogContent
+          className="glass-strong border-gold/30 shadow-[0_30px_80px_-20px_hsl(var(--gold)/0.45)] sm:max-w-2xl max-h-[90vh] overflow-y-auto"
+          aria-describedby={undefined}
+          onOpenAutoFocus={(e) => {
+            // Take over Radix's default initial focus and place it on a meaningful control
+            // inside the modal (the primary action), so screen-reader users land somewhere useful.
+            if (narrativeInitialFocusRef.current) {
+              e.preventDefault();
+              narrativeInitialFocusRef.current.focus();
+            }
+          }}
+          onCloseAutoFocus={(e) => {
+            // Explicitly return focus to the card button that opened the modal,
+            // overriding Radix's default (which can lose the trigger after re-renders).
+            if (narrativeTriggerRef.current) {
+              e.preventDefault();
+              narrativeTriggerRef.current.focus();
+              narrativeTriggerRef.current = null;
+            }
+          }}
+        >
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
           {narrativeCase && (
             <>
@@ -1254,13 +1288,13 @@ const Index = () => {
               </div>
 
               <DialogFooter className="gap-2 sm:gap-3 pt-2">
-                <Button variant="ghost" onClick={() => setNarrativeCase(null)}>
+                <Button variant="ghost" onClick={closeNarrative}>
                   Close
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => {
-                    setNarrativeCase(null);
+                    closeNarrative();
                     setStrategyOpen(true);
                   }}
                 >
@@ -1268,9 +1302,13 @@ const Index = () => {
                 </Button>
                 <Button variant="gold" asChild>
                   <Link
+                    ref={(el) => {
+                      // The asChild Button passes its ref through to this anchor.
+                      narrativeInitialFocusRef.current = (el as unknown as HTMLButtonElement) ?? null;
+                    }}
                     to={`/case-studies/${narrativeCase.slug}`}
                     state={{ from: `/${serializeFilters(caseFilters)}#cases` }}
-                    onClick={() => setNarrativeCase(null)}
+                    onClick={closeNarrative}
                   >
                     Open Full Case Study <ArrowUpRight className="h-4 w-4" />
                   </Link>
