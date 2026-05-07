@@ -100,7 +100,7 @@ const services = [
   },
 ];
 
-import { caseStudies, type CaseStudy, CASE_STUDY_OPEN_EVENT } from "@/data/caseStudies";
+import { caseStudies } from "@/data/caseStudies";
 
 const stats = [
   { value: "$8.4M", label: "Ad spend managed" },
@@ -205,19 +205,6 @@ const Index = () => {
   const [strategyOpen, setStrategyOpen] = useState(false);
   const [caseFilters, setCaseFilters] = useState<CaseFilters>(EMPTY_FILTERS);
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
-  const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
-
-  // Allow other components (e.g. DigitalImpactMap) to open a case study by slug.
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const slug = (e as CustomEvent<{ slug: string }>).detail?.slug;
-      if (!slug) return;
-      const match = caseStudies.find((c) => c.slug === slug);
-      if (match) setActiveCase(match);
-    };
-    window.addEventListener(CASE_STUDY_OPEN_EVENT, handler);
-    return () => window.removeEventListener(CASE_STUDY_OPEN_EVENT, handler);
-  }, []);
   const [veilOpen, setVeilOpen] = useState(false);
   const [veilCode, setVeilCode] = useState("");
   const [veilError, setVeilError] = useState("");
@@ -270,6 +257,30 @@ const Index = () => {
 
   const visibleServices =
     filter === "All" ? services : services.filter((s) => s.category === filter);
+
+  // Compute filtered case studies once so we can share with the map and the grid.
+  const caseFiltersActive = !!(
+    caseFilters.service ||
+    caseFilters.industry ||
+    caseFilters.stack ||
+    caseFilters.stage ||
+    caseFilters.query.trim()
+  );
+  const filteredCases = useMemo(() => {
+    const q = caseFilters.query.trim().toLowerCase();
+    return caseStudies.filter((c) => {
+      if (caseFilters.service && c.service !== caseFilters.service) return false;
+      if (caseFilters.industry && c.industry !== caseFilters.industry) return false;
+      if (caseFilters.stack && !c.stack.includes(caseFilters.stack as typeof c.stack[number])) return false;
+      if (caseFilters.stage && c.stage !== caseFilters.stage) return false;
+      if (q) {
+        const hay = `${c.title} ${c.description} ${c.category} ${c.service} ${c.industry} ${c.stack.join(" ")} ${c.stage}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [caseFilters]);
+  const matchingSlugs = caseFiltersActive ? filteredCases.map((c) => c.slug) : undefined;
 
   useSeo();
   useJsonLd([
@@ -379,7 +390,10 @@ const Index = () => {
       </section>
 
       {/* Digital Impact Map */}
-      <DigitalImpactMap />
+      <DigitalImpactMap
+        matchingSlugs={matchingSlugs}
+        onResetFilters={() => setCaseFilters(EMPTY_FILTERS)}
+      />
 
       {/* Services Directory */}
       <section id="services" className="relative px-6 py-24 md:px-12 lg:px-20">
@@ -794,193 +808,115 @@ const Index = () => {
           </div>
         </div>
 
-        {(() => {
-          const q = caseFilters.query.trim().toLowerCase();
-          const filtered = caseStudies.filter((c) => {
-            if (caseFilters.service && c.service !== caseFilters.service) return false;
-            if (caseFilters.industry && c.industry !== caseFilters.industry) return false;
-            if (caseFilters.stack && !c.stack.includes(caseFilters.stack as typeof c.stack[number])) return false;
-            if (caseFilters.stage && c.stage !== caseFilters.stage) return false;
-            if (q) {
-              const hay = `${c.title} ${c.description} ${c.category} ${c.service} ${c.industry} ${c.stack.join(" ")} ${c.stage}`.toLowerCase();
-              if (!hay.includes(q)) return false;
-            }
-            return true;
-          });
-          const hasActive =
-            !!(caseFilters.service || caseFilters.industry || caseFilters.stack || caseFilters.stage || q);
-          return (
-            <>
-              <FilterBar value={caseFilters} onChange={setCaseFilters} resultCount={hasActive ? filtered.length : undefined} />
-              <div className="mx-auto max-w-7xl mt-8">
-                {filtered.length === 0 ? (
-                  <p className="text-center text-foreground/60 py-12">
-                    No case studies match these filters. Try resetting.
-                  </p>
-                ) : (
-                  <ul
-                    role="list"
-                    aria-label="Case studies"
-                    className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
-                  >
-                    {filtered.map((c, i) => (
-                      <li key={c.title}>
-                      <article
-                        aria-labelledby={`case-${i}-title`}
-                        className={`group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up ${
-                          hasActive ? "ring-2 ring-gold/50 shadow-gold" : ""
-                        }`}
-                        style={{ animationDelay: `${i * 0.06}s` }}
-                      >
-                <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
-                  {/* Subtle dotted grid */}
-                  <div
-                    className="absolute inset-0 opacity-40"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(hsl(var(--gold) / 0.18) 1px, transparent 1px)",
-                      backgroundSize: "14px 14px",
-                    }}
-                    aria-hidden
-                  />
-                  <c.Icon
-                    aria-label={`${c.category} category illustration`}
-                    className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
-                </div>
-
-                <div className="flex flex-1 flex-col p-7">
-                  <span className="inline-flex w-fit items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
-                    {c.category}
-                  </span>
-
-                  <h3 id={`case-${i}-title`} className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
-                    {c.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-relaxed text-foreground/65">
-                    {c.description}
-                  </p>
-
-                  <ul aria-label={`Key results for ${c.title}`} className="mt-5 space-y-2">
-                    {c.results.map((r) => (
-                      <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
-                        <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                        <span>{r}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-auto pt-6">
-                    <button
-                      type="button"
-                      onClick={() => setActiveCase(c)}
-                      aria-label={`View full case study: ${c.title}`}
-                      className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
-                    >
-                      View Case Study <ArrowRight aria-hidden className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              </article>
-              </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </>
-          );
-        })()}
-      </section>
-
-      {/* Case study detail modal */}
-      <Dialog open={!!activeCase} onOpenChange={(o) => !o && setActiveCase(null)}>
-        <DialogContent
-          className="glass border-gold/30 shadow-gold sm:max-w-2xl max-h-[90vh] overflow-y-auto"
-          aria-labelledby="case-modal-title"
-          aria-describedby="case-modal-desc"
-        >
-          <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-          <DialogHeader className="space-y-3 pt-2 text-left">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
-              <span className="sr-only">Category: </span>
-              {activeCase?.category}
-            </p>
-            <DialogTitle id="case-modal-title" className="font-display text-2xl leading-snug md:text-3xl">
-              {activeCase?.title}
-            </DialogTitle>
-            <DialogDescription id="case-modal-desc" className="text-sm text-foreground/70">
-              {activeCase?.description}
-            </DialogDescription>
-          </DialogHeader>
-
-          {activeCase && (
-            <div className="space-y-5 text-sm leading-relaxed text-foreground/75">
-              {/* Compact KPI summary */}
-              <section
-                aria-labelledby="kpi-heading"
-                className="rounded-2xl border border-gold/30 bg-gradient-to-br from-gold/10 via-gold/5 to-transparent p-5"
+        <FilterBar
+          value={caseFilters}
+          onChange={setCaseFilters}
+          resultCount={caseFiltersActive ? filteredCases.length : undefined}
+        />
+        <div className="mx-auto max-w-7xl mt-8">
+          {caseFiltersActive && (
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.25em] text-foreground/55">
+              <span aria-live="polite">
+                <span className="font-semibold text-foreground">{filteredCases.length}</span> of{" "}
+                {caseStudies.length} case studies match
+              </span>
+              <button
+                type="button"
+                onClick={() => setCaseFilters(EMPTY_FILTERS)}
+                className="text-gold hover:underline"
               >
-                <h3 id="kpi-heading" className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold/80">
-                  Headline Outcome
-                </h3>
-                <p className="font-display mt-1.5 text-xl font-bold leading-tight text-gradient md:text-2xl">
-                  {activeCase.results[0]}
-                </p>
-                <dl className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                  {activeCase.results.map((r, idx) => (
-                    <div
-                      key={r}
-                      className="rounded-lg border border-border bg-background/40 p-3"
-                    >
-                      <dt className="text-[9px] font-semibold uppercase tracking-[0.25em] text-foreground/40">
-                        KPI {String(idx + 1).padStart(2, "0")}
-                      </dt>
-                      <dd className="mt-1 flex items-start gap-1.5 text-xs font-semibold text-foreground/90">
-                        <CheckCircle2 aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
-                        <span>{r}</span>
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </section>
-
-              <Section label="Situation" body={activeCase.situation} />
-              <Section label="Problem" body={activeCase.problem} />
-              <Section label="Solution" body={activeCase.solution} />
-              <section aria-labelledby="results-heading">
-                <h3 id="results-heading" className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
-                  Results
-                </h3>
-                <ul className="mt-2 space-y-2">
-                  {activeCase.results.map((r) => (
-                    <li key={r} className="flex items-start gap-2">
-                      <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                      <span>{r}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-              <section aria-labelledby="insight-heading" className="rounded-xl border border-gold/30 bg-gold/5 p-4">
-                <h3 id="insight-heading" className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
-                  Key Insight
-                </h3>
-                <p className="mt-2 text-foreground/85">{activeCase.insight}</p>
-              </section>
+                Clear filters
+              </button>
             </div>
           )}
 
-          <DialogFooter className="gap-2 sm:gap-3">
-            <Button variant="ghost" onClick={() => setActiveCase(null)}>
-              Close
-            </Button>
-            <Button variant="gold" onClick={() => { setActiveCase(null); setQuoteOpen(true); }}>
-              Build Something Similar <ArrowRight className="h-4 w-4" />
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          {filteredCases.length === 0 ? (
+            <div className="text-center py-16 px-6 rounded-3xl glass border border-gold/30">
+              <p className="font-display text-2xl font-bold">No matching case studies</p>
+              <p className="mt-3 text-sm text-foreground/60 max-w-md mx-auto">
+                Try removing one of your filters or clearing the search to see all{" "}
+                {caseStudies.length} live growth systems.
+              </p>
+              <button
+                type="button"
+                onClick={() => setCaseFilters(EMPTY_FILTERS)}
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold-foreground hover:scale-105 transition"
+              >
+                Reset filters
+              </button>
+            </div>
+          ) : (
+            <ul
+              role="list"
+              aria-label="Case studies"
+              className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
+            >
+              {filteredCases.map((c, i) => (
+                <li key={c.title}>
+                  <article
+                    aria-labelledby={`case-${i}-title`}
+                    className={`group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up ${
+                      caseFiltersActive ? "ring-2 ring-gold/50 shadow-gold" : ""
+                    }`}
+                    style={{ animationDelay: `${i * 0.06}s` }}
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
+                      <div
+                        className="absolute inset-0 opacity-40"
+                        style={{
+                          backgroundImage:
+                            "radial-gradient(hsl(var(--gold) / 0.18) 1px, transparent 1px)",
+                          backgroundSize: "14px 14px",
+                        }}
+                        aria-hidden
+                      />
+                      <c.Icon
+                        aria-label={`${c.category} category illustration`}
+                        className="relative h-full w-full p-6 transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-7">
+                      <span className="inline-flex w-fit items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
+                        {c.category}
+                      </span>
+
+                      <h3 id={`case-${i}-title`} className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
+                        {c.title}
+                      </h3>
+
+                      <p className="mt-3 text-sm leading-relaxed text-foreground/65">
+                        {c.description}
+                      </p>
+
+                      <ul aria-label={`Key results for ${c.title}`} className="mt-5 space-y-2">
+                        {c.results.map((r) => (
+                          <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
+                            <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                            <span>{r}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mt-auto pt-6">
+                        <Link
+                          to={`/case-studies/${c.slug}`}
+                          aria-label={`View full case study: ${c.title}`}
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
+                        >
+                          View Case Study <ArrowRight aria-hidden className="h-4 w-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+
 
       {/* FAQ */}
       <Faq />
@@ -1141,13 +1077,5 @@ const Index = () => {
   );
 };
 
-const Section = ({ label, body }: { label: string; body: string }) => (
-  <div>
-    <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
-      {label}
-    </p>
-    <p className="mt-2 text-foreground/75">{body}</p>
-  </div>
-);
 
 export default Index;

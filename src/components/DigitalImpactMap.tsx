@@ -1,13 +1,14 @@
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Cpu, Megaphone, Workflow, Layers, Sparkles, ArrowUpRight } from "lucide-react";
+import { Cpu, Megaphone, Workflow, Layers, Sparkles, ArrowUpRight, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { caseStudies, CASE_STUDY_OPEN_EVENT, type System, type CaseStudy } from "@/data/caseStudies";
+import { caseStudies, type System, type CaseStudy } from "@/data/caseStudies";
 
 const SYSTEMS: Record<
   System,
@@ -43,18 +44,31 @@ const SYSTEMS: Record<
   },
 };
 
-const openCaseStudy = (slug: string) => {
-  if (typeof window === "undefined") return;
-  window.dispatchEvent(new CustomEvent(CASE_STUDY_OPEN_EVENT, { detail: { slug } }));
-  // Scroll to the case studies grid as a graceful fallback.
-  document.getElementById("cases")?.scrollIntoView({ behavior: "smooth", block: "start" });
+type Props = {
+  /** Slugs of case studies currently matching external filters. If undefined, all match. */
+  matchingSlugs?: string[];
+  /** Optional reset handler shown in the empty-state overlay. */
+  onResetFilters?: () => void;
 };
 
-export const DigitalImpactMap = () => {
+export const DigitalImpactMap = ({ matchingSlugs, onResetFilters }: Props = {}) => {
   const [active, setActive] = useState<System | "all">("all");
   const nodeRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const navigate = useNavigate();
 
-  const nodes = useMemo(() => caseStudies.filter((c) => c.map), [/* static */]);
+  const nodes = useMemo(() => caseStudies.filter((c) => c.map), []);
+  const matchSet = useMemo(
+    () => (matchingSlugs ? new Set(matchingSlugs) : null),
+    [matchingSlugs]
+  );
+  const filtersActive = matchSet !== null;
+  const matchedCount = filtersActive
+    ? nodes.filter((n) => matchSet!.has(n.slug)).length
+    : nodes.length;
+
+  const openCaseStudy = (slug: string) => {
+    navigate(`/case-studies/${slug}`);
+  };
 
   const focusNode = (i: number) => {
     const len = nodes.length;
@@ -142,27 +156,40 @@ export const DigitalImpactMap = () => {
             {nodes.map((c, i) => {
               const cfg = SYSTEMS[c.map.system];
               const Icon = cfg.icon;
-              const dim = active !== "all" && active !== c.map.system;
+              const matchesFilter = !matchSet || matchSet.has(c.slug);
+              const filteredOut = !matchesFilter;
+              const dim = (active !== "all" && active !== c.map.system) || filteredOut;
               return (
                 <Tooltip key={c.slug}>
                   <TooltipTrigger asChild>
                     <button
                       ref={(el) => (nodeRefs.current[i] = el)}
                       type="button"
-                      aria-label={`${c.map.city} — ${cfg.label}: ${c.title}. Press Enter to open narrative.`}
+                      aria-label={`${c.map.city} — ${cfg.label}: ${c.title}.${
+                        filteredOut ? " (No match for current filters.)" : ""
+                      } Press Enter to open narrative.`}
                       aria-haspopup="dialog"
+                      data-no-match={filteredOut || undefined}
                       onClick={() => openCaseStudy(c.slug)}
                       onKeyDown={(e) => onNodeKeyDown(e, i, c)}
                       className={cn(
                         "group absolute -translate-x-1/2 -translate-y-1/2 transition-opacity touch-manipulation rounded-full",
                         "p-2 -m-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                        dim ? "opacity-25" : "opacity-100"
+                        dim ? "opacity-25" : "opacity-100",
+                        filteredOut && "grayscale"
                       )}
                       style={{ left: `${c.map.x}%`, top: `${c.map.y}%` }}
                     >
                       <span className="relative flex h-3.5 w-3.5 items-center justify-center md:h-3 md:w-3">
-                        <span className={cn("absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping", cfg.dot)} />
-                        <span className={cn("relative inline-flex h-3.5 w-3.5 rounded-full md:h-3 md:w-3", cfg.dot)} />
+                        {!filteredOut && (
+                          <span className={cn("absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping", cfg.dot)} />
+                        )}
+                        <span
+                          className={cn(
+                            "relative inline-flex h-3.5 w-3.5 rounded-full md:h-3 md:w-3",
+                            filteredOut ? "bg-foreground/30 ring-1 ring-dashed ring-foreground/40" : cfg.dot
+                          )}
+                        />
                       </span>
                       <span className="pointer-events-none mt-2 block whitespace-nowrap text-[9px] uppercase tracking-[0.18em] text-foreground/70 transition-colors group-hover:text-foreground group-focus-visible:text-foreground md:text-[10px]">
                         {c.map.city}
@@ -188,6 +215,11 @@ export const DigitalImpactMap = () => {
                         <p className="mt-2 text-xs font-semibold text-foreground break-words">
                           Outcome: <span className="font-normal text-foreground/80">{c.map.outcome}</span>
                         </p>
+                        {filteredOut && (
+                          <p className="mt-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.2em] text-foreground/50">
+                            <AlertCircle className="h-3 w-3" /> No match for current filters
+                          </p>
+                        )}
                         <button
                           type="button"
                           onClick={() => openCaseStudy(c.slug)}
@@ -201,8 +233,47 @@ export const DigitalImpactMap = () => {
                 </Tooltip>
               );
             })}
+
+            {/* Empty-state overlay when filters match nothing */}
+            {filtersActive && matchedCount === 0 && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/70 backdrop-blur-sm p-6">
+                <div className="max-w-sm rounded-2xl border border-gold/30 bg-background/90 p-6 text-center shadow-gold">
+                  <AlertCircle className="mx-auto h-6 w-6 text-gold" />
+                  <p className="mt-3 font-display text-lg font-bold">No systems match</p>
+                  <p className="mt-2 text-sm text-foreground/65">
+                    Your current filters don't match any live operations on the map.
+                  </p>
+                  {onResetFilters && (
+                    <button
+                      type="button"
+                      onClick={onResetFilters}
+                      className="mt-4 inline-flex items-center gap-1 rounded-full bg-gold px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold-foreground hover:scale-105 transition"
+                    >
+                      Reset filters
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </TooltipProvider>
+
+        {/* Match summary */}
+        <div
+          className="mt-5 text-center text-[11px] uppercase tracking-[0.3em] text-foreground/55"
+          aria-live="polite"
+        >
+          {filtersActive ? (
+            <>
+              <span className={cn("font-semibold", matchedCount === 0 ? "text-gold" : "text-foreground")}>
+                {matchedCount}
+              </span>{" "}
+              of {nodes.length} systems match your filters
+            </>
+          ) : (
+            <>{nodes.length} live growth systems plotted</>
+          )}
+        </div>
 
         {/* Legend */}
         <div
