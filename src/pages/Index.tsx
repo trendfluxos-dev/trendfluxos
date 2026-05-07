@@ -873,14 +873,13 @@ const Index = () => {
                   </ul>
 
                   <div className="mt-auto pt-6">
-                    <button
-                      type="button"
-                      onClick={() => setActiveCase(c)}
+                    <Link
+                      to={`/case-studies/${c.slug}`}
                       aria-label={`View full case study: ${c.title}`}
                       className="inline-flex items-center gap-1 text-sm font-semibold text-gold opacity-80 transition group-hover:opacity-100 hover:gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
                     >
                       View Case Study <ArrowRight aria-hidden className="h-4 w-4" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </article>
