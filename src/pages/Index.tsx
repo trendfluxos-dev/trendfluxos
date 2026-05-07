@@ -213,7 +213,7 @@ const Index = () => {
   const [highlightedSlug, setHighlightedSlug] = useState<string | null>(null);
   const [narrativeCase, setNarrativeCase] = useState<CaseStudy | null>(null);
   const narrativeTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const narrativeInitialFocusRef = useRef<HTMLButtonElement | null>(null);
+  const narrativeInitialFocusRef = useRef<HTMLElement | null>(null);
 
   const openNarrative = (
     c: CaseStudy,
