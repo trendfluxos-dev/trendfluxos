@@ -138,6 +138,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Developed a reels-first content system using hooks, storytelling, and structured scheduling.",
     insight: "Content success is driven by structure and psychology — not volume.",
+    service: "Branding", industry: "Personal Brand", stack: ["Meta Ads"], stage: "Growth",
   },
   {
     category: "Content Engine",
@@ -151,6 +152,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Built a templated production engine combining Figma systems, Canva libraries, and AI copy workflows.",
     insight: "Systems out-produce talent when speed and consistency both matter.",
+    service: "AI Automation", industry: "SaaS", stack: ["CRM"], stage: "Scale",
   },
   {
     category: "Global Strategy",
@@ -164,6 +166,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Rebuilt positioning, creative, and channel mix per market with localized creative variants.",
     insight: "Global growth is local execution — not translated copy.",
+    service: "Paid Media", industry: "Retail", stack: ["Meta Ads", "CRM"], stage: "Scale",
   },
   {
     category: "Automation Funnel",
@@ -176,6 +179,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Wired a WhatsApp + CRM automation that qualified, nurtured, and booked calls 24/7.",
     insight: "Speed-to-lead is the cheapest conversion lever most brands ignore.",
+    service: "Funnels", industry: "Education", stack: ["WhatsApp", "GoHighLevel", "CRM"], stage: "Growth",
   },
   {
     category: "SME Growth",
@@ -188,6 +192,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Architected a top-to-bottom funnel with CRM, content, and outbound playbooks.",
     insight: "SMEs scale when founders escape every step of the customer journey.",
+    service: "Funnels", industry: "Retail", stack: ["GoHighLevel", "CRM"], stage: "Startup",
   },
   {
     category: "Personal Brand",
@@ -200,6 +205,7 @@ const caseStudies: CaseStudy[] = [
     solution:
       "Defined a sharp niche thesis and built a content engine around proof-driven storytelling.",
     insight: "Authority compounds when every post reinforces one undeniable thesis.",
+    service: "Branding", industry: "Personal Brand", stack: ["Meta Ads"], stage: "Startup",
   },
 ];
 
