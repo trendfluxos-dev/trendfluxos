@@ -930,12 +930,6 @@ const Index = () => {
                         }`}
                         style={{ animationDelay: `${i * 0.06}s` }}
                       >
-              <li key={c.title}>
-              <article
-                aria-labelledby={`case-${i}-title`}
-                className="group flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all hover:-translate-y-1 hover:shadow-gold animate-fade-up"
-                style={{ animationDelay: `${i * 0.06}s` }}
-              >
                 <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
                   {/* Subtle dotted grid */}
                   <div
