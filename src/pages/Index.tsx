@@ -366,9 +366,17 @@ const Index = () => {
             TrendFlux <span className="text-gradient">Digital</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8 text-sm text-foreground/70">
-            <a href="#services" className="hover:text-gold transition-colors">Services</a>
-            <a href="#founder" className="hover:text-gold transition-colors">Brand Architect</a>
+          <div className="hidden md:flex items-center gap-6 text-sm text-foreground/70">
+            <a href="#ecosystem" className="hover:text-gold transition-colors">Ecosystem</a>
+            <a href="#services" className="inline-flex items-center gap-1.5 hover:text-gold transition-colors">
+              <Cpu className="w-3.5 h-3.5" /> Digital
+            </a>
+            <Link to="/trendflux-talent" className="inline-flex items-center gap-1.5 hover:text-gold transition-colors">
+              <Users className="w-3.5 h-3.5" /> Talent
+            </Link>
+            <Link to="/luxe-veil" className="inline-flex items-center gap-1.5 hover:text-gold transition-colors">
+              <Sparkles className="w-3.5 h-3.5" /> Luxe Veil
+            </Link>
             <a href="#cases" className="hover:text-gold transition-colors">Case Studies</a>
             <Link to="/project-lead" className="hover:text-gold transition-colors">Project Lead</Link>
           </div>
