@@ -62,49 +62,49 @@ const services = [
     category: "Business Automation" as const,
     icon: Workflow,
     title: "Workflow Intelligence Systems",
-    desc: "End-to-end automation pipelines that eliminate manual overhead and unlock operational velocity.",
-    bestFor: "Founders drowning in manual ops",
-    outcome: "Avg. 70% time reclaimed",
+    desc: "AI-powered workflow automation that replaces repetitive ops, syncs your tools, and gives founders a single command layer to run the business.",
+    bestFor: "Solo founders & lean ops teams running on Notion, Slack, Sheets and Zapier duct-tape.",
+    outcome: "70% manual hours reclaimed within 30 days, 24/7 hands-off execution.",
   },
   {
     category: "Business Automation" as const,
     icon: Users,
     title: "CRM & Sales Orchestration",
-    desc: "Custom-engineered CRM stacks that turn cold pipelines into predictable revenue engines.",
-    bestFor: "Teams losing leads in the gap",
-    outcome: "3.2x lead conversion",
+    desc: "Pipeline-grade CRM architecture with lead scoring, lifecycle automation, and revenue dashboards built on HubSpot, GoHighLevel or custom Supabase stacks.",
+    bestFor: "B2B & service brands losing 30%+ of inbound leads to slow follow-up.",
+    outcome: "3.2x lead-to-deal conversion, sub-5-min response SLA.",
   },
   {
     category: "Meta Ads Management" as const,
     icon: Sparkles,
     title: "Performance Creative Labs",
-    desc: "Data-driven creative testing frameworks designed to scale ROAS without sacrificing brand integrity.",
-    bestFor: "Brands ready to scale acquisition",
-    outcome: "Avg. +45% ROAS lift",
+    desc: "Iterative creative testing framework — UGC, static, and motion ads engineered for Meta's algorithm with weekly hook-rate and CTR scorecards.",
+    bestFor: "DTC & e-commerce brands spending $10K+/month with creative fatigue.",
+    outcome: "+45% ROAS lift, 3x winning creative output per month.",
   },
   {
     category: "Meta Ads Management" as const,
     icon: Target,
     title: "Full-Funnel Paid Strategy",
-    desc: "Surgical audience architecture and bid strategy across Meta's full ecosystem.",
-    bestFor: "Performance teams hitting a CAC ceiling",
-    outcome: "Sub-$8 CAC achieved",
+    desc: "End-to-end Meta funnel design — Advantage+ campaigns, retention retargeting, and AOV-focused bid strategy aligned to LTV economics.",
+    bestFor: "In-house performance teams stuck on a CAC ceiling above $25.",
+    outcome: "Sub-$8 CAC, 2.4x blended ROAS within 60 days.",
   },
   {
     category: "Ecosystem Design" as const,
     icon: Layers,
     title: "Brand Operating Systems",
-    desc: "Holistic brand-to-product ecosystems engineered for compounding growth.",
-    bestFor: "Multi-brand founders & operators",
-    outcome: "12-month roadmaps",
+    desc: "Multi-brand identity, messaging architecture, and content engine designed so every sub-brand reinforces the parent ecosystem and compounds equity.",
+    bestFor: "Multi-brand founders, holdcos, and creator-led businesses scaling 2+ brands.",
+    outcome: "12-month brand roadmap + unified content OS deployed across all properties.",
   },
   {
     category: "Ecosystem Design" as const,
     icon: Cpu,
     title: "Tech Stack Architecture",
-    desc: "Future-proof infrastructure decisions that align tooling with strategic intent.",
-    bestFor: "Scaling teams replatforming",
-    outcome: "Zero-vendor-lock builds",
+    desc: "Vendor-neutral stack design — React, Supabase, Lovable Cloud, edge functions and AI gateways — picked for performance, cost, and exit-ready ownership.",
+    bestFor: "Scaling teams replatforming off WordPress, Webflow or fragmented SaaS.",
+    outcome: "Zero vendor lock-in, 40% lower infra cost, full data portability.",
   },
 ];
 
@@ -210,6 +210,11 @@ const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [quoteContext, setQuoteContext] = useState<{
+    source: string;
+    module?: string;
+    category?: string;
+  } | null>(null);
   const [strategyOpen, setStrategyOpen] = useState(false);
   const [strategySource, setStrategySource] = useState<{ slug: string | null; source: string } | null>(null);
   const openStrategy = (source: string, slug: string | null = null) => {
@@ -583,14 +588,14 @@ const Index = () => {
             })}
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
             {visibleServices.map((s, i) => {
               const Icon = s.icon;
               const idx = services.indexOf(s) + 1;
               return (
                 <article
                   key={s.title}
-                  className="group rounded-3xl glass glass-hover p-7 flex flex-col"
+                  className="group rounded-3xl glass glass-hover p-5 sm:p-7 flex flex-col"
                 >
                   <div className="flex items-start justify-between">
                     <span className="font-display text-sm text-foreground/40">
@@ -600,24 +605,24 @@ const Index = () => {
                       <Icon className="w-5 h-5" />
                     </div>
                   </div>
-                  <p className="mt-6 text-xs uppercase tracking-[0.25em] text-primary">
+                  <p className="mt-5 sm:mt-6 text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-primary break-words">
                     {s.category}
                   </p>
-                  <h3 className="font-display mt-2 text-2xl font-bold leading-tight">
+                  <h3 className="font-display mt-2 text-xl sm:text-2xl font-bold leading-tight tracking-tight break-words [text-wrap:balance]">
                     {s.title}
                   </h3>
-                  <p className="mt-4 text-sm leading-relaxed text-foreground/60">
+                  <p className="mt-3 sm:mt-4 text-[13px] sm:text-sm leading-relaxed text-foreground/60">
                     {s.desc}
                   </p>
 
-                  <dl className="mt-5 space-y-2 text-xs">
-                    <div className="flex gap-2">
-                      <dt className="min-w-[72px] uppercase tracking-wider text-foreground/40">Best for</dt>
-                      <dd className="text-foreground/80">{s.bestFor}</dd>
+                  <dl className="mt-4 sm:mt-5 space-y-3 text-[11px] sm:text-xs">
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
+                      <dt className="sm:min-w-[72px] uppercase tracking-wider text-foreground/40">Best for</dt>
+                      <dd className="text-foreground/80 leading-relaxed break-words">{s.bestFor}</dd>
                     </div>
-                    <div className="flex gap-2">
-                      <dt className="min-w-[72px] uppercase tracking-wider text-foreground/40">Outcome</dt>
-                      <dd className="font-semibold text-gold">{s.outcome}</dd>
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
+                      <dt className="sm:min-w-[72px] uppercase tracking-wider text-foreground/40">Outcome</dt>
+                      <dd className="font-semibold text-gold leading-relaxed break-words">{s.outcome}</dd>
                     </div>
                   </dl>
 
@@ -630,9 +635,14 @@ const Index = () => {
                           category: s.category,
                           source: "services_grid",
                         });
+                        setQuoteContext({
+                          source: "services_grid",
+                          module: s.title,
+                          category: s.category,
+                        });
                         setQuoteOpen(true);
                       }}
-                      className="group/cta inline-flex w-full items-center justify-between gap-2 rounded-full border border-gold/30 bg-gold/5 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-gold transition-all duration-300 hover:border-gold hover:bg-gold/15 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      className="group/cta inline-flex w-full items-center justify-between gap-2 rounded-full border border-gold/30 bg-gold/5 px-3.5 sm:px-4 py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-gold transition-all duration-300 hover:border-gold hover:bg-gold/15 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                       aria-label={`Activate ${s.title}`}
                     >
                       <span>Activate Module</span>
@@ -932,7 +942,14 @@ const Index = () => {
       </section>
 
       {/* Quote request modal */}
-      <QuoteDialog open={quoteOpen} onOpenChange={setQuoteOpen} />
+      <QuoteDialog
+        open={quoteOpen}
+        onOpenChange={(o) => {
+          setQuoteOpen(o);
+          if (!o) setTimeout(() => setQuoteContext(null), 250);
+        }}
+        context={quoteContext}
+      />
 
       {/* Press coverage details modal */}
       <Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>

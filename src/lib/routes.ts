@@ -14,6 +14,7 @@ export const routes = {
   "/auth": make(() => import("@/pages/Auth")),
   "/admin": make(() => import("@/pages/Admin")),
   "/admin/luxe-veil": make(() => import("@/pages/LuxeVeilAdmin")),
+  "/admin/conversions": make(() => import("@/pages/ConversionDashboard")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
   "/trendflux-talent": make(() => import("@/pages/TrendfluxTalent")),

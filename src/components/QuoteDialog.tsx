@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { track } from "@/lib/analytics";
 
 const objectives = [
   "Lead Generation",
@@ -70,9 +71,14 @@ const initialState: FormState = {
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  context?: {
+    source?: string;
+    module?: string;
+    category?: string;
+  } | null;
 };
 
-export const QuoteDialog = ({ open, onOpenChange }: Props) => {
+export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -121,6 +127,21 @@ export const QuoteDialog = ({ open, onOpenChange }: Props) => {
       );
       // Open mail client as the lightweight handoff for now.
       window.location.href = `mailto:zhemongrowth@gmail.com?subject=${subject}&body=${body}`;
+
+      // Generic submit + module-scoped submit when launched from a service module
+      track("quote_submit", {
+        objective: parsed.data.objective,
+        source: context?.source ?? "default",
+        module: context?.module ?? null,
+        category: context?.category ?? null,
+      });
+      if (context?.source === "services_grid" && context.module) {
+        track("service_module_submit", {
+          module: context.module,
+          category: context.category ?? null,
+          objective: parsed.data.objective,
+        });
+      }
 
       toast({
         title: "Operations initiated",
