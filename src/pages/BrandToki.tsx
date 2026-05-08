@@ -58,7 +58,7 @@ export default function BrandToki() {
   useEffect(() => {
     document.title = "Studio BrandToki — Premium Production Studio in Gulshan, Dhaka";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Studio BrandToki — Premium photography, videography, podcast & commercial production studio in Gulshan, Dhaka. Powered by TrendFlux Ecosystem.");
+    if (meta) meta.setAttribute("content", "Studio BrandToki — Premium photography, videography, podcast & commercial production studio in Gulshan, Dhaka.");
   }, []);
 
   return (
