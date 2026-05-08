@@ -24,6 +24,14 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import portrait from "@/assets/zahid-hasan-emon.png";
+import proofEducation from "@/assets/proof/educational-background.png";
+import proofUniversity from "@/assets/proof/university-certificates.png";
+import proofHsc from "@/assets/proof/hsc-credentials.png";
+import proofSsc from "@/assets/proof/ssc-credentials.png";
+import proofLeadershipOverview from "@/assets/proof/leadership-overview.png";
+import proofPzswa from "@/assets/proof/pzswa-presidential.png";
+import proofNdfBd from "@/assets/proof/ndf-bd-appointment.png";
+import proofPds from "@/assets/proof/pds-leadership.png";
 
 const NAV = [
   { label: "About", href: "#about" },
@@ -206,13 +214,14 @@ const LEADERSHIP = [
 ];
 
 const PROOF = [
-  { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00" },
-  { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU" },
-  { cat: "Education", title: "HSC Credentials", desc: "HSC 2016 — GPA 5.00, Shaheed Bulbul Govt. College" },
-  { cat: "Education", title: "SSC Credentials", desc: "SSC 2014 — GPA 5.00, Pabna Zilla School" },
-  { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)" },
-  { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD" },
-  { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)" },
+const PROOF: { cat: string; title: string; desc: string; images?: string[] }[] = [
+  { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00", images: [proofEducation] },
+  { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU", images: [proofUniversity] },
+  { cat: "Education", title: "HSC Credentials", desc: "HSC 2016 — GPA 5.00, Shaheed Bulbul Govt. College", images: [proofHsc] },
+  { cat: "Education", title: "SSC Credentials", desc: "SSC 2014 — GPA 5.00, Pabna Zilla School", images: [proofSsc] },
+  { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)", images: [proofPzswa, proofLeadershipOverview] },
+  { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD", images: [proofNdfBd] },
+  { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)", images: [proofPds] },
   { cat: "Volunteer", title: "COVID-19 Volunteer ID", desc: "Frontline volunteer — Pabna Police Super Office" },
   { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC" },
   { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates" },
@@ -296,6 +305,23 @@ export default function Portfolio() {
 
   const [filter, setFilter] = useState<(typeof PROOF_CATS)[number]>("All");
   const filteredProof = filter === "All" ? PROOF : PROOF.filter((p) => p.cat === filter);
+  const [lightbox, setLightbox] = useState<{ title: string; images: string[]; index: number } | null>(null);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "ArrowRight") setLightbox((l) => (l ? { ...l, index: (l.index + 1) % l.images.length } : l));
+      if (e.key === "ArrowLeft") setLightbox((l) => (l ? { ...l, index: (l.index - 1 + l.images.length) % l.images.length } : l));
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [lightbox]);
 
   return (
     <div className="min-h-screen bg-white text-[#111111] font-[Inter,system-ui,sans-serif] antialiased">
