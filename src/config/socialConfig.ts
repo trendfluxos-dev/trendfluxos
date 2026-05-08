@@ -1,5 +1,9 @@
 export type BrandKey = "trendflux" | "zahid" | "luxeveil";
 
+import brandRoutesJson from "./brandRoutes.json";
+
+export const BRAND_ROUTES = brandRoutesJson as Record<BrandKey, string[]>;
+
 export type Channel =
   | "whatsapp"
   | "telegram"
@@ -66,10 +70,17 @@ export const BRAND_CONTACTS: Record<BrandKey, BrandContact> = {
 
 export const getBrandForRoute = (pathname: string): BrandKey => {
   if (!pathname) return "trendflux";
-  if (pathname.startsWith("/luxe-veil") || pathname.startsWith("/admin/luxe-veil")) {
-    return "luxeveil";
+  const order: BrandKey[] = ["luxeveil", "zahid", "trendflux"];
+  let best: { brand: BrandKey; len: number } | null = null;
+  for (const brand of order) {
+    for (const route of BRAND_ROUTES[brand] ?? []) {
+      if (route === "/") continue;
+      if (pathname === route || pathname.startsWith(route + "/")) {
+        if (!best || route.length > best.len) best = { brand, len: route.length };
+      }
+    }
   }
-  return "trendflux";
+  return best?.brand ?? "trendflux";
 };
 
 export const channelHref = (brand: BrandContact, channel: Channel): string | undefined => {
