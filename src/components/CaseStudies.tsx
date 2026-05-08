@@ -99,6 +99,13 @@ const CaseStudies = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const active = openIndex !== null ? cases[openIndex] : null;
 
+  const metrics = [
+    { value: "485K+", label: "Organic Views Generated" },
+    { value: "+45%", label: "Avg. Engagement Growth" },
+    { value: "24/7", label: "AI Automation Layer" },
+    { value: "3", label: "Multi-Brand Ecosystems Live" },
+  ];
+
   return (
     <section
       id="cases"
@@ -122,6 +129,26 @@ const CaseStudies = () => {
             Each engagement is engineered as a system — content, paid, automation,
             and analytics designed to compound over time.
           </p>
+        </div>
+
+        {/* Metrics strip */}
+        <div
+          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-10"
+          aria-label="Ecosystem performance metrics"
+        >
+          {metrics.map((m) => (
+            <div
+              key={m.label}
+              className="glass rounded-2xl p-5 text-center transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              <div className="font-display text-2xl md:text-3xl font-bold text-gradient">
+                {m.value}
+              </div>
+              <div className="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.22em] text-foreground/55">
+                {m.label}
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">

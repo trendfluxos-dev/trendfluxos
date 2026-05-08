@@ -23,11 +23,11 @@ const ConversionCTA = () => {
 
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Button variant="hero" size="lg">
-              Book a Growth Strategy Session
+              Activate Digital Operations
               <ArrowRight />
             </Button>
             <Button variant="outline" size="lg">
-              See How We Work
+              See How We Operate
             </Button>
           </div>
         </div>

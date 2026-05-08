@@ -1,69 +1,99 @@
-# Multi-Brand Social & Contact Integration
+## Phase 1 — Foundation & Positioning
 
-Build a centralized config + reusable components so every page automatically renders the correct social/contact channels for its brand (TrendFlux Digital, Zahid Hasan Emon, LUXE VEIL).
+Goal: lift TrendFlux from "agency site" to "AI-powered growth infrastructure company" through copy, structure, trust signals, and mobile polish. **No heavy animation in this phase.** Phase 2 (LUXE VEIL secrecy, brand-switch transitions, GSAP scroll, magnetic hovers) will be planned separately after Phase 1 is verified.
 
-## 1. Centralized config
+### 1. CTA copy upgrade ("Start Operations" → enterprise framing)
 
-Create `src/config/socialConfig.ts` exporting:
+Replace every instance of `Start Operations` with **"Launch Growth System"** (primary) and a small set of approved secondary CTAs.
 
-- `BrandKey = "trendflux" | "zahid" | "luxeveil"`
-- `BRAND_CONTACTS: Record<BrandKey, BrandContact>` with: `displayName`, `facebook`, `linkedin?`, `whatsapp?`, `telegram?` (`{ username, chatId, displayName, groupName?, groupId? }`), `email?`, and `priority: Channel[]` (e.g. `["whatsapp","linkedin","facebook","email"]` or `["telegram","facebook"]` for Luxe Veil).
-- Helper `getBrandForRoute(pathname)` mapping:
-  - `/luxe-veil`, `/admin/luxe-veil` → `luxeveil`
-  - `/marriage`, `/project-lead`, `/brand-open`, `/trendflux-talent` → `trendflux`
-  - everything else → `trendflux` (default)
-  - (Optional explicit route for Zahid; expose `zahid` for use inside team/profile cards.)
+- `src/config/brand.ts` → `BRAND.hero.primaryCta = "Launch Growth System"`, `secondaryCta = "Book Strategic Consultation"`.
+- `src/pages/Index.tsx` → desktop nav button (line 417) and mobile menu button (line 467) → "Launch Growth System".
+- `src/components/Hero.tsx` → "Explore Growth Systems" stays; secondary becomes "Book Strategic Consultation".
+- `src/components/ConversionCTA.tsx` → primary "Activate Digital Operations", secondary "See How We Operate".
+- `src/components/Navbar.tsx` → "Book Call" → "Book Strategic Consultation" (size sm).
 
-Values come straight from the brief (FB/LI/WA/email URLs, Luxe Veil Telegram username `luxe_veil`, ID `8794625637`, group `LuxeVeil Lounge` ID `-5154627991`).
+### 2. Hero trust bar
 
-## 2. Reusable components
+Add a premium trust strip directly under hero subhead on `src/pages/Index.tsx` (and confirm same on `Hero.tsx`).
 
-`src/components/social/SocialIcons.tsx`:
-- `<SocialIcons brand?={BrandKey} variant="footer" | "floating" | "inline" size? />`
-- Auto-resolves brand via `useLocation()` if not passed.
-- Renders only channels present for that brand, in the brand's `priority` order.
-- Lucide icons for FB/LinkedIn/Mail; inline SVG for WhatsApp + Telegram.
-- `target="_blank" rel="noopener noreferrer"`, `aria-label`s, focus ring.
-- Tailwind classes for premium hover: `hover:-translate-y-0.5 hover:shadow-[0_6px_22px_hsl(var(--gold)/0.35)] transition` with gold border on dark.
+```text
+AI Systems  •  Automation  •  Brand Infrastructure  •  Growth Operations
+Built for Founders, Brands & High-Growth Businesses
+```
 
-`src/components/social/PrimaryContactCTA.tsx`:
-- Picks the brand's first available channel and renders a single hero/CTA button (e.g. "Talk on WhatsApp" / "Speak with Concierge on Telegram").
-- Luxe Veil → always Telegram DM `https://t.me/luxe_veil`, label "Speak With Concierge".
+- Glass pill row, gold dividers, `text-foreground/55`, `uppercase tracking-[0.25em] text-[11px]`.
+- Desktop: single row. Mobile (<640px): wraps to 2 rows, dividers hidden.
 
-`src/components/social/FloatingContact.tsx`:
-- Fixed bottom-right pill that expands to show all channels for the active brand. Hidden on `/admin*`.
+### 3. Case study metrics strip
 
-## 3. Luxe Veil post-action redirect
+In `src/components/CaseStudies.tsx`, insert a 4-up stat row above the existing grid (between header and grid, ~line 126):
 
-`src/lib/luxeveil.ts`:
-- `LUXE_VEIL_GROUP_URL` (Telegram group invite — uses group name "LuxeVeil Lounge"; since only numeric ID is provided, link to `https://t.me/luxe_veil` as concierge fallback and surface group name in the success toast).
-- `redirectToLuxeVeilGroup()` helper used after submit/booking/inquiry on Luxe Veil page.
+| Metric | Label |
+|---|---|
+| 485K+ | Organic Views Generated |
+| +45% | Avg. Engagement Growth |
+| 24/7 | AI Automation Layer |
+| 3 | Multi-Brand Ecosystems Live |
 
-Wire this into the existing Luxe Veil unlock/inquiry success handler in `src/pages/LuxeVeil.tsx` so successful submissions trigger the redirect (in a new tab) and a toast.
+- `glass` cards, gold numeric, muted label, equal grid `grid-cols-2 lg:grid-cols-4 gap-4`.
+- Reuse existing `glass` / `text-gradient` tokens — no new CSS.
 
-## 4. Wire-up across the app
+### 4. "Systems" language copy pass
 
-- `src/components/Footer.tsx` — replace the placeholder `Linkedin/Twitter/Instagram/Mail` row with `<SocialIcons brand="trendflux" variant="footer" />`.
-- `src/components/Navbar.tsx` — add compact `<SocialIcons variant="inline" size="sm" />` on desktop right side (auto brand by route).
-- `src/components/BrandShell.tsx` (Luxe Veil & funnel pages) — add `<SocialIcons brand="luxeveil" variant="inline" />` in the header strip and a `PrimaryContactCTA` block above the funnel footer.
-- `src/pages/Marriage.tsx` — append `<SocialIcons brand="trendflux" />` near existing reference cards (no WhatsApp/Facebook on individual reference cards — those stay as-is per prior memory).
-- `src/pages/ProjectLead.tsx`, `BrandOpen.tsx`, `TrendfluxTalent.tsx` — drop in `<SocialIcons />` in the page footer area.
-- `src/App.tsx` — mount `<FloatingContact />` inside `<BrowserRouter>` so it auto-detects route/brand.
+Sweep agency-flavored wording → enterprise/system vocabulary. Targeted edits only (no structural changes):
 
-## 5. Design tokens
+- `src/components/Services.tsx`, `src/components/CaseStudies.tsx` headings/descriptions.
+- `src/pages/Index.tsx` services intro and section taglines.
+- Vocabulary palette: ecosystem, operating system, infrastructure, growth engine, automation layer, intelligence stack, digital operations.
+- Avoid: "we help", "agency", "marketing services", "freelance".
 
-Reuse existing `--gold`, `--background`, glass utilities. No new colors needed; ensure all classes use semantic tokens (`text-gold`, `border-gold/40`, `bg-background/40`). Add `animate-fade-in` on icon mount.
+### 5. Floating contact hub — functional polish
 
-## 6. Out of scope
+`FloatingContact.tsx` and `SocialIcons.tsx` already exist and dynamically swap by brand. Phase 1 polish only:
 
-- No backend/DB/edge function changes.
-- No new auth, no new routes.
-- Existing Telegram submit edge function untouched.
-- Reference cards on `/marriage` keep their current Call/Copy-only design.
+- Ensure Telegram appears for LUXE VEIL routes, WhatsApp for TrendFlux/Zahid (already wired via `priority`).
+- Increase tap target on mobile: floating button `w-14 h-14` below `sm`, panel icons min `44×44`.
+- Add subtle gold ring on focus and `aria-live="polite"` brand label inside the panel.
+- Hide on `/auth` and `/admin*` (already done) — verify also hidden inside `LuxeVeil` invitation gate.
+- Defer magnetic hover / cinematic morph to Phase 2.
 
-## Technical notes
+### 6. Mobile UX cleanup
 
-- All links open in new tab with `rel="noopener noreferrer"`.
-- `getBrandForRoute` is pure; components call it via `useLocation().pathname` so SSR/lazy routes are fine.
-- Telegram group ID `-5154627991` is stored in config for future deep-link use; UI link uses `https://t.me/luxe_veil` until an invite link is provided.
-- Accessibility: every icon button has `aria-label`, 40px min touch target on mobile (`h-10 w-10`).
+- `src/pages/Index.tsx` hero (`<h1>` ~line 477): cap width `max-w-[22ch]` on mobile, reduce to `text-[2.25rem]` on <380px.
+- Navbar (line 379): tighten padding `px-3 py-2` on <380px; ensure CTA + hamburger don't overlap on 360px.
+- Hero CTA row: `gap-3` → `gap-4` on mobile, full-width buttons under 420px, stack vertically.
+- Floating hub: bottom offset `bottom-4` on mobile (above iOS safe area via `pb-[env(safe-area-inset-bottom)]`).
+- Trust bar wraps cleanly; metrics strip becomes 2×2.
+- Audit at 360, 390, 414, 768 widths.
+
+### 7. Verification checklist (run at end of Phase 1)
+
+- Build passes (auto).
+- Visit `/`, `/luxe-veil`, `/project-lead`, `/marriage` at desktop + mobile viewport.
+- Confirm: CTA wording consistent everywhere, trust bar visible, metrics row renders, floating hub swaps brand correctly via `?brand=zahid` and `?brand=luxeveil`.
+- No layout shift on hero; no horizontal scroll on 360px.
+
+---
+
+### Phase 2 (deferred — separate plan after Phase 1 ships)
+
+Will cover:
+- LUXE VEIL hidden-layer card (low opacity, blur-glass, gold pulse, hover reveal).
+- Brand-switch cinematic overlay + glow morph on `?brand=` change.
+- GSAP + ScrollTrigger: parallax, gold radial drift, section reveals, text stagger.
+- Magnetic hover on primary CTAs and floating hub.
+- Performance pass (lazy-load GSAP, prefers-reduced-motion guards).
+
+### Files touched in Phase 1
+
+- `src/config/brand.ts`
+- `src/components/Hero.tsx`
+- `src/components/Navbar.tsx`
+- `src/components/ConversionCTA.tsx`
+- `src/components/CaseStudies.tsx`
+- `src/components/Services.tsx`
+- `src/components/social/FloatingContact.tsx`
+- `src/components/social/SocialIcons.tsx`
+- `src/pages/Index.tsx`
+
+No new dependencies, no schema changes, no backend changes.
