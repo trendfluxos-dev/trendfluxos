@@ -679,3 +679,8 @@
   .hover-lift { @apply transition-transform duration-300 hover:-translate-y-0.5; }
   .ring-hairline { @apply ring-1 ring-border; }
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
