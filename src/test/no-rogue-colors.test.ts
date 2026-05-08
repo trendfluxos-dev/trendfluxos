@@ -25,18 +25,16 @@ const APPROVED_HEX = new Set([
 ]);
 
 /**
- * LEGACY_HEX — hex literals already present in older pages
- * (Marriage, BrandOpen, TrendfluxTalent, Index, CaseStudyPage, BrandShell,
- * MarriageInquiryDialog, FloatingContact, PrimaryContactCTA) and the
- * shadcn chart helper. They are intentionally dark for specific sections
- * and kept here as a documented allow-list so this regression test
- * catches *new* off-palette colors without forcing a rewrite of legacy
- * dark moments. Do NOT add to this list — add to APPROVED_HEX instead.
+ * LEGACY_HEX — small documented allow-list for hex literals that are
+ * intentionally part of the on-theme black-family palette in specific
+ * sections (e.g. the Marriage page wedding gradients) plus the shadcn
+ * chart helper neutral. The deep-navy / deep-teal hex codes have been
+ * removed from the codebase as part of the unified white/red theme.
+ * Do NOT add to this list — extend APPROVED_HEX instead.
  */
 const LEGACY_HEX = new Set([
-  "#0B1F3A", "#07182E", "#0C2218",
-  "#1A0507", "#14060A",
-  "#CCC",
+  "#1A0507", "#14060A", // wedding-page near-black with red tint
+  "#CCC",               // shadcn chart axis neutral
 ]);
 
 function listFiles(dir: string, acc: string[] = []): string[] {

@@ -50,7 +50,7 @@ const BrandOpen = () => {
                 Brand
               </span>
             </div>
-            <div className="relative mt-2 inline-flex items-center justify-center bg-gold text-[#07182e] px-6 py-3 rounded-md shadow-[0_8px_30px_rgba(200,169,81,0.35)]">
+            <div className="relative mt-2 inline-flex items-center justify-center bg-primary text-primary-foreground px-6 py-3 rounded-md shadow-[0_12px_28px_-10px_hsl(var(--primary)/0.55)]">
               <span className="font-display text-5xl md:text-6xl font-extrabold tracking-tight leading-none">
                 ব্র্যান্ড
               </span>
