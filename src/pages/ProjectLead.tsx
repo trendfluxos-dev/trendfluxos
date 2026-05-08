@@ -20,6 +20,7 @@ import {
   Heart,
 } from "lucide-react";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
+import { useSeo } from "@/hooks/useSeo";
 
 const metrics = [
   { value: "4.85L+", label: "Organic Views" },
@@ -91,6 +92,13 @@ const socials = [
 
 const ProjectLead = () => {
   const [marriageOpen, setMarriageOpen] = useState(false);
+  useSeo({
+    title: "Project Lead — Zahid Hasan Emon | Founder, TrendFlux Ecosystem",
+    description:
+      "Zahid Hasan Emon — Founder of TrendFlux Ecosystem. AI automation, growth operations, content systems and brand architecture for ambitious businesses.",
+    type: "profile",
+    imageAlt: "Zahid Hasan Emon — Founder, TrendFlux Ecosystem",
+  });
   return (
     <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <MarriageInquiryDialog open={marriageOpen} onOpenChange={setMarriageOpen} />

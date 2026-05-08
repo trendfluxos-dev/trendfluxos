@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2, LogOut, Check, X, Mail, Search, RefreshCw, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { useSeo } from "@/hooks/useSeo";
 
 const PAGE_SIZE = 10;
 type SortField = "created_at" | "name" | "email" | "status";
@@ -32,6 +33,11 @@ const statusStyle: Record<RequestStatus, string> = {
 
 export default function LuxeVeilAdmin() {
   const navigate = useNavigate();
+  useSeo({
+    title: "Luxe Veil Admin — TrendFlux Ecosystem",
+    description: "Private admin console for Luxe Veil invite requests.",
+    noindex: true,
+  });
   const [authChecked, setAuthChecked] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [rows, setRows] = useState<Req[]>([]);

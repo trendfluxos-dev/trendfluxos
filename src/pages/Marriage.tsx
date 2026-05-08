@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart, Copy, Check, User } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useSeo } from "@/hooks/useSeo";
 import profile from "@/assets/marriage/profile.jpg";
 import photo1 from "@/assets/marriage/photo1.jpg";
 import photo2 from "@/assets/marriage/photo2.jpg";
@@ -144,6 +145,13 @@ const trackReferenceEvent = (
 
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
+  useSeo({
+    title: "Marriage Profile — Zahid Hasan Emon | Pabna, Bangladesh",
+    description:
+      "Personal marriage profile of Zahid Hasan Emon — BSc IT (Jahangirnagar University), based in Dhaka. Family, education, values and references.",
+    type: "profile",
+    noindex: true,
+  });
   const location = useLocation();
   type Inquirer = { id?: string; name: string; country_code: string; whatsapp: string; dress_colors?: string[] };
   const stateInquirer = (location.state as { inquirer?: Inquirer } | null)?.inquirer ?? null;

@@ -5,9 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useSeo } from "@/hooks/useSeo";
 
 export default function Auth() {
   const navigate = useNavigate();
+  useSeo({
+    title: "Sign In — TrendFlux Ecosystem",
+    description: "Sign in to access TrendFlux Ecosystem admin tools.",
+    noindex: true,
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
