@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, LogOut, Save, Eye } from "lucide-react";
+import { Loader2, Plus, Trash2, LogOut, Save, Eye, ShieldCheck } from "lucide-react";
 import { usePressItems, type PressItem } from "@/hooks/usePressItems";
 import { PressItemPreview } from "@/components/PressItemPreview";
 import { normalizeHref } from "@/lib/url";
@@ -22,6 +22,8 @@ export default function Admin() {
   const { items, loading, refresh } = usePressItems(true);
   const [rows, setRows] = useState<Row[]>([]);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [checking, setChecking] = useState(false);
+  const [statuses, setStatuses] = useState<Record<string, { status: number; reachable: boolean }>>({});
 
   useEffect(() => {
     const init = async () => {
@@ -123,6 +125,29 @@ export default function Admin() {
     navigate("/auth");
   };
 
+  const recheckAll = async () => {
+    const urls = rows.map((r) => r.href).filter(Boolean);
+    if (urls.length === 0) return toast.error("No URLs to check");
+    setChecking(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("verify-press-urls", {
+        body: { urls },
+      });
+      if (error) throw error;
+      const map: Record<string, { status: number; reachable: boolean }> = {};
+      for (const r of (data?.results ?? []) as { url: string; status: number; reachable: boolean }[]) {
+        map[r.url] = { status: r.status, reachable: r.reachable };
+      }
+      setStatuses(map);
+      const broken = Object.values(map).filter((s) => !s.reachable).length;
+      toast.success(`Checked ${urls.length} URLs — ${broken} unreachable`);
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setChecking(false);
+    }
+  };
+
   if (!authChecked) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -155,6 +180,10 @@ export default function Admin() {
             <p className="text-xs text-foreground/60">Edit outlet headlines, URLs, and ordering.</p>
           </div>
           <div className="flex gap-2">
+            <Button onClick={recheckAll} size="sm" variant="outline" disabled={checking}>
+              {checking ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-1" />}
+              Re-check URLs
+            </Button>
             <Button onClick={addRow} size="sm"><Plus className="h-4 w-4 mr-1" />Add</Button>
             <Button onClick={signOut} size="sm" variant="outline"><LogOut className="h-4 w-4 mr-1" />Sign out</Button>
           </div>
@@ -173,6 +202,13 @@ export default function Admin() {
               <div>
                 <Label>Article URL</Label>
                 <Input value={r.href} onChange={(e) => update(i, { href: e.target.value })} />
+                {statuses[r.href] && (
+                  <p className={`mt-1 text-xs ${statuses[r.href].reachable ? "text-green-500" : "text-red-500"}`}>
+                    {statuses[r.href].status === 0
+                      ? "Unreachable (no response)"
+                      : `HTTP ${statuses[r.href].status}${statuses[r.href].reachable ? " — OK" : " — broken"}`}
+                  </p>
+                )}
               </div>
             </div>
             <div>
