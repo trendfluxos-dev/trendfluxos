@@ -63,7 +63,7 @@ const Navbar = () => {
               </kbd>
             </button>
             <Button variant="hero" size="sm" className="hidden sm:inline-flex">
-              Book Call
+              Book Strategic Consultation
             </Button>
           </div>
         </nav>

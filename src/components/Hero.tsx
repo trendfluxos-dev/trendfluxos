@@ -34,7 +34,7 @@ const Hero = () => {
             <ArrowRight />
           </Button>
           <Button variant="outline" size="lg">
-            Book Strategy Call
+            Book Strategic Consultation
           </Button>
         </div>
 

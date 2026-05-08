@@ -30,8 +30,8 @@ export const BRAND = {
     headlineTrail: "& Growth Operations",
     subheadline:
       "We engineer resilient growth engines for ambitious brands — pairing performance media, automation, and ecosystem design into one cinematic operating system.",
-    primaryCta: "Start Operations",
-    secondaryCta: "View Case Studies",
+    primaryCta: "Launch Growth System",
+    secondaryCta: "Book Strategic Consultation",
   },
 } as const;
 
