@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import SocialIcons from "@/components/social/SocialIcons";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -9,11 +10,6 @@ import {
   Target,
   Layers,
   Cpu,
-  Linkedin,
-  Facebook,
-  Youtube,
-  MessageCircle,
-  Mail,
   MoreHorizontal,
   CheckCircle2,
   Megaphone,
@@ -1186,22 +1182,7 @@ const Index = () => {
         {/* Contact icons */}
         <div className="mx-auto mt-12 max-w-7xl border-t border-border pt-8">
           <div className="flex flex-wrap items-center justify-center gap-4">
-            {[
-              { Icon: MessageCircle, href: "https://wa.me/message/X6JBEVJ65NA3K1", label: "WhatsApp" },
-              { Icon: Facebook, href: "https://www.facebook.com/trendfluxdigital/", label: "Facebook" },
-              { Icon: Linkedin, href: "https://linkedin.com/company/trendfluxdigital", label: "LinkedIn" },
-            ].map(({ Icon, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={label}
-                className="w-11 h-11 rounded-full glass flex items-center justify-center text-foreground/70 hover:text-gold hover:border-gold/40 hover:scale-110 transition-all"
-              >
-                <Icon className="w-5 h-5" />
-              </a>
-            ))}
+            <SocialIcons brand="trendflux" variant="footer" size="lg" />
           </div>
 
           <div className="mt-8 flex flex-col items-center justify-between gap-3 text-sm text-foreground/50 md:flex-row">
