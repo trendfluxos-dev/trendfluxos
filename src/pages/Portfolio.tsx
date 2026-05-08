@@ -888,12 +888,6 @@ export default function Portfolio() {
           >
             ×
           </button>
-          <div className="absolute top-4 left-4 text-white text-sm font-semibold max-w-[70%] truncate">
-            {lightbox.title}
-            {lightbox.images.length > 1 && (
-              <span className="ml-2 text-white/60 font-normal">({lightbox.index + 1}/{lightbox.images.length})</span>
-            )}
-          </div>
           {lightbox.images.length > 1 && (
             <>
               <button
@@ -914,12 +908,55 @@ export default function Portfolio() {
               </button>
             </>
           )}
-          <img
-            src={lightbox.images[lightbox.index]}
-            alt={`${lightbox.title} — original document`}
+          <div
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[88vh] max-w-[92vw] rounded-lg shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] bg-white object-contain"
-          />
+            className="flex flex-col lg:flex-row items-stretch gap-4 lg:gap-5 max-w-[96vw] max-h-[92vh] w-full lg:w-auto"
+          >
+            <img
+              src={lightbox.images[lightbox.index]}
+              alt={`${lightbox.title} — original document`}
+              className="min-h-0 max-h-[60vh] lg:max-h-[88vh] max-w-full lg:max-w-[70vw] rounded-lg shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] bg-white object-contain mx-auto"
+            />
+            <aside
+              aria-label="Verification metadata"
+              className="w-full lg:w-[320px] shrink-0 rounded-2xl bg-white p-5 md:p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] overflow-y-auto"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF5] text-[#16A34A] text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
+                  <ShieldCheck className="h-3 w-3" /> Verified
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-[#4B5563] font-semibold">{lightbox.cat}</span>
+              </div>
+              <h3 className="mt-3 font-semibold tracking-tight text-[#111111] text-base leading-snug">{lightbox.title}</h3>
+              {lightbox.images.length > 1 && (
+                <p className="mt-1 text-[11px] uppercase tracking-wider text-[#4B5563] font-semibold">
+                  Page {lightbox.index + 1} of {lightbox.images.length}
+                </p>
+              )}
+
+              {lightbox.meta && (
+                <dl className="mt-5 space-y-4 text-sm">
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Issuer</dt>
+                    <dd className="mt-1 text-[#111111] leading-snug">{lightbox.meta.issuer}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Date</dt>
+                    <dd className="mt-1 text-[#111111]">{lightbox.meta.date}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Document type</dt>
+                    <dd className="mt-1 text-[#111111]">{lightbox.meta.type}</dd>
+                  </div>
+                </dl>
+              )}
+
+              <div className="mt-5 pt-4 border-t border-[#E5E7EB] flex items-center gap-2 text-[11px] text-[#4B5563]">
+                <Shield className="h-3.5 w-3.5 text-[#DC2626]" />
+                <span>Original document — independently verifiable</span>
+              </div>
+            </aside>
+          </div>
         </div>
       )}
     </div>
