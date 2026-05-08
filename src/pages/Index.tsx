@@ -414,7 +414,7 @@ const Index = () => {
               onClick={() => setQuoteOpen(true)}
               className="hidden sm:inline-flex rounded-full bg-gold px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
             >
-              Start Operations
+              Launch Growth System
             </button>
             <button
               type="button"
@@ -464,7 +464,7 @@ const Index = () => {
               }}
               className="mt-2 sm:hidden rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition active:scale-95"
             >
-              Start Operations
+              Launch Growth System
             </button>
           </div>
         </div>
