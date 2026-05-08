@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowUpRight, Loader2, EyeOff, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import type { PressItem } from "@/hooks/usePressItems";
+import { useSeo } from "@/hooks/useSeo";
 
 type Status = "loading" | "published" | "unpublished-preview" | "unpublished-blocked" | "missing";
 
@@ -12,6 +13,14 @@ export default function PressDetail() {
   const navigate = useNavigate();
   const [item, setItem] = useState<PressItem | null>(null);
   const [status, setStatus] = useState<Status>("loading");
+  useSeo({
+    title: item?.title ? `${item.title} — Press | TrendFlux Ecosystem` : "Press Coverage — TrendFlux Ecosystem",
+    description: item?.title
+      ? `${item.title} — independently verified press coverage from TrendFlux Ecosystem.`
+      : "Press coverage and media features from TrendFlux Ecosystem.",
+    type: "article",
+    noindex: status !== "published",
+  });
 
   useEffect(() => {
     const load = async () => {

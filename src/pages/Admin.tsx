@@ -11,11 +11,17 @@ import { Loader2, Plus, Trash2, LogOut, Save, Eye, ShieldCheck, EyeOff } from "l
 import { usePressItems, type PressItem } from "@/hooks/usePressItems";
 import { PressItemPreview } from "@/components/PressItemPreview";
 import { normalizeHref } from "@/lib/url";
+import { useSeo } from "@/hooks/useSeo";
 
 type Row = PressItem & { _dirty?: boolean; _new?: boolean };
 
 export default function Admin() {
   const navigate = useNavigate();
+  useSeo({
+    title: "Admin — TrendFlux Ecosystem",
+    description: "Administrative dashboard for TrendFlux Ecosystem.",
+    noindex: true,
+  });
   const [authChecked, setAuthChecked] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
