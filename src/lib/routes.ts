@@ -34,14 +34,21 @@ export const preloadRoute = (path: string) => {
   if (path.startsWith("/case-studies/")) return routes["/case-studies/:slug"].preload();
 };
 
-export const navigablePages: { label: string; path: string; keywords?: string }[] = [
-  { label: "Home", path: "/", keywords: "index landing" },
-  { label: "Project Lead", path: "/project-lead", keywords: "lead form" },
-  { label: "Marriage", path: "/marriage", keywords: "wedding" },
-  { label: "Brand Open", path: "/brand-open", keywords: "branding" },
-  { label: "Trendflux Talent", path: "/trendflux-talent", keywords: "careers talent" },
-  { label: "Luxe Veil", path: "/luxe-veil", keywords: "wedding luxe" },
-  { label: "Admin", path: "/admin", keywords: "dashboard" },
-  { label: "Luxe Veil Admin", path: "/admin/luxe-veil", keywords: "admin" },
-  { label: "Sign In", path: "/auth", keywords: "login auth" },
+export type PageType = "Main" | "Brand" | "Admin" | "Account";
+
+export const navigablePages: {
+  label: string;
+  path: string;
+  type: PageType;
+  keywords?: string;
+}[] = [
+  { label: "Home", path: "/", type: "Main", keywords: "index landing start" },
+  { label: "Project Lead", path: "/project-lead", type: "Main", keywords: "lead form contact" },
+  { label: "Marriage", path: "/marriage", type: "Main", keywords: "wedding" },
+  { label: "Brand Open", path: "/brand-open", type: "Brand", keywords: "branding open mass public" },
+  { label: "Trendflux Talent", path: "/trendflux-talent", type: "Brand", keywords: "careers talent platform" },
+  { label: "Luxe Veil", path: "/luxe-veil", type: "Brand", keywords: "wedding luxe private invite" },
+  { label: "Admin", path: "/admin", type: "Admin", keywords: "dashboard manage" },
+  { label: "Luxe Veil Admin", path: "/admin/luxe-veil", type: "Admin", keywords: "admin luxe manage" },
+  { label: "Sign In", path: "/auth", type: "Account", keywords: "login auth signin" },
 ];
