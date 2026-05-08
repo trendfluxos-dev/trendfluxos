@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { BRAND_CONTACTS, BrandKey, getBrandForRoute } from "@/config/socialConfig";
+import { track } from "@/lib/analytics";
 
 type Ctx = {
   override: BrandKey | null;
@@ -41,16 +42,32 @@ export const BrandPreviewProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Re-read ?brand= when URL changes (e.g. SPA navigation)
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
   useEffect(() => {
     const url = new URLSearchParams(search).get("brand");
     if (url === null) return;
     if (url === "" || url === "clear" || url === "off") {
+      track("brand_preview_change", {
+        brand: null,
+        previous: override,
+        page: pathname,
+        source: "query_param",
+        action: "clear",
+      });
       setOverride(null);
       return;
     }
-    if (isBrandKey(url)) setOverride(url);
-  }, [search]);
+    if (isBrandKey(url) && url !== override) {
+      track("brand_preview_change", {
+        brand: url,
+        previous: override,
+        page: pathname,
+        source: "query_param",
+        action: "set",
+      });
+      setOverride(url);
+    }
+  }, [search, pathname, override]);
 
   const value = useMemo(() => ({ override, setOverride }), [override]);
   return <BrandPreviewContext.Provider value={value}>{children}</BrandPreviewContext.Provider>;
