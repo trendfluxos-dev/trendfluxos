@@ -14,6 +14,17 @@ import { navigablePages, preloadRoute, type PageType } from "@/lib/routes";
 import { fuzzyMatch, highlight } from "@/lib/fuzzy";
 import { rankWeights } from "@/lib/commandPaletteConfig";
 
+const EXAMPLE_QUERIES = [
+  "dashboard",
+  "admin",
+  "CRM",
+  "login",
+  "wedding",
+  "talent",
+  "lva",
+  "brand",
+];
+
 type Scored = {
   page: (typeof navigablePages)[number];
   score: number;
@@ -110,6 +121,39 @@ export const CommandPalette = () => {
         value={query}
         onValueChange={setQuery}
       />
+      <div
+        className="flex flex-wrap items-center gap-1.5 border-b px-3 py-2"
+        role="group"
+        aria-label="Example queries"
+      >
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground mr-1">
+          Try
+        </span>
+        {EXAMPLE_QUERIES.map((ex) => (
+          <button
+            key={ex}
+            type="button"
+            onClick={() => setQuery(ex)}
+            aria-label={`Fill query with ${ex}`}
+            className={`rounded-full border px-2 py-0.5 text-[11px] transition-colors ${
+              query === ex
+                ? "border-primary/60 bg-primary/15 text-primary"
+                : "border-border bg-muted/40 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+            }`}
+          >
+            {ex}
+          </button>
+        ))}
+        {query && (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="ml-auto text-[11px] text-muted-foreground hover:text-foreground underline-offset-2 hover:underline"
+          >
+            Clear
+          </button>
+        )}
+      </div>
       <CommandList aria-label="Available pages">
         <CommandEmpty>No pages found.</CommandEmpty>
         {grouped.map((g, i) => (
