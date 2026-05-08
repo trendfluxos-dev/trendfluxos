@@ -71,7 +71,7 @@ export const BrandShell = ({
 
 const BrandFunnelFooter = ({ active }: { active: Tier }) => {
   const items: { id: Tier; name: string; path: string; tag: string }[] = [
-    { id: "open", name: "Brand Tok", path: "/brand-open", tag: "Open" },
+    { id: "open", name: "Studio BrandToki", path: "/brand-open", tag: "Open" },
     { id: "platform", name: "TrendFlux Talent", path: "/trendflux-talent", tag: "Platform" },
     { id: "private", name: "Luxe Veil", path: "/luxe-veil", tag: "Private" },
   ];

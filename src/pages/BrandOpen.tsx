@@ -6,14 +6,14 @@ import { Testimonials } from "@/components/Testimonials";
 
 const BrandOpen = () => {
   useSeo({
-    title: "Brand Tok — Helping Brands Tell Their Stories | TrendFlux",
+    title: "Studio BrandToki — Helping Brands Tell Their Stories | TrendFlux",
     description:
       "Bold, communication-first storytelling for Bangladeshi brands. Modern geometry, flat gold, built for ads, social and mass reach.",
   });
   useJsonLd({
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "Brand Tok",
+    name: "Studio BrandToki",
     provider: { "@type": "Organization", name: "TrendFlux", url: "https://trendfluxdigital.lovable.app" },
     serviceType: "Brand storytelling & mass-reach campaigns",
     areaServed: "Bangladesh",
@@ -109,7 +109,7 @@ const BrandOpen = () => {
       <Testimonials
         items={[
           {
-            quote: "Brand Tok turned our Eid campaign into a city-wide conversation. Reach tripled in 10 days.",
+            quote: "Studio BrandToki turned our Eid campaign into a city-wide conversation. Reach tripled in 10 days.",
             name: "Tanvir Ahmed",
             role: "Founder, Dhanmondi Apparel · Dhaka",
             outcome: "3.2× organic reach in 10 days",
