@@ -45,7 +45,6 @@ export const BrandShell = ({
           ← TrendFlux Digital
         </Link>
         <div className="flex items-center gap-4">
-          <SocialIcons variant="inline" size="sm" className="hidden md:flex" />
           <div className="text-right">
             <div className="text-[10px] uppercase tracking-[0.35em] text-primary/80">{meta.label}</div>
             <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{meta.sub}</div>
