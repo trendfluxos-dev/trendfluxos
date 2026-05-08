@@ -13,6 +13,7 @@ type SeoProps = {
   type?: "website" | "article" | "profile";
   siteName?: string;
   twitterSite?: string;
+  noindex?: boolean;
 };
 
 const setMeta = (selector: string, attr: string, value: string) => {
@@ -55,6 +56,7 @@ export const useSeo = ({
   type = "website",
   siteName,
   twitterSite,
+  noindex,
 }: SeoProps = {}) => {
   useEffect(() => {
     const finalTitle = title ?? `${BRAND.name} — ${BRAND.tagline}`;
@@ -89,10 +91,12 @@ export const useSeo = ({
     setMeta('meta[name="twitter:image:alt"]', "content", finalImageAlt);
     if (finalTwitter) setMeta('meta[name="twitter:site"]', "content", finalTwitter);
 
+    setMeta('meta[name="robots"]', "content", noindex ? "noindex,nofollow" : "index,follow");
+
     const url = canonical || (typeof window !== "undefined" ? window.location.href.split("#")[0] : "");
     if (url) {
       setLink("canonical", url);
       setMeta('meta[property="og:url"]', "content", url);
     }
-  }, [title, description, canonical, image, imageWidth, imageHeight, imageAlt, imageType, type, siteName, twitterSite]);
+  }, [title, description, canonical, image, imageWidth, imageHeight, imageAlt, imageType, type, siteName, twitterSite, noindex]);
 };
