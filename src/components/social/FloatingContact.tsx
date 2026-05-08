@@ -31,10 +31,10 @@ export const FloatingContact = () => {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  if (pathname.startsWith("/admin") || pathname === "/auth") return null;
-
   const brand = useResolvedBrand();
   const contact = BRAND_CONTACTS[brand];
+
+  if (pathname.startsWith("/admin") || pathname === "/auth") return null;
 
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-3">
