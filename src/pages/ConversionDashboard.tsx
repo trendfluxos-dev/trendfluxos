@@ -1,8 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, RefreshCw, Trash2, Download } from "lucide-react";
+import { ArrowLeft, RefreshCw, Trash2, Download, Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { readStoredEvents, clearStoredEvents, type StoredEvent } from "@/lib/analytics";
+import {
+  readStoredEvents,
+  clearStoredEvents,
+  ANALYTICS_EVENT,
+  type StoredEvent,
+} from "@/lib/analytics";
 import { useSeo } from "@/hooks/useSeo";
 
 type ModuleRow = {
@@ -20,12 +25,40 @@ export default function ConversionDashboard() {
   });
 
   const [events, setEvents] = useState<StoredEvent[]>([]);
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [intervalSec, setIntervalSec] = useState(5);
+  const [lastRefresh, setLastRefresh] = useState<number>(Date.now());
 
-  const refresh = () => setEvents(readStoredEvents());
+  const refresh = () => {
+    setEvents(readStoredEvents());
+    setLastRefresh(Date.now());
+  };
 
   useEffect(() => {
     refresh();
   }, []);
+
+  // Live updates: same-tab via custom event, cross-tab via storage event.
+  useEffect(() => {
+    if (!autoRefresh) return;
+    const onAnalytics = () => refresh();
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "tf_analytics_events") refresh();
+    };
+    window.addEventListener(ANALYTICS_EVENT, onAnalytics);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      window.removeEventListener(ANALYTICS_EVENT, onAnalytics);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, [autoRefresh]);
+
+  // Polling fallback so the dashboard catches events from background tabs / SSR.
+  useEffect(() => {
+    if (!autoRefresh) return;
+    const id = window.setInterval(refresh, Math.max(1, intervalSec) * 1000);
+    return () => window.clearInterval(id);
+  }, [autoRefresh, intervalSec]);
 
   const { rows, totals, recent } = useMemo(() => {
     const map = new Map<string, ModuleRow>();
@@ -90,6 +123,32 @@ export default function ConversionDashboard() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/40 px-3 py-1.5 text-xs">
+              <Radio
+                className={`h-3.5 w-3.5 ${autoRefresh ? "text-gold animate-pulse" : "text-foreground/40"}`}
+              />
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  className="accent-gold"
+                  checked={autoRefresh}
+                  onChange={(e) => setAutoRefresh(e.target.checked)}
+                />
+                Live
+              </label>
+              <select
+                value={intervalSec}
+                onChange={(e) => setIntervalSec(Number(e.target.value))}
+                disabled={!autoRefresh}
+                className="bg-transparent text-foreground/70 outline-none disabled:opacity-40"
+                aria-label="Refresh interval"
+              >
+                <option value={2}>2s</option>
+                <option value={5}>5s</option>
+                <option value={10}>10s</option>
+                <option value={30}>30s</option>
+              </select>
+            </div>
             <Button size="sm" variant="outline" onClick={refresh}>
               <RefreshCw className="h-4 w-4" /> Refresh
             </Button>
@@ -108,6 +167,10 @@ export default function ConversionDashboard() {
             </Button>
           </div>
         </div>
+
+        <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-foreground/40">
+          Last updated {new Date(lastRefresh).toLocaleTimeString()}
+        </p>
 
         {/* Totals */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
