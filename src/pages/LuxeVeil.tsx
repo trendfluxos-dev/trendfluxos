@@ -198,7 +198,7 @@ const LuxeVeil = () => {
       </section>
 
       {!unlocked ? (
-        <section className="relative mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#0c2218]/70 backdrop-blur p-8 text-center">
+        <section className="relative mx-auto max-w-md rounded-3xl border border-gold/40 bg-[#0a0a0a]/70 backdrop-blur p-8 text-center">
           {/* Inner hairline + corner crests */}
           <div aria-hidden className="pointer-events-none absolute inset-2 rounded-[1.4rem] border border-gold/15" />
           <span aria-hidden className="absolute -top-2 left-1/2 -translate-x-1/2 text-gold/70 text-xs">◆</span>
@@ -220,7 +220,7 @@ const LuxeVeil = () => {
             {error && <p className="text-xs text-red-300">{error}</p>}
             <button
               type="submit"
-              className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
+              className="w-full bg-gold text-[#0a0a0a] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition"
             >
               Unlock Experience
             </button>
@@ -288,7 +288,7 @@ const RequestInviteForm = () => {
           href={BRAND_CONTACTS.luxeveil.telegram!.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.25em] text-[#0c2218] hover:opacity-90 transition"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.25em] text-[#0a0a0a] hover:opacity-90 transition"
         >
           Speak With Concierge
         </a>
@@ -373,7 +373,7 @@ const RequestInviteForm = () => {
       <button
         type="submit"
         disabled={submitting}
-        className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-50 inline-flex items-center justify-center gap-2"
+        className="w-full bg-gold text-[#0a0a0a] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-50 inline-flex items-center justify-center gap-2"
       >
         {submitting && <Loader2 className="w-3 h-3 animate-spin" />}
         Submit Request
@@ -467,7 +467,7 @@ const TargetSelect = ({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-[#0c2218] border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none"
+        className="w-full bg-[#0a0a0a] border border-gold/30 focus:border-gold rounded-xl px-4 py-2.5 text-sm text-white outline-none"
       >
         {targets.map((t) => (
           <option key={t.key} value={t.key}>{t.label}</option>
@@ -530,7 +530,7 @@ const ErrorBanner = React.forwardRef<HTMLDivElement, {
           disabled={retrying}
           aria-label={retrying ? "Retrying to send your message" : "Retry sending your message"}
           aria-busy={retrying}
-          className="inline-flex items-center gap-1.5 rounded-full bg-gold text-[#0c2218] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c2218]"
+          className="inline-flex items-center gap-1.5 rounded-full bg-gold text-[#0a0a0a] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a]"
         >
           {retrying && <Loader2 className="w-3 h-3 animate-spin" aria-hidden="true" />}
           {retrying ? "Retrying…" : "Retry"}
@@ -540,7 +540,7 @@ const ErrorBanner = React.forwardRef<HTMLDivElement, {
           target="_blank"
           rel="noreferrer"
           aria-label="Contact us on WhatsApp instead (opens in a new tab)"
-          className="inline-flex items-center rounded-full border border-gold/50 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold hover:bg-gold/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0c2218]"
+          className="inline-flex items-center rounded-full border border-gold/50 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold hover:bg-gold/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a]"
         >
           WhatsApp instead
         </a>
@@ -618,7 +618,7 @@ const EntryPopup = () => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-3xl border border-gold/40 bg-[#0c2218] p-7 text-center shadow-2xl">
+      <div className="relative w-full max-w-md rounded-3xl border border-gold/40 bg-[#0a0a0a] p-7 text-center shadow-2xl">
         <button
           onClick={close}
           aria-label="Close"
@@ -680,7 +680,7 @@ const EntryPopup = () => {
               disabled={sending}
               aria-invalid={!!sendErr}
               aria-describedby={sendErr ? "entry-send-error" : undefined}
-              className="w-full bg-gold text-[#0c2218] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
+              className="w-full bg-gold text-[#0a0a0a] py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition disabled:opacity-60 inline-flex items-center justify-center gap-2"
             >
               {sending && <Loader2 className="w-3 h-3 animate-spin" />}
               {sending ? "Sending…" : "Send to Concierge"}
@@ -996,7 +996,7 @@ const LuxeVeilExperience = () => (
     {/* Welcome / Hero (kept dark) */}
     <section className="relative mx-auto max-w-5xl mt-8 rounded-3xl border border-gold/30 overflow-hidden">
       <img src={luxeVeilSpa} alt="Luxe Veil spa interior" width={1920} height={1080} className="absolute inset-0 w-full h-full object-cover opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#11331f]/90 via-[#0c2218]/85 to-[#11331f]/95" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a]/90 via-[#0a0a0a]/85 to-[#1a1a1a]/95" />
       <div className="relative p-8 md:p-14 text-center">
         <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/60" />
         <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/60" />
@@ -1013,7 +1013,7 @@ const LuxeVeilExperience = () => (
           comfort, and care at LUXE VEIL.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0c2218] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
+          <a href={TELEGRAM} target="_blank" rel="noreferrer" className="bg-gold text-[#0a0a0a] px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:opacity-90 transition">
             Contact Concierge
           </a>
           <a href="#contact" className="border border-gold/60 text-gold px-8 py-3 rounded-full font-bold uppercase tracking-[0.2em] text-xs hover:bg-gold/10 transition">
