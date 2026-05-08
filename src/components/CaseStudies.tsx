@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, ArrowRight } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import SocialIcons from "@/components/social/SocialIcons";
+import { track } from "@/lib/analytics";
 
 type CaseItem = {
   title: string;
@@ -16,6 +19,8 @@ type CaseItem = {
   outcome: string;
   buttons: [string, string];
   narrative: string;
+  outcomes: string[];
+  consultPitch: string;
 };
 
 const cases: CaseItem[] = [
@@ -28,6 +33,13 @@ const cases: CaseItem[] = [
     buttons: ["View Narrative", "Consult Operator"],
     narrative:
       "Designed an end-to-end content engine combining a quarterly editorial calendar, Meta Ads funnels, and CRM-tracked nurture sequences. The result was a 45% lift in engagement, predictable lead flow, and a brand voice that compounded month over month.",
+    outcomes: [
+      "+45% engagement lift in 90 days",
+      "Predictable monthly lead flow",
+      "Editorial system handed off to in-house team",
+    ],
+    consultPitch:
+      "Talk to the operator behind this growth system. We'll map your current funnel, identify the highest-leverage automation, and outline a 30-60-90 plan tailored to your brand.",
   },
   {
     title: "Retail Lead Generation Funnel",
@@ -38,6 +50,13 @@ const cases: CaseItem[] = [
     buttons: ["View Funnel", "Build Similar System"],
     narrative:
       "Engineered a GoHighLevel funnel with WhatsApp automation, qualifying landing pages, and a tagged CRM pipeline. Sales conversations now arrive pre-qualified with budget, timeline, and intent captured automatically.",
+    outcomes: [
+      "Pre-qualified inbound conversations",
+      "Auto-tagged CRM pipeline by intent",
+      "WhatsApp-first nurture, 24/7 capture",
+    ],
+    consultPitch:
+      "We'll architect the same funnel for your business — landing page, WhatsApp automation, CRM tags, and the qualifying questions that filter cold traffic into booked calls.",
   },
   {
     title: "Personal Brand Authority Engine",
@@ -48,6 +67,13 @@ const cases: CaseItem[] = [
     buttons: ["View Strategy", "Start Brand Audit"],
     narrative:
       "Productized the founder's expertise into weekly reels, LinkedIn long-form, and AI-assisted copy systems. Analytics dashboards close the loop so every post compounds reach, authority, and inbound opportunities.",
+    outcomes: [
+      "Weekly compounding content cadence",
+      "AI-assisted copy stack for the founder",
+      "Analytics loop that surfaces winners",
+    ],
+    consultPitch:
+      "Get a free brand audit: we review your positioning, content cadence, and inbound funnel, then return a one-page authority roadmap.",
   },
 ];
 
@@ -97,7 +123,9 @@ const ImpactMap = () => (
 
 const CaseStudies = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [consultIndex, setConsultIndex] = useState<number | null>(null);
   const active = openIndex !== null ? cases[openIndex] : null;
+  const consult = consultIndex !== null ? cases[consultIndex] : null;
 
   const metrics = [
     { value: "485K+", label: "Organic Views Generated" },
@@ -213,7 +241,14 @@ const CaseStudies = () => {
                       <Button
                         variant="glass"
                         size="sm"
-                        onClick={() => setOpenIndex(i)}
+                        onClick={() => {
+                          track("case_narrative_open", {
+                            case_title: c.title,
+                            cta: c.buttons[0],
+                            source: "case_studies_component",
+                          });
+                          setOpenIndex(i);
+                        }}
                         aria-label={`${c.buttons[0]} for ${c.title}`}
                         aria-haspopup="dialog"
                         aria-expanded={openIndex === i}
@@ -226,6 +261,17 @@ const CaseStudies = () => {
                         size="sm"
                         className="text-primary hover:text-primary"
                         aria-label={`${c.buttons[1]} about ${c.title}`}
+                        aria-haspopup="dialog"
+                        aria-expanded={consultIndex === i}
+                        aria-controls="case-consult-dialog"
+                        onClick={() => {
+                          track("case_consult_open", {
+                            case_title: c.title,
+                            cta: c.buttons[1],
+                            source: "case_studies_component",
+                          });
+                          setConsultIndex(i);
+                        }}
                       >
                         {c.buttons[1]} <span aria-hidden>→</span>
                       </Button>
@@ -246,7 +292,7 @@ const CaseStudies = () => {
       >
         <DialogContent
           id="case-narrative-dialog"
-          className="max-w-2xl glass-strong"
+          className="max-w-2xl glass-strong max-h-[90vh] overflow-y-auto"
           aria-labelledby="case-narrative-title"
           aria-describedby="case-narrative-desc"
         >
@@ -288,14 +334,102 @@ const CaseStudies = () => {
                 </ul>
               </section>
 
-              <section aria-label="Outcome">
-                <h4 className="text-xs uppercase tracking-[0.25em] text-foreground/60 mb-2">
-                  Outcome
+              <section aria-label="Outcomes" className="rounded-2xl border border-gold/20 bg-gold/5 p-4">
+                <h4 className="text-[10px] uppercase tracking-[0.25em] text-gold mb-2 font-semibold">
+                  Outcomes
                 </h4>
-                <p className="text-foreground/75 leading-relaxed">
-                  {active.outcome}
-                </p>
+                <ul className="grid gap-1.5 sm:grid-cols-2 list-none">
+                  {active.outcomes.map((r) => (
+                    <li key={r} className="flex items-start gap-2 text-sm text-foreground/85">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
               </section>
+
+              <DialogFooter className="gap-2 sm:gap-3 pt-2">
+                <Button variant="ghost" onClick={() => setOpenIndex(null)}>
+                  Close
+                </Button>
+                <Button
+                  variant="gold"
+                  onClick={() => {
+                    const idx = openIndex;
+                    setOpenIndex(null);
+                    if (idx !== null) setConsultIndex(idx);
+                  }}
+                >
+                  {active.buttons[1]} <ArrowRight className="h-4 w-4" />
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Consult / Build Similar System dialog */}
+      <Dialog
+        open={consultIndex !== null}
+        onOpenChange={(o) => !o && setConsultIndex(null)}
+      >
+        <DialogContent
+          id="case-consult-dialog"
+          className="max-w-xl glass-strong max-h-[90vh] overflow-y-auto"
+          aria-labelledby="case-consult-title"
+        >
+          {consult && (
+            <>
+              <DialogHeader>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-gold">
+                  {consult.buttons[1]}
+                </p>
+                <DialogTitle
+                  id="case-consult-title"
+                  className="font-display text-2xl md:text-3xl font-bold"
+                >
+                  Build a system like {consult.title}
+                </DialogTitle>
+                <p className="text-gold/80 font-semibold text-sm">{consult.metric}</p>
+              </DialogHeader>
+
+              <DialogDescription className="text-foreground/75 leading-relaxed">
+                {consult.consultPitch}
+              </DialogDescription>
+
+              <div className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold mb-2">
+                  Reach the operator directly
+                </p>
+                <SocialIcons brand="trendflux" variant="inline" size="md" />
+                <p className="mt-3 text-xs text-foreground/55">
+                  Avg. response time under 4 hours on WhatsApp.
+                </p>
+              </div>
+
+              <DialogFooter className="gap-2 sm:gap-3">
+                <Button variant="ghost" onClick={() => setConsultIndex(null)}>
+                  Close
+                </Button>
+                <Button
+                  variant="gold"
+                  asChild
+                >
+                  <a
+                    href="https://wa.me/message/X6JBEVJ65NA3K1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() =>
+                      track("case_consult_whatsapp", {
+                        case_title: consult.title,
+                        cta: consult.buttons[1],
+                      })
+                    }
+                  >
+                    Start the conversation <ArrowRight className="h-4 w-4" />
+                  </a>
+                </Button>
+              </DialogFooter>
             </>
           )}
         </DialogContent>

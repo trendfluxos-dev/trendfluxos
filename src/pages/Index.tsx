@@ -386,7 +386,7 @@ const Index = () => {
             <span>{BRAND.nameLead}</span> <span className="text-gradient">{BRAND.nameTrail}</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-7 lg:gap-8 text-sm text-foreground/70">
+          <div className="hidden md:flex items-center gap-4 lg:gap-7 xl:gap-8 text-sm text-foreground/70">
             {[
               { href: "#services", label: "Services" },
               { href: "#founder", label: "Brand Architect" },
@@ -395,14 +395,14 @@ const Index = () => {
               <a
                 key={l.href}
                 href={l.href}
-                className="relative py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+                className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
               >
                 {l.label}
               </a>
             ))}
             <Link
               to="/project-lead"
-              className="relative py-1 transition-colors duration-300 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
             >
               Project Lead
             </Link>
@@ -412,9 +412,10 @@ const Index = () => {
             <button
               type="button"
               onClick={() => setQuoteOpen(true)}
-              className="hidden sm:inline-flex rounded-full bg-gold px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+              className="hidden sm:inline-flex md:hidden lg:inline-flex whitespace-nowrap rounded-full bg-gold px-3.5 lg:px-5 py-2 lg:py-2.5 text-xs lg:text-sm font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
             >
-              Launch Growth System
+              <span className="hidden lg:inline">Launch Growth System</span>
+              <span className="lg:hidden">Launch System</span>
             </button>
             <button
               type="button"
@@ -475,9 +476,8 @@ const Index = () => {
         <div className="mx-auto max-w-6xl text-center animate-fade-up">
 
           <h1 className="font-display mx-auto max-w-5xl text-4xl sm:text-5xl font-black leading-[1.05] sm:leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
-            {BRAND.hero.headlineLead}
-            <br />
-            <span className="text-gradient">{BRAND.hero.headlineTrail}</span>
+            <span className="block break-words">{BRAND.hero.headlineLead}</span>
+            <span className="text-gradient block break-words">{BRAND.hero.headlineTrail}</span>
           </h1>
 
           <p className="mx-auto mt-6 sm:mt-8 max-w-2xl text-sm sm:text-base leading-relaxed text-foreground/60 md:text-lg">
@@ -965,6 +965,31 @@ const Index = () => {
               Real execution. Here's how I turn strategy into measurable growth.
             </p>
           </div>
+
+          {/* Ecosystem metrics strip */}
+          <div
+            className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-10"
+            aria-label="Ecosystem performance metrics"
+          >
+            {[
+              { value: "485K+", label: "Organic Views Generated" },
+              { value: "+45%", label: "Avg. Engagement Growth" },
+              { value: "24/7", label: "AI Automation Layer" },
+              { value: "3", label: "Multi-Brand Ecosystems Live" },
+            ].map((m) => (
+              <div
+                key={m.label}
+                className="glass rounded-2xl p-5 text-center transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                <div className="font-display text-2xl md:text-3xl font-bold text-gradient">
+                  {m.value}
+                </div>
+                <div className="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.22em] text-foreground/55">
+                  {m.label}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         <FilterBar
@@ -1183,7 +1208,7 @@ const Index = () => {
               onClick={() => setQuoteOpen(true)}
               className="inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
             >
-              Start Operations <ArrowRight className="w-4 h-4" />
+              Launch Growth System <ArrowRight className="w-4 h-4" />
             </button>
             <button
               type="button"
