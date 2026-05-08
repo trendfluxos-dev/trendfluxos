@@ -15,7 +15,8 @@ export const BrandSwitcher = () => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const has = new URLSearchParams(window.location.search).has("preview");
+    const params = new URLSearchParams(window.location.search);
+    const has = params.has("preview") || params.has("brand");
     const stored = window.localStorage.getItem("brand-switcher") === "1";
     setEnabled(has || stored || import.meta.env.DEV);
     if (has) window.localStorage.setItem("brand-switcher", "1");
