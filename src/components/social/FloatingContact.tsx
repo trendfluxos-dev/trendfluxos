@@ -37,7 +37,10 @@ export const FloatingContact = () => {
   if (pathname.startsWith("/admin") || pathname === "/auth") return null;
 
   return (
-    <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-3">
+    <div
+      className="fixed right-4 sm:right-5 z-40 flex flex-col items-end gap-3"
+      style={{ bottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}
+    >
       {open && (
         <div
           ref={panelRef}
@@ -46,10 +49,13 @@ export const FloatingContact = () => {
           aria-modal="false"
           className="rounded-2xl border border-gold/40 bg-[#0B1F3A]/90 backdrop-blur px-4 py-3 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6)] animate-fade-in"
         >
-          <p className="mb-2 text-[10px] uppercase tracking-[0.3em] text-gold/80">
+          <p
+            className="mb-2 text-[10px] uppercase tracking-[0.3em] text-gold/80"
+            aria-live="polite"
+          >
             {contact.displayName}
           </p>
-          <SocialIcons brand={brand} variant="inline" size="md" />
+          <SocialIcons brand={brand} variant="inline" size="lg" />
         </div>
       )}
       <button
@@ -60,10 +66,10 @@ export const FloatingContact = () => {
         aria-expanded={open}
         aria-haspopup="dialog"
         className={cn(
-          "inline-flex items-center justify-center w-12 h-12 rounded-full border border-gold/50 bg-gradient-to-br from-gold/30 to-gold/10 text-gold shadow-[0_10px_30px_-5px_rgba(200,169,81,0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-5px_rgba(200,169,81,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "inline-flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 rounded-full border border-gold/50 bg-gradient-to-br from-gold/30 to-gold/10 text-gold shadow-[0_10px_30px_-5px_rgba(200,169,81,0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-5px_rgba(200,169,81,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         )}
       >
-        {open ? <X className="w-5 h-5" /> : <MessageCircle className="w-5 h-5" />}
+        {open ? <X className="w-6 h-6 sm:w-5 sm:h-5" /> : <MessageCircle className="w-6 h-6 sm:w-5 sm:h-5" />}
       </button>
     </div>
   );
