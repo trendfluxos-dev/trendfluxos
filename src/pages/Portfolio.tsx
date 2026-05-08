@@ -226,15 +226,51 @@ const PRESETS = {
   "Performance Alliance": { base: 120, perf: 35, avg: 90, scope: 8 },
 } as const;
 
+const PORTFOLIO_META = {
+  title: "Zahid Hasan Emon — AI-Powered Growth Operator & Brand Architect",
+  description:
+    "Zahid Hasan Emon — AI-Powered Digital Growth Operator, Brand Architect & Growth Execution Partner. Building scalable growth systems, content infrastructure and automation for brands, startups and creator ecosystems.",
+  url: "https://trendflux.digital/portfolio",
+  image: "https://trendflux.digital/og/portfolio-zahid-hasan-emon.jpg",
+};
+
+function setMeta(selector: string, attr: string, value: string) {
+  let el = document.head.querySelector<HTMLMetaElement>(selector);
+  if (!el) {
+    el = document.createElement("meta");
+    const [name, val] = selector.replace(/^meta\[/, "").replace(/\]$/, "").split("=");
+    el.setAttribute(name, val.replace(/['"]/g, ""));
+    document.head.appendChild(el);
+  }
+  el.setAttribute(attr, value);
+}
+
 export default function Portfolio() {
   useEffect(() => {
-    document.title = "Zahid Hasan Emon — AI-Powered Growth Operator & Brand Architect";
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta)
-      meta.setAttribute(
-        "content",
-        "Zahid Hasan Emon — AI-Powered Digital Growth Operator, Brand Architect & Growth Execution Partner. Strategic growth systems, content infrastructure, and automation."
-      );
+    document.title = PORTFOLIO_META.title;
+    setMeta('meta[name="description"]', "content", PORTFOLIO_META.description);
+    // Open Graph
+    setMeta('meta[property="og:type"]', "content", "profile");
+    setMeta('meta[property="og:title"]', "content", PORTFOLIO_META.title);
+    setMeta('meta[property="og:description"]', "content", PORTFOLIO_META.description);
+    setMeta('meta[property="og:url"]', "content", PORTFOLIO_META.url);
+    setMeta('meta[property="og:image"]', "content", PORTFOLIO_META.image);
+    setMeta('meta[property="og:site_name"]', "content", "TrendFlux Digital");
+    setMeta('meta[property="profile:first_name"]', "content", "Zahid Hasan");
+    setMeta('meta[property="profile:last_name"]', "content", "Emon");
+    // Twitter
+    setMeta('meta[name="twitter:card"]', "content", "summary_large_image");
+    setMeta('meta[name="twitter:title"]', "content", PORTFOLIO_META.title);
+    setMeta('meta[name="twitter:description"]', "content", PORTFOLIO_META.description);
+    setMeta('meta[name="twitter:image"]', "content", PORTFOLIO_META.image);
+    // Canonical
+    let canon = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (!canon) {
+      canon = document.createElement("link");
+      canon.setAttribute("rel", "canonical");
+      document.head.appendChild(canon);
+    }
+    canon.setAttribute("href", PORTFOLIO_META.url);
   }, []);
 
   const [preset, setPreset] = useState<keyof typeof PRESETS>("Growth Partner");
