@@ -578,3 +578,104 @@
 .tier-card:focus-within .tier-lock-icon {
   animation-play-state: paused;
 }
+
+/* =====================================================================
+   GLOBAL DESIGN SYSTEM — Studio BrandToki × TrendFlux Ecosystem
+   White-first · Red primary · Orange/Green micro-accents · Charcoal text
+   Any new page or component automatically inherits this look by using
+   either semantic Tailwind tokens (bg-background, text-foreground,
+   bg-primary, border-border, etc.) or the helper component classes below.
+   ===================================================================== */
+
+@layer base {
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection { background: hsl(var(--primary) / 0.18); color: hsl(var(--foreground)); }
+
+  /* Default global typographic rhythm — only applies when a heading
+     has no explicit font/size class on it, so existing pages stay intact. */
+  h1:not([class*="text-"]):not([class*="font-"]),
+  h2:not([class*="text-"]):not([class*="font-"]),
+  h3:not([class*="text-"]):not([class*="font-"]) {
+    font-family: "Space Grotesk", Inter, sans-serif;
+    letter-spacing: -0.01em;
+    color: hsl(var(--foreground));
+  }
+
+  /* Global focus ring — premium red, accessible */
+  :where(a, button, [role="button"], input, select, textarea, summary):focus-visible {
+    outline: 2px solid hsl(var(--primary) / 0.55);
+    outline-offset: 2px;
+    border-radius: 10px;
+  }
+}
+
+@layer components {
+  /* ---------- Buttons ---------- */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-primary text-primary-foreground
+           px-5 py-2.5 text-sm font-medium transition
+           hover:bg-[hsl(var(--primary-glow))]
+           shadow-[0_12px_28px_-12px_hsl(var(--primary)/0.55)]
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-background text-foreground
+           px-5 py-2.5 text-sm font-medium border border-border transition
+           hover:border-primary hover:text-primary
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium
+           text-muted-foreground hover:text-foreground transition;
+  }
+
+  /* ---------- Surfaces ---------- */
+  .card-premium {
+    @apply rounded-2xl bg-card text-card-foreground border border-border
+           shadow-[0_1px_2px_rgba(0,0,0,0.04)]
+           hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.22)]
+           hover:-translate-y-0.5 transition-all duration-300;
+  }
+  .surface-muted { @apply bg-muted text-foreground; }
+  .hairline { @apply border-t border-border; }
+
+  /* ---------- Inputs ---------- */
+  .input-premium {
+    @apply w-full h-11 rounded-xl bg-background border border-border px-3 text-sm text-foreground
+           placeholder:text-muted-foreground transition
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40
+           focus-visible:border-primary;
+  }
+
+  /* ---------- Badges & micro-accents ---------- */
+  .badge-base {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1;
+  }
+  .badge-red    { @apply badge-base bg-[hsl(var(--primary)/0.08)] text-primary ring-[hsl(var(--primary)/0.25)]; }
+  .badge-green  { @apply badge-base bg-[hsl(var(--accent-green)/0.10)] text-[hsl(var(--accent-green))] ring-[hsl(var(--accent-green)/0.30)]; }
+  .badge-orange { @apply badge-base bg-[hsl(var(--accent-orange)/0.10)] text-[hsl(var(--accent-orange))] ring-[hsl(var(--accent-orange)/0.30)]; }
+  .badge-neutral{ @apply badge-base bg-muted text-muted-foreground ring-border; }
+
+  /* ---------- Section helpers ---------- */
+  .section-shell { @apply mx-auto max-w-7xl px-5 md:px-8; }
+  .section-pad   { @apply py-20 md:py-24; }
+  .eyebrow       { @apply text-xs font-semibold uppercase tracking-[0.18em] text-primary; }
+  .h-display     { @apply text-3xl md:text-4xl font-bold tracking-tight font-display; }
+  .body-muted    { @apply text-[15px] text-muted-foreground leading-relaxed; }
+
+  /* ---------- Link underline ---------- */
+  .link-red {
+    @apply text-primary inline-flex items-center gap-1 font-medium hover:text-[hsl(var(--primary-glow))] transition;
+  }
+}
+
+@layer utilities {
+  .hover-lift { @apply transition-transform duration-300 hover:-translate-y-0.5; }
+  .ring-hairline { @apply ring-1 ring-border; }
+}
