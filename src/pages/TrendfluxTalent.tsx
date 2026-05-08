@@ -23,7 +23,7 @@ const TrendfluxTalent = () => {
   return (
     <BrandShell tier="platform">
       <section className="pt-14 pb-10 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
           <Users className="w-3 h-3" /> Platform · Creator Network
         </div>
 
@@ -39,8 +39,8 @@ const TrendfluxTalent = () => {
                 filter: "blur(18px)",
               }}
             />
-            <div className="absolute inset-0 rounded-full border border-gold/70" />
-            <div className="absolute inset-2 rounded-full border border-gold/40" />
+            <div className="absolute inset-0 rounded-full border border-[#E5E7EB]" />
+            <div className="absolute inset-2 rounded-full border border-[#E5E7EB]" />
             {/* Outer ticked ring */}
             <svg
               viewBox="0 0 100 100"
@@ -73,13 +73,13 @@ const TrendfluxTalent = () => {
           </div>
         </div>
 
-        <h1 className="mt-8 font-display text-4xl md:text-5xl font-bold tracking-[0.2em] text-white">
+        <h1 className="mt-8 font-display text-4xl md:text-5xl font-bold tracking-[0.2em] text-[#111111]">
           TRENDFLUX <span className="text-gold">TALENT</span>
         </h1>
         <p className="mt-3 text-sm uppercase tracking-[0.35em] text-gold/80">
           Brand Promoters &amp; Creator Community BD
         </p>
-        <p className="mt-2 text-xs uppercase tracking-[0.3em] text-white/55">
+        <p className="mt-2 text-xs uppercase tracking-[0.3em] text-[#4B5563]">
           AI-Powered Creator-Led Growth
         </p>
 
@@ -110,22 +110,22 @@ const TrendfluxTalent = () => {
             className="brand-card-gradient-border rounded-2xl p-6 hover:-translate-y-0.5 transition-transform"
           >
             <I className="w-5 h-5 text-gold" />
-            <h3 className="mt-3 font-semibold text-white">{t}</h3>
-            <p className="mt-1 text-sm text-white/60">{d}</p>
+            <h3 className="mt-3 font-semibold text-[#111111]">{t}</h3>
+            <p className="mt-1 text-sm text-[#4B5563]">{d}</p>
           </div>
         ))}
       </section>
 
-      <section id="join" className="relative mt-12 rounded-3xl border border-gold/30 bg-white/[0.04] p-8 text-center">
+      <section id="join" className="relative mt-12 rounded-3xl border border-[#E5E7EB] bg-white p-8 text-center">
         {/* Corner brackets */}
-        <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-gold/70" />
-        <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-gold/70" />
-        <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-gold/70" />
-        <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-gold/70" />
-        <h2 className="font-display text-2xl md:text-3xl text-white">
+        <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-[#E5E7EB]" />
+        <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-[#E5E7EB]" />
+        <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-[#E5E7EB]" />
+        <span aria-hidden className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-[#E5E7EB]" />
+        <h2 className="font-display text-2xl md:text-3xl text-[#111111]">
           Become part of the next wave of <span className="text-gold">creator-led</span> brands.
         </h2>
-        <p className="mt-3 text-white/60 max-w-2xl mx-auto">
+        <p className="mt-3 text-[#4B5563] max-w-2xl mx-auto">
           A platform built for serious creators and serious brands — luxury, system, authority.
         </p>
       </section>

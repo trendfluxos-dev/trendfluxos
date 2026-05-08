@@ -37,7 +37,7 @@ const BrandOpen = () => {
           </svg>
         </div>
 
-        <div className="relative inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
+        <div className="relative inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
           <Megaphone className="w-3 h-3" /> Open · Mass Awareness
         </div>
 
@@ -46,7 +46,7 @@ const BrandOpen = () => {
           <div className="relative">
             <div className="absolute inset-0 blur-2xl bg-gold/20 rounded-full" />
             <div className="relative flex items-end justify-center">
-              <span className="font-display text-6xl md:text-7xl font-bold text-white tracking-tight">
+              <span className="font-display text-6xl md:text-7xl font-bold text-[#111111] tracking-tight">
                 Brand
               </span>
             </div>
@@ -62,7 +62,7 @@ const BrandOpen = () => {
           </p>
         </div>
 
-        <p className="relative mx-auto mt-10 max-w-xl text-base md:text-lg text-white/75 leading-relaxed">
+        <p className="relative mx-auto mt-10 max-w-xl text-base md:text-lg text-[#4B5563] leading-relaxed">
           Bold, communication-first storytelling for brands ready to be seen.
           Modern geometry, flat gold, and zero noise — built for ads, social, and mass reach.
         </p>
@@ -76,7 +76,7 @@ const BrandOpen = () => {
         ].map(({ icon: I, t, d }, i) => (
           <div
             key={t}
-            className="relative overflow-hidden rounded-2xl border border-gold/20 bg-white/[0.04] p-5 hover:border-gold/50 hover:-translate-y-0.5 transition-all"
+            className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white p-5 hover:border-[#111111] hover:-translate-y-0.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-all"
           >
             <div aria-hidden className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
             <div className="flex items-center justify-between">
@@ -85,14 +85,14 @@ const BrandOpen = () => {
                 0{i + 1}
               </span>
             </div>
-            <h3 className="mt-3 font-semibold text-white">{t}</h3>
-            <p className="mt-1 text-sm text-white/60">{d}</p>
+            <h3 className="mt-3 font-semibold text-[#111111]">{t}</h3>
+            <p className="mt-1 text-sm text-[#4B5563]">{d}</p>
           </div>
         ))}
       </section>
 
       {/* Marquee strip */}
-      <div className="brand-marquee mt-12 overflow-hidden border-y border-gold/15 py-3">
+      <div className="brand-marquee mt-12 overflow-hidden border-y border-[#E5E7EB] py-3">
         <div className="brand-marquee-track flex gap-10 whitespace-nowrap text-[11px] uppercase tracking-[0.45em] text-gold/70">
           {Array.from({ length: 2 }).map((_, k) => (
             <div key={k} className="flex gap-10 shrink-0">
