@@ -14,9 +14,9 @@ export default function PressDetail() {
   const [item, setItem] = useState<PressItem | null>(null);
   const [status, setStatus] = useState<Status>("loading");
   useSeo({
-    title: item?.title ? `${item.title} — Press | TrendFlux Ecosystem` : "Press Coverage — TrendFlux Ecosystem",
-    description: item?.title
-      ? `${item.title} — independently verified press coverage from TrendFlux Ecosystem.`
+    title: item?.headline ? `${item.headline} — Press | TrendFlux Ecosystem` : "Press Coverage — TrendFlux Ecosystem",
+    description: item?.headline
+      ? `${item.headline} — independently verified press coverage from TrendFlux Ecosystem.`
       : "Press coverage and media features from TrendFlux Ecosystem.",
     type: "article",
     noindex: status !== "published",
