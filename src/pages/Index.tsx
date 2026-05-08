@@ -1187,11 +1187,9 @@ const Index = () => {
         <div className="mx-auto mt-12 max-w-7xl border-t border-border pt-8">
           <div className="flex flex-wrap items-center justify-center gap-4">
             {[
-              { Icon: Linkedin, href: "https://www.linkedin.com/in/zhemongrowth", label: "LinkedIn" },
-              { Icon: Facebook, href: "https://www.facebook.com/zhemongrowth/", label: "Facebook" },
-              { Icon: Youtube, href: "https://www.youtube.com/@zhemongrowth", label: "YouTube" },
-              { Icon: MessageCircle, href: "https://wa.me/message/5GSNUYK6CSDCN1", label: "WhatsApp" },
-              { Icon: Mail, href: "mailto:zhemongrowth@gmail.com", label: "Email" },
+              { Icon: MessageCircle, href: "https://wa.me/message/X6JBEVJ65NA3K1", label: "WhatsApp" },
+              { Icon: Facebook, href: "https://www.facebook.com/trendfluxdigital/", label: "Facebook" },
+              { Icon: Linkedin, href: "https://linkedin.com/company/trendfluxdigital", label: "LinkedIn" },
             ].map(({ Icon, href, label }) => (
               <a
                 key={label}
