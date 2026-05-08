@@ -609,8 +609,35 @@ const Index = () => {
                   <p className="mt-4 text-sm leading-relaxed text-foreground/60">
                     {s.desc}
                   </p>
-                  <div className="mt-6 border-t border-border pt-4">
-                    <p className="font-semibold text-gold text-sm">{s.outcome}</p>
+
+                  <dl className="mt-5 space-y-2 text-xs">
+                    <div className="flex gap-2">
+                      <dt className="min-w-[72px] uppercase tracking-wider text-foreground/40">Best for</dt>
+                      <dd className="text-foreground/80">{s.bestFor}</dd>
+                    </div>
+                    <div className="flex gap-2">
+                      <dt className="min-w-[72px] uppercase tracking-wider text-foreground/40">Outcome</dt>
+                      <dd className="font-semibold text-gold">{s.outcome}</dd>
+                    </div>
+                  </dl>
+
+                  <div className="mt-6 flex-1 flex items-end">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        track("service_module_cta", {
+                          module: s.title,
+                          category: s.category,
+                          source: "services_grid",
+                        });
+                        setQuoteOpen(true);
+                      }}
+                      className="group/cta inline-flex w-full items-center justify-between gap-2 rounded-full border border-gold/30 bg-gold/5 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-gold transition-all duration-300 hover:border-gold hover:bg-gold/15 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      aria-label={`Activate ${s.title}`}
+                    >
+                      <span>Activate Module</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
+                    </button>
                   </div>
                 </article>
               );
