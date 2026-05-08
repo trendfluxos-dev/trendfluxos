@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, LogOut, Save, Eye, ShieldCheck } from "lucide-react";
+import { Loader2, Plus, Trash2, LogOut, Save, Eye, ShieldCheck, EyeOff } from "lucide-react";
 import { usePressItems, type PressItem } from "@/hooks/usePressItems";
 import { PressItemPreview } from "@/components/PressItemPreview";
 import { normalizeHref } from "@/lib/url";
@@ -148,6 +148,16 @@ export default function Admin() {
     }
   };
 
+  const hideBroken = async () => {
+    const broken = rows.filter((r) => r.id && r.href && statuses[r.href] && !statuses[r.href].reachable);
+    if (broken.length === 0) return toast.info("No broken URLs to hide");
+    const ids = broken.map((r) => r.id!) as string[];
+    const { error } = await supabase.from("press_items").update({ published: false }).in("id", ids);
+    if (error) return toast.error(error.message);
+    toast.success(`Unpublished ${ids.length} broken item(s)`);
+    refresh();
+  };
+
   if (!authChecked) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -184,6 +194,11 @@ export default function Admin() {
               {checking ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-1" />}
               Re-check URLs
             </Button>
+            {Object.values(statuses).some((s) => !s.reachable) && (
+              <Button onClick={hideBroken} size="sm" variant="outline">
+                <EyeOff className="h-4 w-4 mr-1" />Hide broken
+              </Button>
+            )}
             <Button onClick={addRow} size="sm"><Plus className="h-4 w-4 mr-1" />Add</Button>
             <Button onClick={signOut} size="sm" variant="outline"><LogOut className="h-4 w-4 mr-1" />Sign out</Button>
           </div>
