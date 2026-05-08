@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
+import { trackEvent } from "@/lib/analytics";
 
 const FB_GROUP_URL = "https://www.facebook.com/groups/trendfluxtalent/";
 const TALENT_WHATSAPP_NUMBER = "8801972813761";
@@ -72,6 +73,17 @@ const JoinNetworkForm = () => {
     setErrors({});
     const message = `Hi TrendFlux Talent! I'd like to join the network.\n\nName: ${result.data.name}\nRole: ${result.data.role}`;
     const url = `https://wa.me/${TALENT_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    trackEvent("lead_submit", {
+      brand: "trendflux_talent",
+      form: "join_network",
+      role: result.data.role,
+      destination: "whatsapp",
+    });
+    trackEvent("whatsapp_open", {
+      brand: "trendflux_talent",
+      source: "join_form_submit",
+      number: TALENT_WHATSAPP_NUMBER,
+    });
     window.open(url, "_blank", "noopener,noreferrer");
     toast({
       title: "Opening WhatsApp",
@@ -86,6 +98,11 @@ const JoinNetworkForm = () => {
     try {
       await navigator.clipboard.writeText(submitted.message);
       setCopied(true);
+      trackEvent("copy_message", {
+        brand: "trendflux_talent",
+        source: "join_success_screen",
+        role: submitted.role,
+      });
       toast({ title: "Message copied", description: "Paste it into WhatsApp to send." });
       setTimeout(() => setCopied(false), 2500);
     } catch {
@@ -153,6 +170,13 @@ const JoinNetworkForm = () => {
             href={submitted.url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              trackEvent("whatsapp_open", {
+                brand: "trendflux_talent",
+                source: "join_success_screen",
+                number: TALENT_WHATSAPP_NUMBER,
+              })
+            }
             className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground transition hover:bg-[hsl(var(--primary-glow))]"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true">
