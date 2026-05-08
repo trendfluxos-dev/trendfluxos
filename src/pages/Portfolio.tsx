@@ -218,18 +218,26 @@ const LEADERSHIP = [
   "President — Pabna Zilla Chhatra Kallyan Samiti, JU",
 ];
 
-const PROOF: { cat: string; title: string; desc: string; images?: string[] }[] = [
-  { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00", images: [proofEducation] },
-  { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU", images: [proofUniversity] },
-  { cat: "Education", title: "HSC Credentials", desc: "HSC 2016 — GPA 5.00, Shaheed Bulbul Govt. College", images: [proofHsc] },
-  { cat: "Education", title: "SSC Credentials", desc: "SSC 2014 — GPA 5.00, Pabna Zilla School", images: [proofSsc] },
-  { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)", images: [proofPzswa, proofLeadershipOverview] },
-  { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD", images: [proofNdfBd] },
-  { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)", images: [proofPds] },
-  { cat: "Volunteer", title: "COVID-19 Volunteer ID", desc: "Frontline volunteer — Pabna Police Super Office", images: [proofCovid] },
-  { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC", images: [proofTrainingCerts, proofTrainingOverview] },
-  { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates", images: [proofParticipation] },
-  { cat: "Identity", title: "Official Identification", desc: "University ID · National ID · Birth Certificate", images: [proofIdentification] },
+type ProofItem = {
+  cat: string;
+  title: string;
+  desc: string;
+  images?: string[];
+  meta?: { issuer: string; date: string; type: string };
+};
+
+const PROOF: ProofItem[] = [
+  { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00", images: [proofEducation], meta: { issuer: "Institute of Information Technology, Jahangirnagar University", date: "2016 – 2022", type: "Academic Summary" } },
+  { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU", images: [proofUniversity], meta: { issuer: "Institute of Information Technology, Jahangirnagar University", date: "Apr 2022 & May 2024", type: "Official University Certificate" } },
+  { cat: "Education", title: "HSC Credentials", desc: "HSC 2016 — GPA 5.00, Shaheed Bulbul Govt. College", images: [proofHsc], meta: { issuer: "Board of Intermediate & Secondary Education, Rajshahi", date: "August 2016", type: "HSC Certificate & Transcript" } },
+  { cat: "Education", title: "SSC Credentials", desc: "SSC 2014 — GPA 5.00, Pabna Zilla School", images: [proofSsc], meta: { issuer: "Board of Intermediate & Secondary Education, Rajshahi", date: "May 2014", type: "SSC Certificate & Transcript" } },
+  { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)", images: [proofPzswa, proofLeadershipOverview], meta: { issuer: "Pabna Zilla Chhatra Kallyan Samiti, Jahangirnagar University", date: "19 October 2021", type: "Presidential Appointment Letter" } },
+  { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD", images: [proofNdfBd], meta: { issuer: "National Debate Federation Bangladesh (NDF-BD)", date: "2021", type: "Official Appointment Notice" } },
+  { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)", images: [proofPds], meta: { issuer: "Pabna Debate Society (PDS)", date: "10 July 2021", type: "Advisory Board Appointment" } },
+  { cat: "Volunteer", title: "COVID-19 Volunteer ID", desc: "Frontline volunteer — Pabna Police Super Office", images: [proofCovid], meta: { issuer: "Office of the Superintendent of Police, Pabna", date: "2020", type: "Volunteer Identity Card" } },
+  { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC", images: [proofTrainingCerts, proofTrainingOverview], meta: { issuer: "10 Minute School · Sochetan Foundation · NDBC", date: "2018 – 2024", type: "Course Completion Certificates" } },
+  { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates", images: [proofParticipation], meta: { issuer: "BDF, Debate Bangladesh, Bangladesh Shishu Academy & others", date: "2010 – 2021", type: "Participation & Achievement Certificates" } },
+  { cat: "Identity", title: "Official Identification", desc: "University ID · National ID · Birth Certificate", images: [proofIdentification], meta: { issuer: "Government of Bangladesh & Jahangirnagar University", date: "1999 – 2023", type: "Government & Institutional ID" } },
 ];
 const PROOF_CATS = ["All", "Education", "Leadership", "Volunteer", "Training", "Identity"] as const;
 
@@ -309,7 +317,13 @@ export default function Portfolio() {
 
   const [filter, setFilter] = useState<(typeof PROOF_CATS)[number]>("All");
   const filteredProof = filter === "All" ? PROOF : PROOF.filter((p) => p.cat === filter);
-  const [lightbox, setLightbox] = useState<{ title: string; images: string[]; index: number } | null>(null);
+  const [lightbox, setLightbox] = useState<{
+    title: string;
+    cat: string;
+    images: string[];
+    index: number;
+    meta?: { issuer: string; date: string; type: string };
+  } | null>(null);
 
   useEffect(() => {
     if (!lightbox) return;
@@ -765,7 +779,7 @@ export default function Portfolio() {
                 <button
                   key={p.title}
                   type="button"
-                  onClick={() => p.images && p.images.length > 0 && setLightbox({ title: p.title, images: p.images, index: 0 })}
+                  onClick={() => p.images && p.images.length > 0 && setLightbox({ title: p.title, cat: p.cat, images: p.images, index: 0, meta: p.meta })}
                   disabled={!p.images || p.images.length === 0}
                   aria-label={p.images && p.images.length > 0 ? `View original document: ${p.title}` : `${p.title} — original coming soon`}
                   className="text-left group rounded-2xl border border-[#E5E7EB] bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#111111] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
@@ -874,12 +888,6 @@ export default function Portfolio() {
           >
             ×
           </button>
-          <div className="absolute top-4 left-4 text-white text-sm font-semibold max-w-[70%] truncate">
-            {lightbox.title}
-            {lightbox.images.length > 1 && (
-              <span className="ml-2 text-white/60 font-normal">({lightbox.index + 1}/{lightbox.images.length})</span>
-            )}
-          </div>
           {lightbox.images.length > 1 && (
             <>
               <button
@@ -900,12 +908,55 @@ export default function Portfolio() {
               </button>
             </>
           )}
-          <img
-            src={lightbox.images[lightbox.index]}
-            alt={`${lightbox.title} — original document`}
+          <div
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[88vh] max-w-[92vw] rounded-lg shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] bg-white object-contain"
-          />
+            className="flex flex-col lg:flex-row items-stretch gap-4 lg:gap-5 max-w-[96vw] max-h-[92vh] w-full lg:w-auto"
+          >
+            <img
+              src={lightbox.images[lightbox.index]}
+              alt={`${lightbox.title} — original document`}
+              className="min-h-0 max-h-[60vh] lg:max-h-[88vh] max-w-full lg:max-w-[70vw] rounded-lg shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] bg-white object-contain mx-auto"
+            />
+            <aside
+              aria-label="Verification metadata"
+              className="w-full lg:w-[320px] shrink-0 rounded-2xl bg-white p-5 md:p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] overflow-y-auto"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF5] text-[#16A34A] text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
+                  <ShieldCheck className="h-3 w-3" /> Verified
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-[#4B5563] font-semibold">{lightbox.cat}</span>
+              </div>
+              <h3 className="mt-3 font-semibold tracking-tight text-[#111111] text-base leading-snug">{lightbox.title}</h3>
+              {lightbox.images.length > 1 && (
+                <p className="mt-1 text-[11px] uppercase tracking-wider text-[#4B5563] font-semibold">
+                  Page {lightbox.index + 1} of {lightbox.images.length}
+                </p>
+              )}
+
+              {lightbox.meta && (
+                <dl className="mt-5 space-y-4 text-sm">
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Issuer</dt>
+                    <dd className="mt-1 text-[#111111] leading-snug">{lightbox.meta.issuer}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Date</dt>
+                    <dd className="mt-1 text-[#111111]">{lightbox.meta.date}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Document type</dt>
+                    <dd className="mt-1 text-[#111111]">{lightbox.meta.type}</dd>
+                  </div>
+                </dl>
+              )}
+
+              <div className="mt-5 pt-4 border-t border-[#E5E7EB] flex items-center gap-2 text-[11px] text-[#4B5563]">
+                <Shield className="h-3.5 w-3.5 text-[#DC2626]" />
+                <span>Original document — independently verifiable</span>
+              </div>
+            </aside>
+          </div>
         </div>
       )}
     </div>
