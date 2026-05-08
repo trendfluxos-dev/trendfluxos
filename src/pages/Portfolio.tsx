@@ -760,6 +760,9 @@ export default function Portfolio() {
                 <button
                   key={p.title}
                   type="button"
+                  onClick={() => p.images && p.images.length > 0 && setLightbox({ title: p.title, images: p.images, index: 0 })}
+                  disabled={!p.images || p.images.length === 0}
+                  aria-label={p.images && p.images.length > 0 ? `View original document: ${p.title}` : `${p.title} — original coming soon`}
                   className="text-left group rounded-2xl border border-[#E5E7EB] bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#111111] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
                 >
                   <div className="flex items-center justify-between">
@@ -771,7 +774,7 @@ export default function Portfolio() {
                   <h3 className="mt-3 font-semibold tracking-tight text-[#111111]">{p.title}</h3>
                   <p className="mt-1 text-sm text-[#4B5563]">{p.desc}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#DC2626] group-hover:gap-2 transition-all">
-                    Tap to view original <ArrowUpRight className="h-3.5 w-3.5" />
+                    {p.images && p.images.length > 0 ? "Tap to view original" : "Original coming soon"} <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </button>
               ))
