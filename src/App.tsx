@@ -10,6 +10,19 @@ import CommandPalette from "./components/CommandPalette";
 
 const queryClient = new QueryClient();
 
+const Index = routes["/"];
+const ProjectLead = routes["/project-lead"];
+const Auth = routes["/auth"];
+const Admin = routes["/admin"];
+const LuxeVeilAdmin = routes["/admin/luxe-veil"];
+const PressDetail = routes["/press/:id"];
+const Marriage = routes["/marriage"];
+const BrandOpen = routes["/brand-open"];
+const TrendfluxTalent = routes["/trendflux-talent"];
+const LuxeVeil = routes["/luxe-veil"];
+const CaseStudyPage = routes["/case-studies/:slug"];
+const NotFound = routes["*"];
+
 const PageFallback = () => (
   <div className="flex min-h-screen items-center justify-center bg-background">
     <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
@@ -26,19 +39,19 @@ const App = () => (
         <CommandPalette />
         <Suspense fallback={<PageFallback />}>
           <Routes>
-            <Route path="/" element={<routes["/"] />} />
-            <Route path="/project-lead" element={<routes["/project-lead"] />} />
-            <Route path="/auth" element={<routes["/auth"] />} />
-            <Route path="/admin" element={<routes["/admin"] />} />
-            <Route path="/admin/luxe-veil" element={<routes["/admin/luxe-veil"] />} />
-            <Route path="/press/:id" element={<routes["/press/:id"] />} />
-            <Route path="/marriage" element={<routes["/marriage"] />} />
-            <Route path="/brand-open" element={<routes["/brand-open"] />} />
-            <Route path="/trendflux-talent" element={<routes["/trendflux-talent"] />} />
-            <Route path="/luxe-veil" element={<routes["/luxe-veil"] />} />
-            <Route path="/case-studies/:slug" element={<routes["/case-studies/:slug"] />} />
+            <Route path="/" element={<Index />} />
+            <Route path="/project-lead" element={<ProjectLead />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/luxe-veil" element={<LuxeVeilAdmin />} />
+            <Route path="/press/:id" element={<PressDetail />} />
+            <Route path="/marriage" element={<Marriage />} />
+            <Route path="/brand-open" element={<BrandOpen />} />
+            <Route path="/trendflux-talent" element={<TrendfluxTalent />} />
+            <Route path="/luxe-veil" element={<LuxeVeil />} />
+            <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<routes["*"] />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
