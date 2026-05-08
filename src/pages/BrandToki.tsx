@@ -58,7 +58,7 @@ export default function BrandToki() {
   useEffect(() => {
     document.title = "Studio BrandToki — Premium Production Studio in Gulshan, Dhaka";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Studio BrandToki — Premium photography, videography, podcast & commercial production studio in Gulshan, Dhaka. Powered by TrendFlux Ecosystem.");
+    if (meta) meta.setAttribute("content", "Studio BrandToki — Premium photography, videography, podcast & commercial production studio in Gulshan, Dhaka.");
   }, []);
 
   return (
@@ -79,7 +79,7 @@ export default function BrandToki() {
             <a href="#portfolio" className="hover:text-[#111111] transition">Portfolio</a>
             <a href="#experience" className="hover:text-[#111111] transition">Studio</a>
             <a href="#testimonials" className="hover:text-[#111111] transition">Reviews</a>
-            <Link to="/" className="hover:text-[#111111] transition">TrendFlux</Link>
+            <Link to="/" className="hover:text-[#111111] transition">Studio BrandToki Home</Link>
           </nav>
           <a
             href="#booking"
@@ -117,7 +117,7 @@ export default function BrandToki() {
               <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 text-xs text-[#4B5563]">
                 <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" /> 200+ shoots delivered</span>
                 <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-[#F97316]" /> Cinema-grade lighting</span>
-                <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-[#DC2626]" /> Powered by TrendFlux Ecosystem</span>
+                <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-[#DC2626]" /> Studio BrandToki · Premium Production</span>
               </div>
             </div>
 
@@ -359,7 +359,7 @@ export default function BrandToki() {
           <div className="text-sm">
             <p className="text-white/50 uppercase tracking-wider text-xs font-semibold mb-3">Ecosystem</p>
             <ul className="space-y-2 text-white/80">
-              <li><Link to="/" className="hover:text-white">TrendFlux Digital</Link></li>
+              <li><Link to="/" className="hover:text-white">Studio BrandToki</Link></li>
               <li><a href="https://www.facebook.com/studiobrandtoki/" target="_blank" rel="noopener noreferrer" className="hover:text-white">Facebook</a></li>
               <li><a href="mailto:hello@studiobrandtoki.com" className="hover:text-white">hello@studiobrandtoki.com</a></li>
             </ul>
@@ -369,7 +369,7 @@ export default function BrandToki() {
           <div className="mx-auto max-w-7xl px-5 md:px-8 py-5 flex flex-wrap items-center justify-between gap-3 text-xs text-white/50">
             <span>© {new Date().getFullYear()} Studio BrandToki. All rights reserved.</span>
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#DC2626]" /> Powered by TrendFlux Ecosystem
+              <span className="h-1.5 w-1.5 rounded-full bg-[#DC2626]" /> Studio BrandToki · Production House
             </span>
           </div>
         </div>
