@@ -47,10 +47,10 @@ export const FloatingContact = () => {
           role="dialog"
           aria-label={`${contact.displayName} contact channels`}
           aria-modal="false"
-          className="rounded-2xl border border-gold/40 bg-[#0B1F3A]/90 backdrop-blur px-4 py-3 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.6)] animate-fade-in"
+          className="rounded-2xl border border-border bg-white/95 backdrop-blur px-4 py-3 shadow-[0_20px_60px_-10px_rgba(0,0,0,0.18)] animate-fade-in"
         >
           <p
-            className="mb-2 text-[10px] uppercase tracking-[0.3em] text-gold/80"
+            className="mb-2 text-[10px] uppercase tracking-[0.3em] text-primary"
             aria-live="polite"
           >
             {contact.displayName}
@@ -66,7 +66,7 @@ export const FloatingContact = () => {
         aria-expanded={open}
         aria-haspopup="dialog"
         className={cn(
-          "inline-flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 rounded-full border border-gold/50 bg-gradient-to-br from-gold/30 to-gold/10 text-gold shadow-[0_10px_30px_-5px_rgba(200,169,81,0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-5px_rgba(200,169,81,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "inline-flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 rounded-full border border-primary/40 bg-primary text-primary-foreground shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[hsl(var(--primary-glow))] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         )}
       >
         {open ? <X className="w-6 h-6 sm:w-5 sm:h-5" /> : <MessageCircle className="w-6 h-6 sm:w-5 sm:h-5" />}

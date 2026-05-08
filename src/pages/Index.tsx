@@ -1267,7 +1267,7 @@ const Index = () => {
               type="button"
               onClick={() => { setVeilError(""); setVeilOpen(true); }}
               title="Luxe Veil is invite-only"
-              className="tier-card tier-card-3 relative overflow-hidden rounded-2xl border border-gold/30 bg-[#07182e]/60 p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/70 hover:bg-gold/5"
+              className="tier-card tier-card-3 relative overflow-hidden rounded-2xl border border-border bg-card p-5 text-left transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary/5"
             >
               <span className="tier-sheen" aria-hidden />
               <div className="relative flex items-center justify-between">
@@ -1318,12 +1318,12 @@ const Index = () => {
 
       {/* Luxe Veil invitation code dialog */}
       <Dialog open={veilOpen} onOpenChange={setVeilOpen}>
-        <DialogContent className="border-gold/40 bg-[#0c2218] text-white sm:max-w-md">
+        <DialogContent className="border-border bg-background text-foreground sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 font-display text-gold">
+            <DialogTitle className="flex items-center gap-2 font-display text-primary">
               <Lock className="h-4 w-4" /> Enter your invitation
             </DialogTitle>
-            <DialogDescription className="text-white/60">
+            <DialogDescription className="text-muted-foreground">
               Luxe Veil is invite-only. Enter your code to access the private experience.
             </DialogDescription>
           </DialogHeader>
@@ -1334,18 +1334,18 @@ const Index = () => {
               onChange={(e) => setVeilCode(e.target.value)}
               placeholder="INVITE CODE"
               aria-label="Invitation code"
-              className="w-full rounded-full border border-gold/40 bg-transparent px-5 py-3 text-center text-sm uppercase tracking-[0.3em] text-white outline-none focus:border-gold"
+              className="w-full rounded-full border border-border bg-background px-5 py-3 text-center text-sm uppercase tracking-[0.3em] text-foreground outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
             />
             {veilError && (
-              <p role="alert" aria-live="assertive" className="text-xs text-red-300">{veilError}</p>
+              <p role="alert" aria-live="assertive" className="text-xs text-primary">{veilError}</p>
             )}
             <button
               type="submit"
-              className="w-full rounded-full bg-gold py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#0c2218] transition hover:opacity-90"
+              className="w-full rounded-full bg-primary py-3 text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition hover:bg-[hsl(var(--primary-glow))]"
             >
               Unlock Experience
             </button>
-            <p className="text-center text-[10px] uppercase tracking-[0.3em] text-white/40">
+            <p className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               Access by referral only. No public registration.
             </p>
           </form>

@@ -86,13 +86,13 @@ const TrendfluxTalent = () => {
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           <a
             href="#join"
-            className="inline-flex items-center gap-2 bg-gold text-[#07182e] px-6 py-3 rounded-full font-bold hover:opacity-90 transition"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-bold hover:bg-[hsl(var(--primary-glow))] transition"
           >
             Join the Network <ArrowUpRight className="w-4 h-4" />
           </a>
           <a
             href="#brands"
-            className="inline-flex items-center gap-2 border border-gold/60 text-gold px-6 py-3 rounded-full font-bold hover:bg-gold hover:text-[#07182e] transition"
+            className="inline-flex items-center gap-2 border border-primary/60 text-primary px-6 py-3 rounded-full font-bold hover:bg-primary hover:text-primary-foreground transition"
           >
             For Brands
           </a>

@@ -200,12 +200,12 @@ const CaseStudyPage = () => {
             </div>
 
             <aside className="order-1 lg:order-2 space-y-6">
-              <div className="aspect-[4/3] overflow-hidden rounded-3xl border border-border bg-[#0B1F3A] relative">
+              <div className="aspect-[4/3] overflow-hidden rounded-3xl border border-border bg-muted relative">
                 <div
                   className="absolute inset-0 opacity-40"
                   style={{
                     backgroundImage:
-                      "radial-gradient(hsl(var(--gold) / 0.18) 1px, transparent 1px)",
+                      "radial-gradient(hsl(var(--primary) / 0.18) 1px, transparent 1px)",
                     backgroundSize: "14px 14px",
                   }}
                   aria-hidden
