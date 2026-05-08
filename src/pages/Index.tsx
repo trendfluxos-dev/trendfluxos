@@ -386,7 +386,7 @@ const Index = () => {
             <span>{BRAND.nameLead}</span> <span className="text-gradient">{BRAND.nameTrail}</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-7 lg:gap-8 text-sm text-foreground/70">
+          <div className="hidden md:flex items-center gap-4 lg:gap-7 xl:gap-8 text-sm text-foreground/70">
             {[
               { href: "#services", label: "Services" },
               { href: "#founder", label: "Brand Architect" },
@@ -395,14 +395,14 @@ const Index = () => {
               <a
                 key={l.href}
                 href={l.href}
-                className="relative py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+                className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
               >
                 {l.label}
               </a>
             ))}
             <Link
               to="/project-lead"
-              className="relative py-1 transition-colors duration-300 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
             >
               Project Lead
             </Link>
