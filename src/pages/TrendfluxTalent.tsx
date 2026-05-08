@@ -3,6 +3,10 @@ import { Camera, Users, Sparkles, ArrowUpRight } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
+import trendfluxTalentLogo from "@/assets/trendflux-talent-logo.png";
+
+const FB_GROUP_URL = "https://www.facebook.com/groups/trendfluxtalent/";
+const TALENT_WHATSAPP = "https://wa.me/8801972813761";
 
 const TrendfluxTalent = () => {
   useSeo({
@@ -21,56 +25,20 @@ const TrendfluxTalent = () => {
     parentOrganization: { "@type": "Organization", name: "TrendFlux" },
   });
   return (
-    <BrandShell tier="platform">
+    <BrandShell tier="platform" hideFacebook whatsappOverride={TALENT_WHATSAPP}>
       <section className="pt-14 pb-10 text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] bg-gold/10 px-4 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
           <Users className="w-3 h-3" /> Platform · Creator Network
         </div>
 
-        {/* Monogram lens mark */}
+        {/* Brand logo */}
         <div className="mt-12 flex justify-center">
-          <div className="relative w-44 h-44">
-            <div
-              aria-hidden
-              className="absolute -inset-6 rounded-full"
-              style={{
-                background:
-                  "conic-gradient(from 0deg, hsl(var(--gold) / 0.0), hsl(var(--gold) / 0.35), hsl(var(--gold) / 0.0) 60%)",
-                filter: "blur(18px)",
-              }}
-            />
-            <div className="absolute inset-0 rounded-full border border-[#E5E7EB]" />
-            <div className="absolute inset-2 rounded-full border border-[#E5E7EB]" />
-            {/* Outer ticked ring */}
-            <svg
-              viewBox="0 0 100 100"
-              className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] brand-spin-slower text-gold/50"
-            >
-              <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="0.3" />
-              {Array.from({ length: 24 }).map((_, i) => (
-                <line
-                  key={i}
-                  x1="50"
-                  y1="2"
-                  x2="50"
-                  y2={i % 6 === 0 ? "6" : "4"}
-                  stroke="currentColor"
-                  strokeWidth="0.4"
-                  transform={`rotate(${i * 15} 50 50)`}
-                />
-              ))}
-            </svg>
-            {/* Orbit dot */}
-            <div aria-hidden className="absolute inset-0 flex items-center justify-center">
-              <span className="block w-2 h-2 rounded-full bg-gold shadow-[0_0_12px_hsl(var(--gold)/0.8)] brand-orbit-dot" />
-            </div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display text-6xl font-bold text-gold tracking-tighter">
-                TF
-              </span>
-            </div>
-            <div className="absolute -inset-2 rounded-full bg-gold/10 blur-2xl -z-10" />
-          </div>
+          <img
+            src={trendfluxTalentLogo}
+            alt="TrendFlux Talent — Brand Promoters & Creator Community BD"
+            className="w-full max-w-2xl h-auto rounded-2xl shadow-[0_20px_60px_-20px_rgba(0,0,0,0.45)]"
+            loading="eager"
+          />
         </div>
 
         <h1 className="mt-8 font-display text-4xl md:text-5xl font-bold tracking-[0.2em] text-[#111111]">
@@ -85,13 +53,17 @@ const TrendfluxTalent = () => {
 
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           <a
-            href="#join"
+            href={FB_GROUP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-bold hover:bg-[hsl(var(--primary-glow))] transition"
           >
             Join the Network <ArrowUpRight className="w-4 h-4" />
           </a>
           <a
-            href="#brands"
+            href={FB_GROUP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 border border-primary/60 text-primary px-6 py-3 rounded-full font-bold hover:bg-primary hover:text-primary-foreground transition"
           >
             For Brands
