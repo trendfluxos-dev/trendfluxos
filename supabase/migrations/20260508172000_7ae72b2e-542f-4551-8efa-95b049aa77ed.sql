@@ -1,0 +1,1 @@
+DELETE FROM public.press_items WHERE outlet = 'Channel 24';
