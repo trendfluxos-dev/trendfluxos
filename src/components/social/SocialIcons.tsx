@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import { Facebook, Linkedin, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -7,8 +6,10 @@ import {
   Channel,
   channelHref,
   channelLabel,
-  getBrandForRoute,
 } from "@/config/socialConfig";
+import { useResolvedBrand } from "@/context/BrandPreviewContext";
+import { useLocation } from "react-router-dom";
+import { track } from "@/lib/analytics";
 
 const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
@@ -57,15 +58,15 @@ export const SocialIcons = ({
   size?: Size;
   className?: string;
 }) => {
+  const key = useResolvedBrand(brand);
   const { pathname } = useLocation();
-  const key = brand ?? getBrandForRoute(pathname);
   const contact = BRAND_CONTACTS[key];
 
   const channels = contact.priority.filter((c) => Boolean(channelHref(contact, c)));
   if (channels.length === 0) return null;
 
   const base =
-    "group inline-flex items-center justify-center rounded-full border transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold animate-fade-in";
+    "group inline-flex items-center justify-center rounded-full border transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background animate-fade-in";
   const tone =
     variant === "footer"
       ? "border-foreground/15 bg-foreground/5 text-foreground/70 hover:text-primary hover:border-primary/50 hover:-translate-y-0.5"
@@ -86,6 +87,9 @@ export const SocialIcons = ({
           aria-label={channelLabel(contact, c)}
           title={channelLabel(contact, c)}
           className={cn(base, tone, sizeMap[size])}
+          onClick={() =>
+            track("social_click", { brand: key, channel: c, page: pathname, variant })
+          }
         >
           <ChannelIcon channel={c} className="transition-transform duration-300 group-hover:scale-110" />
         </a>
