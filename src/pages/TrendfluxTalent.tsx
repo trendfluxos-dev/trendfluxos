@@ -4,9 +4,145 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
 import trendfluxTalentLogo from "@/assets/trendflux-talent-logo.png";
+import { useState } from "react";
+import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 
 const FB_GROUP_URL = "https://www.facebook.com/groups/trendfluxtalent/";
-const TALENT_WHATSAPP = "https://wa.me/8801972813761";
+const TALENT_WHATSAPP_NUMBER = "8801972813761";
+const DEFAULT_PREFILL =
+  "Hi TrendFlux Talent — I'd like to learn more about joining the creator network.";
+const TALENT_WHATSAPP = `https://wa.me/${TALENT_WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  DEFAULT_PREFILL,
+)}`;
+
+const ROLE_OPTIONS = [
+  "Creator / Influencer",
+  "Model",
+  "Photographer / Videographer",
+  "Brand / Business",
+  "Agency",
+  "Other",
+] as const;
+
+const joinSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, { message: "Please enter your full name" })
+    .max(80, { message: "Name must be under 80 characters" }),
+  role: z.enum(ROLE_OPTIONS, {
+    errorMap: () => ({ message: "Please select a role" }),
+  }),
+});
+
+const JoinNetworkForm = () => {
+  const [name, setName] = useState("");
+  const [role, setRole] = useState<string>("");
+  const [errors, setErrors] = useState<{ name?: string; role?: string }>({});
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = joinSchema.safeParse({ name, role });
+    if (!result.success) {
+      const fieldErrors: { name?: string; role?: string } = {};
+      result.error.issues.forEach((issue) => {
+        const key = issue.path[0] as "name" | "role";
+        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+    setErrors({});
+    const message = `Hi TrendFlux Talent! I'd like to join the network.\n\nName: ${result.data.name}\nRole: ${result.data.role}`;
+    const url = `https://wa.me/${TALENT_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+    toast({
+      title: "Opening WhatsApp",
+      description: `Thanks ${result.data.name} — continue the conversation in WhatsApp.`,
+    });
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="mx-auto mt-8 grid max-w-xl gap-4 text-left"
+      noValidate
+    >
+      <div className="grid gap-2">
+        <Label htmlFor="tt-name" className="text-xs uppercase tracking-[0.25em] text-[#4B5563]">
+          Your Name
+        </Label>
+        <Input
+          id="tt-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="e.g. Mehzabin Akter"
+          maxLength={80}
+          autoComplete="name"
+          aria-invalid={!!errors.name}
+        />
+        {errors.name && (
+          <p className="text-xs text-destructive">{errors.name}</p>
+        )}
+      </div>
+
+      <div className="grid gap-2">
+        <Label htmlFor="tt-role" className="text-xs uppercase tracking-[0.25em] text-[#4B5563]">
+          Your Role
+        </Label>
+        <Select value={role} onValueChange={setRole}>
+          <SelectTrigger id="tt-role" aria-invalid={!!errors.role}>
+            <SelectValue placeholder="Select your role" />
+          </SelectTrigger>
+          <SelectContent>
+            {ROLE_OPTIONS.map((r) => (
+              <SelectItem key={r} value={r}>
+                {r}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {errors.role && (
+          <p className="text-xs text-destructive">{errors.role}</p>
+        )}
+      </div>
+
+      <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <button
+          type="submit"
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground transition hover:bg-[hsl(var(--primary-glow))]"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+            <path d="M20.52 3.48A11.86 11.86 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.84c0 2.09.55 4.13 1.6 5.93L0 24l6.4-1.68a11.83 11.83 0 0 0 5.64 1.43h.01c6.54 0 11.84-5.3 11.84-11.84 0-3.16-1.23-6.13-3.37-8.43Z" />
+          </svg>
+          Continue on WhatsApp
+          <ArrowUpRight className="w-4 h-4" />
+        </button>
+        <a
+          href={FB_GROUP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-primary/60 px-6 py-3 font-bold text-primary transition hover:bg-primary hover:text-primary-foreground"
+        >
+          Join the Facebook Community
+        </a>
+      </div>
+      <p className="text-center text-[11px] text-muted-foreground">
+        We'll never share your details. WhatsApp opens in a new tab with your message ready to send.
+      </p>
+    </form>
+  );
+};
 
 const TrendfluxTalent = () => {
   useSeo({
@@ -53,9 +189,7 @@ const TrendfluxTalent = () => {
 
         <div className="mt-9 flex flex-wrap justify-center gap-3">
           <a
-            href={FB_GROUP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#join"
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-bold hover:bg-[hsl(var(--primary-glow))] transition"
           >
             Join the Network <ArrowUpRight className="w-4 h-4" />
@@ -100,6 +234,7 @@ const TrendfluxTalent = () => {
         <p className="mt-3 text-[#4B5563] max-w-2xl mx-auto">
           A platform built for serious creators and serious brands — luxury, system, authority.
         </p>
+        <JoinNetworkForm />
       </section>
       <Testimonials
         title="Creators & Brands Already Inside"
