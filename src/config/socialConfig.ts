@@ -40,7 +40,7 @@ export const BRAND_CONTACTS: Record<BrandKey, BrandContact> = {
     linkedin: "https://linkedin.com/company/trendfluxdigital",
     whatsapp: "https://wa.me/message/X6JBEVJ65NA3K1",
     email: "trendflux.digital@gmail.com",
-    priority: ["whatsapp", "linkedin", "facebook", "email"],
+    priority: ["whatsapp", "facebook", "linkedin"],
   },
   zahid: {
     key: "zahid",
