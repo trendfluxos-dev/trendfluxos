@@ -595,13 +595,17 @@ const Index = () => {
               return (
                 <article
                   key={s.title}
-                  className="group rounded-3xl glass glass-hover p-5 sm:p-7 flex flex-col"
+                  className="group relative overflow-hidden rounded-2xl border border-border bg-white p-5 sm:p-7 flex flex-col shadow-[0_1px_2px_hsl(0_0%_0%/0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_18px_44px_-18px_hsl(var(--primary)/0.22)]"
                 >
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute left-0 top-6 bottom-6 w-[3px] rounded-full bg-gradient-to-b from-primary to-primary/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  />
                   <div className="flex items-start justify-between">
                     <span className="font-display text-sm text-foreground/40">
                       {String(idx).padStart(2, "0")}
                     </span>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/15 text-gold">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/15">
                       <Icon className="w-5 h-5" />
                     </div>
                   </div>
