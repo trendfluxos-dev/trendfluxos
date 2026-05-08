@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ReactNode } from "react";
-import SocialIcons from "@/components/social/SocialIcons";
 import PrimaryContactCTA from "@/components/social/PrimaryContactCTA";
+import FacebookPageEmbed from "@/components/social/FacebookPageEmbed";
 import { Facebook, ArrowUpRight } from "lucide-react";
 
 type Tier = "open" | "platform" | "private";
