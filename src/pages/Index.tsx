@@ -1308,8 +1308,8 @@ const Index = () => {
 
           <div className="mt-8 flex flex-col items-center justify-between gap-3 text-sm text-foreground/50 md:flex-row">
             <div className="flex items-center gap-2">
-              <img src={trendfluxLogo} alt="Studio BrandToki logo" className="h-7 w-7 object-contain" />
-              <p className="font-semibold text-foreground">Studio BrandToki</p>
+              <img src={trendfluxLogo} alt="TrendFlux Ecosystem logo" className="h-7 w-7 object-contain" />
+              <p className="font-semibold text-foreground">TrendFlux Ecosystem</p>
             </div>
             <p>© 2026 — Built on integrity</p>
           </div>
