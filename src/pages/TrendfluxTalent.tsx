@@ -1,5 +1,5 @@
 import { BrandShell } from "@/components/BrandShell";
-import { Camera, Users, Sparkles, ArrowUpRight } from "lucide-react";
+import { Camera, Users, Sparkles, ArrowUpRight, Check, Copy } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
@@ -49,6 +49,13 @@ const JoinNetworkForm = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState<string>("");
   const [errors, setErrors] = useState<{ name?: string; role?: string }>({});
+  const [submitted, setSubmitted] = useState<{
+    name: string;
+    role: string;
+    message: string;
+    url: string;
+  } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +77,101 @@ const JoinNetworkForm = () => {
       title: "Opening WhatsApp",
       description: `Thanks ${result.data.name} — continue the conversation in WhatsApp.`,
     });
+    setSubmitted({ name: result.data.name, role: result.data.role, message, url });
+    setCopied(false);
   };
+
+  const handleCopy = async () => {
+    if (!submitted) return;
+    try {
+      await navigator.clipboard.writeText(submitted.message);
+      setCopied(true);
+      toast({ title: "Message copied", description: "Paste it into WhatsApp to send." });
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      toast({
+        title: "Couldn't copy",
+        description: "Please select the message and copy it manually.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleReset = () => {
+    setSubmitted(null);
+    setName("");
+    setRole("");
+    setErrors({});
+    setCopied(false);
+  };
+
+  if (submitted) {
+    return (
+      <div className="mx-auto mt-8 grid max-w-xl gap-5 text-left">
+        <div className="flex items-center justify-center gap-2 text-gold">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gold/15">
+            <Check className="h-5 w-5" />
+          </span>
+          <p className="text-xs uppercase tracking-[0.3em]">Submission ready</p>
+        </div>
+        <h3 className="text-center font-display text-xl text-[#111111]">
+          Thanks, {submitted.name} — your WhatsApp message is prepared.
+        </h3>
+        <p className="text-center text-sm text-[#4B5563]">
+          If WhatsApp didn't open, copy the message below and send it to us directly.
+        </p>
+
+        <div className="rounded-2xl border border-[#E5E7EB] bg-[#F8FAFC] p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#4B5563]">
+              Your message
+            </span>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-white px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-primary transition hover:bg-primary hover:text-primary-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              aria-label="Copy message to clipboard"
+            >
+              {copied ? (
+                <>
+                  <Check className="h-3 w-3" /> Copied
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3 w-3" /> Copy message
+                </>
+              )}
+            </button>
+          </div>
+          <pre className="whitespace-pre-wrap break-words font-sans text-sm text-[#111111]">
+            {submitted.message}
+          </pre>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <a
+            href={submitted.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground transition hover:bg-[hsl(var(--primary-glow))]"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true">
+              <path d="M20.52 3.48A11.86 11.86 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.84c0 2.09.55 4.13 1.6 5.93L0 24l6.4-1.68a11.83 11.83 0 0 0 5.64 1.43h.01c6.54 0 11.84-5.3 11.84-11.84 0-3.16-1.23-6.13-3.37-8.43Z" />
+            </svg>
+            Open WhatsApp again
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/60 px-6 py-3 font-bold text-primary transition hover:bg-primary hover:text-primary-foreground"
+          >
+            Submit another
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form
