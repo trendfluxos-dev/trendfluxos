@@ -11,7 +11,7 @@ export type AnalyticsParams = Record<string, string | number | boolean | undefin
 export type StoredEvent = {
   event: string;
   params: AnalyticsParams;
-  timestamp: number;
+  ts: number;
 };
 
 export const ANALYTICS_EVENT = "tf:analytics";
@@ -43,7 +43,7 @@ export function track(event: string, params: AnalyticsParams = {}) {
   const stored: StoredEvent = {
     event,
     params,
-    timestamp: Date.now(),
+    ts: Date.now(),
   };
 
   try {
