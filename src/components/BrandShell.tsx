@@ -41,7 +41,7 @@ export const BrandShell = ({
 
       <header className="relative max-w-6xl mx-auto px-5 pt-6 flex items-center justify-between">
         <Link to="/" className="text-xs uppercase tracking-[0.3em] text-primary/90 hover:text-primary transition">
-          ← Studio BrandToki
+          ← TrendFlux Digital
         </Link>
         <div className="flex items-center gap-4">
           <SocialIcons variant="inline" size="sm" className="hidden md:flex" />
@@ -79,7 +79,7 @@ const BrandFunnelFooter = ({ active }: { active: Tier }) => {
     <footer className="relative border-t border-border mt-10">
       <div className="max-w-6xl mx-auto px-5 py-8">
         <p className="text-center text-[10px] uppercase tracking-[0.4em] text-primary/80 mb-5">
-          ◆ The Studio BrandToki Funnel ◆
+          ◆ Limited partnerships open each quarter. Let's architect yours. ◆
         </p>
         <div className="grid grid-cols-3 gap-3">
           {items.map((it, i) => (
@@ -109,7 +109,7 @@ const BrandFunnelFooter = ({ active }: { active: Tier }) => {
           ))}
         </div>
         <p className="mt-6 text-center text-[11px] text-muted-foreground">
-          © {new Date().getFullYear()} Studio BrandToki · Powered by TrendFlux Ecosystem
+          © {new Date().getFullYear()} TrendFlux Digital · Powered by TrendFlux Ecosystem
         </p>
       </div>
     </footer>
