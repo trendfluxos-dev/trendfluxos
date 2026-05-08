@@ -1,14 +1,15 @@
-import { useLocation } from "react-router-dom";
 import { Facebook, Linkedin, Mail, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   BRAND_CONTACTS,
   BrandKey,
   channelHref,
-  getBrandForRoute,
   primaryChannel,
   primaryCtaLabel,
 } from "@/config/socialConfig";
+import { useResolvedBrand } from "@/context/BrandPreviewContext";
+import { useLocation } from "react-router-dom";
+import { track } from "@/lib/analytics";
 
 const Icon = ({ channel }: { channel: string }) => {
   if (channel === "linkedin") return <Linkedin className="w-4 h-4" />;
@@ -37,8 +38,8 @@ export const PrimaryContactCTA = ({
   className?: string;
   label?: string;
 }) => {
+  const key = useResolvedBrand(brand);
   const { pathname } = useLocation();
-  const key = brand ?? getBrandForRoute(pathname);
   const contact = BRAND_CONTACTS[key];
   const channel = primaryChannel(contact);
   if (!channel) return null;
@@ -51,10 +52,13 @@ export const PrimaryContactCTA = ({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group inline-flex items-center gap-2 rounded-full border border-gold/60 bg-gold/10 px-5 py-2.5 text-xs uppercase tracking-[0.25em] text-gold transition-all duration-300 hover:bg-gold hover:text-[#0c2218] hover:-translate-y-0.5 hover:shadow-[0_10px_30px_hsl(var(--gold)/0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold",
+        "group inline-flex items-center gap-2 rounded-full border border-gold/60 bg-gold/10 px-5 py-2.5 text-xs uppercase tracking-[0.25em] text-gold transition-all duration-300 hover:bg-gold hover:text-[#0c2218] hover:-translate-y-0.5 hover:shadow-[0_10px_30px_hsl(var(--gold)/0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
       )}
       aria-label={label ?? primaryCtaLabel(contact)}
+      onClick={() =>
+        track("social_cta_click", { brand: key, channel, page: pathname })
+      }
     >
       <Icon channel={channel} />
       <span>{label ?? primaryCtaLabel(contact)}</span>
