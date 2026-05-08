@@ -484,17 +484,33 @@ const Index = () => {
             {BRAND.hero.subheadline}
           </p>
 
+          {/* Trust bar */}
+          <div className="mx-auto mt-7 sm:mt-9 max-w-3xl">
+            <div className="glass rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-5 gap-y-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-foreground/55">
+              <span>AI Systems</span>
+              <span className="hidden sm:inline w-1 h-1 rounded-full bg-gold/60" aria-hidden />
+              <span>Automation</span>
+              <span className="hidden sm:inline w-1 h-1 rounded-full bg-gold/60" aria-hidden />
+              <span>Brand Infrastructure</span>
+              <span className="hidden sm:inline w-1 h-1 rounded-full bg-gold/60" aria-hidden />
+              <span>Growth Operations</span>
+            </div>
+            <p className="mt-3 text-[11px] sm:text-xs uppercase tracking-[0.3em] text-foreground/45">
+              Built for Founders, Brands &amp; High-Growth Businesses
+            </p>
+          </div>
+
           <div className="mt-8 sm:mt-10 flex flex-col items-stretch sm:items-center justify-center gap-3 sm:gap-4 sm:flex-row">
             <button
               type="button"
               onClick={() => setQuoteOpen(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_36px_hsl(var(--gold)/0.55)] active:scale-95"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-gold px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_36px_hsl(var(--gold)/0.55)] active:scale-95"
             >
               {BRAND.hero.primaryCta} <ArrowRight className="w-4 h-4" />
             </button>
             <a
               href="#cases"
-              className="inline-flex items-center justify-center rounded-full border border-foreground/15 px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-foreground transition-all duration-300 hover:scale-[1.04] hover:border-gold/60 hover:bg-foreground/5"
+              className="inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-foreground/15 px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-foreground transition-all duration-300 hover:scale-[1.04] hover:border-gold/60 hover:bg-foreground/5"
             >
               {BRAND.hero.secondaryCta}
             </a>
