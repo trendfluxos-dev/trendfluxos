@@ -60,7 +60,7 @@ export const BrandShell = ({
 
       <div className="relative max-w-6xl mx-auto px-5 pb-20">{children}</div>
 
-      <div className="relative max-w-6xl mx-auto px-5 pb-6 flex flex-col items-center gap-3">
+      <div className="relative max-w-6xl mx-auto px-5 pb-6 flex flex-col items-center gap-6">
         <div className="flex flex-wrap items-center justify-center gap-3">
           <PrimaryContactCTA />
           <a
@@ -75,7 +75,7 @@ export const BrandShell = ({
             <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         </div>
-        <SocialIcons variant="inline" size="sm" />
+        <FacebookPageEmbed />
       </div>
 
       <BrandFunnelFooter active={tier} />
