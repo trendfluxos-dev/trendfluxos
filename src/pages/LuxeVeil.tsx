@@ -399,14 +399,34 @@ const useChatTargets = () => {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/telegram-submit?action=targets`;
       try {
-        const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/telegram-submit?action=targets`;
         const res = await fetch(url, {
           headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
         });
-        const j = await res.json();
-        if (!cancelled && j?.ok && Array.isArray(j.targets)) setTargets(j.targets);
-      } catch { /* ignore */ }
+        const ctype = res.headers.get("content-type") ?? "";
+        const body = ctype.includes("application/json")
+          ? await res.json().catch(() => null)
+          : await res.text().catch(() => "");
+        if (!res.ok) {
+          console.error("[LuxeVeil] targets load failed", {
+            status: res.status,
+            statusText: res.statusText,
+            body,
+          });
+          return;
+        }
+        if (body && typeof body === "object" && (body as any).ok && Array.isArray((body as any).targets)) {
+          if (!cancelled) setTargets((body as any).targets as ChatTarget[]);
+        } else {
+          console.warn("[LuxeVeil] targets response malformed — keeping empty list", { body });
+        }
+      } catch (err) {
+        console.error("[LuxeVeil] targets request errored", {
+          url,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
     })();
     return () => { cancelled = true; };
   }, []);
