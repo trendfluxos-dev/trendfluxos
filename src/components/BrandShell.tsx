@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ReactNode } from "react";
-import SocialIcons from "@/components/social/SocialIcons";
 import PrimaryContactCTA from "@/components/social/PrimaryContactCTA";
+import FacebookPageEmbed from "@/components/social/FacebookPageEmbed";
 import { Facebook, ArrowUpRight } from "lucide-react";
 
 type Tier = "open" | "platform" | "private";
@@ -45,7 +45,6 @@ export const BrandShell = ({
           ← TrendFlux Digital
         </Link>
         <div className="flex items-center gap-4">
-          <SocialIcons variant="inline" size="sm" className="hidden md:flex" />
           <div className="text-right">
             <div className="text-[10px] uppercase tracking-[0.35em] text-primary/80">{meta.label}</div>
             <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{meta.sub}</div>
@@ -60,7 +59,7 @@ export const BrandShell = ({
 
       <div className="relative max-w-6xl mx-auto px-5 pb-20">{children}</div>
 
-      <div className="relative max-w-6xl mx-auto px-5 pb-6 flex flex-col items-center gap-3">
+      <div className="relative max-w-6xl mx-auto px-5 pb-6 flex flex-col items-center gap-6">
         <div className="flex flex-wrap items-center justify-center gap-3">
           <PrimaryContactCTA />
           <a
@@ -75,7 +74,7 @@ export const BrandShell = ({
             <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
         </div>
-        <SocialIcons variant="inline" size="sm" />
+        <FacebookPageEmbed />
       </div>
 
       <BrandFunnelFooter active={tier} />
