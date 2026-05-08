@@ -659,7 +659,7 @@ export default function Portfolio() {
             {filteredProof.map((p) => (
               <button key={p.title} type="button" className="text-left group rounded-2xl border border-[#E5E7EB] bg-white p-5 hover:border-[#111111] transition">
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF5] text-[#15803D] text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#BBF7D0]">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF5] text-[#16A34A] text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
                     <ShieldCheck className="h-3 w-3" /> Verified
                   </span>
                   <span className="text-[10px] uppercase tracking-wider text-[#4B5563] font-semibold">{p.cat}</span>
