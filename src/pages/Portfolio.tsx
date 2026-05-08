@@ -24,6 +24,14 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import portrait from "@/assets/zahid-hasan-emon.png";
+import proofEducation from "@/assets/proof/educational-background.png";
+import proofUniversity from "@/assets/proof/university-certificates.png";
+import proofHsc from "@/assets/proof/hsc-credentials.png";
+import proofSsc from "@/assets/proof/ssc-credentials.png";
+import proofLeadershipOverview from "@/assets/proof/leadership-overview.png";
+import proofPzswa from "@/assets/proof/pzswa-presidential.png";
+import proofNdfBd from "@/assets/proof/ndf-bd-appointment.png";
+import proofPds from "@/assets/proof/pds-leadership.png";
 
 const NAV = [
   { label: "About", href: "#about" },
@@ -205,14 +213,14 @@ const LEADERSHIP = [
   "President — Pabna Zilla Chhatra Kallyan Samiti, JU",
 ];
 
-const PROOF = [
-  { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00" },
-  { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU" },
-  { cat: "Education", title: "HSC Credentials", desc: "HSC 2016 — GPA 5.00, Shaheed Bulbul Govt. College" },
-  { cat: "Education", title: "SSC Credentials", desc: "SSC 2014 — GPA 5.00, Pabna Zilla School" },
-  { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)" },
-  { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD" },
-  { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)" },
+const PROOF: { cat: string; title: string; desc: string; images?: string[] }[] = [
+  { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00", images: [proofEducation] },
+  { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU", images: [proofUniversity] },
+  { cat: "Education", title: "HSC Credentials", desc: "HSC 2016 — GPA 5.00, Shaheed Bulbul Govt. College", images: [proofHsc] },
+  { cat: "Education", title: "SSC Credentials", desc: "SSC 2014 — GPA 5.00, Pabna Zilla School", images: [proofSsc] },
+  { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)", images: [proofPzswa, proofLeadershipOverview] },
+  { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD", images: [proofNdfBd] },
+  { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)", images: [proofPds] },
   { cat: "Volunteer", title: "COVID-19 Volunteer ID", desc: "Frontline volunteer — Pabna Police Super Office" },
   { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC" },
   { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates" },
@@ -296,6 +304,23 @@ export default function Portfolio() {
 
   const [filter, setFilter] = useState<(typeof PROOF_CATS)[number]>("All");
   const filteredProof = filter === "All" ? PROOF : PROOF.filter((p) => p.cat === filter);
+  const [lightbox, setLightbox] = useState<{ title: string; images: string[]; index: number } | null>(null);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "ArrowRight") setLightbox((l) => (l ? { ...l, index: (l.index + 1) % l.images.length } : l));
+      if (e.key === "ArrowLeft") setLightbox((l) => (l ? { ...l, index: (l.index - 1 + l.images.length) % l.images.length } : l));
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [lightbox]);
 
   return (
     <div className="min-h-screen bg-white text-[#111111] font-[Inter,system-ui,sans-serif] antialiased">
@@ -735,6 +760,9 @@ export default function Portfolio() {
                 <button
                   key={p.title}
                   type="button"
+                  onClick={() => p.images && p.images.length > 0 && setLightbox({ title: p.title, images: p.images, index: 0 })}
+                  disabled={!p.images || p.images.length === 0}
+                  aria-label={p.images && p.images.length > 0 ? `View original document: ${p.title}` : `${p.title} — original coming soon`}
                   className="text-left group rounded-2xl border border-[#E5E7EB] bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#111111] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
                 >
                   <div className="flex items-center justify-between">
@@ -746,7 +774,7 @@ export default function Portfolio() {
                   <h3 className="mt-3 font-semibold tracking-tight text-[#111111]">{p.title}</h3>
                   <p className="mt-1 text-sm text-[#4B5563]">{p.desc}</p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#DC2626] group-hover:gap-2 transition-all">
-                    Tap to view original <ArrowUpRight className="h-3.5 w-3.5" />
+                    {p.images && p.images.length > 0 ? "Tap to view original" : "Original coming soon"} <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </button>
               ))
@@ -824,6 +852,57 @@ export default function Portfolio() {
           <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-[#DC2626]" /> Powered by TrendFlux Ecosystem</span>
         </div>
       </footer>
+
+      {lightbox && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.title}
+          onClick={() => setLightbox(null)}
+          className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 motion-safe:animate-[fadeIn_.2s_ease-out]"
+        >
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
+            className="absolute top-4 right-4 h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center text-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            ×
+          </button>
+          <div className="absolute top-4 left-4 text-white text-sm font-semibold max-w-[70%] truncate">
+            {lightbox.title}
+            {lightbox.images.length > 1 && (
+              <span className="ml-2 text-white/60 font-normal">({lightbox.index + 1}/{lightbox.images.length})</span>
+            )}
+          </div>
+          {lightbox.images.length > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="Previous"
+                onClick={(e) => { e.stopPropagation(); setLightbox((l) => l ? { ...l, index: (l.index - 1 + l.images.length) % l.images.length } : l); }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                aria-label="Next"
+                onClick={(e) => { e.stopPropagation(); setLightbox((l) => l ? { ...l, index: (l.index + 1) % l.images.length } : l); }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                ›
+              </button>
+            </>
+          )}
+          <img
+            src={lightbox.images[lightbox.index]}
+            alt={`${lightbox.title} — original document`}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-[88vh] max-w-[92vw] rounded-lg shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] bg-white object-contain"
+          />
+        </div>
+      )}
     </div>
   );
 }
