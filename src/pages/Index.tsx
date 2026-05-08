@@ -63,6 +63,7 @@ const services = [
     icon: Workflow,
     title: "Workflow Intelligence Systems",
     desc: "End-to-end automation pipelines that eliminate manual overhead and unlock operational velocity.",
+    bestFor: "Founders drowning in manual ops",
     outcome: "Avg. 70% time reclaimed",
   },
   {
@@ -70,6 +71,7 @@ const services = [
     icon: Users,
     title: "CRM & Sales Orchestration",
     desc: "Custom-engineered CRM stacks that turn cold pipelines into predictable revenue engines.",
+    bestFor: "Teams losing leads in the gap",
     outcome: "3.2x lead conversion",
   },
   {
@@ -77,6 +79,7 @@ const services = [
     icon: Sparkles,
     title: "Performance Creative Labs",
     desc: "Data-driven creative testing frameworks designed to scale ROAS without sacrificing brand integrity.",
+    bestFor: "Brands ready to scale acquisition",
     outcome: "Avg. +45% ROAS lift",
   },
   {
@@ -84,6 +87,7 @@ const services = [
     icon: Target,
     title: "Full-Funnel Paid Strategy",
     desc: "Surgical audience architecture and bid strategy across Meta's full ecosystem.",
+    bestFor: "Performance teams hitting a CAC ceiling",
     outcome: "Sub-$8 CAC achieved",
   },
   {
@@ -91,6 +95,7 @@ const services = [
     icon: Layers,
     title: "Brand Operating Systems",
     desc: "Holistic brand-to-product ecosystems engineered for compounding growth.",
+    bestFor: "Multi-brand founders & operators",
     outcome: "12-month roadmaps",
   },
   {
@@ -98,6 +103,7 @@ const services = [
     icon: Cpu,
     title: "Tech Stack Architecture",
     desc: "Future-proof infrastructure decisions that align tooling with strategic intent.",
+    bestFor: "Scaling teams replatforming",
     outcome: "Zero-vendor-lock builds",
   },
 ];
