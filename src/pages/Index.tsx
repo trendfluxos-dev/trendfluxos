@@ -210,6 +210,11 @@ const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [quoteContext, setQuoteContext] = useState<{
+    source: string;
+    module?: string;
+    category?: string;
+  } | null>(null);
   const [strategyOpen, setStrategyOpen] = useState(false);
   const [strategySource, setStrategySource] = useState<{ slug: string | null; source: string } | null>(null);
   const openStrategy = (source: string, slug: string | null = null) => {
@@ -583,14 +588,14 @@ const Index = () => {
             })}
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
             {visibleServices.map((s, i) => {
               const Icon = s.icon;
               const idx = services.indexOf(s) + 1;
               return (
                 <article
                   key={s.title}
-                  className="group rounded-3xl glass glass-hover p-7 flex flex-col"
+                  className="group rounded-3xl glass glass-hover p-5 sm:p-7 flex flex-col"
                 >
                   <div className="flex items-start justify-between">
                     <span className="font-display text-sm text-foreground/40">
@@ -600,24 +605,24 @@ const Index = () => {
                       <Icon className="w-5 h-5" />
                     </div>
                   </div>
-                  <p className="mt-6 text-xs uppercase tracking-[0.25em] text-primary">
+                  <p className="mt-5 sm:mt-6 text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-primary break-words">
                     {s.category}
                   </p>
-                  <h3 className="font-display mt-2 text-2xl font-bold leading-tight">
+                  <h3 className="font-display mt-2 text-xl sm:text-2xl font-bold leading-tight tracking-tight break-words [text-wrap:balance]">
                     {s.title}
                   </h3>
-                  <p className="mt-4 text-sm leading-relaxed text-foreground/60">
+                  <p className="mt-3 sm:mt-4 text-[13px] sm:text-sm leading-relaxed text-foreground/60">
                     {s.desc}
                   </p>
 
-                  <dl className="mt-5 space-y-2 text-xs">
-                    <div className="flex gap-2">
-                      <dt className="min-w-[72px] uppercase tracking-wider text-foreground/40">Best for</dt>
-                      <dd className="text-foreground/80">{s.bestFor}</dd>
+                  <dl className="mt-4 sm:mt-5 space-y-3 text-[11px] sm:text-xs">
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
+                      <dt className="sm:min-w-[72px] uppercase tracking-wider text-foreground/40">Best for</dt>
+                      <dd className="text-foreground/80 leading-relaxed break-words">{s.bestFor}</dd>
                     </div>
-                    <div className="flex gap-2">
-                      <dt className="min-w-[72px] uppercase tracking-wider text-foreground/40">Outcome</dt>
-                      <dd className="font-semibold text-gold">{s.outcome}</dd>
+                    <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
+                      <dt className="sm:min-w-[72px] uppercase tracking-wider text-foreground/40">Outcome</dt>
+                      <dd className="font-semibold text-gold leading-relaxed break-words">{s.outcome}</dd>
                     </div>
                   </dl>
 
@@ -630,9 +635,14 @@ const Index = () => {
                           category: s.category,
                           source: "services_grid",
                         });
+                        setQuoteContext({
+                          source: "services_grid",
+                          module: s.title,
+                          category: s.category,
+                        });
                         setQuoteOpen(true);
                       }}
-                      className="group/cta inline-flex w-full items-center justify-between gap-2 rounded-full border border-gold/30 bg-gold/5 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-gold transition-all duration-300 hover:border-gold hover:bg-gold/15 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      className="group/cta inline-flex w-full items-center justify-between gap-2 rounded-full border border-gold/30 bg-gold/5 px-3.5 sm:px-4 py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-gold transition-all duration-300 hover:border-gold hover:bg-gold/15 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                       aria-label={`Activate ${s.title}`}
                     >
                       <span>Activate Module</span>
@@ -932,7 +942,14 @@ const Index = () => {
       </section>
 
       {/* Quote request modal */}
-      <QuoteDialog open={quoteOpen} onOpenChange={setQuoteOpen} />
+      <QuoteDialog
+        open={quoteOpen}
+        onOpenChange={(o) => {
+          setQuoteOpen(o);
+          if (!o) setTimeout(() => setQuoteContext(null), 250);
+        }}
+        context={quoteContext}
+      />
 
       {/* Press coverage details modal */}
       <Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>
