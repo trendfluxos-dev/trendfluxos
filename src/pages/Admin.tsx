@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Loader2, Plus, Trash2, LogOut, Save, Eye } from "lucide-react";
 import { usePressItems, type PressItem } from "@/hooks/usePressItems";
 import { PressItemPreview } from "@/components/PressItemPreview";
+import { normalizeHref } from "@/lib/url";
 
 type Row = PressItem & { _dirty?: boolean; _new?: boolean };
 
@@ -77,10 +78,15 @@ export default function Admin() {
       toast.error("Outlet, headline, and URL are required");
       return;
     }
+    const normalizedHref = normalizeHref(r.href);
+    if (!normalizedHref || !/^https?:\/\//i.test(normalizedHref)) {
+      toast.error("Please enter a valid URL");
+      return;
+    }
     const payload = {
       outlet: r.outlet,
       headline: r.headline,
-      href: r.href,
+      href: normalizedHref,
       context: r.context ?? "",
       sort_order: r.sort_order ?? 0,
       published: r.published ?? true,
