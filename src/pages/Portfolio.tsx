@@ -218,18 +218,26 @@ const LEADERSHIP = [
   "President — Pabna Zilla Chhatra Kallyan Samiti, JU",
 ];
 
-const PROOF: { cat: string; title: string; desc: string; images?: string[] }[] = [
-  { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00", images: [proofEducation] },
-  { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU", images: [proofUniversity] },
-  { cat: "Education", title: "HSC Credentials", desc: "HSC 2016 — GPA 5.00, Shaheed Bulbul Govt. College", images: [proofHsc] },
-  { cat: "Education", title: "SSC Credentials", desc: "SSC 2014 — GPA 5.00, Pabna Zilla School", images: [proofSsc] },
-  { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)", images: [proofPzswa, proofLeadershipOverview] },
-  { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD", images: [proofNdfBd] },
-  { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)", images: [proofPds] },
-  { cat: "Volunteer", title: "COVID-19 Volunteer ID", desc: "Frontline volunteer — Pabna Police Super Office", images: [proofCovid] },
-  { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC", images: [proofTrainingCerts, proofTrainingOverview] },
-  { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates", images: [proofParticipation] },
-  { cat: "Identity", title: "Official Identification", desc: "University ID · National ID · Birth Certificate", images: [proofIdentification] },
+type ProofItem = {
+  cat: string;
+  title: string;
+  desc: string;
+  images?: string[];
+  meta?: { issuer: string; date: string; type: string };
+};
+
+const PROOF: ProofItem[] = [
+  { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00", images: [proofEducation], meta: { issuer: "Institute of Information Technology, Jahangirnagar University", date: "2016 – 2022", type: "Academic Summary" } },
+  { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU", images: [proofUniversity], meta: { issuer: "Institute of Information Technology, Jahangirnagar University", date: "Apr 2022 & May 2024", type: "Official University Certificate" } },
+  { cat: "Education", title: "HSC Credentials", desc: "HSC 2016 — GPA 5.00, Shaheed Bulbul Govt. College", images: [proofHsc], meta: { issuer: "Board of Intermediate & Secondary Education, Rajshahi", date: "August 2016", type: "HSC Certificate & Transcript" } },
+  { cat: "Education", title: "SSC Credentials", desc: "SSC 2014 — GPA 5.00, Pabna Zilla School", images: [proofSsc], meta: { issuer: "Board of Intermediate & Secondary Education, Rajshahi", date: "May 2014", type: "SSC Certificate & Transcript" } },
+  { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)", images: [proofPzswa, proofLeadershipOverview], meta: { issuer: "Pabna Zilla Chhatra Kallyan Samiti, Jahangirnagar University", date: "19 October 2021", type: "Presidential Appointment Letter" } },
+  { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD", images: [proofNdfBd], meta: { issuer: "National Debate Federation Bangladesh (NDF-BD)", date: "2021", type: "Official Appointment Notice" } },
+  { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)", images: [proofPds], meta: { issuer: "Pabna Debate Society (PDS)", date: "10 July 2021", type: "Advisory Board Appointment" } },
+  { cat: "Volunteer", title: "COVID-19 Volunteer ID", desc: "Frontline volunteer — Pabna Police Super Office", images: [proofCovid], meta: { issuer: "Office of the Superintendent of Police, Pabna", date: "2020", type: "Volunteer Identity Card" } },
+  { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC", images: [proofTrainingCerts, proofTrainingOverview], meta: { issuer: "10 Minute School · Sochetan Foundation · NDBC", date: "2018 – 2024", type: "Course Completion Certificates" } },
+  { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates", images: [proofParticipation], meta: { issuer: "BDF, Debate Bangladesh, Bangladesh Shishu Academy & others", date: "2010 – 2021", type: "Participation & Achievement Certificates" } },
+  { cat: "Identity", title: "Official Identification", desc: "University ID · National ID · Birth Certificate", images: [proofIdentification], meta: { issuer: "Government of Bangladesh & Jahangirnagar University", date: "1999 – 2023", type: "Government & Institutional ID" } },
 ];
 const PROOF_CATS = ["All", "Education", "Leadership", "Volunteer", "Training", "Identity"] as const;
 
