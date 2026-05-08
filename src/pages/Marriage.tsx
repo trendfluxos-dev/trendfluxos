@@ -496,13 +496,12 @@ const Marriage = () => {
                         trackReferenceEvent("reference_copy", { name: r.nameEn, field: "phone", value: r.phoneDisplay })
                       }
                     />
-                    <a
-                      href={`tel:${r.phoneE164}`}
-                      onClick={() => trackReferenceEvent("reference_call", { name: r.nameEn, value: r.phoneE164 })}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-red-500/50 bg-red-600/10 px-3 py-1.5 text-xs font-bold text-red-200 hover:bg-red-600 hover:text-white transition"
-                    >
-                      <Phone className="h-3.5 w-3.5" /> Call
-                    </a>
+                    <CallButton
+                      phoneE164={r.phoneE164}
+                      onInvoke={() =>
+                        trackReferenceEvent("reference_call", { name: r.nameEn, value: r.phoneE164 })
+                      }
+                    />
                   </div>
                 </div>
               );
@@ -566,7 +565,10 @@ const CopyChip = ({
   onCopied?: () => void;
 }) => {
   const [copied, setCopied] = useState(false);
+  const [loading, setLoading] = useState(false);
   const onCopy = async () => {
+    if (loading || copied) return;
+    setLoading(true);
     try {
       await navigator.clipboard.writeText(value);
       setCopied(true);
@@ -575,19 +577,78 @@ const CopyChip = ({
       setTimeout(() => setCopied(false), 1600);
     } catch {
       toast.error("Copy failed");
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <button
       type="button"
       onClick={onCopy}
-      className={`inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs ${bold ? "text-white font-bold text-sm" : "text-white/90 font-semibold"} hover:border-red-500/60 hover:bg-red-600/15 transition max-w-full`}
-      title="Click to copy"
+      disabled={loading}
+      aria-busy={loading}
+      aria-label={copied ? `${label} copied` : `Copy ${label}`}
+      className={`group inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-all duration-200 max-w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/70 disabled:cursor-wait active:scale-[0.97] ${
+        bold ? "text-white font-bold text-sm" : "text-white/90 font-semibold"
+      } ${
+        copied
+          ? "border-red-400/70 bg-red-500/20 shadow-[0_0_0_3px_rgba(239,68,68,0.15)]"
+          : "border-white/15 bg-white/5 hover:border-red-500/60 hover:bg-red-600/15 hover:shadow-[0_4px_18px_rgba(239,68,68,0.25)] hover:-translate-y-px"
+      }`}
+      title={copied ? "Copied!" : "Click to copy"}
     >
       {icon}
       <span className="truncate">{label}</span>
-      {copied ? <Check className="h-3.5 w-3.5 text-red-400" /> : <Copy className="h-3.5 w-3.5 text-white/50" />}
+      {loading ? (
+        <span className="h-3.5 w-3.5 inline-block rounded-full border-2 border-white/30 border-t-red-300 animate-spin" aria-hidden />
+      ) : copied ? (
+        <Check className="h-3.5 w-3.5 text-red-300" />
+      ) : (
+        <Copy className="h-3.5 w-3.5 text-white/50 group-hover:text-red-200 transition-colors" />
+      )}
     </button>
+  );
+};
+
+const CallButton = ({
+  phoneE164,
+  onInvoke,
+}: {
+  phoneE164: string;
+  onInvoke?: () => void;
+}) => {
+  const [calling, setCalling] = useState(false);
+  const handle = () => {
+    if (calling) return;
+    setCalling(true);
+    onInvoke?.();
+    // Brief feedback window — `tel:` handoff is near-instant on mobile,
+    // but on desktop nothing visible happens, so the spinner reassures users.
+    setTimeout(() => setCalling(false), 1400);
+  };
+  return (
+    <a
+      href={`tel:${phoneE164}`}
+      onClick={handle}
+      aria-busy={calling}
+      aria-label={`Call ${phoneE164}`}
+      className={`group inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/70 active:scale-[0.97] ${
+        calling
+          ? "border-red-400/70 bg-red-600 text-white shadow-[0_0_0_4px_rgba(239,68,68,0.2)]"
+          : "border-red-500/50 bg-red-600/10 text-red-200 hover:bg-red-600 hover:text-white hover:-translate-y-px hover:shadow-[0_6px_22px_rgba(239,68,68,0.4)]"
+      }`}
+    >
+      {calling ? (
+        <>
+          <span className="h-3.5 w-3.5 inline-block rounded-full border-2 border-white/40 border-t-white animate-spin" aria-hidden />
+          Calling…
+        </>
+      ) : (
+        <>
+          <Phone className="h-3.5 w-3.5 transition-transform group-hover:rotate-12" /> Call
+        </>
+      )}
+    </a>
   );
 };
 
