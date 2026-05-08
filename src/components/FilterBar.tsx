@@ -42,7 +42,7 @@ const FilterBar = ({ value, onChange, resultCount }: Props) => {
               key={g.key}
               value={value[g.key]}
               onChange={(e) => onChange({ ...value, [g.key]: e.target.value })}
-              className={`appearance-none bg-white border rounded-xl px-3 py-2.5 text-sm font-medium cursor-pointer transition-all hover:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary ${
+              className={`appearance-none bg-white border rounded-xl px-3 py-2.5 text-sm font-medium cursor-pointer transition-all hover:border-primary/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-primary ${
                 value[g.key]
                   ? "border-primary/60 bg-[hsl(0_86%_98%)] text-primary"
                   : "border-border text-foreground/80"
@@ -65,15 +65,22 @@ const FilterBar = ({ value, onChange, resultCount }: Props) => {
               onChange={(e) => onChange({ ...value, query: e.target.value })}
               placeholder="Search…"
               maxLength={80}
-              className="w-full rounded-xl border border-border bg-white pl-9 pr-3 py-2.5 text-sm text-foreground placeholder:text-foreground/40 outline-none transition-all hover:border-primary/60 focus:ring-2 focus:ring-primary/40 focus:border-primary"
+              className="w-full rounded-xl border border-border bg-white pl-9 pr-3 py-2.5 text-sm text-foreground placeholder:text-foreground/40 outline-none transition-all hover:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:border-primary"
               aria-label="Search case studies"
             />
           </div>
           <button
             type="button"
             onClick={() => onChange(EMPTY_FILTERS)}
+            onKeyDown={(e) => {
+              if ((e.key === "Enter" || e.key === " ") && hasActive) {
+                e.preventDefault();
+                onChange(EMPTY_FILTERS);
+              }
+            }}
             disabled={!hasActive}
-            className={`rounded-xl px-3 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed ${
+            aria-label={hasActive ? "Reset all filters" : "No filters to reset"}
+            className={`rounded-xl px-3 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
               hasActive
                 ? "border border-primary bg-primary text-primary-foreground hover:bg-[hsl(var(--primary-glow))] shadow-[0_6px_18px_-8px_hsl(var(--primary)/0.55)]"
                 : "border border-border bg-white text-foreground/60"

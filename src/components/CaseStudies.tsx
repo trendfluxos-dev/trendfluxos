@@ -191,14 +191,14 @@ const CaseStudies = () => {
 
         <div className="grid lg:grid-cols-2 gap-5 sm:gap-6">
           <ul
-            className="space-y-4 sm:space-y-5 lg:max-h-[640px] lg:overflow-y-auto lg:pr-1 scroll-smooth list-none"
+            className="space-y-4 sm:space-y-5 lg:max-h-[640px] lg:overflow-y-auto lg:pr-1 scroll-smooth lg:snap-y lg:snap-mandatory list-none [scrollbar-gutter:stable]"
             role="list"
           >
             {cases.map((c, i) => {
               const titleId = `case-${i}-title`;
               const metricId = `case-${i}-metric`;
               return (
-                <li key={c.title}>
+                <li key={c.title} className="lg:snap-start lg:scroll-mt-2">
                   <article
                     aria-labelledby={titleId}
                     aria-describedby={metricId}
