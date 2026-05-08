@@ -18,6 +18,8 @@ export type StoredEvent = {
   ts: number;
 };
 
+export const ANALYTICS_EVENT = "tf:analytics";
+
 function persist(event: string, params: EventParams) {
   if (typeof window === "undefined" || !window.localStorage) return;
   try {
@@ -26,6 +28,11 @@ function persist(event: string, params: EventParams) {
     list.push({ event, params, ts: Date.now() });
     const trimmed = list.slice(-MAX_STORED);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+    try {
+      window.dispatchEvent(new CustomEvent(ANALYTICS_EVENT, { detail: { event } }));
+    } catch {
+      /* noop */
+    }
   } catch {
     /* ignore quota / parse errors */
   }
