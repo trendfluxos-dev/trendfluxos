@@ -1022,23 +1022,43 @@ const Index = () => {
             aria-label="Ecosystem performance metrics"
           >
             {[
-              { value: "485K+", label: "Organic Views Generated" },
-              { value: "+45%", label: "Avg. Engagement Growth" },
-              { value: "24/7", label: "AI Automation Layer" },
-              { value: "3", label: "Multi-Brand Ecosystems Live" },
-            ].map((m) => (
-              <div
-                key={m.label}
-                className="glass rounded-2xl p-5 text-center transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                <div className="font-display text-2xl md:text-3xl font-bold text-gradient">
-                  {m.value}
+              { value: "485K+", label: "Organic Views Generated", tone: "green" as const },
+              { value: "+45%", label: "Avg. Engagement Growth", tone: "green" as const },
+              { value: "24/7", label: "AI Automation Layer", tone: "orange" as const },
+              { value: "3", label: "Multi-Brand Ecosystems Live", tone: "red" as const },
+            ].map((m) => {
+              const dot =
+                m.tone === "green"
+                  ? "bg-brand-green"
+                  : m.tone === "orange"
+                    ? "bg-brand-orange"
+                    : "bg-primary";
+              const tag =
+                m.tone === "green"
+                  ? "text-brand-green border-brand-green/30 bg-brand-green/10"
+                  : m.tone === "orange"
+                    ? "text-brand-orange border-brand-orange/30 bg-brand-orange/10"
+                    : "text-primary border-primary/30 bg-primary/10";
+              return (
+                <div
+                  key={m.label}
+                  className="rounded-2xl border border-border bg-white p-5 text-center shadow-[0_1px_2px_hsl(0_0%_0%/0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-12px_hsl(0_0%_0%/0.10)]"
+                >
+                  <div className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                    {m.value}
+                  </div>
+                  <div className="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.22em] text-foreground/55">
+                    {m.label}
+                  </div>
+                  <span
+                    className={`mt-3 inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] ${tag}`}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
+                    Live
+                  </span>
                 </div>
-                <div className="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.22em] text-foreground/55">
-                  {m.label}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -1152,7 +1172,7 @@ const Index = () => {
                       <ul aria-label={`Key results for ${c.title}`} className="mt-5 space-y-2">
                         {c.results.map((r) => (
                           <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
-                            <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                            <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-brand-green" />
                             <span>{r}</span>
                           </li>
                         ))}
