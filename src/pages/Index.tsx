@@ -477,7 +477,6 @@ const Index = () => {
 
           <h1 className="font-display mx-auto max-w-5xl text-4xl sm:text-5xl font-black leading-[1.05] sm:leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
             <span className="block break-words">{BRAND.hero.headlineLead}</span>
-            <br />
             <span className="text-gradient block break-words">{BRAND.hero.headlineTrail}</span>
           </h1>
 
