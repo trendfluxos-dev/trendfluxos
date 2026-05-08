@@ -213,7 +213,6 @@ const LEADERSHIP = [
   "President — Pabna Zilla Chhatra Kallyan Samiti, JU",
 ];
 
-const PROOF = [
 const PROOF: { cat: string; title: string; desc: string; images?: string[] }[] = [
   { cat: "Education", title: "Educational Background", desc: "B.Sc. IT — Jahangirnagar University · HSC & SSC GPA 5.00", images: [proofEducation] },
   { cat: "Education", title: "University Certificates", desc: "Appeared & character certificates from IIT, JU", images: [proofUniversity] },
