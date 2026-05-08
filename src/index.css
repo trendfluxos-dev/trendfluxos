@@ -42,7 +42,7 @@
     /* Accents — used sparingly */
     --accent: 0 72% 45%;                /* red accent default */
     --accent-foreground: 0 0% 100%;
-    --accent-orange: 24 95% 53%;        /* #F97316 */
+    --accent-orange: 21 90% 48%;        /* #EA580C — WCAG 3:1 on white */
     --accent-green: 142 71% 38%;        /* #16A34A */
 
     --destructive: 0 72% 45%;

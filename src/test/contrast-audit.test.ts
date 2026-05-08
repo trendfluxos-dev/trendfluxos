@@ -35,7 +35,7 @@ const cases: Array<[string, string, string, number]> = [
   ["Primary CTA hover label",  "#FFFFFF", "#B91C1C", 4.5],
   ["Red link on white",        "#DC2626", "#FFFFFF", 4.5],
   ["Green badge on white",     "#16A34A", "#FFFFFF", 3],     // UI/large
-  ["Orange badge on white",    "#F97316", "#FFFFFF", 3],
+  ["Orange badge on white",    "#EA580C", "#FFFFFF", 3],
   ["Border on white",          "#E5E7EB", "#FFFFFF", 1.1],   // visible hairline only
 ];
 

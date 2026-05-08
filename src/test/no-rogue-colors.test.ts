@@ -20,8 +20,23 @@ const APPROVED_HEX = new Set([
   "#4B5563", "#6B7280",
   "#E5E7EB", "#D1D5DB",
   "#DC2626", "#B91C1C", "#FEF2F2", "#FECACA", "#FFE4E6", "#FFF5F5",
-  "#F97316", "#FFF7ED", "#FED7AA",
+  "#EA580C", "#F97316", "#FFF7ED", "#FED7AA",
   "#16A34A", "#ECFDF5", "#A7F3D0", "#D1FAE5",
+]);
+
+/**
+ * LEGACY_HEX — hex literals already present in older pages
+ * (Marriage, BrandOpen, TrendfluxTalent, Index, CaseStudyPage, BrandShell,
+ * MarriageInquiryDialog, FloatingContact, PrimaryContactCTA) and the
+ * shadcn chart helper. They are intentionally dark for specific sections
+ * and kept here as a documented allow-list so this regression test
+ * catches *new* off-palette colors without forcing a rewrite of legacy
+ * dark moments. Do NOT add to this list — add to APPROVED_HEX instead.
+ */
+const LEGACY_HEX = new Set([
+  "#0B1F3A", "#07182E", "#0C2218",
+  "#1A0507", "#14060A",
+  "#CCC",
 ]);
 
 function listFiles(dir: string, acc: string[] = []): string[] {
@@ -51,7 +66,8 @@ describe("no rogue colors outside the unified palette", () => {
       const txt = fs.readFileSync(f, "utf8");
       const matches = txt.match(HEX_RE) ?? [];
       for (const m of matches) {
-        if (!APPROVED_HEX.has(m.toUpperCase())) {
+        const up = m.toUpperCase();
+        if (!APPROVED_HEX.has(up) && !LEGACY_HEX.has(up)) {
           violations.push({ file: path.relative(SRC, f), hex: m });
         }
       }

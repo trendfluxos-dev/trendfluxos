@@ -45,7 +45,7 @@ const tokens = {
   mutedForeground:   hexToRgb("#4B5563"),
   primary:           hexToRgb("#DC2626"),
   primaryHover:      hexToRgb("#B91C1C"),
-  accentOrange:      hexToRgb("#F97316"),
+  accentOrange:      hexToRgb("#EA580C"),
   accentGreen:       hexToRgb("#16A34A"),
   border:            hexToRgb("#E5E7EB"),
 };
