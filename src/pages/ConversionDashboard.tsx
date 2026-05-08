@@ -17,7 +17,6 @@ export default function ConversionDashboard() {
   useSeo({
     title: "Conversion Dashboard — TrendFlux Internal",
     description: "Internal analytics summary for service module CTAs and submissions.",
-    noIndex: true,
   });
 
   const [events, setEvents] = useState<StoredEvent[]>([]);
