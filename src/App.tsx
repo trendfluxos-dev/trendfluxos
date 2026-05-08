@@ -25,6 +25,7 @@ const Marriage = routes["/marriage"];
 const BrandOpen = routes["/brand-open"];
 const TrendfluxTalent = routes["/trendflux-talent"];
 const LuxeVeil = routes["/luxe-veil"];
+const BrandToki = routes["/brandtoki"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const NotFound = routes["*"];
 
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/brand-open" element={<BrandOpen />} />
             <Route path="/trendflux-talent" element={<TrendfluxTalent />} />
             <Route path="/luxe-veil" element={<LuxeVeil />} />
+            <Route path="/brandtoki" element={<BrandToki />} />
             <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
