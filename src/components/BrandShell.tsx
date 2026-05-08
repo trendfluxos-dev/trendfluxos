@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { ReactNode } from "react";
+import SocialIcons from "@/components/social/SocialIcons";
+import PrimaryContactCTA from "@/components/social/PrimaryContactCTA";
 
 type Tier = "open" | "platform" | "private";
 
@@ -43,9 +45,12 @@ export const BrandShell = ({
         <Link to="/" className="text-xs uppercase tracking-[0.3em] text-gold/80 hover:text-gold transition">
           ← TrendFlux
         </Link>
-        <div className="text-right">
-          <div className="text-[10px] uppercase tracking-[0.35em] text-gold/70">{meta.label}</div>
-          <div className="text-[10px] uppercase tracking-[0.25em] text-white/50">{meta.sub}</div>
+        <div className="flex items-center gap-4">
+          <SocialIcons variant="inline" size="sm" className="hidden md:flex" />
+          <div className="text-right">
+            <div className="text-[10px] uppercase tracking-[0.35em] text-gold/70">{meta.label}</div>
+            <div className="text-[10px] uppercase tracking-[0.25em] text-white/50">{meta.sub}</div>
+          </div>
         </div>
       </header>
 
@@ -55,6 +60,11 @@ export const BrandShell = ({
       </div>
 
       <div className="relative max-w-6xl mx-auto px-5 pb-20">{children}</div>
+
+      <div className="relative max-w-6xl mx-auto px-5 pb-6 flex flex-col items-center gap-3">
+        <PrimaryContactCTA />
+        <SocialIcons variant="inline" size="sm" />
+      </div>
 
       <BrandFunnelFooter active={tier} />
     </main>
