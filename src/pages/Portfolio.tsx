@@ -317,7 +317,13 @@ export default function Portfolio() {
 
   const [filter, setFilter] = useState<(typeof PROOF_CATS)[number]>("All");
   const filteredProof = filter === "All" ? PROOF : PROOF.filter((p) => p.cat === filter);
-  const [lightbox, setLightbox] = useState<{ title: string; images: string[]; index: number } | null>(null);
+  const [lightbox, setLightbox] = useState<{
+    title: string;
+    cat: string;
+    images: string[];
+    index: number;
+    meta?: { issuer: string; date: string; type: string };
+  } | null>(null);
 
   useEffect(() => {
     if (!lightbox) return;
@@ -773,7 +779,7 @@ export default function Portfolio() {
                 <button
                   key={p.title}
                   type="button"
-                  onClick={() => p.images && p.images.length > 0 && setLightbox({ title: p.title, images: p.images, index: 0 })}
+                  onClick={() => p.images && p.images.length > 0 && setLightbox({ title: p.title, cat: p.cat, images: p.images, index: 0, meta: p.meta })}
                   disabled={!p.images || p.images.length === 0}
                   aria-label={p.images && p.images.length > 0 ? `View original document: ${p.title}` : `${p.title} — original coming soon`}
                   className="text-left group rounded-2xl border border-[#E5E7EB] bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#111111] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
