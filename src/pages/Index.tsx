@@ -781,6 +781,19 @@ const Index = () => {
                     {item.desc}
                   </p>
 
+                  {item.press !== undefined && item.press.length === 0 && (
+                    <div className="mt-6 rounded-2xl border border-dashed border-gold/30 bg-foreground/[0.02] px-6 py-8 text-center">
+                      <p className="text-xs uppercase tracking-[0.3em] text-gold/70">
+                        Press Coverage
+                      </p>
+                      <p className="mt-3 font-display text-base font-semibold text-foreground/80 md:text-lg">
+                        Verified national headlines coming soon.
+                      </p>
+                      <p className="mt-2 text-xs text-foreground/50">
+                        We're curating the public record. Check back shortly for documented outlet reports.
+                      </p>
+                    </div>
+                  )}
                   {item.press && item.press.length > 0 && (
                     <div className="mt-6">
                       {pressOpenFor !== item.phase ? (
