@@ -226,15 +226,51 @@ const PRESETS = {
   "Performance Alliance": { base: 120, perf: 35, avg: 90, scope: 8 },
 } as const;
 
+const PORTFOLIO_META = {
+  title: "Zahid Hasan Emon — AI-Powered Growth Operator & Brand Architect",
+  description:
+    "Zahid Hasan Emon — AI-Powered Digital Growth Operator, Brand Architect & Growth Execution Partner. Building scalable growth systems, content infrastructure and automation for brands, startups and creator ecosystems.",
+  url: "https://trendflux.digital/portfolio",
+  image: "https://trendflux.digital/og/portfolio-zahid-hasan-emon.jpg",
+};
+
+function setMeta(selector: string, attr: string, value: string) {
+  let el = document.head.querySelector<HTMLMetaElement>(selector);
+  if (!el) {
+    el = document.createElement("meta");
+    const [name, val] = selector.replace(/^meta\[/, "").replace(/\]$/, "").split("=");
+    el.setAttribute(name, val.replace(/['"]/g, ""));
+    document.head.appendChild(el);
+  }
+  el.setAttribute(attr, value);
+}
+
 export default function Portfolio() {
   useEffect(() => {
-    document.title = "Zahid Hasan Emon — AI-Powered Growth Operator & Brand Architect";
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta)
-      meta.setAttribute(
-        "content",
-        "Zahid Hasan Emon — AI-Powered Digital Growth Operator, Brand Architect & Growth Execution Partner. Strategic growth systems, content infrastructure, and automation."
-      );
+    document.title = PORTFOLIO_META.title;
+    setMeta('meta[name="description"]', "content", PORTFOLIO_META.description);
+    // Open Graph
+    setMeta('meta[property="og:type"]', "content", "profile");
+    setMeta('meta[property="og:title"]', "content", PORTFOLIO_META.title);
+    setMeta('meta[property="og:description"]', "content", PORTFOLIO_META.description);
+    setMeta('meta[property="og:url"]', "content", PORTFOLIO_META.url);
+    setMeta('meta[property="og:image"]', "content", PORTFOLIO_META.image);
+    setMeta('meta[property="og:site_name"]', "content", "TrendFlux Digital");
+    setMeta('meta[property="profile:first_name"]', "content", "Zahid Hasan");
+    setMeta('meta[property="profile:last_name"]', "content", "Emon");
+    // Twitter
+    setMeta('meta[name="twitter:card"]', "content", "summary_large_image");
+    setMeta('meta[name="twitter:title"]', "content", PORTFOLIO_META.title);
+    setMeta('meta[name="twitter:description"]', "content", PORTFOLIO_META.description);
+    setMeta('meta[name="twitter:image"]', "content", PORTFOLIO_META.image);
+    // Canonical
+    let canon = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (!canon) {
+      canon = document.createElement("link");
+      canon.setAttribute("rel", "canonical");
+      document.head.appendChild(canon);
+    }
+    canon.setAttribute("href", PORTFOLIO_META.url);
   }, []);
 
   const [preset, setPreset] = useState<keyof typeof PRESETS>("Growth Partner");
@@ -636,39 +672,85 @@ export default function Portfolio() {
       {/* PROOF VAULT */}
       <section id="proof" className="py-20 md:py-24 bg-[#F8FAFC] border-y border-[#E5E7EB]">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <div className="flex items-end justify-between gap-6 flex-wrap">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
               <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Proof Vault</span>
               <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Verified Proof Vault</h2>
               <p className="mt-3 max-w-2xl text-[#4B5563]">Original documents & legal proof. Tap any card to view the original document — credentials, leadership and identity verified.</p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {PROOF_CATS.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setFilter(c)}
-                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${filter === c ? "bg-[#111111] text-white" : "border border-[#E5E7EB] bg-white text-[#4B5563] hover:text-[#111111] hover:border-[#111111]"}`}
-                >
-                  {c}
-                </button>
-              ))}
+            <div
+              role="tablist"
+              aria-label="Filter proof documents by category"
+              className="-mx-5 px-5 lg:mx-0 lg:px-0 flex gap-2 overflow-x-auto snap-x snap-mandatory pb-1 lg:flex-wrap lg:overflow-visible lg:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              {PROOF_CATS.map((c) => {
+                const count = c === "All" ? PROOF.length : PROOF.filter((p) => p.cat === c).length;
+                const active = filter === c;
+                return (
+                  <button
+                    key={c}
+                    role="tab"
+                    aria-selected={active}
+                    type="button"
+                    onClick={() => setFilter(c)}
+                    className={`shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC] ${
+                      active
+                        ? "bg-[#111111] text-white shadow-[0_8px_20px_-10px_rgba(0,0,0,0.4)]"
+                        : "border border-[#E5E7EB] bg-white text-[#4B5563] hover:text-[#111111] hover:border-[#111111]"
+                    }`}
+                  >
+                    {c}
+                    <span
+                      className={`inline-flex h-4 min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-semibold ${
+                        active ? "bg-white/15 text-white" : "bg-[#F8FAFC] text-[#4B5563]"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredProof.map((p) => (
-              <button key={p.title} type="button" className="text-left group rounded-2xl border border-[#E5E7EB] bg-white p-5 hover:border-[#111111] transition">
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF5] text-[#16A34A] text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
-                    <ShieldCheck className="h-3 w-3" /> Verified
+          <div
+            key={filter}
+            className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 motion-safe:animate-[fadeIn_.25s_ease-out]"
+          >
+            {filteredProof.length === 0 ? (
+              <div className="sm:col-span-2 lg:col-span-3 rounded-2xl border border-dashed border-[#E5E7EB] bg-white p-10 text-center">
+                <ShieldCheck className="mx-auto h-6 w-6 text-[#4B5563]" />
+                <h3 className="mt-3 font-semibold text-[#111111]">No documents in this category yet</h3>
+                <p className="mt-1 text-sm text-[#4B5563]">Try another category — every credential here is independently verified.</p>
+                <button
+                  type="button"
+                  onClick={() => setFilter("All")}
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#DC2626] hover:bg-[#B91C1C] text-white px-4 py-2 text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
+                >
+                  Show all documents
+                </button>
+              </div>
+            ) : (
+              filteredProof.map((p) => (
+                <button
+                  key={p.title}
+                  type="button"
+                  className="text-left group rounded-2xl border border-[#E5E7EB] bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#111111] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF5] text-[#16A34A] text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
+                      <ShieldCheck className="h-3 w-3" /> Verified
+                    </span>
+                    <span className="text-[10px] uppercase tracking-wider text-[#4B5563] font-semibold">{p.cat}</span>
+                  </div>
+                  <h3 className="mt-3 font-semibold tracking-tight text-[#111111]">{p.title}</h3>
+                  <p className="mt-1 text-sm text-[#4B5563]">{p.desc}</p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#DC2626] group-hover:gap-2 transition-all">
+                    Tap to view original <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-[#4B5563] font-semibold">{p.cat}</span>
-                </div>
-                <h3 className="mt-3 font-semibold tracking-tight">{p.title}</h3>
-                <p className="mt-1 text-sm text-[#4B5563]">{p.desc}</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#DC2626] group-hover:gap-2 transition-all">Tap to view original <ArrowUpRight className="h-3.5 w-3.5" /></span>
-              </button>
-            ))}
+                </button>
+              ))
+            )}
           </div>
 
           {/* TRUST BLOCK */}
