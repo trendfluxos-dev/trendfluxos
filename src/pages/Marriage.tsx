@@ -503,26 +503,6 @@ const Marriage = () => {
                     >
                       <Phone className="h-3.5 w-3.5" /> Call
                     </a>
-                    <a
-                      href={`https://wa.me/${dialDigits}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={() => trackReferenceEvent("reference_whatsapp", { name: r.nameEn, value: r.phoneE164 })}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-3 py-1.5 text-xs font-bold text-white hover:brightness-110 transition"
-                    >
-                      <MessageCircle className="h-3.5 w-3.5" /> WhatsApp
-                    </a>
-                    {r.facebook && (
-                      <a
-                        href={r.facebook}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => trackReferenceEvent("reference_facebook", { name: r.nameEn, value: r.facebook })}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white hover:bg-white hover:text-black transition"
-                      >
-                        <Facebook className="h-3.5 w-3.5" /> Facebook
-                      </a>
-                    )}
                   </div>
                 </div>
               );
