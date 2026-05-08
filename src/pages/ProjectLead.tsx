@@ -20,6 +20,7 @@ import {
   Heart,
 } from "lucide-react";
 import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
+import { useSeo } from "@/hooks/useSeo";
 
 const metrics = [
   { value: "4.85L+", label: "Organic Views" },

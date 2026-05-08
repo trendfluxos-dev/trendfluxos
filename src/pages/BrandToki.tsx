@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import {
   Camera,
   Video,
@@ -19,6 +18,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import logo from "@/assets/brandtoki-logo.png";
+import { useSeo } from "@/hooks/useSeo";
 
 const services = [
   { icon: Camera, title: "Photography Studio", desc: "Editorial, portrait & lifestyle photography in a fully equipped studio.", tag: "Editorial" },
@@ -55,11 +55,13 @@ const testimonials = [
 ];
 
 export default function BrandToki() {
-  useEffect(() => {
-    document.title = "Studio BrandToki — Premium Production Studio in Gulshan, Dhaka";
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Studio BrandToki — Premium photography, videography, podcast & commercial production studio in Gulshan, Dhaka.");
-  }, []);
+  useSeo({
+    title: "Studio BrandToki — Premium Production Studio in Gulshan, Dhaka",
+    description:
+      "Studio BrandToki — Premium photography, videography, podcast & commercial production studio in Gulshan, Dhaka. Editorial shoots, brand campaigns, creator content.",
+    siteName: "Studio BrandToki",
+    imageAlt: "Studio BrandToki — Premium Production Studio in Gulshan, Dhaka",
+  });
 
   return (
     <div className="min-h-screen bg-white text-[#111111] font-[Inter,system-ui,sans-serif]">
