@@ -238,10 +238,10 @@ export default function Portfolio() {
   }, []);
 
   const [preset, setPreset] = useState<keyof typeof PRESETS>("Growth Partner");
-  const [base, setBase] = useState(PRESETS["Growth Partner"].base);
-  const [perf, setPerf] = useState(PRESETS["Growth Partner"].perf);
-  const [avg, setAvg] = useState(PRESETS["Growth Partner"].avg);
-  const [scope, setScope] = useState(PRESETS["Growth Partner"].scope);
+  const [base, setBase] = useState<number>(PRESETS["Growth Partner"].base);
+  const [perf, setPerf] = useState<number>(PRESETS["Growth Partner"].perf);
+  const [avg, setAvg] = useState<number>(PRESETS["Growth Partner"].avg);
+  const [scope, setScope] = useState<number>(PRESETS["Growth Partner"].scope);
 
   const applyPreset = (p: keyof typeof PRESETS) => {
     const v = PRESETS[p];
