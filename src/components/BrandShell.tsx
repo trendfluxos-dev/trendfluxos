@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ReactNode } from "react";
 import SocialIcons from "@/components/social/SocialIcons";
 import PrimaryContactCTA from "@/components/social/PrimaryContactCTA";
+import { Facebook, ArrowUpRight } from "lucide-react";
 
 type Tier = "open" | "platform" | "private";
 
@@ -60,7 +61,20 @@ export const BrandShell = ({
       <div className="relative max-w-6xl mx-auto px-5 pb-20">{children}</div>
 
       <div className="relative max-w-6xl mx-auto px-5 pb-6 flex flex-col items-center gap-3">
-        <PrimaryContactCTA />
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <PrimaryContactCTA />
+          <a
+            href="https://www.facebook.com/studiobrandtoki"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Connect on Official Facebook"
+            className="group inline-flex items-center gap-2 rounded-full border border-primary/60 bg-primary/5 px-5 py-2.5 text-xs uppercase tracking-[0.25em] text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:-translate-y-0.5 hover:shadow-[0_10px_30px_hsl(var(--primary)/0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            <Facebook className="w-4 h-4" />
+            <span>Connect on Official Facebook</span>
+            <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+        </div>
         <SocialIcons variant="inline" size="sm" />
       </div>
 
