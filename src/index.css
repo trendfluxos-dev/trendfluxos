@@ -8,66 +8,77 @@
 
 @layer base {
   :root {
-    /* Core surface — deep forest green (Spa Inn Bonani inspired) */
-    --background: 150 35% 7%;
-    --foreground: 40 30% 96%;
+    /* TrendFlux International — Light premium theme
+       60% white background · 10% black/charcoal text · 20% red accent
+       Orange + green reserved for micro-accents only. */
 
-    --card: 150 30% 10%;
-    --card-foreground: 40 30% 96%;
+    /* Core surface */
+    --background: 0 0% 100%;            /* #FFFFFF */
+    --foreground: 0 0% 7%;              /* ~#111111 */
 
-    --popover: 150 30% 10%;
-    --popover-foreground: 40 30% 96%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
 
-    /* Primary = forest emerald */
-    --primary: 150 55% 22%;
-    --primary-foreground: 40 30% 96%;
-    --primary-glow: 150 50% 35%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
 
-    /* Secondary = warm amber/gold */
-    --secondary: 38 75% 58%;
-    --secondary-foreground: 150 35% 8%;
-    --gold: 38 75% 58%;
-    --gold-foreground: 150 35% 8%;
+    /* Primary = brand red */
+    --primary: 0 72% 45%;               /* #DC2626 */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 0 74% 38%;          /* #B91C1C deep-red hover */
 
-    --muted: 150 18% 16%;
-    --muted-foreground: 40 18% 75%;
+    /* Secondary = soft slate surface for bands */
+    --secondary: 210 40% 96%;           /* #F1F5F9 */
+    --secondary-foreground: 0 0% 7%;
 
-    --accent: 38 75% 58%;
-    --accent-foreground: 150 35% 8%;
+    /* Legacy "gold" token aliased to brand red so existing utilities
+       (bg-gold, text-gold, shadow-gold, ring-gold) become red CTAs. */
+    --gold: 0 72% 45%;
+    --gold-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 40 30% 96%;
+    --muted: 210 40% 98%;               /* #F8FAFC */
+    --muted-foreground: 220 9% 38%;     /* #4B5563 */
 
-    --border: 150 20% 18%;
-    --input: 150 20% 14%;
-    --ring: 38 75% 58%;
+    /* Accents — used sparingly */
+    --accent: 0 72% 45%;                /* red accent default */
+    --accent-foreground: 0 0% 100%;
+    --accent-orange: 24 95% 53%;        /* #F97316 */
+    --accent-green: 142 71% 38%;        /* #16A34A */
+
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;              /* #E5E7EB */
+    --input: 220 13% 91%;
+    --ring: 0 72% 45%;
 
     --radius: 1rem;
 
-    --glass: 40 30% 96%;
-    --glass-border: 40 30% 96%;
+    /* Glass = white surface with subtle hairline (used over light bg) */
+    --glass: 0 0% 100%;
+    --glass-border: 220 13% 91%;
 
     --gradient-hero:
-      radial-gradient(circle at 80% 0%, hsl(38 75% 58% / 0.18), transparent 40%),
-      radial-gradient(circle at 0% 100%, hsl(150 55% 22% / 0.25), transparent 40%);
-    --gradient-cyan: linear-gradient(135deg, hsl(150 55% 22%), hsl(150 50% 35%));
-    --gradient-gold: linear-gradient(135deg, hsl(38 75% 58%), hsl(43 80% 70%));
-    --gradient-text: linear-gradient(135deg, hsl(40 30% 96%) 0%, hsl(38 75% 75%) 100%);
+      radial-gradient(circle at 85% -10%, hsl(0 72% 45% / 0.10), transparent 45%),
+      radial-gradient(circle at -10% 110%, hsl(24 95% 53% / 0.07), transparent 45%);
+    --gradient-cyan: linear-gradient(135deg, hsl(0 72% 45%), hsl(0 74% 38%));
+    --gradient-gold: linear-gradient(135deg, hsl(0 72% 45%), hsl(0 80% 60%));
+    --gradient-text: linear-gradient(135deg, hsl(0 0% 7%) 0%, hsl(0 72% 45%) 100%);
 
-    --shadow-cyan: 0 0 40px hsl(150 55% 22% / 0.45);
-    --shadow-gold: 0 0 40px hsl(38 75% 58% / 0.4);
-    --shadow-elegant: 0 25px 60px -20px hsl(150 50% 2% / 0.85);
+    --shadow-cyan: 0 10px 30px -12px hsl(0 72% 45% / 0.35);
+    --shadow-gold: 0 14px 40px -14px hsl(0 72% 45% / 0.35);
+    --shadow-elegant: 0 24px 60px -28px hsl(0 0% 0% / 0.18);
 
     --transition-smooth: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 
-    --sidebar-background: 150 30% 10%;
-    --sidebar-foreground: 40 30% 96%;
-    --sidebar-primary: 150 55% 22%;
-    --sidebar-primary-foreground: 40 30% 96%;
-    --sidebar-accent: 150 18% 16%;
-    --sidebar-accent-foreground: 40 30% 96%;
-    --sidebar-border: 150 20% 18%;
-    --sidebar-ring: 38 75% 58%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 7%;
+    --sidebar-primary: 0 72% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 0 0% 7%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 0 72% 45%;
 
     /* Luxe Veil — light theme tokens (Spa Inn Bonani inspired) */
     --lv-ivory: 40 45% 96%;          /* page bg */
@@ -178,26 +189,29 @@
 
 @layer components {
   .glass {
-    background: hsl(var(--glass) / 0.04);
-    border: 1px solid hsl(var(--glass-border) / 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: hsl(0 0% 100% / 0.92);
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 1px 2px hsl(0 0% 0% / 0.04), 0 8px 24px -16px hsl(0 0% 0% / 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .glass-strong {
-    background: hsl(var(--glass) / 0.06);
-    border: 1px solid hsl(var(--glass-border) / 0.12);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: hsl(0 0% 100% / 0.96);
+    border: 1px solid hsl(var(--border));
+    box-shadow: 0 1px 2px hsl(0 0% 0% / 0.05), 0 12px 36px -18px hsl(0 0% 0% / 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .glass-hover {
     @apply transition-all duration-500;
   }
   .glass-hover:hover {
-    background: hsl(var(--glass) / 0.08);
-    border-color: hsl(var(--primary) / 0.35);
-    box-shadow: 0 20px 60px -20px hsl(187 100% 50% / 0.25);
+    background: hsl(0 0% 100%);
+    border-color: hsl(var(--primary) / 0.45);
+    box-shadow: 0 18px 48px -18px hsl(0 72% 45% / 0.25), 0 1px 3px hsl(0 0% 0% / 0.06);
+    transform: translateY(-2px);
   }
 
   .text-gradient {
@@ -214,6 +228,35 @@
 
   .hero-glow {
     background: var(--gradient-hero);
+  }
+
+  /* Strong red CTA — international, conversion-focused */
+  .btn-cta-red {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 1px solid hsl(var(--primary));
+    box-shadow: 0 8px 22px -10px hsl(var(--primary) / 0.55);
+    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+  .btn-cta-red:hover {
+    background: hsl(var(--primary-glow));
+    border-color: hsl(var(--primary-glow));
+    box-shadow: 0 14px 34px -12px hsl(var(--primary) / 0.7);
+    transform: translateY(-1px);
+  }
+  .btn-cta-red:active { transform: translateY(0); }
+
+  /* Subtle red accent line for premium card edges */
+  .accent-line-red {
+    position: relative;
+  }
+  .accent-line-red::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 1.25rem; bottom: 1.25rem;
+    width: 3px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.3) 100%);
   }
 }
 

@@ -61,6 +61,12 @@ export default {
           DEFAULT: "hsl(var(--gold))",
           foreground: "hsl(var(--gold-foreground))",
         },
+        brand: {
+          red: "hsl(var(--primary))",
+          "red-hover": "hsl(var(--primary-glow))",
+          orange: "hsl(var(--accent-orange))",
+          green: "hsl(var(--accent-green))",
+        },
       },
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
