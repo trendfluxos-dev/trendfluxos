@@ -28,7 +28,7 @@ const expected: Record<string, string> = {
   "muted-foreground":  "220 9% 38%",
   "border":            "220 13% 91%",
   "ring":              "0 72% 45%",
-  "accent-orange":     "24 95% 53%",
+  "accent-orange":     "21 90% 48%",
   "accent-green":      "142 71% 38%",
 };
 
