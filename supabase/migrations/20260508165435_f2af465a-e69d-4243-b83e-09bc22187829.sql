@@ -1,0 +1,1 @@
+ALTER TABLE public.press_items ADD CONSTRAINT press_items_href_unique UNIQUE (href);

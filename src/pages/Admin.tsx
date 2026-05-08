@@ -89,7 +89,12 @@ export default function Admin() {
       ? supabase.from("press_items").insert(payload).select().single()
       : supabase.from("press_items").update(payload).eq("id", r.id).select().single();
     const { data, error } = await op;
-    if (error) return toast.error(error.message);
+    if (error) {
+      if (error.code === "23505" || /duplicate|unique/i.test(error.message)) {
+        return toast.error("This URL already exists in another press item.");
+      }
+      return toast.error(error.message);
+    }
     toast.success("Saved");
     setRows((rs) => rs.map((row, idx) => (idx === i ? { ...(data as Row) } : row)));
   };
