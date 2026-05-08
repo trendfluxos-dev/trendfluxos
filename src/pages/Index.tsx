@@ -1002,7 +1002,7 @@ const Index = () => {
       </Dialog>
 
       {/* Case Studies */}
-      <section id="cases" className="relative px-6 py-24 md:px-12 lg:px-20">
+      <section id="cases" className="relative bg-muted px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 text-center">
             <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
@@ -1090,11 +1090,11 @@ const Index = () => {
                   <article
                     id={`case-card-${c.slug}`}
                     aria-labelledby={`case-${i}-title`}
-                    className={`group relative flex h-full flex-col overflow-hidden rounded-3xl glass glass-hover transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_30px_80px_-20px_hsl(var(--gold)/0.45)] hover:border-gold/40 animate-fade-up ${
-                      caseFiltersActive ? "ring-2 ring-gold/50 shadow-gold" : ""
+                    className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.18)] hover:border-[hsl(0_84%_82%)] animate-fade-up ${
+                      caseFiltersActive ? "ring-1 ring-primary/30" : ""
                     } ${
                       highlightedSlug === c.slug
-                        ? "ring-2 ring-gold shadow-[0_0_60px_hsl(var(--gold)/0.55)] -translate-y-1.5 scale-[1.015]"
+                        ? "ring-2 ring-primary shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.25)] -translate-y-1.5"
                         : ""
                     }`}
                     style={{ animationDelay: `${i * 0.06}s` }}
@@ -1102,7 +1102,7 @@ const Index = () => {
                     {/* premium top sheen */}
                     <span
                       aria-hidden
-                      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     />
                     {/* gradient halo on hover */}
                     <span
@@ -1110,28 +1110,34 @@ const Index = () => {
                       className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                       style={{
                         background:
-                          "radial-gradient(600px circle at 50% -20%, hsl(var(--gold) / 0.18), transparent 40%)",
+                          "radial-gradient(600px circle at 50% -20%, hsl(var(--primary) / 0.10), transparent 40%)",
                       }}
                     />
-                    <div className="relative aspect-[16/10] overflow-hidden border-b border-border bg-[#0B1F3A]">
+                    <div
+                      className="relative aspect-[16/10] overflow-hidden border-b border-border"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, #FFF5F5 0%, #FFE4E6 45%, #FFFFFF 100%)",
+                      }}
+                    >
                       <div
-                        className="absolute inset-0 opacity-40"
+                        className="absolute inset-0 opacity-50"
                         style={{
                           backgroundImage:
-                            "radial-gradient(hsl(var(--gold) / 0.18) 1px, transparent 1px)",
+                            "radial-gradient(hsl(var(--primary) / 0.18) 1px, transparent 1px)",
                           backgroundSize: "14px 14px",
                         }}
                         aria-hidden
                       />
                       <c.Icon
                         aria-label={`${c.category} category illustration`}
-                        className="relative h-full w-full p-6 transition-transform duration-700 group-hover:scale-110"
+                        className="relative h-full w-full p-6 text-primary transition-transform duration-700 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/70 via-transparent to-transparent" />
                     </div>
 
                     <div className="relative flex flex-1 flex-col p-7">
-                      <span className="inline-flex w-fit items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
+                      <span className="inline-flex w-fit items-center rounded-full border border-[hsl(0_84%_82%)] bg-[hsl(0_86%_97%)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
                         {c.category}
                       </span>
 
