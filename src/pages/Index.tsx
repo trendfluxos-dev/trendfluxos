@@ -412,7 +412,7 @@ const Index = () => {
             <button
               type="button"
               onClick={() => setQuoteOpen(true)}
-              className="hidden sm:inline-flex whitespace-nowrap rounded-full bg-gold px-3.5 md:px-4 lg:px-5 py-2 md:py-2.5 text-xs lg:text-sm font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+              className="hidden sm:inline-flex md:hidden lg:inline-flex whitespace-nowrap rounded-full bg-gold px-3.5 lg:px-5 py-2 lg:py-2.5 text-xs lg:text-sm font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
             >
               <span className="hidden lg:inline">Launch Growth System</span>
               <span className="lg:hidden">Launch System</span>
