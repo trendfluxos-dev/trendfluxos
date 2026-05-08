@@ -41,7 +41,7 @@ const Footer = () => {
           </h4>
           <ul className="space-y-3 text-sm text-foreground/70">
             <li><Link to="/project-lead" className="hover:text-primary transition-colors">Project Lead</Link></li>
-            <li><Link to="/brand-open" className="hover:text-primary transition-colors">Brand Tok</Link></li>
+            <li><Link to="/brand-open" className="hover:text-primary transition-colors">Studio BrandToki</Link></li>
             <li><Link to="/trendflux-talent" className="hover:text-primary transition-colors">TrendFlux Talent</Link></li>
             <li>
               <Link to="/luxe-veil" className="hover:text-primary transition-colors inline-flex items-center gap-1">

@@ -1246,7 +1246,7 @@ const Index = () => {
                 <Megaphone className="h-5 w-5 text-gold" />
                 <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">01 · Open</span>
               </div>
-              <h3 className="relative mt-3 font-display text-lg font-semibold text-foreground">Brand Tok</h3>
+              <h3 className="relative mt-3 font-display text-lg font-semibold text-foreground">Studio BrandToki</h3>
               <p className="relative mt-1 text-xs text-foreground/55">Mass storytelling for everyone.</p>
             </Link>
 
