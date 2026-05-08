@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Linkedin, Twitter, Instagram, Mail } from "lucide-react";
 import { BRAND } from "@/config/brand";
+import SocialIcons from "@/components/social/SocialIcons";
 
 const Footer = () => {
   return (
@@ -18,17 +18,8 @@ const Footer = () => {
             to operate beyond random marketing.
           </p>
 
-          <div className="flex gap-3 mt-6">
-            {[Linkedin, Twitter, Instagram, Mail].map((Icon, i) => (
-              <a
-                key={i}
-                href="#"
-                aria-label="Social link"
-                className="w-10 h-10 rounded-full glass flex items-center justify-center text-foreground/70 hover:text-primary hover:border-primary/40 transition-all"
-              >
-                <Icon className="w-4 h-4" />
-              </a>
-            ))}
+          <div className="mt-6">
+            <SocialIcons brand="trendflux" variant="footer" size="md" />
           </div>
         </div>
 
