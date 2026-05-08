@@ -1208,7 +1208,7 @@ const Index = () => {
               onClick={() => setQuoteOpen(true)}
               className="inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
             >
-              Start Operations <ArrowRight className="w-4 h-4" />
+              Launch Growth System <ArrowRight className="w-4 h-4" />
             </button>
             <button
               type="button"
