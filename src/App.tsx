@@ -1,23 +1,20 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Suspense } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
-import ProjectLead from "./pages/ProjectLead.tsx";
-import Auth from "./pages/Auth.tsx";
-import Admin from "./pages/Admin.tsx";
-import LuxeVeilAdmin from "./pages/LuxeVeilAdmin.tsx";
-import PressDetail from "./pages/PressDetail.tsx";
-import Marriage from "./pages/Marriage.tsx";
-import BrandOpen from "./pages/BrandOpen.tsx";
-import TrendfluxTalent from "./pages/TrendfluxTalent.tsx";
-import LuxeVeil from "./pages/LuxeVeil.tsx";
-import CaseStudyPage from "./pages/CaseStudyPage.tsx";
+import { routes } from "./lib/routes";
 import ScrollToTop from "./components/ScrollToTop";
+import CommandPalette from "./components/CommandPalette";
 
 const queryClient = new QueryClient();
+
+const PageFallback = () => (
+  <div className="flex min-h-screen items-center justify-center bg-background">
+    <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -26,21 +23,24 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/project-lead" element={<ProjectLead />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/luxe-veil" element={<LuxeVeilAdmin />} />
-          <Route path="/press/:id" element={<PressDetail />} />
-          <Route path="/marriage" element={<Marriage />} />
-          <Route path="/brand-open" element={<BrandOpen />} />
-          <Route path="/trendflux-talent" element={<TrendfluxTalent />} />
-          <Route path="/luxe-veil" element={<LuxeVeil />} />
-          <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <CommandPalette />
+        <Suspense fallback={<PageFallback />}>
+          <Routes>
+            <Route path="/" element={<routes["/"] />} />
+            <Route path="/project-lead" element={<routes["/project-lead"] />} />
+            <Route path="/auth" element={<routes["/auth"] />} />
+            <Route path="/admin" element={<routes["/admin"] />} />
+            <Route path="/admin/luxe-veil" element={<routes["/admin/luxe-veil"] />} />
+            <Route path="/press/:id" element={<routes["/press/:id"] />} />
+            <Route path="/marriage" element={<routes["/marriage"] />} />
+            <Route path="/brand-open" element={<routes["/brand-open"] />} />
+            <Route path="/trendflux-talent" element={<routes["/trendflux-talent"] />} />
+            <Route path="/luxe-veil" element={<routes["/luxe-veil"] />} />
+            <Route path="/case-studies/:slug" element={<routes["/case-studies/:slug"] />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<routes["*"] />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
