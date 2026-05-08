@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/command";
 import { navigablePages, preloadRoute, type PageType } from "@/lib/routes";
 import { fuzzyMatch, highlight } from "@/lib/fuzzy";
+import { rankWeights } from "@/lib/commandPaletteConfig";
 
 type Scored = {
   page: (typeof navigablePages)[number];
@@ -53,21 +54,16 @@ export const CommandPalette = () => {
       const pathM = fuzzyMatch(page.path, query);
       const kwM = fuzzyMatch(page.keywords ?? "", query);
       const typeM = fuzzyMatch(page.type, query);
-      const best = [labelM, pathM, kwM, typeM].filter(Boolean) as {
-        score: number;
-        indices: number[];
-      }[];
-      if (query && best.length === 0) continue;
+      const matched = [labelM, pathM, kwM, typeM].some(Boolean);
+      if (query && !matched) continue;
+      const w = rankWeights;
+      // Weighted sum so a strong label hit + supporting keyword hit
+      // ranks higher than a single field match.
       const score =
-        (labelM?.score ?? -Infinity) * 1.5 >
-        Math.max(pathM?.score ?? -Infinity, kwM?.score ?? -Infinity, typeM?.score ?? -Infinity)
-          ? (labelM?.score ?? 0) * 1.5
-          : Math.max(
-              pathM?.score ?? 0,
-              kwM?.score ?? 0,
-              typeM?.score ?? 0,
-              labelM?.score ?? 0,
-            );
+        (labelM ? labelM.score * w.label : 0) +
+        (kwM ? kwM.score * w.keywords : 0) +
+        (typeM ? typeM.score * w.section : 0) +
+        (pathM ? pathM.score * w.path : 0);
       scored.push({
         page,
         score,
