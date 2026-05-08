@@ -8,6 +8,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
 import { SocialShare } from "@/components/SocialShare";
+import { BRAND_CONTACTS } from "@/config/socialConfig";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -279,9 +280,22 @@ const RequestInviteForm = () => {
 
   if (done) {
     return (
-      <p className="mt-6 text-xs uppercase tracking-[0.3em] text-gold">
-        ✓ Request received — we'll be in touch privately.
-      </p>
+      <div className="mt-6 space-y-3">
+        <p className="text-xs uppercase tracking-[0.3em] text-gold">
+          ✓ Request received — continue privately on Telegram.
+        </p>
+        <a
+          href={BRAND_CONTACTS.luxeveil.telegram!.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.25em] text-[#0c2218] hover:opacity-90 transition"
+        >
+          Speak With Concierge
+        </a>
+        <p className="text-[10px] uppercase tracking-[0.3em] text-gold/60">
+          Group · {BRAND_CONTACTS.luxeveil.telegram!.groupName}
+        </p>
+      </div>
     );
   }
 
@@ -320,6 +334,14 @@ const RequestInviteForm = () => {
         .invoke("send-luxe-veil-request", { body: parsed.data })
         .catch(() => undefined);
       setDone(true);
+      // Auto-redirect to private Telegram concierge in a new tab
+      try {
+        window.open(BRAND_CONTACTS.luxeveil.telegram!.url, "_blank", "noopener,noreferrer");
+      } catch { /* noop */ }
+      toast({
+        title: "Request received",
+        description: `Continue privately with ${BRAND_CONTACTS.luxeveil.telegram!.displayName} on Telegram.`,
+      });
     } catch {
       toast({ title: "Could not submit", description: "Please try again or email zhemongrowth@gmail.com.", variant: "destructive" });
     } finally {

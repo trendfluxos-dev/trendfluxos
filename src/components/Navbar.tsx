@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/brand";
+import SocialIcons from "@/components/social/SocialIcons";
 
 const links = [
   { label: "Systems", href: "/#services" },
@@ -48,6 +49,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
+            <SocialIcons variant="inline" size="sm" className="hidden lg:flex mr-1" />
             <button
               type="button"
               onClick={openPalette}

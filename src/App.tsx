@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { routes } from "./lib/routes";
 import ScrollToTop from "./components/ScrollToTop";
 import CommandPalette from "./components/CommandPalette";
+import FloatingContact from "./components/social/FloatingContact";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
       <BrowserRouter>
         <ScrollToTop />
         <CommandPalette />
+        <FloatingContact />
         <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />
