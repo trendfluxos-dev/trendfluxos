@@ -128,11 +128,17 @@ const CaseStudies = () => {
   const consult = consultIndex !== null ? cases[consultIndex] : null;
 
   const metrics = [
-    { value: "485K+", label: "Organic Views Generated" },
-    { value: "+45%", label: "Avg. Engagement Growth" },
-    { value: "24/7", label: "AI Automation Layer" },
-    { value: "3", label: "Multi-Brand Ecosystems Live" },
+    { value: "485K+", label: "Organic Views Generated", tone: "green" as const },
+    { value: "+45%", label: "Avg. Engagement Growth", tone: "green" as const },
+    { value: "24/7", label: "AI Automation Layer", tone: "orange" as const },
+    { value: "3", label: "Multi-Brand Ecosystems Live", tone: "red" as const },
   ];
+
+  const toneDot: Record<"green" | "orange" | "red", string> = {
+    green: "bg-brand-green",
+    orange: "bg-brand-orange",
+    red: "bg-primary",
+  };
 
   return (
     <section
@@ -141,19 +147,19 @@ const CaseStudies = () => {
       aria-labelledby="cases-heading"
     >
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 sm:mb-12">
           <div>
-            <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
+            <p className="text-primary uppercase tracking-[0.28em] text-[11px] font-semibold mb-3">
               Operator Casebook
             </p>
             <h2
               id="cases-heading"
-              className="font-display text-3xl md:text-5xl font-bold max-w-2xl"
+              className="font-display text-[26px] leading-[1.15] sm:text-4xl md:text-5xl font-bold max-w-2xl tracking-tight text-foreground"
             >
-              Real systems. <span className="text-gradient">Measurable outcomes.</span>
+              Real systems. <span className="text-primary">Measurable outcomes.</span>
             </h2>
           </div>
-          <p className="text-foreground/60 max-w-md text-sm">
+          <p className="text-foreground/65 max-w-md text-sm leading-relaxed">
             Each engagement is engineered as a system — content, paid, automation,
             and analytics designed to compound over time.
           </p>
@@ -161,27 +167,31 @@ const CaseStudies = () => {
 
         {/* Metrics strip */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-10"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 mb-8 sm:mb-10"
           aria-label="Ecosystem performance metrics"
         >
           {metrics.map((m) => (
             <div
               key={m.label}
-              className="glass rounded-2xl p-5 text-center transition-transform duration-300 hover:-translate-y-0.5"
+              className="rounded-2xl bg-card border border-border p-3.5 sm:p-5 text-center shadow-[0_1px_2px_hsl(0_0%_0%/0.04)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_10px_28px_-16px_hsl(var(--primary)/0.35)]"
             >
-              <div className="font-display text-2xl md:text-3xl font-bold text-gradient">
+              <div className="flex items-center justify-center gap-1.5">
+                <span className={`h-1.5 w-1.5 rounded-full ${toneDot[m.tone]}`} aria-hidden />
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-foreground/50 font-semibold">Live</span>
+              </div>
+              <div className="mt-1.5 font-display text-xl sm:text-2xl md:text-3xl font-bold text-foreground tracking-tight">
                 {m.value}
               </div>
-              <div className="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.22em] text-foreground/55">
+              <div className="mt-1.5 text-[9.5px] sm:text-xs uppercase tracking-[0.18em] text-foreground/60 leading-tight">
                 {m.label}
               </div>
             </div>
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-5 sm:gap-6">
           <ul
-            className="space-y-5 lg:max-h-[640px] lg:overflow-y-auto pr-1 scroll-smooth list-none"
+            className="space-y-4 sm:space-y-5 lg:max-h-[640px] lg:overflow-y-auto lg:pr-1 scroll-smooth list-none"
             role="list"
           >
             {cases.map((c, i) => {
@@ -192,40 +202,47 @@ const CaseStudies = () => {
                   <article
                     aria-labelledby={titleId}
                     aria-describedby={metricId}
-                    className="glass glass-hover rounded-3xl p-7 group"
+                    className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-card border border-border p-5 sm:p-7 group shadow-[0_1px_2px_hsl(0_0%_0%/0.04)] transition-all duration-200 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_18px_44px_-20px_hsl(var(--primary)/0.28)]"
                     style={{ animationDelay: `${i * 0.08}s` }}
                   >
-                    <header className="flex items-center justify-between">
-                      <p className="text-[10px] uppercase tracking-[0.3em] text-primary">
+                    <span
+                      aria-hidden
+                      className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-primary via-primary/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    />
+                    <header className="flex items-center justify-between gap-3">
+                      <p className="text-[10px] uppercase tracking-[0.28em] text-primary font-semibold">
                         <span className="sr-only">Case study number </span>
                         Case Study · 0{i + 1}
                       </p>
                       <ArrowUpRight
                         aria-hidden
-                        className="w-5 h-5 text-foreground/40 group-hover:text-primary group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all"
+                        className="w-5 h-5 text-foreground/35 group-hover:text-primary group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-200"
                       />
                     </header>
 
                     <h3
                       id={titleId}
-                      className="font-display text-2xl font-bold mt-4"
+                      className="font-display text-xl sm:text-2xl font-bold mt-3 sm:mt-4 text-foreground tracking-tight leading-snug"
                     >
                       {c.title}
                     </h3>
-                    <p
-                      id={metricId}
-                      className="text-gold font-semibold mt-2"
-                    >
-                      <span className="sr-only">Outcome metric: </span>
-                      {c.metric}
-                    </p>
+                    <div className="mt-2.5">
+                      <span
+                        id={metricId}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(0_86%_97%)] border border-primary/20 px-2.5 py-1 text-xs sm:text-[13px] font-semibold text-primary"
+                      >
+                        <span className="sr-only">Outcome metric: </span>
+                        <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />
+                        {c.metric}
+                      </span>
+                    </div>
 
                     <h4 className="sr-only">Stack used</h4>
-                    <ul className="flex flex-wrap gap-2 mt-4 list-none" aria-label={`${c.title} stack`}>
+                    <ul className="flex flex-wrap gap-1.5 sm:gap-2 mt-4 list-none" aria-label={`${c.title} stack`}>
                       {c.stack.map((t) => (
                         <li
                           key={t}
-                          className="text-xs px-3 py-1 rounded-full bg-foreground/5 border border-border text-foreground/70"
+                          className="text-[11px] sm:text-xs px-2.5 sm:px-3 py-1 rounded-full bg-secondary border border-border text-foreground/75"
                         >
                           {t}
                         </li>
@@ -233,11 +250,11 @@ const CaseStudies = () => {
                     </ul>
 
                     <h4 className="sr-only">Outcome summary</h4>
-                    <p className="text-foreground/70 mt-5 leading-relaxed">
+                    <p className="text-foreground/75 mt-4 sm:mt-5 leading-relaxed text-sm sm:text-[15px]">
                       {c.outcome}
                     </p>
 
-                    <div className="flex flex-wrap gap-3 mt-6">
+                    <div className="flex flex-wrap gap-2.5 sm:gap-3 mt-5 sm:mt-6">
                       <Button
                         variant="glass"
                         size="sm"
@@ -259,7 +276,7 @@ const CaseStudies = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-primary hover:text-primary"
+                        className="text-primary hover:text-primary hover:bg-primary/5"
                         aria-label={`${c.buttons[1]} about ${c.title}`}
                         aria-haspopup="dialog"
                         aria-expanded={consultIndex === i}
@@ -308,7 +325,7 @@ const CaseStudies = () => {
                 >
                   {active.title}
                 </DialogTitle>
-                <p className="text-gold font-semibold">{active.metric}</p>
+                <p className="text-primary font-semibold">{active.metric}</p>
               </DialogHeader>
 
               <DialogDescription
@@ -334,8 +351,8 @@ const CaseStudies = () => {
                 </ul>
               </section>
 
-              <section aria-label="Outcomes" className="rounded-2xl border border-gold/20 bg-gold/5 p-4">
-                <h4 className="text-[10px] uppercase tracking-[0.25em] text-gold mb-2 font-semibold">
+              <section aria-label="Outcomes" className="rounded-2xl border border-primary/20 bg-[hsl(0_86%_98%)] p-4">
+                <h4 className="text-[10px] uppercase tracking-[0.25em] text-primary mb-2 font-semibold">
                   Outcomes
                 </h4>
                 <ul className="grid gap-1.5 sm:grid-cols-2 list-none">
@@ -381,7 +398,7 @@ const CaseStudies = () => {
           {consult && (
             <>
               <DialogHeader>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-gold">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
                   {consult.buttons[1]}
                 </p>
                 <DialogTitle
@@ -390,15 +407,15 @@ const CaseStudies = () => {
                 >
                   Build a system like {consult.title}
                 </DialogTitle>
-                <p className="text-gold/80 font-semibold text-sm">{consult.metric}</p>
+                <p className="text-primary font-semibold text-sm">{consult.metric}</p>
               </DialogHeader>
 
               <DialogDescription className="text-foreground/75 leading-relaxed">
                 {consult.consultPitch}
               </DialogDescription>
 
-              <div className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold mb-2">
+              <div className="rounded-2xl border border-border bg-secondary p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary mb-2">
                   Reach the operator directly
                 </p>
                 <SocialIcons brand="trendflux" variant="inline" size="md" />
