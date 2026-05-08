@@ -15,9 +15,13 @@ const tierMeta: Record<Tier, { label: string; sub: string; tone: string }> = {
 export const BrandShell = ({
   tier,
   children,
+  whatsappOverride,
+  hideFacebook = false,
 }: {
   tier: Tier;
   children: ReactNode;
+  whatsappOverride?: string;
+  hideFacebook?: boolean;
 }) => {
   const meta = tierMeta[tier];
   return (
@@ -61,7 +65,24 @@ export const BrandShell = ({
 
       <div className="relative max-w-6xl mx-auto px-5 pb-6 flex flex-col items-center gap-6">
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <PrimaryContactCTA />
+          {whatsappOverride ? (
+            <a
+              href={whatsappOverride}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Talk on WhatsApp"
+              className="group inline-flex items-center gap-2 rounded-full border border-primary/60 bg-primary/5 px-5 py-2.5 text-xs uppercase tracking-[0.25em] text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:-translate-y-0.5 hover:shadow-[0_10px_30px_hsl(var(--primary)/0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                <path d="M20.52 3.48A11.86 11.86 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.84c0 2.09.55 4.13 1.6 5.93L0 24l6.4-1.68a11.83 11.83 0 0 0 5.64 1.43h.01c6.54 0 11.84-5.3 11.84-11.84 0-3.16-1.23-6.13-3.37-8.43Z" />
+              </svg>
+              <span>Talk on WhatsApp</span>
+              <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          ) : (
+            <PrimaryContactCTA />
+          )}
+          {!hideFacebook && (
           <a
             href="https://www.facebook.com/studiobrandtoki"
             target="_blank"
@@ -73,8 +94,9 @@ export const BrandShell = ({
             <span>Connect on Official Facebook</span>
             <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
+          )}
         </div>
-        <FacebookPageEmbed />
+        {!hideFacebook && <FacebookPageEmbed />}
       </div>
 
       <BrandFunnelFooter active={tier} />
