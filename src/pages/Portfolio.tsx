@@ -32,6 +32,11 @@ import proofLeadershipOverview from "@/assets/proof/leadership-overview.png";
 import proofPzswa from "@/assets/proof/pzswa-presidential.png";
 import proofNdfBd from "@/assets/proof/ndf-bd-appointment.png";
 import proofPds from "@/assets/proof/pds-leadership.png";
+import proofCovid from "@/assets/proof/covid-volunteer.png";
+import proofTrainingOverview from "@/assets/proof/training-overview.png";
+import proofTrainingCerts from "@/assets/proof/training-certificates.png";
+import proofParticipation from "@/assets/proof/participation-achievement.png";
+import proofIdentification from "@/assets/proof/official-identification.png";
 
 const NAV = [
   { label: "About", href: "#about" },
@@ -221,10 +226,10 @@ const PROOF: { cat: string; title: string; desc: string; images?: string[] }[] =
   { cat: "Leadership", title: "Presidential Leadership — PZSWA", desc: "President, Pabna Zilla Chhatra Kallyan Samiti, JU (2021)", images: [proofPzswa, proofLeadershipOverview] },
   { cat: "Leadership", title: "NDF-BD Appointment", desc: "Organizing Secretary (Event), National Debate Federation BD", images: [proofNdfBd] },
   { cat: "Leadership", title: "PDS — Life Member & Advisor", desc: "Pabna Debate Society — Advisory Board (2021–22)", images: [proofPds] },
-  { cat: "Volunteer", title: "COVID-19 Volunteer ID", desc: "Frontline volunteer — Pabna Police Super Office" },
-  { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC" },
-  { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates" },
-  { cat: "Identity", title: "Official Identification", desc: "University ID · National ID · Birth Certificate" },
+  { cat: "Volunteer", title: "COVID-19 Volunteer ID", desc: "Frontline volunteer — Pabna Police Super Office", images: [proofCovid] },
+  { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC", images: [proofTrainingCerts, proofTrainingOverview] },
+  { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates", images: [proofParticipation] },
+  { cat: "Identity", title: "Official Identification", desc: "University ID · National ID · Birth Certificate", images: [proofIdentification] },
 ];
 const PROOF_CATS = ["All", "Education", "Leadership", "Volunteer", "Training", "Identity"] as const;
 
