@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/brand";
 
@@ -10,6 +11,17 @@ const links = [
 
 const Navbar = () => {
   const { pathname } = useLocation();
+  const [isMac, setIsMac] = useState(false);
+
+  useEffect(() => {
+    setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform));
+  }, []);
+
+  const openPalette = () => {
+    window.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "k", ctrlKey: !isMac, metaKey: isMac, bubbles: true }),
+    );
+  };
 
   return (
     <header className="fixed top-0 inset-x-0 z-50">
@@ -35,9 +47,23 @@ const Navbar = () => {
             ))}
           </div>
 
-          <Button variant="hero" size="sm" className="hidden sm:inline-flex">
-            Book Call
-          </Button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={openPalette}
+              aria-label={`Open command palette (${isMac ? "Cmd" : "Ctrl"}+K)`}
+              title="Quick jump to any page"
+              className="hidden md:inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/40 px-3 py-1.5 text-xs text-foreground/70 hover:text-primary hover:border-primary/50 transition-colors"
+            >
+              <span>Quick jump</span>
+              <kbd className="rounded border border-border/60 bg-muted px-1.5 py-0.5 font-mono text-[10px] leading-none">
+                {isMac ? "⌘" : "Ctrl"} K
+              </kbd>
+            </button>
+            <Button variant="hero" size="sm" className="hidden sm:inline-flex">
+              Book Call
+            </Button>
+          </div>
         </nav>
       </div>
     </header>
