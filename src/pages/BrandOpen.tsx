@@ -76,7 +76,7 @@ const BrandOpen = () => {
         ].map(({ icon: I, t, d }, i) => (
           <div
             key={t}
-            className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white p-5 hover:border-[#E5E7EB] hover:-translate-y-0.5 transition-all"
+            className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white p-5 hover:border-[#111111] hover:-translate-y-0.5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-all"
           >
             <div aria-hidden className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
             <div className="flex items-center justify-between">

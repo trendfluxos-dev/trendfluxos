@@ -22,7 +22,7 @@ export const Testimonials = ({
         {items.map((t) => (
           <figure
             key={t.name}
-            className="rounded-2xl border border-[#E5E7EB] bg-white p-6 flex flex-col"
+            className="rounded-2xl border border-[#E5E7EB] bg-white p-6 flex flex-col shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition"
           >
             <span className="text-3xl text-gold leading-none">“</span>
             <blockquote className="mt-2 text-sm text-[#4B5563] leading-relaxed flex-1">
