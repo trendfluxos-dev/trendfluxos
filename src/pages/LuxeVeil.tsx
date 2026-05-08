@@ -400,20 +400,12 @@ const useChatTargets = () => {
     let cancelled = false;
     (async () => {
       try {
-        const { data } = await supabase.functions.invoke("telegram-submit", {
-          body: null,
-          method: "GET" as never,
-        }).catch(() => ({ data: null as never }));
-        // Fallback: call via fetch with ?action=targets
         const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/telegram-submit?action=targets`;
         const res = await fetch(url, {
           headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
         });
         const j = await res.json();
         if (!cancelled && j?.ok && Array.isArray(j.targets)) setTargets(j.targets);
-        else if (!cancelled && data && (data as any).ok && Array.isArray((data as any).targets)) {
-          setTargets((data as any).targets);
-        }
       } catch { /* ignore */ }
     })();
     return () => { cancelled = true; };
