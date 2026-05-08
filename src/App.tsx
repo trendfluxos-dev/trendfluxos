@@ -8,6 +8,8 @@ import { routes } from "./lib/routes";
 import ScrollToTop from "./components/ScrollToTop";
 import CommandPalette from "./components/CommandPalette";
 import FloatingContact from "./components/social/FloatingContact";
+import BrandSwitcher from "./components/social/BrandSwitcher";
+import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 
 const queryClient = new QueryClient();
 
@@ -36,10 +38,12 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ScrollToTop />
-        <CommandPalette />
-        <FloatingContact />
-        <Suspense fallback={<PageFallback />}>
+        <BrandPreviewProvider>
+          <ScrollToTop />
+          <CommandPalette />
+          <FloatingContact />
+          <BrandSwitcher />
+          <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/project-lead" element={<ProjectLead />} />
@@ -56,6 +60,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
+        </BrandPreviewProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
