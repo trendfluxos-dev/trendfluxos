@@ -341,7 +341,7 @@ const CaseStudies = () => {
                 <ul className="grid gap-1.5 sm:grid-cols-2 list-none">
                   {active.outcomes.map((r) => (
                     <li key={r} className="flex items-start gap-2 text-sm text-foreground/85">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand-green" />
                       <span>{r}</span>
                     </li>
                   ))}
