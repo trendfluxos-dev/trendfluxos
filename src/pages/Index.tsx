@@ -1346,10 +1346,7 @@ const Index = () => {
               Unlock Experience
             </button>
             <p className="text-center text-[10px] uppercase tracking-[0.3em] text-white/40">
-              Don't have a code?{" "}
-              <Link to="/luxe-veil" className="text-gold/80 hover:text-gold" onClick={() => setVeilOpen(false)}>
-                Request invitation
-              </Link>
+              Access by referral only. No public registration.
             </p>
           </form>
         </DialogContent>
