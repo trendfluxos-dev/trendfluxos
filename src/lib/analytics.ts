@@ -1,77 +1,50 @@
-// Lightweight analytics helper. Forwards to GA4 (gtag) and GTM (dataLayer) when present,
-// and is a no-op otherwise. Safe to call from anywhere.
+// Lightweight analytics wrapper.
+// Pushes to window.dataLayer (GA4 / GTM compatible) and dispatches a CustomEvent
+// so any other tag (Meta Pixel, PostHog, Plausible, etc.) can listen.
+// Safe no-op if no analytics tag is installed.
 
-type EventParams = Record<string, string | number | boolean | null | undefined>;
+export type AnalyticsParams = Record<string, string | number | boolean | undefined>;
 
 declare global {
   interface Window {
+    dataLayer?: Array<Record<string, unknown>>;
     gtag?: (...args: unknown[]) => void;
+    fbq?: (...args: unknown[]) => void;
   }
 }
 
-const STORAGE_KEY = "tf_analytics_events";
-const MAX_STORED = 500;
+export function trackEvent(event: string, params: AnalyticsParams = {}) {
+  const payload = {
+    event,
+    ...params,
+    timestamp: new Date().toISOString(),
+  };
 
-export type StoredEvent = {
-  event: string;
-  params: EventParams;
-  ts: number;
-};
-
-export const ANALYTICS_EVENT = "tf:analytics";
-
-function persist(event: string, params: EventParams) {
-  if (typeof window === "undefined" || !window.localStorage) return;
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    const list: StoredEvent[] = raw ? JSON.parse(raw) : [];
-    list.push({ event, params, ts: Date.now() });
-    const trimmed = list.slice(-MAX_STORED);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
-    try {
-      window.dispatchEvent(new CustomEvent(ANALYTICS_EVENT, { detail: { event } }));
-    } catch {
-      /* noop */
-    }
-  } catch {
-    /* ignore quota / parse errors */
-  }
-}
+    if (typeof window === "undefined") return;
 
-export function readStoredEvents(): StoredEvent[] {
-  if (typeof window === "undefined" || !window.localStorage) return [];
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as StoredEvent[]) : [];
-  } catch {
-    return [];
-  }
-}
+    // GA4 / GTM dataLayer
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(payload);
 
-export function clearStoredEvents() {
-  if (typeof window === "undefined" || !window.localStorage) return;
-  try {
-    window.localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    /* noop */
-  }
-}
-
-export function track(event: string, params: EventParams = {}) {
-  if (typeof window === "undefined") return;
-  try {
+    // gtag (if GA4 installed directly)
     if (typeof window.gtag === "function") {
       window.gtag("event", event, params);
     }
-    if (Array.isArray(window.dataLayer)) {
-      window.dataLayer.push({ event, ...params });
+
+    // Meta Pixel (if installed) — only for known conversion events
+    if (typeof window.fbq === "function" && event === "lead_submit") {
+      window.fbq("track", "Lead", params);
     }
-    persist(event, params);
+
+    // Custom event for any other listener
+    window.dispatchEvent(new CustomEvent("tf:analytics", { detail: payload }));
+
     if (import.meta.env.DEV) {
       // eslint-disable-next-line no-console
       console.debug("[analytics]", event, params);
     }
   } catch {
-    /* never throw from analytics */
+    // Never let analytics break the UI
   }
 }
