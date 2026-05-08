@@ -3,6 +3,7 @@ import { Megaphone, Sparkles, Zap } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
+import brandTokiLogo from "@/assets/brandtoki-logo.png";
 
 const BrandOpen = () => {
   useSeo({
@@ -44,20 +45,18 @@ const BrandOpen = () => {
         {/* Logo mark */}
         <div className="relative mt-10 flex flex-col items-center">
           <div className="relative">
-            <div className="absolute inset-0 blur-2xl bg-gold/20 rounded-full" />
-            <div className="relative flex items-end justify-center">
-              <span className="font-display text-6xl md:text-7xl font-bold text-[#111111] tracking-tight">
-                Brand
-              </span>
-            </div>
-            <div className="relative mt-2 inline-flex items-center justify-center bg-primary text-primary-foreground px-6 py-3 rounded-md shadow-[0_12px_28px_-10px_hsl(var(--primary)/0.55)]">
-              <span className="font-display text-5xl md:text-6xl font-extrabold tracking-tight leading-none">
-                ব্র্যান্ড
-              </span>
-              <Megaphone className="w-7 h-7 ml-3" strokeWidth={2.4} />
-            </div>
+            <div aria-hidden className="absolute inset-0 blur-2xl bg-primary/15 rounded-full" />
+            <img
+              src={brandTokiLogo}
+              alt="Studio BrandToki logo"
+              className="relative w-28 h-28 md:w-32 md:h-32 object-contain mx-auto drop-shadow-[0_10px_30px_rgba(0,0,0,0.12)]"
+              loading="eager"
+            />
           </div>
-          <p className="mt-6 text-sm uppercase tracking-[0.3em] text-gold/80">
+          <h1 className="mt-6 font-display text-5xl md:text-6xl font-bold tracking-tight text-[#111111]">
+            Studio <span className="text-primary">BrandToki</span>
+          </h1>
+          <p className="mt-4 text-sm md:text-base uppercase tracking-[0.3em] text-primary/80">
             Helping Brands Tell Their Stories
           </p>
         </div>
