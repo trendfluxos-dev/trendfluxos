@@ -1,4 +1,5 @@
 import { ArrowRight, ShieldCheck, Workflow, LayoutDashboard, Database, Boxes, KeyRound, ExternalLink } from "lucide-react";
+import enterpriseMark from "@/assets/trendflux-enterprise-mark.png";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -62,6 +63,11 @@ const Enterprise = () => {
         <div className="absolute bottom-10 left-10 w-80 h-80 rounded-full bg-gold/10 blur-3xl animate-float [animation-delay:2s]" aria-hidden />
 
         <div className="relative max-w-6xl mx-auto text-center animate-fade-up">
+          <img
+            src={enterpriseMark}
+            alt="TrendFlux Enterprise Control"
+            className="mx-auto h-20 md:h-24 w-auto object-contain mb-6 drop-shadow-[0_0_25px_hsl(var(--primary)/0.25)]"
+          />
           <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-primary mb-8">
             <ShieldCheck className="w-3.5 h-3.5" />
             {ENTERPRISE.tagline}
@@ -177,9 +183,11 @@ const Enterprise = () => {
 
               <div className="lg:col-span-3">
                 <div className="rounded-2xl border border-border/60 bg-background/60 p-8 text-center">
-                  <div className="mx-auto w-12 h-12 rounded-xl bg-gold/15 text-gold flex items-center justify-center mb-4">
-                    <ShieldCheck className="w-6 h-6" />
-                  </div>
+                  <img
+                    src={enterpriseMark}
+                    alt="TrendFlux Enterprise Control"
+                    className="mx-auto h-14 w-auto object-contain mb-4"
+                  />
                   <p className="font-display text-xl font-semibold">Enterprise Control</p>
                   <p className="text-xs uppercase tracking-[0.25em] text-foreground/40 mt-2">
                     {ENTERPRISE.tagline}

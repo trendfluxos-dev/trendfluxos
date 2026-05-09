@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { z } from "zod";
-import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Loader2, Circle, Mail, CalendarCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -109,6 +109,30 @@ const EnterpriseDemoForm = () => {
   };
 
   if (success) {
+    const steps = [
+      {
+        key: "received",
+        title: "Request received",
+        body: "Your details are securely logged in our system.",
+        icon: CheckCircle2,
+        state: "done" as const,
+      },
+      {
+        key: "review",
+        title: "Review by our team",
+        body: "We'll match your context to the right TrendFlux operator (typically within 2–4 business hours).",
+        icon: Mail,
+        state: "current" as const,
+      },
+      {
+        key: "scheduled",
+        title: "Demo scheduled",
+        body: "You'll receive a calendar invite at the email below.",
+        icon: CalendarCheck,
+        state: "upcoming" as const,
+      },
+    ];
+
     return (
       <div className="glass-strong rounded-3xl p-8 md:p-10 max-w-2xl mx-auto text-center">
         <div className="mx-auto w-14 h-14 rounded-2xl bg-primary/15 text-primary flex items-center justify-center">
@@ -118,9 +142,46 @@ const EnterpriseDemoForm = () => {
           Demo request received.
         </h3>
         <p className="mt-3 text-foreground/65 leading-relaxed">
-          We've logged your request and notified our team. You'll hear from us within
-          one business day.
+          Track your request below — we'll move it through each step and update you by email.
         </p>
+
+        {/* Status tracker */}
+        <ol className="mt-8 text-left space-y-4">
+          {steps.map((s, idx) => {
+            const Icon = s.state === "upcoming" ? Circle : s.icon;
+            const tone =
+              s.state === "done"
+                ? "bg-primary/15 text-primary border-primary/40"
+                : s.state === "current"
+                  ? "bg-gold/15 text-gold border-gold/40 animate-pulse"
+                  : "bg-background/50 text-foreground/40 border-border/60";
+            return (
+              <li key={s.key} className="flex gap-4 items-start">
+                <div className="flex flex-col items-center">
+                  <div
+                    className={`w-9 h-9 rounded-full border flex items-center justify-center ${tone}`}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </div>
+                  {idx < steps.length - 1 && (
+                    <div className="w-px flex-1 min-h-6 bg-border/60 mt-1" />
+                  )}
+                </div>
+                <div className="pb-2">
+                  <p className="font-semibold text-sm">
+                    {s.title}
+                    {s.state === "current" && (
+                      <span className="ml-2 text-[10px] uppercase tracking-[0.2em] text-gold">
+                        In progress
+                      </span>
+                    )}
+                  </p>
+                  <p className="text-xs text-foreground/60 mt-1 leading-relaxed">{s.body}</p>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
 
         <div className="mt-6 rounded-xl border border-border/60 bg-background/50 p-4 text-left text-sm text-foreground/70">
           <p>
