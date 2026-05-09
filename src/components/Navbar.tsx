@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/brand";
 import SocialIcons from "@/components/social/SocialIcons";
+import logo from "@/assets/trendflux-logo.png";
 
 const links = [
   { label: "Systems", href: "/#services" },
@@ -29,7 +30,7 @@ const Navbar = () => {
       <div className="mx-auto max-w-7xl px-6 lg:px-10 mt-4">
         <nav className="glass-strong rounded-full flex items-center justify-between px-5 py-3">
           <Link to="/" className="flex items-center gap-2 font-display font-bold text-lg whitespace-nowrap shrink-0">
-            <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-cyan animate-pulse-glow" />
+            <img src={logo} alt={`${BRAND.name} logo`} className="h-8 w-8 rounded-md object-contain" />
             <span className="text-gradient">{BRAND.nameLead}</span>
             <span className="text-foreground/60 font-normal">{BRAND.nameTrail}</span>
           </Link>
