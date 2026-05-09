@@ -160,26 +160,24 @@ const Enterprise = () => {
                   you to Finance, HR, Auditor, Admin or CEO from Roles &amp; Access.
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <Button asChild variant="hero">
-                    <a
-                      href={ENTERPRISE.portalUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => openPortal("enterprise_preview_signin")}
-                    >
-                      Sign in <ExternalLink className="w-4 h-4" />
-                    </a>
-                  </Button>
-                  <Button asChild variant="outline">
-                    <a
-                      href={ENTERPRISE.signupUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => openPortal("enterprise_preview_signup")}
-                    >
-                      Create workspace
-                    </a>
-                  </Button>
+                  <a
+                    href={ENTERPRISE.portalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => openPortal("enterprise_preview_signin")}
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-6 bg-gradient-cyan text-primary-foreground hover:shadow-cyan hover:-translate-y-0.5"
+                  >
+                    Sign in <ExternalLink className="w-4 h-4" />
+                  </a>
+                  <a
+                    href={ENTERPRISE.signupUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => openPortal("enterprise_preview_signup")}
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-6 border border-foreground/20 bg-transparent text-foreground hover:bg-foreground/10 hover:border-primary/50"
+                  >
+                    Create workspace
+                  </a>
                 </div>
               </div>
 
