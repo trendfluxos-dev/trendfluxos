@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
 import { ENTERPRISE } from "@/config/enterprise";
 import { track } from "@/lib/analytics";
-import logo from "@/assets/trendflux-logo.png";
+import logo from "@/assets/trendflux-enterprise-mark.png";
 
 const ClientLogin = () => {
   const navigate = useNavigate();
@@ -35,8 +35,8 @@ const ClientLogin = () => {
       <div className="glass-strong rounded-3xl p-10 max-w-lg w-full text-center">
         <img
           src={logo}
-          alt="TrendFlux logo"
-          className="h-12 w-12 mx-auto rounded-xl object-contain"
+          alt="TrendFlux Enterprise Control"
+          className="h-16 w-auto mx-auto object-contain"
         />
         <div className="mt-6 inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.25em] text-primary bg-primary/10">
           <ShieldCheck className="w-3.5 h-3.5" />

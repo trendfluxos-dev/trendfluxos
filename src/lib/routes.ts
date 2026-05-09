@@ -15,6 +15,7 @@ export const routes = {
   "/admin": make(() => import("@/pages/Admin")),
   "/admin/luxe-veil": make(() => import("@/pages/LuxeVeilAdmin")),
   "/admin/conversions": make(() => import("@/pages/ConversionDashboard")),
+  "/admin/enterprise-demos": make(() => import("@/pages/EnterpriseDemos")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
   "/trendflux-talent": make(() => import("@/pages/TrendfluxTalent")),
@@ -59,5 +60,6 @@ export const navigablePages: {
   { label: "Client Login", path: "/client-login", type: "Account", keywords: "client login portal sign in workspace enterprise" },
   { label: "Admin", path: "/admin", type: "Admin", keywords: "dashboard manage" },
   { label: "Luxe Veil Admin", path: "/admin/luxe-veil", type: "Admin", keywords: "admin luxe manage" },
+  { label: "Enterprise Demo Requests", path: "/admin/enterprise-demos", type: "Admin", keywords: "admin demos enterprise leads requests triage" },
   { label: "Sign In", path: "/auth", type: "Account", keywords: "login auth signin" },
 ];
