@@ -11,7 +11,6 @@ import CommandPalette from "./components/CommandPalette";
 import FloatingContact from "./components/social/FloatingContact";
 import BrandSwitcher from "./components/social/BrandSwitcher";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
-import { I18nProvider } from "./i18n";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +43,6 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <BrandPreviewProvider>
-          <I18nProvider>
           <ScrollToTop />
           <CommandPalette />
           <FloatingContact />
@@ -66,22 +64,10 @@ const App = () => (
             <Route path="/brandtoki" element={<BrandToki />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
-            {/* Bangla mirrors */}
-            <Route path="/bn" element={<Index />} />
-            <Route path="/bn/project-lead" element={<ProjectLead />} />
-            <Route path="/bn/press/:id" element={<PressDetail />} />
-            <Route path="/bn/marriage" element={<Marriage />} />
-            <Route path="/bn/brand-open" element={<BrandOpen />} />
-            <Route path="/bn/trendflux-talent" element={<TrendfluxTalent />} />
-            <Route path="/bn/luxe-veil" element={<LuxeVeil />} />
-            <Route path="/bn/brandtoki" element={<BrandToki />} />
-            <Route path="/bn/portfolio" element={<Portfolio />} />
-            <Route path="/bn/case-studies/:slug" element={<CaseStudyPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
-          </I18nProvider>
         </BrandPreviewProvider>
       </BrowserRouter>
     </TooltipProvider>

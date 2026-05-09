@@ -1,155 +1,99 @@
+## Phase 1 — Foundation & Positioning
 
-# Bilingual Site Plan — English + বাংলা
+Goal: lift TrendFlux from "agency site" to "AI-powered growth infrastructure company" through copy, structure, trust signals, and mobile polish. **No heavy animation in this phase.** Phase 2 (LUXE VEIL secrecy, brand-switch transitions, GSAP scroll, magnetic hovers) will be planned separately after Phase 1 is verified.
 
-Make the entire TrendFlux site available in both English (default) and Bengali, with clean `/en/...` and `/bn/...` URLs, a header language switcher, and AI-translated Bangla copy generated through Lovable AI (Gemini) into reviewable JSON files.
+### 1. CTA copy upgrade ("Start Operations" → enterprise framing)
+
+Replace every instance of `Start Operations` with **"Launch Growth System"** (primary) and a small set of approved secondary CTAs.
+
+- `src/config/brand.ts` → `BRAND.hero.primaryCta = "Launch Growth System"`, `secondaryCta = "Book Strategic Consultation"`.
+- `src/pages/Index.tsx` → desktop nav button (line 417) and mobile menu button (line 467) → "Launch Growth System".
+- `src/components/Hero.tsx` → "Explore Growth Systems" stays; secondary becomes "Book Strategic Consultation".
+- `src/components/ConversionCTA.tsx` → primary "Activate Digital Operations", secondary "See How We Operate".
+- `src/components/Navbar.tsx` → "Book Call" → "Book Strategic Consultation" (size sm).
+
+### 2. Hero trust bar
+
+Add a premium trust strip directly under hero subhead on `src/pages/Index.tsx` (and confirm same on `Hero.tsx`).
+
+```text
+AI Systems  •  Automation  •  Brand Infrastructure  •  Growth Operations
+Built for Founders, Brands & High-Growth Businesses
+```
+
+- Glass pill row, gold dividers, `text-foreground/55`, `uppercase tracking-[0.25em] text-[11px]`.
+- Desktop: single row. Mobile (<640px): wraps to 2 rows, dividers hidden.
+
+### 3. Case study metrics strip
+
+In `src/components/CaseStudies.tsx`, insert a 4-up stat row above the existing grid (between header and grid, ~line 126):
+
+| Metric | Label |
+|---|---|
+| 485K+ | Organic Views Generated |
+| +45% | Avg. Engagement Growth |
+| 24/7 | AI Automation Layer |
+| 3 | Multi-Brand Ecosystems Live |
+
+- `glass` cards, gold numeric, muted label, equal grid `grid-cols-2 lg:grid-cols-4 gap-4`.
+- Reuse existing `glass` / `text-gradient` tokens — no new CSS.
+
+### 4. "Systems" language copy pass
+
+Sweep agency-flavored wording → enterprise/system vocabulary. Targeted edits only (no structural changes):
+
+- `src/components/Services.tsx`, `src/components/CaseStudies.tsx` headings/descriptions.
+- `src/pages/Index.tsx` services intro and section taglines.
+- Vocabulary palette: ecosystem, operating system, infrastructure, growth engine, automation layer, intelligence stack, digital operations.
+- Avoid: "we help", "agency", "marketing services", "freelance".
+
+### 5. Floating contact hub — functional polish
+
+`FloatingContact.tsx` and `SocialIcons.tsx` already exist and dynamically swap by brand. Phase 1 polish only:
+
+- Ensure Telegram appears for LUXE VEIL routes, WhatsApp for TrendFlux/Zahid (already wired via `priority`).
+- Increase tap target on mobile: floating button `w-14 h-14` below `sm`, panel icons min `44×44`.
+- Add subtle gold ring on focus and `aria-live="polite"` brand label inside the panel.
+- Hide on `/auth` and `/admin*` (already done) — verify also hidden inside `LuxeVeil` invitation gate.
+- Defer magnetic hover / cinematic morph to Phase 2.
+
+### 6. Mobile UX cleanup
+
+- `src/pages/Index.tsx` hero (`<h1>` ~line 477): cap width `max-w-[22ch]` on mobile, reduce to `text-[2.25rem]` on <380px.
+- Navbar (line 379): tighten padding `px-3 py-2` on <380px; ensure CTA + hamburger don't overlap on 360px.
+- Hero CTA row: `gap-3` → `gap-4` on mobile, full-width buttons under 420px, stack vertically.
+- Floating hub: bottom offset `bottom-4` on mobile (above iOS safe area via `pb-[env(safe-area-inset-bottom)]`).
+- Trust bar wraps cleanly; metrics strip becomes 2×2.
+- Audit at 360, 390, 414, 768 widths.
+
+### 7. Verification checklist (run at end of Phase 1)
+
+- Build passes (auto).
+- Visit `/`, `/luxe-veil`, `/project-lead`, `/marriage` at desktop + mobile viewport.
+- Confirm: CTA wording consistent everywhere, trust bar visible, metrics row renders, floating hub swaps brand correctly via `?brand=zahid` and `?brand=luxeveil`.
+- No layout shift on hero; no horizontal scroll on 360px.
 
 ---
 
-## 1. URL & Routing Structure
+### Phase 2 (deferred — separate plan after Phase 1 ships)
 
-```text
-/                  → redirect to /en (or detected lang)
-/en                → English home
-/bn                → Bangla home
-/en/trendflux-talent
-/bn/trendflux-talent
-/en/luxe-veil      /bn/luxe-veil
-/en/brandtoki      /bn/brandtoki
-/en/marriage       /bn/marriage
-/en/portfolio      /bn/portfolio
-/en/project-lead   /bn/project-lead
-/en/press/:id      /bn/press/:id
-/en/case-studies/:slug etc.
+Will cover:
+- LUXE VEIL hidden-layer card (low opacity, blur-glass, gold pulse, hover reveal).
+- Brand-switch cinematic overlay + glow morph on `?brand=` change.
+- GSAP + ScrollTrigger: parallax, gold radial drift, section reveals, text stagger.
+- Magnetic hover on primary CTAs and floating hub.
+- Performance pass (lazy-load GSAP, prefers-reduced-motion guards).
 
-/admin, /admin/*, /auth → stay un-prefixed (English only)
-```
+### Files touched in Phase 1
 
-- `App.tsx` Routes wrapped in a `:lang(en|bn)` segment.
-- A `<LangGate>` component reads `useParams().lang`, validates it, sets `<html lang>` + `dir`, and provides it via context.
-- Legacy unprefixed URLs (e.g. `/trendflux-talent`) auto-redirect to `/en/trendflux-talent` to preserve existing links and SEO.
-- All internal `<Link to="...">` go through a small `useLocalizedHref()` helper so navigation keeps the active language.
+- `src/config/brand.ts`
+- `src/components/Hero.tsx`
+- `src/components/Navbar.tsx`
+- `src/components/ConversionCTA.tsx`
+- `src/components/CaseStudies.tsx`
+- `src/components/Services.tsx`
+- `src/components/social/FloatingContact.tsx`
+- `src/components/social/SocialIcons.tsx`
+- `src/pages/Index.tsx`
 
-## 2. i18n System
-
-Lightweight, no heavy library — JSON dictionaries + a `t()` hook:
-
-```text
-src/i18n/
-  index.ts            → I18nProvider, useT(), useLang()
-  locales/
-    en/common.json
-    en/home.json
-    en/trendflux-talent.json
-    en/brandtoki.json
-    en/luxe-veil.json
-    en/marriage.json
-    en/portfolio.json
-    en/nav.json
-    en/footer.json
-    en/forms.json
-    bn/...same files (AI-translated)
-```
-
-- Keys are nested + namespaced: `t("home.hero.headline")`.
-- Provider picks dictionary by `lang` from URL.
-- Fallback: missing Bangla key → English string + console warn in dev.
-- Bangla strings auto-get `lang="bn"` via the `<T>` wrapper component, leveraging the existing Bengali typography rules in `index.css`.
-
-## 3. Language Switcher
-
-- New `LanguageSwitcher` component in `Navbar.tsx` (and mirrored in `BrandShell.tsx` header for brand pages).
-- Two-pill toggle: **EN | বাংলা**.
-- Clicking swaps the `:lang` segment of the current URL while preserving the rest of the path + query.
-- Persists last choice in `localStorage` (`tf_lang`) — only used to redirect bare `/` visits.
-- Fires analytics event `language_switch { from, to, page }` via existing `track()` in `src/lib/analytics.ts`.
-
-## 4. Default Language & Auto-Detect
-
-- New visitor at `/`: redirect to `/en` (English default, per your answer).
-- Returning visitor with stored `tf_lang=bn`: redirect to `/bn`.
-- We do NOT use `navigator.language` (kept simple, predictable).
-
-## 5. SEO
-
-- `useSeo` hook extended to accept `lang` and emit:
-  - `<html lang="en">` / `<html lang="bn">`
-  - `<link rel="alternate" hreflang="en" href=".../en/...">`
-  - `<link rel="alternate" hreflang="bn" href=".../bn/...">`
-  - `<link rel="alternate" hreflang="x-default" href=".../en/...">`
-- `scripts/generate-sitemap.mjs` updated to emit both `/en/*` and `/bn/*` entries with hreflang annotations.
-- Page titles & meta descriptions translated per-locale.
-
-## 6. Translation Workflow (Gemini)
-
-A reusable, repeatable build-time script — no runtime AI calls (fast, free for visitors, SEO-indexable static text).
-
-```text
-scripts/translate-locales.mjs
-```
-
-Steps it performs:
-1. Walks `src/i18n/locales/en/*.json`.
-2. For each English file, reads matching `bn/*.json` (if exists) and computes which keys are **missing or marked `__stale: true`**.
-3. Sends only missing keys to Lovable AI (`google/gemini-2.5-pro` for quality, fallback `gemini-3-flash-preview`) with a strict system prompt:
-   - Translate to natural, professional Bangla (not transliteration).
-   - Keep brand names in English: TrendFlux, Luxe Veil, BrandToki, WhatsApp, Facebook.
-   - Preserve `{placeholders}`, HTML tags, line breaks.
-   - Return JSON-only output (`Output.object` schema).
-4. Merges results into `bn/*.json`, sorted, with a `__meta.translatedAt` field per file.
-5. Run via: `npm run i18n:translate`.
-
-Result: deterministic, version-controlled Bangla strings you can edit by hand later.
-
-## 7. Components Touched (high level)
-
-- **App.tsx** — wrap routes in `/:lang` group, add redirects.
-- **Navbar.tsx** — add `LanguageSwitcher`, translate links.
-- **BrandShell.tsx** — translate "Talk on WhatsApp", "Connect on Official Facebook", footer funnel labels, copyright line; add switcher.
-- **Hero.tsx, Services.tsx, CaseStudies.tsx, Testimonials.tsx, Faq.tsx, Footer.tsx** — strings → `t(...)`.
-- **Pages**: `Index`, `BrandToki`, `TrendfluxTalent`, `LuxeVeil`, `Marriage`, `Portfolio`, `ProjectLead`, `BrandOpen`, `PressDetail`, `CaseStudyPage`, `NotFound` — strings → `t(...)`.
-- **Dialogs**: `MarriageInquiryDialog`, `QuoteDialog`, `StrategySessionDialog` — translated labels + WhatsApp prefilled message localized.
-- **Forms**: TrendFlux Talent signup, success screen, validation messages — translated.
-- **CommandPalette** — translated entries; both EN and BN command names indexed so Bangla speakers can search in either language.
-
-Admin pages, auth, and developer tooling (ThemeDebugPanel, BrandSwitcher) stay English-only — internal use.
-
-## 8. Phasing
-
-1. **Phase A — Infrastructure (no visible change yet)**
-   - Add `src/i18n/`, provider, `useT`, locale loader.
-   - Add `/:lang` routing + redirects.
-   - Wire `<html lang>` + hreflang.
-   - Add `LanguageSwitcher` (English-only labels visible until Phase B).
-
-2. **Phase B — Extract English strings**
-   - Move all hard-coded copy from components/pages into `en/*.json`.
-   - Replace JSX text with `t(...)` calls.
-   - Site still looks identical in English; `/bn` falls back to English.
-
-3. **Phase C — Generate Bangla**
-   - Run `npm run i18n:translate` to fill `bn/*.json`.
-   - Quick manual review of headlines, CTAs, brand promises.
-   - `/bn` now fully Bengali.
-
-4. **Phase D — Polish**
-   - Bangla SEO titles/descriptions reviewed.
-   - Sitemap regenerated.
-   - Analytics event added.
-   - Tests: route redirect, language switch preserves path, missing-key fallback.
-
-## 9. What stays English
-
-- Brand names (TrendFlux, Luxe Veil, BrandToki, etc.)
-- `/admin/*`, `/auth`
-- Developer panels
-- WhatsApp number formatting
-
-## 10. Out of scope (can do later)
-
-- RTL (Bangla is LTR, no change needed).
-- Translating user-generated content from Supabase tables (case studies, press items) — these stay in their original language unless you later add a `lang` column.
-- Date/number localization (can add `Intl` formatting in Phase D if you want Bengali numerals).
-
----
-
-After approval I'll execute Phase A + B in the first build pass, then run the Gemini translation script for Phase C in the same session so you see the bilingual site working end-to-end.
+No new dependencies, no schema changes, no backend changes.
