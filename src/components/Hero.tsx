@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useT, useLang } from "@/i18n";
 
 const Hero = () => {
+  const t = useT();
+  const lang = useLang();
   return (
-    <section className="relative pt-40 pb-28 px-6 lg:px-10 overflow-hidden">
+    <section className="relative pt-40 pb-28 px-6 lg:px-10 overflow-hidden" lang={lang}>
       <div className="absolute inset-0 hero-glow" aria-hidden />
       <div className="absolute inset-0 grid-dots opacity-40" aria-hidden />
 
@@ -14,39 +17,37 @@ const Hero = () => {
       <div className="relative max-w-6xl mx-auto text-center animate-fade-up">
         <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-primary mb-8">
           <Sparkles className="w-3.5 h-3.5" />
-          AI-Powered Digital Growth Systems
+          {t.hero.badge}
         </div>
 
         <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight max-w-5xl mx-auto">
-          Architecting{" "}
-          <span className="text-gradient">Digital Growth Systems</span>{" "}
-          for Modern Businesses
+          {t.hero.headline1}{" "}
+          <span className="text-gradient">{t.hero.headline2}</span>{" "}
+          {t.hero.headline3}
         </h1>
 
         <p className="mt-7 text-foreground/70 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-          TrendFlux Ecosystem combines AI automation, paid media, content strategy,
-          CRM workflows, and brand architecture to build scalable business growth ecosystems.
+          {t.hero.sub}
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Button variant="hero" size="lg">
-            Explore Growth Systems
+            {t.hero.ctaPrimary}
             <ArrowRight />
           </Button>
           <Button variant="outline" size="lg">
-            Book Strategic Consultation
+            {t.hero.ctaSecondary}
           </Button>
         </div>
 
         {/* trust strip */}
         <div className="mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-xs uppercase tracking-[0.2em] text-foreground/40">
-          <span>AI Automation</span>
-          <span className="w-1 h-1 rounded-full bg-foreground/20" />
-          <span>Performance Media</span>
-          <span className="w-1 h-1 rounded-full bg-foreground/20" />
-          <span>Brand Architecture</span>
-          <span className="w-1 h-1 rounded-full bg-foreground/20" />
-          <span>Growth Analytics</span>
+          {t.hero.tags.map((tag, i) => (
+            <span key={tag} className="contents">
+              {i > 0 && <span className="w-1 h-1 rounded-full bg-foreground/20" />}
+              <span>{tag}</span>
+            </span>
+          ))}
         </div>
       </div>
     </section>
