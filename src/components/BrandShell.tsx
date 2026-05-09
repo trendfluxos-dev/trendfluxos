@@ -3,13 +3,15 @@ import { ReactNode } from "react";
 import PrimaryContactCTA from "@/components/social/PrimaryContactCTA";
 import FacebookPageEmbed from "@/components/social/FacebookPageEmbed";
 import { Facebook, ArrowUpRight } from "lucide-react";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useT, useLocalizedHref, useLang } from "@/i18n";
 
 type Tier = "open" | "platform" | "private";
 
-const tierMeta: Record<Tier, { label: string; sub: string; tone: string }> = {
-  open: { label: "Level 01 · Open", sub: "Mass / Public", tone: "from-primary/30 to-primary/0" },
-  platform: { label: "Level 02 · Platform", sub: "Business / Authority", tone: "from-primary/40 to-primary/0" },
-  private: { label: "Level 03 · Private", sub: "Invite Only", tone: "from-primary/50 to-primary/0" },
+const tierTone: Record<Tier, string> = {
+  open: "from-primary/30 to-primary/0",
+  platform: "from-primary/40 to-primary/0",
+  private: "from-primary/50 to-primary/0",
 };
 
 export const BrandShell = ({
@@ -23,10 +25,14 @@ export const BrandShell = ({
   whatsappOverride?: string;
   hideFacebook?: boolean;
 }) => {
-  const meta = tierMeta[tier];
+  const t = useT();
+  const localized = useLocalizedHref();
+  const lang = useLang();
+  const meta = { label: t.brandShell.level[tier], sub: t.brandShell.sub[tier], tone: tierTone[tier] };
   return (
     <main
       className="relative min-h-screen bg-background text-foreground overflow-hidden"
+      lang={lang}
       style={{
         background:
           "radial-gradient(60% 40% at 50% -10%, hsl(var(--primary) / 0.07), transparent 70%), linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)",
@@ -45,10 +51,11 @@ export const BrandShell = ({
       </div>
 
       <header className="relative max-w-6xl mx-auto px-5 pt-6 flex items-center justify-between">
-        <Link to="/" className="text-xs uppercase tracking-[0.3em] text-primary/90 hover:text-primary transition">
-          ← TrendFlux Digital
+        <Link to={localized("/")} className="text-xs uppercase tracking-[0.3em] text-primary/90 hover:text-primary transition">
+          {t.brandShell.back}
         </Link>
         <div className="flex items-center gap-4">
+          <LanguageSwitcher />
           <div className="text-right">
             <div className="text-[10px] uppercase tracking-[0.35em] text-primary/80">{meta.label}</div>
             <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{meta.sub}</div>
@@ -70,13 +77,13 @@ export const BrandShell = ({
               href={whatsappOverride}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Talk on WhatsApp"
+              aria-label={t.brandShell.whatsapp}
               className="group inline-flex items-center gap-2 rounded-full border border-primary/60 bg-primary/5 px-5 py-2.5 text-xs uppercase tracking-[0.25em] text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:-translate-y-0.5 hover:shadow-[0_10px_30px_hsl(var(--primary)/0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
                 <path d="M20.52 3.48A11.86 11.86 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.84c0 2.09.55 4.13 1.6 5.93L0 24l6.4-1.68a11.83 11.83 0 0 0 5.64 1.43h.01c6.54 0 11.84-5.3 11.84-11.84 0-3.16-1.23-6.13-3.37-8.43Z" />
               </svg>
-              <span>Talk on WhatsApp</span>
+              <span>{t.brandShell.whatsapp}</span>
               <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           ) : (
@@ -87,11 +94,11 @@ export const BrandShell = ({
             href="https://www.facebook.com/studiobrandtoki"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Connect on Official Facebook"
+            aria-label={t.brandShell.facebook}
             className="group inline-flex items-center gap-2 rounded-full border border-primary/60 bg-primary/5 px-5 py-2.5 text-xs uppercase tracking-[0.25em] text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:-translate-y-0.5 hover:shadow-[0_10px_30px_hsl(var(--primary)/0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <Facebook className="w-4 h-4" />
-            <span>Connect on Official Facebook</span>
+            <span>{t.brandShell.facebook}</span>
             <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
           )}
@@ -105,16 +112,18 @@ export const BrandShell = ({
 };
 
 const BrandFunnelFooter = ({ active }: { active: Tier }) => {
+  const t = useT();
+  const localized = useLocalizedHref();
   const items: { id: Tier; name: string; path: string; tag: string }[] = [
-    { id: "open", name: "Studio BrandToki", path: "/brand-open", tag: "Open" },
-    { id: "platform", name: "TrendFlux Talent", path: "/trendflux-talent", tag: "Platform" },
-    { id: "private", name: "Luxe Veil", path: "/luxe-veil", tag: "Private" },
+    { id: "open", name: "Studio BrandToki", path: localized("/brand-open"), tag: t.brandShell.tiers.open },
+    { id: "platform", name: "TrendFlux Talent", path: localized("/trendflux-talent"), tag: t.brandShell.tiers.platform },
+    { id: "private", name: "Luxe Veil", path: localized("/luxe-veil"), tag: t.brandShell.tiers.private },
   ];
   return (
     <footer className="relative border-t border-border mt-10">
       <div className="max-w-6xl mx-auto px-5 py-8">
         <p className="text-center text-[10px] uppercase tracking-[0.4em] text-primary/80 mb-5">
-          ◆ Limited partnerships open each quarter. Let's architect yours. ◆
+          {t.brandShell.footerNote}
         </p>
         <div className="grid grid-cols-3 gap-3">
           {items.map((it, i) => (
@@ -144,7 +153,7 @@ const BrandFunnelFooter = ({ active }: { active: Tier }) => {
           ))}
         </div>
         <p className="mt-6 text-center text-[11px] text-muted-foreground">
-          © {new Date().getFullYear()} TrendFlux Digital · Powered by TrendFlux Ecosystem
+          © {new Date().getFullYear()} TrendFlux Digital · {t.brandShell.poweredBy}
         </p>
       </div>
     </footer>
