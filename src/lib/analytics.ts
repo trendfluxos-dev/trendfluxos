@@ -25,6 +25,8 @@ const META_PIXEL_MAP: Record<string, string> = {
   strategy_session_booked: "Schedule",
   whatsapp_open: "Contact",
   copy_message: "Contact",
+  enterprise_demo_submit_success: "Lead",
+  enterprise_portal_open: "Contact",
 };
 
 function persist(stored: StoredEvent) {

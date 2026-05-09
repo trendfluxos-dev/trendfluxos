@@ -28,6 +28,7 @@ const LuxeVeil = routes["/luxe-veil"];
 const BrandToki = routes["/brandtoki"];
 const Portfolio = routes["/portfolio"];
 const Enterprise = routes["/enterprise"];
+const ClientLogin = routes["/client-login"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const NotFound = routes["*"];
 
@@ -65,6 +66,7 @@ const App = () => (
             <Route path="/brandtoki" element={<BrandToki />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/enterprise" element={<Enterprise />} />
+            <Route path="/client-login" element={<ClientLogin />} />
             <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
