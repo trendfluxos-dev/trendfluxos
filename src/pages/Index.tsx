@@ -412,6 +412,13 @@ const Index = () => {
               </a>
             ))}
             <Link
+              to="/enterprise"
+              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full inline-flex items-center gap-1.5"
+            >
+              Enterprise
+              <span className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_8px_hsl(var(--gold))]" aria-hidden />
+            </Link>
+            <Link
               to="/project-lead"
               className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
             >
@@ -461,6 +468,14 @@ const Index = () => {
                 {l.label}
               </a>
             ))}
+            <Link
+              to="/enterprise"
+              onClick={() => setMobileNavOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors inline-flex items-center gap-2"
+            >
+              Enterprise
+              <span className="w-1.5 h-1.5 rounded-full bg-gold" aria-hidden />
+            </Link>
             <Link
               to="/project-lead"
               onClick={() => setMobileNavOpen(false)}

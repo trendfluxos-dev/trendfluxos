@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
 import { ENTERPRISE } from "@/config/enterprise";
 import { track } from "@/lib/analytics";
+import EnterpriseDemoForm from "@/components/EnterpriseDemoForm";
 
 const features = [
   {
@@ -88,7 +89,7 @@ const Enterprise = () => {
               </a>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <a href="/project-lead">Request Demo</a>
+              <a href="#request-demo">Request Demo</a>
             </Button>
           </div>
 
@@ -199,14 +200,28 @@ const Enterprise = () => {
       </section>
 
       {/* Final CTA */}
+      <section id="request-demo" className="px-6 lg:px-10 py-20 scroll-mt-28">
+        <div className="max-w-3xl mx-auto text-center mb-10">
+          <p className="text-xs uppercase tracking-[0.25em] text-primary mb-3">Demo</p>
+          <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
+            Request a <span className="text-gradient">private demo</span>
+          </h2>
+          <p className="mt-4 text-foreground/70 leading-relaxed">
+            Tell us about your team and what you'd like to automate. We'll set up a
+            walkthrough of Enterprise Control tailored to your workflow.
+          </p>
+        </div>
+        <EnterpriseDemoForm />
+      </section>
+
       <section className="px-6 lg:px-10 pb-24">
         <div className="max-w-4xl mx-auto text-center glass rounded-3xl p-10 md:p-14">
           <h2 className="font-display text-3xl md:text-4xl font-bold">
             Ready to operate your business as a system?
           </h2>
           <p className="mt-4 text-foreground/70 max-w-2xl mx-auto leading-relaxed">
-            Open the Enterprise Control portal to sign in, or request a private demo and we'll walk
-            you through the workflows live.
+            Open the Enterprise Control portal to sign in — or scroll up to request a
+            private demo with our team.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button asChild variant="hero" size="lg">
@@ -220,7 +235,7 @@ const Enterprise = () => {
               </a>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <a href="/project-lead">Request Demo</a>
+              <a href="#request-demo">Request Demo</a>
             </Button>
           </div>
         </div>

@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      enterprise_demo_requests: {
+        Row: {
+          company: string
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          role: string
+          source: string
+          status: string
+          team_size: string
+          updated_at: string
+        }
+        Insert: {
+          company: string
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          role: string
+          source?: string
+          status?: string
+          team_size: string
+          updated_at?: string
+        }
+        Update: {
+          company?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          role?: string
+          source?: string
+          status?: string
+          team_size?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       luxe_veil_requests: {
         Row: {
           created_at: string
