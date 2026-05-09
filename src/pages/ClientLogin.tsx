@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
 import { ENTERPRISE } from "@/config/enterprise";
@@ -18,15 +18,12 @@ const ClientLogin = () => {
 
   useEffect(() => {
     track("enterprise_portal_open", { location: "client_login_route" });
-    const opened = window.open(
-      ENTERPRISE.portalUrl,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    // Open portal in a new tab without window features to ensure tab (not popup)
+    const opened = window.open(ENTERPRISE.portalUrl, "_blank");
     if (!opened) {
       track("enterprise_portal_popup_blocked", { location: "client_login_route" });
     }
-    const t = window.setTimeout(() => navigate("/enterprise", { replace: true }), 1400);
+    const t = window.setTimeout(() => navigate("/enterprise", { replace: true }), 1800);
     return () => window.clearTimeout(t);
   }, [navigate]);
 
@@ -50,7 +47,11 @@ const ClientLogin = () => {
           blocked the popup — use the button below.
         </p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
-          <Button asChild variant="hero">
+          <Button
+            variant="hero"
+            size="lg"
+            asChild
+          >
             <a
               href={ENTERPRISE.portalUrl}
               target="_blank"
@@ -59,7 +60,8 @@ const ClientLogin = () => {
                 track("enterprise_portal_open", { location: "client_login_fallback" })
               }
             >
-              Open Enterprise Portal <ArrowRight />
+              <ExternalLink className="w-4 h-4" />
+              Open Enterprise Portal
             </a>
           </Button>
           <Button variant="outline" onClick={() => navigate("/enterprise")}>
