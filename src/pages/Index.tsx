@@ -469,6 +469,14 @@ const Index = () => {
               </a>
             ))}
             <Link
+              to="/enterprise"
+              onClick={() => setMobileNavOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors inline-flex items-center gap-2"
+            >
+              Enterprise
+              <span className="w-1.5 h-1.5 rounded-full bg-gold" aria-hidden />
+            </Link>
+            <Link
               to="/project-lead"
               onClick={() => setMobileNavOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors"
