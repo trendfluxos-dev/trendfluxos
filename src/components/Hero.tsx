@@ -38,17 +38,16 @@ const Hero = () => {
           <Button variant="outline" size="lg">
             Book Strategic Consultation
           </Button>
-          <Button asChild variant="ghost" size="lg" className="text-primary hover:text-primary">
-            <a
-              href={ENTERPRISE.portalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => track("enterprise_portal_open", { location: "home_hero" })}
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Open Enterprise Portal
-            </a>
-          </Button>
+          <a
+            href={ENTERPRISE.portalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => track("enterprise_portal_open", { location: "home_hero" })}
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-base font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-12 px-8 text-primary hover:bg-accent hover:text-accent-foreground"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            Open Enterprise Portal
+          </a>
         </div>
 
         {/* trust strip */}
