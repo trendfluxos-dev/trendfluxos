@@ -1,6 +1,5 @@
 import { ArrowRight, ShieldCheck, Workflow, LayoutDashboard, Database, Boxes, KeyRound, ExternalLink } from "lucide-react";
 import enterpriseMark from "@/assets/trendflux-enterprise-mark.png";
-import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
