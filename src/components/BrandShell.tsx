@@ -112,16 +112,18 @@ export const BrandShell = ({
 };
 
 const BrandFunnelFooter = ({ active }: { active: Tier }) => {
+  const t = useT();
+  const localized = useLocalizedHref();
   const items: { id: Tier; name: string; path: string; tag: string }[] = [
-    { id: "open", name: "Studio BrandToki", path: "/brand-open", tag: "Open" },
-    { id: "platform", name: "TrendFlux Talent", path: "/trendflux-talent", tag: "Platform" },
-    { id: "private", name: "Luxe Veil", path: "/luxe-veil", tag: "Private" },
+    { id: "open", name: "Studio BrandToki", path: localized("/brand-open"), tag: t.brandShell.tiers.open },
+    { id: "platform", name: "TrendFlux Talent", path: localized("/trendflux-talent"), tag: t.brandShell.tiers.platform },
+    { id: "private", name: "Luxe Veil", path: localized("/luxe-veil"), tag: t.brandShell.tiers.private },
   ];
   return (
     <footer className="relative border-t border-border mt-10">
       <div className="max-w-6xl mx-auto px-5 py-8">
         <p className="text-center text-[10px] uppercase tracking-[0.4em] text-primary/80 mb-5">
-          ◆ Limited partnerships open each quarter. Let's architect yours. ◆
+          {t.brandShell.footerNote}
         </p>
         <div className="grid grid-cols-3 gap-3">
           {items.map((it, i) => (
@@ -151,7 +153,7 @@ const BrandFunnelFooter = ({ active }: { active: Tier }) => {
           ))}
         </div>
         <p className="mt-6 text-center text-[11px] text-muted-foreground">
-          © {new Date().getFullYear()} TrendFlux Digital · Powered by TrendFlux Ecosystem
+          © {new Date().getFullYear()} TrendFlux Digital · {t.brandShell.poweredBy}
         </p>
       </div>
     </footer>
