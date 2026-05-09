@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { BRAND } from "@/config/brand";
+import { ENTERPRISE } from "@/config/enterprise";
+import { track } from "@/lib/analytics";
 import SocialIcons from "@/components/social/SocialIcons";
 
 const Footer = () => {
   return (
     <footer className="border-t border-border px-6 lg:px-10 pt-16 pb-10 mt-10 relative">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-      <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-10">
         <div className="md:col-span-2">
           <Link to="/" className="flex items-center gap-2 font-display font-bold text-xl">
             <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-cyan" />
@@ -51,6 +53,41 @@ const Footer = () => {
             </li>
             <li><a href="#cases" className="hover:text-primary transition-colors">Case Studies</a></li>
             <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-xs uppercase tracking-[0.25em] text-foreground/40 mb-4">
+            Platform
+          </h4>
+          <ul className="space-y-3 text-sm text-foreground/70">
+            <li>
+              <Link to="/enterprise" className="hover:text-primary transition-colors">
+                Enterprise Control
+              </Link>
+            </li>
+            <li>
+              <a
+                href={ENTERPRISE.portalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track("enterprise_portal_open", { location: "footer_portal" })}
+                className="hover:text-primary transition-colors"
+              >
+                Enterprise Portal
+              </a>
+            </li>
+            <li>
+              <a
+                href={ENTERPRISE.portalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track("enterprise_portal_open", { location: "footer_client_access" })}
+                className="hover:text-primary transition-colors"
+              >
+                Client Access
+              </a>
+            </li>
           </ul>
         </div>
       </div>

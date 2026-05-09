@@ -8,6 +8,7 @@ import logo from "@/assets/trendflux-logo.png";
 const links = [
   { label: "Systems", href: "/#services" },
   { label: "Case Studies", href: "/#cases" },
+  { label: "Enterprise Control", href: "/enterprise" },
   { label: "Project Lead", href: "/project-lead" },
 ];
 

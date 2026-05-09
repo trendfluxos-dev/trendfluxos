@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck } from "lucide-react";
+import { ENTERPRISE } from "@/config/enterprise";
+import { track } from "@/lib/analytics";
 
 const Hero = () => {
   return (
@@ -35,6 +37,17 @@ const Hero = () => {
           </Button>
           <Button variant="outline" size="lg">
             Book Strategic Consultation
+          </Button>
+          <Button asChild variant="ghost" size="lg" className="text-primary hover:text-primary">
+            <a
+              href={ENTERPRISE.portalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track("enterprise_portal_open", { location: "home_hero" })}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Open Enterprise Portal
+            </a>
           </Button>
         </div>
 
