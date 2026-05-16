@@ -17,6 +17,7 @@ import {
   hasFreshLuxeVeilSession,
   persistLuxeVeilToken,
 } from "@/lib/luxeVeilSession";
+import { openAccessRequest } from "@/lib/accessRequest";
 
 const TARGET_PATH = "/luxe-veil";
 
@@ -55,6 +56,28 @@ const LuxeVeilGate = () => {
       setError("");
       setCode("");
       setOpen(true);
+    };
+
+    window.addEventListener(LUXE_VEIL_GATE_EVENT, handler);
+    return () => window.removeEventListener(LUXE_VEIL_GATE_EVENT, handler);
+  }, [navigate]);
+
+  const requestAccess = () => {
+    setOpen(false);
+    openAccessRequest({
+      source: "luxe-veil",
+      title: "Request Luxe Veil access",
+      description: "Luxe Veil is invite-only. Share a few details and we'll review your request and contact you shortly.",
+    });
+  };
+
+  // (effect intentionally above)
+  const _noopBindingScopeMarker = () => {
+    void requestAccess;
+  };
+  void _noopBindingScopeMarker;
+
+  const _legacyEffect = () => {
     };
 
     window.addEventListener(LUXE_VEIL_GATE_EVENT, handler);
