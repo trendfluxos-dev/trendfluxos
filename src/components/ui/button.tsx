@@ -5,23 +5,23 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium tracking-tight ring-offset-background transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm",
         outline:
-          "border border-foreground/20 bg-transparent text-foreground hover:bg-foreground/10 hover:border-primary/50",
+          "border border-foreground/15 bg-transparent text-foreground hover:bg-foreground/[0.04] hover:border-foreground/30",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+        ghost: "text-foreground/80 hover:bg-foreground/[0.04] hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         hero:
-          "bg-gradient-cyan text-primary-foreground hover:shadow-cyan hover:-translate-y-0.5",
+          "bg-gradient-cyan text-primary-foreground shadow-sm hover:shadow-cyan hover:-translate-y-px",
         gold:
-          "bg-gradient-gold text-gold-foreground hover:shadow-gold hover:-translate-y-0.5",
+          "bg-gradient-gold text-gold-foreground shadow-sm hover:shadow-gold hover:-translate-y-px",
         glass:
-          "glass text-foreground hover:bg-foreground/10 hover:border-primary/40",
+          "glass text-foreground hover:bg-foreground/[0.06] hover:border-foreground/25",
       },
       size: {
         default: "h-11 px-6 py-2",
