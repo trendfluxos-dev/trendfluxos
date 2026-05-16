@@ -95,6 +95,47 @@ export type Database = {
         }
         Relationships: []
       }
+      enrollment_events: {
+        Row: {
+          actor: string | null
+          created_at: string
+          enrollment_id: string | null
+          event_type: string
+          id: string
+          message: string | null
+          module_index: number
+          user_id: string
+        }
+        Insert: {
+          actor?: string | null
+          created_at?: string
+          enrollment_id?: string | null
+          event_type: string
+          id?: string
+          message?: string | null
+          module_index: number
+          user_id: string
+        }
+        Update: {
+          actor?: string | null
+          created_at?: string
+          enrollment_id?: string | null
+          event_type?: string
+          id?: string
+          message?: string | null
+          module_index?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrollment_events_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "module_enrollments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       enterprise_demo_requests: {
         Row: {
           company: string
