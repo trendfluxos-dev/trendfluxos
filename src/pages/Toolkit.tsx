@@ -21,14 +21,14 @@ import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
 
 const hubCategories = [
-  { icon: GraduationCap, title: "Class Modules", desc: "8 execution-grade systems, each with frameworks and templates." },
+  { icon: GraduationCap, title: "System Modules", desc: "8 execution-grade systems, each with frameworks and templates." },
   { icon: Library, title: "Prompt Library", desc: "Production prompts for research, content, ops, and strategy." },
   { icon: Workflow, title: "Automation Systems", desc: "End-to-end SOPs and workflow blueprints, ready to ship." },
   { icon: BarChart3, title: "Data & Analytics Tools", desc: "Dashboards, attribution stacks, and decision frameworks." },
   { icon: Briefcase, title: "Portfolio Kit", desc: "Case study templates, proof assets, and pitch scripts." },
 ];
 
-const classes = [
+const modules = [
   {
     n: "01",
     icon: Brain,
@@ -130,7 +130,7 @@ const Toolkit = () => {
   useSeo({
     title: "Growth Operator Toolkit Hub — TrendFlux Digital",
     description:
-      "A practical execution system for AI-powered growth operators. 8 class modules, prompt library, automation blueprints, and portfolio kit — not a course, an OS.",
+      "A modular execution system for AI-powered growth operators. 8 system modules, prompt library, automation blueprints, and portfolio kit — an execution OS, not a course.",
     canonical: `${BRAND.url}/toolkit`,
   });
 
@@ -168,9 +168,9 @@ const Toolkit = () => {
             <span className="text-gradient">Toolkit Hub</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-base text-foreground/70 md:text-lg">
-            A practical execution system for AI-powered growth operators. Not a
-            course — a centralized hub of modules, prompts, automations, and
-            playbooks you can ship from day one.
+            A modular execution system for AI-powered growth operators.
+            A centralized hub of systems, prompts, automations, and playbooks
+            you can execute from day one.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <a
@@ -185,7 +185,7 @@ const Toolkit = () => {
               href="#modules"
               className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-6 py-3 text-sm font-semibold text-foreground/85 transition-colors hover:border-gold/40 hover:text-gold"
             >
-              Browse class modules
+              Browse system modules
             </a>
           </div>
         </div>
@@ -223,18 +223,18 @@ const Toolkit = () => {
         </div>
       </section>
 
-      {/* class modules */}
+      {/* system modules */}
       <section id="modules" className="relative px-6 py-20 md:px-12 lg:px-20">
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 max-w-2xl">
-            <p className="mb-3 text-xs uppercase tracking-[0.3em] text-gold">— Class Modules</p>
+            <p className="mb-3 text-xs uppercase tracking-[0.3em] text-gold">— System Modules</p>
             <h2 className="font-display text-3xl font-bold tracking-tight md:text-5xl">
               8 systems. <span className="text-gradient">Each a transformation.</span>
             </h2>
           </div>
 
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {classes.map((m) => {
+            {modules.map((m) => {
               const Icon = m.icon;
               return (
                 <article

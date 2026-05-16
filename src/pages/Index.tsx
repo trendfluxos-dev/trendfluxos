@@ -596,7 +596,7 @@ const Index = () => {
                   A <span className="text-gradient">practical execution system</span> for AI-powered growth operators.
                 </h3>
                 <p className="mt-1 text-xs sm:text-sm text-foreground/65">
-                  8 class modules · prompt library · automation blueprints · portfolio kit — not a course, an OS.
+                  8 system modules · prompt library · automation blueprints · portfolio kit — an execution OS.
                 </p>
               </div>
             </div>
