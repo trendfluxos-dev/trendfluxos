@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { useReveal } from "@/hooks/useReveal";
 import {
   Bot,
   Target,
@@ -71,11 +72,12 @@ const services: Service[] = [
 ];
 
 const Services = () => {
+  const ref = useReveal<HTMLDivElement>();
   return (
     <section id="services" className="px-6 lg:px-10 py-24 relative">
       <div className="absolute inset-0 bg-gradient-hero opacity-50" aria-hidden />
-      <div className="relative max-w-7xl mx-auto">
-        <div className="text-center mb-14">
+      <div ref={ref} className="relative max-w-7xl mx-auto">
+        <div className="text-center mb-14 reveal">
           <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
             Service Modules
           </p>
@@ -86,15 +88,16 @@ const Services = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {services.map((s) => {
+          {services.map((s, i) => {
             const Icon = s.icon;
             return (
               <article
                 key={s.title}
-                className="glass glass-hover rounded-3xl p-7 group flex flex-col"
+                className="glass glass-hover rounded-3xl p-7 group flex flex-col reveal"
+                style={{ transitionDelay: `${Math.min(i, 5) * 70}ms` }}
               >
                 <div className="w-12 h-12 rounded-2xl bg-gradient-cyan/20 border border-primary/30 flex items-center justify-center mb-5 group-hover:shadow-cyan transition-all">
-                  <Icon className="w-5 h-5 text-primary" />
+                  <Icon className="w-5 h-5 text-primary transition-transform duration-300 group-hover:scale-110" />
                 </div>
                 <h3 className="font-display text-xl font-bold">{s.title}</h3>
                 <p className="text-foreground/60 mt-3 text-sm leading-relaxed">
