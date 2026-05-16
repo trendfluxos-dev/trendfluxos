@@ -376,19 +376,6 @@ const Index = () => {
       description: BRAND.description,
       publisher: { "@type": "Organization", name: BRAND.legalName },
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      name: "TrendFlux Ecosystem Playbook",
-      description:
-        "Founder-grade curriculum on AI workflow automation, Meta performance creative, and multi-brand ecosystem design.",
-      provider: {
-        "@type": "Organization",
-        name: BRAND.legalName,
-        sameAs: BRAND.url,
-      },
-      url: "https://course.trendflux.digital",
-    },
   ]);
 
   return (
@@ -426,7 +413,6 @@ const Index = () => {
               { href: "#services", label: "Services" },
               { href: "#founder", label: "Brand Architect" },
               { href: "#cases", label: "Case Studies" },
-              { href: "#course", label: "Course" },
             ].map((l) => (
               <a
                 key={l.href}
@@ -436,6 +422,12 @@ const Index = () => {
                 {l.label}
               </a>
             ))}
+            <Link
+              to="/toolkit"
+              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Toolkit Hub
+            </Link>
             <Link
               to="/enterprise"
               className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full inline-flex items-center gap-1.5"
