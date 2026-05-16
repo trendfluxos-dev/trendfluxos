@@ -213,7 +213,7 @@ const HEADLINE_VARIANTS: HeadlineVariant[] = [
 const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const activeSection = useActiveSection(["services", "founder", "cases"]);
-  const { values: portraitFocus } = usePortraitFocus();
+  const { activeValue: portraitFocusY } = usePortraitFocus();
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quoteContext, setQuoteContext] = useState<{
@@ -756,12 +756,7 @@ const Index = () => {
                   loading="lazy"
                   decoding="async"
                   className="absolute inset-0 h-full w-full object-cover"
-                  style={{
-                    objectPosition: `center ${portraitFocus.base}%`,
-                    // sm + lg overrides applied via CSS custom properties below
-                  }}
-                  data-focus-sm={portraitFocus.sm}
-                  data-focus-lg={portraitFocus.lg}
+                  style={{ objectPosition: `center ${portraitFocusY}%` }}
                 />
               </div>
               <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
