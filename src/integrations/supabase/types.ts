@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      access_requests: {
+        Row: {
+          created_at: string
+          decided_at: string | null
+          decided_note: string | null
+          decided_via: string | null
+          email: string
+          id: string
+          message: string | null
+          metadata: Json
+          name: string
+          phone: string | null
+          source: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          decided_at?: string | null
+          decided_note?: string | null
+          decided_via?: string | null
+          email: string
+          id?: string
+          message?: string | null
+          metadata?: Json
+          name: string
+          phone?: string | null
+          source: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          decided_at?: string | null
+          decided_note?: string | null
+          decided_via?: string | null
+          email?: string
+          id?: string
+          message?: string | null
+          metadata?: Json
+          name?: string
+          phone?: string | null
+          source?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       enterprise_demo_requests: {
         Row: {
           company: string
