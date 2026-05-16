@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BRAND } from "@/config/brand";
 import SocialIcons from "@/components/social/SocialIcons";
-import logo from "@/assets/trendflux-logo.png";
+import logo from "@/assets/trendflux-logo.webp";
 
 const links = [
   { label: "Systems", href: "/#services" },

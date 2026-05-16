@@ -19,7 +19,7 @@ import {
   Briefcase,
   Heart,
 } from "lucide-react";
-import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
+import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import { useSeo } from "@/hooks/useSeo";
 
 const metrics = [

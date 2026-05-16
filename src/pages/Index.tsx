@@ -19,8 +19,8 @@ import {
   GraduationCap,
   PlayCircle,
 } from "lucide-react";
-import trendfluxLogo from "@/assets/trendflux-logo.png";
-import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
+import trendfluxLogo from "@/assets/trendflux-logo.webp";
+import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

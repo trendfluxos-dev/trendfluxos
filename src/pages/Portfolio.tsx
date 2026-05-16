@@ -23,20 +23,20 @@ import {
   Zap,
   ShieldCheck,
 } from "lucide-react";
-import portrait from "@/assets/zahid-hasan-emon.png";
-import proofEducation from "@/assets/proof/educational-background.png";
-import proofUniversity from "@/assets/proof/university-certificates.png";
-import proofHsc from "@/assets/proof/hsc-credentials.png";
-import proofSsc from "@/assets/proof/ssc-credentials.png";
-import proofLeadershipOverview from "@/assets/proof/leadership-overview.png";
-import proofPzswa from "@/assets/proof/pzswa-presidential.png";
-import proofNdfBd from "@/assets/proof/ndf-bd-appointment.png";
-import proofPds from "@/assets/proof/pds-leadership.png";
-import proofCovid from "@/assets/proof/covid-volunteer.png";
-import proofTrainingOverview from "@/assets/proof/training-overview.png";
-import proofTrainingCerts from "@/assets/proof/training-certificates.png";
-import proofParticipation from "@/assets/proof/participation-achievement.png";
-import proofIdentification from "@/assets/proof/official-identification.png";
+import portrait from "@/assets/zahid-hasan-emon.webp";
+import proofEducation from "@/assets/proof/educational-background.webp";
+import proofUniversity from "@/assets/proof/university-certificates.webp";
+import proofHsc from "@/assets/proof/hsc-credentials.webp";
+import proofSsc from "@/assets/proof/ssc-credentials.webp";
+import proofLeadershipOverview from "@/assets/proof/leadership-overview.webp";
+import proofPzswa from "@/assets/proof/pzswa-presidential.webp";
+import proofNdfBd from "@/assets/proof/ndf-bd-appointment.webp";
+import proofPds from "@/assets/proof/pds-leadership.webp";
+import proofCovid from "@/assets/proof/covid-volunteer.webp";
+import proofTrainingOverview from "@/assets/proof/training-overview.webp";
+import proofTrainingCerts from "@/assets/proof/training-certificates.webp";
+import proofParticipation from "@/assets/proof/participation-achievement.webp";
+import proofIdentification from "@/assets/proof/official-identification.webp";
 
 const NAV = [
   { label: "About", href: "#about" },
