@@ -41,8 +41,14 @@ Deno.serve(async (req) => {
 
   const signingSecret =
     Deno.env.get("LUXE_VEIL_TOKEN_SECRET") ??
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ??
-    "fallback-secret-change-me";
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+  if (!signingSecret || signingSecret.length < 32) {
+    return new Response(
+      JSON.stringify({ ok: false, error: "Invitation service is not configured" }),
+      { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
+  }
 
   // Token verification endpoint
   if (req.method === "POST" && action === "verify-token") {
