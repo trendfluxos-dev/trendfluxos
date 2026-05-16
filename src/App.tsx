@@ -15,6 +15,7 @@ import BrandSwitcher from "./components/social/BrandSwitcher";
 import LuxeVeilGate from "./components/LuxeVeilGate";
 import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
+import { SeoHead } from "@/hooks/useSeo";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <BrandPreviewProvider>
+          <SeoHead />
           <ScrollToTop />
           <ScrollProgress />
           <CommandPalette />
