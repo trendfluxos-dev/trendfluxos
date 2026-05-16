@@ -24,6 +24,7 @@ export const routes = {
   "/portfolio": make(() => import("@/pages/Portfolio")),
   "/enterprise": make(() => import("@/pages/Enterprise")),
   "/toolkit": make(() => import("@/pages/Toolkit")),
+  "/course/trendflux": make(() => import("@/pages/CourseTrendflux")),
   "/press/:id": make(() => import("@/pages/PressDetail")),
   "/case-studies/:slug": make(() => import("@/pages/CaseStudyPage")),
   "*": make(() => import("@/pages/NotFound")),
