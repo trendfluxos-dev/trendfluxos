@@ -46,6 +46,7 @@ import { useCaseFilters, serializeFilters } from "@/hooks/useCaseFilters";
 import type { CaseStudy } from "@/data/caseStudies";
 import { track } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
+import { persistLuxeVeilToken } from "@/lib/luxeVeilSession";
 
 type PressItem = {
   id?: string;
@@ -270,7 +271,7 @@ const Index = () => {
       if (error || !data?.ok || !data.token) {
         setVeilError(data?.error || "Invalid invitation code. Please check with your host.");
       } else {
-        try { localStorage.setItem("luxe_veil_token", data.token); } catch { /* ignore */ }
+        persistLuxeVeilToken(data.token);
         setVeilOpen(false);
         setVeilCode("");
         navigate("/luxe-veil");

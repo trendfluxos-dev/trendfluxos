@@ -11,21 +11,14 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { LUXE_VEIL_GATE_EVENT, type LuxeVeilGateDetail } from "@/lib/luxeVeilGate";
 import { track } from "@/lib/analytics";
+import {
+  clearLuxeVeilSession,
+  ensureLuxeVeilSession,
+  hasFreshLuxeVeilSession,
+  persistLuxeVeilToken,
+} from "@/lib/luxeVeilSession";
 
-const STORAGE_KEY = "luxe_veil_token";
 const TARGET_PATH = "/luxe-veil";
-
-const verifyTokenRemote = async (token: string): Promise<boolean> => {
-  try {
-    const { data } = await supabase.functions.invoke<{ ok: boolean }>(
-      "verify-invite?action=verify-token",
-      { body: { token } },
-    );
-    return !!data?.ok;
-  } catch {
-    return false;
-  }
-};
 
 /**
  * Globally-mounted invite-code gate. Listens for `luxe-veil:open` events
@@ -45,17 +38,19 @@ const LuxeVeilGate = () => {
       const detail = (e as CustomEvent<LuxeVeilGateDetail>).detail ?? {};
       track("luxe_veil_gate_open", { source: detail.source ?? "unknown" });
 
-      // Fast path: existing valid token → navigate directly.
-      const existing =
-        typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
-      if (existing) {
-        const ok = await verifyTokenRemote(existing);
-        if (ok) {
-          navigate(TARGET_PATH);
-          return;
-        }
-        try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
+      // Fast path: cached-fresh session → navigate immediately (no network).
+      if (hasFreshLuxeVeilSession()) {
+        track("luxe_veil_gate_skip", { reason: "cached" });
+        navigate(TARGET_PATH);
+        return;
       }
+      // Slow path: token present but stale → re-verify remotely.
+      if (await ensureLuxeVeilSession()) {
+        track("luxe_veil_gate_skip", { reason: "revalidated" });
+        navigate(TARGET_PATH);
+        return;
+      }
+      clearLuxeVeilSession();
 
       setError("");
       setCode("");
@@ -80,7 +75,7 @@ const LuxeVeilGate = () => {
       if (fnErr || !data?.ok || !data.token) {
         setError(data?.error || "Invalid invitation code. Please check with your host.");
       } else {
-        try { localStorage.setItem(STORAGE_KEY, data.token); } catch { /* ignore */ }
+        persistLuxeVeilToken(data.token);
         track("luxe_veil_gate_verified", {});
         setOpen(false);
         setCode("");
