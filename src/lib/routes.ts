@@ -16,6 +16,7 @@ export const routes = {
   "/admin/luxe-veil": make(() => import("@/pages/LuxeVeilAdmin")),
   "/admin/conversions": make(() => import("@/pages/ConversionDashboard")),
   "/admin/enterprise-demos": make(() => import("@/pages/EnterpriseDemos")),
+  "/admin/course-enrollments": make(() => import("@/pages/CourseEnrollmentsAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
   "/trendflux-talent": make(() => import("@/pages/TrendfluxTalent")),
@@ -62,5 +63,6 @@ export const navigablePages: {
   { label: "Admin", path: "/admin", type: "Admin", keywords: "dashboard manage" },
   { label: "Luxe Veil Admin", path: "/admin/luxe-veil", type: "Admin", keywords: "admin luxe manage" },
   { label: "Enterprise Demo Requests", path: "/admin/enterprise-demos", type: "Admin", keywords: "admin demos enterprise leads requests triage" },
+  { label: "Course Enrollments", path: "/admin/course-enrollments", type: "Admin", keywords: "admin course enrollments telegram bkash trx timeline" },
   { label: "Sign In", path: "/auth", type: "Account", keywords: "login auth signin" },
 ];

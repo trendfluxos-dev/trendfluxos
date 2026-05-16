@@ -25,6 +25,7 @@ const Admin = routes["/admin"];
 const LuxeVeilAdmin = routes["/admin/luxe-veil"];
 const ConversionDashboard = routes["/admin/conversions"];
 const EnterpriseDemos = routes["/admin/enterprise-demos"];
+const CourseEnrollmentsAdmin = routes["/admin/course-enrollments"];
 const PressDetail = routes["/press/:id"];
 const Marriage = routes["/marriage"];
 const BrandOpen = routes["/brand-open"];
@@ -68,6 +69,7 @@ const App = () => (
             <Route path="/admin/luxe-veil" element={<LuxeVeilAdmin />} />
             <Route path="/admin/conversions" element={<ConversionDashboard />} />
             <Route path="/admin/enterprise-demos" element={<EnterpriseDemos />} />
+            <Route path="/admin/course-enrollments" element={<CourseEnrollmentsAdmin />} />
             <Route path="/press/:id" element={<PressDetail />} />
             <Route path="/marriage" element={<Marriage />} />
             <Route path="/brand-open" element={<BrandOpen />} />
