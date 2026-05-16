@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
 import { BRAND } from "@/config/brand";
 import { ENTERPRISE } from "@/config/enterprise";
 import { track } from "@/lib/analytics";
@@ -46,10 +47,14 @@ const Footer = () => {
             <li><Link to="/brand-open" className="hover:text-foreground transition-colors">Studio BrandToki</Link></li>
             <li><Link to="/trendflux-talent" className="hover:text-foreground transition-colors">TrendFlux Talent</Link></li>
             <li>
-              <Link to="/luxe-veil" className="hover:text-foreground transition-colors inline-flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => openLuxeVeilGate({ source: "footer" })}
+                className="hover:text-foreground transition-colors inline-flex items-center gap-1.5 text-left"
+              >
                 <span className="w-1 h-1 rounded-full bg-foreground/40" /> Luxe Veil
                 <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/35 ml-1">Private</span>
-              </Link>
+              </button>
             </li>
             <li><a href="#cases" className="hover:text-foreground transition-colors">Case Studies</a></li>
             <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>
