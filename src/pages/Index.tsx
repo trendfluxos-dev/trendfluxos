@@ -730,6 +730,132 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Pricing */}
+      <section id="pricing" className="relative px-6 py-24 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-12 max-w-3xl">
+            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">— Pricing</p>
+            <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
+              Operator-grade pricing.{" "}
+              <span className="text-gradient">Outcome-aligned.</span>
+            </h2>
+            <p className="mt-5 text-base text-foreground/65 md:text-lg">
+              Start with the system you need today. Scale into the full execution OS
+              as revenue compounds. Cancel or upgrade anytime.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              {
+                name: "Starter",
+                tagline: "Solo operators & founders",
+                price: "$499",
+                period: "/ month",
+                features: [
+                  "1 growth system module",
+                  "Prompt library access",
+                  "Async strategy review (monthly)",
+                  "Email support · 48h SLA",
+                ],
+                cta: "Start with Starter",
+                source: "pricing_starter",
+                highlighted: false,
+              },
+              {
+                name: "Growth",
+                tagline: "Scaling teams · 2–25 people",
+                price: "$2,400",
+                period: "/ month",
+                features: [
+                  "All 8 system modules",
+                  "Automation blueprints + SOPs",
+                  "Performance media activation",
+                  "Weekly growth review call",
+                  "Slack channel · 4h SLA",
+                ],
+                cta: "Launch Growth Plan",
+                source: "pricing_growth",
+                highlighted: true,
+              },
+              {
+                name: "Enterprise",
+                tagline: "Multi-brand & high-revenue ops",
+                price: "Custom",
+                period: "",
+                features: [
+                  "Dedicated execution pod",
+                  "Multi-brand ecosystem build",
+                  "Custom AI + CRM integrations",
+                  "Quarterly board-grade reporting",
+                  "Priority SLA · named lead",
+                ],
+                cta: "Talk to Enterprise",
+                source: "pricing_enterprise",
+                highlighted: false,
+              },
+            ].map((tier) => (
+              <article
+                key={tier.name}
+                className={`relative flex flex-col rounded-2xl border p-7 transition-all duration-300 hover:-translate-y-1 ${
+                  tier.highlighted
+                    ? "border-gold/50 bg-gradient-to-b from-gold/[0.08] to-background shadow-[0_24px_60px_-20px_hsl(var(--gold)/0.4)]"
+                    : "border-foreground/10 glass-strong hover:border-primary/40"
+                }`}
+              >
+                {tier.highlighted && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-foreground shadow-gold">
+                    Most Popular
+                  </span>
+                )}
+
+                <div>
+                  <h3 className="font-display text-2xl font-bold tracking-tight">{tier.name}</h3>
+                  <p className="mt-1 text-sm text-foreground/55">{tier.tagline}</p>
+                </div>
+
+                <div className="mt-6 flex items-baseline gap-1.5">
+                  <span className="font-display text-4xl font-bold tracking-tight">{tier.price}</span>
+                  {tier.period && (
+                    <span className="text-sm text-foreground/50">{tier.period}</span>
+                  )}
+                </div>
+
+                <ul className="mt-7 space-y-3 text-sm">
+                  {tier.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-foreground/80">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    track("pricing_cta_click", { tier: tier.name, source: tier.source });
+                    setQuoteContext({ source: tier.source, module: tier.name, category: "Pricing" });
+                    setQuoteOpen(true);
+                  }}
+                  className={`mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                    tier.highlighted
+                      ? "bg-gold text-gold-foreground shadow-gold hover:scale-[1.03] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)]"
+                      : "border border-foreground/15 text-foreground/90 hover:border-gold/40 hover:text-gold"
+                  }`}
+                >
+                  {tier.cta}
+                  <ArrowUpRight className="h-4 w-4" />
+                </button>
+              </article>
+            ))}
+          </div>
+
+          <p className="mt-8 text-center text-xs text-foreground/50">
+            All plans include onboarding, system access, and 30-day execution guarantee.
+          </p>
+        </div>
+      </section>
+
       {/* Brand Architect */}
       <section id="founder" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
