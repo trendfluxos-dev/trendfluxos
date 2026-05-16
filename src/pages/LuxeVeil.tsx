@@ -11,22 +11,12 @@ import { SocialShare } from "@/components/SocialShare";
 import { BRAND_CONTACTS } from "@/config/socialConfig";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-
-const STORAGE_KEY = "luxe_veil_token";
-
-async function verifyTokenRemote(raw: string | null): Promise<boolean> {
-  if (!raw) return false;
-  try {
-    const { data, error } = await supabase.functions.invoke<{ ok: boolean }>(
-      "verify-invite?action=verify-token",
-      { body: { token: raw } },
-    );
-    if (error) return false;
-    return Boolean(data?.ok);
-  } catch {
-    return false;
-  }
-}
+import {
+  clearLuxeVeilSession,
+  ensureLuxeVeilSession,
+  hasFreshLuxeVeilSession,
+  persistLuxeVeilToken,
+} from "@/lib/luxeVeilSession";
 
 const requestSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80),
@@ -100,16 +90,17 @@ const LuxeVeil = () => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const tok = localStorage.getItem(STORAGE_KEY);
-    if (!tok) return;
+    // Fast path: cached-fresh session unlocks instantly.
+    if (hasFreshLuxeVeilSession()) {
+      setUnlocked(true);
+      return;
+    }
     let cancelled = false;
     (async () => {
-      const ok = await verifyTokenRemote(tok);
+      const ok = await ensureLuxeVeilSession();
       if (cancelled) return;
       if (ok) setUnlocked(true);
-      else {
-        try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
-      }
+      else clearLuxeVeilSession();
     })();
     return () => { cancelled = true; };
   }, []);
@@ -128,7 +119,7 @@ const LuxeVeil = () => {
       if (fnErr || !data?.ok || !data.token) {
         setError(data?.error || "Invalid invitation code. Please check with your host.");
       } else {
-        try { localStorage.setItem(STORAGE_KEY, data.token); } catch { /* ignore */ }
+        persistLuxeVeilToken(data.token);
         setUnlocked(true);
       }
     } catch {
