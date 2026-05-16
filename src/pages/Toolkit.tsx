@@ -459,3 +459,165 @@ const Toolkit = () => {
           </Accordion>
         </div>
       </section>
+
+      {/* Project & Portfolio */}
+      <section className="relative px-6 py-20 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="relative overflow-hidden rounded-3xl border border-gold/25 glass-strong p-8 md:p-14">
+            <div className="absolute -top-24 -right-24 h-[360px] w-[360px] bg-gold/15 blur-[140px]" aria-hidden />
+            <div className="absolute -bottom-24 -left-24 h-[360px] w-[360px] bg-primary/15 blur-[140px]" aria-hidden />
+            <div className="relative grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+              <div>
+                <p className="mb-3 text-xs uppercase tracking-[0.3em] text-gold">
+                  — Project &amp; Portfolio
+                </p>
+                <h2 className="font-display text-3xl font-bold tracking-tight md:text-5xl" lang="bn">
+                  এই কোর্সে আপনি যা যা তৈরি করবেন
+                </h2>
+                <p className="mt-5 text-sm text-foreground/75 md:text-base" lang="bn">
+                  "Master Project &amp; Portfolio System" ক্লাসের মাধ্যমে আপনি
+                  সম্পূর্ণ একটি অটোমেটেড ব্র্যান্ড বা সিস্টেম দাঁড় করাবেন, যা
+                  সরাসরি আপনার সিভি বা পোর্টফোলিওতে যুক্ত করতে পারবেন।
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  {[
+                    "AI Brand System",
+                    "Automation Blueprint",
+                    "Growth Dashboard",
+                    "Pitch Deck",
+                  ].map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-foreground/15 bg-background/40 px-3.5 py-1.5 text-xs font-medium text-foreground/80"
+                    >
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { n: "01", t: "AI Content Engine", c: "Automated brand posts" },
+                  { n: "02", t: "Growth Dashboard", c: "Real-time attribution" },
+                  { n: "03", t: "Prompt Pack", c: "Production-ready library" },
+                  { n: "04", t: "Pitch Asset Kit", c: "Case study + deck" },
+                ].map((p) => (
+                  <div
+                    key={p.n}
+                    className="rounded-2xl border border-foreground/10 bg-background/60 p-4 transition-colors hover:border-gold/40"
+                  >
+                    <p className="font-display text-xs text-foreground/40">{p.n}</p>
+                    <p className="mt-2 font-display text-sm font-bold">{p.t}</p>
+                    <p className="mt-1 text-[11px] text-foreground/55">{p.c}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="relative px-6 py-20 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-3xl">
+          <div className="mb-10 text-center">
+            <p className="mb-3 text-xs uppercase tracking-[0.3em] text-gold">— FAQ</p>
+            <h2 className="font-display text-3xl font-bold tracking-tight md:text-5xl" lang="bn">
+              সচরাচর জিজ্ঞাসা
+            </h2>
+          </div>
+
+          <Accordion type="single" collapsible defaultValue="faq-0" className="space-y-3">
+            {faqs.map((f, i) => (
+              <AccordionItem
+                key={f.q}
+                value={`faq-${i}`}
+                className="overflow-hidden rounded-2xl border border-foreground/10 bg-card/40 px-5 backdrop-blur transition-colors hover:border-primary/40 data-[state=open]:border-primary/50"
+              >
+                <AccordionTrigger className="py-5 text-left font-display text-base font-semibold hover:no-underline" lang="bn">
+                  {f.q}
+                </AccordionTrigger>
+                <AccordionContent
+                  className="pb-5 text-sm leading-relaxed text-foreground/75"
+                  lang="bn"
+                >
+                  {f.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+
+          {/* Final CTA */}
+          <div className="mt-12 rounded-3xl border border-gold/30 bg-gradient-to-br from-gold/10 via-background to-primary/5 p-8 text-center md:p-12">
+            <h3 className="font-display text-2xl font-bold tracking-tight md:text-4xl" lang="bn">
+              আজই এনরোল করুন
+            </h3>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-foreground/70 md:text-base" lang="bn">
+              সিট সীমিত। লাইফটাইম রেকর্ডিং, প্রাইভেট কমিউনিটি ও পোর্টফোলিও সাপোর্ট সহ।
+            </p>
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+              <a
+                href="#enroll"
+                onClick={() => onEnroll("final_cta")}
+                className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3.5 text-sm font-bold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04]"
+              >
+                🚀 <span lang="bn">এনরোল করুন</span>
+              </a>
+              <Link
+                to="/project-lead"
+                className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-6 py-3.5 text-sm font-semibold text-foreground/85 transition-colors hover:border-gold/40 hover:text-gold"
+              >
+                Talk to Mentor
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative px-6 py-12 md:px-12 lg:px-20 border-t border-foreground/10">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <div className="text-sm">
+            <span className="font-display font-semibold">{BRAND.nameLead}</span>{" "}
+            <span className="text-foreground/55">{BRAND.nameTrail}</span>
+            <span className="mx-3 text-foreground/25">·</span>
+            <span className="text-foreground/55">Masterclass: AI &amp; Automation</span>
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-foreground/65">
+            <Link to="/portfolio" className="hover:text-gold transition-colors">Portfolio</Link>
+            <Link to="/project-lead" className="hover:text-gold transition-colors">Contact</Link>
+            <Link to="/enterprise" className="hover:text-gold transition-colors">Enterprise</Link>
+          </div>
+        </div>
+      </footer>
+
+      {/* Sticky bottom bar */}
+      <div
+        className={`fixed inset-x-0 bottom-0 z-40 border-t border-foreground/10 bg-background/95 backdrop-blur transition-transform duration-300 ${
+          stickyVisible ? "translate-y-0" : "translate-y-full"
+        }`}
+        role="region"
+        aria-label="Enrollment reminder"
+      >
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-12 lg:px-20">
+          <p className="flex-1 truncate text-[12.5px] font-medium text-foreground/85 sm:text-sm" lang="bn">
+            <span className="mr-2" aria-hidden>🔥</span>
+            TrendFlux কোর্সের সিট দ্রুত পূরণ হয়ে যাচ্ছে!
+          </p>
+          <a
+            href="#enroll"
+            onClick={() => onEnroll("sticky_bar")}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-xs font-bold text-gold-foreground shadow-gold transition-transform hover:scale-[1.04] sm:text-sm"
+          >
+            <span lang="bn">এনরোল</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default Toolkit;
