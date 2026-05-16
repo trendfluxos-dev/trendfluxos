@@ -770,6 +770,9 @@ const Index = () => {
                   loading="lazy"
                   decoding="async"
                   onLoad={() => setPortraitLoaded(true)}
+                  ref={(el) => {
+                    if (el?.complete && el.naturalWidth > 0) setPortraitLoaded(true);
+                  }}
                   className={`absolute inset-0 h-full w-full object-cover transition-[filter,opacity] duration-700 ease-out ${
                     portraitLoaded
                       ? "opacity-100 blur-0"
