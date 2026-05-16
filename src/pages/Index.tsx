@@ -36,6 +36,8 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import { usePortraitFocus } from "@/hooks/usePortraitFocus";
+import ReframePortrait from "@/components/ReframePortrait";
 import { DigitalImpactMap } from "@/components/DigitalImpactMap";
 import { Faq } from "@/components/Faq";
 import { StrategySessionDialog } from "@/components/StrategySessionDialog";
