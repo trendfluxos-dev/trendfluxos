@@ -412,6 +412,7 @@ const Index = () => {
               { href: "#services", label: "Services" },
               { href: "#founder", label: "Brand Architect" },
               { href: "#cases", label: "Case Studies" },
+              { href: "#pricing", label: "Pricing" },
             ].map((l) => (
               <a
                 key={l.href}
