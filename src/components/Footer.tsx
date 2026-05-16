@@ -31,10 +31,10 @@ const Footer = () => {
             Systems
           </h4>
           <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
-            <li><a href="#services" className="hover:text-foreground transition-colors">AI Automation</a></li>
-            <li><a href="#services" className="hover:text-foreground transition-colors">Paid Media</a></li>
-            <li><a href="#services" className="hover:text-foreground transition-colors">CRM Workflows</a></li>
-            <li><a href="#services" className="hover:text-foreground transition-colors">Brand Architecture</a></li>
+            <li><a href="#services" className="story-link hover:text-foreground transition-colors">AI Automation</a></li>
+            <li><a href="#services" className="story-link hover:text-foreground transition-colors">Paid Media</a></li>
+            <li><a href="#services" className="story-link hover:text-foreground transition-colors">CRM Workflows</a></li>
+            <li><a href="#services" className="story-link hover:text-foreground transition-colors">Brand Architecture</a></li>
           </ul>
         </div>
 
@@ -43,9 +43,9 @@ const Footer = () => {
             Studio
           </h4>
           <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
-            <li><Link to="/project-lead" className="hover:text-foreground transition-colors">Project Lead</Link></li>
-            <li><Link to="/brand-open" className="hover:text-foreground transition-colors">Studio BrandToki</Link></li>
-            <li><Link to="/trendflux-talent" className="hover:text-foreground transition-colors">TrendFlux Talent</Link></li>
+            <li><Link to="/project-lead" className="story-link hover:text-foreground transition-colors">Project Lead</Link></li>
+            <li><Link to="/brand-open" className="story-link hover:text-foreground transition-colors">Studio BrandToki</Link></li>
+            <li><Link to="/trendflux-talent" className="story-link hover:text-foreground transition-colors">TrendFlux Talent</Link></li>
             <li>
               <button
                 type="button"
@@ -56,8 +56,8 @@ const Footer = () => {
                 <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/35 ml-1">Private</span>
               </button>
             </li>
-            <li><a href="#cases" className="hover:text-foreground transition-colors">Case Studies</a></li>
-            <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>
+            <li><a href="#cases" className="story-link hover:text-foreground transition-colors">Case Studies</a></li>
+            <li><a href="#" className="story-link hover:text-foreground transition-colors">Contact</a></li>
           </ul>
         </div>
 
@@ -67,7 +67,7 @@ const Footer = () => {
           </h4>
           <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
             <li>
-              <Link to="/enterprise" className="hover:text-foreground transition-colors">
+              <Link to="/enterprise" className="story-link hover:text-foreground transition-colors">
                 Enterprise Control
               </Link>
             </li>
@@ -77,7 +77,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => track("enterprise_portal_open", { location: "footer_portal" })}
-                className="hover:text-foreground transition-colors"
+                className="story-link hover:text-foreground transition-colors"
               >
                 Enterprise Portal
               </a>
@@ -88,7 +88,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => track("enterprise_portal_open", { location: "footer_client_access" })}
-                className="hover:text-foreground transition-colors"
+                className="story-link hover:text-foreground transition-colors"
               >
                 Client Access
               </a>
