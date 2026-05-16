@@ -196,7 +196,7 @@ Deno.serve(async (req) => {
     : "";
   return html(
     `Payment ${verb}`,
-    `<p>Module <b>${existing.module_index}</b> · TrxID <code>${existing.bkash_trx_id}</code> — marked <b>${newStatus}</b>.</p>${nextNote}`,
+    `<p>Module <b>${esc(String(existing.module_index))}</b> · TrxID <code>${esc(existing.bkash_trx_id ?? "")}</code> — marked <b>${esc(newStatus)}</b>.</p>${nextNote}`,
     color,
   );
 });
