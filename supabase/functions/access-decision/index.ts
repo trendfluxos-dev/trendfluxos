@@ -30,8 +30,17 @@ function safeEqual(a: string, b: string): boolean {
   return diff === 0;
 }
 
+function esc(s: string): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function html(title: string, body: string, color = "#16a34a"): Response {
-  const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${title}</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0b0b0c;color:#f5f5f5;display:grid;place-items:center;min-height:100vh;margin:0;padding:24px}main{max-width:480px;text-align:center;background:#141416;border:1px solid #232326;border-radius:18px;padding:32px}h1{color:${color};margin:0 0 12px;font-size:22px}p{color:#cfcfd2;line-height:1.55}</style></head><body><main><h1>${title}</h1>${body}</main></body></html>`;
+  const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${esc(title)}</title><style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0b0b0c;color:#f5f5f5;display:grid;place-items:center;min-height:100vh;margin:0;padding:24px}main{max-width:480px;text-align:center;background:#141416;border:1px solid #232326;border-radius:18px;padding:32px}h1{color:${color};margin:0 0 12px;font-size:22px}p{color:#cfcfd2;line-height:1.55}</style></head><body><main><h1>${esc(title)}</h1>${body}</main></body></html>`;
   return new Response(doc, { status: 200, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" } });
 }
 
@@ -83,13 +92,16 @@ Deno.serve(async (req) => {
     .eq("id", id)
     .eq("status", "pending");
 
-  if (error) return html("Update failed", `<p>${error.message}</p>`, "#ef4444");
+  if (error) {
+    console.error("access-decision update error", error);
+    return html("Update failed", `<p>Could not update the request.</p>`, "#ef4444");
+  }
 
   const color = newStatus === "approved" ? "#16a34a" : "#ef4444";
   const verb = newStatus === "approved" ? "Approved ✅" : "Rejected ❌";
   return html(
     `Access ${verb}`,
-    `<p>Request for <b>${existing.email}</b> (source: <i>${existing.source}</i>) has been <b>${newStatus}</b>.</p><p style="color:#8a8a90;font-size:13px;margin-top:18px">You can now contact the visitor manually.</p>`,
+    `<p>Request for <b>${esc(existing.email)}</b> (source: <i>${esc(existing.source)}</i>) has been <b>${esc(newStatus)}</b>.</p><p style="color:#8a8a90;font-size:13px;margin-top:18px">You can now contact the visitor manually.</p>`,
     color,
   );
 });

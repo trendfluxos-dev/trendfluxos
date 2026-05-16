@@ -65,7 +65,9 @@ Deno.serve(async (req) => {
     // submitter has it (we hand it back via navigation state + localStorage).
     // Reject lookups for records older than 30 days so a leaked id has a
     // bounded blast radius and cannot be used to enumerate historical PII.
-    const TTL_MS = 30 * 24 * 60 * 60 * 1000;
+    // Tightened from 30d → 48h to reduce blast radius if the UUID leaks
+    // (e.g. via shared device, browser history, support handoff).
+    const TTL_MS = 48 * 60 * 60 * 1000;
     if (data && data.created_at) {
       const ageMs = Date.now() - new Date(data.created_at as string).getTime();
       if (ageMs > TTL_MS) {

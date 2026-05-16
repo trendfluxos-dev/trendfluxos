@@ -105,7 +105,8 @@ Deno.serve(async (req) => {
     .single();
 
   if (insertErr || !inserted) {
-    return new Response(JSON.stringify({ ok: false, error: insertErr?.message || "Insert failed" }), {
+    console.error("access-request insert error", insertErr);
+    return new Response(JSON.stringify({ ok: false, error: "submission_failed" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
