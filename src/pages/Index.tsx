@@ -213,6 +213,7 @@ const HEADLINE_VARIANTS: HeadlineVariant[] = [
 const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const activeSection = useActiveSection(["services", "founder", "cases"]);
+  const { values: portraitFocus } = usePortraitFocus();
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quoteContext, setQuoteContext] = useState<{
