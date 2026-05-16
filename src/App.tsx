@@ -12,6 +12,7 @@ import ScrollProgress from "./components/ScrollProgress";
 import CommandPalette from "./components/CommandPalette";
 import FloatingContact from "./components/social/FloatingContact";
 import BrandSwitcher from "./components/social/BrandSwitcher";
+import LuxeVeilGate from "./components/LuxeVeilGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const App = () => (
           <CommandPalette />
           <FloatingContact />
           <BrandSwitcher />
+          <LuxeVeilGate />
           {import.meta.env.DEV && <ThemeDebugPanel />}
           <Suspense fallback={<PageFallback />}>
           <Routes>
