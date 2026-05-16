@@ -11,7 +11,6 @@ import {
   Search,
   Layers,
   PaintBucket,
-  Image as ImageIcon,
   LineChart,
   Cog,
   Rocket,
