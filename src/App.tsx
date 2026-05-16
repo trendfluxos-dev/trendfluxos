@@ -8,6 +8,7 @@ import ThemeDebugPanel from "@/components/ThemeDebugPanel";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routes } from "./lib/routes";
 import ScrollToTop from "./components/ScrollToTop";
+import ScrollProgress from "./components/ScrollProgress";
 import CommandPalette from "./components/CommandPalette";
 import FloatingContact from "./components/social/FloatingContact";
 import BrandSwitcher from "./components/social/BrandSwitcher";
@@ -48,6 +49,7 @@ const App = () => (
       <BrowserRouter>
         <BrandPreviewProvider>
           <ScrollToTop />
+          <ScrollProgress />
           <CommandPalette />
           <FloatingContact />
           <BrandSwitcher />
