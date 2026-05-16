@@ -35,6 +35,7 @@ import { usePressItems } from "@/hooks/usePressItems";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
+import { useActiveSection } from "@/hooks/useActiveSection";
 import { DigitalImpactMap } from "@/components/DigitalImpactMap";
 import { Faq } from "@/components/Faq";
 import { StrategySessionDialog } from "@/components/StrategySessionDialog";
@@ -209,6 +210,7 @@ const HEADLINE_VARIANTS: HeadlineVariant[] = [
 
 const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
+  const activeSection = useActiveSection(["services", "founder", "cases"]);
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quoteContext, setQuoteContext] = useState<{
@@ -412,15 +414,21 @@ const Index = () => {
               { href: "#services", label: "Services" },
               { href: "#founder", label: "Brand Architect" },
               { href: "#cases", label: "Case Studies" },
-            ].map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
-              >
-                {l.label}
-              </a>
-            ))}
+            ].map((l) => {
+              const isActive = activeSection === l.href.slice(1);
+              return (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  aria-current={isActive ? "true" : undefined}
+                  className={`relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:bg-gold after:transition-all after:duration-300 hover:after:w-full ${
+                    isActive ? "text-gold after:w-full" : "after:w-0"
+                  }`}
+                >
+                  {l.label}
+                </a>
+              );
+            })}
             <Link
               to="/toolkit"
               className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
@@ -1144,7 +1152,7 @@ const Index = () => {
           onChange={setCaseFilters}
           resultCount={caseFiltersActive ? filteredCases.length : undefined}
         />
-        <div className="mx-auto max-w-7xl mt-8">
+        <div id="cases-results" className="mx-auto max-w-7xl mt-8 scroll-mt-44">
           {caseFiltersActive && (
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.25em] text-foreground/55">
               <span aria-live="polite">

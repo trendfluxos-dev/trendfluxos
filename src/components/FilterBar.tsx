@@ -1,4 +1,4 @@
-import { Search, X } from "lucide-react";
+import { Search, X, Filter } from "lucide-react";
 
 export type CaseFilters = {
   service: string;
@@ -27,15 +27,33 @@ type Props = {
   value: CaseFilters;
   onChange: (next: CaseFilters) => void;
   resultCount?: number;
+  onApply?: () => void;
 };
 
-const FilterBar = ({ value, onChange, resultCount }: Props) => {
+const FilterBar = ({ value, onChange, resultCount, onApply }: Props) => {
   const hasActive =
     value.service || value.industry || value.stack || value.stage || value.query.trim();
 
+  const handleApply = () => {
+    if (onApply) {
+      onApply();
+      return;
+    }
+    const target = document.getElementById("cases-results");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <div className="sticky top-20 z-30 px-6 lg:px-10">
-      <div className="max-w-7xl mx-auto glass-strong rounded-2xl p-4">
+      <form
+        className="max-w-7xl mx-auto glass-strong rounded-2xl p-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleApply();
+        }}
+      >
         <div className="grid grid-cols-2 gap-2.5 md:grid-cols-6">
           {groups.map((g) => (
             <select
@@ -70,7 +88,7 @@ const FilterBar = ({ value, onChange, resultCount }: Props) => {
             />
           </div>
           <button
-            type="button"
+            type="reset"
             onClick={() => onChange(EMPTY_FILTERS)}
             onKeyDown={(e) => {
               if ((e.key === "Enter" || e.key === " ") && hasActive) {
@@ -89,15 +107,27 @@ const FilterBar = ({ value, onChange, resultCount }: Props) => {
             <X className="h-3.5 w-3.5" /> Reset
           </button>
         </div>
-        {typeof resultCount === "number" && (
-          <p className="mt-3 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-foreground/55">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-green/30 bg-brand-green/10 px-2.5 py-0.5 font-semibold text-brand-green">
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
-              {resultCount} {resultCount === 1 ? "result" : "results"}
-            </span>
-          </p>
-        )}
-      </div>
+
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          {typeof resultCount === "number" ? (
+            <p className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-foreground/55">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-green/30 bg-brand-green/10 px-2.5 py-0.5 font-semibold text-brand-green">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
+                {resultCount} {resultCount === 1 ? "result" : "results"}
+              </span>
+              <span className="text-foreground/40 normal-case tracking-normal">· updates live</span>
+            </p>
+          ) : <span />}
+
+          <button
+            type="submit"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gold px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-gold-foreground shadow-gold transition-all hover:scale-[1.03] hover:shadow-[0_0_24px_hsl(var(--gold)/0.5)] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+          >
+            <Filter className="h-3.5 w-3.5" />
+            Search Operations
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
