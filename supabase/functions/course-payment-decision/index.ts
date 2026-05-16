@@ -94,12 +94,30 @@ Deno.serve(async (req) => {
   };
   if (newStatus === "paid") update.paid_at = new Date().toISOString();
 
-  const { error } = await supabase
+  // Atomic claim: only the first request that matches `status='pending'` wins.
+  // Subsequent duplicate clicks see 0 rows and short-circuit — no duplicate
+  // events, no duplicate Telegram messages.
+  const { data: claimed, error } = await supabase
     .from("module_enrollments")
     .update(update)
     .eq("id", id)
-    .eq("status", "pending");
+    .eq("status", "pending")
+    .select("id")
+    .maybeSingle();
   if (error) return html("Update failed", `<p>${error.message}</p>`, "#ef4444");
+  if (!claimed) {
+    // Lost the race — another admin (or duplicate click) already decided this.
+    const { data: fresh } = await supabase
+      .from("module_enrollments")
+      .select("status, module_index")
+      .eq("id", id)
+      .maybeSingle();
+    return html(
+      `Already ${fresh?.status ?? "decided"}`,
+      `<p>Module ${fresh?.module_index ?? existing.module_index} was already <b>${fresh?.status ?? "decided"}</b>. No duplicate notification sent.</p>`,
+      fresh?.status === "paid" ? "#16a34a" : "#ef4444",
+    );
+  }
 
   // Fetch module title + user profile for the timeline + confirmation message
   const [{ data: mod }, { data: profile }, { data: nextMod }] = await Promise.all([
@@ -113,7 +131,9 @@ Deno.serve(async (req) => {
   const moduleTitle = mod?.title ?? `Module ${existing.module_index}`;
   const userLabel = profile?.full_name || profile?.email || existing.user_id;
 
-  // Timeline events
+  // Timeline events — partial unique indexes on enrollment_events guarantee
+  // each enrollment can only have ONE approved/rejected row and each
+  // (user, module) can only have ONE unlocked row. Conflict → silently skip.
   const events: Array<Record<string, unknown>> = [{
     enrollment_id: existing.id,
     user_id: existing.user_id,
@@ -134,7 +154,12 @@ Deno.serve(async (req) => {
       message: `Module ${existing.module_index + 1} is now eligible for payment`,
     });
   }
-  await supabase.from("enrollment_events").insert(events);
+  for (const ev of events) {
+    const { error: evErr } = await supabase.from("enrollment_events").insert(ev);
+    if (evErr && !/duplicate key|unique/i.test(evErr.message)) {
+      console.error("enrollment_event insert failed", evErr);
+    }
+  }
 
   // Telegram confirmation message back to admin
   if (action === "approve") {
