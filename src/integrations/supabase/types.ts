@@ -200,10 +200,14 @@ export type Database = {
           bkash_payment_id: string | null
           bkash_trx_id: string | null
           created_at: string
+          decided_at: string | null
+          decided_via: string | null
           id: string
           module_index: number
           paid_at: string | null
+          sender_phone: string | null
           status: string
+          submission_note: string | null
           updated_at: string
           user_id: string
         }
@@ -212,10 +216,14 @@ export type Database = {
           bkash_payment_id?: string | null
           bkash_trx_id?: string | null
           created_at?: string
+          decided_at?: string | null
+          decided_via?: string | null
           id?: string
           module_index: number
           paid_at?: string | null
+          sender_phone?: string | null
           status?: string
+          submission_note?: string | null
           updated_at?: string
           user_id: string
         }
@@ -224,10 +232,14 @@ export type Database = {
           bkash_payment_id?: string | null
           bkash_trx_id?: string | null
           created_at?: string
+          decided_at?: string | null
+          decided_via?: string | null
           id?: string
           module_index?: number
           paid_at?: string | null
+          sender_phone?: string | null
           status?: string
+          submission_note?: string | null
           updated_at?: string
           user_id?: string
         }
