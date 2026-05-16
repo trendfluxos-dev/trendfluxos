@@ -1571,6 +1571,7 @@ const Index = () => {
           )}
         </DialogContent>
       </Dialog>
+      <ReframePortrait />
     </main>
   );
 };
