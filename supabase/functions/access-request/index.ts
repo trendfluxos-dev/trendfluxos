@@ -38,11 +38,32 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// Per-instance in-memory rate limit (5 req / IP / 10 min).
+const rateBuckets = new Map<string, { count: number; reset: number }>();
+function rateLimit(ip: string, limit = 5, windowMs = 10 * 60_000): boolean {
+  const now = Date.now();
+  const b = rateBuckets.get(ip);
+  if (!b || now > b.reset) {
+    rateBuckets.set(ip, { count: 1, reset: now + windowMs });
+    return true;
+  }
+  if (b.count >= limit) return false;
+  b.count++;
+  return true;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), {
       status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
+  if (!rateLimit(ip)) {
+    return new Response(JSON.stringify({ ok: false, error: "rate_limited" }), {
+      status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
