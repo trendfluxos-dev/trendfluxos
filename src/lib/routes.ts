@@ -55,7 +55,7 @@ export const navigablePages: {
   { label: "Luxe Veil", path: "/luxe-veil", type: "Brand", keywords: "wedding luxe private invite" },
   { label: "Studio BrandToki", path: "/brandtoki", type: "Brand", keywords: "studio production photography videography podcast gulshan" },
   { label: "Portfolio — Zahid Hasan Emon", path: "/portfolio", type: "Brand", keywords: "resume cv portfolio executive zahid emon brand architect" },
-  { label: "Enterprise Control", path: "/enterprise", type: "Brand", keywords: "enterprise control portal client login erp dashboard automation compliance audit" },
+  { label: "Enterprise Control", path: "/enterprise", type: "Brand", keywords: "enterprise control portal erp dashboard automation compliance audit" },
   { label: "Admin", path: "/admin", type: "Admin", keywords: "dashboard manage" },
   { label: "Luxe Veil Admin", path: "/admin/luxe-veil", type: "Admin", keywords: "admin luxe manage" },
   { label: "Enterprise Demo Requests", path: "/admin/enterprise-demos", type: "Admin", keywords: "admin demos enterprise leads requests triage" },
