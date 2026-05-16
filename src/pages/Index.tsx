@@ -36,6 +36,8 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import { usePortraitFocus } from "@/hooks/usePortraitFocus";
+import ReframePortrait from "@/components/ReframePortrait";
 import { DigitalImpactMap } from "@/components/DigitalImpactMap";
 import { Faq } from "@/components/Faq";
 import { StrategySessionDialog } from "@/components/StrategySessionDialog";
@@ -211,6 +213,7 @@ const HEADLINE_VARIANTS: HeadlineVariant[] = [
 const Index = () => {
   const [filter, setFilter] = useState<Category>("All");
   const activeSection = useActiveSection(["services", "founder", "cases"]);
+  const { activeValue: portraitFocusY } = usePortraitFocus();
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quoteContext, setQuoteContext] = useState<{
@@ -752,7 +755,8 @@ const Index = () => {
                   height={1000}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover object-[center_22%] sm:object-[center_28%] lg:object-[center_32%]"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: `center ${portraitFocusY}%` }}
                 />
               </div>
               <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
@@ -1567,6 +1571,7 @@ const Index = () => {
           )}
         </DialogContent>
       </Dialog>
+      <ReframePortrait />
     </main>
   );
 };
