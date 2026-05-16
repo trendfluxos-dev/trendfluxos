@@ -755,7 +755,13 @@ const Index = () => {
                   height={1000}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover object-[center_22%] sm:object-[center_28%] lg:object-[center_32%]"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{
+                    objectPosition: `center ${portraitFocus.base}%`,
+                    // sm + lg overrides applied via CSS custom properties below
+                  }}
+                  data-focus-sm={portraitFocus.sm}
+                  data-focus-lg={portraitFocus.lg}
                 />
               </div>
               <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
