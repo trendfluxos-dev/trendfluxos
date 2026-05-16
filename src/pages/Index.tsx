@@ -691,6 +691,100 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Course Promotion */}
+      <section id="course" className="relative px-6 py-24 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="relative overflow-hidden rounded-3xl glass-strong border border-gold/30 p-8 sm:p-12 lg:p-16 shadow-elegant">
+            <div className="absolute -top-24 -right-24 w-[420px] h-[420px] bg-gold/15 blur-[140px] pointer-events-none" aria-hidden />
+            <div className="absolute -bottom-24 -left-24 w-[420px] h-[420px] bg-primary/15 blur-[140px] pointer-events-none" aria-hidden />
+
+            <div className="relative grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gold">
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  New · TrendFlux Course
+                </div>
+                <h2 className="mt-5 font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+                  Learn the <span className="text-gradient">Ecosystem Playbook</span> behind every TrendFlux launch.
+                </h2>
+                <p className="mt-5 text-base sm:text-lg text-foreground/70 max-w-xl">
+                  A founder-grade curriculum on AI workflow automation, Meta performance creative,
+                  and multi-brand ecosystem design — taught with the exact frameworks we ship to
+                  enterprise clients.
+                </p>
+
+                <ul className="mt-6 grid gap-3 sm:grid-cols-2 text-sm">
+                  {[
+                    "12+ modules · self-paced",
+                    "Live system teardowns",
+                    "Done-for-you templates & SOPs",
+                    "Private founder community",
+                  ].map((point) => (
+                    <li key={point} className="flex items-start gap-2 text-foreground/80">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 text-gold shrink-0" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                  <a
+                    href="https://course.trendflux.digital"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("course_cta_click", { source: "home_course_section", cta: "enroll" })}
+                    className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+                  >
+                    Enroll in the Course
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                  <a
+                    href="https://course.trendflux.digital"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track("course_cta_click", { source: "home_course_section", cta: "preview" })}
+                    className="inline-flex items-center gap-2 rounded-full border border-foreground/15 px-6 py-3 text-sm font-semibold text-foreground/85 transition-colors hover:border-gold/40 hover:text-gold"
+                  >
+                    <PlayCircle className="h-4 w-4" />
+                    Preview curriculum
+                  </a>
+                </div>
+              </div>
+
+              <div className="relative">
+                <div className="rounded-2xl border border-foreground/10 bg-background/60 p-6 sm:p-8 backdrop-blur">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-foreground/50">
+                      course.trendflux.digital
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-green/15 px-2.5 py-0.5 text-[11px] font-semibold text-accent-green">
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent-green" />
+                      Enrolling
+                    </span>
+                  </div>
+                  <div className="mt-5 space-y-4">
+                    {[
+                      { n: "01", t: "Ecosystem Foundations" },
+                      { n: "02", t: "Workflow Automation with AI" },
+                      { n: "03", t: "Meta Performance Creative" },
+                      { n: "04", t: "Multi-Brand Scaling OS" },
+                    ].map((m) => (
+                      <div key={m.n} className="flex items-center gap-4 rounded-xl border border-foreground/10 px-4 py-3">
+                        <span className="font-display text-lg font-bold text-gradient">{m.n}</span>
+                        <span className="text-sm font-medium text-foreground/85">{m.t}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-5 text-xs text-foreground/55">
+                    Plus bonus modules on CRM orchestration, paid funnel economics, and exit-ready stack architecture.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Brand Architect */}
       <section id="founder" className="relative px-6 py-24 md:px-12 lg:px-20">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
