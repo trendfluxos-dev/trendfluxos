@@ -199,6 +199,7 @@ const Toolkit = () => {
 
   const [bannerOpen, setBannerOpen] = useState(true);
   const [stickyVisible, setStickyVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setStickyVisible(window.scrollY > 600);
@@ -207,14 +208,14 @@ const Toolkit = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const onEnroll = (source: string) => {
+  const onEnroll = async (source: string) => {
     track("toolkit_cta_click", { source, cta: "enroll" });
-    openAccessRequest({
-      source: "toolkit-trendflux",
-      title: "Enroll — TrendFlux Masterclass",
-      description: "Submit your details to request a seat. Our team will confirm enrollment shortly.",
-      metadata: { cta: source, course: "TrendFlux Masterclass" },
-    });
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      navigate("/course/trendflux");
+    } else {
+      navigate("/auth?redirect=/course/trendflux");
+    }
   };
 
   return (
