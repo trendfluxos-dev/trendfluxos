@@ -124,16 +124,56 @@ Deno.serve(async (req) => {
       const approveUrl = await makeUrl("approve");
       const rejectUrl = await makeUrl("reject");
 
+      // Enrichment: module title, user profile, sequential context
+      const [{ data: mod }, { data: profile }, { data: paidRows }] = await Promise.all([
+        admin.from("course_modules")
+          .select("title")
+          .eq("module_index", body.module_index)
+          .maybeSingle(),
+        admin.from("profiles")
+          .select("full_name, phone")
+          .eq("user_id", userId)
+          .maybeSingle(),
+        admin.from("module_enrollments")
+          .select("module_index")
+          .eq("user_id", userId)
+          .eq("status", "paid"),
+      ]);
+
+      const paidIdx = (paidRows ?? []).map((r) => r.module_index).sort((a, b) => a - b);
+      const paidList = paidIdx.length ? paidIdx.join(", ") : "—";
+      const moduleTitle = mod?.title ?? `Module ${body.module_index}`;
+      const trxId = body.bkash_trx_id.trim().toUpperCase();
+
+      const sequentialLine =
+        body.module_index === 1
+          ? `✅ <b>Sequential check:</b> Module 1 — কোনো prerequisite নেই`
+          : `✅ <b>Sequential check:</b> Module ${body.module_index - 1} আগেই <b>paid</b> — gate পাস`;
+
       const lines = [
-        `💸 <b>New course payment</b>`,
-        `<b>Module:</b> ${body.module_index} / 8`,
-        `<b>User:</b> ${esc(userEmail || userId)}`,
-        `<b>bKash TrxID:</b> <code>${esc(body.bkash_trx_id)}</code>`,
-        `<b>Sender:</b> ${esc(body.sender_phone)}`,
-        `<b>Amount:</b> ৳2,000`,
+        `💸 <b>New course payment submission</b>`,
+        ``,
+        `📚 <b>Module ${body.module_index} / 8</b> — ${esc(moduleTitle)}`,
+        sequentialLine,
+        `🗂️ <b>Already paid modules:</b> ${esc(paidList)}`,
+        ``,
+        `👤 <b>User</b>`,
+        `  • Name: ${esc(profile?.full_name || "—")}`,
+        `  • Email: ${esc(userEmail || "—")}`,
+        `  • Profile phone: ${esc(profile?.phone || "—")}`,
+        ``,
+        `💳 <b>bKash payment details</b>`,
+        `  • TrxID: <code>${esc(trxId)}</code>`,
+        `  • Sender number: <code>${esc(body.sender_phone)}</code>`,
+        `  • Amount: ৳2,000`,
+        `  • Receive number: <code>01756004037</code> (Send Money)`,
       ];
-      if (body.note) lines.push(`<b>Note:</b> ${esc(body.note)}`);
-      lines.push(`<i>id: ${inserted.id}</i>`);
+      if (body.note) lines.push(``, `📝 <b>User note:</b> ${esc(body.note)}`);
+      lines.push(
+        ``,
+        `⏳ <b>Action required:</b> bKash app/SMS-এ TrxID <code>${esc(trxId)}</code> verify করে নিচের button-এ tap করুন।`,
+        `<i>submission id: ${inserted.id}</i>`,
+      );
 
       await fetch("https://connector-gateway.lovable.dev/telegram/sendMessage", {
         method: "POST",
