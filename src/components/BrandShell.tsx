@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import PrimaryContactCTA from "@/components/social/PrimaryContactCTA";
 import FacebookPageEmbed from "@/components/social/FacebookPageEmbed";
 import { Facebook, ArrowUpRight } from "lucide-react";
+import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
 
 type Tier = "open" | "platform" | "private";
 
@@ -117,31 +118,47 @@ const BrandFunnelFooter = ({ active }: { active: Tier }) => {
           ◆ Limited partnerships open each quarter. Let's architect yours. ◆
         </p>
         <div className="grid grid-cols-3 gap-3">
-          {items.map((it, i) => (
-            <Link
-              key={it.id}
-              to={it.path}
-              className={`group relative overflow-hidden rounded-2xl border bg-card px-4 py-4 text-center transition shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.22)] ${
-                active === it.id
-                  ? "border-primary"
-                  : "border-border hover:border-primary/60"
-              }`}
-            >
-              <span
-                aria-hidden
-                className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 skew-x-12 bg-gradient-to-r from-transparent via-primary/15 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-[300%] transition-all duration-700"
-              />
-              <div className="flex items-center justify-center gap-2">
-                <span className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-primary/40 text-[9px] text-primary">
-                  {i + 1}
-                </span>
-                <div className="text-[9px] tracking-[0.3em] uppercase text-primary/80">
-                  {it.tag}
+          {items.map((it, i) => {
+            const cardClass = `group relative overflow-hidden rounded-2xl border bg-card px-4 py-4 text-center transition shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.22)] ${
+              active === it.id
+                ? "border-primary"
+                : "border-border hover:border-primary/60"
+            }`;
+            const inner = (
+              <>
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 skew-x-12 bg-gradient-to-r from-transparent via-primary/15 to-transparent opacity-0 group-hover:opacity-100 group-hover:translate-x-[300%] transition-all duration-700"
+                />
+                <div className="flex items-center justify-center gap-2">
+                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-primary/40 text-[9px] text-primary">
+                    {i + 1}
+                  </span>
+                  <div className="text-[9px] tracking-[0.3em] uppercase text-primary/80">
+                    {it.tag}
+                  </div>
                 </div>
-              </div>
-              <div className="mt-1 text-sm font-semibold text-foreground">{it.name}</div>
-            </Link>
-          ))}
+                <div className="mt-1 text-sm font-semibold text-foreground">{it.name}</div>
+              </>
+            );
+            if (it.id === "private") {
+              return (
+                <button
+                  key={it.id}
+                  type="button"
+                  onClick={() => openLuxeVeilGate({ source: "brand-shell" })}
+                  className={cardClass}
+                >
+                  {inner}
+                </button>
+              );
+            }
+            return (
+              <Link key={it.id} to={it.path} className={cardClass}>
+                {inner}
+              </Link>
+            );
+          })}
         </div>
         <p className="mt-6 text-center text-[11px] text-muted-foreground">
           © {new Date().getFullYear()} TrendFlux Digital · Powered by TrendFlux Ecosystem
