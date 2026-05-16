@@ -744,15 +744,17 @@ const Index = () => {
           <div className="relative">
             <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
             <div className="relative overflow-hidden rounded-[2rem] glass-strong p-2">
-              <img
-                src={emonPortrait}
-                alt="Zahid Hasan Emon, Brand Architect of TrendFlux Ecosystem"
-                width={800}
-                height={1000}
-                loading="lazy"
-                decoding="async"
-                className="aspect-[4/5] w-full rounded-[1.5rem] object-cover object-[center_22%] sm:object-[center_28%] lg:object-[center_32%]"
-              />
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] bg-muted">
+                <img
+                  src={emonPortrait}
+                  alt="Zahid Hasan Emon, Brand Architect of TrendFlux Ecosystem"
+                  width={800}
+                  height={1000}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover object-[center_22%] sm:object-[center_28%] lg:object-[center_32%]"
+                />
+              </div>
               <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
                 <span className="text-gold font-semibold">Brand Architect</span>
                 <span className="mx-2 text-foreground/30">·</span>
