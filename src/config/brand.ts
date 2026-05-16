@@ -20,7 +20,7 @@ export const BRAND = {
   /** Twitter / X handle (with @). */
   twitterHandle: "@TrendFlux",
   /** Canonical production URL. */
-  url: "https://trendfluxdigital.lovable.app",
+  url: "https://trendflux.digital",
   /** Default social/OG image (absolute path under public or full URL). */
   ogImage: "/trendflux-logo.webp",
   /** Hero copy used on the landing page. */
