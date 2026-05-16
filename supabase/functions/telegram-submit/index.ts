@@ -84,6 +84,20 @@ function chatNotFoundGuidance(chatId: string) {
   };
 }
 
+// Per-instance in-memory rate limit (5 req / IP / 10 min) for submissions.
+const rateBuckets = new Map<string, { count: number; reset: number }>();
+function rateLimit(ip: string, limit = 5, windowMs = 10 * 60_000): boolean {
+  const now = Date.now();
+  const b = rateBuckets.get(ip);
+  if (!b || now > b.reset) {
+    rateBuckets.set(ip, { count: 1, reset: now + windowMs });
+    return true;
+  }
+  if (b.count >= limit) return false;
+  b.count++;
+  return true;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -180,6 +194,14 @@ Deno.serve(async (req) => {
 
     // ---- Submission flow ----
     if (targets.length === 0) throw new Error("No TELEGRAM_CHAT_ID configured");
+
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
+    if (!rateLimit(ip)) {
+      return new Response(
+        JSON.stringify({ ok: false, error: "rate_limited" }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
 
     const body = await req.json().catch(() => ({}));
     const name = String(body.name ?? "").trim().slice(0, 120);
