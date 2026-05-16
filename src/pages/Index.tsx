@@ -270,7 +270,7 @@ const Index = () => {
       if (error || !data?.ok || !data.token) {
         setVeilError(data?.error || "Invalid invitation code. Please check with your host.");
       } else {
-        try { localStorage.setItem("luxe_veil_token", data.token); } catch { /* ignore */ }
+        persistLuxeVeilToken(data.token);
         setVeilOpen(false);
         setVeilCode("");
         navigate("/luxe-veil");
