@@ -14,14 +14,14 @@ const Hero = () => {
       <div className="absolute bottom-10 left-10 w-80 h-80 rounded-full bg-gold/10 blur-3xl animate-float [animation-delay:2s]" aria-hidden />
 
       <div className="relative max-w-6xl mx-auto text-center animate-fade-up">
-        <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-primary mb-8">
+        <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-primary mb-8 hover:scale-[1.02] transition-transform duration-300">
           <Sparkles className="w-3.5 h-3.5" />
           AI-Powered Digital Growth Systems
         </div>
 
         <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight max-w-5xl mx-auto">
           Architecting{" "}
-          <span className="text-gradient">Digital Growth Systems</span>{" "}
+          <span className="text-shimmer">Digital Growth Systems</span>{" "}
           for Modern Businesses
         </h1>
 
