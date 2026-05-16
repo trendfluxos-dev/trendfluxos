@@ -749,6 +749,19 @@ const Index = () => {
             <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
             <div className="relative overflow-hidden rounded-[2rem] glass-strong p-2">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] bg-muted">
+                {/* Shimmer skeleton — fades out once the image decodes */}
+                <div
+                  aria-hidden
+                  className={`absolute inset-0 transition-opacity duration-500 ${
+                    portraitLoaded ? "opacity-0" : "opacity-100"
+                  }`}
+                  style={{
+                    background:
+                      "linear-gradient(110deg, hsl(var(--muted)) 30%, hsl(var(--muted-foreground) / 0.12) 50%, hsl(var(--muted)) 70%)",
+                    backgroundSize: "200% 100%",
+                    animation: "portrait-shimmer 1.6s ease-in-out infinite",
+                  }}
+                />
                 <img
                   src={emonPortrait}
                   alt="Zahid Hasan Emon, Brand Architect of TrendFlux Ecosystem"
@@ -756,7 +769,12 @@ const Index = () => {
                   height={1000}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover"
+                  onLoad={() => setPortraitLoaded(true)}
+                  className={`absolute inset-0 h-full w-full object-cover transition-[filter,opacity] duration-700 ease-out ${
+                    portraitLoaded
+                      ? "opacity-100 blur-0"
+                      : "opacity-0 scale-[1.02] blur-md"
+                  }`}
                   style={{ objectPosition: `center ${portraitFocusY}%` }}
                 />
               </div>
