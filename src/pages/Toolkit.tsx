@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   Sparkles,
@@ -22,7 +22,7 @@ import {
 import { BRAND } from "@/config/brand";
 import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
-import { openAccessRequest } from "@/lib/accessRequest";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Accordion,
   AccordionContent,
