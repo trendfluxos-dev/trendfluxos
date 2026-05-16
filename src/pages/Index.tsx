@@ -1144,7 +1144,7 @@ const Index = () => {
           onChange={setCaseFilters}
           resultCount={caseFiltersActive ? filteredCases.length : undefined}
         />
-        <div className="mx-auto max-w-7xl mt-8">
+        <div id="cases-results" className="mx-auto max-w-7xl mt-8 scroll-mt-44">
           {caseFiltersActive && (
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.25em] text-foreground/55">
               <span aria-live="polite">
