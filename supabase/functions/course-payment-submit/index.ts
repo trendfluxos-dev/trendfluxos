@@ -109,6 +109,16 @@ Deno.serve(async (req) => {
     .single();
   if (insErr || !inserted) return json({ ok: false, error: insErr?.message || "Insert failed" }, 500);
 
+  // Timeline log: submitted
+  await admin.from("enrollment_events").insert({
+    enrollment_id: inserted.id,
+    user_id: userId,
+    module_index: body.module_index,
+    event_type: "submitted",
+    actor: "user",
+    message: `TrxID ${body.bkash_trx_id.trim().toUpperCase()} submitted from ${body.sender_phone.trim()}`,
+  });
+
   // Telegram notification with Approve/Reject buttons
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
   const telegramKey = Deno.env.get("TELEGRAM_API_KEY");
