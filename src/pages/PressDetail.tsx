@@ -140,7 +140,10 @@ export default function PressDetail() {
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold">
             {item.outlet}
           </p>
-          <h1 className="font-display mt-4 text-3xl font-bold leading-snug md:text-4xl">
+          <h1
+            lang={/[\u0980-\u09FF]/.test(item.headline) ? "bn" : undefined}
+            className="font-display mt-4 text-3xl font-bold leading-snug md:text-4xl"
+          >
             {item.headline}
           </h1>
 
@@ -156,7 +159,12 @@ export default function PressDetail() {
           </div>
 
           {item.context && (
-            <p className="mt-8 text-base leading-relaxed text-foreground/75">{item.context}</p>
+            <p
+              lang={/[\u0980-\u09FF]/.test(item.context) ? "bn" : undefined}
+              className="mt-8 text-base leading-relaxed text-foreground/75"
+            >
+              {item.context}
+            </p>
           )}
 
           <div className="mt-10 flex flex-wrap gap-3">
