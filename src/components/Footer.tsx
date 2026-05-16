@@ -6,63 +6,63 @@ import SocialIcons from "@/components/social/SocialIcons";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border px-6 lg:px-10 pt-16 pb-10 mt-10 relative">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-      <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-10">
+    <footer className="border-t border-border/60 px-6 lg:px-10 pt-20 pb-10 mt-16 relative">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/15 to-transparent" />
+      <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-12">
         <div className="md:col-span-2">
-          <Link to="/" className="flex items-center gap-2 font-display font-bold text-xl">
-            <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-cyan" />
+          <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-lg tracking-tight">
+            <span className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-gradient">{BRAND.nameLead}</span>
-            <span className="text-foreground/60 font-normal">{BRAND.nameTrail}</span>
+            <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
           </Link>
-          <p className="text-foreground/60 mt-4 max-w-sm leading-relaxed">
+          <p className="text-foreground/55 mt-4 max-w-sm leading-relaxed text-[13.5px]">
             AI-powered growth systems for brands, founders, and businesses ready
             to operate beyond random marketing.
           </p>
 
-          <div className="mt-6">
+          <div className="mt-7">
             <SocialIcons brand="trendflux" variant="footer" size="md" />
           </div>
         </div>
 
         <div>
-          <h4 className="text-xs uppercase tracking-[0.25em] text-foreground/40 mb-4">
+          <h4 className="text-[11px] uppercase tracking-[0.22em] text-foreground/40 mb-5 font-medium">
             Systems
           </h4>
-          <ul className="space-y-3 text-sm text-foreground/70">
-            <li><a href="#services" className="hover:text-primary transition-colors">AI Automation</a></li>
-            <li><a href="#services" className="hover:text-primary transition-colors">Paid Media</a></li>
-            <li><a href="#services" className="hover:text-primary transition-colors">CRM Workflows</a></li>
-            <li><a href="#services" className="hover:text-primary transition-colors">Brand Architecture</a></li>
+          <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
+            <li><a href="#services" className="hover:text-foreground transition-colors">AI Automation</a></li>
+            <li><a href="#services" className="hover:text-foreground transition-colors">Paid Media</a></li>
+            <li><a href="#services" className="hover:text-foreground transition-colors">CRM Workflows</a></li>
+            <li><a href="#services" className="hover:text-foreground transition-colors">Brand Architecture</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="text-xs uppercase tracking-[0.25em] text-foreground/40 mb-4">
+          <h4 className="text-[11px] uppercase tracking-[0.22em] text-foreground/40 mb-5 font-medium">
             Studio
           </h4>
-          <ul className="space-y-3 text-sm text-foreground/70">
-            <li><Link to="/project-lead" className="hover:text-primary transition-colors">Project Lead</Link></li>
-            <li><Link to="/brand-open" className="hover:text-primary transition-colors">Studio BrandToki</Link></li>
-            <li><Link to="/trendflux-talent" className="hover:text-primary transition-colors">TrendFlux Talent</Link></li>
+          <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
+            <li><Link to="/project-lead" className="hover:text-foreground transition-colors">Project Lead</Link></li>
+            <li><Link to="/brand-open" className="hover:text-foreground transition-colors">Studio BrandToki</Link></li>
+            <li><Link to="/trendflux-talent" className="hover:text-foreground transition-colors">TrendFlux Talent</Link></li>
             <li>
-              <Link to="/luxe-veil" className="hover:text-primary transition-colors inline-flex items-center gap-1">
-                <span className="w-1 h-1 rounded-full bg-primary/60" /> Luxe Veil
-                <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/40 ml-1">(Private)</span>
+              <Link to="/luxe-veil" className="hover:text-foreground transition-colors inline-flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-foreground/40" /> Luxe Veil
+                <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/35 ml-1">Private</span>
               </Link>
             </li>
-            <li><a href="#cases" className="hover:text-primary transition-colors">Case Studies</a></li>
-            <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
+            <li><a href="#cases" className="hover:text-foreground transition-colors">Case Studies</a></li>
+            <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="text-xs uppercase tracking-[0.25em] text-foreground/40 mb-4">
+          <h4 className="text-[11px] uppercase tracking-[0.22em] text-foreground/40 mb-5 font-medium">
             Platform
           </h4>
-          <ul className="space-y-3 text-sm text-foreground/70">
+          <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
             <li>
-              <Link to="/enterprise" className="hover:text-primary transition-colors">
+              <Link to="/enterprise" className="hover:text-foreground transition-colors">
                 Enterprise Control
               </Link>
             </li>
@@ -72,7 +72,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => track("enterprise_portal_open", { location: "footer_portal" })}
-                className="hover:text-primary transition-colors"
+                className="hover:text-foreground transition-colors"
               >
                 Enterprise Portal
               </a>
@@ -83,7 +83,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => track("enterprise_portal_open", { location: "footer_client_access" })}
-                className="hover:text-primary transition-colors"
+                className="hover:text-foreground transition-colors"
               >
                 Client Access
               </a>
@@ -92,7 +92,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-12 pt-6 border-t border-border flex flex-col md:flex-row justify-between gap-4 text-xs text-foreground/40">
+      <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-foreground/40 tracking-wide">
         <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</p>
         <p>Built as a system, not a website.</p>
       </div>
