@@ -62,6 +62,39 @@ export type Database = {
         }
         Relationships: []
       }
+      course_modules: {
+        Row: {
+          content_url: string | null
+          created_at: string
+          description: string
+          id: string
+          is_published: boolean
+          module_index: number
+          price_bdt: number
+          title: string
+        }
+        Insert: {
+          content_url?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          is_published?: boolean
+          module_index: number
+          price_bdt?: number
+          title: string
+        }
+        Update: {
+          content_url?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          is_published?: boolean
+          module_index?: number
+          price_bdt?: number
+          title?: string
+        }
+        Relationships: []
+      }
       enterprise_demo_requests: {
         Row: {
           company: string
@@ -161,6 +194,45 @@ export type Database = {
         }
         Relationships: []
       }
+      module_enrollments: {
+        Row: {
+          amount_bdt: number
+          bkash_payment_id: string | null
+          bkash_trx_id: string | null
+          created_at: string
+          id: string
+          module_index: number
+          paid_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_bdt?: number
+          bkash_payment_id?: string | null
+          bkash_trx_id?: string | null
+          created_at?: string
+          id?: string
+          module_index: number
+          paid_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_bdt?: number
+          bkash_payment_id?: string | null
+          bkash_trx_id?: string | null
+          created_at?: string
+          id?: string
+          module_index?: number
+          paid_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       press_items: {
         Row: {
           context: string
@@ -194,6 +266,36 @@ export type Database = {
           published?: boolean
           sort_order?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
