@@ -641,6 +641,42 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Course Teaser — directly after hero */}
+      <section className="relative px-5 sm:px-6 md:px-12 lg:px-20 -mt-4 sm:-mt-6">
+        <div className="mx-auto max-w-5xl">
+          <a
+            href="https://course.trendflux.digital"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => track("course_cta_click", { source: "hero_teaser", cta: "card" })}
+            className="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 rounded-2xl border border-gold/30 bg-gradient-to-r from-gold/10 via-background/40 to-primary/10 p-5 sm:p-6 backdrop-blur-xl shadow-elegant transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-[0_24px_60px_-20px_hsl(var(--gold)/0.45)]"
+          >
+            <div className="flex items-start gap-4 min-w-0">
+              <div className="shrink-0 rounded-xl bg-gold/15 p-2.5 ring-1 ring-gold/30">
+                <GraduationCap className="h-5 w-5 text-gold" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-gold font-semibold">
+                  <span>New</span>
+                  <span className="h-1 w-1 rounded-full bg-gold/50" />
+                  <span className="text-foreground/55">TrendFlux Course</span>
+                </div>
+                <h3 className="mt-1.5 font-display text-lg sm:text-xl font-bold leading-snug">
+                  Learn the <span className="text-gradient">Ecosystem Playbook</span> behind every launch.
+                </h3>
+                <p className="mt-1 text-xs sm:text-sm text-foreground/65">
+                  AI automation · Meta performance creative · Multi-brand scaling OS — self-paced, founder-grade.
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition-transform duration-300 group-hover:scale-[1.04]">
+              Enroll now
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
+          </a>
+        </div>
+      </section>
+
       {/* Digital Impact Map */}
       <DigitalImpactMap
         matchingSlugs={matchingSlugs}
