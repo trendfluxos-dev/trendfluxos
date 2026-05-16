@@ -751,7 +751,7 @@ const Index = () => {
                 height={1000}
                 loading="lazy"
                 decoding="async"
-                className="aspect-[4/5] w-full rounded-[1.5rem] object-cover object-top"
+                className="aspect-[4/5] w-full rounded-[1.5rem] object-cover object-[center_22%] sm:object-[center_28%] lg:object-[center_32%]"
               />
               <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
                 <span className="text-gold font-semibold">Brand Architect</span>
