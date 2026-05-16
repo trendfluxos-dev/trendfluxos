@@ -94,6 +94,47 @@ export default function CourseEnrollmentsAdmin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
+  // Realtime: live-merge enrollment + event changes so admins never act on stale state.
+  useEffect(() => {
+    if (!hasAccess) return;
+    const channel = supabase
+      .channel("admin-course-enrollments")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "module_enrollments" },
+        (payload) => {
+          setEnrollments((prev) => {
+            if (payload.eventType === "DELETE") {
+              return prev.filter((e) => e.id !== (payload.old as Enrollment).id);
+            }
+            const row = payload.new as Enrollment;
+            const idx = prev.findIndex((e) => e.id === row.id);
+            if (idx === -1) return [row, ...prev];
+            const next = prev.slice();
+            next[idx] = { ...next[idx], ...row };
+            return next;
+          });
+          if (payload.eventType === "UPDATE") {
+            const row = payload.new as Enrollment;
+            if (row.status === "paid") toast.success(`Module ${row.module_index} marked paid`);
+            else if (row.status === "failed") toast.error(`Module ${row.module_index} rejected`);
+          }
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "enrollment_events" },
+        (payload) => {
+          const row = payload.new as EventRow;
+          setEvents((prev) => (prev.some((e) => e.id === row.id) ? prev : [row, ...prev]));
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [hasAccess]);
+
   const load = async () => {
     setLoading(true);
     const [{ data: enr }, { data: ev }, { data: pr }] = await Promise.all([
