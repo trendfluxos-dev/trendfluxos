@@ -225,24 +225,6 @@ const Index = () => {
   };
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [caseFilters, setCaseFilters] = useCaseFilters();
-  const [courseBannerOpen, setCourseBannerOpen] = useState(true);
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem("tf_course_banner_dismissed") === "1") {
-        setCourseBannerOpen(false);
-      }
-    } catch {
-      /* ignore */
-    }
-  }, []);
-  const dismissCourseBanner = () => {
-    setCourseBannerOpen(false);
-    try {
-      sessionStorage.setItem("tf_course_banner_dismissed", "1");
-    } catch {
-      /* ignore */
-    }
-  };
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [highlightedSlug, setHighlightedSlug] = useState<string | null>(null);
   const [narrativeCase, setNarrativeCase] = useState<CaseStudy | null>(null);
@@ -411,42 +393,6 @@ const Index = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground font-sans overflow-hidden">
-      {/* Smart top course ribbon */}
-      {courseBannerOpen && (
-        <div className="relative z-[60] border-b border-gold/20 bg-gradient-to-r from-gold/15 via-primary/10 to-gold/15 backdrop-blur-md">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 text-xs sm:text-sm">
-            <a
-              href="https://course.trendflux.digital"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => track("course_cta_click", { source: "top_ribbon", cta: "ribbon" })}
-              className="group flex min-w-0 flex-1 items-center gap-2 text-foreground/85 hover:text-gold transition-colors"
-            >
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold shrink-0">
-                <GraduationCap className="h-3 w-3" />
-                New
-              </span>
-              <span className="truncate">
-                <span className="font-semibold">TrendFlux Course is live</span>
-                <span className="hidden sm:inline text-foreground/60"> — Learn the ecosystem playbook behind every launch.</span>
-              </span>
-              <span className="inline-flex items-center gap-1 font-semibold text-gold shrink-0 group-hover:translate-x-0.5 transition-transform">
-                Enroll
-                <ArrowUpRight className="h-3.5 w-3.5" />
-              </span>
-            </a>
-            <button
-              type="button"
-              onClick={dismissCourseBanner}
-              aria-label="Dismiss course announcement"
-              className="shrink-0 rounded-full p-1 text-foreground/50 hover:text-foreground hover:bg-foreground/10 transition-colors"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Background ambient glow */}
       <div className="fixed inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-0 right-0 w-[520px] h-[520px] bg-primary/20 blur-[160px]" />
