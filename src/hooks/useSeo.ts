@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useSyncExternalStore } from "react";
+import { Helmet } from "react-helmet-async";
 import { BRAND } from "@/config/brand";
 
-type SeoProps = {
+export type SeoProps = {
   title?: string;
   description?: string;
   canonical?: string;
@@ -14,27 +15,22 @@ type SeoProps = {
   siteName?: string;
   twitterSite?: string;
   noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 };
 
-const setMeta = (selector: string, attr: string, value: string) => {
-  let el = document.head.querySelector<HTMLMetaElement>(selector);
-  if (!el) {
-    el = document.createElement("meta");
-    const [k, v] = selector.replace("meta[", "").replace("]", "").split("=");
-    el.setAttribute(k, v.replace(/"/g, ""));
-    document.head.appendChild(el);
-  }
-  el.setAttribute(attr, value);
+// Tiny shared store so any component can call useSeo({...}) like before
+// while a single <SeoHead /> mounted at the app root renders the actual
+// <Helmet> tree. This keeps all existing call sites unchanged.
+let state: SeoProps = {};
+const listeners = new Set<() => void>();
+const subscribe = (l: () => void) => {
+  listeners.add(l);
+  return () => listeners.delete(l);
 };
-
-const setLink = (rel: string, href: string) => {
-  let el = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
-  if (!el) {
-    el = document.createElement("link");
-    el.setAttribute("rel", rel);
-    document.head.appendChild(el);
-  }
-  el.setAttribute("href", href);
+const getSnapshot = () => state;
+const setState = (next: SeoProps) => {
+  state = next;
+  listeners.forEach((l) => l());
 };
 
 const toAbsolute = (url?: string) => {
@@ -44,59 +40,64 @@ const toAbsolute = (url?: string) => {
   return new URL(url, window.location.origin).toString();
 };
 
-export const useSeo = ({
-  title,
-  description,
-  canonical,
-  image,
-  imageWidth,
-  imageHeight,
-  imageAlt,
-  imageType,
-  type = "website",
-  siteName,
-  twitterSite,
-  noindex,
-}: SeoProps = {}) => {
+export const useSeo = (props: SeoProps = {}) => {
+  // Serialize for dep tracking so callers don't need useMemo.
+  const key = JSON.stringify(props);
   useEffect(() => {
-    const finalTitle = title ?? `${BRAND.name} — ${BRAND.tagline}`;
-    const finalDescription = description ?? BRAND.description;
-    const finalSiteName = siteName ?? BRAND.name;
-    const finalTwitter = twitterSite ?? BRAND.twitterHandle;
-    const finalImage = image ?? BRAND.ogImage;
-    const finalImageAlt = imageAlt ?? `${BRAND.name} — ${BRAND.tagline}`;
+    setState(props);
+    return () => {
+      // Reset on unmount so a stale page's SEO doesn't leak.
+      if (state === props) setState({});
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+};
 
-    document.title = finalTitle;
-    setMeta('meta[name="description"]', "content", finalDescription);
+export const SeoHead = () => {
+  const s = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
-    setMeta('meta[property="og:title"]', "content", finalTitle);
-    setMeta('meta[property="og:description"]', "content", finalDescription);
-    setMeta('meta[property="og:type"]', "content", type);
-    setMeta('meta[property="og:site_name"]', "content", finalSiteName);
+  const title = s.title ?? `${BRAND.name} — ${BRAND.tagline}`;
+  const description = s.description ?? BRAND.description;
+  const siteName = s.siteName ?? BRAND.name;
+  const twitterSite = s.twitterSite ?? BRAND.twitterHandle;
+  const image = toAbsolute(s.image ?? BRAND.ogImage);
+  const imageAlt = s.imageAlt ?? `${BRAND.name} — ${BRAND.tagline}`;
+  const type = s.type ?? "website";
+  const url =
+    s.canonical ||
+    (typeof window !== "undefined" ? window.location.href.split("#")[0] : BRAND.url);
 
-    const absImage = toAbsolute(finalImage);
-    if (absImage) {
-      setMeta('meta[property="og:image"]', "content", absImage);
-      setMeta('meta[property="og:image:secure_url"]', "content", absImage);
-      if (imageType) setMeta('meta[property="og:image:type"]', "content", imageType);
-      if (imageWidth) setMeta('meta[property="og:image:width"]', "content", String(imageWidth));
-      if (imageHeight) setMeta('meta[property="og:image:height"]', "content", String(imageHeight));
-      setMeta('meta[property="og:image:alt"]', "content", finalImageAlt);
-    }
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="robots" content={s.noindex ? "noindex,nofollow" : "index,follow"} />
+      <link rel="canonical" href={url} />
 
-    setMeta('meta[name="twitter:card"]', "content", absImage ? "summary_large_image" : "summary");
-    setMeta('meta[name="twitter:title"]', "content", finalTitle);
-    setMeta('meta[name="twitter:description"]', "content", finalDescription);
-    if (absImage) setMeta('meta[name="twitter:image"]', "content", absImage);
-    setMeta('meta[name="twitter:image:alt"]', "content", finalImageAlt);
-    if (finalTwitter) setMeta('meta[name="twitter:site"]', "content", finalTwitter);
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:type" content={type} />
+      <meta property="og:site_name" content={siteName} />
+      <meta property="og:url" content={url} />
+      {image && <meta property="og:image" content={image} />}
+      {image && <meta property="og:image:secure_url" content={image} />}
+      {image && s.imageType && <meta property="og:image:type" content={s.imageType} />}
+      {image && s.imageWidth && <meta property="og:image:width" content={String(s.imageWidth)} />}
+      {image && s.imageHeight && <meta property="og:image:height" content={String(s.imageHeight)} />}
+      {image && <meta property="og:image:alt" content={imageAlt} />}
 
-    setMeta('meta[name="robots"]', "content", noindex ? "noindex,nofollow" : "index,follow");
+      <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      {image && <meta name="twitter:image" content={image} />}
+      {image && <meta name="twitter:image:alt" content={imageAlt} />}
+      {twitterSite && <meta name="twitter:site" content={twitterSite} />}
 
-    const url = canonical || (typeof window !== "undefined" ? window.location.href.split("#")[0] : "");
-    if (url) {
-      setLink("canonical", url);
-      setMeta('meta[property="og:url"]', "content", url);
-    }
-  }, [title, description, canonical, image, imageWidth, imageHeight, imageAlt, imageType, type, siteName, twitterSite, noindex]);
+      {s.jsonLd && (
+        <script type="application/ld+json">
+          {JSON.stringify(s.jsonLd)}
+        </script>
+      )}
+    </Helmet>
+  );
 };
