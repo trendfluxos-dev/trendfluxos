@@ -622,12 +622,16 @@ const Index = () => {
         <div className="mx-auto max-w-7xl">
           <div className="mb-10 max-w-3xl">
             <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-              — Services Directory
+              — Platform Modules
             </p>
             <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
-              Built like an operating system.{" "}
-              <span className="text-gradient">Filed for clarity.</span>
+              One platform.{" "}
+              <span className="text-gradient">Every growth function.</span>
             </h2>
+            <p className="mt-5 max-w-2xl text-base text-foreground/65 md:text-lg">
+              Activate only the modules you need. Each one ships with the
+              playbook, automations, and KPIs already wired in.
+            </p>
           </div>
 
           {/* Filter tabs */}
