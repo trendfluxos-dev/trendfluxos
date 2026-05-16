@@ -731,7 +731,7 @@ const Index = () => {
 
       {/* Brand Architect */}
       <section id="founder" className="relative px-6 py-24 md:px-12 lg:px-20">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-center">
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-start">
           {/* Portrait */}
           <div className="relative">
             <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
