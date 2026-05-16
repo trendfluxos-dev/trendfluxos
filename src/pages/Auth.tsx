@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,8 @@ import { useSeo } from "@/hooks/useSeo";
 
 export default function Auth() {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const redirect = params.get("redirect") || "/";
   useSeo({
     title: "Sign In — TrendFlux Ecosystem",
     description: "Sign in to access TrendFlux Ecosystem admin tools.",
@@ -16,6 +18,7 @@ export default function Auth() {
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [loading, setLoading] = useState(false);
 
@@ -23,10 +26,10 @@ export default function Auth() {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
         window.scrollTo({ top: 0, behavior: "auto" });
-        navigate("/", { replace: true });
+        navigate(redirect, { replace: true });
       }
     });
-  }, [navigate]);
+  }, [navigate, redirect]);
 
   const handle = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,15 +42,18 @@ export default function Auth() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
+          options: {
+            emailRedirectTo: `${window.location.origin}${redirect}`,
+            data: { full_name: fullName },
+          },
         });
         if (error) throw error;
-        toast.success("Account created. Check your email to confirm, then sign in.");
+        toast.success("Account তৈরি হয়েছে। Email confirm করে sign in করুন।");
         setMode("signin");
         return;
       }
       window.scrollTo({ top: 0, behavior: "auto" });
-      navigate("/", { replace: true });
+      navigate(redirect, { replace: true });
     } catch (err: any) {
       toast.error(err.message ?? "Authentication failed");
     } finally {
@@ -59,9 +65,19 @@ export default function Auth() {
     <div className="min-h-screen flex items-center justify-center bg-background p-6">
       <form onSubmit={handle} className="w-full max-w-sm rounded-2xl glass p-8 space-y-5">
         <div>
-          <h1 className="font-display text-2xl font-bold">Admin {mode === "signin" ? "Sign In" : "Sign Up"}</h1>
-          <p className="text-sm text-foreground/60 mt-1">Manage press headlines &amp; URLs.</p>
+          <h1 className="font-display text-2xl font-bold">
+            {mode === "signin" ? "Sign In" : "Create Account"}
+          </h1>
+          <p className="text-sm text-foreground/60 mt-1">
+            TrendFlux course ও admin tools access।
+          </p>
         </div>
+        {mode === "signup" && (
+          <div className="space-y-2">
+            <Label htmlFor="full_name">Full name</Label>
+            <Input id="full_name" type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
+          </div>
+        )}
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
