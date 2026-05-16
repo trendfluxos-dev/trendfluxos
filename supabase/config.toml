@@ -1,1 +1,4 @@
 project_id = "eaobwuebboiqhsthardl"
+
+[functions.access-decision]
+verify_jwt = false
