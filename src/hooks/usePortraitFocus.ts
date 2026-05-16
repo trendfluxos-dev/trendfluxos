@@ -27,17 +27,23 @@ export const getActiveBreakpoint = (): Breakpoint => {
 /** Reactive store for portrait focus values (Y-percent per breakpoint). */
 export const usePortraitFocus = () => {
   const [values, setValues] = useState<Record<Breakpoint, number>>(read);
+  const [activeBp, setActiveBp] = useState<Breakpoint>(() =>
+    getActiveBreakpoint(),
+  );
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY) setValues(read());
     };
     const onCustom = () => setValues(read());
+    const onResize = () => setActiveBp(getActiveBreakpoint());
     window.addEventListener("storage", onStorage);
     window.addEventListener("portrait-focus-change", onCustom);
+    window.addEventListener("resize", onResize);
     return () => {
       window.removeEventListener("storage", onStorage);
       window.removeEventListener("portrait-focus-change", onCustom);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
@@ -62,5 +68,6 @@ export const usePortraitFocus = () => {
     }
   };
 
-  return { values, set, reset, defaults: DEFAULTS };
+  const activeValue = values[activeBp];
+  return { values, activeBp, activeValue, set, reset, defaults: DEFAULTS };
 };
