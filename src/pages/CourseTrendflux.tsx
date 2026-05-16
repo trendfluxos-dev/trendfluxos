@@ -39,6 +39,15 @@ type Enrollment = {
   bkash_trx_id: string | null;
 };
 
+type EnrollmentEvent = {
+  id: string;
+  module_index: number;
+  event_type: "submitted" | "approved" | "rejected" | "unlocked";
+  message: string | null;
+  actor: string | null;
+  created_at: string;
+};
+
 export default function CourseTrendflux() {
   const navigate = useNavigate();
   useSeo({
@@ -50,6 +59,7 @@ export default function CourseTrendflux() {
   const [userId, setUserId] = useState<string | null>(null);
   const [modules, setModules] = useState<Module[]>([]);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [events, setEvents] = useState<EnrollmentEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [openModule, setOpenModule] = useState<Module | null>(null);
 
@@ -84,14 +94,41 @@ export default function CourseTrendflux() {
 
   const refresh = async (uid: string) => {
     setLoading(true);
-    const [mods, enrs] = await Promise.all([
+    const [mods, enrs, evts] = await Promise.all([
       supabase.from("course_modules").select("*").order("module_index"),
       supabase.from("module_enrollments").select("id, module_index, status, bkash_trx_id").eq("user_id", uid),
+      supabase.from("enrollment_events")
+        .select("id, module_index, event_type, message, actor, created_at")
+        .eq("user_id", uid)
+        .order("created_at", { ascending: false })
+        .limit(40),
     ]);
     if (mods.data) setModules(mods.data as Module[]);
     if (enrs.data) setEnrollments(enrs.data as Enrollment[]);
+    if (evts.data) setEvents(evts.data as EnrollmentEvent[]);
     setLoading(false);
   };
+
+  // Realtime subscription so user dashboard updates instantly on admin approve
+  useEffect(() => {
+    if (!userId) return;
+    const channel = supabase
+      .channel(`course-events-${userId}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "module_enrollments", filter: `user_id=eq.${userId}` },
+        () => refresh(userId),
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "enrollment_events", filter: `user_id=eq.${userId}` },
+        () => refresh(userId),
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [userId]);
 
   const statusFor = (idx: number): Enrollment["status"] | null => {
     const list = enrollments.filter((e) => e.module_index === idx);
@@ -217,6 +254,41 @@ export default function CourseTrendflux() {
             );
           })}
         </div>
+
+        {events.length > 0 && (
+          <section className="mt-10">
+            <h2 className="font-display text-xl font-bold mb-3">Activity timeline</h2>
+            <ol className="space-y-2 border-l border-border/50 pl-4">
+              {events.map((e) => (
+                <li key={e.id} className="relative text-sm">
+                  <span
+                    className={`absolute -left-[1.18rem] top-1.5 h-2.5 w-2.5 rounded-full ring-2 ring-background ${
+                      e.event_type === "approved" || e.event_type === "unlocked"
+                        ? "bg-emerald-500"
+                        : e.event_type === "rejected"
+                        ? "bg-red-500"
+                        : "bg-amber-500"
+                    }`}
+                  />
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    <span className="font-mono text-xs text-foreground/50">
+                      M{e.module_index}
+                    </span>
+                    <span className="font-semibold capitalize">{e.event_type}</span>
+                    <span className="text-xs text-foreground/40">
+                      {new Date(e.created_at).toLocaleString("en-GB", {
+                        day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                  {e.message && (
+                    <p className="text-foreground/60 text-xs mt-0.5">{e.message}</p>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
       </div>
 
       {openModule && (
