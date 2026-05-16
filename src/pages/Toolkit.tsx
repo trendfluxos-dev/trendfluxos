@@ -130,7 +130,7 @@ const Toolkit = () => {
   useSeo({
     title: "Growth Operator Toolkit Hub — TrendFlux Digital",
     description:
-      "A modular execution system for AI-powered growth operators. 8 system modules, prompt library, automation blueprints, and portfolio kit — an execution OS, not a course.",
+      "A modular execution system for AI-powered growth operators. 8 system modules, prompt library, automation blueprints, and portfolio kit — an execution OS for digital operators.",
     canonical: `${BRAND.url}/toolkit`,
   });
 
