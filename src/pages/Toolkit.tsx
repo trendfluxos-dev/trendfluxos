@@ -22,6 +22,7 @@ import {
 import { BRAND } from "@/config/brand";
 import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
+import { openAccessRequest } from "@/lib/accessRequest";
 import {
   Accordion,
   AccordionContent,
@@ -206,8 +207,15 @@ const Toolkit = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const onEnroll = (source: string) =>
+  const onEnroll = (source: string) => {
     track("toolkit_cta_click", { source, cta: "enroll" });
+    openAccessRequest({
+      source: "toolkit-trendflux",
+      title: "Enroll — TrendFlux Masterclass",
+      description: "Submit your details to request a seat. Our team will confirm enrollment shortly.",
+      metadata: { cta: source, course: "TrendFlux Masterclass" },
+    });
+  };
 
   return (
     <main className="min-h-screen bg-background text-foreground font-sans">
