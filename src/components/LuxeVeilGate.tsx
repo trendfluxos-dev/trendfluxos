@@ -22,10 +22,10 @@ import { openAccessRequest } from "@/lib/accessRequest";
 const TARGET_PATH = "/luxe-veil";
 
 /**
- * Globally-mounted invite-code gate. Listens for `luxe-veil:open` events
- * (dispatched via openLuxeVeilGate()), prompts for an invite code, and
- * navigates to /luxe-veil on success. If a valid token already exists in
- * localStorage, navigates immediately without prompting.
+ * Globally-mounted Luxe Veil gate. Cached-fresh sessions navigate
+ * straight to the private experience; otherwise the visitor can either
+ * enter an existing invite code or request access (which routes through
+ * the global access-request approval flow).
  */
 const LuxeVeilGate = () => {
   const navigate = useNavigate();
@@ -39,13 +39,11 @@ const LuxeVeilGate = () => {
       const detail = (e as CustomEvent<LuxeVeilGateDetail>).detail ?? {};
       track("luxe_veil_gate_open", { source: detail.source ?? "unknown" });
 
-      // Fast path: cached-fresh session → navigate immediately (no network).
       if (hasFreshLuxeVeilSession()) {
         track("luxe_veil_gate_skip", { reason: "cached" });
         navigate(TARGET_PATH);
         return;
       }
-      // Slow path: token present but stale → re-verify remotely.
       if (await ensureLuxeVeilSession()) {
         track("luxe_veil_gate_skip", { reason: "revalidated" });
         navigate(TARGET_PATH);
@@ -67,22 +65,10 @@ const LuxeVeilGate = () => {
     openAccessRequest({
       source: "luxe-veil",
       title: "Request Luxe Veil access",
-      description: "Luxe Veil is invite-only. Share a few details and we'll review your request and contact you shortly.",
+      description:
+        "Luxe Veil is invite-only. Share a few details and we'll review your request and contact you shortly.",
     });
   };
-
-  // (effect intentionally above)
-  const _noopBindingScopeMarker = () => {
-    void requestAccess;
-  };
-  void _noopBindingScopeMarker;
-
-  const _legacyEffect = () => {
-    };
-
-    window.addEventListener(LUXE_VEIL_GATE_EVENT, handler);
-    return () => window.removeEventListener(LUXE_VEIL_GATE_EVENT, handler);
-  }, [navigate]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,7 +106,7 @@ const LuxeVeilGate = () => {
             Luxe Veil — Invitation Required
           </DialogTitle>
           <DialogDescription className="text-foreground/70">
-            Luxe Veil is invite-only. Enter your code to access the private experience.
+            Luxe Veil is invite-only. Enter your code, or request access if you don't have one yet.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-3">
@@ -145,9 +131,18 @@ const LuxeVeilGate = () => {
           >
             {verifying ? "Verifying…" : "Unlock Luxe Veil"}
           </button>
-          <p className="text-center text-[11px] uppercase tracking-[0.3em] text-foreground/40">
-            By referral only
-          </p>
+          <div className="flex items-center gap-3 py-1 text-[11px] uppercase tracking-[0.3em] text-foreground/40">
+            <span className="h-px flex-1 bg-border" />
+            <span>or</span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+          <button
+            type="button"
+            onClick={requestAccess}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition hover:border-gold hover:text-gold"
+          >
+            Request access (admin approval)
+          </button>
         </form>
       </DialogContent>
     </Dialog>
