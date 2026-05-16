@@ -31,6 +31,30 @@ function html(title: string, body: string, color = "#16a34a"): Response {
   return new Response(doc, { status: 200, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" } });
 }
 
+function esc(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+async function telegramSend(text: string) {
+  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+  const telegramKey = Deno.env.get("TELEGRAM_API_KEY");
+  const chatId = Deno.env.get("TELEGRAM_CHAT_ID");
+  if (!lovableKey || !telegramKey || !chatId) return;
+  try {
+    await fetch("https://connector-gateway.lovable.dev/telegram/sendMessage", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": telegramKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
+    });
+  } catch (e) {
+    console.error("telegram confirm failed", e);
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   const url = new URL(req.url);
@@ -52,7 +76,7 @@ Deno.serve(async (req) => {
   const supabase = createClient(supabaseUrl, serviceKey);
   const { data: existing } = await supabase
     .from("module_enrollments")
-    .select("id, status, module_index, user_id, bkash_trx_id")
+    .select("id, status, module_index, user_id, bkash_trx_id, sender_phone")
     .eq("id", id)
     .maybeSingle();
 
@@ -77,11 +101,77 @@ Deno.serve(async (req) => {
     .eq("status", "pending");
   if (error) return html("Update failed", `<p>${error.message}</p>`, "#ef4444");
 
+  // Fetch module title + user profile for the timeline + confirmation message
+  const [{ data: mod }, { data: profile }, { data: nextMod }] = await Promise.all([
+    supabase.from("course_modules").select("title").eq("module_index", existing.module_index).maybeSingle(),
+    supabase.from("profiles").select("full_name, email").eq("user_id", existing.user_id).maybeSingle(),
+    existing.module_index < 8
+      ? supabase.from("course_modules").select("title").eq("module_index", existing.module_index + 1).maybeSingle()
+      : Promise.resolve({ data: null }),
+  ]);
+
+  const moduleTitle = mod?.title ?? `Module ${existing.module_index}`;
+  const userLabel = profile?.full_name || profile?.email || existing.user_id;
+
+  // Timeline events
+  const events: Array<Record<string, unknown>> = [{
+    enrollment_id: existing.id,
+    user_id: existing.user_id,
+    module_index: existing.module_index,
+    event_type: action === "approve" ? "approved" : "rejected",
+    actor: "admin",
+    message: action === "approve"
+      ? `Admin approved TrxID ${existing.bkash_trx_id} — module unlocked`
+      : `Admin rejected TrxID ${existing.bkash_trx_id}`,
+  }];
+  if (action === "approve" && existing.module_index < 8) {
+    events.push({
+      enrollment_id: null,
+      user_id: existing.user_id,
+      module_index: existing.module_index + 1,
+      event_type: "unlocked",
+      actor: "system",
+      message: `Module ${existing.module_index + 1} is now eligible for payment`,
+    });
+  }
+  await supabase.from("enrollment_events").insert(events);
+
+  // Telegram confirmation message back to admin
+  if (action === "approve") {
+    const nextLine = existing.module_index < 8 && nextMod?.title
+      ? `🔓 <b>Next unlocked:</b> Module ${existing.module_index + 1} — ${esc(nextMod.title)}`
+      : `🏁 <b>Course complete!</b> All 8 modules paid for this user.`;
+    await telegramSend([
+      `✅ <b>Payment APPROVED</b>`,
+      ``,
+      `📚 Module ${existing.module_index} — ${esc(moduleTitle)}`,
+      `👤 ${esc(String(userLabel))}`,
+      `💳 TrxID <code>${esc(existing.bkash_trx_id ?? "")}</code> from <code>${esc(existing.sender_phone ?? "")}</code>`,
+      `💰 ৳2,000 confirmed`,
+      ``,
+      nextLine,
+      `<i>Student dashboard auto-updated · timeline logged</i>`,
+    ].join("\n"));
+  } else {
+    await telegramSend([
+      `❌ <b>Payment REJECTED</b>`,
+      ``,
+      `📚 Module ${existing.module_index} — ${esc(moduleTitle)}`,
+      `👤 ${esc(String(userLabel))}`,
+      `💳 TrxID <code>${esc(existing.bkash_trx_id ?? "")}</code> from <code>${esc(existing.sender_phone ?? "")}</code>`,
+      ``,
+      `🔒 Module ${existing.module_index + 1 > 8 ? 8 : existing.module_index + 1} remains locked. User can retry submission.`,
+    ].join("\n"));
+  }
+
   const verb = newStatus === "paid" ? "Approved ✅" : "Rejected ❌";
   const color = newStatus === "paid" ? "#16a34a" : "#ef4444";
+  const nextNote = newStatus === "paid" && existing.module_index < 8
+    ? `<p style="color:#8a8a90;font-size:13px;margin-top:18px">Module ${existing.module_index + 1} এখন user-এর জন্য unlock — timeline log update হয়েছে।</p>`
+    : "";
   return html(
     `Payment ${verb}`,
-    `<p>Module <b>${existing.module_index}</b> · TrxID <code>${existing.bkash_trx_id}</code> — marked <b>${newStatus}</b>.</p>`,
+    `<p>Module <b>${existing.module_index}</b> · TrxID <code>${existing.bkash_trx_id}</code> — marked <b>${newStatus}</b>.</p>${nextNote}`,
     color,
   );
 });
