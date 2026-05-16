@@ -19,8 +19,8 @@ import {
   GraduationCap,
   PlayCircle,
 } from "lucide-react";
-import trendfluxLogo from "@/assets/trendflux-logo.png";
-import emonPortrait from "@/assets/zahid-hasan-emon.jpg";
+import trendfluxLogo from "@/assets/trendflux-logo.webp";
+import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -408,7 +408,16 @@ const Index = () => {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="flex items-center gap-2 font-display text-base sm:text-lg font-bold tracking-tight whitespace-nowrap shrink-0 transition-opacity hover:opacity-90"
           >
-            <img src={trendfluxLogo} alt={`${BRAND.name} logo`} className="h-7 w-7 sm:h-8 sm:w-8 object-contain" />
+            <img
+              src={trendfluxLogo}
+              alt={`${BRAND.name} logo`}
+              width={32}
+              height={32}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="h-7 w-7 sm:h-8 sm:w-8 object-contain"
+            />
             <span>{BRAND.nameLead}</span> <span className="text-gradient">{BRAND.nameTrail}</span>
           </Link>
 
@@ -831,6 +840,10 @@ const Index = () => {
               <img
                 src={emonPortrait}
                 alt="Zahid Hasan Emon, Brand Architect of TrendFlux Ecosystem"
+                width={800}
+                height={1000}
+                loading="lazy"
+                decoding="async"
                 className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
               />
               <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
@@ -1469,7 +1482,15 @@ const Index = () => {
 
           <div className="mt-8 flex flex-col items-center justify-between gap-3 text-sm text-foreground/50 md:flex-row">
             <div className="flex items-center gap-2">
-              <img src={trendfluxLogo} alt="TrendFlux Ecosystem logo" className="h-7 w-7 object-contain" />
+              <img
+                src={trendfluxLogo}
+                alt="TrendFlux Ecosystem logo"
+                width={28}
+                height={28}
+                loading="lazy"
+                decoding="async"
+                className="h-7 w-7 object-contain"
+              />
               <p className="font-semibold text-foreground">TrendFlux Ecosystem</p>
             </div>
             <p>© 2026 — Built on integrity</p>

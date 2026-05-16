@@ -3,7 +3,7 @@ import { Camera, Users, Sparkles, ArrowUpRight, Check, Copy } from "lucide-react
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
-import trendfluxTalentLogo from "@/assets/trendflux-talent-logo.png";
+import trendfluxTalentLogo from "@/assets/trendflux-talent-logo.webp";
 import { useState } from "react";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";

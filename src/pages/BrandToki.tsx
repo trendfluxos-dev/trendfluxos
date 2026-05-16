@@ -17,7 +17,7 @@ import {
   CalendarCheck,
   ShieldCheck,
 } from "lucide-react";
-import logo from "@/assets/brandtoki-logo.png";
+import logo from "@/assets/brandtoki-logo.webp";
 import { useSeo } from "@/hooks/useSeo";
 
 const services = [

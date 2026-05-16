@@ -4,10 +4,10 @@ import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart, Copy, Check, Use
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
-import profile from "@/assets/marriage/profile.jpg";
-import photo1 from "@/assets/marriage/photo1.jpg";
-import photo2 from "@/assets/marriage/photo2.jpg";
-import photo3 from "@/assets/marriage/photo3.jpg";
+import profile from "@/assets/marriage/profile.webp";
+import photo1 from "@/assets/marriage/photo1.webp";
+import photo2 from "@/assets/marriage/photo2.webp";
+import photo3 from "@/assets/marriage/photo3.webp";
 
 type Bi = { en: string; bn: string };
 const T = ({ en, bn, bangla }: Bi & { bangla: boolean }) => <>{bangla ? bn : en}</>;

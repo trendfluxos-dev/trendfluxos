@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import luxeVeilSpa from "@/assets/luxe-veil-spa.jpg";
-import luxeVeilLogo from "@/assets/luxe-veil-logo.png";
-import luxeVeilOg from "@/assets/luxe-veil-og.jpg";
+import luxeVeilSpa from "@/assets/luxe-veil-spa.webp";
+import luxeVeilLogo from "@/assets/luxe-veil-logo.webp";
+import luxeVeilOg from "@/assets/luxe-veil-og.webp";
 import { BrandShell } from "@/components/BrandShell";
 import { Lock, Mail, KeyRound, Loader2, ShieldCheck, BadgeCheck, Sparkles, Leaf } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";

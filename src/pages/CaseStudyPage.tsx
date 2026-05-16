@@ -7,7 +7,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
-import trendfluxLogo from "@/assets/trendflux-logo.png";
+import trendfluxLogo from "@/assets/trendflux-logo.webp";
 
 const Section = ({ label, body }: { label: string; body: string }) => (
   <div>

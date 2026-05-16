@@ -22,7 +22,7 @@ export const BRAND = {
   /** Canonical production URL. */
   url: "https://trendfluxdigital.lovable.app",
   /** Default social/OG image (absolute path under public or full URL). */
-  ogImage: "/trendflux-logo.png",
+  ogImage: "/trendflux-logo.webp",
   /** Hero copy used on the landing page. */
   hero: {
     headlineLead: "Digital Transformation",

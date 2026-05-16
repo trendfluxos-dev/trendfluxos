@@ -3,7 +3,7 @@ import { Megaphone, Sparkles, Zap } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { Testimonials } from "@/components/Testimonials";
-import brandTokiLogo from "@/assets/brandtoki-logo.png";
+import brandTokiLogo from "@/assets/brandtoki-logo.webp";
 
 const BrandOpen = () => {
   useSeo({
