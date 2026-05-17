@@ -184,7 +184,7 @@ Deno.serve(async (req) => {
         `<i>submission id: ${inserted.id}</i>`,
       );
 
-      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -199,8 +199,27 @@ Deno.serve(async (req) => {
           },
         }),
       });
+      const tgData = await tgRes.json().catch(() => ({} as Record<string, unknown>));
+      if (!tgRes.ok || !(tgData as { ok?: boolean }).ok) {
+        console.error("telegram sendMessage failed", tgRes.status, tgData);
+        await admin.from("telegram_error_logs").insert({
+          function_name: "course-payment-submit",
+          api_method: "sendMessage",
+          http_status: tgRes.status,
+          error_code: String((tgData as { error_code?: unknown }).error_code ?? ""),
+          error_description: String((tgData as { description?: unknown }).description ?? ""),
+          telegram_response: tgData,
+          request_context: { enrollment_id: inserted.id, user_id: userId, module_index: body.module_index },
+        });
+      }
     } catch (e) {
       console.error("telegram notify failed", e);
+      await admin.from("telegram_error_logs").insert({
+        function_name: "course-payment-submit",
+        api_method: "sendMessage",
+        error_description: e instanceof Error ? e.message : String(e),
+        request_context: { enrollment_id: inserted.id, user_id: userId, module_index: body.module_index, kind: "exception" },
+      });
     }
   }
 
