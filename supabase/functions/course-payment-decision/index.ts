@@ -194,7 +194,7 @@ Deno.serve(async (req) => {
       ``,
       nextLine,
       `<i>Student dashboard auto-updated · timeline logged</i>`,
-    ].join("\n"));
+    ].join("\n"), supabase, { enrollment_id: existing.id, user_id: existing.user_id, module_index: existing.module_index, action: "approve" });
   } else {
     await telegramSend([
       `❌ <b>Payment REJECTED</b>`,
@@ -204,7 +204,7 @@ Deno.serve(async (req) => {
       `💳 TrxID <code>${esc(existing.bkash_trx_id ?? "")}</code> from <code>${esc(existing.sender_phone ?? "")}</code>`,
       ``,
       `🔒 Module ${existing.module_index + 1 > 8 ? 8 : existing.module_index + 1} remains locked. User can retry submission.`,
-    ].join("\n"));
+    ].join("\n"), supabase, { enrollment_id: existing.id, user_id: existing.user_id, module_index: existing.module_index, action: "reject" });
   }
 
   const verb = newStatus === "paid" ? "Approved ✅" : "Rejected ❌";
