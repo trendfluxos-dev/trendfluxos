@@ -35,18 +35,41 @@ function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-async function telegramSend(text: string) {
+async function telegramSend(
+  text: string,
+  supabase: ReturnType<typeof createClient>,
+  context: Record<string, unknown>,
+) {
   const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
   const chatId = Deno.env.get("TELEGRAM_CHAT_ID");
   if (!botToken || !chatId) return;
   try {
-    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
     });
+    const data = await res.json().catch(() => ({} as Record<string, unknown>));
+    if (!res.ok || !(data as { ok?: boolean }).ok) {
+      console.error("telegram confirm failed", res.status, data);
+      await supabase.from("telegram_error_logs").insert({
+        function_name: "course-payment-decision",
+        api_method: "sendMessage",
+        http_status: res.status,
+        error_code: String((data as { error_code?: unknown }).error_code ?? ""),
+        error_description: String((data as { description?: unknown }).description ?? ""),
+        telegram_response: data,
+        request_context: context,
+      });
+    }
   } catch (e) {
     console.error("telegram confirm failed", e);
+    await supabase.from("telegram_error_logs").insert({
+      function_name: "course-payment-decision",
+      api_method: "sendMessage",
+      error_description: e instanceof Error ? e.message : String(e),
+      request_context: { ...context, kind: "exception" },
+    });
   }
 }
 
