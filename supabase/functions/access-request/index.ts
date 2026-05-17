@@ -137,7 +137,7 @@ Deno.serve(async (req) => {
       if (body.message) lines.push(`<b>Message:</b> ${escapeHtml(body.message)}`);
       lines.push(`<i>id: ${inserted.id}</i>`);
 
-      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -152,10 +152,29 @@ Deno.serve(async (req) => {
           },
         }),
       });
+      const tgData = await tgRes.json().catch(() => ({} as Record<string, unknown>));
+      if (!tgRes.ok || !(tgData as { ok?: boolean }).ok) {
+        console.error("telegram sendMessage failed", tgRes.status, tgData);
+        await supabase.from("telegram_error_logs").insert({
+          function_name: "access-request",
+          api_method: "sendMessage",
+          http_status: tgRes.status,
+          error_code: String((tgData as { error_code?: unknown }).error_code ?? ""),
+          error_description: String((tgData as { description?: unknown }).description ?? ""),
+          telegram_response: tgData,
+          request_context: { access_request_id: inserted.id, source: body.source },
+        });
+      }
       // projectRef referenced to silence lint
       void projectRef;
     } catch (e) {
       console.error("telegram notify failed", e);
+      await supabase.from("telegram_error_logs").insert({
+        function_name: "access-request",
+        api_method: "sendMessage",
+        error_description: e instanceof Error ? e.message : String(e),
+        request_context: { access_request_id: inserted.id, source: body.source, kind: "exception" },
+      });
     }
   } else {
     console.warn("Telegram secrets missing; skipping notification");
