@@ -120,10 +120,9 @@ Deno.serve(async (req) => {
   });
 
   // Telegram notification with Approve/Reject buttons
-  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
-  const telegramKey = Deno.env.get("TELEGRAM_API_KEY");
+  const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
   const chatId = Deno.env.get("TELEGRAM_CHAT_ID");
-  if (lovableKey && telegramKey && chatId) {
+  if (botToken && chatId) {
     try {
       const decisionBase = `${supabaseUrl}/functions/v1/course-payment-decision`;
       const makeUrl = async (action: "approve" | "reject") => {
@@ -185,13 +184,9 @@ Deno.serve(async (req) => {
         `<i>submission id: ${inserted.id}</i>`,
       );
 
-      await fetch("https://connector-gateway.lovable.dev/telegram/sendMessage", {
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${lovableKey}`,
-          "X-Connection-Api-Key": telegramKey,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: chatId,
           text: lines.join("\n"),

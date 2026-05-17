@@ -5,7 +5,6 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 };
 
-const GATEWAY_URL = "https://connector-gateway.lovable.dev/telegram";
 const BOT_USERNAME = "LuxeVeil_Bot";
 const GROUP_INVITE = "https://t.me/+GAMSK09w_6Q3MGQ1";
 
@@ -44,23 +43,10 @@ function parseTargets(): ChatTarget[] {
     });
 }
 
-function tgHeaders(lovableKey: string, tgKey: string) {
-  return {
-    Authorization: `Bearer ${lovableKey}`,
-    "X-Connection-Api-Key": tgKey,
-    "Content-Type": "application/json",
-  };
-}
-
-async function callTg(
-  method: string,
-  body: unknown,
-  lovableKey: string,
-  tgKey: string,
-) {
-  const res = await fetch(`${GATEWAY_URL}/${method}`, {
+async function callTg(method: string, body: unknown, botToken: string) {
+  const res = await fetch(`https://api.telegram.org/bot${botToken}/${method}`, {
     method: "POST",
-    headers: tgHeaders(lovableKey, tgKey),
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body ?? {}),
   });
   const data = await res.json().catch(() => ({}));
@@ -102,10 +88,8 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const TELEGRAM_API_KEY = Deno.env.get("TELEGRAM_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
-    if (!TELEGRAM_API_KEY) throw new Error("TELEGRAM_API_KEY not configured");
+    const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN");
+    if (!TELEGRAM_BOT_TOKEN) throw new Error("TELEGRAM_BOT_TOKEN not configured");
 
     const targets = parseTargets();
     const url = new URL(req.url);
@@ -141,7 +125,7 @@ Deno.serve(async (req) => {
         configured_targets: targets.map((t) => ({ key: t.key, label: t.label, chat_id: t.chat_id })),
       };
 
-      const me = await callTg("getMe", {}, LOVABLE_API_KEY, TELEGRAM_API_KEY);
+      const me = await callTg("getMe", {}, TELEGRAM_BOT_TOKEN);
       result.bot = me.data?.result ?? me.data;
       if (!me.res.ok || !me.data?.ok) {
         return new Response(
@@ -152,7 +136,7 @@ Deno.serve(async (req) => {
 
       const checks = await Promise.all(
         targets.map(async (t) => {
-          const c = await callTg("getChat", { chat_id: t.chat_id }, LOVABLE_API_KEY, TELEGRAM_API_KEY);
+          const c = await callTg("getChat", { chat_id: t.chat_id }, TELEGRAM_BOT_TOKEN);
           return {
             key: t.key,
             label: t.label,
@@ -170,7 +154,7 @@ Deno.serve(async (req) => {
         const upd = await callTg(
           "getUpdates",
           { limit: 50, allowed_updates: ["message", "my_chat_member", "channel_post"] },
-          LOVABLE_API_KEY, TELEGRAM_API_KEY,
+          TELEGRAM_BOT_TOKEN,
         );
         const seen = new Map<string, { id: number; title?: string; type?: string }>();
         for (const u of (upd.data?.result ?? []) as Array<Record<string, any>>) {
@@ -260,7 +244,7 @@ Deno.serve(async (req) => {
         const { res, data } = await callTg(
           "sendMessage",
           { chat_id: t.chat_id, text, parse_mode: "HTML", disable_web_page_preview: true },
-          LOVABLE_API_KEY, TELEGRAM_API_KEY,
+          TELEGRAM_BOT_TOKEN,
         );
         return {
           key: t.key,
