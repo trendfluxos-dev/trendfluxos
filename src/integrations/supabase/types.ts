@@ -352,6 +352,42 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_error_logs: {
+        Row: {
+          api_method: string
+          created_at: string
+          error_code: string | null
+          error_description: string | null
+          function_name: string
+          http_status: number | null
+          id: string
+          request_context: Json
+          telegram_response: Json | null
+        }
+        Insert: {
+          api_method: string
+          created_at?: string
+          error_code?: string | null
+          error_description?: string | null
+          function_name: string
+          http_status?: number | null
+          id?: string
+          request_context?: Json
+          telegram_response?: Json | null
+        }
+        Update: {
+          api_method?: string
+          created_at?: string
+          error_code?: string | null
+          error_description?: string | null
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          request_context?: Json
+          telegram_response?: Json | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

@@ -1,3 +1,5 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -51,6 +53,30 @@ async function callTg(method: string, body: unknown, botToken: string) {
   });
   const data = await res.json().catch(() => ({}));
   return { res, data };
+}
+
+function getLogger() {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!supabaseUrl || !serviceKey) return null;
+  const supabase = createClient(supabaseUrl, serviceKey);
+  return async (
+    method: string,
+    status: number,
+    data: Record<string, unknown>,
+    context: Record<string, unknown>,
+  ) => {
+    console.error(`telegram-submit ${method} failed`, status, data);
+    await supabase.from("telegram_error_logs").insert({
+      function_name: "telegram-submit",
+      api_method: method,
+      http_status: status,
+      error_code: String((data as { error_code?: unknown }).error_code ?? ""),
+      error_description: String((data as { description?: unknown }).description ?? ""),
+      telegram_response: data,
+      request_context: context,
+    });
+  };
 }
 
 function chatNotFoundGuidance(chatId: string) {
@@ -246,6 +272,10 @@ Deno.serve(async (req) => {
           { chat_id: t.chat_id, text, parse_mode: "HTML", disable_web_page_preview: true },
           TELEGRAM_BOT_TOKEN,
         );
+        if (!res.ok || !data?.ok) {
+          const log = getLogger();
+          if (log) await log("sendMessage", res.status, data ?? {}, { target_key: t.key, chat_id: t.chat_id });
+        }
         return {
           key: t.key,
           label: t.label,
