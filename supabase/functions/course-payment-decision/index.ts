@@ -36,18 +36,13 @@ function esc(s: string): string {
 }
 
 async function telegramSend(text: string) {
-  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
-  const telegramKey = Deno.env.get("TELEGRAM_API_KEY");
+  const botToken = Deno.env.get("TELEGRAM_BOT_TOKEN");
   const chatId = Deno.env.get("TELEGRAM_CHAT_ID");
-  if (!lovableKey || !telegramKey || !chatId) return;
+  if (!botToken || !chatId) return;
   try {
-    await fetch("https://connector-gateway.lovable.dev/telegram/sendMessage", {
+    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
-      headers: {
-        "Authorization": `Bearer ${lovableKey}`,
-        "X-Connection-Api-Key": telegramKey,
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
     });
   } catch (e) {
