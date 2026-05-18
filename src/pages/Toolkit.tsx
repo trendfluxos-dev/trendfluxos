@@ -210,11 +210,13 @@ const Toolkit = () => {
 
   const onEnroll = async (source: string) => {
     track("toolkit_cta_click", { source, cta: "enroll" });
+    // Cold traffic → conversion-optimized Masterclass LP.
+    // Logged-in students bypass and go straight to the paid module dashboard.
     const { data } = await supabase.auth.getSession();
     if (data.session) {
       navigate("/course/trendflux");
     } else {
-      navigate("/auth?redirect=/course/trendflux");
+      navigate("/masterclass");
     }
   };
 
