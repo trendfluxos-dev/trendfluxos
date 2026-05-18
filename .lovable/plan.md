@@ -1,45 +1,77 @@
-# TrendFlux Course — Paid Sequential Module System
 
-৮টি module, প্রতিটি **৳2,000 BDT**, bKash Tokenized Checkout (API) দিয়ে pay। Module N unlock হবে শুধুমাত্র Module N-1 paid হলে। প্রতিটি সফল payment-এ admin Telegram-এ notification পাবে।
+# Advanced AI Masterclass — Conversion-Optimized Landing Page
 
-## Flow (user-facing)
+Build a new dedicated landing page at `/masterclass` that implements your funnel architecture (identity shift → trust block → operator-language modules → transformation frame → qualified WhatsApp close). Reuses existing components — no new backend needed.
 
-1. `/toolkit` → "Enroll" → login/signup screen (Email + Password, Google)
-2. Login-এর পর `/course/trendflux` dashboard:
-   - ৮টি module card — sequential lock (1 open, বাকি 🔒)
-   - Module 1 paid হলে → Module 2 unlock + pay button দেখাবে
-3. "Pay ৳2,000" click → bKash Checkout redirect → success হলে module unlock + content (video/PDF link) দেখাবে
-4. Telegram-এ admin notification: "User X paid Module N — TrxID: ..."
+## What gets built
 
-## Backend (Lovable Cloud)
+### 1. New page: `src/pages/Masterclass.tsx` (route `/masterclass`)
 
-### Auth
-- Email/password + Google sign-in
-- `profiles` table (user_id, name, phone, email)
+Single-purpose LP, no nav distractions, structured as:
 
-### Tables
-- **`course_modules`** — seed-করা ৮টি module (index, title, description, price=2000, content_url)
-- **`module_enrollments`** — user_id, module_index, status (`pending`/`paid`/`failed`), bkash_payment_id, bkash_trx_id, amount, paid_at. RLS: user নিজের record দেখবে; admin সব দেখবে।
+**A. Hero (identity-shift)**
+- Eyebrow chip: "AI GROWTH OPERATOR PROGRAM"
+- H1: *Turn AI Into a Revenue System — Not a Productivity Tool.*
+- Sub: *Operators build systems. Leaders automate growth. Learn the stack.*
+- Primary CTA: **Apply for Limited Batch** → opens `AccessRequestGate` with `source: "masterclass_hero"`
+- Secondary CTA: **Message on WhatsApp** → opens pre-filled WhatsApp deep link with qualification prompt
+- Right side: uploaded hero image (`src/assets/masterclass-hero.jpg`)
 
-### Edge Functions
-- **`bkash-create-payment`** (auth required) — verify previous module paid → grant bKash token → create payment → return `bkashURL`
-- **`bkash-execute-payment`** (public callback) — execute, update enrollment status, Telegram notify
+**B. Pattern-interrupt strip** (3 hooks rotating, A/B-ready)
+- "You're not behind in AI — you're using it wrong."
+- "AI isn't a tool anymore. It's a business operator."
+- "If AI isn't saving you time or making you money, you're playing with it."
 
-### Secrets needed
-- `BKASH_APP_KEY`, `BKASH_APP_SECRET`, `BKASH_USERNAME`, `BKASH_PASSWORD`, `BKASH_BASE_URL` (sandbox: `https://tokenized.sandbox.bka.sh/v1.2.0-beta`, live: `https://tokenized.pay.bka.sh/v1.2.0-beta`)
+**C. Trust-shift block** — "Why most people fail with AI"
+- 3 cards: No system thinking · No workflow design · No execution structure
+- Closer line: *This program fixes that.*
 
-## Frontend
-- `/auth` page (login/signup + Google)
-- `/course/trendflux` — module list with lock states, payment CTA, success/fail handler from bKash callback query params
-- Update Toolkit page "Enroll" buttons → route to `/course/trendflux` (login gated)
+**D. Operator-language module grid (8 modules)**
+| # | Operator name | One-liner |
+|---|---|---|
+| 01 | AI Instruction Architecture | Prompt systems that compound |
+| 02 | Insight Extraction Engine | Mine signal from any source |
+| 03 | AI Decision Matrix | Pick the right model every time |
+| 04 | Content Scaling Engine | Ship 10× output, on brand |
+| 05 | Brand Identity Engine | Visual systems at AI speed |
+| 06 | Growth Intelligence Layer | Data → decisions, automated |
+| 07 | Workflow Automation Stack | Connect tools, kill busywork |
+| 08 | AI Business Build Sprint | Capstone: ship a real system |
 
-## Gating rule
-Server-side: `bkash-create-payment` rejects if `module_index > 1 AND no paid row for module_index-1`. Client UI mirrors this.
+Each card numbered, hoverable, dark with gold accent — matches existing brand tokens (`gold`, `primary`, `glass`).
 
-## Notes
-- Manual bKash (screenshot) flow বাদ — শুধু API gateway
-- Admin approval auto = bKash success
-- Telegram notify-only (existing `TELEGRAM_*` secrets reused)
-- bKash merchant credentials না থাকলে sandbox দিয়ে test হবে
+**E. Transformation frame** — "After this program you will…"
+- 4 outcomes as ✓ rows (design AI workflows, automate content, build digital assets, operate like a growth strategist)
 
-Approve করলে শুরু করব — auth + DB schema + edge functions + UI সব একসাথে।
+**F. Final CTA band**
+- Headline: *Limited batch. System-based training, not theory.*
+- Primary: **Reserve Your Seat** → `AccessRequestGate` (`source: "masterclass_final"`)
+- Inline qualification preview: "We'll ask 2 quick questions: Student / Job / Business? Goal: income · skill · automation?"
+
+### 2. Wire the qualification logic
+- `AccessRequestGate` already collects name/email/phone/message. Pass `metadata: { audience: "masterclass", qualification_prompt: true }` and pre-fill the message placeholder with: *"I am [student/job/business] · Goal: [income growth / skill upgrade / business automation]"* — this front-loads your DM segmentation so Telegram notification already contains the segment.
+
+### 3. Discovery surfaces
+- Add `Masterclass` route to `src/lib/routes.ts` (lazy-loaded, matches existing pattern).
+- Add to `navigablePages` so command palette finds it.
+- Add SEO via `useSeo` + JSON-LD `Course` schema (already used elsewhere).
+- Update `/toolkit` "Enroll" CTAs to point to `/masterclass` instead of `/course/trendflux` for cold traffic; keep `/course/trendflux` as the paid student dashboard.
+
+### 4. Hero image
+Copy your uploaded ad creative into `src/assets/masterclass-hero.jpg` for the hero panel.
+
+## What this does NOT change
+
+- No backend changes (existing `access_requests` table + `access-request` edge function + Telegram notify handle it).
+- No payment/auth changes — `/course/trendflux` stays the paid module dashboard for students who convert.
+- No new secrets needed.
+
+## Out of scope (separate asks if you want)
+
+- A/B test infrastructure for the 3 hooks (would need analytics segmentation table)
+- WhatsApp chatbot auto-qualification (would need a webhook function + WhatsApp Business API)
+- Meta Ads creative export / pixel events beyond what `track()` already emits
+
+---
+
+Approve and I'll build it in one pass.
