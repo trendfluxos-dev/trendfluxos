@@ -37,6 +37,7 @@ const Portfolio = routes["/portfolio"];
 const Enterprise = routes["/enterprise"];
 const Toolkit = routes["/toolkit"];
 const CourseTrendflux = routes["/course/trendflux"];
+const Masterclass = routes["/masterclass"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const NotFound = routes["*"];
 
@@ -82,6 +83,7 @@ const App = () => (
             <Route path="/enterprise" element={<Enterprise />} />
             <Route path="/toolkit" element={<Toolkit />} />
             <Route path="/course/trendflux" element={<CourseTrendflux />} />
+            <Route path="/masterclass" element={<Masterclass />} />
             <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
