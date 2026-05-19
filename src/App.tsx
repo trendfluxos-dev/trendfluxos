@@ -62,6 +62,7 @@ const App = () => (
           <FloatingContact />
           <BrandSwitcher />
           <LuxeVeilGate />
+          <TelegramGroupPopup />
           <AccessRequestGate />
           {import.meta.env.DEV && <ThemeDebugPanel />}
           <Suspense fallback={<PageFallback />}>
