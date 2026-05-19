@@ -41,8 +41,22 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
 
-  // No additional auth: the gateway already requires a valid apikey to invoke,
-  // and this endpoint can only register the webhook against our own function URL.
+  // Require the service-role key in the Authorization header. The public anon
+  // key is not sufficient: invoking setWebhook with drop_pending_updates
+  // could discard queued admin notifications.
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const provided = authHeader.replace(/^Bearer\s+/i, "").trim();
+  const a = new TextEncoder().encode(provided);
+  const b = new TextEncoder().encode(serviceKey);
+  let ok = a.length === b.length && b.length > 0;
+  if (ok) { let diff = 0; for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i]; ok = diff === 0; }
+  if (!ok) {
+    return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
+      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
 
   let mode = "both";
   try { mode = (await req.json())?.mode ?? "both"; } catch { /* ignore */ }
