@@ -13,6 +13,7 @@ import CommandPalette from "./components/CommandPalette";
 import FloatingContact from "./components/social/FloatingContact";
 import BrandSwitcher from "./components/social/BrandSwitcher";
 import LuxeVeilGate from "./components/LuxeVeilGate";
+import TelegramGroupPopup from "./components/TelegramGroupPopup";
 import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
@@ -61,6 +62,7 @@ const App = () => (
           <FloatingContact />
           <BrandSwitcher />
           <LuxeVeilGate />
+          <TelegramGroupPopup />
           <AccessRequestGate />
           {import.meta.env.DEV && <ThemeDebugPanel />}
           <Suspense fallback={<PageFallback />}>
