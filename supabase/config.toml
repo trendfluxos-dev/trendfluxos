@@ -1,7 +1,1 @@
-project_id = "eaobwuebboiqhsthardl"
-
-[functions.access-decision]
-verify_jwt = false
-
-[functions.course-payment-decision]
-verify_jwt = false
+project_id = "gycypazgqtlslybgtvjl"
