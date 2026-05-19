@@ -388,6 +388,39 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_support_sessions: {
+        Row: {
+          chat_id: number
+          created_at: string
+          issue: string | null
+          name: string | null
+          premium: boolean
+          step: string
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          chat_id: number
+          created_at?: string
+          issue?: string | null
+          name?: string | null
+          premium?: boolean
+          step?: string
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          chat_id?: number
+          created_at?: string
+          issue?: string | null
+          name?: string | null
+          premium?: boolean
+          step?: string
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
