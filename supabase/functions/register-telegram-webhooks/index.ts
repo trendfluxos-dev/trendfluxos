@@ -42,8 +42,10 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
 
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const auth = req.headers.get("authorization") ?? "";
-  if (!auth.toLowerCase().startsWith("bearer ") || auth.slice(7).trim() !== serviceKey) {
+  const provided =
+    req.headers.get("x-admin-key") ??
+    (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "").trim();
+  if (provided !== serviceKey) {
     return new Response(JSON.stringify({ ok: false, error: "Unauthorized" }), {
       status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
