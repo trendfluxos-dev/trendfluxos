@@ -82,7 +82,7 @@ const LuxeVeilGate = () => {
         error?: string;
       }>("verify-invite", { body: { code: code.trim() } });
       if (fnErr || !data?.ok || !data.token) {
-        setError(data?.error || "Invalid invitation code. Please check with your host.");
+        setError("Invalid Invite Code. Please contact support for access.");
       } else {
         persistLuxeVeilToken(data.token);
         track("luxe_veil_gate_verified", {});
