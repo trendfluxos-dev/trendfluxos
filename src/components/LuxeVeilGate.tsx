@@ -81,7 +81,8 @@ const LuxeVeilGate = () => {
         ok: boolean;
         token?: string;
         error?: string;
-      }>("verify-invite", { body: { code: code.trim() } });
+        mode?: string;
+      }>("verify-invite", { body: { code: code.trim(), mode: getAppMode() } });
       if (fnErr || !data?.ok || !data.token) {
         setError("Invalid Invite Code. Please contact support for access.");
       } else {
