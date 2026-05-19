@@ -106,6 +106,11 @@ const LuxeVeilGate = () => {
           <DialogTitle className="flex items-center gap-2 font-display text-primary">
             <Lock className="h-4 w-4 text-gold" />
             Luxe Veil — Invitation Required
+            {getAppMode() === "staging" && (
+              <span className="ml-2 rounded-full border border-gold/40 bg-gold/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-gold">
+                Staging
+              </span>
+            )}
           </DialogTitle>
           <DialogDescription className="text-foreground/70">
             Luxe Veil is invite-only. Enter your code, or request access if you don't have one yet.
