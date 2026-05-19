@@ -56,6 +56,15 @@ export const FloatingContact = () => {
             {contact.displayName}
           </p>
           <SocialIcons brand={brand} variant="inline" size="lg" />
+          <a
+            href="https://t.me/LuxeVeil_Bot?start=support"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setOpen(false)}
+            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground transition hover:scale-[1.02]"
+          >
+            Contact Support
+          </a>
         </div>
       )}
       <button
