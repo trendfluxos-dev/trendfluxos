@@ -18,6 +18,7 @@ import {
   persistLuxeVeilToken,
 } from "@/lib/luxeVeilSession";
 import { openAccessRequest } from "@/lib/accessRequest";
+import { getAppMode } from "@/lib/appMode";
 
 const TARGET_PATH = "/luxe-veil";
 
