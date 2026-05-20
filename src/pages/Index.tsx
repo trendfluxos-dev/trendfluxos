@@ -835,9 +835,9 @@ const Index = () => {
             <p className="reveal mb-4 sm:mb-5 text-[11px] sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-gold" style={{ transitionDelay: "80ms" }}>
               — Meet the Brand Architect
             </p>
-            <h2 className="reveal font-display text-[1.75rem] leading-[1.2] sm:text-4xl md:text-5xl font-bold tracking-tight" style={{ transitionDelay: "140ms" }}>
+            <h2 className="reveal font-display text-[clamp(1.375rem,6.8vw,1.75rem)] leading-[1.2] sm:text-4xl md:text-5xl font-bold tracking-tight" style={{ transitionDelay: "140ms" }}>
               <span className="block text-foreground/85">Brand Architect</span>
-              <span className="block text-gradient mt-2 whitespace-nowrap">Zahid Hasan Emon</span>
+              <span className="block text-gradient mt-2 whitespace-nowrap [hyphens:none] [word-break:keep-all] max-w-full truncate">Zahid Hasan Emon</span>
             </h2>
             <blockquote className="reveal mt-8 sm:mt-10 border-l-2 border-gold/60 pl-4 sm:pl-6 text-[15px] leading-[1.75] sm:text-base sm:leading-relaxed text-foreground/75 md:text-lg space-y-4" style={{ transitionDelay: "220ms" }}>
               <p>
