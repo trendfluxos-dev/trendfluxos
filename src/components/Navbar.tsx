@@ -2,9 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, GraduationCap, LogIn, LayoutDashboard } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import SocialIcons from "@/components/social/SocialIcons";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/trendflux-logo.webp";
 
 const links = [
