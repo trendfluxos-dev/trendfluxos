@@ -15,7 +15,7 @@ const BrandOpen = () => {
     "@context": "https://schema.org",
     "@type": "Service",
     name: "Studio BrandToki",
-    provider: { "@type": "Organization", name: "TrendFlux", url: "https://trendfluxdigital.lovable.app" },
+    provider: { "@type": "Organization", name: "TrendFlux", url: "https://trendflux.digital" },
     serviceType: "Brand storytelling & mass-reach campaigns",
     areaServed: "Bangladesh",
     description: "Bold, communication-first brand storytelling for ads, social, and mass awareness.",
