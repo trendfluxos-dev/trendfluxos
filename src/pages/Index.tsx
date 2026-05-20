@@ -783,7 +783,7 @@ const Index = () => {
 
       {/* Brand Architect */}
       <section id="founder" className="relative px-5 py-16 sm:px-6 sm:py-20 md:px-12 md:py-24 lg:px-20">
-        <div ref={founderRevealRef} className="mx-auto grid max-w-7xl gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12 lg:items-start">
+        <div ref={founderRevealRef} className="mx-auto grid max-w-7xl gap-12 sm:gap-14 lg:grid-cols-2 lg:gap-12 lg:items-start">
           {/* Portrait */}
           <div className="reveal relative mx-auto w-full max-w-sm lg:max-w-none">
             <div className="absolute -inset-3 sm:-inset-4 rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
