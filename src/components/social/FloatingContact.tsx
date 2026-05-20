@@ -39,7 +39,7 @@ export const FloatingContact = () => {
   return (
     <div
       className="fixed right-4 sm:right-5 z-40 flex flex-col items-end gap-3"
-      style={{ bottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}
+      style={{ bottom: "calc(1.25rem + env(safe-area-inset-bottom, 0px))" }}
     >
       {open && (
         <div
