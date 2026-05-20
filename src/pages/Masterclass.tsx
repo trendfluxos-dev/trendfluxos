@@ -235,15 +235,16 @@ const Masterclass = () => {
           </div>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {MODULES.map(({ icon: Icon, n, title, blurb }) => (
+            {MODULES.map(({ icon: Icon, n, title, blurb }, i) => (
               <div
                 key={n}
-                className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-5 backdrop-blur transition hover:-translate-y-1 hover:border-gold/70 hover:shadow-gold"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-gold/70 hover:shadow-gold animate-fade-up"
+                style={{ animationDelay: `${i * 60}ms` }}
               >
                 <div className="absolute right-4 top-4 font-display text-xs tracking-[0.3em] text-gold/60">
                   {n}
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/10 text-gold ring-1 ring-gold/30">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/10 text-gold ring-1 ring-gold/30 transition-transform duration-300 group-hover:scale-110">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 font-display text-base font-semibold leading-snug text-foreground">
@@ -253,6 +254,7 @@ const Masterclass = () => {
               </div>
             ))}
           </div>
+
         </div>
       </section>
 

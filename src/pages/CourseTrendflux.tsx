@@ -160,19 +160,49 @@ export default function CourseTrendflux() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 py-10 max-w-3xl">
-        <header className="flex items-start justify-between gap-4 mb-8">
+      {/* Ambient brand glow */}
+      <div className="pointer-events-none fixed inset-0" aria-hidden>
+        <div className="absolute -top-24 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-[160px]" />
+        <div className="absolute bottom-0 -left-24 h-[420px] w-[420px] rounded-full bg-gold/10 blur-[160px]" />
+      </div>
+
+      <div className="container mx-auto px-4 py-12 max-w-3xl relative">
+        <header className="flex items-start justify-between gap-4 mb-10 animate-fade-up">
           <div>
-            <h1 className="font-display text-3xl sm:text-4xl font-bold">TrendFlux Masterclass</h1>
-            <p className="text-foreground/60 mt-2 text-sm">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-primary mb-2 font-semibold">
+              TrendFlux Masterclass · Dashboard
+            </p>
+            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
+              Your Learning <span className="text-gradient">Operating System</span>
+            </h1>
+            <p className="text-foreground/60 mt-3 text-sm">
               ৮টি module · প্রতিটি ৳{MODULE_PRICE_BDT.toLocaleString("en-BD")} · sequential unlock
             </p>
+
+            <div className="mt-5 max-w-sm">
+              <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-foreground/50 mb-1.5">
+                <span>Progress</span>
+                <span className="text-foreground/70 font-semibold">
+                  {paidIndexes.size} / {modules.length || 8}
+                </span>
+              </div>
+              <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-primary to-[hsl(var(--primary-glow))] transition-all duration-700 ease-out"
+                  style={{
+                    width: `${
+                      modules.length ? (paidIndexes.size / modules.length) * 100 : 0
+                    }%`,
+                  }}
+                />
+              </div>
+            </div>
           </div>
           <Button variant="ghost" size="sm" onClick={signOut}>Sign out</Button>
         </header>
 
         <div className="space-y-3">
-          {modules.map((m) => {
+          {modules.map((m, idx) => {
             const s = statusFor(m.module_index);
             const access = canAccess(m.module_index);
             const locked = !access && s !== "paid";
@@ -180,41 +210,43 @@ export default function CourseTrendflux() {
             return (
               <div
                 key={m.id}
-                className={`rounded-2xl border p-5 transition ${
+                className={`group rounded-2xl border p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-elegant animate-fade-up ${
                   s === "paid"
-                    ? "border-gold/40 bg-gold/5"
+                    ? "border-primary/30 bg-gradient-to-br from-primary/[0.04] to-transparent"
                     : locked
-                    ? "border-border/40 bg-card/40 opacity-70"
-                    : "border-border bg-card"
+                    ? "border-border/60 bg-card/60 opacity-80"
+                    : "border-border bg-card hover:border-primary/40"
                 }`}
+                style={{ animationDelay: `${Math.min(idx, 7) * 60}ms` }}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-mono text-foreground/50">
-                        Module {m.module_index}/8
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-foreground/45">
+                        Module {m.module_index} / 8
                       </span>
                       {s === "paid" && (
-                        <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/30">
+                        <Badge className="bg-primary/10 text-primary border-primary/30 hover:bg-primary/15">
                           <CheckCircle2 className="h-3 w-3 mr-1" /> Unlocked
                         </Badge>
                       )}
                       {s === "pending" && (
-                        <Badge variant="outline" className="border-amber-500/40 text-amber-400">
-                          <Hourglass className="h-3 w-3 mr-1" /> Awaiting approval
+                        <Badge variant="outline" className="border-[hsl(var(--accent-orange))]/50 text-[hsl(var(--accent-orange))]">
+                          <Hourglass className="h-3 w-3 mr-1 animate-pulse" /> Awaiting approval
                         </Badge>
                       )}
                       {locked && (
-                        <Badge variant="outline" className="text-foreground/50">
+                        <Badge variant="outline" className="text-foreground/50 border-border">
                           <Lock className="h-3 w-3 mr-1" /> Locked
                         </Badge>
                       )}
                     </div>
-                    <h2 className="font-semibold text-base sm:text-lg">{m.title}</h2>
-                    <p className="text-sm text-foreground/60 mt-1">{m.description}</p>
+                    <h2 className="font-display font-semibold text-base sm:text-lg leading-snug">{m.title}</h2>
+                    <p className="text-sm text-foreground/60 mt-1.5 leading-relaxed">{m.description}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="text-sm font-bold">৳{m.price_bdt.toLocaleString("en-BD")}</div>
+                    <div className="text-base font-bold tracking-tight">৳{m.price_bdt.toLocaleString("en-BD")}</div>
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-foreground/40 mt-0.5">one-time</div>
                   </div>
                 </div>
 
@@ -222,30 +254,30 @@ export default function CourseTrendflux() {
                   {s === "paid" ? (
                     m.content_url ? (
                       <a href={m.content_url} target="_blank" rel="noreferrer">
-                        <Button size="sm" variant="default">
+                        <Button size="sm" variant="default" className="rounded-full">
                           Open content <ExternalLink className="h-3 w-3 ml-1" />
                         </Button>
                       </a>
                     ) : (
-                      <Button size="sm" variant="outline" disabled>
+                      <Button size="sm" variant="outline" disabled className="rounded-full">
                         Content link coming soon
                       </Button>
                     )
                   ) : s === "pending" ? (
-                    <Button size="sm" variant="outline" disabled>
-                      Pending approval…
+                    <Button size="sm" variant="outline" disabled className="rounded-full">
+                      <Hourglass className="h-3 w-3 mr-1.5" /> Pending approval…
                     </Button>
                   ) : locked ? (
-                    <Button size="sm" variant="outline" disabled>
-                      <Lock className="h-3 w-3 mr-1" /> Module {m.module_index - 1} আগে complete করুন
+                    <Button size="sm" variant="outline" disabled className="rounded-full">
+                      <Lock className="h-3 w-3 mr-1.5" /> Module {m.module_index - 1} আগে complete করুন
                     </Button>
                   ) : (
-                    <Button size="sm" onClick={() => setOpenModule(m)}>
+                    <Button size="sm" onClick={() => setOpenModule(m)} className="rounded-full btn-cta-red text-primary-foreground border-0">
                       Pay ৳{m.price_bdt.toLocaleString("en-BD")} via bKash
                     </Button>
                   )}
                   {s === "failed" && (
-                    <Button size="sm" variant="outline" onClick={() => setOpenModule(m)}>
+                    <Button size="sm" variant="outline" onClick={() => setOpenModule(m)} className="rounded-full">
                       Retry submission
                     </Button>
                   )}
@@ -256,33 +288,31 @@ export default function CourseTrendflux() {
         </div>
 
         {events.length > 0 && (
-          <section className="mt-10">
-            <h2 className="font-display text-xl font-bold mb-3">Activity timeline</h2>
-            <ol className="space-y-2 border-l border-border/50 pl-4">
+          <section className="mt-12 animate-fade-up" style={{ animationDelay: "200ms" }}>
+            <h2 className="font-display text-xl font-bold mb-4 tracking-tight">Activity timeline</h2>
+            <ol className="space-y-3 border-l border-border/60 pl-5">
               {events.map((e) => (
                 <li key={e.id} className="relative text-sm">
                   <span
-                    className={`absolute -left-[1.18rem] top-1.5 h-2.5 w-2.5 rounded-full ring-2 ring-background ${
+                    className={`absolute -left-[1.42rem] top-1.5 h-2.5 w-2.5 rounded-full ring-2 ring-background ${
                       e.event_type === "approved" || e.event_type === "unlocked"
-                        ? "bg-emerald-500"
+                        ? "bg-primary"
                         : e.event_type === "rejected"
-                        ? "bg-red-500"
-                        : "bg-amber-500"
+                        ? "bg-destructive"
+                        : "bg-[hsl(var(--accent-orange))]"
                     }`}
                   />
                   <div className="flex items-baseline gap-2 flex-wrap">
-                    <span className="font-mono text-xs text-foreground/50">
-                      M{e.module_index}
-                    </span>
-                    <span className="font-semibold capitalize">{e.event_type}</span>
-                    <span className="text-xs text-foreground/40">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-foreground/45">M{e.module_index}</span>
+                    <span className="font-semibold capitalize text-foreground/85">{e.event_type}</span>
+                    <span className="text-[11px] text-foreground/40">
                       {new Date(e.created_at).toLocaleString("en-GB", {
                         day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
                       })}
                     </span>
                   </div>
                   {e.message && (
-                    <p className="text-foreground/60 text-xs mt-0.5">{e.message}</p>
+                    <p className="text-foreground/60 text-xs mt-1 leading-relaxed">{e.message}</p>
                   )}
                 </li>
               ))}
@@ -290,6 +320,7 @@ export default function CourseTrendflux() {
           </section>
         )}
       </div>
+
 
       {openModule && (
         <PaymentDialog
