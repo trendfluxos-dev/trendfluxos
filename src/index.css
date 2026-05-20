@@ -681,7 +681,34 @@
 
 @layer utilities {
   .hover-lift { @apply transition-transform duration-300 hover:-translate-y-0.5; }
+  .hover-lift-md { @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-elegant; }
   .ring-hairline { @apply ring-1 ring-border; }
+
+  /* Unified premium CTA micro-interaction: subtle lift + sheen on hover,
+     consistent press feedback. Apply to any button without changing color. */
+  .cta-fx {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.25s ease, background-color 0.25s ease;
+  }
+  .cta-fx:hover { transform: translateY(-1px); }
+  .cta-fx:active { transform: translateY(0) scale(0.98); }
+  .cta-fx::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(110deg, transparent 35%, hsl(0 0% 100% / 0.18) 50%, transparent 65%);
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .cta-fx:hover::after { transform: translateX(120%); }
+  @media (prefers-reduced-motion: reduce) {
+    .cta-fx, .cta-fx:hover, .cta-fx:active { transform: none; }
+    .cta-fx::after { display: none; }
+  }
 
   /* Scroll reveal — pairs with useReveal hook */
   .reveal {
