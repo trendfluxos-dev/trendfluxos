@@ -26,8 +26,8 @@ const requestSchema = z.object({
 });
 
 const LuxeVeil = () => {
-  const pageUrl = typeof window !== "undefined" ? window.location.href.split("#")[0] : "https://trendfluxdigital.lovable.app/luxe-veil";
-  const origin = typeof window !== "undefined" ? window.location.origin : "https://trendfluxdigital.lovable.app";
+  const pageUrl = typeof window !== "undefined" ? window.location.href.split("#")[0] : "https://trendflux.digital/luxe-veil";
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://trendflux.digital";
   const ogImageAbs = `${origin}${luxeVeilOg}`;
   const logoAbs = `${origin}${luxeVeilLogo}`;
 
