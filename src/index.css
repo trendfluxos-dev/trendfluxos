@@ -126,6 +126,13 @@
     scroll-behavior: smooth;
   }
 
+  /* Anchor sections clear the fixed navbar so in-page jumps land
+     with breathing room instead of slipping under the nav. */
+  section[id],
+  [id]:where(section, article, main > div) {
+    scroll-margin-top: 96px;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "cv11";
