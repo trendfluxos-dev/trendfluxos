@@ -217,6 +217,8 @@ const Index = () => {
   const activeSection = useActiveSection(["services", "founder", "cases"]);
   const { activeValue: portraitFocusY } = usePortraitFocus();
   const [portraitLoaded, setPortraitLoaded] = useState(false);
+  const founderRevealRef = useReveal<HTMLDivElement>();
+  const heroRevealRef = useReveal<HTMLDivElement>();
   const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [quoteContext, setQuoteContext] = useState<{
