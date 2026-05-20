@@ -435,10 +435,17 @@ const Index = () => {
               );
             })}
             <Link
+              to="/course/trendflux"
+              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full inline-flex items-center gap-1.5"
+            >
+              Course
+              <span className="rounded-full bg-gold/10 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-gold">New</span>
+            </Link>
+            <Link
               to="/toolkit"
               className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
             >
-              Toolkit Hub
+              Toolkit
             </Link>
             <Link
               to="/enterprise"
@@ -453,6 +460,13 @@ const Index = () => {
             >
               Project Lead
             </Link>
+            <Link
+              to="/auth?redirect=/course/trendflux"
+              className="relative whitespace-nowrap py-1 transition-colors duration-300 text-foreground/55 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+            >
+              Login
+            </Link>
+
           </div>
 
           <div className="flex items-center gap-2">
