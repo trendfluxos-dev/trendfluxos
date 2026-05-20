@@ -512,6 +512,21 @@ const Index = () => {
               </a>
             ))}
             <Link
+              to="/course/trendflux"
+              onClick={() => setMobileNavOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors inline-flex items-center justify-between"
+            >
+              <span>Course</span>
+              <span className="rounded-full bg-gold/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-gold">New</span>
+            </Link>
+            <Link
+              to="/toolkit"
+              onClick={() => setMobileNavOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors"
+            >
+              Toolkit
+            </Link>
+            <Link
               to="/enterprise"
               onClick={() => setMobileNavOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors inline-flex items-center gap-2"
@@ -526,6 +541,14 @@ const Index = () => {
             >
               Project Lead
             </Link>
+            <Link
+              to="/auth?redirect=/course/trendflux"
+              onClick={() => setMobileNavOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground/60 hover:bg-foreground/5 hover:text-gold transition-colors"
+            >
+              Login / Dashboard
+            </Link>
+
             <button
               type="button"
               onClick={() => {
