@@ -7,9 +7,9 @@ import SocialIcons from "@/components/social/SocialIcons";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border/60 px-6 lg:px-10 pt-20 pb-10 mt-16 relative">
+    <footer className="border-t border-border/60 px-6 lg:px-10 pt-16 sm:pt-20 pb-10 mt-16 relative">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/15 to-transparent" />
-      <div className="max-w-7xl mx-auto grid md:grid-cols-5 gap-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10 md:gap-12">
         <div className="md:col-span-2">
           <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-lg tracking-tight">
             <span className="w-2 h-2 rounded-full bg-primary" />
