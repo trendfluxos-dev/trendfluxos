@@ -32,6 +32,7 @@ import {
 import { QuoteDialog } from "@/components/QuoteDialog";
 import { ResumeButton } from "@/components/ResumeButton";
 import { usePressItems } from "@/hooks/usePressItems";
+import { useReveal } from "@/hooks/useReveal";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
