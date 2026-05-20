@@ -145,7 +145,25 @@ const Navbar = () => {
                       {l.label}
                     </Link>
                   ))}
+                  <div className="my-3 h-px bg-border/60" />
+                  <Link
+                    to="/toolkit"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    <GraduationCap className="h-4 w-4 text-primary" />
+                    Course & Toolkit
+                  </Link>
+                  <Link
+                    to={signedIn ? "/admin" : "/auth"}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary" /> : <LogIn className="h-4 w-4 text-primary" />}
+                    {signedIn ? "Dashboard" : "Login"}
+                  </Link>
                 </div>
+
                 <div className="mt-6 border-t border-border/60 pt-6">
                   <Button variant="hero" size="sm" className="w-full" onClick={() => setOpen(false)}>
                     Book Strategic Consultation
