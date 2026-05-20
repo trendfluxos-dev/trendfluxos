@@ -2,9 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, GraduationCap, LogIn, LayoutDashboard } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import SocialIcons from "@/components/social/SocialIcons";
+import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/trendflux-logo.webp";
 
 const links = [
@@ -19,6 +20,7 @@ const Navbar = () => {
   const [isMac, setIsMac] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
     setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform));
@@ -29,6 +31,20 @@ const Navbar = () => {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (mounted) setSignedIn(!!data.session);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setSignedIn(!!session);
+    });
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   const openPalette = () => {
@@ -67,21 +83,38 @@ const Navbar = () => {
 
           <div className="flex items-center gap-1.5">
             <SocialIcons variant="inline" size="sm" className="hidden lg:flex mr-1" />
+            <Link
+              to="/toolkit"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+              title="Course & Toolkit"
+            >
+              <GraduationCap className="h-3.5 w-3.5" />
+              <span>Course</span>
+            </Link>
+            <Link
+              to={signedIn ? "/admin" : "/auth"}
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+              title={signedIn ? "Dashboard" : "Login"}
+            >
+              {signedIn ? <LayoutDashboard className="h-3.5 w-3.5" /> : <LogIn className="h-3.5 w-3.5" />}
+              <span>{signedIn ? "Dashboard" : "Login"}</span>
+            </Link>
             <button
               type="button"
               onClick={openPalette}
               aria-label={`Open command palette (${isMac ? "Cmd" : "Ctrl"}+K)`}
               title="Quick jump to any page"
-              className="hidden md:inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[11px] text-foreground/60 hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="hidden lg:inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[11px] text-foreground/60 hover:text-foreground hover:border-foreground/30 transition-colors"
             >
               <span>Quick jump</span>
               <kbd className="rounded border border-border/50 bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] leading-none">
                 {isMac ? "⌘" : "Ctrl"} K
               </kbd>
             </button>
-            <Button variant="hero" size="sm" className="hidden sm:inline-flex">
+            <Button variant="hero" size="sm" className="hidden sm:inline-flex cta-fx">
               Book Strategic Consultation
             </Button>
+
 
             {/* Mobile menu */}
             <Sheet open={open} onOpenChange={setOpen}>
@@ -112,7 +145,25 @@ const Navbar = () => {
                       {l.label}
                     </Link>
                   ))}
+                  <div className="my-3 h-px bg-border/60" />
+                  <Link
+                    to="/toolkit"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    <GraduationCap className="h-4 w-4 text-primary" />
+                    Course & Toolkit
+                  </Link>
+                  <Link
+                    to={signedIn ? "/admin" : "/auth"}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary" /> : <LogIn className="h-4 w-4 text-primary" />}
+                    {signedIn ? "Dashboard" : "Login"}
+                  </Link>
                 </div>
+
                 <div className="mt-6 border-t border-border/60 pt-6">
                   <Button variant="hero" size="sm" className="w-full" onClick={() => setOpen(false)}>
                     Book Strategic Consultation
