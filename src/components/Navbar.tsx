@@ -83,21 +83,38 @@ const Navbar = () => {
 
           <div className="flex items-center gap-1.5">
             <SocialIcons variant="inline" size="sm" className="hidden lg:flex mr-1" />
+            <Link
+              to="/toolkit"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+              title="Course & Toolkit"
+            >
+              <GraduationCap className="h-3.5 w-3.5" />
+              <span>Course</span>
+            </Link>
+            <Link
+              to={signedIn ? "/admin" : "/auth"}
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+              title={signedIn ? "Dashboard" : "Login"}
+            >
+              {signedIn ? <LayoutDashboard className="h-3.5 w-3.5" /> : <LogIn className="h-3.5 w-3.5" />}
+              <span>{signedIn ? "Dashboard" : "Login"}</span>
+            </Link>
             <button
               type="button"
               onClick={openPalette}
               aria-label={`Open command palette (${isMac ? "Cmd" : "Ctrl"}+K)`}
               title="Quick jump to any page"
-              className="hidden md:inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[11px] text-foreground/60 hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="hidden lg:inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[11px] text-foreground/60 hover:text-foreground hover:border-foreground/30 transition-colors"
             >
               <span>Quick jump</span>
               <kbd className="rounded border border-border/50 bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] leading-none">
                 {isMac ? "⌘" : "Ctrl"} K
               </kbd>
             </button>
-            <Button variant="hero" size="sm" className="hidden sm:inline-flex">
+            <Button variant="hero" size="sm" className="hidden sm:inline-flex cta-fx">
               Book Strategic Consultation
             </Button>
+
 
             {/* Mobile menu */}
             <Sheet open={open} onOpenChange={setOpen}>
