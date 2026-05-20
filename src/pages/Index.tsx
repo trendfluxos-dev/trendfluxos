@@ -783,7 +783,7 @@ const Index = () => {
 
       {/* Brand Architect */}
       <section id="founder" className="relative px-5 py-16 sm:px-6 sm:py-20 md:px-12 md:py-24 lg:px-20">
-        <div ref={founderRevealRef} className="mx-auto grid max-w-7xl gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12 lg:items-start">
+        <div ref={founderRevealRef} className="mx-auto grid max-w-7xl gap-12 sm:gap-14 lg:grid-cols-2 lg:gap-12 lg:items-start">
           {/* Portrait */}
           <div className="reveal relative mx-auto w-full max-w-sm lg:max-w-none">
             <div className="absolute -inset-3 sm:-inset-4 rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
@@ -832,14 +832,14 @@ const Index = () => {
 
           {/* Content */}
           <div>
-            <p className="reveal mb-2.5 sm:mb-3 text-[11px] sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-gold" style={{ transitionDelay: "80ms" }}>
+            <p className="reveal mb-4 sm:mb-5 text-[11px] sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-gold" style={{ transitionDelay: "80ms" }}>
               — Meet the Brand Architect
             </p>
-            <h2 className="reveal font-display text-[1.75rem] leading-[1.15] sm:text-4xl md:text-5xl font-bold tracking-tight" style={{ transitionDelay: "140ms" }}>
+            <h2 className="reveal font-display text-[1.75rem] leading-[1.2] sm:text-4xl md:text-5xl font-bold tracking-tight" style={{ transitionDelay: "140ms" }}>
               <span className="block text-foreground/85">Brand Architect</span>
-              <span className="block text-gradient mt-1 whitespace-nowrap">Zahid Hasan Emon</span>
+              <span className="block text-gradient mt-2 whitespace-nowrap">Zahid Hasan Emon</span>
             </h2>
-            <blockquote className="reveal mt-6 sm:mt-8 border-l-2 border-gold/60 pl-4 sm:pl-6 text-[15px] leading-[1.7] sm:text-base sm:leading-relaxed text-foreground/75 md:text-lg space-y-3.5 sm:space-y-4" style={{ transitionDelay: "220ms" }}>
+            <blockquote className="reveal mt-8 sm:mt-10 border-l-2 border-gold/60 pl-4 sm:pl-6 text-[15px] leading-[1.75] sm:text-base sm:leading-relaxed text-foreground/75 md:text-lg space-y-4" style={{ transitionDelay: "220ms" }}>
               <p>
                 "My journey to founding TrendFlux Ecosystem wasn't just built on IT
                 engineering and data analytics—it was forged in the crucible of
