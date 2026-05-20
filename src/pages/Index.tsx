@@ -780,13 +780,13 @@ const Index = () => {
       </section>
 
       {/* Brand Architect */}
-      <section id="founder" className="relative px-6 py-24 md:px-12 lg:px-20">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2 lg:items-start">
+      <section id="founder" className="relative px-5 py-16 sm:px-6 sm:py-20 md:px-12 md:py-24 lg:px-20">
+        <div className="mx-auto grid max-w-7xl gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12 lg:items-start">
           {/* Portrait */}
-          <div className="relative">
-            <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
-            <div className="relative overflow-hidden rounded-[2rem] glass-strong p-2">
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] bg-muted">
+          <div className="relative mx-auto w-full max-w-sm lg:max-w-none">
+            <div className="absolute -inset-3 sm:-inset-4 rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
+            <div className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] glass-strong p-1.5 sm:p-2">
+              <div className="relative aspect-[4/5] sm:aspect-[4/5] lg:aspect-[4/5] w-full overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] bg-muted">
                 {/* Shimmer skeleton — fades out once the image decodes */}
                 <div
                   aria-hidden
@@ -819,9 +819,9 @@ const Index = () => {
                   style={{ objectPosition: `center ${portraitFocusY}%` }}
                 />
               </div>
-              <div className="absolute bottom-6 left-6 rounded-full glass-strong px-4 py-2 text-xs">
+              <div className="absolute bottom-3 left-3 sm:bottom-5 sm:left-5 rounded-full glass-strong px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-[10px] sm:text-xs whitespace-nowrap max-w-[calc(100%-1.5rem)] truncate">
                 <span className="text-gold font-semibold">Brand Architect</span>
-                <span className="mx-2 text-foreground/30">·</span>
+                <span className="mx-1.5 sm:mx-2 text-foreground/30">·</span>
                 <span className="text-foreground/80">Zahid Hasan Emon</span>
               </div>
               <ResumeButton />
@@ -830,14 +830,14 @@ const Index = () => {
 
           {/* Content */}
           <div>
-            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
+            <p className="mb-2.5 sm:mb-3 text-[11px] sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-gold">
               — Meet the Brand Architect
             </p>
-            <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Brand Architect:{" "}
-              <span className="text-gradient">Zahid Hasan Emon</span>
+            <h2 className="font-display text-[1.75rem] leading-[1.15] sm:text-4xl md:text-5xl font-bold tracking-tight">
+              <span className="block text-foreground/85">Brand Architect</span>
+              <span className="block text-gradient mt-1 whitespace-nowrap">Zahid Hasan Emon</span>
             </h2>
-            <blockquote className="mt-8 border-l-2 border-gold/60 pl-6 text-base leading-relaxed text-foreground/75 md:text-lg space-y-4">
+            <blockquote className="mt-6 sm:mt-8 border-l-2 border-gold/60 pl-4 sm:pl-6 text-[15px] leading-[1.7] sm:text-base sm:leading-relaxed text-foreground/75 md:text-lg space-y-3.5 sm:space-y-4">
               <p>
                 "My journey to founding TrendFlux Ecosystem wasn't just built on IT
                 engineering and data analytics—it was forged in the crucible of
@@ -863,21 +863,22 @@ const Index = () => {
                 for your success."
               </p>
             </blockquote>
-            <div className="mt-8 flex items-center gap-3 text-sm text-foreground/60">
-              <span className="font-display font-semibold text-foreground">Zahid Hasan Emon</span>
-              <span className="text-foreground/30">·</span>
+            <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] sm:text-sm text-foreground/60">
+              <span className="font-display font-semibold text-foreground whitespace-nowrap">Zahid Hasan Emon</span>
+              <span className="text-foreground/30 hidden sm:inline">·</span>
               <span>Brand Architect, TrendFlux Ecosystem</span>
             </div>
-            <div className="mt-8 flex flex-wrap items-center gap-5">
+            <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-5">
               <Link
                 to="/project-lead"
-                className="inline-flex items-center gap-2 text-primary hover:text-gold transition-colors"
+                className="inline-flex items-center gap-2 text-primary hover:text-gold transition-colors text-sm sm:text-base"
               >
                 Read full profile <ArrowUpRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
         </div>
+
 
         {/* Timeline */}
         <div className="mx-auto mt-24 max-w-5xl">
