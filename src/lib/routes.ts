@@ -22,6 +22,7 @@ export const routes = {
   "/admin/web-vitals": make(() => import("@/pages/WebVitalsAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/the-stand": make(() => import("@/pages/TheStand")),
+  "/the-stand/share": make(() => import("@/pages/TheStandShare")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
   "/trendflux-talent": make(() => import("@/pages/TrendfluxTalent")),
   "/luxe-veil": make(() => import("@/pages/LuxeVeil")),
@@ -57,6 +58,7 @@ export const navigablePages: {
 }[] = [
   { label: "Home", path: "/", type: "Main", keywords: "index landing start" },
   { label: "The Stand — Zahid Hasan Emon", path: "/the-stand", type: "Main", keywords: "zahid emon jahid hasan jabi torture cell whistleblower mayer nishedh ache integrity stand story" },
+  { label: "The Stand — Share Quote Cards", path: "/the-stand/share", type: "Main", keywords: "share quote card facebook instagram story generator the stand zahid emon mayer nishedh ache" },
   { label: "Project Lead", path: "/project-lead", type: "Main", keywords: "lead form contact" },
   { label: "Marriage", path: "/marriage", type: "Main", keywords: "wedding" },
   { label: "Brand Open", path: "/brand-open", type: "Brand", keywords: "branding open mass public" },
