@@ -39,7 +39,7 @@
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#000000" />
 
-  <!-- Lovable + GA4 with Consent Mode v2 -->
+  <!-- Lovable-ready GA4 + Consent Mode v2 -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -52,7 +52,9 @@
     });
     gtag('js', new Date());
     gtag('config', 'G-JL7PJMSR0G');
-    window.grantConsent = function() {
+    gtag('set', 'url_passthrough', true);
+    gtag('set', 'ads_data_redaction', true);
+    function grantAllConsent() {
       try { localStorage.setItem('consentGranted', 'true'); } catch (e) {}
       gtag('consent', 'update', {
         'ad_storage': 'granted',
@@ -60,16 +62,18 @@
         'ad_user_data': 'granted',
         'ad_personalization': 'granted'
       });
-    };
+    }
+    window.grantConsent = grantAllConsent;
     document.addEventListener('DOMContentLoaded', function() {
       try {
-        if (localStorage.getItem('consentGranted') === 'true') window.grantConsent();
+        if (localStorage.getItem('consentGranted') === 'true') grantAllConsent();
       } catch (e) {}
       var btn = document.getElementById('consent-grant-btn');
-      if (btn) btn.addEventListener('click', window.grantConsent);
+      if (btn) btn.addEventListener('click', grantAllConsent);
     });
   </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-JL7PJMSR0G"></script>
+
 
 
   
