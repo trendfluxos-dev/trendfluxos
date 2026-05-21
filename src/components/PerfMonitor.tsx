@@ -321,7 +321,7 @@ const PerfMonitor = () => {
       window.removeEventListener("pointermove", onPointer);
       window.removeEventListener("keydown", onKey);
     };
-  }, [allowed, pathname]);
+  }, [allowed, pathname, resetKey]);
 
   if (!allowed || !visible) return null;
 
