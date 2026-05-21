@@ -18,6 +18,7 @@ export const routes = {
   "/admin/enterprise-demos": make(() => import("@/pages/EnterpriseDemos")),
   "/admin/course-enrollments": make(() => import("@/pages/CourseEnrollmentsAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
+  "/the-stand": make(() => import("@/pages/TheStand")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
   "/trendflux-talent": make(() => import("@/pages/TrendfluxTalent")),
   "/luxe-veil": make(() => import("@/pages/LuxeVeil")),
@@ -52,6 +53,7 @@ export const navigablePages: {
   keywords?: string;
 }[] = [
   { label: "Home", path: "/", type: "Main", keywords: "index landing start" },
+  { label: "The Stand — Zahid Hasan Emon", path: "/the-stand", type: "Main", keywords: "zahid emon jahid hasan jabi torture cell whistleblower mayer nishedh ache integrity stand story" },
   { label: "Project Lead", path: "/project-lead", type: "Main", keywords: "lead form contact" },
   { label: "Marriage", path: "/marriage", type: "Main", keywords: "wedding" },
   { label: "Brand Open", path: "/brand-open", type: "Brand", keywords: "branding open mass public" },
