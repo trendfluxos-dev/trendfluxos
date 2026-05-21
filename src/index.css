@@ -145,17 +145,42 @@
     hyphens: none;
   }
 
-  /* Bengali / Indic clusters must not break mid-word */
+  /* Bengali / Indic clusters must not break mid-word.
+     Hind Siliguri leads the stack — modern, corporate-friendly, balanced
+     weights with proper conjunct rendering (যুক্তাক্ষর). */
   :lang(bn),
   [lang="bn"] {
-    font-family: "Noto Sans Bengali", "Hind Siliguri", "SolaimanLipi",
+    font-family: "Hind Siliguri", "Noto Sans Bengali", "SolaimanLipi",
       "Kalpurush", system-ui, sans-serif;
+    font-weight: 500;
+    font-synthesis: none;
     word-break: keep-all;
     overflow-wrap: normal;
     line-break: strict;
     hyphens: none;
+    letter-spacing: 0;
+    line-height: 1.6;
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern", "liga", "calt";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings in Bengali: tighter leading, semibold (never extra-bold which
+     looks crushed on Indic conjuncts), no tracking. */
+  :is(h1, h2, h3, h4, h5, h6):lang(bn),
+  :is(h1, h2, h3, h4, h5, h6)[lang="bn"] {
+    font-family: "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0;
+  }
+
+  /* Body paragraphs in Bengali: comfortable reading rhythm. */
+  :is(p, li, blockquote, figcaption):lang(bn),
+  :is(p, li, blockquote, figcaption)[lang="bn"] {
+    font-weight: 400;
+    line-height: 1.7;
   }
 
   /* Long URLs / tokens should still wrap so they never overflow */
