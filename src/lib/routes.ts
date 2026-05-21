@@ -19,6 +19,7 @@ export const routes = {
   "/admin/course-enrollments": make(() => import("@/pages/CourseEnrollmentsAdmin")),
   "/admin/uptime": make(() => import("@/pages/UptimeAdmin")),
   "/admin/errors": make(() => import("@/pages/ErrorLogsAdmin")),
+  "/admin/web-vitals": make(() => import("@/pages/WebVitalsAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
@@ -71,5 +72,7 @@ export const navigablePages: {
   { label: "Enterprise Demo Requests", path: "/admin/enterprise-demos", type: "Admin", keywords: "admin demos enterprise leads requests triage" },
   { label: "Course Enrollments", path: "/admin/course-enrollments", type: "Admin", keywords: "admin course enrollments telegram bkash trx timeline" },
   { label: "Uptime Monitor", path: "/admin/uptime", type: "Admin", keywords: "uptime monitor status health probe alert downtime telegram" },
+  { label: "Client Error Logs", path: "/admin/errors", type: "Admin", keywords: "errors runtime client logs sentry stack trace" },
+  { label: "Web Vitals", path: "/admin/web-vitals", type: "Admin", keywords: "performance web vitals lcp inp cls fcp ttfb speed core" },
   { label: "Sign In", path: "/auth", type: "Account", keywords: "login auth signin" },
 ];
