@@ -4,10 +4,12 @@ import App from "./App.tsx";
 import "./index.css";
 import { installErrorLogger } from "./lib/errorLogger";
 import { initSentry } from "./lib/sentry";
+import { installWebVitals } from "./lib/webVitals";
 
 // Initialize Sentry first so it can capture errors from app startup.
 initSentry();
 installErrorLogger();
+installWebVitals();
 
 // Recover from stale dynamic-import chunks after a redeploy: if a lazy()
 // chunk fails to load, hard-reload once so the browser fetches the new

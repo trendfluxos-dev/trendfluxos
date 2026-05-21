@@ -33,6 +33,7 @@ const EnterpriseDemos = routes["/admin/enterprise-demos"];
 const CourseEnrollmentsAdmin = routes["/admin/course-enrollments"];
 const UptimeAdmin = routes["/admin/uptime"];
 const ErrorLogsAdmin = routes["/admin/errors"];
+const WebVitalsAdmin = routes["/admin/web-vitals"];
 const PressDetail = routes["/press/:id"];
 const Marriage = routes["/marriage"];
 const BrandOpen = routes["/brand-open"];
@@ -97,6 +98,7 @@ const App = () => (
             <Route path="/admin/course-enrollments" element={<CourseEnrollmentsAdmin />} />
             <Route path="/admin/uptime" element={<UptimeAdmin />} />
             <Route path="/admin/errors" element={<ErrorLogsAdmin />} />
+            <Route path="/admin/web-vitals" element={<WebVitalsAdmin />} />
             <Route path="/press/:id" element={<PressDetail />} />
             <Route path="/marriage" element={<Marriage />} />
             <Route path="/brand-open" element={<BrandOpen />} />

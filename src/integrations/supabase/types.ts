@@ -514,6 +514,42 @@ export type Database = {
         }
         Relationships: []
       }
+      web_vitals: {
+        Row: {
+          created_at: string
+          id: string
+          metric: string
+          navigation_type: string | null
+          path: string | null
+          rating: string | null
+          release: string | null
+          user_agent: string | null
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metric: string
+          navigation_type?: string | null
+          path?: string | null
+          rating?: string | null
+          release?: string | null
+          user_agent?: string | null
+          value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metric?: string
+          navigation_type?: string | null
+          path?: string | null
+          rating?: string | null
+          release?: string | null
+          user_agent?: string | null
+          value?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
