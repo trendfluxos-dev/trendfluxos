@@ -10,8 +10,7 @@
 In GitHub → Settings:
 
 ### Variables (Settings → Secrets and variables → Actions → Variables)
-- `DEPLOY_TARGET` — one of `vercel`, `netlify`, `cloudflare`
-- `CLOUDFLARE_PROJECT_NAME` — only if using Cloudflare
+- `DEPLOY_TARGET` — one of `vercel`, `netlify`
 
 ### Secrets (Settings → Secrets and variables → Actions → Secrets)
 
@@ -26,11 +25,22 @@ Vercel:
 Netlify:
 - `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`
 
-Cloudflare Pages:
-- `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
-
 ## Notes
 
 - Lovable's own publish (`*.lovable.app`) still requires clicking **Publish → Update** in the editor — it's not automatable.
-- This workflow targets self-hosted production (your custom domain on Vercel/Netlify/Cloudflare).
+- This workflow targets self-hosted production (your custom domain on Vercel/Netlify).
 - Lovable Cloud backend (edge functions, migrations) keeps deploying automatically via Lovable's own sync — this workflow only handles the frontend.
+
+## Custom Domain (direct registrar DNS, no Cloudflare proxy)
+
+When pointing a custom domain at the Lovable-hosted site, configure DNS directly at your registrar (GoDaddy, Namecheap, Google Domains, Porkbun, etc.). Do **not** enable Cloudflare proxy ("orange cloud") — Lovable issues SSL directly and proxying breaks verification.
+
+Add these records at your registrar:
+
+| Type | Name  | Value           | TTL  |
+|------|-------|-----------------|------|
+| A    | `@`   | `185.158.133.1` | Auto |
+| A    | `www` | `185.158.133.1` | Auto |
+| TXT  | `_lovable` | (value shown in Project Settings → Domains) | Auto |
+
+Then in Lovable: **Project Settings → Domains → Connect Domain**, enter both `yourdomain.com` and `www.yourdomain.com`, and wait for verification + SSL (usually minutes, up to 72h for DNS propagation).
