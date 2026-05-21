@@ -82,7 +82,8 @@ const Navbar = () => {
           </div>
 
           <div className="flex flex-nowrap items-center gap-1.5 shrink-0">
-            <SocialIcons variant="inline" size="sm" className="hidden xl:flex mr-1" />
+            {/* Social icons removed from navbar — already present in footer + floating contact.
+                They were overlapping nav links on mid-wide viewports. */}
             <Link
               to="/toolkit"
               className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
