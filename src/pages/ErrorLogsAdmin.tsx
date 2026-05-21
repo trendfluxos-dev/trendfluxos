@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, RefreshCw, AlertTriangle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -121,9 +121,8 @@ export default function ErrorLogsAdmin() {
                 </tr>
               )}
               {rows.map((r) => (
-                <>
+                <Fragment key={r.id}>
                   <tr
-                    key={r.id}
                     className="cursor-pointer border-b hover:bg-muted/40"
                     onClick={() => setExpanded(expanded === r.id ? null : r.id)}
                   >
@@ -150,7 +149,7 @@ export default function ErrorLogsAdmin() {
                     </td>
                   </tr>
                   {expanded === r.id && (
-                    <tr key={`${r.id}-detail`} className="border-b bg-muted/20">
+                    <tr className="border-b bg-muted/20">
                       <td colSpan={5} className="px-3 py-3">
                         <div className="space-y-2 text-xs">
                           <div>
@@ -170,7 +169,7 @@ export default function ErrorLogsAdmin() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>
