@@ -153,3 +153,82 @@ export const THE_STAND = {
     body: "গল্পটা ছড়িয়ে দিন, যাচাইকৃত প্রতিবেদনগুলো পড়ুন এবং সাহসী সাংবাদিকতাকে সমর্থন করুন। চুপ থাকা মানে অন্যায়ের সঙ্গে চুক্তি।",
   },
 };
+
+// ─── THE STAND — cinematic narrative system (added) ───
+export type RefusalCard = { id: "money" | "fear" | "silence"; label: string; bn: string; en: string };
+export type ReconstructionBeat = { stamp: string; title: string; body: string };
+export type EthicalPrinciple = { num: string; title: string; body: string };
+export type InfraPillar = { title: string; body: string };
+
+export const STAND_OPENER = {
+  bn: "মায়ের নিষেধ আছে।",
+  en: "A statement that became larger than fear.",
+  scrollCue: "Scroll into evidence",
+};
+
+export const STAND_REFUSALS: RefusalCard[] = [
+  { id: "money",   label: "01 · Money",   bn: "চাঁদার ভাগ প্রত্যাখ্যান",        en: "He refused the share of extortion." },
+  { id: "fear",    label: "02 · Fear",    bn: "পিস্তলের মুখেও নতি স্বীকার নয়", en: "He did not bow, even at gunpoint." },
+  { id: "silence", label: "03 · Silence", bn: "ঘটনা চাপা দিতে অস্বীকৃতি",       en: "He refused to let the night be buried." },
+];
+
+export const STAND_LISTEN = {
+  eyebrow: "Why people started listening",
+  body:
+    "তিনি কোনো রাজনৈতিক চরিত্র নন। তিনি একজন তরুণ — যিনি প্রযুক্তি, ব্র্যান্ড আর্কিটেকচার আর AI-যুগের নৈতিক প্রশ্ন নিয়ে কাজ করেন। তাঁর কণ্ঠ গুরুত্বপূর্ণ এই কারণে নয় যে তিনি আক্রমণের শিকার হয়েছিলেন — বরং এই কারণে যে আক্রান্ত হয়েও তিনি কাঠামোর সাথে আপস করেননি।",
+};
+
+export const STAND_RECONSTRUCTION = {
+  eyebrow: "The Reconstruction",
+  title: "Room 126 — মওলানা ভাসানী হল",
+  subtitle: "১৩ আগস্ট ২০২৩ · একটি রাতের পুনর্গঠন",
+  beats: [
+    { stamp: "00:00",  title: "মধ্যরাতের ফোন",         body: "একটি ফোন কল। হল-সামনে আসতে বলা হয়। সরল বিশ্বাসে পৌঁছানো।" },
+    { stamp: "00:07",  title: "দরজা বন্ধ হয়",          body: "মোটরসাইকেল বাইরে। ১২ নম্বর কক্ষে নিয়ে যাওয়া। তালার শব্দ।" },
+    { stamp: "00:14",  title: "রড ও হাতুড়ি",            body: "চারজন প্রাপ্তবয়স্ক, একজন নিরস্ত্র শিক্ষার্থী। দীর্ঘ সময়, অনবরত আঘাত।" },
+    { stamp: "00:42",  title: "পেটে পিস্তল",            body: "অবৈধ আগ্নেয়াস্ত্র। পেটে চাপ। কণ্ঠে কাঁপুনি, কিন্তু কথা স্পষ্ট — “পেটে নয়, মাথায় গুলি করুন।”" },
+    { stamp: "01:05",  title: "জোরপূর্বক ভিডিও",        body: "মদ ঢালা শরীরে। ক্যামেরার সামনে স্বীকারোক্তি আদায়। চরিত্র হননের প্রস্তুতি।" },
+    { stamp: "ভোর",     title: "নীরবতা",                 body: "প্রশাসন জানে। প্রক্টরিয়াল বডি জানে। তবু — কোনো রিপোর্ট নয়, কোনো বিবৃতি নয়।" },
+    { stamp: "পরে",     title: "সিদ্ধান্ত",              body: "তিনি লিখিত ই-মেইল পাঠান উপাচার্য বরাবর। রেকর্ড তৈরি হয়। চুপ থাকা মানে অন্যায়ের সঙ্গে চুক্তি।" },
+  ] satisfies ReconstructionBeat[],
+};
+
+export const STAND_ETHICS = {
+  eyebrow: "Ethical Leadership Index",
+  title: "Principles, not awards.",
+  body: "এখানে কোনো ট্রফি নেই, কোনো শংসাপত্র নেই। শুধু অবস্থানের একটি সূচক — যেগুলো প্রমাণিত, যাচাইকৃত, এবং পাবলিক রেকর্ডে আছে।",
+  items: [
+    { num: "01", title: "Refused extortion money",       body: "চাঁদাবাজি কাঠামোর ভেতর থেকেও ভাগ নিতে অস্বীকৃতি — পারিবারিক মূল্যবোধই সর্বোচ্চ অগ্রাধিকার।" },
+    { num: "02", title: "Public whistleblower",           body: "উপাচার্য বরাবর লিখিত অভিযোগ এবং জাতীয় গণমাধ্যমে প্রকাশ্য বিবৃতি।" },
+    { num: "03", title: "Survived institutional pressure",body: "প্রতিষ্ঠানিক নীরবতা ও সামাজিক বিচ্ছিন্নতার মুখোমুখি দাঁড়িয়ে অবস্থান অটুট রাখা।" },
+    { num: "04", title: "AI-era ethical thinker",         body: "ব্র্যান্ড আর্কিটেকচার, AI-যুগের নৈতিকতা, এবং ডিজিটাল পাবলিক সিস্টেম নিয়ে কাজ।" },
+  ] satisfies EthicalPrinciple[],
+};
+
+export const STAND_INFRA = {
+  eyebrow: "After The Stand",
+  headline: "Resistance became infrastructure.",
+  sub: "Some experiences do not destroy people. They redefine what they build next.",
+  pillars: [
+    { title: "AI Governance",          body: "অ্যালগরিদমিক স্বচ্ছতা ও দায়বদ্ধতা — মানুষের অধিকারকে কেন্দ্রে রেখে।" },
+    { title: "Youth Empowerment",      body: "তরুণদের জন্য সিভিক, টেক এবং নৈতিক নেতৃত্বের কাঠামো।" },
+    { title: "Digital Transparency",   body: "পাবলিক ডেটা, পাবলিক রেকর্ড — যাচাইযোগ্য সত্যের পরিকাঠামো।" },
+    { title: "Education Reform",       body: "ক্যাম্পাস সুশাসন ও নিরাপদ শিক্ষা পরিবেশের জন্য কাঠামোগত প্রস্তাবনা।" },
+    { title: "Smart Civic Systems",    body: "নাগরিক সেবা, অভিযোগ ও জবাবদিহিতার ডিজিটাল আর্কিটেকচার।" },
+    { title: "TrendFlux Ecosystem",    body: "ব্র্যান্ড, কনটেন্ট, AI অটোমেশন ও CRM — নৈতিক ভিতের উপর নির্মিত গ্রোথ সিস্টেম।" },
+  ] satisfies InfraPillar[],
+};
+
+export const STAND_DOCUMENTARY = {
+  eyebrow: "Documentary",
+  title: "The 126 Room",
+  sub: "A cinematic reconstruction — coming soon.",
+  // Set youtubeId once the documentary publishes to swap the placeholder for an embed.
+  youtubeId: "" as string,
+};
+
+export const STAND_CLOSING = {
+  line1: "কিছু মানুষ ক্ষমতা বেছে নেয়।",
+  line2: "কিছু মানুষ বিবেক।",
+  signature: "TrendFlux Ecosystem",
+};
