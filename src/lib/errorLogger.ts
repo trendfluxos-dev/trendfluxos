@@ -57,7 +57,7 @@ export async function logClientError(payload: ErrorPayload) {
       release: payload.release ?? RELEASE,
       severity: payload.severity ?? "error",
       user_id: auth?.user?.id ?? null,
-      meta: payload.meta ?? null,
+      meta: (payload.meta ?? null) as never,
     });
   } catch {
     // Never throw from the logger.
