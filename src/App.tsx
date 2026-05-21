@@ -92,6 +92,7 @@ const App = () => (
             <Route path="/course/trendflux" element={<CourseTrendflux />} />
             <Route path="/masterclass" element={<Masterclass />} />
             <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
+            {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
