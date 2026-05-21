@@ -9,6 +9,7 @@ import {
   type StoredEvent,
 } from "@/lib/analytics";
 import { useSeo } from "@/hooks/useSeo";
+import { DeploymentChecklist } from "@/components/DeploymentChecklist";
 
 type ModuleRow = {
   module: string;
@@ -171,6 +172,8 @@ export default function ConversionDashboard() {
         <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-foreground/40">
           Last updated {new Date(lastRefresh).toLocaleTimeString()}
         </p>
+
+        <DeploymentChecklist />
 
         {/* Totals */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
