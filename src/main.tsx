@@ -3,7 +3,10 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 import { installErrorLogger } from "./lib/errorLogger";
+import { initSentry } from "./lib/sentry";
 
+// Initialize Sentry first so it can capture errors from app startup.
+initSentry();
 installErrorLogger();
 
 // Recover from stale dynamic-import chunks after a redeploy: if a lazy()
