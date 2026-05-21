@@ -20,6 +20,7 @@ export const routes = {
   "/admin/uptime": make(() => import("@/pages/UptimeAdmin")),
   "/admin/errors": make(() => import("@/pages/ErrorLogsAdmin")),
   "/admin/web-vitals": make(() => import("@/pages/WebVitalsAdmin")),
+  "/admin/ga4-check": make(() => import("@/pages/Ga4Check")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/the-stand/share": make(() => import("@/pages/TheStandShare")),
