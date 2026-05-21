@@ -1,0 +1,25 @@
+INSERT INTO public.press_items (outlet, headline, href, sort_order, published) VALUES
+('Channel 24', 'জাবি ছাত্রলীগের অপরাধনামা : ক্যাম্পাস যেনো ধর্ষণ আর চাঁদাবাজির আস্তানা', 'https://www.channel24bd.tv/politics/article/196733/', 10, true),
+('NewsBangla24', 'জাবি হলের ''টর্চার সেলে'' ছাত্রলীগ নেতাকে মারধর, প্রশাসন নীরব', 'https://www.newsbangla24.com/education/232640/', 20, true),
+('ইত্তেফাক', 'সাবেক ছাত্রলীগ সভাপতির ভাইয়ের বিরুদ্ধে ''টর্চার সেলে'' শিক্ষার্থী নির্যাতনের অভিযোগ', 'https://www.ittefaq.com.bd/661047/', 30, true),
+('BanglaNews24', 'জাবিতে ছাত্রলীগ নেতাকে নির্যাতন, তদন্ত কমিটি', 'https://www.banglanews24.com/education/news/bd/1197220.details', 40, true),
+('প্রথম আলো', 'সংবাদ সম্মেলনে নির্যাতনের বর্ণনা দিলেন জাবি ছাত্রলীগ নেতা', 'https://www.prothomalo.com/bangladesh/district/4foz5xmv9u', 50, true),
+('Dhaka Post', 'জাবিতে ছাত্রলীগ নেতাকে আটকে রেখে নির্যাতন', 'https://www.dhakapost.com/campus/225681', 60, true),
+('The Daily Star বাংলা', 'সাবেক সভাপতি জয়ের ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ', 'https://bangla.thedailystar.net/youth/education/campus/news-518381', 70, true),
+('দৈনিক জনকণ্ঠ', 'জয়ের ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ, নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা', 'https://www.dailyjanakantha.com/politics/news/700438', 80, true),
+('ইত্তেফাক', 'উপাচার্যের কাছে জীবনের নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা', 'https://www.ittefaq.com.bd/661213/', 90, true),
+('দৈনিক শিক্ষা', 'ভিসির কাছে জীবনের নিরাপত্তা চাইলেন জাবি ছাত্রলীগ নেতা', 'https://www.dainikshiksha.com/%E0%A6%9C%E0%A6%BE%E0%A6%AC%E0%A6%BF-%E0%A6%9B%E0%A6%BE%E0%A6%A4%E0%A7%8D%E0%A6%B0%E0%A6%B2%E0%A7%80%E0%A6%97-%E0%A6%A8%E0%A7%87%E0%A6%A4%E0%A6%BE-%E0%A6%89%E0%A6%AA%E0%A6%BE%E0%A6%9A%E0%A6%BE%E0%A6%B0%E0%A7%8D%E0%A6%AF%E0%A7%87%E0%A6%B0-%E0%A6%95%E0%A6%BE%E0%A6%9B%E0%A7%87-%E0%A6%9C%E0%A7%80%E0%A6%AC%E0%A6%A8%E0%A7%87%E0%A6%B0-%E0%A6%A8%E0%A6%BF%E0%A6%B0%E0%A6%BE%E0%A6%AA%E0%A6%A4%E0%A7%8D%E0%A6%A4%E0%A6%BE-%E0%A6%9A%E0%A6%BE%E0%A6%87%E0%A6%B2%E0%A7%87%E0%A6%A8/260584/', 100, true),
+('দেশ রূপান্তর', '''মায়ের নিষেধ আছে'' তাই কোনো চাঁদার ভাগ নিতেন না ছাত্রলীগ নেতা', 'https://www.deshrupantor.com/456582/', 110, true),
+('দেশ রূপান্তর', 'সাবেক ছাত্রলীগ সভাপতির ভাইয়ের ''অপকর্মের সাম্রাজ্য''', 'https://www.deshrupantor.com/456399/', 120, true),
+('Dhaka Tribune বাংলা', 'জাহাঙ্গীরনগর বিশ্ববিদ্যালয়: বারবার পার পেয়ে বেপরোয়া ছাত্রলীগ', 'https://bangla.dhakatribune.com/bangladesh/76832/', 130, true),
+('Dhaka Mail', 'জাবির আবাসিক হলে শিক্ষার্থীদের ওপর নির্যাতন, ছাত্র ইউনিয়নের উদ্বেগ', 'https://dhakamail.com/country/122306', 140, true),
+('সমকাল', 'জাবির হলে ছাত্রলীগ নেতাকে নির্যাতনের অভিযোগ', 'https://samakal.com/whole-country/article/198505/%E0%A6%9C%E0%A6%BE%E0%A6%AC%E0%A6%BF%E0%A6%B0-%E0%A6%B9%E0%A6%B2%E0%A7%87-%E0%A6%9B%E0%A6%BE%E0%A6%A4%E0%A7%8D%E0%A6%B0%E0%A6%B2%E0%A7%80%E0%A6%97-%E0%A6%A8%E0%A7%87%E0%A6%A4%E0%A6%BE%E0%A6%95%E0%A7%87-%E0%A6%A8%E0%A6%BF%E0%A6%B0%E0%A7%8D%E0%A6%AF%E0%A6%BE%E0%A6%A4%E0%A6%A8%E0%A7%87%E0%A6%B0-%E0%A6%85%E0%A6%AD%E0%A6%BF%E0%A6%AF%E0%A7%8B%E0%A6%97', 150, true),
+('কালবেলা', 'জাবি ছাত্রলীগ নেতাকে মারধরের অভিযোগ', 'https://www.kalbela.com/ajkerpatrika/khobor/26832', 160, true),
+('দৈনিক ইনকিলাব', 'ছাত্রলীগের সাবেক সভাপতি জয়ের ছোট ভাইয়ের বিরুদ্ধে নির্যাতনের অভিযোগ', 'https://dailyinqilab.com/bangladesh/news/605977', 170, true),
+('দৈনিক বায়ান্ন', 'কোথায় আছে জাবির মাদক সম্রাট যুব', 'https://dainikbayanno.com/post/%E0%A6%95%E0%A7%8B%E0%A6%A5%E0%A6%BE%E0%A7%9F-%E0%A6%86%E0%A6%9B%E0%A7%87-%E0%A6%9C%E0%A6%BE%E0%A6%AC%E0%A6%BF%E0%A6%B0-%E0%A6%AE%E0%A6%BE%E0%A6%A6%E0%A6%95-%E0%A6%B8%E0%A6%AE%E0%A7%8D%E0%A6%B0%E0%A6%BE%E0%A6%9F-%E0%A6%AF%E0%A7%81%E0%A6%AC', 180, true),
+('কালবেলা', 'জাবির হলে মাদকের থাবা, নিয়ন্ত্রণে ছাত্রলীগ', 'https://www.kalbela.com/ajkerpatrika/lastpage/65756', 190, true)
+ON CONFLICT (href) DO UPDATE SET
+  outlet = EXCLUDED.outlet,
+  headline = EXCLUDED.headline,
+  sort_order = EXCLUDED.sort_order,
+  published = true;
