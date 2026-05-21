@@ -40,16 +40,103 @@ interface ShiftRecord { t: number; value: number; nodes: string[]; mode: Mode }
 interface FrameSpike { t: number; dt: number; mode: Mode }
 interface ModeBucket { frames: number; jank: number; worst: number; durationMs: number }
 
-const describeNode = (n: Node | null): string => {
-  if (!n || !(n instanceof Element)) return "(unknown)";
-  const el = n as Element;
-  const id = el.id ? `#${el.id}` : "";
+/**
+ * Build a precise, copy-pasteable description of a DOM node:
+ *  - full CSS-ish selector path (up to 6 ancestors) with :nth-of-type
+ *  - data-testid / data-component / data-* hints when present
+ *  - React component owner name (read from the internal Fiber when available)
+ *  - bounding rect (so you can correlate with where it shifted on screen)
+ */
+const fiberKey = (el: any): string | undefined =>
+  Object.keys(el).find(
+    (k) => k.startsWith("__reactFiber$") || k.startsWith("__reactInternalInstance$"),
+  );
+
+const reactOwnerName = (el: Element): string | null => {
+  try {
+    const key = fiberKey(el as any);
+    if (!key) return null;
+    let fiber: any = (el as any)[key];
+    // Walk up fibers to find the nearest function/class component owner
+    while (fiber) {
+      const t = fiber.type;
+      if (t && typeof t !== "string") {
+        const name = t.displayName || t.name || t.render?.displayName || t.render?.name;
+        if (name && name !== "Unknown") return name;
+      }
+      fiber = fiber.return;
+    }
+  } catch {
+    /* noop */
+  }
+  return null;
+};
+
+const shortSelector = (el: Element): string => {
+  const tag = el.tagName.toLowerCase();
+  if (el.id) return `${tag}#${CSS.escape(el.id)}`;
   const cls =
     typeof el.className === "string" && el.className
-      ? "." + el.className.trim().split(/\s+/).slice(0, 2).join(".")
+      ? "." +
+        el.className
+          .trim()
+          .split(/\s+/)
+          .filter((c) => !/^(hover:|md:|lg:|xl:|sm:|focus:|dark:)/.test(c))
+          .slice(0, 2)
+          .map((c) => CSS.escape(c))
+          .join(".")
       : "";
-  return `${el.tagName.toLowerCase()}${id}${cls}`;
+  const parent = el.parentElement;
+  let nth = "";
+  if (parent) {
+    const siblings = Array.from(parent.children).filter((c) => c.tagName === el.tagName);
+    if (siblings.length > 1) nth = `:nth-of-type(${siblings.indexOf(el) + 1})`;
+  }
+  return `${tag}${cls}${nth}`;
 };
+
+const domPath = (el: Element, maxDepth = 6): string => {
+  const parts: string[] = [];
+  let cur: Element | null = el;
+  let depth = 0;
+  while (cur && cur !== document.body && depth < maxDepth) {
+    parts.unshift(shortSelector(cur));
+    cur = cur.parentElement;
+    depth++;
+  }
+  return parts.join(" > ");
+};
+
+const dataHints = (el: Element): string => {
+  const keys = ["data-testid", "data-component", "data-id", "data-section", "aria-label", "role"];
+  const hits: string[] = [];
+  for (const k of keys) {
+    const v = el.getAttribute(k);
+    if (v) hits.push(`[${k}="${v.slice(0, 40)}"]`);
+  }
+  return hits.join("");
+};
+
+const describeNode = (n: Node | null): string => {
+  if (!n) return "(unknown)";
+  // PerformanceLayoutShift sources may include Text/Comment nodes — climb to element
+  let el: Element | null =
+    n instanceof Element ? n : n.parentElement;
+  if (!el) return "(non-element)";
+
+  const path = domPath(el);
+  const hints = dataHints(el);
+  const owner = reactOwnerName(el);
+  let rect = "";
+  try {
+    const r = el.getBoundingClientRect();
+    rect = ` @${Math.round(r.x)},${Math.round(r.y)} ${Math.round(r.width)}×${Math.round(r.height)}`;
+  } catch {
+    /* noop */
+  }
+  return `${path}${hints}${owner ? ` <${owner}>` : ""}${rect}`;
+};
+
 
 const emptyBucket = (): ModeBucket => ({ frames: 0, jank: 0, worst: 0, durationMs: 0 });
 
