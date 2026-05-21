@@ -1096,6 +1096,41 @@ const Index = () => {
         </div>
       </section>
 
+      {/* The Stand Highlight — featured immediately after the four-phase journey */}
+      <section className="relative px-5 sm:px-6 md:px-12 lg:px-20 pb-12 sm:pb-16">
+        <div className="mx-auto max-w-5xl">
+          <Link
+            to="/the-stand"
+            onClick={() => track("the_stand_open", { source: "post_phases_highlight" })}
+            className="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 rounded-2xl border border-gold/30 bg-gradient-to-r from-gold/10 via-background/40 to-primary/10 p-5 sm:p-6 backdrop-blur-xl shadow-elegant transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-[0_24px_60px_-20px_hsl(var(--gold)/0.45)]"
+          >
+            <div className="flex items-start gap-4 min-w-0">
+              <div className="shrink-0 rounded-xl bg-gold/15 p-2.5 ring-1 ring-gold/30">
+                <BookOpenText className="h-5 w-5 text-gold" />
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-gold font-semibold">
+                  <span>Featured</span>
+                  <span className="h-1 w-1 rounded-full bg-gold/50" />
+                  <span className="text-foreground/55">The Stand · জাতীয় দলিল</span>
+                </div>
+                <h3 lang="bn" className="mt-1.5 font-display text-lg sm:text-xl font-bold leading-snug">
+                  একজন মানুষের <span className="text-gradient">অবস্থান</span>, একটি জাতির বিবেক।
+                </h3>
+                <p lang="bn" className="mt-1 text-xs sm:text-sm text-foreground/65">
+                  জাহিদ হাসান ইমন — &ldquo;মায়ের নিষেধ আছে&rdquo; থেকে জাতীয় দলিল পর্যন্ত · ১৯+ মিডিয়া কাভারেজ · শেয়ার-কার্ড জেনারেটর।
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition-transform duration-300 group-hover:scale-[1.04]">
+              Read The Stand
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
+          </Link>
+        </div>
+      </section>
+
+
       {/* Quote request modal */}
       <QuoteDialog
         open={quoteOpen}
