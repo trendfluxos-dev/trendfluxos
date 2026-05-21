@@ -18,6 +18,7 @@ export const routes = {
   "/admin/enterprise-demos": make(() => import("@/pages/EnterpriseDemos")),
   "/admin/course-enrollments": make(() => import("@/pages/CourseEnrollmentsAdmin")),
   "/admin/uptime": make(() => import("@/pages/UptimeAdmin")),
+  "/admin/errors": make(() => import("@/pages/ErrorLogsAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
