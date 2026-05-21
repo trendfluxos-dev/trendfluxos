@@ -384,21 +384,21 @@ const PerfMonitor = () => {
 
   return (
     <div
-      className="fixed bottom-3 left-3 z-[9999] select-none rounded-md border border-white/15 bg-black/70 px-2.5 py-1.5 font-mono text-[10px] leading-tight text-white/85 backdrop-blur-sm shadow-lg"
+      className="fixed bottom-3 left-3 z-[9999] select-none rounded-md border border-white/15 bg-black/70 px-2.5 py-1.5 font-mono text-[10px] leading-tight text-white/85 backdrop-blur-sm shadow-lg tabular-nums"
       title="Alt+P to hide"
     >
       <div className="flex items-center gap-2">
-        <span className={fpsTone}>{stats.fps} fps</span>
+        <span className={`${fpsTone} inline-block w-[48px]`}>{stats.fps} fps</span>
         <span className="text-white/40">·</span>
-        <span>jank {stats.jank}</span>
+        <span className="inline-block w-[52px]">jank {stats.jank}</span>
         <span className="text-white/40">·</span>
-        <span>worst {stats.worst}ms</span>
+        <span className="inline-block w-[72px]">worst {stats.worst}ms</span>
         <span className="text-white/40">·</span>
-        <span className={clsTone}>CLS {stats.cls.toFixed(3)}</span>
+        <span className={`${clsTone} inline-block w-[72px]`}>CLS {stats.cls.toFixed(3)}</span>
         <span className="text-white/40">·</span>
-        <span title="CLS shifts correlated with jank frames">↔ {stats.correlated}</span>
+        <span className="inline-block w-[28px]" title="CLS shifts correlated with jank frames">↔ {stats.correlated}</span>
         <span className="text-white/40">·</span>
-        <span className="uppercase tracking-wider text-white/55">{stats.mode}</span>
+        <span className="inline-block w-[44px] uppercase tracking-wider text-white/55">{stats.mode}</span>
         <button
           type="button"
           onClick={() => {
