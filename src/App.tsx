@@ -67,6 +67,8 @@ const App = () => (
           <TelegramGroupPopup />
           <AccessRequestGate />
           {import.meta.env.DEV && <ThemeDebugPanel />}
+          {import.meta.env.DEV && <PerfMonitor />}
+
           <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />
