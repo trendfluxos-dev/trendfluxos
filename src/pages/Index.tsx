@@ -1246,12 +1246,18 @@ const Index = () => {
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
               {activePress?.outlet}
             </p>
-            <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
+            <DialogTitle
+              lang={activePress?.headline && /[\u0980-\u09FF]/.test(activePress.headline) ? "bn" : undefined}
+              className="font-display text-2xl leading-snug md:text-3xl"
+            >
               {activePress?.headline}
             </DialogTitle>
           </DialogHeader>
 
-          <p className="text-sm leading-relaxed text-foreground/70">
+          <p
+            lang={activePress?.context && /[\u0980-\u09FF]/.test(activePress.context) ? "bn" : undefined}
+            className="text-sm leading-relaxed text-foreground/70"
+          >
             {activePress?.context}
           </p>
 
