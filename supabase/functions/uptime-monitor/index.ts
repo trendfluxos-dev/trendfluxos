@@ -78,9 +78,28 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: CORS_HEADERS });
   }
 
+  // Require the service-role key in the Authorization header. This function is
+  // invoked by pg_cron (which can attach the key) — no public callers allowed.
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const provided = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "").trim();
+  const a = new TextEncoder().encode(provided);
+  const b = new TextEncoder().encode(serviceKey);
+  let authOk = a.length === b.length && b.length > 0;
+  if (authOk) {
+    let diff = 0;
+    for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+    authOk = diff === 0;
+  }
+  if (!authOk) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+    });
+  }
+
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    serviceKey,
   );
 
   // 1. Look up the previous state so we only alert on transitions.
