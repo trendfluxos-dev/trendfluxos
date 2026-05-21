@@ -145,6 +145,7 @@ const PerfMonitor = () => {
   const allowed = routeAllowed(pathname);
 
   const [visible, setVisible] = useState(true);
+  const [resetKey, setResetKey] = useState(0);
   const [stats, setStats] = useState({
     fps: 60, jank: 0, worst: 0, mode: "idle" as Mode, cls: 0, correlated: 0,
   });
