@@ -18,6 +18,9 @@ import {
   X,
   GraduationCap,
   BookOpenText,
+  Share2,
+  ImageIcon,
+  ChevronDown,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.webp";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
@@ -236,6 +239,7 @@ const Index = () => {
   const [caseFilters, setCaseFilters] = useCaseFilters();
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [highlightedSlug, setHighlightedSlug] = useState<string | null>(null);
+  const [standExpanded, setStandExpanded] = useState(false);
   const [narrativeCase, setNarrativeCase] = useState<CaseStudy | null>(null);
   const narrativeTriggerRef = useRef<HTMLButtonElement | null>(null);
   const narrativeInitialFocusRef = useRef<HTMLButtonElement | null>(null);
@@ -1099,36 +1103,114 @@ const Index = () => {
       {/* The Stand Highlight — featured immediately after the four-phase journey */}
       <section className="relative px-5 sm:px-6 md:px-12 lg:px-20 pb-12 sm:pb-16">
         <div className="mx-auto max-w-5xl">
-          <Link
-            to="/the-stand"
-            onClick={() => track("the_stand_open", { source: "post_phases_highlight" })}
-            className="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 rounded-2xl border border-gold/30 bg-gradient-to-r from-gold/10 via-background/40 to-primary/10 p-5 sm:p-6 backdrop-blur-xl shadow-elegant transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-[0_24px_60px_-20px_hsl(var(--gold)/0.45)]"
-          >
-            <div className="flex items-start gap-4 min-w-0">
-              <div className="shrink-0 rounded-xl bg-gold/15 p-2.5 ring-1 ring-gold/30">
-                <BookOpenText className="h-5 w-5 text-gold" />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-gold font-semibold">
-                  <span>Featured</span>
-                  <span className="h-1 w-1 rounded-full bg-gold/50" />
-                  <span className="text-foreground/55">The Stand · জাতীয় দলিল</span>
+          <div className="group relative rounded-2xl border border-gold/30 bg-gradient-to-r from-gold/10 via-background/40 to-primary/10 backdrop-blur-xl shadow-elegant overflow-hidden transition-all duration-300 hover:border-gold/60 hover:shadow-[0_24px_60px_-20px_hsl(var(--gold)/0.45)]">
+            <button
+              type="button"
+              onClick={() => {
+                const next = !standExpanded;
+                setStandExpanded(next);
+                if (next) track("the_stand_highlight_expand", { source: "post_phases_highlight" });
+              }}
+              aria-expanded={standExpanded}
+              aria-controls="the-stand-highlight-details"
+              className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 p-5 sm:p-6 text-left"
+            >
+              <div className="flex items-start gap-4 min-w-0">
+                <div className="shrink-0 rounded-xl bg-gold/15 p-2.5 ring-1 ring-gold/30">
+                  <BookOpenText className="h-5 w-5 text-gold" />
                 </div>
-                <h3 lang="bn" className="mt-1.5 font-display text-lg sm:text-xl font-bold leading-snug">
-                  একজন মানুষের <span className="text-gradient">অবস্থান</span>, একটি জাতির বিবেক।
-                </h3>
-                <p lang="bn" className="mt-1 text-xs sm:text-sm text-foreground/65">
-                  জাহিদ হাসান ইমন — &ldquo;মায়ের নিষেধ আছে&rdquo; থেকে জাতীয় দলিল পর্যন্ত · ১৯+ মিডিয়া কাভারেজ · শেয়ার-কার্ড জেনারেটর।
-                </p>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-gold font-semibold">
+                    <span>Featured</span>
+                    <span className="h-1 w-1 rounded-full bg-gold/50" />
+                    <span className="text-foreground/55">The Stand · জাতীয় দলিল</span>
+                  </div>
+                  <h3 lang="bn" className="mt-1.5 font-display text-lg sm:text-xl font-bold leading-snug">
+                    একজন মানুষের <span className="text-gradient">অবস্থান</span>, একটি জাতির বিবেক।
+                  </h3>
+                  <p lang="bn" className="mt-1 text-xs sm:text-sm text-foreground/65">
+                    জাহিদ হাসান ইমন — &ldquo;মায়ের নিষেধ আছে&rdquo; থেকে জাতীয় দলিল পর্যন্ত · ১৯+ মিডিয়া কাভারেজ · শেয়ার-কার্ড জেনারেটর।
+                  </p>
+                </div>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition-transform duration-300 group-hover:scale-[1.04]">
+                {standExpanded ? "Hide details" : "View details"}
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform duration-300 ${standExpanded ? "rotate-180" : ""}`}
+                />
+              </span>
+            </button>
+
+            <div
+              id="the-stand-highlight-details"
+              className={`grid transition-all duration-500 ease-out ${
+                standExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="border-t border-gold/20 px-5 sm:px-6 pb-6 pt-5">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {/* Feature 1 — OG image */}
+                    <div className="rounded-xl border border-gold/20 bg-foreground/[0.03] p-4">
+                      <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-gold font-semibold">
+                        <ImageIcon className="h-3.5 w-3.5" />
+                        <span>OG Image · 1216×640</span>
+                      </div>
+                      <p lang="bn" className="mt-2 font-display text-base font-bold leading-snug">
+                        সিনেমাটিক &ldquo;মায়ের নিষেধ আছে&rdquo; পোস্টার
+                      </p>
+                      <p lang="bn" className="mt-1.5 text-xs text-foreground/65 leading-relaxed">
+                        Facebook · X · LinkedIn-এ <code className="text-gold/90">/the-stand</code> শেয়ার করলে gold typography-সহ এই কার্ড দৃশ্যমান হবে।
+                      </p>
+                      <a
+                        href="/og-the-stand.jpg"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.18em] text-gold hover:underline"
+                      >
+                        Preview OG
+                        <ArrowUpRight className="h-3 w-3" />
+                      </a>
+                    </div>
+
+                    {/* Feature 2 — Share Quote Cards */}
+                    <div className="rounded-xl border border-gold/20 bg-foreground/[0.03] p-4">
+                      <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-gold font-semibold">
+                        <Share2 className="h-3.5 w-3.5" />
+                        <span>Quote Card Generator</span>
+                      </div>
+                      <p lang="bn" className="mt-2 font-display text-base font-bold leading-snug">
+                        ৬টি বাণী · ৩টি ফর্ম্যাট · এক ক্লিকে PNG
+                      </p>
+                      <p lang="bn" className="mt-1.5 text-xs text-foreground/65 leading-relaxed">
+                        1:1 IG · 9:16 Story · 16:9 FB/X — ক্লায়েন্ট-সাইড রেন্ডার, কোনো ওয়াটারমার্ক নেই।
+                      </p>
+                      <Link
+                        to="/the-stand/share"
+                        onClick={() => track("the_stand_share_open", { source: "post_phases_highlight_details" })}
+                        className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.18em] text-gold hover:underline"
+                      >
+                        Open generator
+                        <ArrowUpRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  <Link
+                    to="/the-stand"
+                    onClick={() => track("the_stand_open", { source: "post_phases_highlight_details" })}
+                    className="mt-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/[0.06] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold transition-all hover:bg-gold/15 hover:border-gold/70"
+                  >
+                    Read The Stand · সম্পূর্ণ ডকুমেন্ট
+                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
               </div>
             </div>
-            <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition-transform duration-300 group-hover:scale-[1.04]">
-              Read The Stand
-              <ArrowUpRight className="h-4 w-4" />
-            </span>
-          </Link>
+          </div>
         </div>
       </section>
+
 
 
       {/* Quote request modal */}
