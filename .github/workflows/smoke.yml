@@ -1,0 +1,41 @@
+name: Production Smoke
+
+# Runs after every successful deploy, on a 6-hour schedule, and on demand.
+# Verifies trendflux.digital serves a healthy homepage with correct SEO markers.
+
+on:
+  workflow_run:
+    workflows: ["Build & Deploy"]
+    types: [completed]
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "URL to smoke-test"
+        required: false
+        default: "https://trendflux.digital"
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Smoke test live site
+    runs-on: ubuntu-latest
+    # Skip if the triggering deploy failed.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install --frozen-lockfile
+
+      - name: Run smoke test
+        env:
+          SMOKE_URL: ${{ github.event.inputs.target || 'https://trendflux.digital' }}
+        run: bun run test:smoke
