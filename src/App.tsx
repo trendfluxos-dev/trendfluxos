@@ -43,7 +43,7 @@ const CourseTrendflux = routes["/course/trendflux"];
 const Masterclass = routes["/masterclass"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const NotFound = routes["*"];
-const PerfCompare = import.meta.env.DEV ? (await import("./pages/PerfCompare")).default : null;
+const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 
 const PageFallback = () => (
   <div className="flex min-h-screen items-center justify-center bg-background">
