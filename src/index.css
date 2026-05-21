@@ -212,14 +212,17 @@
   }
 
   .glass-hover {
-    @apply transition-all duration-500;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
   }
-  .glass-hover:hover {
-    background: hsl(0 0% 100%);
-    border-color: hsl(var(--primary) / 0.45);
-    box-shadow: 0 18px 48px -18px hsl(0 72% 45% / 0.25), 0 1px 3px hsl(0 0% 0% / 0.06);
-    transform: translateY(-2px);
+  @media (hover: hover) and (pointer: fine) {
+    .glass-hover:hover {
+      background: hsl(0 0% 100%);
+      border-color: hsl(var(--primary) / 0.45);
+      box-shadow: 0 18px 48px -18px hsl(0 72% 45% / 0.25), 0 1px 3px hsl(0 0% 0% / 0.06);
+      transform: translateY(-2px);
+    }
   }
+
 
   .text-gradient {
     background: var(--gradient-text);
@@ -245,13 +248,16 @@
     box-shadow: 0 8px 22px -10px hsl(var(--primary) / 0.55);
     transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
   }
-  .btn-cta-red:hover {
-    background: hsl(var(--primary-glow));
-    border-color: hsl(var(--primary-glow));
-    box-shadow: 0 14px 34px -12px hsl(var(--primary) / 0.7);
-    transform: translateY(-1px);
+  @media (hover: hover) and (pointer: fine) {
+    .btn-cta-red:hover {
+      background: hsl(var(--primary-glow));
+      border-color: hsl(var(--primary-glow));
+      box-shadow: 0 14px 34px -12px hsl(var(--primary) / 0.7);
+      transform: translateY(-1px);
+    }
   }
   .btn-cta-red:active { transform: translateY(0); }
+
 
   /* Subtle red accent line for premium card edges */
   .accent-line-red {
@@ -687,9 +693,14 @@
 }
 
 @layer utilities {
-  .hover-lift { @apply transition-transform duration-300 hover:-translate-y-0.5; }
-  .hover-lift-md { @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-elegant; }
+  .hover-lift { @apply transition-transform duration-300; }
+  .hover-lift-md { @apply transition-all duration-300; }
   .ring-hairline { @apply ring-1 ring-border; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hover-lift:hover { transform: translateY(-2px); }
+    .hover-lift-md:hover { transform: translateY(-4px); box-shadow: var(--shadow-elegant); }
+  }
 
   /* Unified premium CTA micro-interaction: subtle lift + sheen on hover,
      consistent press feedback. Apply to any button without changing color. */
@@ -700,7 +711,6 @@
     transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
                 box-shadow 0.25s ease, background-color 0.25s ease;
   }
-  .cta-fx:hover { transform: translateY(-1px); }
   .cta-fx:active { transform: translateY(0) scale(0.98); }
   .cta-fx::after {
     content: "";
@@ -711,11 +721,15 @@
     pointer-events: none;
     z-index: 1;
   }
-  .cta-fx:hover::after { transform: translateX(120%); }
+  @media (hover: hover) and (pointer: fine) {
+    .cta-fx:hover { transform: translateY(-1px); }
+    .cta-fx:hover::after { transform: translateX(120%); }
+  }
   @media (prefers-reduced-motion: reduce) {
-    .cta-fx, .cta-fx:hover, .cta-fx:active { transform: none; }
+    .cta-fx, .cta-fx:active { transform: none; }
     .cta-fx::after { display: none; }
   }
+
 
   /* Scroll reveal — pairs with useReveal hook */
   .reveal {
