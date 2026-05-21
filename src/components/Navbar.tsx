@@ -57,22 +57,22 @@ const Navbar = () => {
     <header className="fixed top-0 inset-x-0 z-50">
       <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 transition-all duration-300 ${scrolled ? "mt-2" : "mt-4"}`}>
         <nav
-          className={`glass-strong rounded-full flex items-center justify-between pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border transition-all duration-300 ${
+          className={`glass-strong rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4 pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border transition-all duration-300 ${
             scrolled ? "border-border/60 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.18)]" : "border-border/40"
           }`}
         >
-          <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-[15px] whitespace-nowrap shrink-0 tracking-tight">
+          <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-[14px] lg:text-[15px] whitespace-nowrap shrink-0 tracking-tight">
             <img src={logo} alt={`${BRAND.name} logo`} className="h-7 w-7 rounded-md object-contain" />
             <span className="text-gradient">{BRAND.nameLead}</span>
             <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-6 text-[13px] text-foreground/65">
+          <div className="hidden md:flex flex-nowrap items-center gap-4 lg:gap-6 text-[12px] lg:text-[13px] text-foreground/65 min-w-0">
             {links.map((l) => (
               <Link
                 key={l.href}
                 to={l.href}
-                className={`story-link transition-colors duration-200 hover:text-foreground ${
+                className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
                   pathname === l.href ? "text-foreground" : ""
                 }`}
               >
@@ -81,22 +81,22 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <SocialIcons variant="inline" size="sm" className="hidden lg:flex mr-1" />
+          <div className="flex flex-nowrap items-center gap-1.5 shrink-0">
+            <SocialIcons variant="inline" size="sm" className="hidden xl:flex mr-1" />
             <Link
               to="/toolkit"
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
               title="Course & Toolkit"
             >
-              <GraduationCap className="h-3.5 w-3.5" />
+              <GraduationCap className="h-3.5 w-3.5 shrink-0" />
               <span>Course</span>
             </Link>
             <Link
               to={signedIn ? "/admin" : "/auth"}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
               title={signedIn ? "Dashboard" : "Login"}
             >
-              {signedIn ? <LayoutDashboard className="h-3.5 w-3.5" /> : <LogIn className="h-3.5 w-3.5" />}
+              {signedIn ? <LayoutDashboard className="h-3.5 w-3.5 shrink-0" /> : <LogIn className="h-3.5 w-3.5 shrink-0" />}
               <span>{signedIn ? "Dashboard" : "Login"}</span>
             </Link>
             <button
@@ -104,14 +104,14 @@ const Navbar = () => {
               onClick={openPalette}
               aria-label={`Open command palette (${isMac ? "Cmd" : "Ctrl"}+K)`}
               title="Quick jump to any page"
-              className="hidden lg:inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[11px] text-foreground/60 hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="hidden xl:inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[11px] text-foreground/60 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
             >
               <span>Quick jump</span>
               <kbd className="rounded border border-border/50 bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] leading-none">
                 {isMac ? "⌘" : "Ctrl"} K
               </kbd>
             </button>
-            <Button variant="hero" size="sm" className="hidden sm:inline-flex cta-fx">
+            <Button variant="hero" size="sm" className="hidden sm:inline-flex whitespace-nowrap cta-fx">
               Book Strategic Consultation
             </Button>
 
