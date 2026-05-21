@@ -8,6 +8,7 @@ import { Listening } from "@/components/the-stand/Listening";
 import { ReconstructionTimeline } from "@/components/the-stand/ReconstructionTimeline";
 import { EthicalIndex } from "@/components/the-stand/EthicalIndex";
 import { InfrastructurePivot } from "@/components/the-stand/InfrastructurePivot";
+import { HumanityRestored } from "@/components/the-stand/HumanityRestored";
 import { MediaWall } from "@/components/the-stand/MediaWall";
 import { QuoteEngineCta } from "@/components/the-stand/QuoteEngineCta";
 import { DocumentaryEmbed } from "@/components/the-stand/DocumentaryEmbed";
@@ -81,6 +82,7 @@ export default function TheStand() {
       <Listening />
       <ReconstructionTimeline />
       <EthicalIndex />
+      <HumanityRestored />
       <InfrastructurePivot />
       <MediaWall />
       <QuoteEngineCta />
