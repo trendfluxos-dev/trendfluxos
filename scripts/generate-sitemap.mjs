@@ -29,9 +29,17 @@ const caseSlugs = [
 
 const staticRoutes = [
   "/",
+  "/the-stand",
+  "/the-stand/share",
+  "/enterprise",
+  "/portfolio",
+  "/masterclass",
+  "/course/trendflux",
+  "/toolkit",
   "/project-lead",
   "/marriage",
   "/brand-open",
+  "/brandtoki",
   "/trendflux-talent",
   "/luxe-veil",
 ];
