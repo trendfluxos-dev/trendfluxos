@@ -14,6 +14,11 @@ export default function TheStand() {
     description:
       "জাহাঙ্গীরনগর বিশ্ববিদ্যালয়ে টর্চার সেল ও চাঁদাবাজির বিরুদ্ধে জাহিদ হাসান ইমনের অটুট নৈতিকতার সংগ্রাম — 'মায়ের নিষেধ আছে' থেকে ১৯+ যাচাইকৃত জাতীয় গণমাধ্যম প্রতিবেদন পর্যন্ত পূর্ণ দলিল।",
     type: "article",
+    image: "/og-the-stand.jpg",
+    imageWidth: 1216,
+    imageHeight: 640,
+    imageType: "image/jpeg",
+    imageAlt: "মায়ের নিষেধ আছে — জাহিদ হাসান ইমন, সত্যের পক্ষে এক অটল অবস্থান",
     jsonLd: [
       {
         "@context": "https://schema.org",
