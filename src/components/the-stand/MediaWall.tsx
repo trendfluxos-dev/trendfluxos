@@ -46,6 +46,7 @@ export function MediaWall() {
                   {item.outlet}
                 </span>
                 <p
+                  lang={/[\u0980-\u09FF]/.test(item.headline) ? "bn" : undefined}
                   className="text-sm md:text-base leading-snug text-[hsl(var(--stand-ink))] group-hover:text-[hsl(var(--stand-ink))]"
                 >
                   {item.headline}
