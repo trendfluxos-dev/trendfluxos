@@ -248,13 +248,16 @@
     box-shadow: 0 8px 22px -10px hsl(var(--primary) / 0.55);
     transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
   }
-  .btn-cta-red:hover {
-    background: hsl(var(--primary-glow));
-    border-color: hsl(var(--primary-glow));
-    box-shadow: 0 14px 34px -12px hsl(var(--primary) / 0.7);
-    transform: translateY(-1px);
+  @media (hover: hover) and (pointer: fine) {
+    .btn-cta-red:hover {
+      background: hsl(var(--primary-glow));
+      border-color: hsl(var(--primary-glow));
+      box-shadow: 0 14px 34px -12px hsl(var(--primary) / 0.7);
+      transform: translateY(-1px);
+    }
   }
   .btn-cta-red:active { transform: translateY(0); }
+
 
   /* Subtle red accent line for premium card edges */
   .accent-line-red {
