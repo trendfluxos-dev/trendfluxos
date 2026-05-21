@@ -239,6 +239,7 @@ const Index = () => {
   const [caseFilters, setCaseFilters] = useCaseFilters();
   const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
   const [highlightedSlug, setHighlightedSlug] = useState<string | null>(null);
+  const [standExpanded, setStandExpanded] = useState(false);
   const [narrativeCase, setNarrativeCase] = useState<CaseStudy | null>(null);
   const narrativeTriggerRef = useRef<HTMLButtonElement | null>(null);
   const narrativeInitialFocusRef = useRef<HTMLButtonElement | null>(null);
