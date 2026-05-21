@@ -119,6 +119,7 @@ const App = () => (
       <Analytics />
     </TooltipProvider>
   </QueryClientProvider>
+  </SentryErrorBoundary>
 );
 
 export default App;
