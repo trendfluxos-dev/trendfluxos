@@ -556,6 +556,14 @@ const Index = () => {
               Project Lead
             </Link>
             <Link
+              to="/the-stand"
+              onClick={() => setMobileNavOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground/90 hover:bg-foreground/5 hover:text-[hsl(0_72%_55%)] transition-colors inline-flex items-center justify-between"
+            >
+              <span>The Stand</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[hsl(0_72%_55%)] shadow-[0_0_8px_hsl(0_72%_55%/0.7)] animate-pulse" aria-hidden />
+            </Link>
+            <Link
               to="/auth?redirect=/course/trendflux"
               onClick={() => setMobileNavOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground/60 hover:bg-foreground/5 hover:text-gold transition-colors"
