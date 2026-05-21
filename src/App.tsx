@@ -19,6 +19,7 @@ import TelegramGroupPopup from "./components/TelegramGroupPopup";
 import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
+import { SentryErrorBoundary } from "@/lib/sentry";
 
 const queryClient = new QueryClient();
 
