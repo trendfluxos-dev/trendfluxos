@@ -145,6 +145,7 @@ const PerfMonitor = () => {
   const allowed = routeAllowed(pathname);
 
   const [visible, setVisible] = useState(true);
+  const [resetKey, setResetKey] = useState(0);
   const [stats, setStats] = useState({
     fps: 60, jank: 0, worst: 0, mode: "idle" as Mode, cls: 0, correlated: 0,
   });
@@ -320,7 +321,7 @@ const PerfMonitor = () => {
       window.removeEventListener("pointermove", onPointer);
       window.removeEventListener("keydown", onKey);
     };
-  }, [allowed, pathname]);
+  }, [allowed, pathname, resetKey]);
 
   if (!allowed || !visible) return null;
 
@@ -400,8 +401,23 @@ const PerfMonitor = () => {
         <span className="uppercase tracking-wider text-white/55">{stats.mode}</span>
         <button
           type="button"
-          onClick={exportSession}
+          onClick={() => {
+            shiftsRef.current = [];
+            spikesRef.current = [];
+            setStats({ fps: 60, jank: 0, worst: 0, mode: "idle", cls: 0, correlated: 0 });
+            setResetKey((k) => k + 1);
+            // eslint-disable-next-line no-console
+            console.info("[PerfMonitor] session reset");
+          }}
           className="ml-1 rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-white/90 hover:bg-white/20"
+          title="Clear FPS / jank / CLS and start fresh"
+        >
+          Reset
+        </button>
+        <button
+          type="button"
+          onClick={exportSession}
+          className="rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-white/90 hover:bg-white/20"
           title="Download session summary as JSON"
         >
           Export
