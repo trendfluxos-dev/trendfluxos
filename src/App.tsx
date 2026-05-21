@@ -86,6 +86,7 @@ const App = () => (
           <BrandSwitcher />
           <LuxeVeilGate />
           <TelegramGroupPopup />
+          <ConsentBanner />
           <AccessRequestGate />
           {import.meta.env.DEV && <ThemeDebugPanel />}
           {import.meta.env.DEV && <PerfMonitor />}
