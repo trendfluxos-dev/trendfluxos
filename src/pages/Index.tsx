@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   GraduationCap,
+  BookOpenText,
 } from "lucide-react";
 import trendfluxLogo from "@/assets/trendflux-logo.webp";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
