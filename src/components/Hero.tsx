@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, ShieldCheck, BookOpenText } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, BookOpenText, Share2 } from "lucide-react";
 import { ENTERPRISE } from "@/config/enterprise";
 import { track } from "@/lib/analytics";
 
@@ -63,23 +63,38 @@ const Hero = () => {
           <span>Growth Analytics</span>
         </div>
 
-        {/* Idol anchor — link to the dedicated story hub */}
-        <Link
-          to="/the-stand"
-          onClick={() => track("the_stand_open", { location: "home_hero" })}
-          className="group mt-12 inline-flex max-w-2xl items-center gap-4 rounded-2xl border border-gold/30 bg-gold/[0.04] px-5 py-4 text-left transition-all hover:border-gold/60 hover:bg-gold/10 hover:shadow-gold/30 hover:shadow-lg"
-        >
-          <BookOpenText className="h-5 w-5 shrink-0 text-gold" aria-hidden />
-          <div className="flex-1">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
-              একজন মানুষের অবস্থান, একটি জাতির বিবেক
-            </p>
-            <p lang="bn" className="mt-1 text-sm md:text-base font-medium text-foreground/85">
-              জাহিদ হাসান ইমন — &ldquo;মায়ের নিষেধ আছে&rdquo; থেকে জাতীয় দলিল পর্যন্ত
-            </p>
-          </div>
-          <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
-        </Link>
+        {/* Idol anchor — link to the dedicated story hub + share-card shortcut */}
+        <div className="mt-12 mx-auto max-w-2xl">
+          <Link
+            to="/the-stand"
+            onClick={() => track("the_stand_open", { location: "home_hero" })}
+            className="group relative flex items-center gap-4 rounded-2xl border-2 border-gold/40 bg-gradient-to-br from-gold/[0.08] via-gold/[0.04] to-transparent px-5 py-4 text-left transition-all hover:border-gold/70 hover:shadow-gold/40 hover:shadow-xl animate-pulse-soft"
+          >
+            <span aria-hidden className="absolute -top-2 left-4 inline-flex items-center gap-1 rounded-full bg-gold px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-background">
+              ★ Featured
+            </span>
+            <BookOpenText className="h-5 w-5 shrink-0 text-gold" aria-hidden />
+            <div className="flex-1">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold">
+                একজন মানুষের অবস্থান, একটি জাতির বিবেক
+              </p>
+              <p lang="bn" className="mt-1 text-sm md:text-base font-medium text-foreground/85">
+                জাহিদ হাসান ইমন — &ldquo;মায়ের নিষেধ আছে&rdquo; থেকে জাতীয় দলিল পর্যন্ত
+              </p>
+            </div>
+            <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />
+          </Link>
+
+          <Link
+            to="/the-stand/share"
+            onClick={() => track("the_stand_share_open", { location: "home_hero" })}
+            className="mt-3 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/[0.06] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold transition-all hover:bg-gold/15 hover:border-gold/70"
+            lang="bn"
+          >
+            <Share2 className="h-3.5 w-3.5" />
+            শেয়ার কার্ড বানান · Quote Card Generator
+          </Link>
+        </div>
       </div>
     </section>
   );
