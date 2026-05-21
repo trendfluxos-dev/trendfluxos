@@ -5,6 +5,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import ThemeDebugPanel from "@/components/ThemeDebugPanel";
+import PerfMonitor from "@/components/PerfMonitor";
+
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routes } from "./lib/routes";
 import ScrollToTop from "./components/ScrollToTop";
