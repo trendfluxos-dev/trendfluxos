@@ -2,6 +2,9 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
+import { installErrorLogger } from "./lib/errorLogger";
+
+installErrorLogger();
 
 // Recover from stale dynamic-import chunks after a redeploy: if a lazy()
 // chunk fails to load, hard-reload once so the browser fetches the new
