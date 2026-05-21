@@ -16,6 +16,7 @@ import FloatingContact from "./components/social/FloatingContact";
 import BrandSwitcher from "./components/social/BrandSwitcher";
 import LuxeVeilGate from "./components/LuxeVeilGate";
 import TelegramGroupPopup from "./components/TelegramGroupPopup";
+import ConsentBanner from "./components/ConsentBanner";
 import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
@@ -85,6 +86,7 @@ const App = () => (
           <BrandSwitcher />
           <LuxeVeilGate />
           <TelegramGroupPopup />
+          <ConsentBanner />
           <AccessRequestGate />
           {import.meta.env.DEV && <ThemeDebugPanel />}
           {import.meta.env.DEV && <PerfMonitor />}
