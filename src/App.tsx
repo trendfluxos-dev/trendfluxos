@@ -55,7 +55,19 @@ const PageFallback = () => (
 );
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
+  <SentryErrorBoundary
+    fallback={
+      <div className="flex min-h-screen items-center justify-center bg-background p-6 text-center">
+        <div className="max-w-md space-y-3">
+          <h1 className="text-xl font-semibold text-foreground">Something went wrong</h1>
+          <p className="text-sm text-muted-foreground">
+            We've been notified and are looking into it. Try refreshing the page.
+          </p>
+        </div>
+      </div>
+    }
+  >
+    <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
