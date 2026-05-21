@@ -179,6 +179,98 @@ export default function TheStand() {
         </p>
       </Section>
 
+      {/* 6.5 — Belal: humanity restored (warm-tone bridge between collapse and rebuilding) */}
+      <section className="relative px-6 lg:px-10 py-16 md:py-24 overflow-hidden">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-b from-amber-500/[0.06] via-amber-200/[0.03] to-transparent"
+        />
+        <div
+          aria-hidden
+          className="absolute -top-20 left-1/2 -translate-x-1/2 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl"
+        />
+        <div className="relative mx-auto max-w-5xl">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-amber-300/90">
+            {THE_STAND.belal.eyebrow}
+          </p>
+          <h2 className="font-display mt-3 text-3xl md:text-5xl font-bold leading-tight">
+            {THE_STAND.belal.title}
+          </h2>
+          <p className="mt-3 max-w-2xl text-base md:text-lg text-foreground/65">
+            {THE_STAND.belal.subtitle}
+          </p>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-[auto_1fr] md:items-start">
+            <figure className="mx-auto md:mx-0">
+              <div className="relative h-40 w-40 md:h-48 md:w-48 rounded-full overflow-hidden ring-1 ring-amber-300/30 shadow-[0_20px_60px_-20px_hsl(38_92%_50%_/_0.25)] bg-gradient-to-br from-amber-100/[0.08] to-amber-500/[0.04]">
+                <div className="absolute inset-0 grid place-items-center">
+                  <span className="font-display text-5xl font-bold text-amber-200/80">ব</span>
+                </div>
+              </div>
+              <figcaption className="mt-4 text-center md:text-left">
+                <p className="font-display text-lg font-semibold text-foreground/95">
+                  {THE_STAND.belal.name}
+                </p>
+                <p className="mt-1 text-xs uppercase tracking-[0.2em] text-amber-300/80">
+                  {THE_STAND.belal.role}
+                </p>
+              </figcaption>
+            </figure>
+
+            <div>
+              <blockquote
+                lang="bn"
+                className="relative rounded-2xl border border-amber-300/25 bg-amber-500/[0.04] p-6 md:p-8"
+              >
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300/50 to-transparent"
+                />
+                <p className="font-display text-xl md:text-3xl font-bold leading-snug text-foreground">
+                  &ldquo;{THE_STAND.belal.quote}&rdquo;
+                </p>
+              </blockquote>
+              <p className="mt-6 text-base leading-relaxed text-foreground/75">
+                {THE_STAND.belal.body}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-14">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-300/90">
+              What changed everything
+            </p>
+            <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {THE_STAND.belal.arc.map((step, i) => (
+                <li
+                  key={step.phase}
+                  className="relative rounded-xl border border-amber-300/15 bg-foreground/[0.02] p-4"
+                >
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-300/70">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <p className="mt-2 font-display text-base font-bold text-foreground/95">
+                    {step.phase}
+                  </p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-foreground/60">
+                    {step.body}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="mt-10 rounded-2xl border-l-2 border-amber-300/50 bg-amber-500/[0.03] px-6 py-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-300/90">
+              Why this matters
+            </p>
+            <p className="mt-2 text-base leading-relaxed text-foreground/80">
+              {THE_STAND.belal.whyMatters}
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* 7. Press grid */}
       <Section title="Public Record — যাচাইকৃত জাতীয় কভারেজ">
         <p lang="en" className="mb-6 text-sm text-foreground/60">
