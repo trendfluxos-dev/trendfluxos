@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, ShieldCheck, BookOpenText } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, BookOpenText, Share2 } from "lucide-react";
 import { ENTERPRISE } from "@/config/enterprise";
 import { track } from "@/lib/analytics";
 
