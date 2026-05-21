@@ -35,6 +35,8 @@ const UptimeAdmin = routes["/admin/uptime"];
 const ErrorLogsAdmin = routes["/admin/errors"];
 const WebVitalsAdmin = routes["/admin/web-vitals"];
 const PressDetail = routes["/press/:id"];
+const TheStand = routes["/the-stand"];
+const TheStandShare = routes["/the-stand/share"];
 const Marriage = routes["/marriage"];
 const BrandOpen = routes["/brand-open"];
 const TrendfluxTalent = routes["/trendflux-talent"];
@@ -100,6 +102,8 @@ const App = () => (
             <Route path="/admin/errors" element={<ErrorLogsAdmin />} />
             <Route path="/admin/web-vitals" element={<WebVitalsAdmin />} />
             <Route path="/press/:id" element={<PressDetail />} />
+            <Route path="/the-stand" element={<TheStand />} />
+            <Route path="/the-stand/share" element={<TheStandShare />} />
             <Route path="/marriage" element={<Marriage />} />
             <Route path="/brand-open" element={<BrandOpen />} />
             <Route path="/trendflux-talent" element={<TrendfluxTalent />} />

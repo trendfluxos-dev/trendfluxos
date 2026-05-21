@@ -235,10 +235,13 @@ export default function TheStand() {
           <p className="mt-4 text-foreground/70">{THE_STAND.takeStand.body}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild variant="gold" size="lg">
-              <Link to="/#story">
-                Public Record দেখুন
+              <Link to="/the-stand/share">
+                Share Quote Cards তৈরি করুন
                 <ArrowRight className="h-4 w-4" />
               </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/#story">Public Record দেখুন</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
               <Link to="/project-lead">যোগাযোগ করুন</Link>
