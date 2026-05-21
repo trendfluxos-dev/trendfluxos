@@ -972,7 +972,7 @@ const Index = () => {
               >
                 {/* Marker */}
                 <div className="absolute -left-10 md:-left-14 top-1 flex h-7 w-7 items-center justify-center">
-                  <span className="absolute h-7 w-7 rounded-full bg-gold/25 blur-md animate-pulse" aria-hidden />
+                  <span className="absolute h-7 w-7 rounded-full bg-gold/25 blur-md" aria-hidden />
                   <span className="absolute h-5 w-5 rounded-full bg-gold/20" aria-hidden />
                   <span className="relative h-3 w-3 rounded-full bg-gold shadow-gold ring-4 ring-background" />
                 </div>

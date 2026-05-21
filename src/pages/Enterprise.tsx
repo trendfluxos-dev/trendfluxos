@@ -58,8 +58,9 @@ const Enterprise = () => {
       <section className="relative pt-40 pb-24 px-6 lg:px-10 overflow-hidden">
         <div className="absolute inset-0 hero-glow" aria-hidden />
         <div className="absolute inset-0 grid-dots opacity-40" aria-hidden />
-        <div className="absolute top-32 right-10 w-72 h-72 rounded-full bg-primary/10 blur-3xl animate-float" aria-hidden />
-        <div className="absolute bottom-10 left-10 w-80 h-80 rounded-full bg-gold/10 blur-3xl animate-float [animation-delay:2s]" aria-hidden />
+        <div className="absolute top-32 right-10 w-72 h-72 rounded-full bg-primary/10 blur-3xl" aria-hidden />
+        <div className="absolute bottom-10 left-10 w-80 h-80 rounded-full bg-gold/10 blur-3xl" aria-hidden />
+
 
         <div className="relative max-w-6xl mx-auto text-center animate-fade-up">
           <img

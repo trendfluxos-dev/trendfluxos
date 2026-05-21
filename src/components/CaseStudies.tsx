@@ -82,19 +82,20 @@ const ImpactMap = () => (
     <div className="absolute inset-0 grid-dots opacity-60" aria-hidden />
     <div className="absolute inset-0 bg-gradient-hero" aria-hidden />
 
-    {/* orbits */}
+    {/* orbits — static (rings + nodes look identical without continuous rotation/pulse) */}
     <div className="absolute inset-0 flex items-center justify-center">
       <div className="relative w-[420px] h-[420px] max-w-[90%] max-h-[90%]">
-        <div className="absolute inset-0 rounded-full border border-primary/20 animate-orbit" />
-        <div className="absolute inset-10 rounded-full border border-gold/25 animate-orbit-reverse" />
-        <div className="absolute inset-20 rounded-full border border-primary/15 animate-pulse-glow" />
+        <div className="absolute inset-0 rounded-full border border-primary/20" />
+        <div className="absolute inset-10 rounded-full border border-gold/25" />
+        <div className="absolute inset-20 rounded-full border border-primary/15" />
 
-        {/* nodes */}
+        {/* nodes — keep one subtle pulse on the top anchor node only */}
         <span className="absolute top-2 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-primary shadow-cyan animate-pulse-glow" />
-        <span className="absolute bottom-4 right-8 w-3.5 h-3.5 rounded-full bg-gold shadow-gold animate-pulse-glow [animation-delay:1s]" />
+        <span className="absolute bottom-4 right-8 w-3.5 h-3.5 rounded-full bg-gold shadow-gold" />
         <span className="absolute top-1/2 -left-1 w-2.5 h-2.5 rounded-full bg-primary-glow shadow-cyan" />
         <span className="absolute bottom-10 left-12 w-2 h-2 rounded-full bg-foreground shadow-[0_0_20px_hsl(var(--foreground))]" />
-        <span className="absolute top-16 right-2 w-2.5 h-2.5 rounded-full bg-primary shadow-cyan animate-pulse-glow [animation-delay:0.5s]" />
+        <span className="absolute top-16 right-2 w-2.5 h-2.5 rounded-full bg-primary shadow-cyan" />
+
 
         {/* connection lines */}
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 420 420" fill="none" aria-hidden>
