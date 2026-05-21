@@ -34,6 +34,7 @@ const CourseEnrollmentsAdmin = routes["/admin/course-enrollments"];
 const UptimeAdmin = routes["/admin/uptime"];
 const ErrorLogsAdmin = routes["/admin/errors"];
 const WebVitalsAdmin = routes["/admin/web-vitals"];
+const Ga4Check = routes["/admin/ga4-check"];
 const PressDetail = routes["/press/:id"];
 const TheStand = routes["/the-stand"];
 const TheStandShare = routes["/the-stand/share"];
@@ -101,6 +102,7 @@ const App = () => (
             <Route path="/admin/uptime" element={<UptimeAdmin />} />
             <Route path="/admin/errors" element={<ErrorLogsAdmin />} />
             <Route path="/admin/web-vitals" element={<WebVitalsAdmin />} />
+            <Route path="/admin/ga4-check" element={<Ga4Check />} />
             <Route path="/press/:id" element={<PressDetail />} />
             <Route path="/the-stand" element={<TheStand />} />
             <Route path="/the-stand/share" element={<TheStandShare />} />

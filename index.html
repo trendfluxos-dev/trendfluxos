@@ -38,6 +38,40 @@
   <link rel="apple-touch-icon" href="/favicon.png" />
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="theme-color" content="#000000" />
+
+  <!-- Lovable + GA4 with Consent Mode v2 -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+    window.grantConsent = function() {
+      try { localStorage.setItem('consentGranted', 'true'); } catch (e) {}
+      gtag('consent', 'update', {
+        'ad_storage': 'granted',
+        'analytics_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted'
+      });
+    };
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        if (localStorage.getItem('consentGranted') === 'true') window.grantConsent();
+      } catch (e) {}
+      var btn = document.getElementById('consent-grant-btn');
+      if (btn) btn.addEventListener('click', window.grantConsent);
+    });
+  </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+
+
   
   
   
