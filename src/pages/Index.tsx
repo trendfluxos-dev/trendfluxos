@@ -468,6 +468,13 @@ const Index = () => {
               Project Lead
             </Link>
             <Link
+              to="/the-stand"
+              className="relative whitespace-nowrap py-1 transition-colors duration-300 text-foreground/85 hover:text-[hsl(0_72%_55%)] after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-[hsl(0_72%_55%)] after:transition-all after:duration-300 hover:after:w-full inline-flex items-center gap-1.5"
+            >
+              The Stand
+              <span className="w-1.5 h-1.5 rounded-full bg-[hsl(0_72%_55%)] shadow-[0_0_8px_hsl(0_72%_55%/0.7)] animate-pulse" aria-hidden />
+            </Link>
+            <Link
               to="/auth?redirect=/course/trendflux"
               className="relative whitespace-nowrap py-1 transition-colors duration-300 text-foreground/55 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
             >
