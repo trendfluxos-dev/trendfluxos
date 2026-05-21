@@ -17,6 +17,7 @@ export const routes = {
   "/admin/conversions": make(() => import("@/pages/ConversionDashboard")),
   "/admin/enterprise-demos": make(() => import("@/pages/EnterpriseDemos")),
   "/admin/course-enrollments": make(() => import("@/pages/CourseEnrollmentsAdmin")),
+  "/admin/uptime": make(() => import("@/pages/UptimeAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
@@ -68,5 +69,6 @@ export const navigablePages: {
   { label: "Luxe Veil Admin", path: "/admin/luxe-veil", type: "Admin", keywords: "admin luxe manage" },
   { label: "Enterprise Demo Requests", path: "/admin/enterprise-demos", type: "Admin", keywords: "admin demos enterprise leads requests triage" },
   { label: "Course Enrollments", path: "/admin/course-enrollments", type: "Admin", keywords: "admin course enrollments telegram bkash trx timeline" },
+  { label: "Uptime Monitor", path: "/admin/uptime", type: "Admin", keywords: "uptime monitor status health probe alert downtime telegram" },
   { label: "Sign In", path: "/auth", type: "Account", keywords: "login auth signin" },
 ];

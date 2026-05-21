@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.register-telegram-webhooks]
 verify_jwt = false
+
+[functions.uptime-monitor]
+verify_jwt = false
