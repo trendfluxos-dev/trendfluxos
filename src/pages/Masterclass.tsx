@@ -35,14 +35,13 @@ const HOOKS = [
 ];
 
 const MODULES = [
-  { icon: Cpu,      n: "01", title: "AI Instruction Architecture",  blurb: "Prompt systems that compound — not one-off chats." },
-  { icon: LineChart,n: "02", title: "Insight Extraction Engine",    blurb: "Mine signal from any document, site, or dataset." },
-  { icon: Workflow, n: "03", title: "AI Decision Matrix",           blurb: "Pick the right model for the right job, every time." },
-  { icon: PenTool,  n: "04", title: "Content Scaling Engine",       blurb: "Ship 10× output without losing brand voice." },
-  { icon: ImageIcon,n: "05", title: "Brand Identity Engine",        blurb: "Visual systems built at AI speed, on-brand." },
-  { icon: Database, n: "06", title: "Growth Intelligence Layer",    blurb: "Data → decisions, automated end-to-end." },
-  { icon: Zap,      n: "07", title: "Workflow Automation Stack",    blurb: "Connect tools, kill busywork, scale ops." },
-  { icon: Rocket,   n: "08", title: "AI Business Build Sprint",     blurb: "Capstone: ship a real revenue system." },
+  { icon: Cpu,       n: "01", title: "AI Foundation + Prompting",         duration: "১ ঘণ্টা",   blurb: "এআই-কে 'সার্চ ইঞ্জিন' থেকে 'ডিজিটাল ইন্টার্ন'-এ রূপান্তর।" },
+  { icon: ImageIcon, n: "02", title: "AI Graphics Design",                duration: "১.৫ ঘণ্টা", blurb: "McKinsey/Big-4 স্টাইলের কর্পোরেট এবং প্রিমিয়াম ভিজ্যুয়াল আইডেন্টিটি তৈরি।" },
+  { icon: PenTool,   n: "03", title: "Social Media Content System",       duration: "১.৫ ঘণ্টা", blurb: "ভাইরাল মানসিকতা থেকে বেরিয়ে ব্র্যান্ড ভ্যালু তৈরি।" },
+  { icon: Zap,       n: "04", title: "AI for Productivity & Automation",  duration: "১ ঘণ্টা",   blurb: "ম্যানুয়াল লেবার কমিয়ে সিস্টেম-ড্রিভেন প্রসেস ও অটোমেশন ব্লুপ্রিন্ট তৈরি।" },
+  { icon: LineChart, n: "05", title: "Analytics & Growth Strategy",       duration: "১ ঘণ্টা",   blurb: "ডাটা-ড্রিভেন সিদ্ধান্ত গ্রহণ এবং এক্সিকিউটিভ ড্যাশবোর্ড তৈরি।" },
+  { icon: Database,  n: "06", title: "AI Tool Ecosystem Overview",        duration: "১ ঘণ্টা",   blurb: "সঠিক কাজের জন্য সঠিক মডেল নির্বাচন।" },
+  { icon: Rocket,    n: "07", title: "Final Practical + Q&A",             duration: "১ ঘণ্টা",   blurb: "মাস্টার প্রজেক্ট এবং রেডি-টু-শো পোর্টফোলিও বিল্ডিং।" },
 ];
 
 const OUTCOMES = [
@@ -153,9 +152,9 @@ const Masterclass = () => {
                 <ShieldCheck className="h-3.5 w-3.5 text-gold" /> System-based, not theory
               </span>
               <span className="hidden h-1 w-1 rounded-full bg-foreground/20 md:inline-block" />
-              <span>8 operator modules</span>
+              <span>7 operator modules</span>
               <span className="hidden h-1 w-1 rounded-full bg-foreground/20 md:inline-block" />
-              <span>Capstone build sprint</span>
+              <span>~8 hours · capstone project</span>
             </div>
           </div>
 
@@ -225,17 +224,17 @@ const Masterclass = () => {
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-gold">The Operating Stack</p>
               <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-                8 modules. One growth system.
+                7 modules. One growth system.
               </h2>
             </div>
             <p className="max-w-md text-sm text-foreground/65">
-              Each module is a layer of the stack — not a topic. By module 8, you
+              Each module is a layer of the stack — not a topic. By module 7, you
               don't have notes. You have a working AI business system.
             </p>
           </div>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {MODULES.map(({ icon: Icon, n, title, blurb }, i) => (
+            {MODULES.map(({ icon: Icon, n, title, duration, blurb }, i) => (
               <div
                 key={n}
                 className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-gold/70 hover:shadow-gold animate-fade-up"
@@ -250,6 +249,9 @@ const Masterclass = () => {
                 <h3 className="mt-4 font-display text-base font-semibold leading-snug text-foreground">
                   {title}
                 </h3>
+                <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-gold/80">
+                  {duration}
+                </p>
                 <p className="mt-2 text-sm text-foreground/65">{blurb}</p>
               </div>
             ))}

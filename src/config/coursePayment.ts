@@ -7,4 +7,4 @@ export const BKASH_RECEIVE_TYPE: "Send Money" | "Payment" = "Send Money";
 // is routed via the existing TELEGRAM_CHAT_ID secret).
 export const ADMIN_CONTACT_NUMBER = "01353991954";
 export const MODULE_PRICE_BDT = 2000;
-export const TOTAL_MODULES = 8;
+export const TOTAL_MODULES = 7;

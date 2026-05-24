@@ -51,8 +51,8 @@ type EnrollmentEvent = {
 export default function CourseTrendflux() {
   const navigate = useNavigate();
   useSeo({
-    title: "TrendFlux Course — ৮ Module Masterclass",
-    description: "AI + automation মাস্টারক্লাস। প্রতি module ৳2,000, sequential unlock।",
+    title: "TrendFlux Course — ৭ Module Masterclass",
+    description: "AI + automation মাস্টারক্লাস। ৭টি module, প্রতিটি ৳2,000, sequential unlock।",
     noindex: true,
   });
 
@@ -176,14 +176,14 @@ export default function CourseTrendflux() {
               Your Learning <span className="text-gradient">Operating System</span>
             </h1>
             <p className="text-foreground/60 mt-3 text-sm">
-              ৮টি module · প্রতিটি ৳{MODULE_PRICE_BDT.toLocaleString("en-BD")} · sequential unlock
+              ৭টি module · প্রতিটি ৳{MODULE_PRICE_BDT.toLocaleString("en-BD")} · sequential unlock
             </p>
 
             <div className="mt-5 max-w-sm">
               <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-foreground/50 mb-1.5">
                 <span>Progress</span>
                 <span className="text-foreground/70 font-semibold">
-                  {paidIndexes.size} / {modules.length || 8}
+                  {paidIndexes.size} / {modules.length || 7}
                 </span>
               </div>
               <div className="h-1.5 rounded-full bg-muted overflow-hidden">
@@ -223,7 +223,7 @@ export default function CourseTrendflux() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                       <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-foreground/45">
-                        Module {m.module_index} / 8
+                        Module {m.module_index} / 7
                       </span>
                       {s === "paid" && (
                         <Badge className="bg-primary/10 text-primary border-primary/30 hover:bg-primary/15">
