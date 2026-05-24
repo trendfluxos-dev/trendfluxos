@@ -86,7 +86,7 @@ const App = () => (
           <BrandSwitcher />
           <LuxeVeilGate />
           <TelegramGroupPopup />
-          {!/lovable\.(app|dev)|lovableproject\.com|localhost|127\.0\.0\.1/.test(typeof window !== "undefined" ? window.location.hostname : "") && <ConsentBanner />}
+          {false && <ConsentBanner />}
           <AccessRequestGate />
           {import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && <ThemeDebugPanel />}
           {import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && <PerfMonitor />}
