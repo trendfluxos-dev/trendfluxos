@@ -183,7 +183,7 @@ export default function CourseTrendflux() {
               <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-foreground/50 mb-1.5">
                 <span>Progress</span>
                 <span className="text-foreground/70 font-semibold">
-                  {paidIndexes.size} / {modules.length || 8}
+                  {paidIndexes.size} / {modules.length || 7}
                 </span>
               </div>
               <div className="h-1.5 rounded-full bg-muted overflow-hidden">
