@@ -51,8 +51,8 @@ type EnrollmentEvent = {
 export default function CourseTrendflux() {
   const navigate = useNavigate();
   useSeo({
-    title: "TrendFlux Course — ৮ Module Masterclass",
-    description: "AI + automation মাস্টারক্লাস। প্রতি module ৳2,000, sequential unlock।",
+    title: "TrendFlux Course — ৭ Module Masterclass",
+    description: "AI + automation মাস্টারক্লাস। ৭টি module, প্রতিটি ৳2,000, sequential unlock।",
     noindex: true,
   });
 
