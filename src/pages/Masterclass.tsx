@@ -234,7 +234,7 @@ const Masterclass = () => {
           </div>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {MODULES.map(({ icon: Icon, n, title, blurb }, i) => (
+            {MODULES.map(({ icon: Icon, n, title, duration, blurb }, i) => (
               <div
                 key={n}
                 className="group relative overflow-hidden rounded-2xl border border-border bg-card/60 p-5 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-gold/70 hover:shadow-gold animate-fade-up"
@@ -249,6 +249,9 @@ const Masterclass = () => {
                 <h3 className="mt-4 font-display text-base font-semibold leading-snug text-foreground">
                   {title}
                 </h3>
+                <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-gold/80">
+                  {duration}
+                </p>
                 <p className="mt-2 text-sm text-foreground/65">{blurb}</p>
               </div>
             ))}
