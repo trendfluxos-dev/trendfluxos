@@ -176,7 +176,7 @@ export default function CourseTrendflux() {
               Your Learning <span className="text-gradient">Operating System</span>
             </h1>
             <p className="text-foreground/60 mt-3 text-sm">
-              ৮টি module · প্রতিটি ৳{MODULE_PRICE_BDT.toLocaleString("en-BD")} · sequential unlock
+              ৭টি module · প্রতিটি ৳{MODULE_PRICE_BDT.toLocaleString("en-BD")} · sequential unlock
             </p>
 
             <div className="mt-5 max-w-sm">
