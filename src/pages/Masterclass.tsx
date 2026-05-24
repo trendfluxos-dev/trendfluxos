@@ -152,9 +152,9 @@ const Masterclass = () => {
                 <ShieldCheck className="h-3.5 w-3.5 text-gold" /> System-based, not theory
               </span>
               <span className="hidden h-1 w-1 rounded-full bg-foreground/20 md:inline-block" />
-              <span>8 operator modules</span>
+              <span>7 operator modules</span>
               <span className="hidden h-1 w-1 rounded-full bg-foreground/20 md:inline-block" />
-              <span>Capstone build sprint</span>
+              <span>~8 hours · capstone project</span>
             </div>
           </div>
 
