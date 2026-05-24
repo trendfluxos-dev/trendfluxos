@@ -224,11 +224,11 @@ const Masterclass = () => {
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-gold">The Operating Stack</p>
               <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-                8 modules. One growth system.
+                7 modules. One growth system.
               </h2>
             </div>
             <p className="max-w-md text-sm text-foreground/65">
-              Each module is a layer of the stack — not a topic. By module 8, you
+              Each module is a layer of the stack — not a topic. By module 7, you
               don't have notes. You have a working AI business system.
             </p>
           </div>
