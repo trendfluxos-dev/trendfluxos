@@ -35,14 +35,13 @@ const HOOKS = [
 ];
 
 const MODULES = [
-  { icon: Cpu,      n: "01", title: "AI Instruction Architecture",  blurb: "Prompt systems that compound — not one-off chats." },
-  { icon: LineChart,n: "02", title: "Insight Extraction Engine",    blurb: "Mine signal from any document, site, or dataset." },
-  { icon: Workflow, n: "03", title: "AI Decision Matrix",           blurb: "Pick the right model for the right job, every time." },
-  { icon: PenTool,  n: "04", title: "Content Scaling Engine",       blurb: "Ship 10× output without losing brand voice." },
-  { icon: ImageIcon,n: "05", title: "Brand Identity Engine",        blurb: "Visual systems built at AI speed, on-brand." },
-  { icon: Database, n: "06", title: "Growth Intelligence Layer",    blurb: "Data → decisions, automated end-to-end." },
-  { icon: Zap,      n: "07", title: "Workflow Automation Stack",    blurb: "Connect tools, kill busywork, scale ops." },
-  { icon: Rocket,   n: "08", title: "AI Business Build Sprint",     blurb: "Capstone: ship a real revenue system." },
+  { icon: Cpu,       n: "01", title: "AI Foundation + Prompting",         duration: "১ ঘণ্টা",   blurb: "এআই-কে 'সার্চ ইঞ্জিন' থেকে 'ডিজিটাল ইন্টার্ন'-এ রূপান্তর।" },
+  { icon: ImageIcon, n: "02", title: "AI Graphics Design",                duration: "১.৫ ঘণ্টা", blurb: "McKinsey/Big-4 স্টাইলের কর্পোরেট এবং প্রিমিয়াম ভিজ্যুয়াল আইডেন্টিটি তৈরি।" },
+  { icon: PenTool,   n: "03", title: "Social Media Content System",       duration: "১.৫ ঘণ্টা", blurb: "ভাইরাল মানসিকতা থেকে বেরিয়ে ব্র্যান্ড ভ্যালু তৈরি।" },
+  { icon: Zap,       n: "04", title: "AI for Productivity & Automation",  duration: "১ ঘণ্টা",   blurb: "ম্যানুয়াল লেবার কমিয়ে সিস্টেম-ড্রিভেন প্রসেস ও অটোমেশন ব্লুপ্রিন্ট তৈরি।" },
+  { icon: LineChart, n: "05", title: "Analytics & Growth Strategy",       duration: "১ ঘণ্টা",   blurb: "ডাটা-ড্রিভেন সিদ্ধান্ত গ্রহণ এবং এক্সিকিউটিভ ড্যাশবোর্ড তৈরি।" },
+  { icon: Database,  n: "06", title: "AI Tool Ecosystem Overview",        duration: "১ ঘণ্টা",   blurb: "সঠিক কাজের জন্য সঠিক মডেল নির্বাচন।" },
+  { icon: Rocket,    n: "07", title: "Final Practical + Q&A",             duration: "১ ঘণ্টা",   blurb: "মাস্টার প্রজেক্ট এবং রেডি-টু-শো পোর্টফোলিও বিল্ডিং।" },
 ];
 
 const OUTCOMES = [
