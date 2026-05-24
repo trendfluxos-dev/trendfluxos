@@ -223,7 +223,7 @@ export default function CourseTrendflux() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                       <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-foreground/45">
-                        Module {m.module_index} / 8
+                        Module {m.module_index} / 7
                       </span>
                       {s === "paid" && (
                         <Badge className="bg-primary/10 text-primary border-primary/30 hover:bg-primary/15">
