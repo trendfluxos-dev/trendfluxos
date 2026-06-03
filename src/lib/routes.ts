@@ -10,8 +10,14 @@ const make = (loader: Loader) => {
 
 export const routes = {
   "/": make(() => import("@/pages/Index")),
+  "/ecosystem": make(() => import("@/pages/Ecosystem")),
+  "/services": make(() => import("@/pages/Services")),
+  "/about": make(() => import("@/pages/About")),
+  "/contact": make(() => import("@/pages/Contact")),
+  "/explore": make(() => import("@/pages/Explore")),
   "/project-lead": make(() => import("@/pages/ProjectLead")),
   "/auth": make(() => import("@/pages/Auth")),
+  "/dashboard": make(() => import("@/pages/Dashboard")),
   "/admin": make(() => import("@/pages/Admin")),
   "/admin/luxe-veil": make(() => import("@/pages/LuxeVeilAdmin")),
   "/admin/conversions": make(() => import("@/pages/ConversionDashboard")),
@@ -24,6 +30,7 @@ export const routes = {
   "/marriage": make(() => import("@/pages/Marriage")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/the-stand/share": make(() => import("@/pages/TheStandShare")),
+  "/quiet-positions": make(() => import("@/pages/QuietPositions")),
   "/brand-open": make(() => import("@/pages/BrandOpen")),
   "/trendflux-talent": make(() => import("@/pages/TrendfluxTalent")),
   "/luxe-veil": make(() => import("@/pages/LuxeVeil")),
@@ -35,6 +42,9 @@ export const routes = {
   "/masterclass": make(() => import("@/pages/Masterclass")),
   "/press/:id": make(() => import("@/pages/PressDetail")),
   "/case-studies/:slug": make(() => import("@/pages/CaseStudyPage")),
+  "/justice-appeal": make(() => import("@/pages/JusticeAppeal")),
+  "/media-reports": make(() => import("@/pages/MediaReports")),
+  "/share-kit": make(() => import("@/pages/ShareKit")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
@@ -58,6 +68,7 @@ export const navigablePages: {
   keywords?: string;
 }[] = [
   { label: "Home", path: "/", type: "Main", keywords: "index landing start" },
+  { label: "Browse all pages", path: "/explore", type: "Main", keywords: "sitemap browse explore directory map all pages navigation" },
   { label: "The Stand — Zahid Hasan Emon", path: "/the-stand", type: "Main", keywords: "zahid emon jahid hasan jabi torture cell whistleblower mayer nishedh ache integrity stand story" },
   { label: "The Stand — Share Quote Cards", path: "/the-stand/share", type: "Main", keywords: "share quote card facebook instagram story generator the stand zahid emon mayer nishedh ache" },
   { label: "Project Lead", path: "/project-lead", type: "Main", keywords: "lead form contact" },
@@ -78,4 +89,5 @@ export const navigablePages: {
   { label: "Client Error Logs", path: "/admin/errors", type: "Admin", keywords: "errors runtime client logs sentry stack trace" },
   { label: "Web Vitals", path: "/admin/web-vitals", type: "Admin", keywords: "performance web vitals lcp inp cls fcp ttfb speed core" },
   { label: "Sign In", path: "/auth", type: "Account", keywords: "login auth signin" },
+  { label: "Dashboard", path: "/dashboard", type: "Account", keywords: "dashboard hub account home enrollments luxe veil admin" },
 ];

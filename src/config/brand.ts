@@ -13,10 +13,10 @@ export const BRAND = {
   /** Legal/parent organization name (used in schema.org). */
   legalName: "TrendFlux",
   /** Short tagline shown under the hero / SEO title. */
-  tagline: "The Growth Execution OS for Modern Operators",
+  tagline: "The AI-Native Growth Execution OS for Modern Brands",
   /** Long-form description used for meta description & OG tags. */
   description:
-    "TrendFlux is the execution OS for AI-powered growth teams — unifying automation, performance media, CRM, and brand systems in one operating layer. Ship faster. Scale leaner.",
+    "TrendFlux is the AI-Native Growth Execution OS — one connected system for automation, CRM orchestration, paid media, creative, and analytics. Replace fragmented tools. Reclaim 20+ manual hours weekly. Scale with transparency.",
   /** Twitter / X handle (with @). */
   twitterHandle: "@TrendFlux",
   /** Canonical production URL. */
@@ -25,14 +25,15 @@ export const BRAND = {
   ogImage: "/trendflux-logo.webp",
   /** Hero copy used on the landing page. */
   hero: {
-    headlineLead: "Your growth stack,",
-    headlineTrail: "executed as one system.",
+    headlineLead: "Build your brand's",
+    headlineTrail: "AI-Native Growth Execution OS.",
     subheadline:
-      "TrendFlux replaces fragmented tools, agencies, and playbooks with a single execution OS — AI automation, performance media, CRM, and brand systems running in sync, measured in revenue.",
-    primaryCta: "Access the Platform",
-    secondaryCta: "Book a Strategy Call",
+      "Replace scattered marketing tools with one connected system — automation, CRM, paid media, creative, and analytics running in sync. Reclaim 20+ hours weekly and scale with transparency.",
+    primaryCta: "Build My Growth OS",
+    secondaryCta: "Explore the Ecosystem",
   },
 } as const;
+
 
 /** Convenience: full SEO title `Brand — Tagline`. */
 export const BRAND_SEO_TITLE = `${BRAND.name} — ${BRAND.tagline}`;

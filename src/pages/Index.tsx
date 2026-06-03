@@ -1,368 +1,139 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import SocialIcons from "@/components/social/SocialIcons";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  Workflow,
-  Users,
-  Sparkles,
-  Target,
-  Layers,
-  Cpu,
-  MoreHorizontal,
-  CheckCircle2,
+  Bot,
   Megaphone,
-  Lock,
-  Menu,
-  X,
+  Database,
+  GitBranch,
+  Palette,
+  Sparkles,
   GraduationCap,
-  BookOpenText,
-  Share2,
-  ImageIcon,
-  ChevronDown,
+  Lock,
+  Workflow,
+  Target,
+  ShieldCheck,
+  Quote,
+  CheckCircle2,
+  
 } from "lucide-react";
-import trendfluxLogo from "@/assets/trendflux-logo.webp";
-import emonPortrait from "@/assets/zahid-hasan-emon.webp";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { QuoteDialog } from "@/components/QuoteDialog";
-import { ResumeButton } from "@/components/ResumeButton";
-import { usePressItems } from "@/hooks/usePressItems";
-import { useReveal } from "@/hooks/useReveal";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
-import { useActiveSection } from "@/hooks/useActiveSection";
-import { usePortraitFocus } from "@/hooks/usePortraitFocus";
-import ReframePortrait from "@/components/ReframePortrait";
-import { DigitalImpactMap } from "@/components/DigitalImpactMap";
-import { Faq } from "@/components/Faq";
-import { StrategySessionDialog } from "@/components/StrategySessionDialog";
-import FilterBar, { EMPTY_FILTERS, type CaseFilters } from "@/components/FilterBar";
-import { useCaseFilters, serializeFilters } from "@/hooks/useCaseFilters";
-import type { CaseStudy } from "@/data/caseStudies";
-import { track } from "@/lib/analytics";
-import { supabase } from "@/integrations/supabase/client";
-import { persistLuxeVeilToken } from "@/lib/luxeVeilSession";
+import { QuoteDialog } from "@/components/QuoteDialog";
+import emonPortrait from "@/assets/zahid-hasan-emon.webp";
+import theStandCover from "@/assets/the-stand-cover.jpg";
+import { TfSection, TfCard } from "@/components/tf/Section";
+import DashboardMock from "@/components/tf/DashboardMock";
+import EcosystemMap from "@/components/tf/EcosystemMap";
+import ProofTabs from "@/components/tf/ProofTabs";
+import brandPabnaNagorik from "@/assets/brands/pabna-nagorik-committee.jpeg";
+import brandHbEduverse from "@/assets/brands/hb-eduverse.jpeg";
+import brandMarieElliot from "@/assets/brands/marie-j-elliot.jpeg";
+import brandPabnaDebate from "@/assets/brands/pabna-debate-society.jpeg";
+import brandStarpath from "@/assets/brands/starpath-tech.jpeg";
 
-type PressItem = {
-  id?: string;
-  outlet: string;
-  headline: string;
-  href: string;
-  context: string;
-};
-
-type Category =
-  | "All"
-  | "Business Automation"
-  | "Meta Ads Management"
-  | "Ecosystem Design";
-
-const services = [
+const OPERATED_BRANDS = [
   {
-    category: "Business Automation" as const,
-    icon: Workflow,
-    title: "Workflow Intelligence Systems",
-    desc: "AI-powered workflow automation that replaces repetitive ops, syncs your tools, and gives founders a single command layer to run the business.",
-    bestFor: "Solo founders & lean ops teams running on Notion, Slack, Sheets and Zapier duct-tape.",
-    outcome: "70% manual hours reclaimed within 30 days, 24/7 hands-off execution.",
+    name: "TrendFlux Digital",
+    role: "Founder · AI-Native Growth OS",
+    logo: "/trendflux-logo.webp",
+    href: "https://trendflux.digital",
+    fb: "https://www.facebook.com/trendfluxdigital/",
   },
   {
-    category: "Business Automation" as const,
-    icon: Users,
-    title: "CRM & Sales Orchestration",
-    desc: "Pipeline-grade CRM architecture with lead scoring, lifecycle automation, and revenue dashboards built on HubSpot, GoHighLevel or custom Supabase stacks.",
-    bestFor: "B2B & service brands losing 30%+ of inbound leads to slow follow-up.",
-    outcome: "3.2x lead-to-deal conversion, sub-5-min response SLA.",
+    name: "Starpath Technology & Consultancy",
+    role: "Strategy, systems & content lead — in-house",
+    logo: brandStarpath,
+    href: "https://facebook.com/starpathtech",
+    impact: "588 REHAB leads · 5–8M BDT pitches",
+    tagline: "GHL + Wix CRM hybrid, McKinsey-grade proposals, 4-week AI content OS",
+    paid: true,
   },
   {
-    category: "Meta Ads Management" as const,
-    icon: Sparkles,
-    title: "Performance Creative Labs",
-    desc: "Iterative creative testing framework — UGC, static, and motion ads engineered for Meta's algorithm with weekly hook-rate and CTR scorecards.",
-    bestFor: "DTC & e-commerce brands spending $10K+/month with creative fatigue.",
-    outcome: "+45% ROAS lift, 3x winning creative output per month.",
+    name: "Pabna Nagorik Committee",
+    role: "Website, social & content — full stack solo",
+    logo: brandPabnaNagorik,
+    href: "https://www.facebook.com/PabnaNagorikCommittee",
+    impact: "485K+ organic views",
+    tagline: "নাগরিক ঐক্যেই বদলাবে পাবনা — strategy, creative, setup, ops",
+    paid: true,
   },
   {
-    category: "Meta Ads Management" as const,
-    icon: Target,
-    title: "Full-Funnel Paid Strategy",
-    desc: "End-to-end Meta funnel design — Advantage+ campaigns, retention retargeting, and AOV-focused bid strategy aligned to LTV economics.",
-    bestFor: "In-house performance teams stuck on a CAC ceiling above $25.",
-    outcome: "Sub-$8 CAC, 2.4x blended ROAS within 60 days.",
+    name: "H&B EduVerse",
+    role: "Growth systems · EdTech",
+    logo: brandHbEduverse,
   },
   {
-    category: "Ecosystem Design" as const,
-    icon: Layers,
-    title: "Brand Operating Systems",
-    desc: "Multi-brand identity, messaging architecture, and content engine designed so every sub-brand reinforces the parent ecosystem and compounds equity.",
-    bestFor: "Multi-brand founders, holdcos, and creator-led businesses scaling 2+ brands.",
-    outcome: "12-month brand roadmap + unified content OS deployed across all properties.",
+    name: "Marie J. Elliot",
+    role: "Brand & funnel · Child Parenting",
+    logo: brandMarieElliot,
   },
   {
-    category: "Ecosystem Design" as const,
-    icon: Cpu,
-    title: "Tech Stack Architecture",
-    desc: "Vendor-neutral stack design — React, Supabase, Lovable Cloud, edge functions and AI gateways — picked for performance, cost, and exit-ready ownership.",
-    bestFor: "Scaling teams replatforming off WordPress, Webflow or fragmented SaaS.",
-    outcome: "Zero vendor lock-in, 40% lower infra cost, full data portability.",
+    name: "Pabna Debate Society",
+    role: "Community ops · Education",
+    logo: brandPabnaDebate,
   },
 ];
 
-import { caseStudies } from "@/data/caseStudies";
-
-const stats = [
-  { value: "$8.4M", label: "Ad spend managed" },
-  { value: "+312%", label: "Avg. growth lift" },
-  { value: "47", label: "Operations launched" },
+const TRUST = [
+  { icon: Bot, label: "AI Automation" },
+  { icon: Database, label: "CRM Infrastructure" },
+  { icon: Megaphone, label: "Meta Ad Systems" },
+  { icon: GitBranch, label: "Workflow Orchestration" },
+  { icon: Palette, label: "Creative Frameworks" },
+  { icon: Sparkles, label: "Analytics Intelligence" },
 ];
 
-type HeadlineVariant = {
-  id: string;
-  label: string;
-  timeline: React.ReactNode;
-  pressTagline: string;
-};
+const SERVICES = [
+  { icon: Megaphone, title: "Meta Ads", desc: "Advantage+ funnels engineered for sub-$8 CAC and compounding ROAS." },
+  { icon: Bot, title: "AI Automation", desc: "Agents and workflows that replace 20+ manual hours weekly." },
+  { icon: Database, title: "CRM Systems", desc: "Lead scoring, lifecycle, and pipeline visibility — one source of truth." },
+  { icon: Workflow, title: "Funnel Engineering", desc: "Acquisition, activation, retention — wired end to end." },
+  { icon: Palette, title: "Creative Strategy", desc: "Hook-rate framework, weekly creative tests, motion + UGC at scale." },
+  { icon: Target, title: "Founder Branding", desc: "Position founders as category operators, not commodity service providers." },
+];
 
-const HEADLINE_VARIANTS: HeadlineVariant[] = [
+const METRICS = [
+  { value: "$8.4M", label: "Ad spend orchestrated", delta: "+312% avg lift" },
+  { value: "4.82x", label: "Blended ROAS", delta: "across 47 ops" },
+  { value: "20+", label: "Hours reclaimed weekly", delta: "per founder" },
+  { value: "99%", label: "Lead routing latency cut", delta: "sub-5s SLA" },
+];
+
+const TESTIMONIALS = [
   {
-    id: "stand-spotlight",
-    label: "From Stand to Spotlight",
-    timeline: (
-      <>
-        From <span className="text-gradient">Stand</span> to Spotlight
-      </>
-    ),
-    pressTagline: "A stand turned into a documented public record.",
+    quote:
+      "TrendFlux replaced three agencies and two internal hires. Our pipeline is now an audited system, not a guessing game.",
+    name: "Director of Growth",
+    role: "Series-A SaaS · $14M ARR",
   },
   {
-    id: "integrity-fire",
-    label: "Integrity Under Fire",
-    timeline: (
-      <>
-        <span className="text-gradient">Integrity</span> Under Fire
-      </>
-    ),
-    pressTagline: "Tested under pressure, verified by national outlets.",
+    quote:
+      "Within 60 days we cut CAC by 38% and reclaimed 22 founder hours a week. The OS framing is real — not marketing copy.",
+    name: "Founder & CEO",
+    role: "DTC portfolio · 7-figure scale",
   },
   {
-    id: "whistleblower-focus",
-    label: "Whistleblower in Focus",
-    timeline: (
-      <>
-        <span className="text-gradient">Whistleblower</span> in Focus
-      </>
-    ),
-    pressTagline: "An unyielding voice, captured on the public record.",
+    quote:
+      "The only operator I've worked with who treats growth like infrastructure. Every workflow is observable and ownable.",
+    name: "Head of Operations",
+    role: "B2B services · $6M ARR",
   },
-  {
-    id: "truth-headlines",
-    label: "Truth That Made Headlines",
-    timeline: (
-      <>
-        <span className="text-gradient">Truth</span> That Made Headlines
-      </>
-    ),
-    pressTagline: "When silence broke, the headlines followed.",
-  },
-  {
-    id: "stand-echoed",
-    label: "A Stand That Echoed",
-    timeline: (
-      <>
-        A <span className="text-gradient">Stand</span> That Echoed
-      </>
-    ),
-    pressTagline: "One stand, echoed across Bangladesh's leading outlets.",
-  },
-  {
-    id: "satyer-pakshe",
-    label: "সত্যের পক্ষে দাঁড়ানো",
-    timeline: (
-      <>
-        <span className="text-gradient">সত্যের পক্ষে</span> দাঁড়ানো — National Spotlight
-      </>
-    ),
-    pressTagline: "একটা অবস্থান, সারা দেশের আলোচনায়।",
-  },
-  {
-    id: "stand-speak-spotlight",
-    label: "Stand. Speak. Spotlight.",
-    timeline: (
-      <>
-        <span className="text-gradient">Stand.</span> Speak. Spotlight.
-      </>
-    ),
-    pressTagline: "Stand taken. Voice raised. Spotlight earned.",
-  },
-  {
-    id: "unyielding-truth",
-    label: "Unyielding Truth",
-    timeline: (
-      <>
-        <span className="text-gradient">Unyielding</span> Truth
-      </>
-    ),
-    pressTagline: "Documented courage — outlet by outlet.",
-  },
+];
+
+const FIT = [
+  "Founder-led brand doing $1M–$50M annual revenue",
+  "Ready to consolidate scattered tools into one OS",
+  "Committed to a 90-day systems engagement",
+  "Values operating leverage over vanity reporting",
 ];
 
 const Index = () => {
-  const [filter, setFilter] = useState<Category>("All");
-  const activeSection = useActiveSection(["services", "founder", "cases"]);
-  const { activeValue: portraitFocusY } = usePortraitFocus();
-  const [portraitLoaded, setPortraitLoaded] = useState(false);
-  const founderRevealRef = useReveal<HTMLDivElement>();
-  const [activePress, setActivePress] = useState<PressItem | null>(null);
   const [quoteOpen, setQuoteOpen] = useState(false);
-  const [quoteContext, setQuoteContext] = useState<{
-    source: string;
-    module?: string;
-    category?: string;
-  } | null>(null);
-  const [strategyOpen, setStrategyOpen] = useState(false);
-  const [strategySource, setStrategySource] = useState<{ slug: string | null; source: string } | null>(null);
-  const openStrategy = (source: string, slug: string | null = null) => {
-    setStrategySource({ slug, source });
-    setStrategyOpen(true);
-  };
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [caseFilters, setCaseFilters] = useCaseFilters();
-  const [pressOpenFor, setPressOpenFor] = useState<string | null>(null);
-  const [highlightedSlug, setHighlightedSlug] = useState<string | null>(null);
-  const [standExpanded, setStandExpanded] = useState(false);
-  const [narrativeCase, setNarrativeCase] = useState<CaseStudy | null>(null);
-  const narrativeTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const narrativeInitialFocusRef = useRef<HTMLButtonElement | null>(null);
-
-  const openNarrative = (
-    c: CaseStudy,
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    narrativeTriggerRef.current = e.currentTarget;
-    track("view_narrative_open", {
-      case_slug: c.slug,
-      case_title: c.title,
-      case_category: c.category,
-      source: "case_card",
-    });
-    setNarrativeCase(c);
-  };
-
-  const closeNarrative = () => {
-    setNarrativeCase(null);
-  };
-  const [veilOpen, setVeilOpen] = useState(false);
-  const [veilCode, setVeilCode] = useState("");
-  const [veilError, setVeilError] = useState("");
-  const [veilVerifying, setVeilVerifying] = useState(false);
-  const navigate = useNavigate();
-  const submitVeilCode = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (veilVerifying) return;
-    setVeilVerifying(true);
-    setVeilError("");
-    try {
-      const { data, error } = await supabase.functions.invoke<{
-        ok: boolean; token?: string; error?: string;
-      }>("verify-invite", { body: { code: veilCode.trim() } });
-      if (error || !data?.ok || !data.token) {
-        setVeilError(data?.error || "Invalid invitation code. Please check with your host.");
-      } else {
-        persistLuxeVeilToken(data.token);
-        setVeilOpen(false);
-        setVeilCode("");
-        navigate("/luxe-veil");
-      }
-    } catch {
-      setVeilError("Could not verify invitation. Please try again.");
-    } finally {
-      setVeilVerifying(false);
-    }
-  };
-  const { items: dbPress } = usePressItems();
-  const [headlineId, setHeadlineId] = useState<string>(() => {
-    if (typeof window === "undefined") return HEADLINE_VARIANTS[0].id;
-    return localStorage.getItem("headline_variant") || HEADLINE_VARIANTS[0].id;
-  });
-  const headline =
-    HEADLINE_VARIANTS.find((v) => v.id === headlineId) ?? HEADLINE_VARIANTS[0];
-  const selectHeadline = (id: string) => {
-    setHeadlineId(id);
-    try {
-      localStorage.setItem("headline_variant", id);
-    } catch {
-      /* ignore */
-    }
-  };
-
-  const filterTabs: Category[] = [
-    "All",
-    "Business Automation",
-    "Meta Ads Management",
-    "Ecosystem Design",
-  ];
-
-  const counts = useMemo(
-    () => ({
-      All: services.length,
-      "Business Automation": services.filter((s) => s.category === "Business Automation").length,
-      "Meta Ads Management": services.filter((s) => s.category === "Meta Ads Management").length,
-      "Ecosystem Design": services.filter((s) => s.category === "Ecosystem Design").length,
-    }),
-    []
-  );
-
-  const visibleServices =
-    filter === "All" ? services : services.filter((s) => s.category === filter);
-
-  // Compute filtered case studies once so we can share with the map and the grid.
-  const caseFiltersActive = !!(
-    caseFilters.service ||
-    caseFilters.industry ||
-    caseFilters.stack ||
-    caseFilters.stage ||
-    caseFilters.query.trim()
-  );
-  const filteredCases = useMemo(() => {
-    const q = caseFilters.query.trim().toLowerCase();
-    return caseStudies.filter((c) => {
-      if (caseFilters.service && c.service !== caseFilters.service) return false;
-      if (caseFilters.industry && c.industry !== caseFilters.industry) return false;
-      if (caseFilters.stack && !c.stack.includes(caseFilters.stack as typeof c.stack[number])) return false;
-      if (caseFilters.stage && c.stage !== caseFilters.stage) return false;
-      if (q) {
-        const hay = `${c.title} ${c.description} ${c.category} ${c.service} ${c.industry} ${c.stack.join(" ")} ${c.stage}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
-      return true;
-    });
-  }, [caseFilters]);
-  const matchingSlugs = caseFiltersActive ? filteredCases.map((c) => c.slug) : undefined;
-
-  const handleNodeSelect = (slug: string) => {
-    track("map_node_click", { case_slug: slug });
-    setHighlightedSlug(slug);
-    // Scroll the cases section into view and clear highlight after a short window.
-    requestAnimationFrame(() => {
-      const el = document.getElementById(`case-card-${slug}`);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-      } else {
-        document.getElementById("cases")?.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-    window.setTimeout(() => setHighlightedSlug((s) => (s === slug ? null : s)), 4000);
-  };
 
   useSeo();
   useJsonLd([
@@ -371,7 +142,6 @@ const Index = () => {
       "@type": "Organization",
       name: BRAND.name,
       legalName: BRAND.legalName,
-      alternateName: BRAND.nameLead,
       url: BRAND.url,
       logo: `${BRAND.url}/favicon.ico`,
       slogan: BRAND.tagline,
@@ -381,1402 +151,625 @@ const Index = () => {
         "https://www.linkedin.com/company/trendflux",
       ],
     },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: BRAND.name,
-      url: BRAND.url,
-      description: BRAND.description,
-      publisher: { "@type": "Organization", name: BRAND.legalName },
-    },
   ]);
 
   return (
-    <main className="min-h-screen bg-background text-foreground font-sans overflow-hidden">
-      {/* Background ambient glow */}
-      <div className="fixed inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 right-0 w-[520px] h-[520px] bg-primary/20 blur-[160px]" />
-        <div className="absolute bottom-0 left-0 w-[520px] h-[520px] bg-primary-glow/15 blur-[160px]" />
-        <div className="absolute top-1/3 left-1/2 w-[420px] h-[420px] bg-gold/10 blur-[180px]" />
-      </div>
+    <main className="min-h-screen bg-background text-foreground font-sans antialiased">
+      <Navbar />
 
-      {/* Navbar */}
-      <nav className="fixed top-3 left-1/2 -translate-x-1/2 z-50 w-[96%] sm:w-[94%] max-w-7xl rounded-full glass-strong border border-foreground/10 shadow-elegant">
-        <div className="flex items-center justify-between px-4 sm:px-5 md:px-8 py-2.5 sm:py-3 md:py-3.5 gap-3">
-          <Link
-            to="/"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-2 font-display text-base sm:text-lg font-bold tracking-tight whitespace-nowrap shrink-0 transition-opacity hover:opacity-90"
-          >
-            <img
-              src={trendfluxLogo}
-              alt={`${BRAND.name} logo`}
-              width={32}
-              height={32}
-              loading="eager"
-              decoding="async"
-              fetchPriority="high"
-              className="h-7 w-7 sm:h-8 sm:w-8 object-contain"
-            />
-            <span>{BRAND.nameLead}</span> <span className="text-gradient">{BRAND.nameTrail}</span>
-          </Link>
-
-          <div className="hidden md:flex items-center gap-4 lg:gap-7 xl:gap-8 text-sm text-foreground/70">
-            {[
-              { href: "#services", label: "Services" },
-              { href: "#founder", label: "Brand Architect" },
-              { href: "#cases", label: "Case Studies" },
-            ].map((l) => {
-              const isActive = activeSection === l.href.slice(1);
-              return (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  aria-current={isActive ? "true" : undefined}
-                  className={`relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:bg-gold after:transition-all after:duration-300 hover:after:w-full ${
-                    isActive ? "text-gold after:w-full" : "after:w-0"
-                  }`}
-                >
-                  {l.label}
-                </a>
-              );
-            })}
-            <Link
-              to="/course/trendflux"
-              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full inline-flex items-center gap-1.5"
-            >
-              Course
-              <span className="rounded-full bg-gold/10 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-gold">New</span>
-            </Link>
-            <Link
-              to="/toolkit"
-              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Toolkit
-            </Link>
-            <Link
-              to="/enterprise"
-              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold focus-visible:text-gold focus-visible:outline-none after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full inline-flex items-center gap-1.5"
-            >
-              Enterprise
-              <span className="w-1.5 h-1.5 rounded-full bg-gold shadow-[0_0_8px_hsl(var(--gold))]" aria-hidden />
-            </Link>
-            <Link
-              to="/project-lead"
-              className="relative whitespace-nowrap py-1 transition-colors duration-300 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Project Lead
-            </Link>
-            <Link
-              to="/the-stand"
-              className="relative whitespace-nowrap py-1 transition-colors duration-300 text-foreground/85 hover:text-[hsl(0_72%_55%)] after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-[hsl(0_72%_55%)] after:transition-all after:duration-300 hover:after:w-full inline-flex items-center gap-1.5"
-            >
-              The Stand
-              <span className="w-1.5 h-1.5 rounded-full bg-[hsl(0_72%_55%)] shadow-[0_0_8px_hsl(0_72%_55%/0.7)] animate-pulse" aria-hidden />
-            </Link>
-            <Link
-              to="/auth?redirect=/course/trendflux"
-              className="relative whitespace-nowrap py-1 transition-colors duration-300 text-foreground/55 hover:text-gold after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:mx-auto after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Login
-            </Link>
-
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setQuoteOpen(true)}
-              className="hidden sm:inline-flex md:hidden lg:inline-flex whitespace-nowrap rounded-full bg-gold px-3.5 lg:px-5 py-2 lg:py-2.5 text-xs lg:text-sm font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_30px_hsl(var(--gold)/0.55)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-            >
-              <span className="hidden lg:inline">Launch Growth System</span>
-              <span className="lg:hidden">Launch System</span>
-            </button>
-            <button
-              type="button"
-              aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileNavOpen}
-              onClick={() => setMobileNavOpen((o) => !o)}
-              className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-foreground/15 text-foreground/80 hover:text-gold hover:border-gold/40 transition-colors"
-            >
-              {mobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
+      {/* ============= 1. HERO ============= */}
+      <section className="relative isolate overflow-hidden bg-background pt-32 pb-24 sm:pt-44 sm:pb-32">
+        {/* animated grid */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 tf-grid-bg" />
+        {/* primary glow */}
         <div
-          className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-out ${
-            mobileNavOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="px-5 pb-4 pt-1 flex flex-col gap-1 text-sm">
-            {[
-              { href: "#services", label: "Services" },
-              { href: "#founder", label: "Brand Architect" },
-              { href: "#cases", label: "Case Studies" },
-            ].map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setMobileNavOpen(false)}
-                className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors"
-              >
-                {l.label}
-              </a>
-            ))}
-            <Link
-              to="/course/trendflux"
-              onClick={() => setMobileNavOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors inline-flex items-center justify-between"
-            >
-              <span>Course</span>
-              <span className="rounded-full bg-gold/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-gold">New</span>
-            </Link>
-            <Link
-              to="/toolkit"
-              onClick={() => setMobileNavOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors"
-            >
-              Toolkit
-            </Link>
-            <Link
-              to="/enterprise"
-              onClick={() => setMobileNavOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors inline-flex items-center gap-2"
-            >
-              Enterprise
-              <span className="w-1.5 h-1.5 rounded-full bg-gold" aria-hidden />
-            </Link>
-            <Link
-              to="/project-lead"
-              onClick={() => setMobileNavOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-foreground/80 hover:bg-foreground/5 hover:text-gold transition-colors"
-            >
-              Project Lead
-            </Link>
-            <Link
-              to="/the-stand"
-              onClick={() => setMobileNavOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-foreground/90 hover:bg-foreground/5 hover:text-[hsl(0_72%_55%)] transition-colors inline-flex items-center justify-between"
-            >
-              <span>The Stand</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[hsl(0_72%_55%)] shadow-[0_0_8px_hsl(0_72%_55%/0.7)] animate-pulse" aria-hidden />
-            </Link>
-            <Link
-              to="/auth?redirect=/course/trendflux"
-              onClick={() => setMobileNavOpen(false)}
-              className="rounded-xl px-3 py-2.5 text-foreground/60 hover:bg-foreground/5 hover:text-gold transition-colors"
-            >
-              Login / Dashboard
-            </Link>
+          aria-hidden
+          className="pointer-events-none absolute -top-40 left-1/2 h-[560px] w-[1000px] -translate-x-1/2 rounded-full bg-primary/8 blur-[180px] tf-glow-pulse"
+        />
+        {/* secondary corner glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute bottom-0 right-0 h-[380px] w-[480px] translate-x-1/3 translate-y-1/3 rounded-full bg-primary/5 blur-[140px]"
+        />
 
-            <button
-              type="button"
-              onClick={() => {
-                setMobileNavOpen(false);
-                setQuoteOpen(true);
-              }}
-              className="mt-2 sm:hidden rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition active:scale-95"
-            >
-              Launch Growth System
-            </button>
+        <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:px-10">
+          <div className="tf-rise text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/50 px-3 py-1 backdrop-blur-sm">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+              </span>
+              <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                TrendFlux OS · v2.0 · Live
+              </span>
+            </div>
+
+            <h1 className="mt-8 font-display text-[40px] font-semibold leading-[1.04] tracking-[-0.025em] text-foreground sm:text-[56px] lg:text-[68px] lg:leading-[1.0]">
+              Your AI-Powered
+              <br />
+              <span className="tf-text-electric">Growth Operating System</span>
+              <span className="text-primary">.</span>
+            </h1>
+
+            <p className="mx-auto mt-7 max-w-xl text-[15px] leading-[1.7] text-muted-foreground sm:text-[16.5px] lg:mx-0">
+              Replace scattered tools, disconnected workflows, and manual scaling
+              with one unified AI-driven ecosystem — built for founders who
+              operate beyond marketing.
+            </p>
+
+            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-3.5 lg:justify-start">
+              <button
+                type="button"
+                onClick={() => setQuoteOpen(true)}
+                className="tf-btn-primary inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_rgba(220,38,38,0.5)] hover:bg-primary/90 sm:w-auto"
+              >
+                Book Strategy Call <ArrowRight className="h-4 w-4" />
+              </button>
+              <a
+                href="#ecosystem"
+                className="inline-flex w-full items-center justify-center rounded-full border border-border bg-muted/50 px-7 py-3.5 text-sm font-semibold text-foreground transition-all duration-200 hover:-translate-y-px hover:border-foreground/20 hover:bg-muted sm:w-auto"
+              >
+                Explore the OS
+              </a>
+            </div>
+
+            {/* inline trust micro-row */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground lg:justify-start">
+              <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3 w-3 text-primary" /> NDA-ready</span>
+              <span className="h-0.5 w-0.5 rounded-full bg-muted-foreground" />
+              <span>$8.4M ad spend</span>
+              <span className="h-0.5 w-0.5 rounded-full bg-muted-foreground" />
+              <span>47 ops deployed</span>
+              <span className="h-0.5 w-0.5 rounded-full bg-muted-foreground" />
+              <span>4.82x avg ROAS</span>
+            </div>
+          </div>
+
+          <div className="relative">
+            <DashboardMock />
           </div>
         </div>
-      </nav>
+      </section>
 
-      {/* Hero */}
-      <section className="relative flex min-h-screen items-center px-5 pt-28 pb-16 sm:px-6 sm:pt-32 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-6xl text-center animate-fade-up">
-
-          <h1 className="font-display mx-auto max-w-5xl text-4xl sm:text-5xl font-black leading-[1.05] sm:leading-[0.95] tracking-tight md:text-7xl lg:text-8xl">
-            <span className="block break-words">{BRAND.hero.headlineLead}</span>
-            <span className="text-gradient block break-words">{BRAND.hero.headlineTrail}</span>
-          </h1>
-
-          <p className="mx-auto mt-6 sm:mt-8 max-w-2xl text-sm sm:text-base leading-relaxed text-foreground/60 md:text-lg">
-            {BRAND.hero.subheadline}
+      {/* ============= 2. TRUST BAR ============= */}
+      <section className="relative border-y border-border bg-muted py-12">
+        <div className="mx-auto max-w-7xl px-6 lg:px-10">
+          <p className="mb-7 text-center text-[10px] font-medium uppercase tracking-[0.4em] text-muted-foreground">
+            One ecosystem · Six integrated layers
           </p>
-
-          {/* Trust bar */}
-          <div className="mx-auto mt-7 sm:mt-9 max-w-3xl">
-            <div className="glass rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-5 gap-y-1.5 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-foreground/55">
-              <span>AI Systems</span>
-              <span className="hidden sm:inline w-1 h-1 rounded-full bg-gold/60" aria-hidden />
-              <span>Automation</span>
-              <span className="hidden sm:inline w-1 h-1 rounded-full bg-gold/60" aria-hidden />
-              <span>Brand Infrastructure</span>
-              <span className="hidden sm:inline w-1 h-1 rounded-full bg-gold/60" aria-hidden />
-              <span>Growth Operations</span>
-            </div>
-            <p className="mt-3 text-[11px] sm:text-xs uppercase tracking-[0.3em] text-foreground/45">
-              Built for Founders, Brands &amp; High-Growth Businesses
-            </p>
-          </div>
-
-          <div className="mt-8 sm:mt-10 flex flex-col items-stretch sm:items-center justify-center gap-3 sm:gap-4 sm:flex-row">
-            <button
-              type="button"
-              onClick={() => setQuoteOpen(true)}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-gold px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-gold-foreground shadow-gold transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_36px_hsl(var(--gold)/0.55)] active:scale-95"
-            >
-              {BRAND.hero.primaryCta} <ArrowRight className="w-4 h-4" />
-            </button>
-            <a
-              href="#cases"
-              className="inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-foreground/15 px-7 sm:px-8 py-3.5 sm:py-4 font-semibold text-foreground transition-all duration-300 hover:scale-[1.04] hover:border-gold/60 hover:bg-foreground/5"
-            >
-              {BRAND.hero.secondaryCta}
-            </a>
-          </div>
-
-          {/* Stats */}
-          <div className="mx-auto mt-20 grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
-            {stats.map((s) => (
-              <div key={s.label} className="rounded-2xl glass p-6 text-center">
-                <div className="font-display text-3xl font-bold text-gradient md:text-4xl">
-                  {s.value}
-                </div>
-                <div className="mt-2 text-xs uppercase tracking-[0.25em] text-foreground/50">
-                  {s.label}
-                </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 lg:grid-cols-6">
+            {TRUST.map((t) => (
+              <div
+                key={t.label}
+                className="group flex items-center justify-center gap-2 text-[12px] font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground"
+              >
+                <t.icon className="h-4 w-4 text-muted-foreground transition-colors duration-300 group-hover:text-primary" />
+                <span className="whitespace-nowrap">{t.label}</span>
               </div>
+
             ))}
           </div>
         </div>
       </section>
 
-      {/* Toolkit Hub Teaser — directly after hero */}
-      <section className="relative px-5 sm:px-6 md:px-12 lg:px-20 -mt-4 sm:-mt-6">
-        <div className="mx-auto max-w-5xl">
+      {/* ============= 3. ECOSYSTEM OVERVIEW ============= */}
+      <TfSection
+        id="ecosystem"
+        eyebrow="The Architecture"
+        title={<>One connected system. <span className="text-muted-foreground">Zero glue work.</span></>}
+        intro="Every module of the TrendFlux OS is engineered to plug into the next — automation feeds CRM, CRM informs creative, creative powers ads, ads feed analytics. Compounding by design."
+      >
+        <EcosystemMap />
+        <div className="mt-12 text-center">
           <Link
-            to="/toolkit"
-            onClick={() => track("toolkit_cta_click", { source: "hero_teaser", cta: "card" })}
-            className="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 rounded-2xl border border-gold/30 bg-gradient-to-r from-gold/10 via-background/40 to-primary/10 p-5 sm:p-6 backdrop-blur-xl shadow-elegant transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/60 hover:shadow-[0_24px_60px_-20px_hsl(var(--gold)/0.45)]"
+            to="/ecosystem"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
           >
-            <div className="flex items-start gap-4 min-w-0">
-              <div className="shrink-0 rounded-xl bg-gold/15 p-2.5 ring-1 ring-gold/30">
-                <GraduationCap className="h-5 w-5 text-gold" />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-gold font-semibold">
-                  <span>New</span>
-                  <span className="h-1 w-1 rounded-full bg-gold/50" />
-                  <span className="text-foreground/55">Growth Operator Toolkit Hub</span>
-                </div>
-                <h3 className="mt-1.5 font-display text-lg sm:text-xl font-bold leading-snug">
-                  A <span className="text-gradient">practical execution system</span> for AI-powered growth operators.
-                </h3>
-                <p className="mt-1 text-xs sm:text-sm text-foreground/65">
-                  8 system modules · prompt library · automation blueprints · portfolio kit — an execution OS.
-                </p>
-              </div>
-            </div>
-            <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition-transform duration-300 group-hover:scale-[1.04]">
-              Access Toolkit Hub
-              <ArrowUpRight className="h-4 w-4" />
-            </span>
+            View full architecture <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
-      </section>
+      </TfSection>
 
-      {/* Digital Impact Map */}
-      <DigitalImpactMap
-        matchingSlugs={matchingSlugs}
-        onResetFilters={() => setCaseFilters(EMPTY_FILTERS)}
-        returnTo={`/${serializeFilters(caseFilters)}#cases`}
-        onNodeSelect={handleNodeSelect}
-        highlightedSlug={highlightedSlug}
-      />
+      {/* ============= 4. SERVICES ============= */}
+      <TfSection
+        id="services"
+        eyebrow="Services"
+        title="Six disciplines. One operating layer."
+        intro="Each service is a module of the OS — deployed standalone or composed into a full Growth OS engagement."
+        tone="muted"
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {SERVICES.map((s) => (
+            <TfCard key={s.title}>
+              <s.icon className="h-6 w-6 text-primary" />
+              <h3 className="mt-5 font-display text-lg font-semibold text-foreground">
+                {s.title}
+              </h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">
+                {s.desc}
+              </p>
+            </TfCard>
+          ))}
+        </div>
+        <div className="mt-12 text-center">
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+          >
+            All services <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </TfSection>
 
-      {/* Services Directory */}
-      <section id="services" className="relative px-6 py-24 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 max-w-3xl">
-            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-              — Platform Modules
-            </p>
-            <h2 className="font-display text-4xl font-bold tracking-tight md:text-6xl">
-              One platform.{" "}
-              <span className="text-gradient">Every growth function.</span>
-            </h2>
-            <p className="mt-5 max-w-2xl text-base text-foreground/65 md:text-lg">
-              Activate only the modules you need. Each one ships with the
-              playbook, automations, and KPIs already wired in.
-            </p>
+      {/* ============= 5. FOUNDER ============= */}
+      <TfSection eyebrow="Founder" title="Built by an operator, not an agency.">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 lg:grid-cols-[320px_1fr] lg:gap-16">
+          <div className="relative mx-auto">
+            <div className="absolute -inset-3 rounded-2xl bg-primary/10 blur-2xl" />
+            <div className="relative overflow-hidden rounded-2xl border border-border bg-muted">
+              <img
+                src={emonPortrait}
+                alt="Zahid Hasan Emon — Founder of TrendFlux"
+                className="h-[380px] w-[320px] object-cover"
+                loading="lazy"
+              />
+            </div>
           </div>
-
-          {/* Filter tabs */}
-          <div className="mb-10 flex flex-wrap gap-2">
-            {filterTabs.map((tab) => {
-              const active = filter === tab;
-              return (
-                <button
-                  key={tab}
-                  onClick={() => setFilter(tab)}
-                  className={`rounded-full px-4 py-2 text-sm transition-all ${
-                    active
-                      ? "bg-gold text-gold-foreground shadow-gold"
-                      : "glass text-foreground/70 hover:text-foreground hover:border-primary/40"
-                  }`}
+          <div>
+            <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-primary">
+              Zahid Hasan Emon
+            </p>
+            <h3 className="mt-3 font-display text-2xl font-semibold text-foreground sm:text-3xl">
+              Strategic operator. Systems-first builder. Transparency by default.
+            </h3>
+            <p className="mt-5 text-[15px] leading-relaxed text-muted-foreground">
+              TrendFlux exists because the modern brand is drowning in disconnected
+              tools. Zahid architects growth as infrastructure — the same way
+              engineers think about systems. No black boxes. No vanity dashboards.
+              Just compounding leverage you can audit.
+            </p>
+            <div className="mt-7 flex flex-wrap gap-2">
+              {["Ethical Growth", "Systems Thinking", "Founder-Led", "Audit-Ready"].map((t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-border bg-muted/60 px-3 py-1 text-[11px] font-medium text-foreground/80"
                 >
-                  {tab}
-                  <span className={`ml-2 text-xs ${active ? "text-gold-foreground/70" : "text-foreground/40"}`}>
-                    {counts[tab]}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {visibleServices.map((s, i) => {
-              const Icon = s.icon;
-              const idx = services.indexOf(s) + 1;
-              return (
-                <article
-                  key={s.title}
-                  className="group relative overflow-hidden rounded-2xl border border-border bg-white p-5 sm:p-7 flex flex-col shadow-[0_1px_2px_hsl(0_0%_0%/0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_18px_44px_-18px_hsl(var(--primary)/0.22)]"
-                >
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute left-0 top-6 bottom-6 w-[3px] rounded-full bg-gradient-to-b from-primary to-primary/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  />
-                  <div className="flex items-start justify-between">
-                    <span className="font-display text-sm text-foreground/40">
-                      {String(idx).padStart(2, "0")}
-                    </span>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/15">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                  </div>
-                  <p className="mt-5 sm:mt-6 text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-primary break-words">
-                    {s.category}
-                  </p>
-                  <h3 className="font-display mt-2 text-xl sm:text-2xl font-bold leading-tight tracking-tight break-words [text-wrap:balance]">
-                    {s.title}
-                  </h3>
-                  <p className="mt-3 sm:mt-4 text-[13px] sm:text-sm leading-relaxed text-foreground/60">
-                    {s.desc}
-                  </p>
-
-                  <dl className="mt-4 sm:mt-5 space-y-3 text-[11px] sm:text-xs">
-                    <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
-                      <dt className="sm:min-w-[72px] uppercase tracking-wider text-foreground/40">Best for</dt>
-                      <dd className="text-foreground/80 leading-relaxed break-words">{s.bestFor}</dd>
-                    </div>
-                    <div className="flex flex-col gap-0.5 sm:flex-row sm:gap-2">
-                      <dt className="sm:min-w-[72px] uppercase tracking-wider text-foreground/40">Outcome</dt>
-                      <dd className="font-semibold text-gold leading-relaxed break-words">{s.outcome}</dd>
-                    </div>
-                  </dl>
-
-                  <div className="mt-6 flex-1 flex items-end">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        track("service_module_cta", {
-                          module: s.title,
-                          category: s.category,
-                          source: "services_grid",
-                        });
-                        setQuoteContext({
-                          source: "services_grid",
-                          module: s.title,
-                          category: s.category,
-                        });
-                        setQuoteOpen(true);
-                      }}
-                      className="group/cta inline-flex w-full items-center justify-between gap-2 rounded-full border border-gold/30 bg-gold/5 px-3.5 sm:px-4 py-2.5 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.14em] sm:tracking-[0.18em] text-gold transition-all duration-300 hover:border-gold hover:bg-gold/15 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                      aria-label={`Activate ${s.title}`}
-                    >
-                      <span>Activate Module</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
+                  {t}
+                </span>
+              ))}
+            </div>
+            <Link
+              to="/about"
+              className="mt-7 inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+            >
+              The full story <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
-      </section>
+      </TfSection>
 
-      {/* Brand Architect */}
-      <section id="founder" className="relative px-5 py-16 sm:px-6 sm:py-20 md:px-12 md:py-24 lg:px-20">
-        <div ref={founderRevealRef} className="mx-auto grid max-w-7xl gap-12 sm:gap-14 lg:grid-cols-2 lg:gap-12 lg:items-start">
-          {/* Portrait */}
-          <div className="reveal relative mx-auto w-full max-w-sm lg:max-w-none">
-            <div className="absolute -inset-3 sm:-inset-4 rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-cyan opacity-20 blur-2xl" aria-hidden />
-            <div className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] glass-strong p-1.5 sm:p-2">
-              <div className="relative aspect-[4/5] sm:aspect-[4/5] lg:aspect-[4/5] w-full overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] bg-muted">
-                {/* Shimmer skeleton — fades out once the image decodes */}
-                <div
-                  aria-hidden
-                  className={`absolute inset-0 transition-opacity duration-500 ${
-                    portraitLoaded ? "opacity-0" : "opacity-100"
-                  }`}
-                  style={{
-                    background:
-                      "linear-gradient(110deg, hsl(var(--muted)) 30%, hsl(var(--muted-foreground) / 0.12) 50%, hsl(var(--muted)) 70%)",
-                    backgroundSize: "200% 100%",
-                    animation: "portrait-shimmer 1.6s ease-in-out infinite",
-                  }}
-                />
-                <img
-                  src={emonPortrait}
-                  alt="Zahid Hasan Emon, Brand Architect of TrendFlux Ecosystem"
-                  width={800}
-                  height={1000}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={() => setPortraitLoaded(true)}
-                  ref={(el) => {
-                    if (el?.complete && el.naturalWidth > 0) setPortraitLoaded(true);
-                  }}
-                  className={`absolute inset-0 h-full w-full object-cover transition-[filter,opacity] duration-700 ease-out ${
-                    portraitLoaded
-                      ? "opacity-100 blur-0"
-                      : "opacity-0 scale-[1.02] blur-md"
-                  }`}
-                  style={{ objectPosition: `center ${portraitFocusY}%` }}
-                />
-              </div>
-              <div className="absolute bottom-3 left-3 sm:bottom-5 sm:left-5 rounded-full glass-strong px-2.5 py-1 sm:px-3.5 sm:py-1.5 text-[10px] sm:text-xs whitespace-nowrap max-w-[calc(100%-1.5rem)] truncate">
-                <span className="text-gold font-semibold">Brand Architect</span>
-                <span className="mx-1.5 sm:mx-2 text-foreground/30">·</span>
-                <span className="text-foreground/80">Zahid Hasan Emon</span>
-              </div>
-              <ResumeButton />
-            </div>
+      {/* ============= 5b. THE STAND — Cinematic National Cover ============= */}
+      <section
+        aria-labelledby="the-stand-cover-heading"
+        className="relative isolate overflow-hidden bg-black py-16 sm:py-24"
+      >
+        {/* atmospheric glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 55%), radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.85), transparent 70%)",
+          }}
+        />
+
+        <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10">
+          {/* eyebrow rail */}
+          <div className="mb-6 flex items-center gap-4 sm:mb-8">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" />
+            <span className="font-serif text-[10px] uppercase tracking-[0.42em] text-amber-400/85 sm:text-[11px]">
+              Featured · The Stand · জাতীয় দলিল
+            </span>
+            <span className="h-px flex-1 bg-white/[0.08]" />
+            <span className="hidden font-serif text-[10px] uppercase tracking-[0.32em] text-white/40 sm:inline">
+              Volume I · 2023–2024
+            </span>
           </div>
 
-          {/* Content */}
-          <div>
-            <p className="reveal mb-4 sm:mb-5 text-[11px] sm:text-sm uppercase tracking-[0.3em] sm:tracking-[0.35em] text-gold" style={{ transitionDelay: "80ms" }}>
-              — Meet the Brand Architect
-            </p>
-            <h2 className="reveal font-display text-[clamp(1.375rem,6.8vw,1.75rem)] leading-[1.2] sm:text-4xl md:text-5xl font-bold tracking-tight" style={{ transitionDelay: "140ms" }}>
-              <span className="block text-foreground/85">Brand Architect</span>
-              <span className="block text-gradient mt-2 whitespace-nowrap [hyphens:none] [word-break:keep-all] max-w-full truncate">Zahid Hasan Emon</span>
-            </h2>
-            <blockquote className="reveal mt-8 sm:mt-10 border-l-2 border-gold/60 pl-4 sm:pl-6 text-[15px] leading-[1.75] sm:text-base sm:leading-relaxed text-foreground/75 md:text-lg space-y-4" style={{ transitionDelay: "220ms" }}>
-              <p>
-                "My journey to founding TrendFlux Ecosystem wasn't just built on IT
-                engineering and data analytics—it was forged in the crucible of
-                extreme adversity. Rooted in a deep maternal legacy of absolute
-                honesty, I made a historic stand against systemic corruption
-                during my university years.
-              </p>
-              <p>
-                Recognized by national media like{" "}
-                <span className="text-gold font-semibold">Desh Rupantor</span>{" "}
-                as an unyielding whistleblower, I chose to face insurmountable
-                pressure rather than compromise my ethical values. Today, that
-                same battle-tested resilience forms the absolute core of
-                TrendFlux Ecosystem.
-              </p>
-              <p>
-                When you partner with us, you are gaining a strategic partner
-                who values{" "}
-                <span className="text-foreground font-semibold">
-                  radical transparency, ethical execution, and the courage to
-                  stand firm
-                </span>{" "}
-                for your success."
-              </p>
-            </blockquote>
-            <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] sm:text-sm text-foreground/60">
-              <span className="font-display font-semibold text-foreground whitespace-nowrap">Zahid Hasan Emon</span>
-              <span className="text-foreground/30 hidden sm:inline">·</span>
-              <span>Brand Architect, TrendFlux Ecosystem</span>
-            </div>
-            <div className="mt-6 sm:mt-8 flex flex-wrap items-center gap-5">
+          {/* SR-only heading for SEO/a11y — visual heading lives inside the cinematic plate */}
+          <h2 id="the-stand-cover-heading" className="sr-only">
+            THE STAND — একজন তরুণ একা দাঁড়িয়ে — নৈতিক অবস্থানের সিনেমাটিক রূপায়ণ
+          </h2>
+
+          {/* CINEMATIC PLATE */}
+          <figure className="group relative overflow-hidden rounded-sm border border-amber-400/[0.12] bg-black shadow-[0_60px_160px_-40px_rgba(0,0,0,0.95)]">
+            {/* soft outer glow */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-px rounded-sm opacity-60"
+              style={{
+                boxShadow: "inset 0 0 120px 20px rgba(212,175,55,0.06)",
+              }}
+            />
+            <img
+              src={theStandCover}
+              alt="THE STAND — একজন তরুণ একা দাঁড়িয়ে — Zahid Hasan Emon · মায়ের নিষেধ আছে · জাতীয় দলিল ২০২৩–২০২৪"
+              width={1920}
+              height={1080}
+              loading="lazy"
+              decoding="async"
+              className="block h-auto w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.012]"
+            />
+
+            {/* corner index marks */}
+            <span aria-hidden className="absolute left-3 top-3 h-3.5 w-3.5 border-l border-t border-amber-400/60 sm:left-5 sm:top-5" />
+            <span aria-hidden className="absolute right-3 top-3 h-3.5 w-3.5 border-r border-t border-amber-400/60 sm:right-5 sm:top-5" />
+            <span aria-hidden className="absolute bottom-3 left-3 h-3.5 w-3.5 border-b border-l border-amber-400/60 sm:bottom-5 sm:left-5" />
+            <span aria-hidden className="absolute bottom-3 right-3 h-3.5 w-3.5 border-b border-r border-amber-400/60 sm:bottom-5 sm:right-5" />
+          </figure>
+
+          {/* CTA + META STRIP */}
+          <div className="mt-8 grid grid-cols-1 items-center gap-8 sm:mt-10 lg:grid-cols-[auto_1fr_auto] lg:gap-10">
+            {/* CTA cluster */}
+            <div className="flex flex-wrap items-center gap-3">
               <Link
-                to="/project-lead"
-                className="inline-flex items-center gap-2 text-primary hover:text-gold transition-colors text-sm sm:text-base"
+                to="/the-stand"
+                className="group inline-flex items-center gap-2 rounded-sm bg-amber-400 px-6 py-3 text-sm font-semibold tracking-wide text-black transition-colors hover:bg-amber-300"
               >
-                Read full profile <ArrowUpRight className="w-4 h-4" />
+                ENTER THE STAND
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+              <Link
+                to="/the-stand/share"
+                className="inline-flex items-center gap-2 rounded-sm border border-white/15 px-6 py-3 text-sm font-medium text-white/85 transition-colors hover:border-amber-400/40 hover:text-amber-200"
+              >
+                শেয়ার কার্ড
               </Link>
             </div>
-          </div>
-        </div>
 
+            {/* divider */}
+            <span aria-hidden className="hidden h-px w-full bg-white/[0.08] lg:block" />
 
-        {/* Timeline */}
-        <div className="mx-auto mt-24 max-w-5xl">
-          <div className="mb-12 text-center">
-            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-              — The Journey
-            </p>
-            <h3
-              key={`title-${headline.id}`}
-              lang={headline.id === "satyer-pakshe" ? "bn" : undefined}
-              className="font-display text-3xl font-bold tracking-tight md:text-4xl animate-fade-in"
-            >
-              {headline.timeline}
-            </h3>
-            <p
-              key={`tag-${headline.id}`}
-              lang={/[\u0980-\u09FF]/.test(headline.pressTagline) ? "bn" : undefined}
-              className="mt-3 text-sm text-foreground/55 md:text-base animate-fade-in"
-            >
-              {headline.pressTagline}
-            </p>
-
-            {/* Headline variants selector */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/40 mr-1">
-                Headline:
-              </span>
-              {HEADLINE_VARIANTS.map((v) => {
-                const active = v.id === headline.id;
-                const isBn = /[\u0980-\u09FF]/.test(v.label);
-                return (
-                  <button
-                    key={v.id}
-                    type="button"
-                    onClick={() => selectHeadline(v.id)}
-                    aria-pressed={active}
-                    lang={isBn ? "bn" : undefined}
-                    className={`rounded-full border px-3 py-1 text-[11px] transition-colors ${
-                      active
-                        ? "border-gold bg-gold/15 text-gold"
-                        : "border-foreground/15 text-foreground/55 hover:border-gold/40 hover:text-gold"
-                    }`}
-                  >
-                    {v.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="relative pl-10 md:pl-14">
-            {/* Vertical line */}
-            <div
-              className="absolute left-3 md:left-5 top-2 bottom-2 w-px bg-gradient-to-b from-gold/60 via-primary/40 to-transparent"
-              aria-hidden
-            />
-
-            {[
-              {
-                phase: "Phase 01",
-                year: "Foundation",
-                title: "A Maternal Legacy of Honesty",
-                desc: "Raised under an uncompromising principle: never take what isn't yours, never trade integrity for convenience. The ethical compass that would later define every business decision.",
-              },
-              {
-                phase: "Phase 02",
-                year: "University Years",
-                title: "The Stand Against Corruption",
-                desc: "At Jahangirnagar University, refused to participate in extortion networks operating inside campus halls. Faced direct threats and physical pressure rather than compromise core values.",
-              },
-              {
-                phase: "Phase 03",
-                year: "Public Record",
-                title: "Recognized by National Media",
-                desc: "Featured across Bangladesh's leading outlets as an unyielding whistleblower — turning a personal stand into a documented public record of integrity.",
-                press: (dbPress.length > 0 ? dbPress : []) as PressItem[],
-              },
-              {
-                phase: "Phase 04",
-                year: "Today",
-                title: "TrendFlux Ecosystem",
-                desc: "That same battle-tested resilience now powers a growth operations studio built on radical transparency, ethical execution, and the courage to stand firm for every client we partner with.",
-              },
-            ].map((item, i, arr) => (
-              <div
-                key={item.phase}
-                className={`relative ${i !== arr.length - 1 ? "pb-10" : ""} animate-fade-up`}
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                {/* Marker */}
-                <div className="absolute -left-10 md:-left-14 top-1 flex h-7 w-7 items-center justify-center">
-                  <span className="absolute h-7 w-7 rounded-full bg-gold/25 blur-md" aria-hidden />
-                  <span className="absolute h-5 w-5 rounded-full bg-gold/20" aria-hidden />
-                  <span className="relative h-3 w-3 rounded-full bg-gold shadow-gold ring-4 ring-background" />
-                </div>
-
-                <div className="rounded-2xl glass glass-hover p-6">
-                  <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.25em]">
-                    <span className="font-semibold text-gold">{item.phase}</span>
-                    <span className="text-foreground/30">·</span>
-                    <span className="text-foreground/50">{item.year}</span>
-                  </div>
-                  <h4 className="font-display mt-3 text-xl font-bold md:text-2xl">
-                    {item.title}
-                  </h4>
-                  <p className="mt-3 text-sm leading-relaxed text-foreground/65 md:text-base">
-                    {item.desc}
-                  </p>
-
-                  {item.press !== undefined && item.press.length === 0 && (
-                    <div className="mt-6 rounded-2xl border border-dashed border-gold/30 bg-foreground/[0.02] px-6 py-8 text-center">
-                      <p className="text-xs uppercase tracking-[0.3em] text-gold/70">
-                        Press Coverage
-                      </p>
-                      <p className="mt-3 font-display text-base font-semibold text-foreground/80 md:text-lg">
-                        Verified national headlines coming soon.
-                      </p>
-                      <p className="mt-2 text-xs text-foreground/50">
-                        We're curating the public record. Check back shortly for documented outlet reports.
-                      </p>
-                    </div>
-                  )}
-                  {item.press && item.press.length > 0 && (
-                    <div className="mt-6">
-                      {pressOpenFor !== item.phase ? (
-                        <button
-                          type="button"
-                          onClick={() => setPressOpenFor(item.phase)}
-                          className="group relative inline-flex w-full items-center justify-between gap-4 overflow-hidden rounded-2xl border border-gold/40 bg-gradient-to-r from-gold/10 via-gold/5 to-transparent px-6 py-5 text-left shadow-gold/20 hover:border-gold/70 hover:shadow-gold focus:outline-none focus:ring-2 focus:ring-gold/60 transition-all md:w-auto md:px-8"
-                          aria-expanded={false}
-                        >
-                          <span className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-gold via-gold/60 to-transparent" aria-hidden />
-                          <span className="flex items-center gap-4">
-                            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold/15 ring-1 ring-gold/40 group-hover:bg-gold/25 transition-colors">
-                              <MoreHorizontal className="h-5 w-5 text-gold" />
-                            </span>
-                            <span className="flex flex-col">
-                              <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold/80">
-                                Press Coverage
-                              </span>
-                              <span className="font-display text-lg font-bold text-foreground md:text-xl">
-                                View {item.press.length} National Headlines
-                              </span>
-                              <span className="mt-0.5 text-xs text-foreground/55">
-                                Click to reveal verified outlet reports
-                              </span>
-                            </span>
-                          </span>
-                          <ArrowUpRight className="h-5 w-5 shrink-0 text-gold transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                        </button>
-                      ) : (
-                        <div className="animate-fade-up">
-                          <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-                            <p className="text-xs uppercase tracking-[0.25em] text-foreground/40">
-                              Press Coverage · {item.press.length} headlines
-                            </p>
-                            <button
-                              type="button"
-                              onClick={() => setPressOpenFor(null)}
-                              className="text-xs uppercase tracking-wider text-foreground/40 hover:text-gold transition-colors"
-                            >
-                              Hide
-                            </button>
-                          </div>
-                          <p
-                            key={`press-tag-${headline.id}`}
-                            lang={/[\u0980-\u09FF]/.test(headline.pressTagline) ? "bn" : undefined}
-                            className="mb-3 text-xs text-foreground/40 animate-fade-in"
-                          >
-                            {headline.pressTagline}
-                          </p>
-                          <div className="grid gap-3 sm:grid-cols-2">
-                            {item.press.map((p, idx) => (
-                              <Link
-                                key={`${p.outlet}-${idx}`}
-                                to={p.id ? `/press/${p.id}` : "#"}
-                                onClick={(e) => {
-                                  if (!p.id) {
-                                    e.preventDefault();
-                                    setActivePress(p);
-                                  }
-                                }}
-                                className="group/card flex flex-col rounded-xl border border-border bg-foreground/[0.03] p-4 text-left hover:border-gold/40 hover:bg-gold/5 focus:outline-none focus:ring-2 focus:ring-gold/50 transition-all"
-                              >
-                                <div className="flex items-center justify-between">
-                                  <span className="text-xs font-semibold uppercase tracking-wider text-gold">
-                                    {p.outlet}
-                                  </span>
-                                  <MoreHorizontal className="h-4 w-4 text-foreground/40 transition-colors group-hover/card:text-gold" />
-                                </div>
-                                <p
-                                  lang="bn"
-                                  className="mt-2 text-sm leading-snug text-foreground/80 group-hover/card:text-foreground"
-                                >
-                                  {p.headline}
-                                </p>
-                                <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider text-foreground/40 group-hover/card:text-gold transition-colors">
-                                  Explore details
-                                  <ArrowUpRight className="h-3 w-3 transition-transform group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5" />
-                                </span>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
+            {/* meta cards */}
+            <dl className="grid grid-cols-3 gap-4 sm:gap-8">
+              <div>
+                <dt className="font-serif text-[10px] uppercase tracking-[0.28em] text-white/40">Chapter</dt>
+                <dd className="mt-1.5 font-serif text-[13px] text-white/85 sm:text-sm">I — The Stand</dd>
               </div>
-            ))}
+              <div>
+                <dt className="font-serif text-[10px] uppercase tracking-[0.28em] text-white/40">Year</dt>
+                <dd className="mt-1.5 font-serif text-[13px] text-white/85 sm:text-sm">2023–2024</dd>
+              </div>
+              <div>
+                <dt className="font-serif text-[10px] uppercase tracking-[0.28em] text-white/40">Status</dt>
+                <dd className="mt-1.5 inline-flex items-center gap-1.5 font-serif text-[13px] text-white/85 sm:text-sm">
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]" />
+                  Verified
+                </dd>
+              </div>
+            </dl>
           </div>
         </div>
       </section>
 
-      {/* The Stand Highlight — featured immediately after the four-phase journey */}
-      <section className="relative px-5 sm:px-6 md:px-12 lg:px-20 pb-12 sm:pb-16">
-        <div className="mx-auto max-w-5xl">
-          <div className="group relative rounded-2xl border border-gold/30 bg-gradient-to-r from-gold/10 via-background/40 to-primary/10 backdrop-blur-xl shadow-elegant overflow-hidden transition-all duration-300 hover:border-gold/60 hover:shadow-[0_24px_60px_-20px_hsl(var(--gold)/0.45)]">
-            <button
-              type="button"
-              onClick={() => {
-                const next = !standExpanded;
-                setStandExpanded(next);
-                if (next) track("the_stand_highlight_expand", { source: "post_phases_highlight" });
-              }}
-              aria-expanded={standExpanded}
-              aria-controls="the-stand-highlight-details"
-              className="w-full flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 p-5 sm:p-6 text-left"
-            >
-              <div className="flex items-start gap-4 min-w-0">
-                <div className="shrink-0 rounded-xl bg-gold/15 p-2.5 ring-1 ring-gold/30">
-                  <BookOpenText className="h-5 w-5 text-gold" />
+
+
+
+      {/* ============= 5c. JUSTICE APPEAL — Public Interest Notice ============= */}
+      <section className="relative bg-[hsl(220,45%,8%)] py-20 sm:py-24">
+        <div className="mx-auto max-w-5xl px-6 lg:px-10">
+          <div className="overflow-hidden rounded-2xl border border-[hsl(220,30%,20%)] bg-[hsl(220,40%,11%)]">
+            <div className="grid grid-cols-1 gap-0 lg:grid-cols-[1.2fr_1fr]">
+              <div className="p-8 sm:p-10">
+                <div className="inline-flex items-center gap-2">
+                  <span className="inline-block h-2 w-2 rounded-full bg-[hsl(0,65%,55%)]" />
+                  <span className="font-serif text-[11px] tracking-[0.22em] text-white/80">
+                    PABNA ACCOUNTABILITY PROJECT
+                  </span>
                 </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 text-[10px] sm:text-[11px] uppercase tracking-[0.22em] text-gold font-semibold">
-                    <span>Featured</span>
-                    <span className="h-1 w-1 rounded-full bg-gold/50" />
-                    <span className="text-foreground/55">The Stand · জাতীয় দলিল</span>
-                  </div>
-                  <h3 lang="bn" className="mt-1.5 font-display text-lg sm:text-xl font-bold leading-snug">
-                    একজন মানুষের <span className="text-gradient">অবস্থান</span>, একটি জাতির বিবেক।
-                  </h3>
-                  <p lang="bn" className="mt-1 text-xs sm:text-sm text-foreground/65">
-                    জাহিদ হাসান ইমন — &ldquo;মায়ের নিষেধ আছে&rdquo; থেকে জাতীয় দলিল পর্যন্ত · ১৯+ মিডিয়া কাভারেজ · শেয়ার-কার্ড জেনারেটর।
-                  </p>
-                </div>
-              </div>
-              <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground shadow-gold transition-transform duration-300 group-hover:scale-[1.04]">
-                {standExpanded ? "Hide details" : "View details"}
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-300 ${standExpanded ? "rotate-180" : ""}`}
-                />
-              </span>
-            </button>
-
-            <div
-              id="the-stand-highlight-details"
-              className={`grid transition-all duration-500 ease-out ${
-                standExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-              }`}
-            >
-              <div className="overflow-hidden">
-                <div className="border-t border-gold/20 px-5 sm:px-6 pb-6 pt-5">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {/* Feature 1 — OG image */}
-                    <div className="rounded-xl border border-gold/20 bg-foreground/[0.03] p-4">
-                      <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-gold font-semibold">
-                        <ImageIcon className="h-3.5 w-3.5" />
-                        <span>OG Image · 1216×640</span>
-                      </div>
-                      <p lang="bn" className="mt-2 font-display text-base font-bold leading-snug">
-                        সিনেমাটিক &ldquo;মায়ের নিষেধ আছে&rdquo; পোস্টার
-                      </p>
-                      <p lang="bn" className="mt-1.5 text-xs text-foreground/65 leading-relaxed">
-                        Facebook · X · LinkedIn-এ <code className="text-gold/90">/the-stand</code> শেয়ার করলে gold typography-সহ এই কার্ড দৃশ্যমান হবে।
-                      </p>
-                      <a
-                        href="/og-the-stand.jpg"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.18em] text-gold hover:underline"
-                      >
-                        Preview OG
-                        <ArrowUpRight className="h-3 w-3" />
-                      </a>
-                    </div>
-
-                    {/* Feature 2 — Share Quote Cards */}
-                    <div className="rounded-xl border border-gold/20 bg-foreground/[0.03] p-4">
-                      <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-gold font-semibold">
-                        <Share2 className="h-3.5 w-3.5" />
-                        <span>Quote Card Generator</span>
-                      </div>
-                      <p lang="bn" className="mt-2 font-display text-base font-bold leading-snug">
-                        ৬টি বাণী · ৩টি ফর্ম্যাট · এক ক্লিকে PNG
-                      </p>
-                      <p lang="bn" className="mt-1.5 text-xs text-foreground/65 leading-relaxed">
-                        1:1 IG · 9:16 Story · 16:9 FB/X — ক্লায়েন্ট-সাইড রেন্ডার, কোনো ওয়াটারমার্ক নেই।
-                      </p>
-                      <Link
-                        to="/the-stand/share"
-                        onClick={() => track("the_stand_share_open", { source: "post_phases_highlight_details" })}
-                        className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.18em] text-gold hover:underline"
-                      >
-                        Open generator
-                        <ArrowUpRight className="h-3 w-3" />
-                      </Link>
-                    </div>
-                  </div>
-
+                <h2 className="mt-6 font-serif text-3xl font-semibold leading-[1.15] tracking-tight text-white sm:text-4xl">
+                  When fear replaces justice,{" "}
+                  <span className="italic text-slate-300">documentation becomes necessary.</span>
+                </h2>
+                <p className="mt-5 text-[15px] leading-relaxed text-slate-300">
+                  Public Interest Documentation — একটি লিখিত অভিযোগ ও সংশ্লিষ্ট সংবাদ
+                  রেফারেন্সের ভিত্তিতে নির্মিত আর্কাইভ। নিরপেক্ষ তদন্ত, আইনগত সুরক্ষা ও
+                  প্রাতিষ্ঠানিক জবাবদিহিতার আবেদন। This is a dossier, not a campaign of attack.
+                </p>
+                <div className="mt-7 flex flex-wrap items-center gap-3">
                   <Link
-                    to="/the-stand"
-                    onClick={() => track("the_stand_open", { source: "post_phases_highlight_details" })}
-                    className="mt-5 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/[0.06] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-gold transition-all hover:bg-gold/15 hover:border-gold/70"
+                    to="/justice-appeal"
+                    className="inline-flex items-center gap-2 rounded-md bg-[hsl(0,65%,55%)] px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90"
                   >
-                    Read The Stand · সম্পূর্ণ ডকুমেন্ট
-                    <ArrowUpRight className="h-3.5 w-3.5" />
+                    Read Timeline <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    to="/justice-appeal#complaint"
+                    className="inline-flex items-center gap-2 rounded-md border border-white/20 px-5 py-2.5 text-sm font-medium text-white hover:bg-white/[0.06]"
+                  >
+                    View Documents
                   </Link>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-
-
-      {/* Quote request modal */}
-      <QuoteDialog
-        open={quoteOpen}
-        onOpenChange={(o) => {
-          setQuoteOpen(o);
-          if (!o) setTimeout(() => setQuoteContext(null), 250);
-        }}
-        context={quoteContext}
-      />
-
-      {/* Press coverage details modal */}
-      <Dialog open={!!activePress} onOpenChange={(o) => !o && setActivePress(null)}>
-        <DialogContent className="glass border-gold/30 shadow-gold sm:max-w-xl">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
-          <DialogHeader className="space-y-3 pt-2 text-left">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
-              {activePress?.outlet}
-            </p>
-            <DialogTitle
-              lang={activePress?.headline && /[\u0980-\u09FF]/.test(activePress.headline) ? "bn" : undefined}
-              className="font-display text-2xl leading-snug md:text-3xl"
-            >
-              {activePress?.headline}
-            </DialogTitle>
-          </DialogHeader>
-
-          <p
-            lang={activePress?.context && /[\u0980-\u09FF]/.test(activePress.context) ? "bn" : undefined}
-            className="text-sm leading-relaxed text-foreground/70"
-          >
-            {activePress?.context}
-          </p>
-
-          <div className="flex flex-wrap gap-2">
-            {["Bangladesh", "National Press", "2023–2024 coverage"].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-border bg-foreground/[0.04] px-3 py-1 text-[11px] uppercase tracking-wider text-foreground/60"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <p className="text-[11px] text-foreground/40">
-            Link opens the outlet's homepage. Article-level deep links can be added later.
-          </p>
-
-          <DialogFooter className="gap-2 sm:gap-3">
-            <Button
-              variant="ghost"
-              onClick={() => setActivePress(null)}
-            >
-              Close
-            </Button>
-            {activePress && (
-              <Button variant="gold" asChild>
-                <a href={activePress.href} target="_blank" rel="noreferrer noopener">
-                  Read on {activePress.outlet} <ArrowUpRight className="h-4 w-4" />
-                </a>
-              </Button>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Case Studies */}
-      <section id="cases" className="relative bg-muted px-6 py-24 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 text-center">
-            <p className="mb-3 text-sm uppercase tracking-[0.35em] text-gold">
-              — Proven Growth Systems & Results
-            </p>
-            <h2 className="font-display mx-auto max-w-3xl text-4xl font-bold tracking-tight md:text-5xl">
-              Real systems. <span className="text-gradient">Real outcomes.</span>
-            </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-base text-foreground/65">
-              Real execution. Here's how I turn strategy into measurable growth.
-            </p>
-          </div>
-
-          {/* Ecosystem metrics strip */}
-          <div
-            className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-10"
-            aria-label="Ecosystem performance metrics"
-          >
-            {[
-              { value: "485K+", label: "Organic Views Generated", tone: "green" as const },
-              { value: "+45%", label: "Avg. Engagement Growth", tone: "green" as const },
-              { value: "24/7", label: "AI Automation Layer", tone: "orange" as const },
-              { value: "3", label: "Multi-Brand Ecosystems Live", tone: "red" as const },
-            ].map((m) => {
-              const dot =
-                m.tone === "green"
-                  ? "bg-brand-green"
-                  : m.tone === "orange"
-                    ? "bg-brand-orange"
-                    : "bg-primary";
-              const tag =
-                m.tone === "green"
-                  ? "text-brand-green border-brand-green/30 bg-brand-green/10"
-                  : m.tone === "orange"
-                    ? "text-brand-orange border-brand-orange/30 bg-brand-orange/10"
-                    : "text-primary border-primary/30 bg-primary/10";
-              return (
-                <div
-                  key={m.label}
-                  className="rounded-2xl border border-border bg-white p-5 text-center shadow-[0_1px_2px_hsl(0_0%_0%/0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_30px_-12px_hsl(0_0%_0%/0.10)]"
-                >
-                  <div className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                    {m.value}
-                  </div>
-                  <div className="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.22em] text-foreground/55">
-                    {m.label}
-                  </div>
-                  <span
-                    className={`mt-3 inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] ${tag}`}
-                  >
-                    <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
-                    Live
-                  </span>
+              <div className="hidden border-l border-white/10 p-10 lg:flex lg:flex-col lg:justify-center">
+                <div className="text-[10px] uppercase tracking-[0.3em] text-slate-500">দাখিল</div>
+                <div className="mt-2 font-serif text-2xl text-white">২৯ আগস্ট ২০২৪</div>
+                <div className="mt-6 text-[10px] uppercase tracking-[0.3em] text-slate-500">অবস্থা</div>
+                <div className="mt-2 text-sm text-slate-300">চলমান নিরাপত্তা শঙ্কা · নিরপেক্ষ তদন্তের আবেদন</div>
+                <div className="mt-8 border-t border-white/10 pt-5 text-[11px] uppercase tracking-[0.25em] text-slate-500">
+                  ন্যায়বিচার · নিরাপত্তা · আইনি তদন্ত
                 </div>
-              );
-            })}
+              </div>
+
+            </div>
           </div>
-        </div>
-
-        <FilterBar
-          value={caseFilters}
-          onChange={setCaseFilters}
-          resultCount={caseFiltersActive ? filteredCases.length : undefined}
-        />
-        <div id="cases-results" className="mx-auto max-w-7xl mt-8 scroll-mt-44">
-          {caseFiltersActive && (
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.25em] text-foreground/55">
-              <span aria-live="polite">
-                <span className="font-semibold text-foreground">{filteredCases.length}</span> of{" "}
-                {caseStudies.length} case studies match
-              </span>
-              <button
-                type="button"
-                onClick={() => setCaseFilters(EMPTY_FILTERS)}
-                className="text-gold hover:underline"
-              >
-                Clear filters
-              </button>
-            </div>
-          )}
-
-          {filteredCases.length === 0 ? (
-            <div className="text-center py-16 px-6 rounded-3xl glass border border-gold/30">
-              <p className="font-display text-2xl font-bold">No matching case studies</p>
-              <p className="mt-3 text-sm text-foreground/60 max-w-md mx-auto">
-                Try removing one of your filters or clearing the search to see all{" "}
-                {caseStudies.length} live growth systems.
-              </p>
-              <button
-                type="button"
-                onClick={() => setCaseFilters(EMPTY_FILTERS)}
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-gold-foreground hover:scale-105 transition"
-              >
-                Reset filters
-              </button>
-            </div>
-          ) : (
-            <ul
-              role="list"
-              aria-label="Case studies"
-              className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 list-none p-0"
-            >
-              {filteredCases.map((c, i) => (
-                <li key={c.title}>
-                  <article
-                    id={`case-card-${c.slug}`}
-                    aria-labelledby={`case-${i}-title`}
-                    className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.18)] hover:border-[hsl(0_84%_82%)] animate-fade-up ${
-                      caseFiltersActive ? "ring-1 ring-primary/30" : ""
-                    } ${
-                      highlightedSlug === c.slug
-                        ? "ring-2 ring-primary shadow-[0_20px_50px_-12px_hsl(var(--primary)/0.25)] -translate-y-1.5"
-                        : ""
-                    }`}
-                    style={{ animationDelay: `${i * 0.06}s` }}
-                  >
-                    {/* premium top sheen */}
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    />
-                    {/* gradient halo on hover */}
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      style={{
-                        background:
-                          "radial-gradient(600px circle at 50% -20%, hsl(var(--primary) / 0.10), transparent 40%)",
-                      }}
-                    />
-                    <div
-                      className="relative aspect-[16/10] overflow-hidden border-b border-border"
-                      style={{
-                        background:
-                          "linear-gradient(180deg, #FFF5F5 0%, #FFE4E6 45%, #FFFFFF 100%)",
-                      }}
-                    >
-                      <div
-                        className="absolute inset-0 opacity-50"
-                        style={{
-                          backgroundImage:
-                            "radial-gradient(hsl(var(--primary) / 0.18) 1px, transparent 1px)",
-                          backgroundSize: "14px 14px",
-                        }}
-                        aria-hidden
-                      />
-                      <c.Icon
-                        aria-label={`${c.category} category illustration`}
-                        className="relative h-full w-full p-6 text-primary transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/70 via-transparent to-transparent" />
-                    </div>
-
-                    <div className="relative flex flex-1 flex-col p-7">
-                      <span className="inline-flex w-fit items-center rounded-full border border-[hsl(0_84%_82%)] bg-[hsl(0_86%_97%)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
-                        {c.category}
-                      </span>
-
-                      <h3 id={`case-${i}-title`} className="font-display mt-4 text-xl font-bold leading-snug md:text-2xl">
-                        {c.title}
-                      </h3>
-
-                      <p className="mt-3 text-sm leading-relaxed text-foreground/65">
-                        {c.description}
-                      </p>
-
-                      <ul aria-label={`Key results for ${c.title}`} className="mt-5 space-y-2">
-                        {c.results.map((r) => (
-                          <li key={r} className="flex items-start gap-2 text-sm text-foreground/80">
-                            <CheckCircle2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-brand-green" />
-                            <span>{r}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-2.5">
-                        <button
-                          type="button"
-                          onClick={(e) => openNarrative(c, e)}
-                          aria-label={`View narrative for ${c.title}`}
-                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-gold px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-gold-foreground shadow-gold/30 transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_28px_hsl(var(--gold)/0.5)] active:scale-95"
-                        >
-                          View Narrative <ArrowUpRight aria-hidden className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            track("consult_operator_click", {
-                              case_slug: c.slug,
-                              case_title: c.title,
-                              source: "case_card",
-                            });
-                            openStrategy("case_card", c.slug);
-                          }}
-                          aria-label={`Consult an operator about ${c.title}`}
-                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-foreground/20 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-foreground/85 transition-all duration-300 hover:border-gold/60 hover:text-gold hover:bg-gold/5"
-                        >
-                          Consult Operator
-                        </button>
-                      </div>
-                    </div>
-                  </article>
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </section>
 
 
-      {/* FAQ */}
-      <Faq />
 
-      {/* Final CTA + Footer */}
-      <footer id="contact" className="relative px-6 py-24 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-6xl rounded-[2rem] glass-strong p-10 text-center md:p-16">
-          <h2 className="font-display mx-auto max-w-3xl text-3xl font-bold leading-tight md:text-5xl">
-            Ready to operate at{" "}
-            <span className="text-gradient">full velocity</span> of{" "}
-            <span className="text-gradient">{BRAND.name}</span>?
-          </h2>
-          <p className="mx-auto mt-6 max-w-xl text-foreground/60">
-            Limited partnerships open each quarter. Let's architect yours.
-          </p>
+      {/* ============= 6. ACADEMY ============= */}
+      <TfSection
+        eyebrow="TrendFlux Academy"
+        title="Train the operator behind the system."
+        intro="Modular education for founders, ops leads, and growth engineers learning to build with AI-native systems."
+        tone="muted"
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { title: "Systems Thinking", desc: "Architect leverage, not tasks." },
+            { title: "AI Marketing", desc: "Agents, prompts, automated funnels." },
+            { title: "Operational Scaling", desc: "From 1 brand to a portfolio." },
+            { title: "Founder Education", desc: "Position, price, and lead." },
+          ].map((m) => (
+            <TfCard key={m.title}>
+              <GraduationCap className="h-6 w-6 text-primary" />
+              <h3 className="mt-4 font-display text-base font-semibold text-foreground">
+                {m.title}
+              </h3>
+              <p className="mt-1.5 text-[13.5px] leading-relaxed text-muted-foreground">
+                {m.desc}
+              </p>
+            </TfCard>
+          ))}
+        </div>
+        <div className="mt-12 text-center">
+          <Link
+            to="/course/trendflux"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+          >
+            Enter the Academy <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </TfSection>
 
-          <p className="mx-auto mt-10 text-[10px] uppercase tracking-[0.4em] text-foreground/40">
-            ◆ Choose your tier ◆
-          </p>
+      {/* ============= 6b. OPERATED BRANDS ============= */}
+      <TfSection
+        eyebrow="Ecosystem"
+        title="Communities, brands & pages I operate."
+        intro="A portfolio of platforms, civic initiatives, and education brands built and operated under the TrendFlux ecosystem — designed and engineered by Zahid Hasan Emon."
+      >
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {OPERATED_BRANDS.map((b) => {
+            const card = (
+              <TfCard className="flex h-full flex-col items-center text-center">
+                <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-background ring-1 ring-border">
+                  <img
+                    src={b.logo}
+                    alt={`${b.name} logo`}
+                    loading="lazy"
+                    className="h-full w-full object-contain p-1.5"
+                  />
+                </div>
+                <h3 className="mt-3 font-display text-[13.5px] font-semibold leading-tight text-foreground">
+                  {b.name}
+                </h3>
+                <p className="mt-1 text-[11.5px] leading-snug text-muted-foreground">
+                  {b.role}
+                </p>
+                {b.impact && (
+                  <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10.5px] font-semibold text-emerald-700">
+                    <Target className="h-3 w-3" />
+                    {b.impact}
+                  </div>
+                )}
+                {b.tagline && (
+                  <p className="mt-2 text-[10.5px] leading-snug text-muted-foreground">
+                    {b.tagline}
+                  </p>
+                )}
+                {b.paid && (
+                  <span className="mt-2 text-[10px] font-medium text-primary/80">
+                    Client project
+                  </span>
+                )}
+              </TfCard>
+            );
+            return b.href ? (
+              <a
+                key={b.name}
+                href={b.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block transition hover:-translate-y-0.5"
+                aria-label={`Visit ${b.name}`}
+              >
+                {card}
+              </a>
+            ) : (
+              <div key={b.name}>{card}</div>
+            );
+          })}
+        </div>
+        <p className="mt-8 text-center text-xs text-muted-foreground">
+          Designed & engineered by <span className="text-foreground">Zahid Hasan Emon</span> · <a href="https://trendflux.digital" className="text-primary hover:underline">trendflux.digital</a> · <a href="https://www.facebook.com/trendfluxdigital/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">fb/trendflux.digital</a>
+        </p>
+      </TfSection>
 
-          <div className="mx-auto mt-5 grid max-w-3xl gap-3 sm:grid-cols-3">
-            <Link
-              to="/brand-open"
-              className="tier-card tier-card-1 relative overflow-hidden rounded-2xl border border-gold/20 bg-white/[0.03] p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/5"
-            >
-              <span className="tier-sheen" aria-hidden />
-              <div className="relative flex items-center justify-between">
-                <Megaphone className="h-5 w-5 text-gold" />
-                <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">01 · Open</span>
-              </div>
-              <h3 className="relative mt-3 font-display text-lg font-semibold text-foreground">Studio BrandToki</h3>
-              <p className="relative mt-1 text-xs text-foreground/55">Mass storytelling for everyone.</p>
-            </Link>
 
-            <Link
-              to="/trendflux-talent"
-              className="tier-card tier-card-2 relative overflow-hidden rounded-2xl border border-gold/20 bg-white/[0.03] p-5 text-left transition hover:-translate-y-0.5 hover:border-gold/60 hover:bg-gold/5"
-            >
-              <span className="tier-sheen" aria-hidden />
-              <div className="relative flex items-center justify-between">
-                <Users className="h-5 w-5 text-gold" />
-                <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">02 · Platform</span>
-              </div>
-              <h3 className="relative mt-3 font-display text-lg font-semibold text-foreground">TrendFlux Talent</h3>
-              <p className="relative mt-1 text-xs text-foreground/55">Creator network for serious brands.</p>
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => { setVeilError(""); setVeilOpen(true); }}
-              title="Luxe Veil is invite-only"
-              className="tier-card tier-card-3 relative overflow-hidden rounded-2xl border border-border bg-card p-5 text-left transition hover:-translate-y-0.5 hover:border-primary/60 hover:bg-primary/5"
-            >
-              <span className="tier-sheen" aria-hidden />
-              <div className="relative flex items-center justify-between">
-                <Lock className="h-5 w-5 text-gold tier-lock-icon" />
-                <span className="text-[9px] uppercase tracking-[0.3em] text-gold/70">03 · Secret</span>
-              </div>
-              <h3 className="relative mt-3 font-display text-lg font-semibold text-gold">Luxe Veil</h3>
-              <p className="relative mt-1 text-xs text-foreground/55">Invitation only. By referral.</p>
-              <span className="absolute right-3 bottom-3 text-[9px] uppercase tracking-[0.3em] text-gold/60">
-                Locked
-              </span>
-            </button>
+      {/* ============= 7. LUXE VEIL ============= */}
+      <section className="relative isolate overflow-hidden bg-gradient-to-b from-background via-muted to-background py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 30% 30%, rgba(212,175,55,0.5), transparent 50%), radial-gradient(circle at 70% 70%, rgba(220,38,38,0.3), transparent 50%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-4xl px-6 text-center lg:px-10">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-200/40 bg-amber-50 px-3 py-1">
+            <Lock className="h-3 w-3 text-amber-600/80" />
+            <span className="text-[10px] font-medium uppercase tracking-[0.3em] text-amber-700">
+              Invite Only
+            </span>
           </div>
+          <h2 className="mt-7 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+            <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-400 bg-clip-text text-transparent">
+              Luxe Veil
+            </span>
+          </h2>
+          <p className="mt-5 text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+            A private network for high-level operators. Closed-door briefings,
+            unpublished playbooks, and direct introductions across the TrendFlux
+            ecosystem. Membership is not advertised.
+          </p>
+          <Link
+            to="/luxe-veil"
+            className="mt-9 inline-flex items-center gap-2 rounded-full border border-amber-300/40 bg-amber-50 px-7 py-3.5 text-sm font-semibold text-amber-800 transition-all hover:border-amber-400/60 hover:bg-amber-100"
+          >
+            Request Consideration <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+      {/* ============= 8. CASE STUDIES (METRICS) ============= */}
+      <TfSection
+        id="proof"
+        eyebrow="Proof"
+        title="Operating metrics, not vanity numbers."
+        intro="Representative outcomes across deployed TrendFlux OS engagements. Audit trail available on request."
+      >
+        <ProofTabs />
+        <div className="mt-12 text-center">
+          <Link
+            to="/portfolio"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+          >
+            View case studies <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </TfSection>
+
+      {/* ============= 8b. TESTIMONIALS ============= */}
+      <TfSection
+        eyebrow="Operator Signal"
+        title="Trusted by founders running real P&Ls."
+        intro="Selected feedback from operators inside live TrendFlux OS engagements. Names withheld under standard NDA."
+        tone="muted"
+      >
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          {TESTIMONIALS.map((t) => (
+            <TfCard key={t.name} className="flex h-full flex-col">
+              <Quote className="h-5 w-5 text-primary/70" />
+              <p className="mt-5 flex-1 text-[14.5px] leading-relaxed text-foreground/90">
+                “{t.quote}”
+              </p>
+              <div className="mt-6 border-t border-border pt-4">
+                <div className="text-[13px] font-semibold text-foreground">{t.name}</div>
+                <div className="mt-0.5 text-[11.5px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {t.role}
+                </div>
+              </div>
+            </TfCard>
+          ))}
+        </div>
+      </TfSection>
+
+      {/* ============= 8c. FIT QUALIFIER ============= */}
+      <TfSection
+        eyebrow="Engagement Fit"
+        title={<>Built for operators. <span className="text-muted-foreground">Not for everyone.</span></>}
+        intro="TrendFlux OS is a 90-day systems engagement, not a retainer. We work with a small number of founders per quarter."
+      >
+        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-3 sm:grid-cols-2">
+          {FIT.map((f) => (
+            <div
+              key={f}
+              className="flex items-start gap-3 rounded-xl border border-border bg-card/40 p-5"
+            >
+              <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
+              <span className="text-[14px] leading-relaxed text-foreground/90">{f}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <button
+            type="button"
+            onClick={() => setQuoteOpen(true)}
+            className="tf-btn-primary inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_rgba(220,38,38,0.5)] hover:bg-primary/90"
+          >
+            Request a Fit Assessment <ArrowRight className="h-4 w-4" />
+          </button>
+          <p className="mt-4 text-[11.5px] uppercase tracking-[0.22em] text-muted-foreground">
+            45-min call · No pitch · Operator to operator
+          </p>
+        </div>
+      </TfSection>
+
+
+
+      {/* ============= 9. FINAL CTA ============= */}
+      <section className="relative isolate overflow-hidden bg-background py-32">
+        <div aria-hidden className="pointer-events-none absolute inset-0 tf-grid-bg" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[480px] w-[880px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-[180px] tf-glow-pulse"
+        />
+        <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        <div className="relative mx-auto max-w-3xl px-6 text-center lg:px-10">
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.3em] text-primary">
+            <span className="h-1 w-1 rounded-full bg-primary" />
+            Next chapter
+          </p>
+          <h2 className="font-display text-4xl font-semibold tracking-[-0.025em] text-foreground sm:text-5xl md:text-[60px] md:leading-[1.02]">
+            Scale Beyond <span className="tf-text-electric">Marketing</span>.
+          </h2>
+          <p className="mx-auto mt-6 max-w-xl text-[15px] leading-[1.7] text-muted-foreground sm:text-[16.5px]">
+            Stop renting agency hours. Own a growth system that compounds — wired for your P&L, auditable on day one.
+          </p>
+
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <button
               type="button"
               onClick={() => setQuoteOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full bg-gold px-9 py-4 font-bold text-gold-foreground shadow-gold transition hover:scale-105"
+              className="tf-btn-primary inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_rgba(220,38,38,0.5)] hover:bg-primary/90 sm:w-auto"
             >
-              Launch Growth System <ArrowRight className="w-4 h-4" />
+              Book Private Strategy Call <ArrowRight className="h-4 w-4" />
             </button>
-            <button
-              type="button"
-              onClick={() => openStrategy("footer_cta")}
-              className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-8 py-4 font-semibold text-foreground transition hover:border-primary/60 hover:bg-foreground/5"
+            <Link
+              to="/ecosystem"
+              className="inline-flex w-full items-center justify-center rounded-full border border-border bg-muted/50 px-7 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-foreground/20 hover:bg-muted sm:w-auto"
             >
-              Book a Growth Strategy Session
-            </button>
+              See the Architecture
+            </Link>
           </div>
+          <p className="mt-6 text-[11.5px] uppercase tracking-[0.22em] text-muted-foreground">
+            Limited engagements per quarter · Founder-to-founder
+          </p>
         </div>
+      </section>
 
-        {/* Contact icons */}
-        <div className="mx-auto mt-12 max-w-7xl border-t border-border pt-8">
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <SocialIcons brand="trendflux" variant="footer" size="lg" />
-          </div>
+      <Footer />
 
-          <div className="mt-8 flex flex-col items-center justify-between gap-3 text-sm text-foreground/50 md:flex-row">
-            <div className="flex items-center gap-2">
-              <img
-                src={trendfluxLogo}
-                alt="TrendFlux Ecosystem logo"
-                width={28}
-                height={28}
-                loading="lazy"
-                decoding="async"
-                className="h-7 w-7 object-contain"
-              />
-              <p className="font-semibold text-foreground">TrendFlux Ecosystem</p>
-            </div>
-            <p>© 2026 — Built on integrity</p>
-          </div>
-        </div>
-      </footer>
-
-      {/* Luxe Veil invitation code dialog */}
-      <Dialog open={veilOpen} onOpenChange={setVeilOpen}>
-        <DialogContent className="border-border bg-background text-foreground sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 font-display text-primary">
-              <Lock className="h-4 w-4" /> Enter your invitation
-            </DialogTitle>
-            <DialogDescription className="text-muted-foreground">
-              Luxe Veil is invite-only. Enter your code to access the private experience.
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={submitVeilCode} className="mt-2 space-y-3">
-            <input
-              autoFocus
-              value={veilCode}
-              onChange={(e) => setVeilCode(e.target.value)}
-              placeholder="INVITE CODE"
-              aria-label="Invitation code"
-              className="w-full rounded-full border border-border bg-background px-5 py-3 text-center text-sm uppercase tracking-[0.3em] text-foreground outline-none focus:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
-            />
-            {veilError && (
-              <p role="alert" aria-live="assertive" className="text-xs text-primary">{veilError}</p>
-            )}
-            <button
-              type="submit"
-              className="w-full rounded-full bg-primary py-3 text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground transition hover:bg-[hsl(var(--primary-glow))]"
-            >
-              Unlock Experience
-            </button>
-            <p className="text-center text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-              Access by referral only. No public registration.
-            </p>
-          </form>
-        </DialogContent>
-      </Dialog>
-      <StrategySessionDialog
-        open={strategyOpen}
-        onOpenChange={(o) => {
-          setStrategyOpen(o);
-          if (!o) setStrategySource(null);
-        }}
-        sourceCaseSlug={strategySource?.slug ?? null}
-        source={strategySource?.source}
+      <QuoteDialog
+        open={quoteOpen}
+        onOpenChange={setQuoteOpen}
+        context={{ source: "homepage_hero" }}
       />
-
-      {/* Case study narrative modal */}
-      <Dialog open={!!narrativeCase} onOpenChange={(o) => !o && closeNarrative()}>
-        <DialogContent
-          className="glass-strong border-gold/30 shadow-[0_30px_80px_-20px_hsl(var(--gold)/0.45)] sm:max-w-2xl max-h-[90vh] overflow-y-auto"
-          aria-describedby={undefined}
-          onOpenAutoFocus={(e) => {
-            // Take over Radix's default initial focus and place it on a meaningful control
-            // inside the modal (the primary action), so screen-reader users land somewhere useful.
-            if (narrativeInitialFocusRef.current) {
-              e.preventDefault();
-              narrativeInitialFocusRef.current.focus();
-            }
-          }}
-          onCloseAutoFocus={(e) => {
-            // Explicitly return focus to the card button that opened the modal,
-            // overriding Radix's default (which can lose the trigger after re-renders).
-            if (narrativeTriggerRef.current) {
-              e.preventDefault();
-              narrativeTriggerRef.current.focus();
-              narrativeTriggerRef.current = null;
-            }
-          }}
-        >
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
-          {narrativeCase && (
-            <>
-              <DialogHeader className="space-y-3 pt-2 text-left">
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
-                    {narrativeCase.category}
-                  </span>
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-foreground/50">
-                    {narrativeCase.map.city} · {narrativeCase.map.region}
-                  </span>
-                </div>
-                <DialogTitle className="font-display text-2xl leading-snug md:text-3xl">
-                  {narrativeCase.title}
-                </DialogTitle>
-                <DialogDescription className="text-sm leading-relaxed text-foreground/70">
-                  {narrativeCase.description}
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                {[
-                  { label: "Situation", value: narrativeCase.situation },
-                  { label: "Problem", value: narrativeCase.problem },
-                  { label: "Solution", value: narrativeCase.solution },
-                  { label: "Insight", value: narrativeCase.insight },
-                ].map((b) => (
-                  <div
-                    key={b.label}
-                    className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-4"
-                  >
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold">
-                      {b.label}
-                    </p>
-                    <p className="mt-2 text-sm leading-relaxed text-foreground/80">{b.value}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 rounded-2xl border border-gold/20 bg-gold/5 p-4">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold">
-                  Outcomes
-                </p>
-                <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
-                  {narrativeCase.results.map((r) => (
-                    <li key={r} className="flex items-start gap-2 text-sm text-foreground/85">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand-green" />
-                      <span>{r}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <DialogFooter className="gap-2 sm:gap-3 pt-2">
-                <Button variant="ghost" onClick={closeNarrative}>
-                  Close
-                </Button>
-                <Button
-                  variant="ghost"
-                  onClick={() => {
-                    const slug = narrativeCase?.slug ?? null;
-                    if (narrativeCase) {
-                      track("consult_operator_click", {
-                        case_slug: narrativeCase.slug,
-                        case_title: narrativeCase.title,
-                        source: "narrative_modal",
-                      });
-                    }
-                    closeNarrative();
-                    openStrategy("narrative_modal", slug);
-                  }}
-                >
-                  Consult Operator
-                </Button>
-                <Button variant="gold" asChild>
-                  <Link
-                    ref={(el) => {
-                      // The asChild Button passes its ref through to this anchor.
-                      narrativeInitialFocusRef.current = (el as unknown as HTMLButtonElement) ?? null;
-                    }}
-                    to={`/case-studies/${narrativeCase.slug}`}
-                    state={{ from: `/${serializeFilters(caseFilters)}#cases` }}
-                    onClick={closeNarrative}
-                  >
-                    Open Full Case Study <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </DialogFooter>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-      <ReframePortrait />
     </main>
   );
 };
-
 
 export default Index;

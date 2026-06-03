@@ -78,24 +78,59 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: CORS_HEADERS });
   }
 
-  // Require the service-role key in the Authorization header. This function is
-  // invoked by pg_cron (which can attach the key) — no public callers allowed.
+  // Allow two caller types:
+  //  1. pg_cron / server-side jobs presenting the service-role key as Bearer
+  //  2. An authenticated admin user (manual "Run now" from the admin UI)
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-  const provided = (req.headers.get("Authorization") ?? "").replace(/^Bearer\s+/i, "").trim();
-  const a = new TextEncoder().encode(provided);
-  const b = new TextEncoder().encode(serviceKey);
-  let authOk = a.length === b.length && b.length > 0;
-  if (authOk) {
-    let diff = 0;
-    for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
-    authOk = diff === 0;
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const provided = authHeader.replace(/^Bearer\s+/i, "").trim();
+
+  let authOk = false;
+
+  // Constant-time compare against service-role key.
+  if (provided && serviceKey) {
+    const a = new TextEncoder().encode(provided);
+    const b = new TextEncoder().encode(serviceKey);
+    if (a.length === b.length) {
+      let diff = 0;
+      for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+      if (diff === 0) authOk = true;
+    }
   }
+
+  // Otherwise, accept an authenticated admin user.
+  if (!authOk && provided) {
+    try {
+      const userClient = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_ANON_KEY")!,
+        { global: { headers: { Authorization: authHeader } } },
+      );
+      const { data: claimsData } = await userClient.auth.getClaims(provided);
+      const userId = claimsData?.claims?.sub;
+      if (userId) {
+        const adminProbe = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          serviceKey,
+        );
+        const { data: isAdmin } = await adminProbe.rpc("has_role", {
+          _user_id: userId,
+          _role: "admin",
+        });
+        if (isAdmin === true) authOk = true;
+      }
+    } catch (err) {
+      console.error("Admin auth check failed", err);
+    }
+  }
+
   if (!authOk) {
     return new Response(JSON.stringify({ error: "unauthorized" }), {
       status: 401,
       headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
     });
   }
+
 
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,

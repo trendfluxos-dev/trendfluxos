@@ -1,34 +1,33 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
+import { StandLanguageProvider } from "@/context/StandLanguageContext";
 import { FilmGrain } from "@/components/the-stand/FilmGrain";
+import { LangToggle } from "@/components/the-stand/LangToggle";
 import { SilentOpener } from "@/components/the-stand/SilentOpener";
-import { RefusalCards } from "@/components/the-stand/RefusalCards";
 import { Listening } from "@/components/the-stand/Listening";
+import { RefusalStanzas } from "@/components/the-stand/RefusalStanzas";
 import { ReconstructionTimeline } from "@/components/the-stand/ReconstructionTimeline";
-import { EthicalIndex } from "@/components/the-stand/EthicalIndex";
-import { InfrastructurePivot } from "@/components/the-stand/InfrastructurePivot";
+import { PrinciplesList } from "@/components/the-stand/PrinciplesList";
+import { MemoryLayer24 } from "@/components/the-stand/MemoryLayer24";
 import { HumanityRestored } from "@/components/the-stand/HumanityRestored";
 import { MediaWall } from "@/components/the-stand/MediaWall";
-import { QuoteEngineCta } from "@/components/the-stand/QuoteEngineCta";
 import { DocumentaryEmbed } from "@/components/the-stand/DocumentaryEmbed";
+import { InfrastructurePivot } from "@/components/the-stand/InfrastructurePivot";
+import { ArchiveUtilities } from "@/components/the-stand/ArchiveUtilities";
 import { ClosingStatement } from "@/components/the-stand/ClosingStatement";
 
 /**
- * /the-stand — a museum-grade cinematic experience for the
- * Zahid Hasan Emon narrative inside the TrendFlux ecosystem.
- *
- * Tone: Apple minimalism + Netflix documentary + A24 atmosphere.
- * Visual language tokens live under the scoped `.the-stand` class
- * in `src/index.css` (--stand-bone / --stand-silver / --stand-charcoal
- * / --stand-red). All sections fade in via IntersectionObserver and
- * respect `prefers-reduced-motion`.
+ * /the-stand — a Bangla-first digital civic memory experience.
+ * Narrative-first ordering: statement → why it matters → refusals →
+ * reconstruction → principles → human element → archive → bridge →
+ * (quiet utilities) → closing. Tools are demoted; emotion leads.
  */
 export default function TheStand() {
   useSeo({
     title: "The Stand — Zahid Hasan Emon · TrendFlux Ecosystem",
     description:
-      "মায়ের নিষেধ আছে। A preserved moment of conscience — Zahid Hasan Emon's stand against extortion and a torture-cell night at Jahangirnagar University, reimagined as a cinematic archive inside the TrendFlux Ecosystem.",
+      "মায়ের নিষেধ আছে। A preserved moment of conscience — Zahid Hasan Emon's stand against extortion and a torture-cell night at Jahangirnagar University, reimagined as a Bangla-first civic memory experience inside the TrendFlux Ecosystem.",
     type: "article",
     image: "/og-the-stand.jpg",
     imageWidth: 1216,
@@ -64,30 +63,48 @@ export default function TheStand() {
   });
 
   return (
-    <main className="the-stand relative min-h-screen">
-      <FilmGrain />
+    <StandLanguageProvider>
+      <main className="the-stand relative min-h-screen">
+        <FilmGrain />
 
-      {/* Quiet back link — desaturated, easy to miss on purpose */}
-      <Link
-        to="/#story"
-        lang="en"
-        className="fixed left-6 top-6 z-50 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))]/70 transition-colors hover:text-[hsl(var(--stand-red))]"
-      >
-        <ArrowLeft className="h-3 w-3" />
-        Home
-      </Link>
+        {/* Quiet back link — desaturated, easy to miss on purpose */}
+        <Link
+          to="/#story"
+          lang="en"
+          className="fixed left-6 top-6 z-50 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))]/70 transition-colors hover:text-[hsl(var(--stand-red))]"
+        >
+          <ArrowLeft className="h-3 w-3" />
+          Home
+        </Link>
 
-      <SilentOpener />
-      <RefusalCards />
-      <Listening />
-      <ReconstructionTimeline />
-      <EthicalIndex />
-      <HumanityRestored />
-      <InfrastructurePivot />
-      <MediaWall />
-      <QuoteEngineCta />
-      <DocumentaryEmbed />
-      <ClosingStatement />
-    </main>
+        <LangToggle />
+
+        <SilentOpener />
+        <Listening />
+        <RefusalStanzas />
+        <ReconstructionTimeline />
+        <PrinciplesList />
+        <MemoryLayer24 />
+        <HumanityRestored />
+        <MediaWall />
+        <DocumentaryEmbed />
+        <InfrastructurePivot />
+        <ArchiveUtilities />
+        <ClosingStatement />
+
+        {/* Hairline bridge to the parallel emotional archive — easy to miss on purpose */}
+        <div className="mx-auto flex max-w-xl flex-col items-center gap-3 px-6 pb-20 pt-8 text-center">
+          <span aria-hidden className="h-px w-10 bg-[hsl(var(--stand-hairline))]" />
+          <Link
+            to="/quiet-positions"
+            className="text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-muted))]/65 transition-colors hover:text-[hsl(var(--stand-red))]"
+          >
+            <span lang="bn">নীরব অবস্থান</span>
+            <span aria-hidden> · </span>
+            <span lang="en">Quiet Positions →</span>
+          </Link>
+        </div>
+      </main>
+    </StandLanguageProvider>
   );
 }

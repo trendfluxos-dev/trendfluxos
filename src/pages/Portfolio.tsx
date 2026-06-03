@@ -42,10 +42,77 @@ const NAV = [
   { label: "About", href: "#about" },
   { label: "Systems", href: "#systems" },
   { label: "Deliverables", href: "#deliverables" },
+  { label: "Pages", href: "#pages" },
   { label: "Packages", href: "#packages" },
   { label: "Proof Vault", href: "#proof" },
   { label: "Contact", href: "#contact" },
 ];
+
+type PageItem = {
+  name: string;
+  role: string;
+  desc: string;
+  href: string;
+  badge?: string;
+  website?: { label: string; href: string };
+};
+
+const PAGE_GROUPS: { key: string; label: string; caption: string; items: PageItem[] }[] = [
+  {
+    key: "civic",
+    label: "Civic Work",
+    caption: "Voluntary social & cultural activism — not client work.",
+    items: [
+      {
+        name: "Pabna Nagarik Committee",
+        role: "Brand & Campaign Strategist",
+        desc: "নাগরিক ঐক্যেই বদলাবে পাবনা — civic campaign systems, 485K+ organic views.",
+        href: "https://facebook.com/pncpabna",
+        badge: "Website by me",
+        website: { label: "pncpabna.live", href: "https://pncpabna.live" },
+      },
+      {
+        name: "Pabna Debate Society (PDS)",
+        role: "Founder · Life Member & Advisor",
+        desc: "মুক্তির আলোয় মুক্তি — debate, leadership & cultural movement in Pabna.",
+        href: "https://facebook.com/debate.pabna",
+      },
+    ],
+  },
+  {
+    key: "employer",
+    label: "Employer Work",
+    caption: "Pages operated as part of full-time / company role.",
+    items: [
+      {
+        name: "HnB EduVerse",
+        role: "Assistant Manager — Digital & Social",
+        desc: "Education brand — content systems, reels strategy, campaign execution.",
+        href: "https://facebook.com/HnBEduVerse",
+      },
+      {
+        name: "Marie J. Elliot — Child Parenting",
+        role: "Social Media Manager",
+        desc: "International parenting brand — content, scheduling & engagement systems.",
+        href: "#",
+      },
+    ],
+  },
+  {
+    key: "client",
+    label: "Client Work",
+    caption: "Independent client engagements.",
+    items: [
+      {
+        name: "My Little Outlier",
+        role: "Social Media Manager",
+        desc: "Brand voice, content planning & growth execution for a parenting community.",
+        href: "https://facebook.com/MyLittleOutlier",
+      },
+    ],
+  },
+];
+
 
 const TRUST = [
   { v: "485K+", l: "Organic Views" },
@@ -664,6 +731,82 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
+
+      {/* PAGES & BRANDS */}
+      <section id="pages" className="py-20 md:py-24">
+        <div className="mx-auto max-w-7xl px-5 md:px-8">
+          <div className="max-w-2xl">
+            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Pages & Brands</span>
+            <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">
+              Communities, brands & pages I operate
+            </h2>
+            <p className="mt-3 text-[15px] text-[#4B5563] leading-relaxed">
+              Grouped by context — civic activism, full-time employer work, and independent client engagements.
+            </p>
+          </div>
+
+          <div className="mt-12 space-y-14">
+            {PAGE_GROUPS.map((g) => (
+              <div key={g.key}>
+                <div className="flex items-end justify-between gap-4 border-b border-[#E5E7EB] pb-3">
+                  <div>
+                    <h3 className="text-lg font-semibold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">{g.label}</h3>
+                    <p className="text-sm text-[#4B5563] mt-1">{g.caption}</p>
+                  </div>
+                  <span className="text-xs text-[#6B7280] tabular-nums">{g.items.length} {g.items.length === 1 ? "page" : "pages"}</span>
+                </div>
+                <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {g.items.map((p) => (
+                    <div key={p.name} className="group rounded-2xl border border-[#E5E7EB] bg-white p-6 hover:border-[#111111] transition">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="h-10 w-10 rounded-xl bg-[#111111] text-white grid place-items-center text-[13px] font-bold tracking-tight shrink-0">
+                            {p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                          </span>
+                          <div className="min-w-0">
+                            <div className="font-semibold tracking-tight truncate">{p.name}</div>
+                            <div className="text-xs text-[#6B7280] mt-0.5">{p.role}</div>
+                          </div>
+                        </div>
+                        {p.badge && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[#FEF2F2] text-[#B91C1C] text-[10px] font-semibold px-2 py-1 ring-1 ring-[#FECACA] whitespace-nowrap">
+                            <Globe className="h-3 w-3" />{p.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-4 text-sm text-[#4B5563] leading-relaxed">{p.desc}</p>
+                      <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                        {p.href && p.href !== "#" && (
+                          <a
+                            href={p.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 font-medium text-[#111111] hover:text-[#DC2626] transition"
+                          >
+                            <Facebook className="h-3.5 w-3.5" /> Visit page <ArrowUpRight className="h-3.5 w-3.5" />
+                          </a>
+                        )}
+                        {p.website && (
+                          <a
+                            href={p.website.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 font-medium text-[#DC2626] hover:underline"
+                          >
+                            <Globe className="h-3.5 w-3.5" /> {p.website.label} <ArrowUpRight className="h-3.5 w-3.5" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
 
       {/* SKILLS + LEADERSHIP + EDU */}
       <section className="py-20 md:py-24">

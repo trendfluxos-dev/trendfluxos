@@ -57,6 +57,8 @@ const Footer = () => {
               </button>
             </li>
             <li><a href="#cases" className="story-link hover:text-foreground transition-colors">Case Studies</a></li>
+            <li><Link to="/the-stand" className="story-link hover:text-foreground transition-colors">The Stand</Link></li>
+            <li><Link to="/toolkit" className="story-link hover:text-foreground transition-colors">Course & Toolkit</Link></li>
             <li><a href="#" className="story-link hover:text-foreground transition-colors">Contact</a></li>
           </ul>
         </div>
@@ -99,7 +101,10 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-foreground/40 tracking-wide">
         <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</p>
-        <p>Built as a system, not a website.</p>
+        <div className="flex items-center gap-4">
+          <Link to="/explore" className="hover:text-foreground transition-colors">Browse all pages</Link>
+          <p>Built as a system, not a website.</p>
+        </div>
       </div>
     </footer>
   );

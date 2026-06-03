@@ -1,30 +1,19 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { Menu, GraduationCap, LogIn, LayoutDashboard } from "lucide-react";
+import { Menu, LogIn, LayoutDashboard, Search } from "lucide-react";
 import { BRAND } from "@/config/brand";
+import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
+import { openCommandPalette } from "@/lib/commandPalette";
 import SocialIcons from "@/components/social/SocialIcons";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/trendflux-logo.webp";
 
-const links = [
-  { label: "Systems", href: "/#services" },
-  { label: "Case Studies", href: "/#cases" },
-  { label: "Enterprise Control", href: "/enterprise" },
-  { label: "Project Lead", href: "/project-lead" },
-];
-
 const Navbar = () => {
   const { pathname } = useLocation();
-  const [isMac, setIsMac] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
-
-  useEffect(() => {
-    setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform));
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -47,12 +36,6 @@ const Navbar = () => {
     };
   }, []);
 
-  const openPalette = () => {
-    window.dispatchEvent(
-      new KeyboardEvent("keydown", { key: "k", ctrlKey: !isMac, metaKey: isMac, bubbles: true }),
-    );
-  };
-
   return (
     <header className="fixed top-0 inset-x-0 z-50">
       <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 transition-all duration-300 ${scrolled ? "mt-2" : "mt-4"}`}>
@@ -67,55 +50,52 @@ const Navbar = () => {
             <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
           </Link>
 
-          <div className="hidden md:flex flex-nowrap items-center gap-4 lg:gap-6 text-[12px] lg:text-[13px] text-foreground/65 min-w-0">
-            {links.map((l) => (
-              <Link
-                key={l.href}
-                to={l.href}
-                className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
-                  pathname === l.href ? "text-foreground" : ""
-                }`}
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="flex flex-nowrap items-center gap-1.5 shrink-0">
-            {/* Social icons removed from navbar — already present in footer + floating contact.
-                They were overlapping nav links on mid-wide viewports. */}
+          {/* Center: Explore + Browse */}
+          <div className="hidden md:flex flex-nowrap items-center gap-5 text-[12px] lg:text-[13px] text-foreground/65">
             <Link
-              to="/toolkit"
-              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
-              title="Course & Toolkit"
+              to="/"
+              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
+                pathname === "/" ? "text-foreground" : ""
+              }`}
             >
-              <GraduationCap className="h-3.5 w-3.5 shrink-0" />
-              <span>Course</span>
+              Explore
             </Link>
             <Link
+              to="/explore"
+              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
+                pathname === "/explore" ? "text-foreground" : ""
+              }`}
+            >
+              Browse
+            </Link>
+          </div>
+
+          {/* Right: Search + Apply Access + Login */}
+          <div className="flex flex-nowrap items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => openCommandPalette()}
+              aria-label="Search pages"
+              title="Search pages (⌘K)"
+              className="inline-flex items-center justify-center h-8 w-8 rounded-full border border-border/50 bg-background/30 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+            >
+              <Search className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => openLuxeVeilGate({ source: "navbar" })}
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
+            >
+              Apply Access
+            </button>
+            <Link
               to={signedIn ? "/admin" : "/auth"}
-              className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
               title={signedIn ? "Dashboard" : "Login"}
             >
               {signedIn ? <LayoutDashboard className="h-3.5 w-3.5 shrink-0" /> : <LogIn className="h-3.5 w-3.5 shrink-0" />}
               <span>{signedIn ? "Dashboard" : "Login"}</span>
             </Link>
-            <button
-              type="button"
-              onClick={openPalette}
-              aria-label={`Open command palette (${isMac ? "Cmd" : "Ctrl"}+K)`}
-              title="Quick jump to any page"
-              className="hidden xl:inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[11px] text-foreground/60 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
-            >
-              <span>Quick jump</span>
-              <kbd className="rounded border border-border/50 bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] leading-none">
-                {isMac ? "⌘" : "Ctrl"} K
-              </kbd>
-            </button>
-            <Button variant="hero" size="sm" className="hidden sm:inline-flex whitespace-nowrap cta-fx">
-              Book Strategic Consultation
-            </Button>
-
 
             {/* Mobile menu */}
             <Sheet open={open} onOpenChange={setOpen}>
@@ -136,25 +116,30 @@ const Navbar = () => {
                   </SheetTitle>
                 </SheetHeader>
                 <div className="mt-8 flex flex-col gap-1">
-                  {links.map((l) => (
-                    <Link
-                      key={l.href}
-                      to={l.href}
-                      onClick={() => setOpen(false)}
-                      className="rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
-                    >
-                      {l.label}
-                    </Link>
-                  ))}
-                  <div className="my-3 h-px bg-border/60" />
                   <Link
-                    to="/toolkit"
+                    to="/"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                    className="rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
                   >
-                    <GraduationCap className="h-4 w-4 text-primary" />
-                    Course & Toolkit
+                    Explore
                   </Link>
+                  <Link
+                    to="/explore"
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    Browse all pages
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      openLuxeVeilGate({ source: "navbar_mobile" });
+                    }}
+                    className="text-left rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    Apply Access
+                  </button>
                   <Link
                     to={signedIn ? "/admin" : "/auth"}
                     onClick={() => setOpen(false)}
@@ -166,9 +151,6 @@ const Navbar = () => {
                 </div>
 
                 <div className="mt-6 border-t border-border/60 pt-6">
-                  <Button variant="hero" size="sm" className="w-full" onClick={() => setOpen(false)}>
-                    Book Strategic Consultation
-                  </Button>
                   <div className="mt-5">
                     <SocialIcons variant="inline" size="sm" />
                   </div>

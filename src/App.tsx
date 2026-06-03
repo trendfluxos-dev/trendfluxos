@@ -6,6 +6,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import ThemeDebugPanel from "@/components/ThemeDebugPanel";
 import PerfMonitor from "@/components/PerfMonitor";
+import OverflowDetector from "@/components/dev/OverflowDetector";
+
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routes } from "./lib/routes";
@@ -16,7 +18,7 @@ import FloatingContact from "./components/social/FloatingContact";
 import BrandSwitcher from "./components/social/BrandSwitcher";
 import LuxeVeilGate from "./components/LuxeVeilGate";
 import TelegramGroupPopup from "./components/TelegramGroupPopup";
-import ConsentBanner from "./components/ConsentBanner";
+import ConsentBannerGate from "./components/ConsentBannerGate";
 import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
@@ -25,8 +27,14 @@ import { SentryErrorBoundary } from "@/lib/sentry";
 const queryClient = new QueryClient();
 
 const Index = routes["/"];
+const Ecosystem = routes["/ecosystem"];
+const ServicesPage = routes["/services"];
+const AboutPage = routes["/about"];
+const ContactPage = routes["/contact"];
+const Explore = routes["/explore"];
 const ProjectLead = routes["/project-lead"];
 const Auth = routes["/auth"];
+const Dashboard = routes["/dashboard"];
 const Admin = routes["/admin"];
 const LuxeVeilAdmin = routes["/admin/luxe-veil"];
 const ConversionDashboard = routes["/admin/conversions"];
@@ -39,6 +47,7 @@ const Ga4Check = routes["/admin/ga4-check"];
 const PressDetail = routes["/press/:id"];
 const TheStand = routes["/the-stand"];
 const TheStandShare = routes["/the-stand/share"];
+const QuietPositions = routes["/quiet-positions"];
 const Marriage = routes["/marriage"];
 const BrandOpen = routes["/brand-open"];
 const TrendfluxTalent = routes["/trendflux-talent"];
@@ -50,6 +59,9 @@ const Toolkit = routes["/toolkit"];
 const CourseTrendflux = routes["/course/trendflux"];
 const Masterclass = routes["/masterclass"];
 const CaseStudyPage = routes["/case-studies/:slug"];
+const JusticeAppeal = routes["/justice-appeal"];
+const MediaReports = routes["/media-reports"];
+const ShareKit = routes["/share-kit"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 
@@ -86,16 +98,25 @@ const App = () => (
           <BrandSwitcher />
           <LuxeVeilGate />
           <TelegramGroupPopup />
-          {false && <ConsentBanner />}
+          <ConsentBannerGate />
           <AccessRequestGate />
           {import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && <ThemeDebugPanel />}
           {import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && <PerfMonitor />}
+          <OverflowDetector />
+
+
 
           <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/ecosystem" element={<Ecosystem />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/explore" element={<Explore />} />
             <Route path="/project-lead" element={<ProjectLead />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/luxe-veil" element={<LuxeVeilAdmin />} />
             <Route path="/admin/conversions" element={<ConversionDashboard />} />
@@ -108,6 +129,7 @@ const App = () => (
             <Route path="/press/:id" element={<PressDetail />} />
             <Route path="/the-stand" element={<TheStand />} />
             <Route path="/the-stand/share" element={<TheStandShare />} />
+            <Route path="/quiet-positions" element={<QuietPositions />} />
             <Route path="/marriage" element={<Marriage />} />
             <Route path="/brand-open" element={<BrandOpen />} />
             <Route path="/trendflux-talent" element={<TrendfluxTalent />} />
@@ -119,6 +141,9 @@ const App = () => (
             <Route path="/course/trendflux" element={<CourseTrendflux />} />
             <Route path="/masterclass" element={<Masterclass />} />
             <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
+            <Route path="/justice-appeal" element={<JusticeAppeal />} />
+            <Route path="/media-reports" element={<MediaReports />} />
+            <Route path="/share-kit" element={<ShareKit />} />
             {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

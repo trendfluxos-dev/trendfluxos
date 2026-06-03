@@ -232,3 +232,177 @@ export const STAND_CLOSING = {
   line2: "কিছু মানুষ বিবেক।",
   signature: "TrendFlux Ecosystem",
 };
+
+// ─── Editorially adapted English layer (not literal translation) ───
+// Surfaces as the "EN" toggle on /the-stand. Tone: cinematic, museum-grade,
+// documentary — never machine-translated, never marketing.
+
+export const STAND_OPENER_EN = {
+  eyebrow: "The Stand · A preserved moment of conscience",
+  headline: "My mother forbade it.",
+  body: "A single sentence that became larger than fear — and the night an institution tried to bury it.",
+  scrollCue: "Scroll into evidence",
+};
+
+export const STAND_OPENER_BN = {
+  eyebrow: "The Stand · বিবেকের একটি সংরক্ষিত মুহূর্ত",
+  headline: STAND_OPENER.bn,
+  body: "একটি বাক্য — যা ভয়ের চেয়ে বড় হয়ে উঠেছিল। আর সেই রাত — যেটি একটি প্রতিষ্ঠান চাপা দিতে চেয়েছিল।",
+  scrollCue: "নিচে — প্রমাণের দিকে",
+};
+
+export const STAND_LISTEN_EN = {
+  eyebrow: "Why this moment matters",
+  body:
+    "He is not a political figure. He is a young technologist working on brand architecture and the ethical questions of the AI era. His voice carries weight not because he was attacked — but because, after being attacked, he refused to make peace with the structure that allowed it.",
+};
+
+export const STAND_LISTEN_BN_TITLE = "কেন এই মুহূর্ত গুরুত্বপূর্ণ";
+
+export const STAND_REFUSAL_INTRO = {
+  bn: { eyebrow: "যা প্রত্যাখ্যান করা হয়েছিল", title: "তিনটি প্রত্যাখ্যান। একটি বিবেক।" },
+  en: { eyebrow: "What was refused", title: "Three refusals. One conscience." },
+};
+
+export const STAND_RECONSTRUCTION_EN = {
+  eyebrow: "The Reconstruction",
+  title: "Room 126 — Maulana Bhasani Hall",
+  subtitle: "13 August 2023 · the reconstruction of a single night",
+  beats: [
+    { title: "A midnight call", body: "A phone call. Summoned to the front of the hall. He arrived in good faith." },
+    { title: "The door closes", body: "Motorcycle left outside. Walked into Room 126. The sound of the lock." },
+    { title: "Iron rod & hammer", body: "Four adults, one unarmed student. Long duration. Continuous strikes." },
+    { title: "A pistol to the stomach", body: "An illegal firearm pressed to his stomach. Voice trembling, words clear — \"Not the stomach. Shoot me in the head.\"" },
+    { title: "A forced confession", body: "Alcohol poured on his body. A confession recorded for the camera. The infrastructure of character assassination." },
+    { title: "Silence", body: "Administration knew. The proctorial body knew. No report. No statement." },
+    { title: "A decision", body: "He wrote a formal email to the Vice-Chancellor. A record was made. Silence is a contract with injustice." },
+  ],
+};
+
+export const STAND_PRINCIPLES_EN = {
+  eyebrow: "Ethical Leadership Index",
+  title: "Principles, not awards.",
+  body: "No trophies. No certificates. An index of positions — verified, documented, on the public record.",
+  items: [
+    { num: "01", title: "Refused extortion money", body: "Inside a culture of extortion, he refused his share. Family values held the highest priority." },
+    { num: "02", title: "Public whistleblower", body: "A written complaint to the Vice-Chancellor. A public statement in the national press." },
+    { num: "03", title: "Survived institutional pressure", body: "Held his position against administrative silence and social isolation." },
+    { num: "04", title: "An ethical voice for the AI era", body: "Working on brand architecture, the ethics of AI, and digital public systems." },
+  ],
+};
+
+export const STAND_INFRA_EN = {
+  eyebrow: "After The Stand",
+  headline: "Resistance became infrastructure.",
+  body:
+    "Some experiences do not destroy a person. They redefine what that person builds next — AI governance, youth leadership, digital transparency, education reform, and civic systems.",
+  link: "Enter the TrendFlux Ecosystem →",
+};
+
+export const STAND_INFRA_BN = {
+  eyebrow: "প্রতিরোধের পরবর্তী অধ্যায়",
+  headline: "প্রতিরোধই হয়ে উঠেছিল পরিকাঠামো।",
+  body:
+    "কিছু অভিজ্ঞতা মানুষকে ধ্বংস করে না — পরবর্তীতে সে কী গড়বে, তা পুনঃসংজ্ঞায়িত করে। AI গভর্নেন্স, তরুণ নেতৃত্ব, ডিজিটাল স্বচ্ছতা, শিক্ষা সংস্কার এবং সিভিক সিস্টেম।",
+  link: "TrendFlux Ecosystem-এ প্রবেশ করুন →",
+};
+
+export const STAND_MEDIA = {
+  bn: {
+    eyebrow: "নথিভুক্ত দলিল",
+    title: "ঘটনাগুলোর জনসম্মুখে প্রকাশিত রেকর্ড।",
+    note: "জাতীয় গণমাধ্যমে স্বাধীনভাবে প্রকাশিত প্রতিবেদনের একটি সংরক্ষিত সংকলন — মতামত নয়, দলিল।",
+    countSuffix: "টি দলিলভুক্ত প্রতিবেদন",
+    read: "কভারেজ পড়ুন",
+    timelineEyebrow: "কভারেজ ধারাবাহিকতা",
+    timeline: [
+      { year: "২০২৩", label: "প্রাথমিক প্রতিবেদন" },
+      { year: "২০২৪", label: "জাতীয় কভারেজ" },
+      { year: "পরবর্তী", label: "জনপ্রতিক্রিয়া ও বিবৃতি" },
+      { year: "চলমান", label: "আর্কাইভ ধারাবাহিকতা" },
+    ],
+  },
+  en: {
+    eyebrow: "Documented Public Record",
+    title: "A preserved record of what was published.",
+    note: "An archival index of independently published national reporting — documentation, not opinion.",
+    countSuffix: "documented reports",
+    read: "Read coverage",
+    timelineEyebrow: "Coverage continuity",
+    timeline: [
+      { year: "2023", label: "Initial reporting" },
+      { year: "2024", label: "National coverage" },
+      { year: "After", label: "Public reactions & statements" },
+      { year: "Ongoing", label: "Archive continuity" },
+    ],
+  },
+};
+
+export const STAND_ARCHIVE_UTILS = {
+  bn: {
+    eyebrow: "আর্কাইভ সরঞ্জাম",
+    body: "চাইলে এই বিবৃতিগুলো নিজস্ব শেয়ার-কার্ডে রূপ দিন।",
+    primary: "উদ্ধৃতি জেনারেটর",
+    secondary: "শেয়ার কার্ড / OG এক্সপোর্ট",
+  },
+  en: {
+    eyebrow: "Archive utilities",
+    body: "Optional. Turn any of these statements into a share card.",
+    primary: "Quote generator",
+    secondary: "Share card / OG export",
+  },
+};
+
+export const STAND_DOCUMENTARY_EN = {
+  eyebrow: "Documentary",
+  title: "The 126 Room",
+  sub: "A cinematic reconstruction — in production.",
+};
+
+export const STAND_DOCUMENTARY_BN = {
+  eyebrow: "তথ্যচিত্র",
+  title: "১২৬ নম্বর কক্ষ",
+  sub: "একটি সিনেম্যাটিক পুনর্গঠন — নির্মাণাধীন।",
+};
+
+export const STAND_CLOSING_EN = {
+  line1: "Some people choose power.",
+  line2: "Others choose conscience.",
+};
+
+
+// ─── July 2024 — civic memory layer ───
+// Treated as public memory, not political branding. Restrained, archival.
+export type MemoryBeat = { stamp: string; title: string; body: string };
+
+export const STAND_MEMORY_24_BN = {
+  eyebrow: "জুলাই ২০২৪ · নাগরিক স্মৃতির স্তর",
+  title: "একা একটি অবস্থান। পরে — একটি প্রজন্মের কণ্ঠস্বর।",
+  intro:
+    "২০২৪ সালের ঘটনাগুলো শুধু রাজনৈতিক মুহূর্ত নয় — এগুলো ছিল নাগরিক অবস্থান, ভয়, সাহস, এবং জনমতের ডিজিটাল দলিল। এই স্তরটি কোনো প্রচার নয়; এটি একটি স্মৃতি — সংরক্ষিত, যাচাইযোগ্য, এবং নীরব।",
+  beats: [
+    { stamp: "২০২৩", title: "প্রথম শব্দ", body: "একজন তরুণ, একটি কক্ষ, একটি প্রত্যাখ্যান। কোনো মিছিল নয়, কোনো ব্যানার নয় — শুধু একটি বাক্য যা চাপা পড়েনি।" },
+    { stamp: "শীত · ২০২৩–২৪", title: "নীরবতা ভাঙে", body: "জাতীয় গণমাধ্যমে যাচাইকৃত প্রতিবেদন। ক্যাম্পাসের ভেতরের একটি কাঠামো প্রথমবার পাবলিক রেকর্ডে আসে।" },
+    { stamp: "জুলাই · ২০২৪", title: "প্রজন্ম রাস্তায়", body: "যে নীরবতার বিরুদ্ধে একজন একা দাঁড়িয়েছিলেন, সেই একই কাঠামোর বিরুদ্ধে নেমে আসে হাজারো শিক্ষার্থী। প্রতিরোধ ব্যক্তি থেকে নাগরিক হয়ে ওঠে।" },
+    { stamp: "আগস্ট · ২০২৪", title: "পরিবর্তনের একটি মুহূর্ত", body: "একটি কাঠামোগত মুহূর্ত — যেখানে ভয় ও আনুগত্যের সমীকরণ বদলে যায়। স্মৃতিতে সংরক্ষিত, ইতিহাসে অনিবার্য।" },
+    { stamp: "পরে", title: "স্মৃতি, কাঠামো", body: "যা ঘটেছে তা পুনরাবৃত্তি রোধে দলিল হয়ে থাকে। এই আর্কাইভ সেই দলিলের একটি ছোট অধ্যায়।" },
+  ] satisfies MemoryBeat[],
+  closing:
+    "এই স্তর কোনো ‘পক্ষ’ নয়। এটি একটি প্রজন্মের সম্মিলিত কণ্ঠস্বর — যা সংরক্ষণ না করলে হারিয়ে যায়।",
+};
+
+export const STAND_MEMORY_24_EN = {
+  eyebrow: "July 2024 · A civic memory layer",
+  title: "One stand alone. Then — the voice of a generation.",
+  intro:
+    "The events of 2024 were not only political moments. They were civic positions, fear, courage, and the digital record of public opinion. This layer is not advocacy; it is memory — preserved, verifiable, quiet.",
+  beats: [
+    { stamp: "2023", title: "The first word", body: "One young man, one room, one refusal. No procession, no banner — only a sentence that did not get buried." },
+    { stamp: "Winter · 2023–24", title: "Silence begins to break", body: "Verified reports in the national press. An internal campus structure enters the public record for the first time." },
+    { stamp: "July · 2024", title: "A generation in the streets", body: "The same structure that one person had stood against alone now drew out thousands of students. Resistance moved from the individual to the civic." },
+    { stamp: "August · 2024", title: "A moment of inflection", body: "A structural moment — when the equations of fear and obedience shifted. Preserved in memory, inevitable in history." },
+    { stamp: "Afterward", title: "Memory, structure", body: "What happened becomes a document against repetition. This archive is one small chapter of that document." },
+  ] satisfies MemoryBeat[],
+  closing:
+    "This layer takes no side. It is the collective voice of a generation — which, if not preserved, is lost.",
+};
