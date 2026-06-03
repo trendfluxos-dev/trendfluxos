@@ -124,6 +124,7 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   /* Anchor sections clear the fixed navbar so in-page jumps land
@@ -136,7 +137,8 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "cv11";
-    /* Safer wrapping defaults for mixed Latin + Bengali/Unicode text */
+    overflow-x: hidden;
+    max-width: 100vw;
     /* Safer wrapping defaults for mixed Latin + Bengali/Unicode text:
        break-word only breaks strings that have no other break opportunity,
        so normal English words like "TrendFlux" stay intact. */
@@ -144,6 +146,12 @@
     word-break: normal;
     hyphens: none;
   }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
 
   /* Bengali / Indic clusters must not break mid-word.
      Hind Siliguri leads the stack — modern, corporate-friendly, balanced
@@ -911,7 +919,182 @@
   color: #000;
 }
 
+/* Bangla-first editorial rhythm — Hind Siliguri / Noto Sans Bengali
+   need more breathing room than Latin to stay calm and museum-grade. */
+.the-stand [lang="bn"] {
+  font-family: "Hind Siliguri", "Noto Sans Bengali", "Space Grotesk", Inter, sans-serif;
+  line-height: 1.85;
+  letter-spacing: 0;
+  word-break: keep-all;
+  line-break: strict;
+}
+.the-stand [lang="bn"].font-display,
+.the-stand h1[lang="bn"],
+.the-stand h2[lang="bn"],
+.the-stand h3[lang="bn"],
+.the-stand blockquote[lang="bn"],
+.the-stand p[lang="bn"].stand-bn-display {
+  line-height: 1.4;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .stand-redline { animation: none; transform: scaleX(1); }
   .stand-rise { opacity: 1; transform: none; filter: none; transition: none; }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   নীরব অবস্থান · QUIET POSITIONS — independent editorial layer
+   Scoped to [data-surface="quiet"]
+   ────────────────────────────────────────────────────────────── */
+[data-surface="quiet"] {
+  --quiet-bg: 0 0% 4%;
+  --quiet-ink: 36 18% 92%;
+  --quiet-rule: 36 12% 22%;
+  --quiet-accent: 3 62% 48%;
+
+  background-color: hsl(var(--quiet-bg));
+  color: hsl(var(--quiet-ink) / 0.78);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "kern";
+}
+
+[data-surface="quiet"] ::selection {
+  background: hsl(var(--quiet-accent) / 0.75);
+  color: hsl(var(--quiet-ink));
+}
+
+.quiet-display {
+  font-family: "Tiro Bangla", "Noto Serif Bengali", "Instrument Serif", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+
+.quiet-serif {
+  font-family: "Instrument Serif", "Tiro Bangla", "Noto Serif Bengali", Georgia, serif;
+  font-weight: 400;
+}
+
+.quiet-eyebrow {
+  font-family: "Inter", system-ui, sans-serif;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-surface="quiet"] * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* =========================================================================
+   TrendFlux OS — Premium light polish layer (white + red brand)
+   ========================================================================= */
+
+@keyframes tf-glow-drift {
+  0%, 100% { transform: translate(-50%, 0) scale(1); opacity: 0.35; }
+  50%      { transform: translate(-50%, -8px) scale(1.06); opacity: 0.6; }
+}
+@keyframes tf-grid-drift {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 56px 56px, 56px 56px; }
+}
+@keyframes tf-rise {
+  0%   { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes tf-bar-rise {
+  0%   { transform: scaleY(0); opacity: 0; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+@keyframes tf-orbit { to { transform: rotate(360deg); } }
+@keyframes tf-sheen {
+  0%   { transform: translateX(-120%); }
+  100% { transform: translateX(260%); }
+}
+@keyframes tf-pulse-ring {
+  0%   { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+@keyframes tf-dash { to { stroke-dashoffset: -32; } }
+
+.tf-glow-pulse { animation: tf-glow-drift 9s ease-in-out infinite; will-change: transform, opacity; }
+.tf-rise { animation: tf-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.tf-bar { transform-origin: bottom; animation: tf-bar-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.tf-orbit-slow { animation: tf-orbit 30s linear infinite; }
+.tf-dash-flow { animation: tf-dash 1.6s linear infinite; }
+
+.tf-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tf-reveal.is-in { opacity: 1; transform: translateY(0); }
+
+.tf-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+          mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  animation: tf-grid-drift 60s linear infinite;
+}
+
+.tf-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.4s ease;
+  will-change: transform;
+}
+.tf-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 30px 80px -30px hsl(0 72% 45% / 0.25),
+    0 10px 30px -15px hsl(0 0% 0% / 0.08);
+}
+.tf-card::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 35%;
+  background: linear-gradient(100deg, transparent 0%, rgba(0,0,0,0.04) 50%, transparent 100%);
+  transform: translateX(-120%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.tf-card:hover::after {
+  opacity: 1;
+  animation: tf-sheen 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.tf-btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.2s ease;
+}
+.tf-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 44px -10px hsl(0 72% 45% / 0.55);
+}
+.tf-btn-primary:active { transform: translateY(0); }
+
+.tf-text-electric {
+  background-image: linear-gradient(135deg, #FCA5A5 0%, #DC2626 45%, #B91C1C 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf-glow-pulse, .tf-grid-bg, .tf-orbit-slow, .tf-dash-flow,
+  .tf-bar, .tf-card::after { animation: none !important; }
+  .tf-reveal { opacity: 1; transform: none; transition: none; }
+}
+

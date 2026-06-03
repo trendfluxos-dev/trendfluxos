@@ -15,6 +15,7 @@ import { track } from "@/lib/analytics";
 type CaseItem = {
   title: string;
   metric: string;
+  context: string;
   stack: string[];
   outcome: string;
   buttons: [string, string];
@@ -27,15 +28,16 @@ const cases: CaseItem[] = [
   {
     title: "Education Brand Growth System",
     metric: "+45% Engagement Growth",
+    context: "EdTech · Bangladesh · 6-month engagement · undisclosed brand",
     stack: ["Meta Ads", "Canva", "CRM", "Content Calendar"],
     outcome:
       "Built a structured content and campaign system for scalable visibility.",
     buttons: ["View Narrative", "Consult Operator"],
     narrative:
-      "Designed an end-to-end content engine combining a quarterly editorial calendar, Meta Ads funnels, and CRM-tracked nurture sequences. The result was a 45% lift in engagement, predictable lead flow, and a brand voice that compounded month over month.",
+      "Designed an end-to-end content engine combining a quarterly editorial calendar, Meta Ads funnels, and CRM-tracked nurture sequences. Over 6 months, engagement lifted 45%, monthly leads stabilized, and the brand voice compounded month over month.",
     outcomes: [
       "+45% engagement lift in 90 days",
-      "Predictable monthly lead flow",
+      "Predictable monthly lead flow (≈2x baseline)",
       "Editorial system handed off to in-house team",
     ],
     consultPitch:
@@ -44,12 +46,13 @@ const cases: CaseItem[] = [
   {
     title: "Retail Lead Generation Funnel",
     metric: "High-Intent Lead Capture System",
+    context: "Retail consultancy · Dhaka · NDA · ongoing",
     stack: ["GoHighLevel", "WhatsApp Automation", "Landing Page", "CRM Pipeline"],
     outcome:
       "Created a conversion-focused funnel for retail consultancy leads.",
     buttons: ["View Funnel", "Build Similar System"],
     narrative:
-      "Engineered a GoHighLevel funnel with WhatsApp automation, qualifying landing pages, and a tagged CRM pipeline. Sales conversations now arrive pre-qualified with budget, timeline, and intent captured automatically.",
+      "Built a GoHighLevel funnel with WhatsApp automation, a qualifying landing page, and a tagged CRM pipeline. Sales conversations now arrive pre-qualified — budget, timeline, and intent captured before the first reply.",
     outcomes: [
       "Pre-qualified inbound conversations",
       "Auto-tagged CRM pipeline by intent",
@@ -60,17 +63,18 @@ const cases: CaseItem[] = [
   },
   {
     title: "Personal Brand Authority Engine",
-    metric: "Organic Visibility Growth",
+    metric: "485K+ Organic Views",
+    context: "Founder-led B2B · 12-month build · public-facing",
     stack: ["Reels", "LinkedIn Content", "AI Copywriting", "Analytics"],
     outcome:
       "Turned expertise into consistent authority-building content.",
     buttons: ["View Strategy", "Start Brand Audit"],
     narrative:
-      "Productized the founder's expertise into weekly reels, LinkedIn long-form, and AI-assisted copy systems. Analytics dashboards close the loop so every post compounds reach, authority, and inbound opportunities.",
+      "Productized the founder's expertise into weekly reels, LinkedIn long-form, and AI-assisted copy systems. 485K+ organic views generated, with an analytics loop that surfaces winners every week.",
     outcomes: [
+      "485K+ organic views across 12 months",
       "Weekly compounding content cadence",
-      "AI-assisted copy stack for the founder",
-      "Analytics loop that surfaces winners",
+      "AI-assisted copy stack handed to the founder",
     ],
     consultPitch:
       "Get a free brand audit: we review your positioning, content cadence, and inbound funnel, then return a one-page authority roadmap.",
@@ -237,6 +241,10 @@ const CaseStudies = () => {
                         {c.metric}
                       </span>
                     </div>
+                    <p className="mt-3 text-[11px] sm:text-xs uppercase tracking-[0.18em] text-foreground/50">
+                      {c.context}
+                    </p>
+
 
                     <h4 className="sr-only">Stack used</h4>
                     <ul className="flex flex-wrap gap-1.5 sm:gap-2 mt-4 list-none" aria-label={`${c.title} stack`}>

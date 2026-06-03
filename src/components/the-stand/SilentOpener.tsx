@@ -1,6 +1,10 @@
-import { STAND_OPENER } from "@/content/theStand";
+import { useStandLang } from "@/context/StandLanguageContext";
+import { STAND_OPENER_BN, STAND_OPENER_EN } from "@/content/theStand";
 
 export function SilentOpener() {
+  const { lang } = useStandLang();
+  const t = lang === "bn" ? STAND_OPENER_BN : STAND_OPENER_EN;
+
   return (
     <section
       aria-label="Opening statement"
@@ -8,33 +12,33 @@ export function SilentOpener() {
     >
       <div className="mx-auto w-full max-w-4xl">
         <p
-          lang="en"
+          lang={lang}
           className="text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-muted))]/70 animate-[fadeIn_500ms_ease-out_both]"
           style={{ animationDelay: "80ms" }}
         >
-          The Stand · A preserved moment of conscience
+          {t.eyebrow}
         </p>
 
         <h1
-          lang="bn"
-          className="mt-12 font-display text-5xl md:text-7xl lg:text-[6.5rem] font-semibold leading-[1.02] tracking-tight text-[hsl(var(--stand-ink))] animate-[fadeIn_700ms_ease-out_both]"
+          lang={lang}
+          className="mt-12 font-display text-5xl md:text-7xl lg:text-[6.5rem] font-semibold leading-[1.05] tracking-tight text-[hsl(var(--stand-ink))] animate-[fadeIn_700ms_ease-out_both]"
           style={{ animationDelay: "220ms" }}
         >
-          {STAND_OPENER.bn}
+          {t.headline}
         </h1>
 
         <div
-          className="stand-redline mt-10 w-[60%] md:w-[40%]"
+          className="stand-redline mt-12 w-[60%] md:w-[40%]"
           style={{ animationDelay: "420ms", animationFillMode: "both" }}
           aria-hidden
         />
 
         <p
-          lang="en"
-          className="mt-10 max-w-xl text-base md:text-lg leading-relaxed text-[hsl(var(--stand-muted))] animate-[fadeIn_700ms_ease-out_both]"
+          lang={lang}
+          className="mt-12 max-w-xl text-base md:text-lg leading-relaxed text-[hsl(var(--stand-muted))] animate-[fadeIn_700ms_ease-out_both]"
           style={{ animationDelay: "520ms" }}
         >
-          {STAND_OPENER.en}
+          {t.body}
         </p>
       </div>
 
@@ -43,12 +47,11 @@ export function SilentOpener() {
         style={{ animationDelay: "780ms" }}
         aria-hidden
       >
-
         <span
-          lang="en"
+          lang={lang}
           className="text-[10px] uppercase tracking-[0.5em] text-[hsl(var(--stand-muted))]/60"
         >
-          {STAND_OPENER.scrollCue}
+          {t.scrollCue}
         </span>
       </div>
     </section>

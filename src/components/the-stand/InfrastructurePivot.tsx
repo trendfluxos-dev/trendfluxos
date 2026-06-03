@@ -1,58 +1,52 @@
-import { STAND_INFRA } from "@/content/theStand";
+import { useStandLang } from "@/context/StandLanguageContext";
+import { STAND_INFRA_BN, STAND_INFRA_EN } from "@/content/theStand";
 import { Reveal } from "./Reveal";
 
+/**
+ * Quiet bridge to the TrendFlux Ecosystem. A single editorial paragraph
+ * and one understated inline link — no pillar grid.
+ */
 export function InfrastructurePivot() {
+  const { lang } = useStandLang();
+  const t = lang === "bn" ? STAND_INFRA_BN : STAND_INFRA_EN;
+
   return (
     <section
       aria-label="After The Stand"
-      className="relative overflow-hidden px-6 lg:px-10 py-28 md:py-44 bg-[hsl(var(--stand-charcoal))] text-[hsl(var(--stand-bone))]"
+      className="relative overflow-hidden px-6 lg:px-10 py-32 md:py-44 bg-[hsl(var(--stand-charcoal))] text-[hsl(var(--stand-bone))]"
     >
       <div
         aria-hidden
         className="pointer-events-none absolute -top-32 right-[-10%] h-[420px] w-[420px] rounded-full bg-[hsl(var(--stand-red))]/15 blur-[120px]"
       />
-      <div className="relative mx-auto max-w-6xl">
+      <div className="relative mx-auto max-w-3xl">
         <Reveal>
           <p
-            lang="en"
+            lang={lang}
             className="text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-red-glow))]"
           >
-            {STAND_INFRA.eyebrow}
+            {t.eyebrow}
           </p>
-          <h2 className="mt-6 max-w-3xl font-display text-4xl md:text-6xl font-semibold leading-[1.05]">
-            {STAND_INFRA.headline}
+          <h2
+            lang={lang}
+            className="mt-8 font-display text-4xl md:text-6xl font-semibold leading-[1.1]"
+          >
+            {t.headline}
           </h2>
-          <p className="mt-6 max-w-2xl text-base md:text-lg text-[hsl(var(--stand-bone))]/65 leading-relaxed">
-            {STAND_INFRA.sub}
+          <p
+            lang={lang}
+            className="mt-8 text-base md:text-lg text-[hsl(var(--stand-bone))]/70 leading-relaxed"
+          >
+            {t.body}
           </p>
+          <a
+            href="/"
+            lang={lang}
+            className="mt-12 inline-block border-b border-[hsl(var(--stand-red-glow))]/50 pb-1 text-sm uppercase tracking-[0.3em] text-[hsl(var(--stand-bone))] transition-colors hover:text-[hsl(var(--stand-red-glow))] hover:border-[hsl(var(--stand-red-glow))]"
+          >
+            {t.link}
+          </a>
         </Reveal>
-
-        <div className="mt-20 grid gap-px sm:grid-cols-2 lg:grid-cols-3 bg-[hsl(var(--stand-bone))]/10">
-          {STAND_INFRA.pillars.map((p, i) => (
-            <Reveal key={p.title} delay={i * 90}>
-              <article className="h-full bg-[hsl(var(--stand-charcoal))] p-8 md:p-10">
-                <p
-                  lang="en"
-                  className="font-mono text-[11px] uppercase tracking-[0.35em] text-[hsl(var(--stand-red-glow))]"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </p>
-                <h3
-                  lang="en"
-                  className="mt-4 font-display text-xl md:text-2xl font-semibold"
-                >
-                  {p.title}
-                </h3>
-                <p
-                  lang="bn"
-                  className="mt-4 text-sm leading-relaxed text-[hsl(var(--stand-bone))]/65"
-                >
-                  {p.body}
-                </p>
-              </article>
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );

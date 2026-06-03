@@ -9,6 +9,7 @@ export type PressItem = {
   context: string;
   sort_order?: number;
   published?: boolean;
+  created_at?: string;
 };
 
 export function usePressItems(includeUnpublished = false) {

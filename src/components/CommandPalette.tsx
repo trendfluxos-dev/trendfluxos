@@ -13,6 +13,7 @@ import {
 import { navigablePages, preloadRoute, type PageType } from "@/lib/routes";
 import { fuzzyMatch, highlight } from "@/lib/fuzzy";
 import { rankWeights } from "@/lib/commandPaletteConfig";
+import { onOpenCommandPalette } from "@/lib/commandPalette";
 
 const EXAMPLE_QUERIES = [
   "dashboard",
@@ -45,7 +46,11 @@ export const CommandPalette = () => {
       }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    const offEvent = onOpenCommandPalette(() => setOpen(true));
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      offEvent();
+    };
   }, []);
 
   useEffect(() => {

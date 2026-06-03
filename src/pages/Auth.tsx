@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useSeo } from "@/hooks/useSeo";
+import trendfluxLogo from "@/assets/trendflux-logo.webp";
 
 export default function Auth() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const redirect = params.get("redirect") || "/";
+  const redirect = params.get("redirect") || "/dashboard";
   useSeo({
     title: "Sign In — TrendFlux Ecosystem",
     description: "Sign in to access TrendFlux Ecosystem admin tools.",
@@ -39,7 +39,7 @@ export default function Auth() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -48,9 +48,12 @@ export default function Auth() {
           },
         });
         if (error) throw error;
-        toast.success("Account তৈরি হয়েছে। Email confirm করে sign in করুন।");
-        setMode("signin");
-        return;
+        if (!data.session) {
+          toast.success("Account তৈরি হয়েছে। এখন sign in করুন।");
+          setMode("signin");
+          return;
+        }
+        toast.success("স্বাগতম!");
       }
       window.scrollTo({ top: 0, behavior: "auto" });
       navigate(redirect, { replace: true });
@@ -61,42 +64,108 @@ export default function Auth() {
     }
   };
 
+  const isSignup = mode === "signup";
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-6">
-      <form onSubmit={handle} className="w-full max-w-sm rounded-2xl glass p-8 space-y-5">
-        <div>
-          <h1 className="font-display text-2xl font-bold">
-            {mode === "signin" ? "Sign In" : "Create Account"}
-          </h1>
-          <p className="text-sm text-foreground/60 mt-1">
-            TrendFlux course ও admin tools access।
+    <div className="min-h-screen flex items-center justify-center bg-background px-5 py-10">
+      <div className="w-full max-w-[420px]">
+        {/* Brand mark */}
+        <div className="flex flex-col items-center text-center mb-8">
+          <div className="flex items-center gap-2.5">
+            <img
+              src={trendfluxLogo}
+              alt="TrendFlux Digital"
+              className="h-8 w-8 object-contain"
+            />
+            <span className="font-display text-[15px] font-semibold tracking-tight">
+              TrendFlux <span className="text-foreground/55 font-normal">Digital</span>
+            </span>
+          </div>
+          <p className="mt-1.5 text-[11px] uppercase tracking-[0.22em] text-foreground/45">
+            AI Systems · Digital Growth
           </p>
         </div>
-        {mode === "signup" && (
-          <div className="space-y-2">
-            <Label htmlFor="full_name">Full name</Label>
-            <Input id="full_name" type="text" required value={fullName} onChange={(e) => setFullName(e.target.value)} />
-          </div>
-        )}
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "..." : mode === "signin" ? "Sign In" : "Create Account"}
-        </Button>
-        <button
-          type="button"
-          onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          className="text-xs text-foreground/60 hover:text-gold w-full text-center"
+
+        <form
+          onSubmit={handle}
+          className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm p-7 sm:p-8 space-y-5 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_24px_60px_-30px_rgba(0,0,0,0.25)]"
         >
-          {mode === "signin" ? "Need an account? Sign up" : "Have an account? Sign in"}
-        </button>
-      </form>
+          <div className="space-y-1.5">
+            <h1 className="font-display text-[22px] font-semibold tracking-tight">
+              {isSignup ? "Create Account" : "Sign In"}
+            </h1>
+            <p className="text-[13px] leading-relaxed text-foreground/60">
+              {isSignup
+                ? "TrendFlux Academy, AI Systems ও Professional Toolkit Access।"
+                : "TrendFlux Ecosystem-এ ফিরে স্বাগতম।"}
+            </p>
+          </div>
+
+          {isSignup && (
+            <div className="space-y-1.5">
+              <Label htmlFor="full_name" className="text-[12px] font-medium text-foreground/75">Full name</Label>
+              <Input
+                id="full_name"
+                type="text"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="h-11 rounded-xl border-border/70 bg-background/60 px-3.5 text-[14px] focus-visible:ring-2 focus-visible:ring-[#B11226]/30 focus-visible:border-[#B11226]/60 transition-colors"
+              />
+            </div>
+          )}
+
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-[12px] font-medium text-foreground/75">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-11 rounded-xl border-border/70 bg-background/60 px-3.5 text-[14px] focus-visible:ring-2 focus-visible:ring-[#B11226]/30 focus-visible:border-[#B11226]/60 transition-colors"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="password" className="text-[12px] font-medium text-foreground/75">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-11 rounded-xl border-border/70 bg-background/60 px-3.5 text-[14px] focus-visible:ring-2 focus-visible:ring-[#B11226]/30 focus-visible:border-[#B11226]/60 transition-colors"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-11 rounded-xl text-[14px] font-semibold text-white tracking-tight transition-all duration-200 hover:brightness-110 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed shadow-[0_8px_24px_-10px_rgba(177,18,38,0.55)]"
+            style={{ background: "linear-gradient(135deg,#B11226 0%,#7A0C19 100%)" }}
+          >
+            {loading ? "..." : isSignup ? "Create Account" : "Sign In"}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMode(isSignup ? "signin" : "signup")}
+            className="block w-full text-center text-[12.5px] text-foreground/55 hover:text-foreground transition-colors"
+          >
+            {isSignup ? (
+              <>Already have access? <span className="text-foreground/85 font-medium">Sign in</span></>
+            ) : (
+              <>Need access? <span className="text-foreground/85 font-medium">Create account</span></>
+            )}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-[12px] leading-relaxed text-foreground/45">
+          Built for creators, operators & ambitious digital professionals.
+        </p>
+      </div>
     </div>
   );
 }
