@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import textureUrl from "@/assets/quiet-positions-texture.jpg";
 import sareeUrl from "@/assets/quiet-positions-saree.jpg";
 import concreteUrl from "@/assets/quiet-positions-concrete.jpg";
+import heroReferenceUrl from "@/assets/quiet-positions-hero.jpg";
 import { copy, fragments, principles } from "@/content/quietPositions";
 
 /**
@@ -151,6 +152,28 @@ export default function QuietPositions() {
               </Reveal>
             </div>
           </Movement>
+
+          {/* ────────────── 00b Reference Frame ────────────── */}
+          <section className="relative w-full">
+            <Reveal>
+              <figure className="relative mx-auto w-full max-w-3xl px-6 sm:px-10 md:px-0">
+                <img
+                  src={heroReferenceUrl}
+                  alt="A quiet gesture — an anklet being held, a hand resting near a foot. A reference frame for the chapter."
+                  width={1080}
+                  height={1620}
+                  loading="lazy"
+                  className="block w-full h-auto object-contain"
+                />
+                <figcaption className="mx-auto mt-6 flex max-w-xl items-center gap-4">
+                  <span aria-hidden className="h-px w-10" style={{ backgroundColor: "hsl(var(--quiet-accent))" }} />
+                  <span lang="en" className="quiet-serif text-[12px] italic tracking-[0.04em] text-[hsl(var(--quiet-ink))]/55 sm:text-[13px]">
+                    a quiet gesture · <span lang="bn">নীরব ভঙ্গি</span>
+                  </span>
+                </figcaption>
+              </figure>
+            </Reveal>
+          </section>
 
           {/* ────────────── 01 Threshold ────────────── */}
           <Movement>
