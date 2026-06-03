@@ -859,6 +859,40 @@ export default function Portfolio() {
       {/* PROOF VAULT */}
       <section id="proof" className="py-20 md:py-24 bg-[#F8FAFC] border-y border-[#E5E7EB]">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
+          {/* Easy-move rail → The Stand & Quiet Positions */}
+          <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Link
+              to="/the-stand"
+              className="group flex items-center justify-between gap-4 rounded-xl border border-[#111111]/10 bg-white px-5 py-4 transition-all hover:border-[#111111]/40 hover:shadow-[0_12px_30px_-18px_rgba(0,0,0,0.4)]"
+            >
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#DC2626]">
+                  Featured · জাতীয় দলিল
+                </p>
+                <p className="mt-1.5 truncate font-[Space_Grotesk,Inter,sans-serif] text-[15px] font-semibold text-[#111111]">
+                  The Stand — মায়ের নিষেধ আছে
+                </p>
+                <p className="mt-1 text-xs text-[#4B5563]">A preserved moment of conscience.</p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 shrink-0 text-[#111111] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+            <Link
+              to="/quiet-positions"
+              className="group flex items-center justify-between gap-4 rounded-xl border border-[#111111]/10 bg-white px-5 py-4 transition-all hover:border-[#111111]/40 hover:shadow-[0_12px_30px_-18px_rgba(0,0,0,0.4)]"
+            >
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#4B5563]">
+                  Parallel Chapter · নীরব অবস্থান
+                </p>
+                <p className="mt-1.5 truncate font-[Space_Grotesk,Inter,sans-serif] text-[15px] font-semibold text-[#111111]">
+                  Quiet Positions
+                </p>
+                <p className="mt-1 text-xs text-[#4B5563]">An emotional archive — restrained, civic.</p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 shrink-0 text-[#111111] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          </div>
+
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
               <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Proof Vault</span>
