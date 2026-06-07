@@ -486,7 +486,7 @@ const Index = () => {
               </div>
             </figcaption>
           </figure>
-        </InlineEditProvider>
+
 
           {/* CTA + META STRIP */}
           <div className="mt-10 grid grid-cols-1 items-center gap-8 sm:mt-12 lg:grid-cols-[auto_1fr_auto] lg:gap-12">
