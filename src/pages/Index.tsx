@@ -532,7 +532,9 @@ const Index = () => {
             </dl>
           </div>
         </div>
+        </InlineEditProvider>
       </section>
+
 
       {/* ============= 5b-ii. QUIET POSITIONS — Parallel Emotional Archive ============= */}
       <section
