@@ -27,6 +27,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import theStandCover from "@/assets/the-stand-cover.jpg";
 import { TfSection, TfCard } from "@/components/tf/Section";
+import { InlineEditProvider, InlineEditToggle, EditableText } from "@/components/InlineEditable";
 import DashboardMock from "@/components/tf/DashboardMock";
 import EcosystemMap from "@/components/tf/EcosystemMap";
 import ProofTabs from "@/components/tf/ProofTabs";
@@ -357,6 +358,7 @@ const Index = () => {
         aria-labelledby="the-stand-cover-heading"
         className="relative isolate overflow-hidden bg-black py-16 sm:py-24"
       >
+        <InlineEditProvider scope="the-stand-cover">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
@@ -367,16 +369,17 @@ const Index = () => {
         />
 
         <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10">
-          {/* eyebrow rail */}
+          {/* eyebrow rail + inline edit toggle */}
           <div className="mb-6 flex items-center gap-3 sm:mb-8 sm:gap-4">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" />
             <span className="font-serif text-[10px] uppercase tracking-[0.38em] text-amber-400/90 sm:text-[11px] sm:tracking-[0.42em]">
-              Featured · The Stand · <span lang="bn">জাতীয় দলিল</span>
+              <EditableText id="eyebrow" defaultText="Featured · The Stand · জাতীয় দলিল" />
             </span>
             <span className="h-px flex-1 bg-white/[0.08]" />
             <span className="hidden font-serif text-[10px] uppercase tracking-[0.32em] text-white/40 sm:inline">
-              Volume I · 2023–2024
+              <EditableText id="volume-eyebrow" defaultText="Volume I · 2023–2024" />
             </span>
+            <InlineEditToggle className="ml-2" />
           </div>
 
           {/* CINEMATIC PLATE — image as backdrop, editable text overlaid */}
@@ -416,54 +419,74 @@ const Index = () => {
             <span aria-hidden className="absolute bottom-3 left-3 h-3.5 w-3.5 border-b border-l border-amber-400/70 sm:bottom-5 sm:left-5 sm:h-4 sm:w-4" />
             <span aria-hidden className="absolute bottom-3 right-3 h-3.5 w-3.5 border-b border-r border-amber-400/70 sm:bottom-5 sm:right-5 sm:h-4 sm:w-4" />
 
-            {/* EDITABLE OVERLAY ─ change copy here freely */}
+            {/* EDITABLE OVERLAY ─ flip the toggle above to edit copy inline */}
             <figcaption className="absolute inset-0 flex flex-col justify-between p-5 sm:p-10 lg:p-16">
               {/* top: volume marker */}
               <div className="flex items-center justify-between gap-3 text-[9px] uppercase tracking-[0.4em] text-amber-300/80 sm:text-[10px]">
-                <span>Volume I</span>
-                <span className="hidden sm:inline" lang="bn">জাতীয় দলিল · ২০২৩–২০২৪</span>
-                <span className="sm:hidden" lang="bn">২০২৩–২০২৪</span>
+                <EditableText id="top-volume" defaultText="Volume I" />
+                <EditableText
+                  id="top-meta-lg"
+                  defaultText="জাতীয় দলিল · ২০২৩–২০২৪"
+                  lang="bn"
+                  className="hidden sm:inline"
+                />
+                <EditableText
+                  id="top-meta-sm"
+                  defaultText="২০২৩–২০২৪"
+                  lang="bn"
+                  className="sm:hidden"
+                />
               </div>
 
               {/* center: title + subtitle */}
               <div className="max-w-2xl">
-                <h2
-                  id="the-stand-cover-heading"
+                <EditableText
+                  as="h2"
+                  id="title"
+                  defaultText="THE STAND"
                   className="font-serif text-4xl font-bold leading-[0.95] tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] sm:text-6xl lg:text-7xl"
-                >
-                  THE STAND
-                </h2>
-                <p
+                />
+                {/* Hidden anchor for aria-labelledby */}
+                <span id="the-stand-cover-heading" className="sr-only">The Stand</span>
+                <EditableText
+                  as="p"
+                  id="subtitle"
                   lang="bn"
+                  defaultText="একজন তরুণ একা দাঁড়িয়ে — নৈতিক অবস্থানের সিনেমাটিক রূপায়ণ"
                   className="mt-3 font-serif text-base font-medium text-amber-200/95 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] sm:mt-4 sm:text-xl lg:text-2xl"
-                >
-                  একজন তরুণ একা দাঁড়িয়ে — নৈতিক অবস্থানের সিনেমাটিক রূপায়ণ
-                </p>
-                <p className="mt-3 max-w-md text-[13px] leading-relaxed text-white/75 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:mt-5 sm:text-sm lg:text-base">
-                  Zahid Hasan Emon · Jahangirnagar University · a preserved moment
-                  of conscience against extortion and torture-cell culture.
-                </p>
+                />
+                <EditableText
+                  as="p"
+                  id="standfirst"
+                  multiline
+                  defaultText="Zahid Hasan Emon · Jahangirnagar University · a preserved moment of conscience against extortion and torture-cell culture."
+                  className="mt-3 max-w-md text-[13px] leading-relaxed text-white/75 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:mt-5 sm:text-sm lg:text-base"
+                />
               </div>
 
               {/* bottom: pull-quote attribution */}
               <div className="flex items-end justify-between gap-4">
                 <blockquote className="max-w-xs">
-                  <p
+                  <EditableText
+                    as="p"
+                    id="quote"
                     lang="bn"
+                    defaultText="“মায়ের নিষেধ আছে।”"
                     className="font-serif text-lg italic leading-snug text-amber-100 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] sm:text-2xl lg:text-3xl"
-                  >
-                    “মায়ের নিষেধ আছে।”
-                  </p>
+                  />
                   <footer className="mt-2 font-serif text-[10px] uppercase tracking-[0.3em] text-white/60 sm:text-[11px]">
-                    <span lang="bn">— জাহিদ হাসান ইমন</span> · 2023
+                    <EditableText id="attribution" defaultText="— জাহিদ হাসান ইমন · 2023" lang="bn" />
                   </footer>
                 </blockquote>
-                <span className="hidden font-serif text-[10px] uppercase tracking-[0.32em] text-amber-300/70 sm:inline">
-                  Chapter I
-                </span>
+                <EditableText
+                  id="chapter"
+                  defaultText="Chapter I"
+                  className="hidden font-serif text-[10px] uppercase tracking-[0.32em] text-amber-300/70 sm:inline"
+                />
               </div>
             </figcaption>
           </figure>
+
 
           {/* CTA + META STRIP */}
           <div className="mt-10 grid grid-cols-1 items-center gap-8 sm:mt-12 lg:grid-cols-[auto_1fr_auto] lg:gap-12">
@@ -509,7 +532,9 @@ const Index = () => {
             </dl>
           </div>
         </div>
+        </InlineEditProvider>
       </section>
+
 
       {/* ============= 5b-ii. QUIET POSITIONS — Parallel Emotional Archive ============= */}
       <section
