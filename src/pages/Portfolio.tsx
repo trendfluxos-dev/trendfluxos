@@ -325,44 +325,40 @@ const PORTFOLIO_META = {
   image: "https://trendflux.digital/og/portfolio-zahid-hasan-emon.jpg",
 };
 
-function setMeta(selector: string, attr: string, value: string) {
-  let el = document.head.querySelector<HTMLMetaElement>(selector);
-  if (!el) {
-    el = document.createElement("meta");
-    const [name, val] = selector.replace(/^meta\[/, "").replace(/\]$/, "").split("=");
-    el.setAttribute(name, val.replace(/['"]/g, ""));
-    document.head.appendChild(el);
-  }
-  el.setAttribute(attr, value);
-}
-
 export default function Portfolio() {
-  useEffect(() => {
-    document.title = PORTFOLIO_META.title;
-    setMeta('meta[name="description"]', "content", PORTFOLIO_META.description);
-    // Open Graph
-    setMeta('meta[property="og:type"]', "content", "profile");
-    setMeta('meta[property="og:title"]', "content", PORTFOLIO_META.title);
-    setMeta('meta[property="og:description"]', "content", PORTFOLIO_META.description);
-    setMeta('meta[property="og:url"]', "content", PORTFOLIO_META.url);
-    setMeta('meta[property="og:image"]', "content", PORTFOLIO_META.image);
-    setMeta('meta[property="og:site_name"]', "content", "TrendFlux Digital");
-    setMeta('meta[property="profile:first_name"]', "content", "Zahid Hasan");
-    setMeta('meta[property="profile:last_name"]', "content", "Emon");
-    // Twitter
-    setMeta('meta[name="twitter:card"]', "content", "summary_large_image");
-    setMeta('meta[name="twitter:title"]', "content", PORTFOLIO_META.title);
-    setMeta('meta[name="twitter:description"]', "content", PORTFOLIO_META.description);
-    setMeta('meta[name="twitter:image"]', "content", PORTFOLIO_META.image);
-    // Canonical
-    let canon = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (!canon) {
-      canon = document.createElement("link");
-      canon.setAttribute("rel", "canonical");
-      document.head.appendChild(canon);
-    }
-    canon.setAttribute("href", PORTFOLIO_META.url);
-  }, []);
+  // Per-page SEO routed through the central SeoHead/Helmet pipeline so the
+  // tags don't fight with default ones set by the homepage on hydration.
+  useSeo({
+    title: PORTFOLIO_META.title,
+    description: PORTFOLIO_META.description,
+    canonical: PORTFOLIO_META.url,
+    image: PORTFOLIO_META.image,
+    imageWidth: 1200,
+    imageHeight: 630,
+    type: "profile",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      mainEntity: {
+        "@type": "Person",
+        name: "Zahid Hasan Emon",
+        givenName: "Zahid Hasan",
+        familyName: "Emon",
+        jobTitle: "AI-Powered Growth Operator & Brand Architect",
+        url: PORTFOLIO_META.url,
+        image: PORTFOLIO_META.image,
+        sameAs: [
+          "https://www.linkedin.com/company/trendflux",
+          "https://www.facebook.com/trendflux",
+        ],
+        worksFor: {
+          "@type": "Organization",
+          name: BRAND.name,
+          url: BRAND.url,
+        },
+      },
+    },
+  });
 
   const [preset, setPreset] = useState<keyof typeof PRESETS>("Growth Partner");
   const [base, setBase] = useState<number>(PRESETS["Growth Partner"].base);
