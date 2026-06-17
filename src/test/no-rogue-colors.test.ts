@@ -40,6 +40,10 @@ const LEGACY_HEX = new Set([
   "#F3F4F6",            // Dashboard utility colors
   "#E9E3D3", "#393961", // Justice Appeal + Media Reports palette
   "#F5F0E0", "#C9A84C", // The Stand Share warm palette
+  // Official social brand colors used only for share-button icon tinting
+  "#1877F2", // Facebook brand
+  "#0A66C2", // LinkedIn brand
+  "#FF0000", // YouTube brand
 ]);
 
 function listFiles(dir: string, acc: string[] = []): string[] {

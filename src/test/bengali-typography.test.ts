@@ -40,9 +40,14 @@ describe("Per-page Bengali lang attribute usage", () => {
   });
 
   it("Index page tags Bengali text blocks with lang=\"bn\"", () => {
-    const src = read("src/pages/Index.tsx");
-    // The Stand cover and Quiet Positions heading carry lang="bn"
-    const matches = src.match(/lang="bn"/g) ?? [];
+    // Index.tsx is composition-only; the Bengali blocks live in its home sections.
+    // The Stand cover, Quiet Positions heading, and AI Expert teaser all tag lang="bn".
+    const sources = [
+      "src/components/home/TheStandCoverSection.tsx",
+      "src/components/home/QuietPositionsSection.tsx",
+      "src/components/home/AiExpertStoryTeaser.tsx",
+    ].map(read).join("\n");
+    const matches = sources.match(/lang="bn"/g) ?? [];
     expect(matches.length).toBeGreaterThanOrEqual(3);
   });
 });
