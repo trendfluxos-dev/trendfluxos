@@ -47,6 +47,21 @@ window.addEventListener("unhandledrejection", (e) => {
 });
 window.addEventListener("load", () => sessionStorage.removeItem(RELOAD_KEY));
 
+// White-screen watchdog: if the React tree never mounts (root still empty
+// 8s after load), do a single hard reload to recover from stale chunks /
+// transient asset failures. Logs to the error logger so we can track it.
+const WHITE_SCREEN_KEY = "__white_screen_reload_attempted";
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const root = document.getElementById("root");
+    if (!root || root.childElementCount > 0) return;
+    if (sessionStorage.getItem(WHITE_SCREEN_KEY)) return;
+    sessionStorage.setItem(WHITE_SCREEN_KEY, "1");
+    console.error("[watchdog] White screen detected — reloading once");
+    window.location.reload();
+  }, 8000);
+});
+
 createRoot(document.getElementById("root")!).render(
   <HelmetProvider>
     <App />
