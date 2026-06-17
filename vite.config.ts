@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => ({
         manualChunks(id) {
           if (!id.includes("node_modules")) return undefined;
           if (id.includes("/recharts/") || id.includes("/d3-")) return "recharts";
-          if (id.includes("@radix-ui/")) return "radix";
+          if (id.includes("@radix-ui/")) return "react";
           if (id.includes("/lucide-react/")) return "icons";
           // Sentry is loaded lazily — pin it to its own chunk so it never
           // ends up bundled into the main `vendor` chunk by accident.
