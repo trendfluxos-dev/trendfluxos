@@ -45,11 +45,36 @@ const ResearchDetail = () => {
   const [shareOpen, setShareOpen] = useState(false);
   const entry = slug ? getEntryBySlug(slug) : undefined;
 
+  const articleUrl = entry
+    ? `https://trendfluxdigital-bd.lovable.app${entry.kind === "research" ? "/research" : "/implementations"}/${entry.slug}`
+    : undefined;
   useSeo({
     title: entry ? `${entry.title} — Zahid Hasan Emon` : "Not found",
     description: entry?.excerpt ?? "",
     type: "article",
     imageAlt: entry?.title,
+    canonical: articleUrl,
+    jsonLd: entry
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: entry.title,
+          description: entry.excerpt,
+          datePublished: entry.publishedAt,
+          dateModified: entry.publishedAt,
+          mainEntityOfPage: articleUrl,
+          url: articleUrl,
+          author: {
+            "@type": "Person",
+            name: "Zahid Hasan Emon",
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "TrendFlux",
+            url: "https://trendfluxdigital-bd.lovable.app",
+          },
+        }
+      : undefined,
   });
 
   const related = useMemo(() => {

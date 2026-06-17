@@ -44,9 +44,9 @@ const About = () => {
             <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-primary">
               Founder · Architect
             </p>
-            <h3 className="mt-3 font-display text-2xl font-semibold text-foreground sm:text-3xl">
+            <h2 className="mt-3 font-display text-2xl font-semibold text-foreground sm:text-3xl">
               Zahid Hasan Emon
-            </h3>
+            </h2>
             <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-muted-foreground">
               <p>
                 TrendFlux started as a refusal — a refusal to keep watching founders
