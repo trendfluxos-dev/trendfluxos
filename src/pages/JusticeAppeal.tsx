@@ -49,18 +49,34 @@ export default function JusticeAppeal() {
         <title>Pabna Accountability Project — Public Interest Documentation</title>
         <meta name="description" content="A documentary archive of a written complaint and related media references, requesting lawful investigation and safety protection." />
         <meta name="robots" content="noindex" />
-        <link rel="canonical" href="https://trendfluxdigital.lovable.app/justice-appeal" />
+        <link rel="canonical" href="https://trendflux.digital/justice-appeal" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Pabna Accountability Project — Public Interest Documentation" />
         <meta property="og:description" content="When fear replaces justice, documentation becomes necessary. A structured public-interest dossier." />
-        <meta property="og:url" content="https://trendfluxdigital.lovable.app/justice-appeal" />
-        <meta property="og:image" content="https://trendfluxdigital.lovable.app/og-justice-appeal.jpg" />
+        <meta property="og:url" content="https://trendflux.digital/justice-appeal" />
+        <meta property="og:image" content="https://trendflux.digital/og-justice-appeal.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Pabna Accountability Project" />
         <meta name="twitter:description" content="When fear replaces justice, documentation becomes necessary." />
-        <meta name="twitter:image" content="https://trendfluxdigital.lovable.app/og-justice-appeal.jpg" />
+        <meta name="twitter:image" content="https://trendflux.digital/og-justice-appeal.jpg" />
+        {/* Article schema: helps search engines understand this is a
+            documentary public-interest archive (not a marketing page).
+            Pairs with the page-level noindex above — schema describes
+            the content for any crawler that does see it. */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: "Pabna Accountability Project — Public Interest Documentation",
+          description: "A documentary archive of a written complaint and related media references, requesting lawful investigation and safety protection.",
+          inLanguage: "bn",
+          isAccessibleForFree: true,
+          mainEntityOfPage: "https://trendflux.digital/justice-appeal",
+          image: "https://trendflux.digital/og-justice-appeal.jpg",
+          author: { "@type": "Organization", name: "TrendFlux Ecosystem", url: "https://trendflux.digital" },
+          publisher: { "@type": "Organization", name: "TrendFlux Ecosystem", url: "https://trendflux.digital" },
+        })}</script>
       </Helmet>
 
 

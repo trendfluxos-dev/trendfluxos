@@ -99,7 +99,7 @@ export default function QuietPositions() {
         />
         <meta property="og:image" content={textureUrl} />
         <meta name="theme-color" content="#0a0a0a" />
-        <link rel="canonical" href="https://trendfluxdigital.lovable.app/quiet-positions" />
+        <link rel="canonical" href="https://trendflux.digital/quiet-positions" />
       </Helmet>
 
       <main

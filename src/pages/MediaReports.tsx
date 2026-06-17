@@ -367,17 +367,17 @@ export default function MediaReports() {
           content="সংশ্লিষ্ট সংবাদ প্রতিবেদন, highlighted excerpts ও clickable sources-এর জনস্বার্থমূলক গ্যালারি।"
         />
         <meta name="robots" content="noindex" />
-        <link rel="canonical" href="https://trendfluxdigital.lovable.app/media-reports" />
+        <link rel="canonical" href="https://trendflux.digital/media-reports" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="মিডিয়া রিপোর্টস — পাবনা অ্যাকাউন্টেবিলিটি প্রজেক্ট" />
         <meta
           property="og:description"
           content="Clickable sources, highlighted excerpts — Referenced in reporting."
         />
-        <meta property="og:url" content="https://trendfluxdigital.lovable.app/media-reports" />
+        <meta property="og:url" content="https://trendflux.digital/media-reports" />
         <meta
           property="og:image"
-          content="https://trendfluxdigital.lovable.app/og-justice-appeal.jpg"
+          content="https://trendflux.digital/og-justice-appeal.jpg"
         />
       </Helmet>
 

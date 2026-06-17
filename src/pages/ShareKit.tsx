@@ -22,7 +22,7 @@ const accent = "text-[hsl(0,65%,55%)]";
 const accentBg = "bg-[hsl(0,65%,55%)]";
 const accentBorder = "border-[hsl(0,65%,55%)]";
 
-const PAGE_URL = "https://trendfluxdigital.lovable.app/justice-appeal";
+const PAGE_URL = "https://trendflux.digital/justice-appeal";
 
 type Block = {
   id: string;
@@ -176,15 +176,15 @@ export default function ShareKit() {
           content="আইনি দিক থেকে নিরাপদ ভাষায় শেয়ার করার জন্য preformatted text blocks ও screenshot guidelines।"
         />
         <meta name="robots" content="noindex" />
-        <link rel="canonical" href="https://trendfluxdigital.lovable.app/share-kit" />
+        <link rel="canonical" href="https://trendflux.digital/share-kit" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="শেয়ার কিট — পাবনা অ্যাকাউন্টেবিলিটি প্রজেক্ট" />
         <meta
           property="og:description"
           content="Preformatted text + screenshot guidelines — harassment নয়, documentation।"
         />
-        <meta property="og:url" content="https://trendfluxdigital.lovable.app/share-kit" />
-        <meta property="og:image" content="https://trendfluxdigital.lovable.app/og-justice-appeal.jpg" />
+        <meta property="og:url" content="https://trendflux.digital/share-kit" />
+        <meta property="og:image" content="https://trendflux.digital/og-justice-appeal.jpg" />
       </Helmet>
 
       {/* Masthead */}
