@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://trendfluxdigital-bd.lovable.app/sitemap.xml
+Sitemap: https://trendflux.digital/sitemap.xml
