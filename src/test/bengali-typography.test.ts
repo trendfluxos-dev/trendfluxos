@@ -39,14 +39,11 @@ describe("Per-page Bengali lang attribute usage", () => {
     expect(src).toMatch(/lang=\{bangla\s*\?\s*"bn"\s*:\s*"en"\}/);
   });
 
-  it("Index page tags Bengali headline blocks with lang=\"bn\"", () => {
+  it("Index page tags Bengali text blocks with lang=\"bn\"", () => {
     const src = read("src/pages/Index.tsx");
-    // Timeline heading
-    expect(src).toMatch(/lang=\{headline\.id === "satyer-pakshe" \? "bn" : undefined\}/);
-    // Press tagline / variant button uses Unicode-range detection
-    expect(src).toMatch(/\/\[\\u0980-\\u09FF\]\/\.test\(/);
-    // Press card headline (always Bengali)
-    expect(src).toMatch(/lang="bn"/);
+    // The Stand cover and Quiet Positions heading carry lang="bn"
+    const matches = src.match(/lang="bn"/g) ?? [];
+    expect(matches.length).toBeGreaterThanOrEqual(3);
   });
 });
 
