@@ -5,6 +5,11 @@
       "name": "0029_authenticated_security_definer_function_executable",
       "level": "warn",
       "reason": "public.current_user_has_role(app_role) intentionally exposes EXECUTE to authenticated so a signed-in client can check its own auth.uid() role for UI gating. Authoritative protection lives in RLS on the underlying tables."
+    },
+    {
+      "name": "0029_authenticated_security_definer_function_executable",
+      "level": "warn",
+      "reason": "public.has_role(uuid, app_role) is SECURITY DEFINER and called from RLS policies on user_roles and other admin-gated tables. RLS is evaluated under the calling role, so authenticated must retain EXECUTE for policies to resolve. Anon + PUBLIC have been revoked. The function only reads from public.user_roles and cannot escalate privileges."
     }
   ]
 }
