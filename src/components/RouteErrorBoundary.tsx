@@ -1,10 +1,13 @@
 import { Component, ReactNode } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { logClientError } from "@/lib/errorLogger";
 import { getSentry } from "@/lib/sentry";
 
 interface Props {
   children: ReactNode;
   pathname: string;
+  search?: string;
+  params?: Record<string, string | undefined>;
 }
 
 interface State {
@@ -32,7 +35,14 @@ export class RouteErrorBoundary extends Component<Props, State> {
       stack: error.stack,
       source: `RouteErrorBoundary:${this.props.pathname}`,
       severity: "error",
-      meta: { componentStack: info.componentStack ?? "", pathname: this.props.pathname },
+      meta: {
+        componentStack: info.componentStack ?? "",
+        route: {
+          pathname: this.props.pathname,
+          search: this.props.search,
+          params: this.props.params,
+        },
+      },
     });
     const sentry = getSentry();
     if (sentry) {
@@ -102,4 +112,24 @@ export class RouteErrorBoundary extends Component<Props, State> {
   }
 }
 
-export default RouteErrorBoundary;
+/**
+ * Functional wrapper that pulls router context (pathname, search, params) and
+ * forwards it to the class boundary so logged errors include the exact route.
+ * Must be rendered inside a <BrowserRouter>.
+ */
+export const RouteErrorBoundaryWithContext = ({ children }: { children: ReactNode }) => {
+  const location = useLocation();
+  const params = useParams();
+  return (
+    <RouteErrorBoundary
+      key={location.pathname}
+      pathname={location.pathname}
+      search={location.search}
+      params={params}
+    >
+      {children}
+    </RouteErrorBoundary>
+  );
+};
+
+export default RouteErrorBoundaryWithContext;
