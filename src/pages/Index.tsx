@@ -645,7 +645,7 @@ const Index = () => {
       {/* ============= 5b-ii. QUIET POSITIONS — Parallel Emotional Archive ============= */}
       <section
         aria-labelledby="quiet-positions-heading"
-        className="relative isolate overflow-hidden bg-muted py-28 sm:py-32"
+        className="relative isolate overflow-hidden bg-muted py-20 sm:py-24 lg:py-28"
       >
         {/* hairline top */}
         <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
@@ -657,7 +657,7 @@ const Index = () => {
               "radial-gradient(ellipse at center, hsl(var(--primary) / 0.04), transparent 60%)",
           }}
         />
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+        <div className="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
           <div className="mx-auto max-w-2xl text-center">
             <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.3em] text-primary">
               <span className="h-1 w-1 rounded-full bg-primary" />
