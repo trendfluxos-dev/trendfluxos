@@ -26,7 +26,7 @@ import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import theStandCover from "@/assets/the-stand-cover.jpg";
-import audioAsset from "@/assets/algorithm-torture-cell.mp3.asset.json";
+import AudioStoryTeaser from "@/components/tf/AudioStoryTeaser";
 import { TfSection, TfCard } from "@/components/tf/Section";
 import { InlineEditProvider, InlineEditToggle, EditableText } from "@/components/InlineEditable";
 import DashboardMock from "@/components/tf/DashboardMock";
