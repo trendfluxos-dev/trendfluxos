@@ -335,7 +335,33 @@ const ProjectLead = () => {
 
       {/* LEADERSHIP & COMMUNITY */}
       <section className="px-6 lg:px-10 py-24">
-        {/* (Showcase preview rendered above) */}
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
+              Leadership & Community Engagement
+            </p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold max-w-3xl mx-auto">
+              Civic leadership behind the <span className="text-gradient">growth operator</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {leadership.map((l) => (
+              <div
+                key={l.org}
+                className="glass glass-hover rounded-2xl p-6 flex items-start gap-4"
+              >
+                <div className="w-10 h-10 rounded-xl bg-gradient-cyan/20 border border-primary/30 flex items-center justify-center shrink-0">
+                  <Award className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-gold font-semibold text-sm">{l.role}</p>
+                  <p className="text-foreground/75 mt-1">{l.org}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14">
