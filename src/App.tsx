@@ -112,6 +112,13 @@ const App = () => (
 
 
           <Suspense fallback={<PageFallback />}>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:shadow-lg focus-visible:outline-none"
+          >
+            Skip to main content
+          </a>
+          <div id="main-content" tabIndex={-1} className="outline-none">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/ecosystem" element={<Ecosystem />} />
@@ -158,6 +165,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </div>
         </Suspense>
         </BrandPreviewProvider>
       </BrowserRouter>

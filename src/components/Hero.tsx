@@ -6,7 +6,7 @@ import { track } from "@/lib/analytics";
 
 const Hero = () => {
   return (
-    <section className="relative pt-40 pb-28 px-6 lg:px-10 overflow-hidden">
+    <section aria-labelledby="hero-title" className="relative pt-32 sm:pt-40 pb-20 sm:pb-28 px-6 lg:px-10 overflow-hidden">
       <div className="absolute inset-0 hero-glow" aria-hidden />
       <div className="absolute inset-0 grid-dots opacity-40" aria-hidden />
 
@@ -21,23 +21,23 @@ const Hero = () => {
           AI-Powered Digital Growth Systems
         </div>
 
-        <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight max-w-5xl mx-auto">
+        <h1 id="hero-title" className="font-display text-[2.25rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight max-w-5xl mx-auto text-balance">
           Architecting{" "}
           <span className="text-shimmer">Digital Growth Systems</span>{" "}
           for Modern Businesses
         </h1>
 
-        <p className="mt-7 text-foreground/70 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+        <p className="mt-6 sm:mt-7 text-foreground/70 text-[15px] sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed text-pretty">
           TrendFlux Ecosystem combines AI automation, paid media, content strategy,
           CRM workflows, and brand architecture to build scalable business growth ecosystems.
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Button variant="hero" size="lg">
+        <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4">
+          <Button variant="hero" size="lg" className="w-full sm:w-auto">
             Explore Growth Systems
-            <ArrowRight />
+            <ArrowRight aria-hidden="true" />
           </Button>
-          <Button variant="outline" size="lg">
+          <Button variant="outline" size="lg" className="w-full sm:w-auto">
             Book Strategic Consultation
           </Button>
           <a
@@ -45,9 +45,10 @@ const Hero = () => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => track("enterprise_portal_open", { location: "home_hero" })}
-            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-base font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-12 px-8 text-primary hover:bg-accent hover:text-accent-foreground"
+            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 whitespace-nowrap rounded-full text-base font-semibold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-12 px-8 text-primary hover:bg-accent hover:text-accent-foreground"
+            aria-label="Open Enterprise Portal (opens in new tab)"
           >
-            <ShieldCheck className="w-4 h-4" />
+            <ShieldCheck className="w-4 h-4" aria-hidden="true" />
             Open Enterprise Portal
           </a>
         </div>
