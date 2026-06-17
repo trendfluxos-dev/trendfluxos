@@ -76,7 +76,7 @@ export function track(event: string, params: AnalyticsParams = {}) {
     window.dispatchEvent(new CustomEvent(ANALYTICS_EVENT, { detail: stored }));
 
     if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
+       
       console.debug("[analytics]", event, params);
     }
   } catch {

@@ -81,7 +81,7 @@ const FALLBACK_ANALYTICS_KEY = "marriage_analytics_queue";
 const fallbackLog = (data: Record<string, unknown>) => {
   // 1) Always log to console for debugging / manual capture
   try {
-    // eslint-disable-next-line no-console
+     
     console.info("[analytics:fallback]", data);
   } catch { /* noop */ }
   // 2) Persist to localStorage queue (capped at 200 entries) so events survive

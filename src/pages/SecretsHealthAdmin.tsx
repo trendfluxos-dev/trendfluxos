@@ -73,7 +73,7 @@ export default function SecretsHealthAdmin() {
       if (!s) navigate("/auth");
     });
     return () => sub.subscription.unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [navigate]);
 
   const runHealthCheck = async () => {

@@ -91,7 +91,7 @@ export default function CourseEnrollmentsAdmin() {
       setAuthChecked(true);
       if (ok) load();
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [navigate]);
 
   // Realtime: live-merge enrollment + event changes so admins never act on stale state.
