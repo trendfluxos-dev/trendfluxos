@@ -52,6 +52,14 @@ jobs:
           restore-keys: |
             supabase-cli-${{ runner.os }}-
 
+      - name: Log Supabase CLI cache status
+        run: |
+          if [ "${{ steps.cache-supabase-cli.outputs.cache-hit }}" = "true" ]; then
+            echo "✅ Supabase CLI cache RESTORED"
+          else
+            echo "❌ Supabase CLI cache MISSED — CLI will be downloaded"
+          fi
+
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
