@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2 } from "lucide-react";
+import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import audioAsset from "@/assets/algorithm-torture-cell.mp3.asset.json";
 
 function fmt(s: number) {
@@ -23,6 +23,12 @@ export default function AudioStoryTeaser() {
   const [dur, setDur] = useState(0);
   const [loading, setLoading] = useState(false);
   const [buffered, setBuffered] = useState(0);
+  // Preview: hover or first-click triggers a short low-volume intro
+  // that auto-stops after PREVIEW_MS unless the user takes over with Play.
+  const PREVIEW_MS = 8000;
+  const [previewing, setPreviewing] = useState(false);
+  const previewedOnce = useRef(false);
+  const previewTimer = useRef<number | null>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -58,12 +64,56 @@ export default function AudioStoryTeaser() {
       el.removeEventListener("playing", onPlay);
       el.removeEventListener("pause", onPause);
       el.removeEventListener("progress", onProgress);
+      if (previewTimer.current) window.clearTimeout(previewTimer.current);
     };
   }, []);
+
+  const stopPreview = () => {
+    const el = ref.current;
+    if (!el) return;
+    if (previewTimer.current) {
+      window.clearTimeout(previewTimer.current);
+      previewTimer.current = null;
+    }
+    if (previewing) {
+      el.pause();
+      el.volume = 1;
+      el.currentTime = 0;
+      setPreviewing(false);
+    }
+  };
+
+  const startPreview = () => {
+    const el = ref.current;
+    if (!el || playing || previewing) return;
+    if (previewedOnce.current) return; // only fire once per session
+    previewedOnce.current = true;
+    el.volume = 0.35;
+    el.currentTime = 0;
+    setPreviewing(true);
+    void el.play().catch(() => setPreviewing(false));
+    previewTimer.current = window.setTimeout(() => {
+      if (!ref.current) return;
+      ref.current.pause();
+      ref.current.volume = 1;
+      ref.current.currentTime = 0;
+      setPreviewing(false);
+    }, PREVIEW_MS);
+  };
 
   const toggle = () => {
     const el = ref.current;
     if (!el) return;
+    // Taking over from preview → full-volume playback from start
+    if (previewing) {
+      if (previewTimer.current) {
+        window.clearTimeout(previewTimer.current);
+        previewTimer.current = null;
+      }
+      el.volume = 1;
+      setPreviewing(false);
+      return;
+    }
     if (playing) { el.pause(); }
     else { setLoading(true); void el.play().catch(() => setLoading(false)); }
   };
@@ -83,14 +133,14 @@ export default function AudioStoryTeaser() {
   return (
     <section
       aria-labelledby="audio-story-teaser-heading"
-      className="relative isolate overflow-hidden bg-background py-24 sm:py-32"
+      className="relative isolate overflow-hidden bg-background py-20 sm:py-24 lg:py-28"
     >
       {/* hairline top */}
       <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      <div className="relative mx-auto max-w-6xl px-6 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
         {/* eyebrow */}
-        <div className="mb-12 flex items-center justify-center">
+        <div className="mb-10 flex items-center justify-center sm:mb-12">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.3em] text-primary">
             <span className="h-1 w-1 rounded-full bg-primary" />
             Audio Story · The Stand
@@ -115,7 +165,7 @@ export default function AudioStoryTeaser() {
           </h2>
           <p
             lang="bn"
-            className="mx-auto mt-6 max-w-xl text-[15px] leading-[1.75] text-muted-foreground sm:text-[16px]"
+            className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.7] text-muted-foreground sm:mt-6 sm:text-[16px]"
           >
             একটি রাত, একটি হলঘর, একটি প্রজন্মের নীরব সাক্ষ্য — প্রযুক্তি, ভয় ও
             বিবেক যেখানে একই সরলরেখায় এসে দাঁড়ায়।
@@ -123,8 +173,21 @@ export default function AudioStoryTeaser() {
         </div>
 
         {/* Player card — single, centered, structured */}
-        <div className="mx-auto mt-14 max-w-3xl">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
+        <div
+          className="mx-auto mt-10 max-w-3xl sm:mt-14"
+          onMouseEnter={startPreview}
+          onMouseLeave={stopPreview}
+        >
+          <div
+            className="relative rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7 lg:p-8"
+            onClick={() => { if (!previewedOnce.current) startPreview(); }}
+          >
+            {previewing && (
+              <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-primary">
+                <Sparkles className="h-3 w-3" />
+                Preview
+              </span>
+            )}
             {/* meta row */}
             <div className="flex items-center justify-between gap-4 border-b border-border pb-5">
               <span className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
@@ -213,7 +276,7 @@ export default function AudioStoryTeaser() {
             {/* CTA */}
             <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
               <span className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-                Recorded narrative
+                {previewing ? "Auto-stops in 8s · click play for full" : "Recorded narrative"}
               </span>
               <Link
                 to="/the-stand"
@@ -225,10 +288,164 @@ export default function AudioStoryTeaser() {
             </div>
           </div>
         </div>
+
+        {/* Related stories carousel */}
+        <RelatedStories />
       </div>
 
       {/* hairline bottom */}
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
     </section>
+  );
+}
+
+/* ============================================================
+ * RelatedStories — horizontal-scroll carousel of upcoming /
+ * related audio chapters. Keyboard + button navigation, snap.
+ * ========================================================== */
+const RELATED: {
+  id: string;
+  chapter: string;
+  titleBn: string;
+  titleEn: string;
+  duration: string;
+  status: "Upcoming" | "Draft" | "Live";
+  href: string;
+}[] = [
+  {
+    id: "quiet-positions",
+    chapter: "Chapter II",
+    titleBn: "নীরব অবস্থান",
+    titleEn: "Quiet Positions",
+    duration: "≈ 12 min",
+    status: "Upcoming",
+    href: "/quiet-positions",
+  },
+  {
+    id: "humanity-restored",
+    chapter: "Chapter III",
+    titleBn: "মানবতার পুনরুদ্ধার",
+    titleEn: "Humanity Restored",
+    duration: "≈ 9 min",
+    status: "Draft",
+    href: "/the-stand",
+  },
+  {
+    id: "justice-appeal",
+    chapter: "Dossier",
+    titleBn: "ন্যায়বিচারের আবেদন",
+    titleEn: "Justice Appeal",
+    duration: "≈ 7 min",
+    status: "Live",
+    href: "/justice-appeal",
+  },
+  {
+    id: "media-wall",
+    chapter: "Archive",
+    titleBn: "প্রেস সংরক্ষণাগার",
+    titleEn: "Press Archive",
+    duration: "18 sources",
+    status: "Live",
+    href: "/the-stand#press",
+  },
+];
+
+function RelatedStories() {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollBy = (dir: 1 | -1) => {
+    const el = trackRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.min(el.clientWidth * 0.85, 360), behavior: "smooth" });
+  };
+
+  return (
+    <div className="mx-auto mt-16 max-w-6xl sm:mt-20 lg:mt-24">
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+            Continue listening
+          </p>
+          <h3 className="mt-2 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
+            Related stories
+          </h3>
+        </div>
+        <div className="hidden items-center gap-2 sm:flex">
+          <button
+            type="button"
+            onClick={() => scrollBy(-1)}
+            aria-label="Previous"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollBy(1)}
+            aria-label="Next"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      <div className="relative -mx-6 sm:mx-0">
+        {/* edge fades */}
+        <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 z-10 w-8 bg-gradient-to-r from-background to-transparent sm:w-12" />
+        <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-background to-transparent sm:w-12" />
+
+        <div
+          ref={trackRef}
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-6 pb-4 sm:gap-5 sm:px-0 [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+        >
+          {RELATED.map((s) => (
+            <Link
+              key={s.id}
+              to={s.href}
+              className="group relative flex w-[260px] shrink-0 snap-start flex-col justify-between rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md sm:w-[280px]"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-medium uppercase tracking-[0.24em] text-primary">
+                    {s.chapter}
+                  </span>
+                  <span
+                    className={
+                      "rounded-full px-2 py-0.5 text-[9px] font-medium uppercase tracking-[0.18em] " +
+                      (s.status === "Live"
+                        ? "bg-primary/10 text-primary"
+                        : s.status === "Upcoming"
+                          ? "bg-muted text-muted-foreground"
+                          : "border border-border text-muted-foreground")
+                    }
+                  >
+                    {s.status}
+                  </span>
+                </div>
+                <h4
+                  lang="bn"
+                  className="mt-4 font-display text-[17px] font-semibold leading-[1.25] text-foreground"
+                >
+                  {s.titleBn}
+                </h4>
+                <p className="mt-1 font-display text-[13px] italic text-muted-foreground">
+                  {s.titleEn}
+                </p>
+              </div>
+              <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
+                <span className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                  <Clock className="h-3 w-3" />
+                  {s.duration}
+                </span>
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted text-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Play className="h-3.5 w-3.5 translate-x-[1px]" />
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
