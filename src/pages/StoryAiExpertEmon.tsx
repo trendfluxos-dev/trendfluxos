@@ -721,18 +721,13 @@ const StoryAiExpertEmon = () => {
           {/* Narrative */}
           <div className="mt-14 space-y-6">
             {copy.paragraphs.map((p, i) => (
-              <p
+              <TranscriptParagraph
                 key={i}
-                ref={(el) => { paragraphRefs.current[i] = el; }}
+                text={p}
                 lang={lang}
-                className={`scroll-mt-28 rounded-md border-l-2 py-1 pl-4 text-[16px] leading-[1.85] transition-colors duration-300 sm:text-[17px] ${
-                  i === activeChapterIdx
-                    ? "border-primary bg-primary/[0.04] text-foreground"
-                    : "border-transparent text-foreground/85"
-                }`}
-              >
-                {p}
-              </p>
+                isActive={i === activeChapterIdx}
+                setRef={setParagraphRef[i]}
+              />
             ))}
           </div>
 
