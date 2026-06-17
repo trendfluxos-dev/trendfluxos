@@ -4,8 +4,20 @@
  *
  * Usage: `node scripts/generate-sitemap.mjs`
  *
- * Add case-study slugs and routes here whenever a new one ships.
- * Kept intentionally dependency-free so it runs in any Node 18+ env.
+ * Source of truth for the sitemap. Runs automatically before every
+ * `vite build` via the `prebuild` npm hook so deployed builds always
+ * ship a sitemap that mirrors the routes in `src/App.tsx`.
+ *
+ * Two lists below:
+ *   - `staticRoutes` — every public, indexable React-Router route
+ *   - `noindexRoutes` — public routes that explicitly set
+ *     <meta name="robots" content="noindex" /> via Helmet. They are
+ *     INTENTIONALLY OMITTED from the sitemap to avoid sending Google
+ *     conflicting signals (sitemap = please index; meta = please don't).
+ *
+ * Add a new route to `staticRoutes` whenever a new public page ships.
+ * Add it to `noindexRoutes` instead when the page is noindex'd.
+ * Kept dependency-free so it runs in any Node 18+ env.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -27,21 +39,39 @@ const caseSlugs = [
   "personal-brand-authority",
 ];
 
+// Every public, indexable route in src/App.tsx. Keep in sync.
 const staticRoutes = [
   "/",
-  "/the-stand",
-  "/the-stand/share",
-  "/enterprise",
+  "/ecosystem",
+  "/services",
+  "/about",
+  "/contact",
+  "/explore",
+  "/showcase",
   "/portfolio",
+  "/enterprise",
+  "/toolkit",
   "/masterclass",
   "/course/trendflux",
-  "/toolkit",
   "/project-lead",
+  "/the-stand",
+  "/the-stand/share",
+  "/quiet-positions",
   "/marriage",
   "/brand-open",
-  "/brandtoki",
   "/trendflux-talent",
   "/luxe-veil",
+  "/brandtoki",
+  "/stories/ai-expert-emon",
+];
+
+// Public but Helmet-marked noindex. Intentionally omitted from sitemap.
+// Kept here as documentation so the omission is explicit.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const noindexRoutes = [
+  "/justice-appeal",
+  "/media-reports",
+  "/share-kit",
 ];
 
 const today = new Date().toISOString().split("T")[0];
@@ -51,18 +81,30 @@ const urls = [
   ...caseSlugs.map((s) => `/case-studies/${s}`),
 ];
 
+function priorityFor(p) {
+  if (p === "/") return "1.0";
+  if (p === "/services" || p === "/portfolio") return "0.9";
+  if (p === "/ecosystem" || p === "/about" || p === "/contact") return "0.8";
+  if (p.startsWith("/case-studies/")) return "0.8";
+  if (p === "/explore" || p === "/showcase") return "0.7";
+  return "0.6";
+}
+
+function changefreqFor(p) {
+  if (p === "/") return "weekly";
+  if (p === "/showcase" || p === "/explore") return "weekly";
+  return "monthly";
+}
+
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls
   .map((p) => {
-    const priority =
-      p === "/" ? "1.0" : p.startsWith("/case-studies/") ? "0.8" : "0.6";
-    const changefreq = p === "/" ? "weekly" : "monthly";
     return `  <url>
     <loc>${SITE_URL}${p}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
+    <changefreq>${changefreqFor(p)}</changefreq>
+    <priority>${priorityFor(p)}</priority>
   </url>`;
   })
   .join("\n")}

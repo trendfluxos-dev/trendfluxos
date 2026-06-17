@@ -28,7 +28,7 @@
     <loc>https://trendflux.digital/contact</loc>
     <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/explore</loc>
@@ -43,34 +43,40 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://trendflux.digital/stories/ai-expert-emon</loc>
+    <loc>https://trendflux.digital/portfolio</loc>
     <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://trendflux.digital/quiet-positions</loc>
+    <loc>https://trendflux.digital/enterprise</loc>
     <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trendflux.digital/justice-appeal</loc>
+    <loc>https://trendflux.digital/toolkit</loc>
     <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trendflux.digital/media-reports</loc>
-    <lastmod>2026-06-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://trendflux.digital/share-kit</loc>
+    <loc>https://trendflux.digital/masterclass</loc>
     <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trendflux.digital/course/trendflux</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trendflux.digital/project-lead</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/the-stand</loc>
@@ -80,109 +86,85 @@
   </url>
   <url>
     <loc>https://trendflux.digital/the-stand/share</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://trendflux.digital/enterprise</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trendflux.digital/portfolio</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trendflux.digital/masterclass</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trendflux.digital/course/trendflux</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trendflux.digital/toolkit</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trendflux.digital/project-lead</loc>
-    <lastmod>2026-05-21</lastmod>
+    <loc>https://trendflux.digital/quiet-positions</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/marriage</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/brand-open</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://trendflux.digital/brandtoki</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/trendflux-talent</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/luxe-veil</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trendflux.digital/brandtoki</loc>
+    <lastmod>2026-06-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://trendflux.digital/stories/ai-expert-emon</loc>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/case-studies/organic-reach-485k</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/case-studies/content-engine-200</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/case-studies/global-strategy-us-uk</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/case-studies/whatsapp-lead-conversion</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/case-studies/sme-growth-architecture</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://trendflux.digital/case-studies/personal-brand-authority</loc>
-    <lastmod>2026-05-21</lastmod>
+    <lastmod>2026-06-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

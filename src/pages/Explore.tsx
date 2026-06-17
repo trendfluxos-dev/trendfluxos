@@ -48,7 +48,14 @@ const Explore = () => {
           name="description"
           content="Browse every section of TrendFlux Digital — brands, courses, studio, enterprise, and more."
         />
-        <link rel="canonical" href="/explore" />
+        <link rel="canonical" href="https://trendflux.digital/explore" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Browse — TrendFlux Digital" />
+        <meta property="og:description" content="Browse every section of TrendFlux Digital — brands, courses, studio, enterprise, and more." />
+        <meta property="og:url" content="https://trendflux.digital/explore" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Browse — TrendFlux Digital" />
+        <meta name="twitter:description" content="Browse every section of TrendFlux Digital — brands, courses, studio, enterprise, and more." />
       </Helmet>
 
       <Navbar />
