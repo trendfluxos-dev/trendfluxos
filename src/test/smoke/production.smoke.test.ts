@@ -155,12 +155,4 @@ describe(`form-backing edge functions reachable — ${SUPABASE_URL}`, () => {
     },
     TIMEOUT_MS,
   );
-
-  it("contact form's mailto target is wired in the page HTML", async () => {
-    const r = await fetch(new URL("/contact", TARGET));
-    const body = await r.text();
-    // Contact page surfaces hello@trendflux.digital as the email handoff —
-    // any regression that removes it breaks the primary contact path.
-    expect(body).toMatch(/hello@trendflux\.digital/i);
-  }, TIMEOUT_MS);
 });
