@@ -11,6 +11,7 @@ import { ReconstructionTimeline } from "@/components/the-stand/ReconstructionTim
 import { PrinciplesList } from "@/components/the-stand/PrinciplesList";
 import { MemoryLayer24 } from "@/components/the-stand/MemoryLayer24";
 import { HumanityRestored } from "@/components/the-stand/HumanityRestored";
+import { AudioStory } from "@/components/the-stand/AudioStory";
 import { MediaWall } from "@/components/the-stand/MediaWall";
 import { DocumentaryEmbed } from "@/components/the-stand/DocumentaryEmbed";
 import { InfrastructurePivot } from "@/components/the-stand/InfrastructurePivot";
@@ -86,6 +87,7 @@ export default function TheStand() {
         <PrinciplesList />
         <MemoryLayer24 />
         <HumanityRestored />
+        <AudioStory />
         <MediaWall />
         <DocumentaryEmbed />
         <InfrastructurePivot />
