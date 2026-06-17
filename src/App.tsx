@@ -23,6 +23,7 @@ import { SeoHead } from "@/hooks/useSeo";
 import { AppErrorBoundary } from "@/components/AppErrorBoundary";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import RequireRole from "@/components/auth/RequireRole";
+import { AppBoomTrigger, RouteBoom } from "@/components/dev/BoomTrigger";
 
 // Dev-only diagnostic panels. They are heavy and only ever rendered when
 // `?perf` is in the URL during development, so we code-split them out of the
@@ -139,6 +140,8 @@ const RoutedApp = () => {
         <Route path="/share-kit" element={<ShareKit />} />
         <Route path="/stories/ai-expert-emon" element={<StoryAiExpertEmon />} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
+        {/* Synthetic error route for Playwright error-boundary smoke tests. */}
+        <Route path="/__test/boom-route" element={<RouteBoom />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -167,6 +170,7 @@ const App = () => (
         <BrandPreviewProvider>
           <SeoHead />
           <ScrollToTop />
+          <AppBoomTrigger />
           <ScrollProgress />
           <CommandPalette />
           <FloatingContact />
