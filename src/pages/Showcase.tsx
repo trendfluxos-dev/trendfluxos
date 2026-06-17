@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
+import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
 import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
 import { SHOWCASE_ITEMS, SHOWCASE_CATEGORIES, type ShowcaseCategory } from "@/data/showcase";
-import { ArrowRight, Facebook, Linkedin, Share2, Sparkles } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowRight, Sparkles, Share2 } from "lucide-react";
 
 const SHARE_URL =
   typeof window !== "undefined"
@@ -18,6 +18,7 @@ const SHARE_TEXT =
 
 const Showcase = () => {
   const [filter, setFilter] = useState<ShowcaseCategory | "All">("All");
+  const [shareOpen, setShareOpen] = useState(false);
 
   useSeo({
     title: "Showcase — Zahid Hasan Emon | TrendFlux",
@@ -40,17 +41,13 @@ const Showcase = () => {
     return m;
   }, []);
 
-  const handleShare = async () => {
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: "Showcase — Zahid Hasan Emon", text: SHARE_TEXT, url: SHARE_URL });
-        return;
-      }
-      await navigator.clipboard.writeText(SHARE_URL);
-      toast.success("Link copied — paste into Facebook to share");
-    } catch {
-      /* user cancelled */
-    }
+  const pageSharePayload: SharePayload = {
+    title: "Zahid Hasan Emon — Showcase",
+    summary:
+      "A curated showcase of brands, websites, enterprise systems, social platforms and personal initiatives built end-to-end by Zahid Hasan Emon.",
+    url: SHARE_URL,
+    category: "Portfolio",
+    tags: ["TrendFlux", "GrowthOperator", "AIAutomation", "Bangladesh"],
   };
 
   return (
@@ -76,33 +73,19 @@ const Showcase = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button variant="hero" size="lg" onClick={handleShare}>
-              <Share2 />
-              Share Showcase
+            <Button variant="hero" size="lg" onClick={() => setShareOpen(true)}>
+              <Sparkles />
+              AI Share Showcase
             </Button>
-            <Button variant="outline" size="lg" asChild>
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Facebook />
-                Share on Facebook
-              </a>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(SHARE_URL)}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Linkedin />
-                Share on LinkedIn
-              </a>
-            </Button>
+            <p className="text-xs text-foreground/55 self-center inline-flex items-center gap-1.5">
+              <Share2 className="w-3 h-3" />
+              Auto-formats for Facebook · LinkedIn · YouTube · X
+            </p>
           </div>
         </div>
       </section>
+
+      <ShareDialog open={shareOpen} onOpenChange={setShareOpen} payload={pageSharePayload} />
 
       {/* FILTER BAR */}
       <section className="px-6 lg:px-10">

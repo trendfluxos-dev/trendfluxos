@@ -20,6 +20,7 @@ export type ShowcaseItem = {
   external?: boolean;
   size?: ShowcaseSize; // controls visual prominence
   accent?: "cyan" | "gold" | "violet" | "rose" | "emerald";
+  videoUrl?: string; // if set, YouTube-share tab unlocks
 };
 
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
