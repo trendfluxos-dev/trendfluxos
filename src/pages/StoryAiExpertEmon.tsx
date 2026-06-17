@@ -107,6 +107,25 @@ const StoryAiExpertEmon = () => {
   const [bookmark, setBookmark] = useState<number | null>(null);
   const lastSavedRef = useRef(0);
   const justJumpedToBookmarkRef = useRef(false);
+  const [audioError, setAudioError] = useState<string | null>(null);
+
+  const msgs = MESSAGES[lang];
+
+  const safePlay = (el: HTMLAudioElement | null) => {
+    if (!el) return;
+    const p = el.play();
+    if (p && typeof p.then === "function") {
+      p.catch((err: unknown) => {
+        setPlaying(false);
+        const name = err instanceof Error ? err.name : "";
+        if (name === "NotAllowedError" || name === "AbortError") {
+          toast.info(msgs.playBlocked);
+        } else {
+          toast.error(msgs.playFailed);
+        }
+      });
+    }
+  };
 
   useSeo({
     title: `${copy.title} · Zahid Hasan Emon`,
@@ -147,15 +166,37 @@ const StoryAiExpertEmon = () => {
       }
       setResumeAt(null);
     };
+    const onError = () => {
+      setPlaying(false);
+      const code = el.error?.code;
+      // 1 ABORTED, 2 NETWORK, 3 DECODE, 4 SRC_NOT_SUPPORTED
+      const friendly =
+        code === 2 ? msgs.loadFailed :
+        code === 4 ? msgs.loadFailed :
+        msgs.loadFailed;
+      setAudioError(friendly);
+      toast.error(friendly);
+    };
+    const onStalled = () => {
+      // Show inline notice but don't spam toasts on flaky networks.
+      setAudioError(msgs.loadFailed);
+    };
+    const onPlaying = () => setAudioError(null);
     el.addEventListener("timeupdate", t);
     el.addEventListener("loadedmetadata", m);
     el.addEventListener("ended", e);
+    el.addEventListener("error", onError);
+    el.addEventListener("stalled", onStalled);
+    el.addEventListener("playing", onPlaying);
     return () => {
       el.removeEventListener("timeupdate", t);
       el.removeEventListener("loadedmetadata", m);
       el.removeEventListener("ended", e);
+      el.removeEventListener("error", onError);
+      el.removeEventListener("stalled", onStalled);
+      el.removeEventListener("playing", onPlaying);
     };
-  }, []);
+  }, [msgs]);
 
   // Load saved progress + bookmark once on mount
   useEffect(() => {
@@ -192,8 +233,8 @@ const StoryAiExpertEmon = () => {
     if (!el) return;
     if (playing) { el.pause(); setPlaying(false); }
     else {
-      void el.play();
       setPlaying(true);
+      safePlay(el);
       // Pressing play instead of "Resume" means the user chose to start from
       // the current head — dismiss the stale resume prompt.
       if (resumeAt != null) setResumeAt(null);
@@ -204,11 +245,17 @@ const StoryAiExpertEmon = () => {
     const el = audioRef.current;
     const bar = barRef.current;
     if (!el || !bar || !dur) return;
-    const rect = bar.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-    el.currentTime = ratio * dur;
-    setCur(el.currentTime);
-    if (resumeAt != null) setResumeAt(null);
+    try {
+      const rect = bar.getBoundingClientRect();
+      const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      const next = ratio * dur;
+      if (!Number.isFinite(next)) return;
+      el.currentTime = next;
+      setCur(el.currentTime);
+      if (resumeAt != null) setResumeAt(null);
+    } catch {
+      toast.error(msgs.seekFailed);
+    }
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
@@ -225,11 +272,20 @@ const StoryAiExpertEmon = () => {
   const jumpTo = (t: number) => {
     const el = audioRef.current;
     if (!el) return;
-    el.currentTime = t;
-    setCur(t);
+    if (!Number.isFinite(t) || t < 0) {
+      toast.error(msgs.seekFailed);
+      return;
+    }
+    try {
+      el.currentTime = t;
+      setCur(t);
+    } catch {
+      toast.error(msgs.seekFailed);
+      return;
+    }
     if (!playing) {
-      void el.play();
       setPlaying(true);
+      safePlay(el);
     }
     // Once the user moves the playhead, the stale "resume" banner is irrelevant.
     if (resumeAt != null) setResumeAt(null);
@@ -246,16 +302,20 @@ const StoryAiExpertEmon = () => {
     if (resumeAt == null) return;
     const el = audioRef.current;
     if (!el) return;
-    const target = resumeAt;
+    // Clamp against known duration to defend against stale/corrupt saves.
+    const ceiling = Number.isFinite(el.duration) && el.duration > 0 ? el.duration - 1 : resumeAt;
+    const target = Math.max(0, Math.min(resumeAt, ceiling));
     const applySeek = () => {
       try {
         el.currentTime = target;
       } catch {
-        /* ignore seek errors */
+        toast.error(msgs.seekFailed);
+        return;
       }
       setCur(target);
-      void el.play();
       setPlaying(true);
+      safePlay(el);
+      toast.success(msgs.progressRestored);
       let idx = 0;
       for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
         if (target >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
@@ -295,6 +355,10 @@ const StoryAiExpertEmon = () => {
   const toggleBookmark = () => {
     const el = audioRef.current;
     if (!el) return;
+    if (!Number.isFinite(el.currentTime)) {
+      toast.error(msgs.seekFailed);
+      return;
+    }
     // If the user just jumped to the bookmark, the playhead is right on it —
     // don't interpret the next click as "remove".
     if (
@@ -308,13 +372,17 @@ const StoryAiExpertEmon = () => {
       } catch {
         /* ignore */
       }
+      toast(msgs.bookmarkRemoved);
     } else {
       const t = el.currentTime;
       setBookmark(t);
       try {
         localStorage.setItem(BOOKMARK_KEY, String(t));
-      } catch {
-        /* ignore */
+        toast.success(`${msgs.bookmarkSaved} · ${fmt(t)}`);
+      } catch (err) {
+        // Roll back optimistic state if write actually failed.
+        setBookmark(bookmark);
+        toast.error(isQuotaError(err) ? msgs.bookmarkStorageFull : msgs.bookmarkSaved);
       }
     }
     justJumpedToBookmarkRef.current = false;
