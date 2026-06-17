@@ -62,7 +62,7 @@ const StoryAiExpertEmon = () => {
   const [resumeAt, setResumeAt] = useState<number | null>(null);
   const [bookmark, setBookmark] = useState<number | null>(null);
   const lastSavedRef = useRef(0);
-  const restoredRef = useRef(false);
+  const justJumpedToBookmarkRef = useRef(false);
 
   useSeo({
     title: `${copy.title} · Zahid Hasan Emon`,
@@ -147,7 +147,13 @@ const StoryAiExpertEmon = () => {
     const el = audioRef.current;
     if (!el) return;
     if (playing) { el.pause(); setPlaying(false); }
-    else { void el.play(); setPlaying(true); }
+    else {
+      void el.play();
+      setPlaying(true);
+      // Pressing play instead of "Resume" means the user chose to start from
+      // the current head — dismiss the stale resume prompt.
+      if (resumeAt != null) setResumeAt(null);
+    }
   };
 
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -158,6 +164,7 @@ const StoryAiExpertEmon = () => {
     const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
     el.currentTime = ratio * dur;
     setCur(el.currentTime);
+    if (resumeAt != null) setResumeAt(null);
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
@@ -180,8 +187,10 @@ const StoryAiExpertEmon = () => {
       void el.play();
       setPlaying(true);
     }
+    // Once the user moves the playhead, the stale "resume" banner is irrelevant.
+    if (resumeAt != null) setResumeAt(null);
     const idx = AI_EXPERT_EMON_CHAPTERS.findIndex((c) => c.time === t);
-    if (idx >= 0) {
+    if (idx >= 0 && idx < paragraphRefs.current.length) {
       const node = paragraphRefs.current[idx];
       if (node) {
         node.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -193,18 +202,40 @@ const StoryAiExpertEmon = () => {
     if (resumeAt == null) return;
     const el = audioRef.current;
     if (!el) return;
-    el.currentTime = resumeAt;
-    setCur(resumeAt);
-    void el.play();
-    setPlaying(true);
-    restoredRef.current = true;
-    // Scroll matching paragraph into view based on nearest chapter
-    let idx = 0;
-    for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
-      if (resumeAt >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
+    const target = resumeAt;
+    const applySeek = () => {
+      try {
+        el.currentTime = target;
+      } catch {
+        /* ignore seek errors */
+      }
+      setCur(target);
+      void el.play();
+      setPlaying(true);
+      let idx = 0;
+      for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
+        if (target >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
+      }
+      if (idx < paragraphRefs.current.length) {
+        const node = paragraphRefs.current[idx];
+        if (node) node.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    };
+    // Some browsers silently ignore `currentTime` writes before metadata loads.
+    if (el.readyState < 1) {
+      const onReady = () => {
+        el.removeEventListener("loadedmetadata", onReady);
+        applySeek();
+      };
+      el.addEventListener("loadedmetadata", onReady);
+      try {
+        el.load();
+      } catch {
+        /* ignore */
+      }
+    } else {
+      applySeek();
     }
-    const node = paragraphRefs.current[idx];
-    if (node) node.scrollIntoView({ behavior: "smooth", block: "center" });
     setResumeAt(null);
   };
 
@@ -220,7 +251,13 @@ const StoryAiExpertEmon = () => {
   const toggleBookmark = () => {
     const el = audioRef.current;
     if (!el) return;
-    if (bookmark != null && Math.abs(bookmark - el.currentTime) < 1.5) {
+    // If the user just jumped to the bookmark, the playhead is right on it —
+    // don't interpret the next click as "remove".
+    if (
+      bookmark != null &&
+      !justJumpedToBookmarkRef.current &&
+      Math.abs(bookmark - el.currentTime) < 1.5
+    ) {
       setBookmark(null);
       try {
         localStorage.removeItem(BOOKMARK_KEY);
@@ -236,10 +273,12 @@ const StoryAiExpertEmon = () => {
         /* ignore */
       }
     }
+    justJumpedToBookmarkRef.current = false;
   };
 
   const goToBookmark = () => {
     if (bookmark == null) return;
+    justJumpedToBookmarkRef.current = true;
     jumpTo(bookmark);
   };
 
