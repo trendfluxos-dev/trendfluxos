@@ -1,0 +1,70 @@
+name: DB Security Lint
+
+# Runs the Supabase database linter against the project's migrations on every
+# pull request (and on pushes to main as a safety net). Any finding that is
+# not explicitly listed in `.security/lint-baseline.json` fails the build.
+#
+# The lint runs against a local Supabase stack started from the committed
+# migrations — no production credentials are needed, so this is safe to run
+# on forks.
+
+on:
+  pull_request:
+    paths:
+      - "supabase/migrations/**"
+      - ".security/lint-baseline.json"
+      - "scripts/check-supabase-lint.mjs"
+      - ".github/workflows/db-security.yml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - ".security/lint-baseline.json"
+      - "scripts/check-supabase-lint.mjs"
+      - ".github/workflows/db-security.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: db-security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Supabase DB Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start local Supabase stack
+        run: supabase start --exclude studio,inbucket,imgproxy,storage-api,realtime,edge-runtime,logflare,vector
+
+      - name: Run database linter (JSON)
+        id: lint
+        run: |
+          mkdir -p reports
+          # `--level info` returns every finding; the gate script filters
+          # against the committed baseline.
+          supabase db lint --level info --output json | tee reports/supabase-lint.json
+
+      - name: Apply baseline gate
+        run: node scripts/check-supabase-lint.mjs reports/supabase-lint.json
+
+      - name: Stop local Supabase stack
+        if: always()
+        run: supabase stop --no-backup || true
+
+      - name: Upload lint report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-lint-report
+          path: reports/supabase-lint.json
+          retention-days: 14
+          if-no-files-found: ignore
