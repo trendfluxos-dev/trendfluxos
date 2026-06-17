@@ -107,7 +107,19 @@ Deno.serve(async (req) => {
     })
     .select("id")
     .single();
-  if (insErr || !inserted) return json({ ok: false, error: insErr?.message || "Insert failed" }, 500);
+  if (insErr || !inserted) {
+    console.error("course-payment-submit insert failed", insErr);
+    const isDuplicate = insErr?.code === "23505";
+    return json(
+      {
+        ok: false,
+        error: isDuplicate
+          ? "This bKash TrxID has already been submitted."
+          : "Submission failed. Please try again.",
+      },
+      isDuplicate ? 409 : 500,
+    );
+  }
 
   // Timeline log: submitted
   await admin.from("enrollment_events").insert({
