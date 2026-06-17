@@ -147,7 +147,13 @@ const StoryAiExpertEmon = () => {
     const el = audioRef.current;
     if (!el) return;
     if (playing) { el.pause(); setPlaying(false); }
-    else { void el.play(); setPlaying(true); }
+    else {
+      void el.play();
+      setPlaying(true);
+      // Pressing play instead of "Resume" means the user chose to start from
+      // the current head — dismiss the stale resume prompt.
+      if (resumeAt != null) setResumeAt(null);
+    }
   };
 
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -158,6 +164,7 @@ const StoryAiExpertEmon = () => {
     const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
     el.currentTime = ratio * dur;
     setCur(el.currentTime);
+    if (resumeAt != null) setResumeAt(null);
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
