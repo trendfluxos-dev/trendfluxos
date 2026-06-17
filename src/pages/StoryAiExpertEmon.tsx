@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Bookmark, BookmarkCheck, Download, Headphones, ListMusic, Pause, Play, RotateCcw, Share2, Sparkles, Lightbulb } from "lucide-react";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
@@ -24,15 +25,56 @@ function fmt(s: number) {
 
 const PROGRESS_KEY = "story:ai-expert-emon:progress";
 const BOOKMARK_KEY = "story:ai-expert-emon:bookmark";
+const MAX_REASONABLE_SECONDS = 60 * 60 * 6; // 6h guard against corrupt storage
+
+const MESSAGES = {
+  bn: {
+    playBlocked: "ব্রাউজার অটোমেটিক প্লে আটকেছে — প্লে বাটনে ট্যাপ করুন।",
+    playFailed: "অডিও চালু করা যায়নি। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।",
+    loadFailed: "অডিও ফাইল লোড হয়নি। কিছুক্ষণ পর আবার চেষ্টা করুন।",
+    seekFailed: "এই মুহূর্তে নির্দিষ্ট সময়ে যাওয়া যাচ্ছে না।",
+    bookmarkSaved: "বুকমার্ক সেভ হয়েছে",
+    bookmarkRemoved: "বুকমার্ক মুছে ফেলা হয়েছে",
+    bookmarkStorageFull: "ডিভাইস স্টোরেজ ভরা — বুকমার্ক সেভ হয়নি।",
+    progressRestored: "আগের জায়গা থেকে চালু হলো",
+  },
+  en: {
+    playBlocked: "Your browser blocked autoplay — tap the play button to start.",
+    playFailed: "Couldn't start the audio. Check your connection and try again.",
+    loadFailed: "The audio file failed to load. Please try again in a moment.",
+    seekFailed: "Couldn't jump to that point right now.",
+    bookmarkSaved: "Bookmark saved",
+    bookmarkRemoved: "Bookmark removed",
+    bookmarkStorageFull: "Device storage is full — bookmark wasn't saved.",
+    progressRestored: "Resumed from where you left off",
+  },
+} as const;
+
+function isQuotaError(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  return err.name === "QuotaExceededError" || /quota/i.test(err.message);
+}
 
 type SavedProgress = { time: number; updatedAt: number };
 
 function readProgress(): SavedProgress | null {
   try {
+    if (typeof localStorage === "undefined") return null;
     const raw = localStorage.getItem(PROGRESS_KEY);
     if (!raw) return null;
-    const v = JSON.parse(raw) as SavedProgress;
-    return Number.isFinite(v?.time) && v.time > 2 ? v : null;
+    const parsed: unknown = JSON.parse(raw);
+    if (
+      !parsed ||
+      typeof parsed !== "object" ||
+      typeof (parsed as SavedProgress).time !== "number"
+    ) {
+      return null;
+    }
+    const v = parsed as SavedProgress;
+    if (!Number.isFinite(v.time) || v.time <= 2 || v.time > MAX_REASONABLE_SECONDS) {
+      return null;
+    }
+    return v;
   } catch {
     return null;
   }
@@ -40,10 +82,12 @@ function readProgress(): SavedProgress | null {
 
 function readBookmark(): number | null {
   try {
+    if (typeof localStorage === "undefined") return null;
     const raw = localStorage.getItem(BOOKMARK_KEY);
     if (!raw) return null;
     const v = Number.parseFloat(raw);
-    return Number.isFinite(v) ? v : null;
+    if (!Number.isFinite(v) || v < 0 || v > MAX_REASONABLE_SECONDS) return null;
+    return v;
   } catch {
     return null;
   }
