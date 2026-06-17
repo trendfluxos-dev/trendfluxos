@@ -77,19 +77,30 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
 
     setSubmitting(true);
     const newId = (crypto as Crypto).randomUUID();
-    const { error } = await supabase.from("marriage_inquiries").insert({
-      id: newId,
-      name: parsed.data.name,
-      country_code: parsed.data.country_code,
-      whatsapp: parsed.data.whatsapp,
-      dress_colors: parsed.data.dress_colors,
-    });
-    setSubmitting(false);
+    let insertError: { message: string } | null = null;
+    try {
+      const { error } = await supabase.from("marriage_inquiries").insert({
+        id: newId,
+        name: parsed.data.name,
+        country_code: parsed.data.country_code,
+        whatsapp: parsed.data.whatsapp,
+        dress_colors: parsed.data.dress_colors,
+      });
+      insertError = error;
+    } catch (err) {
+      console.error("Marriage inquiry insert threw", err);
+      insertError = { message: "network" };
+    } finally {
+      setSubmitting(false);
+    }
 
-    if (error) {
+    if (insertError) {
       toast({
         title: "Submission failed",
-        description: "Please try again in a moment.",
+        description:
+          insertError.message === "network"
+            ? "Network issue — please check your connection and try again."
+            : "Please try again in a moment.",
         variant: "destructive",
       });
       return;
