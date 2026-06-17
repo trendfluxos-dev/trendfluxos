@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Bookmark, BookmarkCheck, Download, Headphones, ListMusic, Pause, Play, RotateCcw, Share2, Sparkles, Lightbulb } from "lucide-react";
+import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
@@ -24,15 +25,56 @@ function fmt(s: number) {
 
 const PROGRESS_KEY = "story:ai-expert-emon:progress";
 const BOOKMARK_KEY = "story:ai-expert-emon:bookmark";
+const MAX_REASONABLE_SECONDS = 60 * 60 * 6; // 6h guard against corrupt storage
+
+const MESSAGES = {
+  bn: {
+    playBlocked: "ব্রাউজার অটোমেটিক প্লে আটকেছে — প্লে বাটনে ট্যাপ করুন।",
+    playFailed: "অডিও চালু করা যায়নি। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।",
+    loadFailed: "অডিও ফাইল লোড হয়নি। কিছুক্ষণ পর আবার চেষ্টা করুন।",
+    seekFailed: "এই মুহূর্তে নির্দিষ্ট সময়ে যাওয়া যাচ্ছে না।",
+    bookmarkSaved: "বুকমার্ক সেভ হয়েছে",
+    bookmarkRemoved: "বুকমার্ক মুছে ফেলা হয়েছে",
+    bookmarkStorageFull: "ডিভাইস স্টোরেজ ভরা — বুকমার্ক সেভ হয়নি।",
+    progressRestored: "আগের জায়গা থেকে চালু হলো",
+  },
+  en: {
+    playBlocked: "Your browser blocked autoplay — tap the play button to start.",
+    playFailed: "Couldn't start the audio. Check your connection and try again.",
+    loadFailed: "The audio file failed to load. Please try again in a moment.",
+    seekFailed: "Couldn't jump to that point right now.",
+    bookmarkSaved: "Bookmark saved",
+    bookmarkRemoved: "Bookmark removed",
+    bookmarkStorageFull: "Device storage is full — bookmark wasn't saved.",
+    progressRestored: "Resumed from where you left off",
+  },
+} as const;
+
+function isQuotaError(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  return err.name === "QuotaExceededError" || /quota/i.test(err.message);
+}
 
 type SavedProgress = { time: number; updatedAt: number };
 
 function readProgress(): SavedProgress | null {
   try {
+    if (typeof localStorage === "undefined") return null;
     const raw = localStorage.getItem(PROGRESS_KEY);
     if (!raw) return null;
-    const v = JSON.parse(raw) as SavedProgress;
-    return Number.isFinite(v?.time) && v.time > 2 ? v : null;
+    const parsed: unknown = JSON.parse(raw);
+    if (
+      !parsed ||
+      typeof parsed !== "object" ||
+      typeof (parsed as SavedProgress).time !== "number"
+    ) {
+      return null;
+    }
+    const v = parsed as SavedProgress;
+    if (!Number.isFinite(v.time) || v.time <= 2 || v.time > MAX_REASONABLE_SECONDS) {
+      return null;
+    }
+    return v;
   } catch {
     return null;
   }
@@ -40,10 +82,12 @@ function readProgress(): SavedProgress | null {
 
 function readBookmark(): number | null {
   try {
+    if (typeof localStorage === "undefined") return null;
     const raw = localStorage.getItem(BOOKMARK_KEY);
     if (!raw) return null;
     const v = Number.parseFloat(raw);
-    return Number.isFinite(v) ? v : null;
+    if (!Number.isFinite(v) || v < 0 || v > MAX_REASONABLE_SECONDS) return null;
+    return v;
   } catch {
     return null;
   }
@@ -63,6 +107,25 @@ const StoryAiExpertEmon = () => {
   const [bookmark, setBookmark] = useState<number | null>(null);
   const lastSavedRef = useRef(0);
   const justJumpedToBookmarkRef = useRef(false);
+  const [audioError, setAudioError] = useState<string | null>(null);
+
+  const msgs = MESSAGES[lang];
+
+  const safePlay = (el: HTMLAudioElement | null) => {
+    if (!el) return;
+    const p = el.play();
+    if (p && typeof p.then === "function") {
+      p.catch((err: unknown) => {
+        setPlaying(false);
+        const name = err instanceof Error ? err.name : "";
+        if (name === "NotAllowedError" || name === "AbortError") {
+          toast.info(msgs.playBlocked);
+        } else {
+          toast.error(msgs.playFailed);
+        }
+      });
+    }
+  };
 
   useSeo({
     title: `${copy.title} · Zahid Hasan Emon`,
@@ -103,15 +166,37 @@ const StoryAiExpertEmon = () => {
       }
       setResumeAt(null);
     };
+    const onError = () => {
+      setPlaying(false);
+      const code = el.error?.code;
+      // 1 ABORTED, 2 NETWORK, 3 DECODE, 4 SRC_NOT_SUPPORTED
+      const friendly =
+        code === 2 ? msgs.loadFailed :
+        code === 4 ? msgs.loadFailed :
+        msgs.loadFailed;
+      setAudioError(friendly);
+      toast.error(friendly);
+    };
+    const onStalled = () => {
+      // Show inline notice but don't spam toasts on flaky networks.
+      setAudioError(msgs.loadFailed);
+    };
+    const onPlaying = () => setAudioError(null);
     el.addEventListener("timeupdate", t);
     el.addEventListener("loadedmetadata", m);
     el.addEventListener("ended", e);
+    el.addEventListener("error", onError);
+    el.addEventListener("stalled", onStalled);
+    el.addEventListener("playing", onPlaying);
     return () => {
       el.removeEventListener("timeupdate", t);
       el.removeEventListener("loadedmetadata", m);
       el.removeEventListener("ended", e);
+      el.removeEventListener("error", onError);
+      el.removeEventListener("stalled", onStalled);
+      el.removeEventListener("playing", onPlaying);
     };
-  }, []);
+  }, [msgs]);
 
   // Load saved progress + bookmark once on mount
   useEffect(() => {
@@ -148,8 +233,8 @@ const StoryAiExpertEmon = () => {
     if (!el) return;
     if (playing) { el.pause(); setPlaying(false); }
     else {
-      void el.play();
       setPlaying(true);
+      safePlay(el);
       // Pressing play instead of "Resume" means the user chose to start from
       // the current head — dismiss the stale resume prompt.
       if (resumeAt != null) setResumeAt(null);
@@ -160,11 +245,17 @@ const StoryAiExpertEmon = () => {
     const el = audioRef.current;
     const bar = barRef.current;
     if (!el || !bar || !dur) return;
-    const rect = bar.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
-    el.currentTime = ratio * dur;
-    setCur(el.currentTime);
-    if (resumeAt != null) setResumeAt(null);
+    try {
+      const rect = bar.getBoundingClientRect();
+      const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      const next = ratio * dur;
+      if (!Number.isFinite(next)) return;
+      el.currentTime = next;
+      setCur(el.currentTime);
+      if (resumeAt != null) setResumeAt(null);
+    } catch {
+      toast.error(msgs.seekFailed);
+    }
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
@@ -181,11 +272,20 @@ const StoryAiExpertEmon = () => {
   const jumpTo = (t: number) => {
     const el = audioRef.current;
     if (!el) return;
-    el.currentTime = t;
-    setCur(t);
+    if (!Number.isFinite(t) || t < 0) {
+      toast.error(msgs.seekFailed);
+      return;
+    }
+    try {
+      el.currentTime = t;
+      setCur(t);
+    } catch {
+      toast.error(msgs.seekFailed);
+      return;
+    }
     if (!playing) {
-      void el.play();
       setPlaying(true);
+      safePlay(el);
     }
     // Once the user moves the playhead, the stale "resume" banner is irrelevant.
     if (resumeAt != null) setResumeAt(null);
@@ -202,16 +302,20 @@ const StoryAiExpertEmon = () => {
     if (resumeAt == null) return;
     const el = audioRef.current;
     if (!el) return;
-    const target = resumeAt;
+    // Clamp against known duration to defend against stale/corrupt saves.
+    const ceiling = Number.isFinite(el.duration) && el.duration > 0 ? el.duration - 1 : resumeAt;
+    const target = Math.max(0, Math.min(resumeAt, ceiling));
     const applySeek = () => {
       try {
         el.currentTime = target;
       } catch {
-        /* ignore seek errors */
+        toast.error(msgs.seekFailed);
+        return;
       }
       setCur(target);
-      void el.play();
       setPlaying(true);
+      safePlay(el);
+      toast.success(msgs.progressRestored);
       let idx = 0;
       for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
         if (target >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
@@ -251,6 +355,10 @@ const StoryAiExpertEmon = () => {
   const toggleBookmark = () => {
     const el = audioRef.current;
     if (!el) return;
+    if (!Number.isFinite(el.currentTime)) {
+      toast.error(msgs.seekFailed);
+      return;
+    }
     // If the user just jumped to the bookmark, the playhead is right on it —
     // don't interpret the next click as "remove".
     if (
@@ -264,13 +372,17 @@ const StoryAiExpertEmon = () => {
       } catch {
         /* ignore */
       }
+      toast(msgs.bookmarkRemoved);
     } else {
       const t = el.currentTime;
       setBookmark(t);
       try {
         localStorage.setItem(BOOKMARK_KEY, String(t));
-      } catch {
-        /* ignore */
+        toast.success(`${msgs.bookmarkSaved} · ${fmt(t)}`);
+      } catch (err) {
+        // Roll back optimistic state if write actually failed.
+        setBookmark(bookmark);
+        toast.error(isQuotaError(err) ? msgs.bookmarkStorageFull : msgs.bookmarkSaved);
       }
     }
     justJumpedToBookmarkRef.current = false;
@@ -341,6 +453,28 @@ const StoryAiExpertEmon = () => {
           {/* Player */}
           <div className="mt-10 rounded-2xl border border-border bg-card p-5 sm:p-6">
             <audio ref={audioRef} preload="metadata" src={audioAsset.url} />
+
+            {audioError && (
+              <div
+                role="alert"
+                className="mb-4 flex items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/[0.06] px-3 py-2 text-[12px] text-destructive"
+              >
+                <span lang={lang}>{audioError}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = audioRef.current;
+                    if (!el) return;
+                    setAudioError(null);
+                    try { el.load(); } catch { /* ignore */ }
+                    safePlay(el);
+                  }}
+                  className="rounded-full border border-destructive/40 px-2.5 py-0.5 text-[11px] font-medium text-destructive hover:bg-destructive/10"
+                >
+                  {lang === "bn" ? "আবার চেষ্টা" : "Retry"}
+                </button>
+              </div>
+            )}
 
             {resumeAt != null && (
               <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2">
