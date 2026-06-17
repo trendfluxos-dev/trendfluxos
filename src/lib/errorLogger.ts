@@ -22,6 +22,43 @@ const SESSION_CAP = 50;
 
 const RELEASE = (import.meta.env.VITE_BUILD_SHA as string | undefined) ?? "dev";
 
+// Stable per-tab session id so a sequence of errors from one user can be
+// correlated in the client_errors table without exposing PII.
+const SESSION_KEY = "__client_error_session_id";
+const getSessionId = (): string | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    let id = sessionStorage.getItem(SESSION_KEY);
+    if (!id) {
+      id =
+        (crypto as Crypto & { randomUUID?: () => string }).randomUUID?.() ??
+        `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      sessionStorage.setItem(SESSION_KEY, id);
+    }
+    return id;
+  } catch {
+    return null;
+  }
+};
+
+const buildContextMeta = (): Record<string, unknown> => {
+  if (typeof window === "undefined") return {};
+  const loc = window.location;
+  const nav = navigator as Navigator & { connection?: { effectiveType?: string } };
+  return {
+    session_id: getSessionId(),
+    pathname: loc.pathname,
+    search: loc.search || undefined,
+    hash: loc.hash || undefined,
+    referrer: document.referrer || undefined,
+    viewport: { w: window.innerWidth, h: window.innerHeight, dpr: window.devicePixelRatio },
+    online: typeof navigator !== "undefined" ? navigator.onLine : undefined,
+    language: typeof navigator !== "undefined" ? navigator.language : undefined,
+    connection: nav.connection?.effectiveType,
+    ts_iso: new Date().toISOString(),
+  };
+};
+
 const shouldDrop = (key: string) => {
   const now = Date.now();
   const last = recent.get(key);
@@ -48,6 +85,23 @@ export async function logClientError(payload: ErrorPayload) {
     sentCount += 1;
 
     const { data: auth } = await supabase.auth.getUser();
+    const { data: sessionData } = await supabase.auth.getSession();
+    const user = auth?.user;
+    const session = sessionData?.session;
+    const authMeta = {
+      user_id: user?.id ?? null,
+      user_email: user?.email ?? null,
+      auth_provider: user?.app_metadata?.provider ?? null,
+      authenticated: Boolean(session),
+      session_expires_at: session?.expires_at ?? null,
+    };
+
+    const mergedMeta = {
+      ...buildContextMeta(),
+      ...authMeta,
+      ...(payload.meta ?? {}),
+    };
+
     await supabase.from("client_errors").insert({
       message,
       stack: truncate(payload.stack),
@@ -56,8 +110,8 @@ export async function logClientError(payload: ErrorPayload) {
       user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
       release: payload.release ?? RELEASE,
       severity: payload.severity ?? "error",
-      user_id: auth?.user?.id ?? null,
-      meta: (payload.meta ?? null) as never,
+      user_id: user?.id ?? null,
+      meta: mergedMeta as never,
     });
   } catch {
     // Never throw from the logger.

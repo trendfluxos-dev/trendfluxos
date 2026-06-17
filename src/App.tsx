@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -94,9 +94,8 @@ const PageFallback = () => (
 );
 
 const RoutedApp = () => {
-  const { pathname } = useLocation();
   return (
-    <RouteErrorBoundary key={pathname} pathname={pathname}>
+    <RouteErrorBoundary>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/ecosystem" element={<Ecosystem />} />
