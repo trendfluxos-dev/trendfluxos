@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.current_user_has_role(public.app_role) FROM anon;
