@@ -1,12 +1,14 @@
 name: Production Smoke
 
-# Runs after every successful deploy, on a 6-hour schedule, and on demand.
-# Verifies trendflux.digital serves a healthy homepage with correct SEO markers.
+# Runs after every successful deploy (Lovable "Build & Deploy" workflow OR Vercel
+# deployment_status), on a 6-hour schedule, and on demand. Verifies that every
+# primary route SPA-resolves and that form-backing edge functions are reachable.
 
 on:
   workflow_run:
     workflows: ["Build & Deploy"]
     types: [completed]
+  deployment_status:
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch:
@@ -24,8 +26,15 @@ jobs:
   smoke:
     name: Smoke test live site
     runs-on: ubuntu-latest
-    # Skip if the triggering deploy failed.
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    # Skip when the triggering deploy didn't succeed.
+    # - workflow_run: only run if the upstream workflow succeeded.
+    # - deployment_status: only run on the "success" state (Vercel emits
+    #   "pending" / "in_progress" / "success" / "failure" / "error").
+    if: >-
+      ${{
+        (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+        && (github.event_name != 'deployment_status' || github.event.deployment_status.state == 'success')
+      }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,5 +46,14 @@ jobs:
 
       - name: Run smoke test
         env:
-          SMOKE_URL: ${{ github.event.inputs.target || 'https://trendflux.digital' }}
+          # Priority:
+          # 1. Manual dispatch input
+          # 2. Vercel deployment URL (deployment_status events expose environment_url)
+          # 3. Production custom domain
+          SMOKE_URL: >-
+            ${{
+              github.event.inputs.target
+              || github.event.deployment_status.environment_url
+              || 'https://trendflux.digital'
+            }}
         run: bun run test:smoke

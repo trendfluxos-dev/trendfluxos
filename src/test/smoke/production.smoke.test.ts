@@ -2,14 +2,41 @@
  * Production smoke test — fetches the live homepage and verifies key markers.
  *
  * Run locally:   bun run test:smoke
- * Run in CI:     .github/workflows/smoke.yml (post-deploy + scheduled)
+ * Run in CI:     .github/workflows/smoke.yml (post-deploy from Lovable OR Vercel + scheduled)
  *
  * Override target with SMOKE_URL=https://example.com bun run test:smoke
+ * Override backend with SMOKE_SUPABASE_URL=https://xxx.supabase.co bun run test:smoke
  */
 import { describe, it, expect, beforeAll } from "vitest";
 
 const TARGET = process.env.SMOKE_URL ?? "https://trendflux.digital";
+const SUPABASE_URL =
+  process.env.SMOKE_SUPABASE_URL ??
+  "https://dnodqhwwzdqfqlndwhsf.supabase.co";
 const TIMEOUT_MS = 30_000;
+
+// Primary public routes — every one of these must SPA-resolve to a 200 HTML.
+const PUBLIC_ROUTES = [
+  "/",
+  "/about",
+  "/services",
+  "/ecosystem",
+  "/contact",
+  "/project-lead",
+  "/explore",
+  "/showcase",
+  "/the-stand",
+  "/marriage",
+] as const;
+
+// Edge functions powering user-facing forms — health-checked via CORS preflight.
+// OPTIONS returns 200/204 with CORS headers when the function is deployed and reachable.
+const FORM_EDGE_FUNCTIONS = [
+  "telegram-submit", // LuxeVeil intake
+  "enterprise-demo-notify", // Enterprise demo form
+  "course-payment-submit", // Course payment intake
+  "access-request", // Access-request form
+] as const;
 
 let status = 0;
 let html = "";
@@ -78,4 +105,54 @@ describe(`production smoke — ${TARGET}`, () => {
     expect(r.status).toBe(200);
     expect((r.headers.get("content-type") ?? "")).toMatch(/text\/html/i);
   }, TIMEOUT_MS);
+});
+
+describe(`public routes SPA-resolve — ${TARGET}`, () => {
+  it.each(PUBLIC_ROUTES)(
+    "%s returns 200 HTML with SPA root mounted",
+    async (path) => {
+      const r = await fetch(new URL(path, TARGET), {
+        redirect: "follow",
+        headers: { "user-agent": "trendflux-smoke/1.0" },
+      });
+      expect(r.status, `${path} should return 200`).toBe(200);
+      expect(r.headers.get("content-type") ?? "").toMatch(/text\/html/i);
+      const body = await r.text();
+      expect(body, `${path} missing SPA root div`).toMatch(
+        /<div[^>]+id=["']root["']/i,
+      );
+      expect(body, `${path} missing module script`).toMatch(
+        /<script[^>]+type=["']module["']/i,
+      );
+    },
+    TIMEOUT_MS,
+  );
+});
+
+describe(`form-backing edge functions reachable — ${SUPABASE_URL}`, () => {
+  it.each(FORM_EDGE_FUNCTIONS)(
+    "%s responds to CORS preflight (OPTIONS)",
+    async (fn) => {
+      const url = `${SUPABASE_URL}/functions/v1/${fn}`;
+      const r = await fetch(url, {
+        method: "OPTIONS",
+        headers: {
+          origin: TARGET,
+          "access-control-request-method": "POST",
+          "access-control-request-headers": "content-type, authorization",
+        },
+      });
+      // Healthy edge function returns 200 or 204 with CORS headers.
+      // 404 = function not deployed; 5xx = function crashed at boot.
+      expect(
+        [200, 204].includes(r.status),
+        `${fn} preflight returned ${r.status}`,
+      ).toBe(true);
+      expect(
+        r.headers.get("access-control-allow-origin"),
+        `${fn} missing CORS allow-origin header`,
+      ).toBeTruthy();
+    },
+    TIMEOUT_MS,
+  );
 });
