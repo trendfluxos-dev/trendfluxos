@@ -104,6 +104,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-foreground/40 tracking-wide">
         <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</p>
         <div className="flex items-center gap-4">
+          <Link to="/trust" className="hover:text-foreground transition-colors">Trust & Privacy</Link>
           <Link to="/explore" className="hover:text-foreground transition-colors">Browse all pages</Link>
           <p>Built as a system, not a website.</p>
         </div>

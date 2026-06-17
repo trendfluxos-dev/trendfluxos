@@ -75,6 +75,7 @@ const staticRoutes = [
   "/luxe-veil",
   "/brandtoki",
   "/stories/ai-expert-emon",
+  "/trust",
 ];
 
 // Public but Helmet-marked noindex. Intentionally omitted from sitemap.
