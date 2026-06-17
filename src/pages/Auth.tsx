@@ -7,6 +7,33 @@ import { toast } from "sonner";
 import { useSeo } from "@/hooks/useSeo";
 import trendfluxLogo from "@/assets/trendflux-logo.webp";
 
+/**
+ * Map raw auth errors to friendly, bilingual messages so we never leak
+ * provider-specific strings (e.g. "AuthApiError: Invalid login credentials").
+ */
+function friendlyAuthError(message: string, mode: "signin" | "signup"): string {
+  const m = message.toLowerCase();
+  if (m.includes("invalid login") || m.includes("invalid credentials")) {
+    return "ভুল email বা password। আবার চেষ্টা করুন।";
+  }
+  if (m.includes("email not confirmed")) {
+    return "প্রথমে আপনার email confirm করুন, তারপর sign in করুন।";
+  }
+  if (m.includes("user already registered") || m.includes("already registered")) {
+    return "এই email দিয়ে আগে account তৈরি হয়েছে। Sign in করুন।";
+  }
+  if (m.includes("password") && m.includes("6")) {
+    return "Password কমপক্ষে ৬ অক্ষরের হতে হবে।";
+  }
+  if (m.includes("rate limit") || m.includes("too many")) {
+    return "অনেক বেশি চেষ্টা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।";
+  }
+  if (m.includes("network") || m.includes("fetch")) {
+    return "Network সমস্যা। Internet connection check করে আবার চেষ্টা করুন।";
+  }
+  return mode === "signin" ? "Sign in করা যায়নি। আবার চেষ্টা করুন।" : "Account তৈরি করা যায়নি। আবার চেষ্টা করুন।";
+}
+
 export default function Auth() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -33,18 +60,32 @@ export default function Auth() {
 
   const handle = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Light client-side guardrails before hitting the network.
+    const trimmedEmail = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      toast.error("একটি valid email address দিন।");
+      return;
+    }
+    if (password.length < 6) {
+      toast.error("Password কমপক্ষে ৬ অক্ষরের হতে হবে।");
+      return;
+    }
+    if (mode === "signup" && fullName.trim().length < 2) {
+      toast.error("আপনার পুরো নাম লিখুন।");
+      return;
+    }
     setLoading(true);
     try {
       if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await supabase.auth.signInWithPassword({ email: trimmedEmail, password });
         if (error) throw error;
       } else {
         const { data, error } = await supabase.auth.signUp({
-          email,
+          email: trimmedEmail,
           password,
           options: {
             emailRedirectTo: `${window.location.origin}${redirect}`,
-            data: { full_name: fullName },
+            data: { full_name: fullName.trim() },
           },
         });
         if (error) throw error;
@@ -57,8 +98,10 @@ export default function Auth() {
       }
       window.scrollTo({ top: 0, behavior: "auto" });
       navigate(redirect, { replace: true });
-    } catch (err: any) {
-      toast.error(err.message ?? "Authentication failed");
+    } catch (err) {
+      const raw = err instanceof Error ? err.message : String(err);
+      console.error("Auth submit failed", err);
+      toast.error(friendlyAuthError(raw, mode));
     } finally {
       setLoading(false);
     }

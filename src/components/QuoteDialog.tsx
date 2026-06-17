@@ -148,6 +148,14 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
         description: "We'll be in touch within one business day.",
       });
       setSubmitted({ ...form, ...parsed.data });
+    } catch (err) {
+      console.error("QuoteDialog submit failed", err);
+      toast({
+        title: "Couldn't open your mail client",
+        description:
+          "Please email zhemongrowth@gmail.com directly with your request.",
+        variant: "destructive",
+      });
     } finally {
       setSubmitting(false);
     }
