@@ -58,7 +58,7 @@ export const AI_EXPERT_EMON_CHAPTERS: StoryChapter[] = [
   { time: 0,   bn: "ডিজিটাল স্থপতি ইমন",            en: "The Digital Architect" },
   { time: 110, bn: "হলের বিপরীত বাস্তবতা",          en: "The Hall's Other Reality" },
   { time: 230, bn: "বিচারহীনতার সংস্কৃতি",          en: "A Culture of Impunity" },
-  { time: 350, bn: "টর্চার সেল ও মাদক নেটওয়ার্ক",   bn_alt: "", en: "Torture Cells & The Drug Network" } as StoryChapter,
+  { time: 350, bn: "টর্চার সেল ও মাদক নেটওয়ার্ক",   en: "Torture Cells & The Drug Network" },
   { time: 480, bn: "২৩ আগস্ট ২০২৩ — সেই রাত",       en: "August 23, 2023 — The Night" },
   { time: 620, bn: "প্রক্টর অফিস ও নীরব আঁতাত",      en: "The Proctor & The Silent Pact" },
   { time: 760, bn: "যুক্তি দিয়ে প্রতিরোধ",           en: "Resistance Through Logic" },
