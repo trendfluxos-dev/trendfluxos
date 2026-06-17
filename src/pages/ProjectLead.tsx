@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import { useSeo } from "@/hooks/useSeo";
+import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
+import { SHOWCASE_ITEMS } from "@/data/showcase";
 
 const metrics = [
   { value: "4.85L+", label: "Organic Views" },
@@ -333,6 +335,8 @@ const ProjectLead = () => {
 
       {/* LEADERSHIP & COMMUNITY */}
       <section className="px-6 lg:px-10 py-24">
+        {/* (Showcase preview rendered above) */}
+      </section>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
