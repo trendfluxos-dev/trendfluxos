@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, Headphones, ListMusic, Pause, Play, Share2, Sparkles, Lightbulb } from "lucide-react";
+import { ArrowLeft, Bookmark, BookmarkCheck, Download, Headphones, ListMusic, Pause, Play, RotateCcw, Share2, Sparkles, Lightbulb } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
@@ -22,6 +22,33 @@ function fmt(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
+const PROGRESS_KEY = "story:ai-expert-emon:progress";
+const BOOKMARK_KEY = "story:ai-expert-emon:bookmark";
+
+type SavedProgress = { time: number; updatedAt: number };
+
+function readProgress(): SavedProgress | null {
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (!raw) return null;
+    const v = JSON.parse(raw) as SavedProgress;
+    return Number.isFinite(v?.time) && v.time > 2 ? v : null;
+  } catch {
+    return null;
+  }
+}
+
+function readBookmark(): number | null {
+  try {
+    const raw = localStorage.getItem(BOOKMARK_KEY);
+    if (!raw) return null;
+    const v = Number.parseFloat(raw);
+    return Number.isFinite(v) ? v : null;
+  } catch {
+    return null;
+  }
+}
+
 const StoryAiExpertEmon = () => {
   const [lang, setLang] = useState<StoryLang>("bn");
   const copy = AI_EXPERT_EMON_STORY[lang];
@@ -32,6 +59,10 @@ const StoryAiExpertEmon = () => {
   const [cur, setCur] = useState(0);
   const [dur, setDur] = useState(0);
   const [shareOpen, setShareOpen] = useState(false);
+  const [resumeAt, setResumeAt] = useState<number | null>(null);
+  const [bookmark, setBookmark] = useState<number | null>(null);
+  const lastSavedRef = useRef(0);
+  const restoredRef = useRef(false);
 
   useSeo({
     title: `${copy.title} · Zahid Hasan Emon`,
@@ -47,9 +78,31 @@ const StoryAiExpertEmon = () => {
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
-    const t = () => setCur(el.currentTime);
+    const t = () => {
+      setCur(el.currentTime);
+      const now = Date.now();
+      if (now - lastSavedRef.current > 2500 && el.currentTime > 2) {
+        lastSavedRef.current = now;
+        try {
+          localStorage.setItem(
+            PROGRESS_KEY,
+            JSON.stringify({ time: el.currentTime, updatedAt: now }),
+          );
+        } catch {
+          /* ignore quota */
+        }
+      }
+    };
     const m = () => setDur(el.duration);
-    const e = () => setPlaying(false);
+    const e = () => {
+      setPlaying(false);
+      try {
+        localStorage.removeItem(PROGRESS_KEY);
+      } catch {
+        /* ignore */
+      }
+      setResumeAt(null);
+    };
     el.addEventListener("timeupdate", t);
     el.addEventListener("loadedmetadata", m);
     el.addEventListener("ended", e);
@@ -57,6 +110,36 @@ const StoryAiExpertEmon = () => {
       el.removeEventListener("timeupdate", t);
       el.removeEventListener("loadedmetadata", m);
       el.removeEventListener("ended", e);
+    };
+  }, []);
+
+  // Load saved progress + bookmark once on mount
+  useEffect(() => {
+    const p = readProgress();
+    if (p) setResumeAt(p.time);
+    setBookmark(readBookmark());
+  }, []);
+
+  // Save final position on unload
+  useEffect(() => {
+    const save = () => {
+      const el = audioRef.current;
+      if (!el || el.currentTime <= 2) return;
+      try {
+        localStorage.setItem(
+          PROGRESS_KEY,
+          JSON.stringify({ time: el.currentTime, updatedAt: Date.now() }),
+        );
+      } catch {
+        /* ignore */
+      }
+    };
+    window.addEventListener("pagehide", save);
+    window.addEventListener("beforeunload", save);
+    return () => {
+      window.removeEventListener("pagehide", save);
+      window.removeEventListener("beforeunload", save);
+      save();
     };
   }, []);
 
@@ -104,6 +187,60 @@ const StoryAiExpertEmon = () => {
         node.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     }
+  };
+
+  const resume = () => {
+    if (resumeAt == null) return;
+    const el = audioRef.current;
+    if (!el) return;
+    el.currentTime = resumeAt;
+    setCur(resumeAt);
+    void el.play();
+    setPlaying(true);
+    restoredRef.current = true;
+    // Scroll matching paragraph into view based on nearest chapter
+    let idx = 0;
+    for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
+      if (resumeAt >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
+    }
+    const node = paragraphRefs.current[idx];
+    if (node) node.scrollIntoView({ behavior: "smooth", block: "center" });
+    setResumeAt(null);
+  };
+
+  const dismissResume = () => {
+    setResumeAt(null);
+    try {
+      localStorage.removeItem(PROGRESS_KEY);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const toggleBookmark = () => {
+    const el = audioRef.current;
+    if (!el) return;
+    if (bookmark != null && Math.abs(bookmark - el.currentTime) < 1.5) {
+      setBookmark(null);
+      try {
+        localStorage.removeItem(BOOKMARK_KEY);
+      } catch {
+        /* ignore */
+      }
+    } else {
+      const t = el.currentTime;
+      setBookmark(t);
+      try {
+        localStorage.setItem(BOOKMARK_KEY, String(t));
+      } catch {
+        /* ignore */
+      }
+    }
+  };
+
+  const goToBookmark = () => {
+    if (bookmark == null) return;
+    jumpTo(bookmark);
   };
 
   const summary = AI_EXPERT_EMON_SUMMARY[lang];
@@ -165,6 +302,35 @@ const StoryAiExpertEmon = () => {
           {/* Player */}
           <div className="mt-10 rounded-2xl border border-border bg-card p-5 sm:p-6">
             <audio ref={audioRef} preload="metadata" src={audioAsset.url} />
+
+            {resumeAt != null && (
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2">
+                <div className="flex items-center gap-2 text-[12px] text-foreground/85">
+                  <RotateCcw className="h-3.5 w-3.5 text-primary" />
+                  <span lang={lang}>
+                    {lang === "bn" ? "আগের জায়গা থেকে শুরু করবেন?" : "Resume where you left off?"}
+                  </span>
+                  <span className="font-mono text-[11px] text-muted-foreground">{fmt(resumeAt)}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={resume}
+                    className="rounded-full bg-primary px-3 py-1 text-[11px] font-medium text-primary-foreground"
+                  >
+                    {lang === "bn" ? "শুরু করুন" : "Resume"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={dismissResume}
+                    className="rounded-full px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground"
+                  >
+                    {lang === "bn" ? "শুরু থেকে" : "Start over"}
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center gap-4">
               <button
                 type="button"
@@ -196,11 +362,43 @@ const StoryAiExpertEmon = () => {
                       />
                     );
                   })}
+                  {bookmark != null && (
+                    <span
+                      aria-hidden
+                      title={`Bookmark · ${fmt(bookmark)}`}
+                      className="absolute top-1/2 h-3 w-[2px] -translate-y-1/2 rounded-sm bg-primary"
+                      style={{ left: `${Math.min(100, Math.max(0, (bookmark / effectiveDur) * 100))}%` }}
+                    />
+                  )}
                 </div>
                 <div className="mt-2 flex items-center justify-between font-mono text-[11px] tabular-nums text-muted-foreground">
                   <span>{fmt(cur)}</span>
                   <span>{dur ? fmt(dur) : "—:—"}</span>
                 </div>
+              </div>
+              <div className="flex shrink-0 flex-col items-center gap-1">
+                <button
+                  type="button"
+                  onClick={toggleBookmark}
+                  aria-label={bookmark != null ? "Remove bookmark" : "Bookmark this moment"}
+                  title={bookmark != null ? `Bookmarked at ${fmt(bookmark)}` : "Bookmark this moment"}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
+                    bookmark != null
+                      ? "border-primary/40 bg-primary/[0.08] text-primary"
+                      : "border-border bg-card text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {bookmark != null ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+                </button>
+                {bookmark != null && (
+                  <button
+                    type="button"
+                    onClick={goToBookmark}
+                    className="font-mono text-[10px] tabular-nums text-muted-foreground hover:text-primary"
+                  >
+                    {fmt(bookmark)}
+                  </button>
+                )}
               </div>
             </div>
 
