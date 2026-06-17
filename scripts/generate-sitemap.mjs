@@ -27,7 +27,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const root = path.resolve(__dirname, "..");
 
-const SITE_URL = "https://trendflux.digital";
+const SITE_URL = "https://trendfluxdigital-bd.lovable.app";
 
 // Mirror of caseStudies slugs in src/data/caseStudies.ts
 const caseSlugs = [
@@ -37,6 +37,18 @@ const caseSlugs = [
   "whatsapp-lead-conversion",
   "sme-growth-architecture",
   "personal-brand-authority",
+];
+
+// Mirror of research/implementation slugs in src/data/research.ts
+const researchSlugs = [
+  "civic-content-engine-bangladesh",
+  "ai-share-routing-platform-aware",
+  "founder-voice-on-linkedin-bd",
+];
+const implementationSlugs = [
+  "trendflux-ecosystem-buildout",
+  "luxe-veil-invite-gate",
+  "the-stand-share-cards",
 ];
 
 // Every public, indexable route in src/App.tsx. Keep in sync.
@@ -72,6 +84,10 @@ const noindexRoutes = [
   "/justice-appeal",
   "/media-reports",
   "/share-kit",
+  // Auth-gated / admin-only routes — never indexable.
+  "/auth",
+  "/dashboard",
+  "/admin",
 ];
 
 const today = new Date().toISOString().split("T")[0];
@@ -79,6 +95,8 @@ const today = new Date().toISOString().split("T")[0];
 const urls = [
   ...staticRoutes,
   ...caseSlugs.map((s) => `/case-studies/${s}`),
+  ...researchSlugs.map((s) => `/research/${s}`),
+  ...implementationSlugs.map((s) => `/implementations/${s}`),
 ];
 
 function priorityFor(p) {
@@ -86,6 +104,7 @@ function priorityFor(p) {
   if (p === "/services" || p === "/portfolio") return "0.9";
   if (p === "/ecosystem" || p === "/about" || p === "/contact") return "0.8";
   if (p.startsWith("/case-studies/")) return "0.8";
+  if (p.startsWith("/research/") || p.startsWith("/implementations/")) return "0.7";
   if (p === "/explore" || p === "/showcase") return "0.7";
   return "0.6";
 }
