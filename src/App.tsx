@@ -23,6 +23,7 @@ import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
 import { SentryErrorBoundary } from "@/lib/sentry";
+import RequireRole from "@/components/auth/RequireRole";
 
 const queryClient = new QueryClient();
 
@@ -132,16 +133,16 @@ const App = () => (
             <Route path="/implementations/:slug" element={<ImplementationDetail />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/admin/luxe-veil" element={<LuxeVeilAdmin />} />
-            <Route path="/admin/conversions" element={<ConversionDashboard />} />
-            <Route path="/admin/enterprise-demos" element={<EnterpriseDemos />} />
-            <Route path="/admin/course-enrollments" element={<CourseEnrollmentsAdmin />} />
-            <Route path="/admin/uptime" element={<UptimeAdmin />} />
-            <Route path="/admin/errors" element={<ErrorLogsAdmin />} />
-            <Route path="/admin/web-vitals" element={<WebVitalsAdmin />} />
-            <Route path="/admin/ga4-check" element={<Ga4Check />} />
-            <Route path="/admin/secrets-health" element={<SecretsHealthAdmin />} />
+            <Route path="/admin" element={<RequireRole roles={["admin", "editor"]}><Admin /></RequireRole>} />
+            <Route path="/admin/luxe-veil" element={<RequireRole roles={["admin"]}><LuxeVeilAdmin /></RequireRole>} />
+            <Route path="/admin/conversions" element={<RequireRole roles={["admin"]}><ConversionDashboard /></RequireRole>} />
+            <Route path="/admin/enterprise-demos" element={<RequireRole roles={["admin"]}><EnterpriseDemos /></RequireRole>} />
+            <Route path="/admin/course-enrollments" element={<RequireRole roles={["admin"]}><CourseEnrollmentsAdmin /></RequireRole>} />
+            <Route path="/admin/uptime" element={<RequireRole roles={["admin"]}><UptimeAdmin /></RequireRole>} />
+            <Route path="/admin/errors" element={<RequireRole roles={["admin"]}><ErrorLogsAdmin /></RequireRole>} />
+            <Route path="/admin/web-vitals" element={<RequireRole roles={["admin"]}><WebVitalsAdmin /></RequireRole>} />
+            <Route path="/admin/ga4-check" element={<RequireRole roles={["admin"]}><Ga4Check /></RequireRole>} />
+            <Route path="/admin/secrets-health" element={<RequireRole roles={["admin"]}><SecretsHealthAdmin /></RequireRole>} />
             <Route path="/press/:id" element={<PressDetail />} />
             <Route path="/the-stand" element={<TheStand />} />
             <Route path="/the-stand/share" element={<TheStandShare />} />
