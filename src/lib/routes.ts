@@ -49,6 +49,7 @@ export const routes = {
   "/justice-appeal": make(() => import("@/pages/JusticeAppeal")),
   "/media-reports": make(() => import("@/pages/MediaReports")),
   "/share-kit": make(() => import("@/pages/ShareKit")),
+  "/stories/ai-expert-emon": make(() => import("@/pages/StoryAiExpertEmon")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
@@ -79,6 +80,7 @@ export const navigablePages: {
   { label: "The Stand — Share Quote Cards", path: "/the-stand/share", type: "Main", keywords: "share quote card facebook instagram story generator the stand zahid emon mayer nishedh ache" },
   { label: "Project Lead", path: "/project-lead", type: "Main", keywords: "lead form contact" },
   { label: "Showcase — Zahid Hasan Emon", path: "/showcase", type: "Main", keywords: "showcase portfolio work brands websites enterprise systems social platforms initiatives zahid emon" },
+  { label: "Audio Story — এআই বিশেষজ্ঞ ইমন", path: "/stories/ai-expert-emon", type: "Main", keywords: "audio story ai expert emon zahid hasan narrative voice note bangla" },
   { label: "Marriage", path: "/marriage", type: "Main", keywords: "wedding" },
   { label: "Brand Open", path: "/brand-open", type: "Brand", keywords: "branding open mass public" },
   { label: "Trendflux Talent", path: "/trendflux-talent", type: "Brand", keywords: "careers talent platform" },

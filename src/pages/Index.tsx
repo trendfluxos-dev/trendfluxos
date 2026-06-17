@@ -27,6 +27,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import theStandCover from "@/assets/the-stand-cover.jpg";
 import AudioStoryTeaser from "@/components/tf/AudioStoryTeaser";
+import AiExpertStoryTeaser from "@/components/home/AiExpertStoryTeaser";
 import { TfSection, TfCard } from "@/components/tf/Section";
 import { InlineEditProvider, InlineEditToggle, EditableText } from "@/components/InlineEditable";
 import DashboardMock from "@/components/tf/DashboardMock";
@@ -641,6 +642,9 @@ const Index = () => {
 
       {/* ============= 5b-i. AUDIO STORY — অ্যালগরিদম আর টর্চার সেলের রুদ্ধশ্বাস জীবন ============= */}
       <AudioStoryTeaser />
+
+      {/* ============= 5b-i+. AUDIO STORY — এআই বিশেষজ্ঞ ইমন ============= */}
+      <AiExpertStoryTeaser />
 
       {/* ============= 5b-ii. QUIET POSITIONS — Parallel Emotional Archive ============= */}
       <section
