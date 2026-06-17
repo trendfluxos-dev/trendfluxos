@@ -40,6 +40,7 @@ const Navbar = () => {
     <header className="fixed top-0 inset-x-0 z-50">
       <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 transition-all duration-300 ${scrolled ? "mt-2" : "mt-4"}`}>
         <nav
+          aria-label="Primary"
           className={`glass-strong rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4 pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border transition-all duration-300 ${
             scrolled ? "border-border/60 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.18)]" : "border-border/40"
           }`}
@@ -54,6 +55,7 @@ const Navbar = () => {
           <div className="hidden md:flex flex-nowrap items-center gap-5 text-[12px] lg:text-[13px] text-foreground/65">
             <Link
               to="/"
+              aria-current={pathname === "/" ? "page" : undefined}
               className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
                 pathname === "/" ? "text-foreground" : ""
               }`}
@@ -62,6 +64,7 @@ const Navbar = () => {
             </Link>
             <Link
               to="/explore"
+              aria-current={pathname === "/explore" ? "page" : undefined}
               className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
                 pathname === "/explore" ? "text-foreground" : ""
               }`}
@@ -70,6 +73,7 @@ const Navbar = () => {
             </Link>
             <Link
               to="/showcase"
+              aria-current={pathname === "/showcase" ? "page" : undefined}
               className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
                 pathname === "/showcase" ? "text-foreground" : ""
               }`}
@@ -85,20 +89,20 @@ const Navbar = () => {
               onClick={() => openCommandPalette()}
               aria-label="Search pages"
               title="Search pages (⌘K)"
-              className="inline-flex items-center justify-center h-8 w-8 rounded-full border border-border/50 bg-background/30 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="inline-flex items-center justify-center h-9 w-9 rounded-full border border-border/50 bg-background/30 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <Search className="h-3.5 w-3.5" />
             </button>
             <button
               type="button"
               onClick={() => openLuxeVeilGate({ source: "navbar" })}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               Apply Access
             </button>
             <Link
               to={signedIn ? "/admin" : "/auth"}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-2.5 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               title={signedIn ? "Dashboard" : "Login"}
             >
               {signedIn ? <LayoutDashboard className="h-3.5 w-3.5 shrink-0" /> : <LogIn className="h-3.5 w-3.5 shrink-0" />}
@@ -110,8 +114,10 @@ const Navbar = () => {
               <SheetTrigger asChild>
                 <button
                   type="button"
-                  aria-label="Open menu"
-                  className="md:hidden inline-flex items-center justify-center h-9 w-9 rounded-full border border-border/50 bg-background/40 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors"
+                  aria-label="Open navigation menu"
+                  aria-haspopup="dialog"
+                  aria-expanded={open}
+                  className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-border/50 bg-background/40 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   <Menu className="h-4 w-4" />
                 </button>
@@ -123,25 +129,28 @@ const Navbar = () => {
                     <span className="text-foreground/55 font-normal"> {BRAND.nameTrail}</span>
                   </SheetTitle>
                 </SheetHeader>
-                <div className="mt-8 flex flex-col gap-1">
+                <nav aria-label="Mobile" className="mt-8 flex flex-col gap-1">
                   <Link
                     to="/"
+                    aria-current={pathname === "/" ? "page" : undefined}
                     onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
                   >
                     Explore
                   </Link>
                   <Link
                     to="/explore"
+                    aria-current={pathname === "/explore" ? "page" : undefined}
                     onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
                   >
                     Browse all pages
                   </Link>
                   <Link
                     to="/showcase"
+                    aria-current={pathname === "/showcase" ? "page" : undefined}
                     onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
                   >
                     Showcase
                   </Link>
@@ -151,19 +160,19 @@ const Navbar = () => {
                       setOpen(false);
                       openLuxeVeilGate({ source: "navbar_mobile" });
                     }}
-                    className="text-left rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                    className="text-left rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     Apply Access
                   </button>
                   <Link
                     to={signedIn ? "/admin" : "/auth"}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary" /> : <LogIn className="h-4 w-4 text-primary" />}
                     {signedIn ? "Dashboard" : "Login"}
                   </Link>
-                </div>
+                </nav>
 
                 <div className="mt-6 border-t border-border/60 pt-6">
                   <div className="mt-5">
