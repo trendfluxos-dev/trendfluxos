@@ -61,6 +61,22 @@ export default function JusticeAppeal() {
         <meta name="twitter:title" content="Pabna Accountability Project" />
         <meta name="twitter:description" content="When fear replaces justice, documentation becomes necessary." />
         <meta name="twitter:image" content="https://trendflux.digital/og-justice-appeal.jpg" />
+        {/* Article schema: helps search engines understand this is a
+            documentary public-interest archive (not a marketing page).
+            Pairs with the page-level noindex above — schema describes
+            the content for any crawler that does see it. */}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: "Pabna Accountability Project — Public Interest Documentation",
+          description: "A documentary archive of a written complaint and related media references, requesting lawful investigation and safety protection.",
+          inLanguage: "bn",
+          isAccessibleForFree: true,
+          mainEntityOfPage: "https://trendflux.digital/justice-appeal",
+          image: "https://trendflux.digital/og-justice-appeal.jpg",
+          author: { "@type": "Organization", name: "TrendFlux Ecosystem", url: "https://trendflux.digital" },
+          publisher: { "@type": "Organization", name: "TrendFlux Ecosystem", url: "https://trendflux.digital" },
+        })}</script>
       </Helmet>
 
 
