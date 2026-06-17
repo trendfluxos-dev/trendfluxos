@@ -4,8 +4,6 @@ import { Suspense, lazy } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
-import ThemeDebugPanel from "@/components/ThemeDebugPanel";
-import PerfMonitor from "@/components/PerfMonitor";
 import OverflowDetector from "@/components/dev/OverflowDetector";
 
 
@@ -24,6 +22,16 @@ import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
 import { SentryErrorBoundary } from "@/lib/sentry";
 import RequireRole from "@/components/auth/RequireRole";
+
+// Dev-only diagnostic panels. They are heavy and only ever rendered when
+// `?perf` is in the URL during development, so we code-split them out of the
+// production bundle entirely and lazy-load on demand.
+const ThemeDebugPanel = import.meta.env.DEV
+  ? lazy(() => import("@/components/ThemeDebugPanel"))
+  : null;
+const PerfMonitor = import.meta.env.DEV
+  ? lazy(() => import("@/components/PerfMonitor"))
+  : null;
 
 const queryClient = new QueryClient();
 
@@ -106,8 +114,16 @@ const App = () => (
           <TelegramGroupPopup />
           <ConsentBannerGate />
           <AccessRequestGate />
-          {import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && <ThemeDebugPanel />}
-          {import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && <PerfMonitor />}
+          {ThemeDebugPanel && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && (
+            <Suspense fallback={null}>
+              <ThemeDebugPanel />
+            </Suspense>
+          )}
+          {PerfMonitor && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && (
+            <Suspense fallback={null}>
+              <PerfMonitor />
+            </Suspense>
+          )}
           <OverflowDetector />
 
 
