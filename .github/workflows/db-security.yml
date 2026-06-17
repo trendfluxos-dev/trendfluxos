@@ -37,13 +37,67 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Cache the Supabase CLI binary across runs. The CLI is large and
+      # `supabase/setup-cli` re-downloads it on every job otherwise. Keyed by
+      # OS only because we pin `version: latest` — bumping to a pinned version
+      # below will naturally invalidate the cache via the key suffix.
+      - name: Cache Supabase CLI
+        id: cache-supabase-cli
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/supabase
+            /opt/hostedtoolcache/supabase
+          key: supabase-cli-${{ runner.os }}-latest
+          restore-keys: |
+            supabase-cli-${{ runner.os }}-
+
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
           version: latest
 
+      # Cache the Docker images that `supabase start` pulls (Postgres, GoTrue,
+      # PostgREST, etc.). On a cold cache this saves nothing; on warm runs it
+      # shaves multiple minutes off `supabase start`. The key includes a hash
+      # of the migrations + workflow so unrelated PRs share the cache, but a
+      # CLI/stack bump invalidates cleanly.
+      - name: Cache Supabase Docker images
+        id: cache-supabase-images
+        uses: actions/cache@v4
+        with:
+          path: /tmp/supabase-images
+          key: supabase-images-${{ runner.os }}-${{ hashFiles('.github/workflows/db-security.yml') }}
+          restore-keys: |
+            supabase-images-${{ runner.os }}-
+
+      - name: Restore Supabase Docker images
+        if: steps.cache-supabase-images.outputs.cache-hit == 'true'
+        run: |
+          if [ -d /tmp/supabase-images ]; then
+            for img in /tmp/supabase-images/*.tar; do
+              [ -f "$img" ] || continue
+              docker load -i "$img" || true
+            done
+          fi
+
       - name: Start local Supabase stack
         run: supabase start --exclude studio,inbucket,imgproxy,storage-api,realtime,edge-runtime,logflare,vector
+
+      - name: Save Supabase Docker images for next run
+        if: steps.cache-supabase-images.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p /tmp/supabase-images
+          # Snapshot only the supabase/* images the stack actually pulled.
+          # Each image is saved to its own tarball so the cache stays
+          # incremental and partial restores remain usable.
+          docker images --format '{{.Repository}}:{{.Tag}}' \
+            | grep -E '^(public\.ecr\.aws/supabase/|supabase/)' \
+            | sort -u \
+            | while read -r image; do
+                safe=$(echo "$image" | tr '/:' '__')
+                docker save "$image" -o "/tmp/supabase-images/${safe}.tar" || true
+              done
 
       - name: Run database linter (JSON)
         id: lint
