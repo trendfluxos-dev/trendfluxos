@@ -229,8 +229,20 @@ const StoryAiExpertEmon = () => {
   const justJumpedToBookmarkRef = useRef(false);
   const [audioError, setAudioError] = useState<string | null>(null);
 
+  /** Localized strings bound to the current language toggle. */
   const msgs = MESSAGES[lang];
 
+  /**
+   * Start playback on an `<audio>` element while gracefully handling the
+   * Promise rejection returned by modern browsers when playback is blocked
+   * (autoplay policy) or cannot start (network / decode error).
+   *
+   * On `NotAllowedError` / `AbortError` we show an informational toast asking
+   * the user to tap Play; on anything else we surface a generic failure toast
+   * and reset the `playing` state so the UI doesn't appear stuck.
+   *
+   * @param el - The `<audio>` element to play (may be `null` during teardown).
+   */
   const safePlay = useCallback((el: HTMLAudioElement | null) => {
     if (!el) return;
     const p = el.play();
@@ -258,6 +270,20 @@ const StoryAiExpertEmon = () => {
     imageAlt: `${copy.title} — chapter list and author`,
   });
 
+  /**
+   * Wire all `<audio>` element listeners and own their lifecycle.
+   *
+   * Events handled:
+   * - `timeupdate`: throttled state update (see inline note) + auto-save
+   *   playback position to localStorage every 2.5s.
+   * - `loadedmetadata`: capture the real duration once known.
+   * - `ended`: clear saved progress (next visit starts at 0) + reset UI.
+   * - `error` / `stalled`: surface friendly inline + toast messages.
+   * - `playing`: clear any previously shown error banner.
+   *
+   * Re-runs only when the language changes (which rebinds the listener
+   * closures so they see the latest localized strings).
+   */
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
@@ -332,14 +358,23 @@ const StoryAiExpertEmon = () => {
     };
   }, [msgs]);
 
-  // Load saved progress + bookmark once on mount
+  /**
+   * On mount, hydrate UI state from localStorage:
+   * - If a valid saved playback position exists, show the "Resume?" banner.
+   * - If a bookmark exists, draw its pin on the seek bar.
+   */
   useEffect(() => {
     const p = readProgress();
     if (p) setResumeAt(p.time);
     setBookmark(readBookmark());
   }, []);
 
-  // Save final position on unload
+  /**
+   * Best-effort final flush of the playback position on page hide / unload,
+   * and on component unmount (e.g. client-side navigation away from the
+   * story page). Browsers run `pagehide` reliably on iOS where
+   * `beforeunload` is ignored; we register both for cross-browser coverage.
+   */
   useEffect(() => {
     const save = () => {
       const el = audioRef.current;
