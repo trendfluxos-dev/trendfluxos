@@ -45,3 +45,53 @@ export const AI_EXPERT_EMON_STORY: Record<StoryLang, StoryCopy> = {
 };
 
 export const AI_EXPERT_EMON_THEMES = ["AI", "Digital Technologies", "Social Justice", "Campus Violence", "Political Influence", "Corruption", "Rule of Law", "Personal Struggle", "Moral Courage"];
+
+// Chapter markers anchored to audio timestamps (seconds).
+// Estimated from a ~16 min narration evenly weighted across the 7 narrative beats.
+export interface StoryChapter {
+  time: number;
+  bn: string;
+  en: string;
+}
+
+export const AI_EXPERT_EMON_CHAPTERS: StoryChapter[] = [
+  { time: 0,   bn: "ডিজিটাল স্থপতি ইমন",            en: "The Digital Architect" },
+  { time: 110, bn: "হলের বিপরীত বাস্তবতা",          en: "The Hall's Other Reality" },
+  { time: 230, bn: "বিচারহীনতার সংস্কৃতি",          en: "A Culture of Impunity" },
+  { time: 350, bn: "টর্চার সেল ও মাদক নেটওয়ার্ক",   en: "Torture Cells & The Drug Network" },
+  { time: 480, bn: "২৩ আগস্ট ২০২৩ — সেই রাত",       en: "August 23, 2023 — The Night" },
+  { time: 620, bn: "প্রক্টর অফিস ও নীরব আঁতাত",      en: "The Proctor & The Silent Pact" },
+  { time: 760, bn: "যুক্তি দিয়ে প্রতিরোধ",           en: "Resistance Through Logic" },
+];
+
+// 5-bullet summary + key takeaways surfaced directly on the story page.
+export const AI_EXPERT_EMON_SUMMARY: Record<StoryLang, { summary: string[]; takeaways: string[] }> = {
+  bn: {
+    summary: [
+      "জাবি আইআইটি গ্র্যাজুয়েট ইমন আন্তর্জাতিক মার্কেটে ডেটা ও এআই-চালিত গ্রোথ ইনফ্রাস্ট্রাকচার বানান।",
+      "একই ক্যাম্পাসের হলগুলোতে এক হাজারের বেশি অছাত্র সিট দখল করে গড়ে তুলেছে অপরাধ ইকোসিস্টেম।",
+      "মাসে ৭ হাজার+ ইয়াবা সরবরাহ এবং একাধিক হলে নিশ্চিহ্ন টর্চার সেলের অস্তিত্ব নথিভুক্ত।",
+      "২৩ আগস্ট ২০২৩-এ ইমনকে রড দিয়ে পেটানো, পিস্তল ঠেকিয়ে হুমকি ও মদ ঢেলে দুর্ঘটনার গল্প সাজানোর চেষ্টা হয়।",
+      "ইমন আবেগ নয়, তথ্য–যুক্তি–ডকুমেন্ট দিয়ে আইজিপি ও উপদেষ্টা পর্যায়ে সুস্পষ্ট পাবলিক রেকর্ড তৈরি করেন।",
+    ],
+    takeaways: [
+      "বিচারহীনতা প্রতিষ্ঠানিক হলে অপরাধ ক্ষমতা প্রদর্শনে পরিণত হয়।",
+      "ক্ষমতার কাছাকাছি থেকেও নৈতিক অবস্থান ধরে রাখা সম্ভব — এবং সেটাই সবচেয়ে বড় হুমকি হয়ে ওঠে।",
+      "সিস্টেমেটিক ডকুমেন্টেশন বিশৃঙ্খল পেশিশক্তির বিরুদ্ধে সবচেয়ে কার্যকর প্রতিরোধ।",
+    ],
+  },
+  en: {
+    summary: [
+      "JU IIT graduate Emon builds data- and AI-driven growth infrastructure for international clients.",
+      "On the same campus, 1,000+ former students illegally hold dorm seats, forming an entrenched criminal ecosystem.",
+      "7,000+ Yaba pills are supplied monthly, with documented torture cells in multiple residential halls.",
+      "On Aug 23, 2023, Emon was beaten with rods, threatened at gunpoint, and doused with alcohol to stage an accidental death.",
+      "He responded not with emotion but with logic — written records to the IGP and government advisors created a public paper trail.",
+    ],
+    takeaways: [
+      "When impunity becomes institutional, crime turns into a public display of power.",
+      "Proximity to power does not require complicity — and refusing it makes you the biggest threat.",
+      "Systematic documentation is the most effective defense against chaotic brute force.",
+    ],
+  },
+};

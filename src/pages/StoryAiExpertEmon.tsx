@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Headphones, Pause, Play, Share2, Sparkles } from "lucide-react";
+import { ArrowLeft, Headphones, ListMusic, Pause, Play, Share2, Sparkles, Lightbulb } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
 import audioAsset from "@/assets/ai-bisheshoggo-emon.mp3.asset.json";
-import { AI_EXPERT_EMON_STORY, AI_EXPERT_EMON_THEMES, type StoryLang } from "@/data/aiExpertEmonStory";
+import {
+  AI_EXPERT_EMON_CHAPTERS,
+  AI_EXPERT_EMON_STORY,
+  AI_EXPERT_EMON_SUMMARY,
+  AI_EXPERT_EMON_THEMES,
+  type StoryLang,
+} from "@/data/aiExpertEmonStory";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
 
 function fmt(s: number) {
@@ -65,6 +71,28 @@ const StoryAiExpertEmon = () => {
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
+
+  const effectiveDur = dur || 960; // fallback ~16 min until metadata loads
+  const activeChapterIdx = (() => {
+    let idx = 0;
+    for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
+      if (cur >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
+    }
+    return idx;
+  })();
+
+  const jumpTo = (t: number) => {
+    const el = audioRef.current;
+    if (!el) return;
+    el.currentTime = t;
+    setCur(t);
+    if (!playing) {
+      void el.play();
+      setPlaying(true);
+    }
+  };
+
+  const summary = AI_EXPERT_EMON_SUMMARY[lang];
 
   const sharePayload: SharePayload = {
     title: copy.title,
@@ -143,12 +171,57 @@ const StoryAiExpertEmon = () => {
                   className="relative h-1.5 w-full cursor-pointer overflow-hidden rounded-full bg-muted"
                 >
                   <div className="h-full bg-primary transition-[width] duration-150" style={{ width: `${pct}%` }} />
+                  {AI_EXPERT_EMON_CHAPTERS.slice(1).map((c) => {
+                    const left = Math.min(100, Math.max(0, (c.time / effectiveDur) * 100));
+                    return (
+                      <span
+                        key={c.time}
+                        aria-hidden
+                        className="absolute top-1/2 h-2.5 w-px -translate-y-1/2 bg-foreground/40"
+                        style={{ left: `${left}%` }}
+                      />
+                    );
+                  })}
                 </div>
                 <div className="mt-2 flex items-center justify-between font-mono text-[11px] tabular-nums text-muted-foreground">
                   <span>{fmt(cur)}</span>
                   <span>{dur ? fmt(dur) : "—:—"}</span>
                 </div>
               </div>
+            </div>
+
+            {/* Chapter list */}
+            <div className="mt-6 border-t border-border pt-5">
+              <div className="mb-3 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                <ListMusic className="h-3 w-3" />
+                {lang === "bn" ? "অধ্যায়" : "Chapters"}
+              </div>
+              <ol className="space-y-0.5">
+                {AI_EXPERT_EMON_CHAPTERS.map((c, i) => {
+                  const isActive = i === activeChapterIdx;
+                  return (
+                    <li key={c.time}>
+                      <button
+                        type="button"
+                        onClick={() => jumpTo(c.time)}
+                        className={`group flex w-full items-center gap-3 rounded-md px-2 py-1.5 text-left transition-colors ${
+                          isActive ? "bg-primary/[0.06] text-foreground" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                        }`}
+                      >
+                        <span className={`font-mono text-[11px] tabular-nums ${isActive ? "text-primary" : "text-muted-foreground"}`}>
+                          {fmt(c.time)}
+                        </span>
+                        <span lang={lang} className="flex-1 text-[13px] leading-snug">
+                          {lang === "bn" ? c.bn : c.en}
+                        </span>
+                        {isActive && (
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ol>
             </div>
           </div>
 
@@ -171,6 +244,38 @@ const StoryAiExpertEmon = () => {
               <Share2 className="h-3.5 w-3.5" />
             </button>
           </div>
+
+          {/* Summary + Key takeaways */}
+          <section className="mt-12 grid gap-5 sm:grid-cols-5">
+            <div className="rounded-2xl border border-border bg-card p-5 sm:col-span-3 sm:p-6">
+              <div className="mb-4 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                <Sparkles className="h-3 w-3 text-primary" />
+                {lang === "bn" ? "৫ লাইনে সারসংক্ষেপ" : "5-Bullet Summary"}
+              </div>
+              <ul className="space-y-3">
+                {summary.summary.map((s, i) => (
+                  <li key={i} lang={lang} className="flex gap-3 text-[14px] leading-[1.65] text-foreground/85">
+                    <span className="mt-1 inline-block h-1 w-1 shrink-0 rounded-full bg-primary" aria-hidden />
+                    <span>{s}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5 sm:col-span-2 sm:p-6">
+              <div className="mb-4 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                <Lightbulb className="h-3 w-3 text-primary" />
+                {lang === "bn" ? "মূল উপলব্ধি" : "Key Takeaways"}
+              </div>
+              <ul className="space-y-3">
+                {summary.takeaways.map((t, i) => (
+                  <li key={i} lang={lang} className="text-[13px] leading-[1.6] text-foreground/80">
+                    <span className="mr-1.5 font-mono text-[11px] text-primary">0{i + 1}</span>
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
 
           {/* Narrative */}
           <div className="mt-14 space-y-6">
