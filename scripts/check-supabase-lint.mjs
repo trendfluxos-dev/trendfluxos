@@ -18,7 +18,7 @@
  * Exit: 0 when every finding is accepted, 1 otherwise.
  */
 import { readFileSync } from "node:fs";
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, appendFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 
 const BASELINE_PATH = resolve(".security/lint-baseline.json");
@@ -70,22 +70,38 @@ console.log(
 
 if (offenders.length === 0) {
   console.log("[supabase-lint-gate] OK — no unaccepted findings.");
+  writeStepSummary({ findings, offenders, matched, status: "PASS" });
   process.exit(0);
 }
 
 console.error("\n[supabase-lint-gate] FAIL — new or unaccepted Supabase linter findings:\n");
 for (const f of offenders) {
-  console.error(`  ${f.level?.toUpperCase() ?? "WARN"}  ${f.name}`);
-  if (f.title) console.error(`         ${f.title}`);
-  if (f.detail) console.error(`         ${f.detail}`);
-  if (f.remediation) console.error(`         fix: ${f.remediation}`);
-  console.error("");
+  const lvl = (f.level ?? "warn").toLowerCase();
+  // Group the entry in the CI log so it's collapsible but visible by default.
+  console.error(`::group::${lvl.toUpperCase()}  ${f.name}${f.title ? `  —  ${f.title}` : ""}`);
+  if (f.detail) console.error(`detail: ${f.detail}`);
+  if (f.remediation) console.error(`fix:    ${f.remediation}`);
+  if (f.cache_key) console.error(`docs:   ${f.cache_key}`);
+  console.error("::endgroup::");
+  // Surface as a top-of-build GitHub annotation so the failure is actionable
+  // straight from the PR "Files changed" / "Checks" tab without expanding logs.
+  const ghLevel = lvl === "error" ? "error" : "warning";
+  const msg = [
+    f.title ?? f.name,
+    f.detail,
+    f.remediation ? `Fix: ${f.remediation}` : null,
+  ]
+    .filter(Boolean)
+    .join(" — ")
+    .replace(/\r?\n/g, " ");
+  console.error(`::${ghLevel} title=Supabase lint: ${f.name}::${msg}`);
 }
 console.error(
   "If a finding above is an intentional design choice, append it to\n" +
     "`.security/lint-baseline.json` with a written reason and update\n" +
     "@security-memory accordingly. Otherwise, fix the underlying issue.",
 );
+writeStepSummary({ findings, offenders, matched, status: "FAIL" });
 process.exit(1);
 
 // ---------------------------------------------------------------------------
@@ -187,4 +203,40 @@ function writeHtmlReport({ findings, offenders, matched }) {
   mkdirSync(dirname(HTML_REPORT_PATH), { recursive: true });
   writeFileSync(HTML_REPORT_PATH, html, "utf8");
   console.log(`[supabase-lint-gate] HTML report written to ${HTML_REPORT_PATH}`);
+}
+
+// Render a Markdown summary that GitHub Actions surfaces directly on the
+// workflow run page (no download required).
+function writeStepSummary({ findings, offenders, matched, status }) {
+  const summaryPath = process.env.GITHUB_STEP_SUMMARY;
+  if (!summaryPath) return;
+  const lines = [];
+  lines.push(`## Supabase DB Lint — ${status}`);
+  lines.push("");
+  lines.push(
+    `**${findings.length}** total · **${offenders.length}** new/unaccepted · **${matched.length}** baseline matches`,
+  );
+  lines.push("");
+  if (offenders.length > 0) {
+    lines.push("### ❌ New findings");
+    lines.push("");
+    lines.push("| Level | Rule | Title | Fix |");
+    lines.push("| --- | --- | --- | --- |");
+    for (const f of offenders) {
+      const cell = (v) => String(v ?? "").replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
+      lines.push(
+        `| ${cell((f.level ?? "warn").toUpperCase())} | \`${cell(f.name)}\` | ${cell(f.title)} | ${cell(f.remediation)} |`,
+      );
+    }
+    lines.push("");
+  }
+  if (matched.length > 0) {
+    lines.push("### ✅ Baseline matches");
+    lines.push("");
+    for (const f of matched) {
+      lines.push(`- \`${f.name}\` — ${acceptedByName.get(f.name)?.reason ?? ""}`);
+    }
+    lines.push("");
+  }
+  appendFileSync(summaryPath, lines.join("\n") + "\n", "utf8");
 }
