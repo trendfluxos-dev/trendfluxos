@@ -420,7 +420,7 @@ function PreviewModal({
         </header>
 
         {/* Frame stage */}
-        <div className="relative flex-1 overflow-auto bg-[#050505] p-4 md:p-8">
+        <div className="relative flex-1 overflow-auto bg-black p-4 md:p-8">
           <div
             className={`mx-auto h-full bg-white shadow-xl transition-all duration-300 ${
               device === "mobile" ? "max-w-[400px]" : "max-w-full"
