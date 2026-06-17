@@ -33,6 +33,7 @@ const AboutPage = routes["/about"];
 const ContactPage = routes["/contact"];
 const Explore = routes["/explore"];
 const ProjectLead = routes["/project-lead"];
+const Showcase = routes["/showcase"];
 const Auth = routes["/auth"];
 const Dashboard = routes["/dashboard"];
 const Admin = routes["/admin"];
@@ -116,6 +117,7 @@ const App = () => (
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/project-lead" element={<ProjectLead />} />
+            <Route path="/showcase" element={<Showcase />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin" element={<Admin />} />
