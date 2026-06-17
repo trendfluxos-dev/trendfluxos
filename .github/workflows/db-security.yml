@@ -85,9 +85,14 @@ jobs:
             supabase-images-${{ runner.os }}-
 
       - name: Log Docker images cache status
+        env:
+          PRIMARY_KEY: supabase-images-${{ runner.os }}-${{ hashFiles('.github/workflows/db-security.yml') }}
+          MATCHED_KEY: ${{ steps.cache-supabase-images.outputs.cache-matched-key }}
         run: |
-          if [ "${{ steps.cache-supabase-images.outputs.cache-hit }}" = "true" ]; then
-            echo "✅ Supabase Docker images cache RESTORED"
+          if [ "$MATCHED_KEY" = "$PRIMARY_KEY" ]; then
+            echo "✅ Supabase Docker images cache RESTORED (exact key: $MATCHED_KEY)"
+          elif [ -n "$MATCHED_KEY" ]; then
+            echo "↪️  Supabase Docker images cache RESTORED via restore-keys (matched key: $MATCHED_KEY)"
           else
             echo "❌ Supabase Docker images cache MISSED — images will be pulled and saved"
           fi
