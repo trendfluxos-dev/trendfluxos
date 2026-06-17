@@ -27,7 +27,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const root = path.resolve(__dirname, "..");
 
-const SITE_URL = "https://trendfluxdigital-bd.lovable.app";
+const SITE_URL = "https://trendflux.digital";
 
 // Mirror of caseStudies slugs in src/data/caseStudies.ts
 const caseSlugs = [
