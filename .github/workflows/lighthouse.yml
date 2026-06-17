@@ -1,0 +1,47 @@
+name: Lighthouse CI
+
+# Catches Web Vitals + bundle-size regressions on every PR and on pushes to main.
+# Runs LHCI against a locally-served production build of dist/, so results are
+# deterministic and don't depend on a deploy preview being live yet.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Lighthouse + Perf Budget
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build production bundle
+        run: bun run build
+
+      - name: Run Lighthouse CI
+        run: bunx --bun @lhci/cli@0.14.x autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+      - name: Upload LHCI report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci
+          retention-days: 14
