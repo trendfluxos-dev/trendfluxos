@@ -6,10 +6,23 @@ import { installErrorLogger } from "./lib/errorLogger";
 import { initSentry } from "./lib/sentry";
 import { installWebVitals } from "./lib/webVitals";
 
-// Initialize Sentry first so it can capture errors from app startup.
-initSentry();
+// Sentry is heavy (~250KB). Defer its dynamic import until the browser is
+// idle so it never blocks the initial paint. Errors thrown before Sentry
+// loads are still captured by the global listeners installed below and the
+// AppErrorBoundary.
 installErrorLogger();
 installWebVitals();
+const scheduleSentry = () => {
+  initSentry().catch((err) => {
+    console.warn("Sentry init skipped:", err);
+  });
+};
+if (typeof window !== "undefined") {
+  const ric = (window as unknown as { requestIdleCallback?: (cb: () => void) => void })
+    .requestIdleCallback;
+  if (ric) ric(scheduleSentry);
+  else setTimeout(scheduleSentry, 2000);
+}
 
 // Recover from stale dynamic-import chunks after a redeploy: if a lazy()
 // chunk fails to load, hard-reload once so the browser fetches the new
