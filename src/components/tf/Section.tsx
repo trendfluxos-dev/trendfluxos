@@ -14,6 +14,7 @@ export const TfSection = ({
   children,
   tone = "light",
   align = "center",
+  titleAs = "h2",
 }: {
   id?: string;
   eyebrow?: string;
@@ -23,6 +24,12 @@ export const TfSection = ({
   children?: React.ReactNode;
   tone?: "light" | "muted";
   align?: "center" | "left";
+  /**
+   * HTML heading level for the section title. Defaults to `h2` because most
+   * sections are sub-sections of a page. Set to `h1` on the page's primary
+   * hero section to satisfy "every page has exactly one H1" for SEO/a11y.
+   */
+  titleAs?: "h1" | "h2";
 }) => {
   const headerRef = useTfReveal<HTMLDivElement>();
   const bodyRef = useTfReveal<HTMLDivElement>();
@@ -61,11 +68,14 @@ export const TfSection = ({
                 {eyebrow}
               </p>
             )}
-            {title && (
-              <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[44px] md:leading-[1.05]">
-                {title}
-              </h2>
-            )}
+            {title && (() => {
+              const Heading = titleAs;
+              return (
+                <Heading className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[44px] md:leading-[1.05]">
+                  {title}
+                </Heading>
+              );
+            })()}
             {intro && (
               <p
                 className={cn(

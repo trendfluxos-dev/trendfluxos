@@ -12,11 +12,12 @@ export const BRAND = {
   nameTrail: "Ecosystem",
   /** Legal/parent organization name (used in schema.org). */
   legalName: "TrendFlux",
-  /** Short tagline shown under the hero / SEO title. */
-  tagline: "The AI-Native Growth Execution OS for Modern Brands",
+  /** Short tagline shown under the hero / SEO title. Kept under 30 chars so
+   *  `${name} — ${tagline}` stays within Google's ~60-char title window. */
+  tagline: "AI-Native Growth Execution OS",
   /** Long-form description used for meta description & OG tags. */
   description:
-    "TrendFlux is the AI-Native Growth Execution OS — one connected system for automation, CRM orchestration, paid media, creative, and analytics. Replace fragmented tools. Reclaim 20+ manual hours weekly. Scale with transparency.",
+    "TrendFlux is the AI-Native Growth Execution OS — one connected system for automation, CRM, paid media, creative, and analytics. Reclaim 20+ hours weekly.",
   /** Twitter / X handle (with @). */
   twitterHandle: "@TrendFlux",
   /** Canonical production URL. */

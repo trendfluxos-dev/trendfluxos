@@ -70,6 +70,7 @@ const Services = () => {
         className="pt-40"
         eyebrow="Services"
         title="Six disciplines. One operating layer."
+        titleAs="h1"
         intro="Each module is deployable standalone — or composed into a full Growth OS engagement. Built for founders who want infrastructure, not retainers."
       >
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

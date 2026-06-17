@@ -27,6 +27,7 @@ const About = () => {
         className="pt-40"
         eyebrow="About"
         title="Built by an operator. For operators."
+        titleAs="h1"
       >
         <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-12 lg:grid-cols-[340px_1fr]">
           <div className="relative mx-auto">
