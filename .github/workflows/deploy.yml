@@ -43,6 +43,28 @@ jobs:
       - name: Verify dev-only panels stripped from prod bundle
         run: node scripts/verify-dev-only-stripped.mjs dist
 
+      - name: Print dev-strip report summary
+        if: always()
+        run: |
+          if [ -f dist/dev-strip-report.txt ]; then
+            echo "::group::dev-strip-report.txt"
+            cat dist/dev-strip-report.txt
+            echo "::endgroup::"
+          else
+            echo "No dev-strip report found (build likely failed earlier)."
+          fi
+
+      - name: Upload dev-strip report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-strip-report
+          path: |
+            dist/dev-strip-report.json
+            dist/dev-strip-report.txt
+          retention-days: 14
+          if-no-files-found: ignore
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
