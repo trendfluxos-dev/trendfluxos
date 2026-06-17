@@ -100,7 +100,7 @@ const PROJECTS: Project[] = [
 function Thumb({ kind }: { kind: Project["thumb"] }) {
   const common = "absolute inset-0 w-full h-full";
   return (
-    <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0d0d0d] border-b border-white/[0.06]">
+    <div className="relative aspect-[16/10] w-full overflow-hidden bg-black border-b border-white/[0.06]">
       {/* Faint grid base */}
       <svg className={common} viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden>
         <defs>
@@ -209,7 +209,7 @@ export function SelectedExecution() {
     <section
       id="selected-execution"
       aria-labelledby="selected-execution-heading"
-      className="relative bg-[#0a0a0a] text-[#f5f5f4] px-6 lg:px-10 py-28 md:py-40 border-t border-white/[0.06]"
+      className="relative bg-[#0a0a0a] text-stone-100 px-6 lg:px-10 py-28 md:py-40 border-t border-white/[0.06]"
     >
       <div className="mx-auto max-w-6xl">
         {/* Editorial header */}
