@@ -27,9 +27,6 @@ type InviteTestRow = {
   at: string;
 };
 
-const PRESET_PRODUCTION = ["LUXE2026", "VIP2026", "EARLYACCESS"];
-const PRESET_STAGING = ["TESTCODE", "STAGEVIP"];
-
 export default function SecretsHealthAdmin() {
   const navigate = useNavigate();
   useSeo({
@@ -146,11 +143,6 @@ export default function SecretsHealthAdmin() {
     } finally {
       setTesting(false);
     }
-  };
-
-  const runPreset = async () => {
-    for (const c of PRESET_PRODUCTION) await testInvite(c, "production");
-    for (const c of PRESET_STAGING) await testInvite(c, "staging");
   };
 
   if (!authChecked) {
@@ -271,13 +263,6 @@ export default function SecretsHealthAdmin() {
             Calls the real <code className="rounded bg-muted px-1">verify-invite</code> edge
             function — same logic as the live invite gate.
           </p>
-
-          <div className="mb-4 flex flex-wrap gap-2">
-            <Button onClick={runPreset} disabled={testing} variant="secondary">
-              {testing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Run preset (prod + staging)
-            </Button>
-          </div>
 
           <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_180px_auto]">
             <div>

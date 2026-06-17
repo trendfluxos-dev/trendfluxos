@@ -122,7 +122,10 @@ Deno.serve(async (req) => {
     .eq("status", "pending")
     .select("id")
     .maybeSingle();
-  if (error) return html("Update failed", `<p>${error.message}</p>`, "#ef4444");
+  if (error) {
+    console.error("course-payment-decision update failed", error);
+    return html("Update failed", `<p>Could not update enrollment. Please try again.</p>`, "#ef4444");
+  }
   if (!claimed) {
     // Lost the race — another admin (or duplicate click) already decided this.
     const { data: fresh } = await supabase
