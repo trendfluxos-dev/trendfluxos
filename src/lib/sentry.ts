@@ -1,5 +1,3 @@
-import * as Sentry from "@sentry/react";
-
 /**
  * Initialize Sentry for production error tracking.
  *
@@ -7,7 +5,9 @@ import * as Sentry from "@sentry/react";
  * When unset (or in dev / Lovable preview), Sentry is a no-op so the
  * editor and previews stay clean.
  *
- * Release is taken from `VITE_BUILD_SHA` if available, otherwise "dev".
+ * IMPORTANT: `@sentry/react` is ~250KB. We dynamic-import it so it ships in
+ * its own chunk and is fetched only when there's a DSN AND we're not on a
+ * preview host. This keeps the initial JS payload small for every visitor.
  */
 const DSN = import.meta.env.VITE_SENTRY_DSN as string | undefined;
 const RELEASE = (import.meta.env.VITE_BUILD_SHA as string | undefined) ?? "dev";
@@ -16,8 +16,14 @@ const ENVIRONMENT =
   (import.meta.env.PROD ? "production" : "development");
 
 let initialized = false;
+// Holds the Sentry module once loaded so the error boundary can forward to it.
+let sentryModule: typeof import("@sentry/react") | null = null;
 
-export function initSentry() {
+export function getSentry() {
+  return sentryModule;
+}
+
+export async function initSentry() {
   if (initialized) return;
 
   if (!DSN) return; // No DSN configured → skip.
@@ -28,6 +34,10 @@ export function initSentry() {
     // Skip Lovable preview / sandbox domains.
     if (host.endsWith("lovable.app") || host.endsWith("lovableproject.com")) return;
   }
+
+  // Dynamic import — bundler splits this into its own chunk.
+  const Sentry = await import("@sentry/react");
+  sentryModule = Sentry;
 
   Sentry.init({
     dsn: DSN,
@@ -64,6 +74,3 @@ export function initSentry() {
 
   initialized = true;
 }
-
-export const SentryErrorBoundary = Sentry.ErrorBoundary;
-export { Sentry };

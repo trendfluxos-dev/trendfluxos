@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
@@ -32,9 +32,12 @@ import {
  * and all static copy lives in `src/data/home.ts`. The only state retained
  * here is the shared "Book Strategy Call" dialog.
  */
+const HOMEPAGE_HERO_CONTEXT = { source: "homepage_hero" as const };
+
 const Index = () => {
   const [quoteOpen, setQuoteOpen] = useState(false);
-  const openQuote = () => setQuoteOpen(true);
+  // Stable identity so memoised sections don't re-render when the dialog toggles.
+  const openQuote = useCallback(() => setQuoteOpen(true), []);
 
   useSeo();
   useJsonLd([
@@ -98,7 +101,7 @@ const Index = () => {
       <QuoteDialog
         open={quoteOpen}
         onOpenChange={setQuoteOpen}
-        context={{ source: "homepage_hero" }}
+        context={HOMEPAGE_HERO_CONTEXT}
       />
     </main>
   );
