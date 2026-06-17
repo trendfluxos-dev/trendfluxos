@@ -120,7 +120,7 @@ const dataHints = (el: Element): string => {
 const describeNode = (n: Node | null): string => {
   if (!n) return "(unknown)";
   // PerformanceLayoutShift sources may include Text/Comment nodes — climb to element
-  let el: Element | null =
+  const el: Element | null =
     n instanceof Element ? n : n.parentElement;
   if (!el) return "(non-element)";
 
@@ -262,7 +262,7 @@ const PerfMonitor = () => {
               correlationsRef.current.push({
                 t, shift_value: value, frame_ms: spike.dt, mode: spike.mode, nodes,
               });
-              // eslint-disable-next-line no-console
+               
               console.warn("[PerfMonitor] CLS ↔ jank correlated", {
                 shift_value: +value.toFixed(4),
                 frame_ms: Math.round(spike.dt),
@@ -271,7 +271,7 @@ const PerfMonitor = () => {
                 href: window.location.pathname,
               });
             } else {
-              // eslint-disable-next-line no-console
+               
               console.info("[PerfMonitor] layout shift", {
                 value: +value.toFixed(4), mode: modeRef.current, nodes,
               });
@@ -286,7 +286,7 @@ const PerfMonitor = () => {
     let lastReportCls = 0;
     let lastReportCorrelated = 0;
     const reportInterval = window.setInterval(() => {
-      // eslint-disable-next-line no-console
+       
       console.info("[PerfMonitor] summary", {
         href: window.location.pathname,
         mode: modeRef.current,
@@ -406,7 +406,7 @@ const PerfMonitor = () => {
             spikesRef.current = [];
             setStats({ fps: 60, jank: 0, worst: 0, mode: "idle", cls: 0, correlated: 0 });
             setResetKey((k) => k + 1);
-            // eslint-disable-next-line no-console
+             
             console.info("[PerfMonitor] session reset");
           }}
           className="ml-1 rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-white/90 hover:bg-white/20"

@@ -54,7 +54,7 @@ function check(label: string) {
   if (key === lastReportedKey) return;
   lastReportedKey = key;
 
-  // eslint-disable-next-line no-console
+   
   console.warn(
     `[overflow] ${label} — document scrollWidth ${scrollWidth}px > viewport ${docWidth}px`,
     offenders.map((o) => ({ selector: describe(o.el), rightEdge: o.width, el: o.el })),
@@ -86,7 +86,7 @@ const OverflowDetector = () => {
 
     // Expose a manual sweep across common breakpoints from the devtools console.
     (window as unknown as { __checkOverflow?: () => void }).__checkOverflow = () => {
-      // eslint-disable-next-line no-console
+       
       console.info(
         "[overflow] Manual sweep — resize the window to each breakpoint to verify:",
         COMMON_BREAKPOINTS,
