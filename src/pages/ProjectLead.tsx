@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import { useSeo } from "@/hooks/useSeo";
+import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
+import { SHOWCASE_ITEMS } from "@/data/showcase";
 
 const metrics = [
   { value: "4.85L+", label: "Organic Views" },
@@ -359,6 +361,30 @@ const ProjectLead = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* SHOWCASE PREVIEW */}
+      <section className="px-6 lg:px-10 py-24 relative">
+        <div className="relative max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <div>
+              <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
+                Showcase
+              </p>
+              <h2 className="font-display text-3xl md:text-5xl font-bold max-w-2xl">
+                Everything built, <span className="text-gradient">in one place</span>
+              </h2>
+            </div>
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/showcase">
+                Open Full Showcase
+                <ArrowRight />
+              </Link>
+            </Button>
+          </div>
+
+          <ShowcaseMasonry items={SHOWCASE_ITEMS.slice(0, 6)} />
         </div>
       </section>
 
