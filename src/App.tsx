@@ -85,6 +85,7 @@ const JusticeAppeal = routes["/justice-appeal"];
 const MediaReports = routes["/media-reports"];
 const ShareKit = routes["/share-kit"];
 const StoryAiExpertEmon = routes["/stories/ai-expert-emon"];
+const Trust = routes["/trust"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 
@@ -139,6 +140,7 @@ const RoutedApp = () => {
         <Route path="/media-reports" element={<MediaReports />} />
         <Route path="/share-kit" element={<ShareKit />} />
         <Route path="/stories/ai-expert-emon" element={<StoryAiExpertEmon />} />
+        <Route path="/trust" element={<Trust />} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
         {/* Synthetic error route for Playwright error-boundary smoke tests. */}
         <Route path="/__test/boom-route" element={<RouteBoom />} />
