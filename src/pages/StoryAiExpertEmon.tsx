@@ -1,3 +1,24 @@
+/**
+ * StoryAiExpertEmon — long-form audio story page.
+ *
+ * Responsibilities:
+ * - Render the bilingual (bn/en) narrative, kicker, pull quote, and themes.
+ * - Provide a custom audio player with chapter markers, transcript sync,
+ *   bookmark, and resume-from-last-position behavior backed by localStorage.
+ * - Surface a 5-bullet AI summary, key takeaways, and a downloadable share card.
+ * - Emit article-level SEO + Open Graph metadata via `useSeo`.
+ *
+ * Persistence keys:
+ * - `PROGRESS_KEY` — auto-saved playback time, restored as a "Resume?" prompt.
+ * - `BOOKMARK_KEY` — single user-pinned moment, drawn on the seek bar.
+ *
+ * Performance notes:
+ * - `timeupdate` fires ~4×/s; we coalesce React state updates to once per
+ *   whole second OR a chapter boundary crossing to avoid re-rendering the
+ *   full transcript on every tick.
+ * - The transcript is split into a memoized child so only the paragraph
+ *   whose active state flips re-renders.
+ */
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Bookmark, BookmarkCheck, Download, Headphones, ListMusic, Pause, Play, RotateCcw, Share2, Sparkles, Lightbulb } from "lucide-react";
@@ -16,6 +37,12 @@ import {
 } from "@/data/aiExpertEmonStory";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
 
+/**
+ * Format a duration in seconds as `m:ss`.
+ *
+ * @param s - Time in seconds. Non-finite or negative values are coerced to 0.
+ * @returns A short clock string, e.g. `4:07`.
+ */
 function fmt(s: number) {
   if (!Number.isFinite(s) || s < 0) return "0:00";
   const m = Math.floor(s / 60);
@@ -23,8 +50,16 @@ function fmt(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
-// Compute which chapter the playhead is in. Linear scan is fine (N ~= 7) and
-// avoids per-render closure allocation of an IIFE.
+/**
+ * Resolve the chapter index that contains a given playback time.
+ *
+ * Chapters are stored in ascending `time` order, so a single linear pass
+ * over the (small, N ≈ 7) array is faster and simpler than binary search.
+ * Times before chapter 0 still return index 0.
+ *
+ * @param time - Current playback position in seconds.
+ * @returns Zero-based chapter index into `AI_EXPERT_EMON_CHAPTERS`.
+ */
 function chapterIndexAt(time: number): number {
   let idx = 0;
   for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
@@ -33,14 +68,27 @@ function chapterIndexAt(time: number): number {
   return idx;
 }
 
-// Memoized transcript paragraph — only the paragraph whose `isActive` flips
-// re-renders when the audio playhead crosses a chapter boundary.
+/**
+ * Props for {@link TranscriptParagraph}.
+ *
+ * @property text     - Paragraph body (already localized).
+ * @property isActive - True when this paragraph is the current chapter's anchor.
+ * @property lang     - Language code, propagated to the DOM `lang` attribute
+ *                      for correct hyphenation and screen-reader pronunciation.
+ * @property setRef   - Ref setter so the parent can scroll this paragraph
+ *                      into view when the chapter / bookmark is jumped to.
+ */
 type ParagraphProps = {
   text: string;
   isActive: boolean;
   lang: StoryLang;
   setRef: (el: HTMLParagraphElement | null) => void;
 };
+/**
+ * One paragraph of the transcript. Memoized so that re-rendering the page
+ * on every audio tick (e.g. seek-bar updates) does not also re-render every
+ * paragraph — only the one whose `isActive` flag changed.
+ */
 const TranscriptParagraph = memo(function TranscriptParagraph({
   text, isActive, lang, setRef,
 }: ParagraphProps) {
@@ -59,10 +107,21 @@ const TranscriptParagraph = memo(function TranscriptParagraph({
   );
 });
 
+/** localStorage key for the auto-saved playback position (JSON envelope). */
 const PROGRESS_KEY = "story:ai-expert-emon:progress";
+/** localStorage key for the user's single pinned bookmark (raw float seconds). */
 const BOOKMARK_KEY = "story:ai-expert-emon:bookmark";
+/**
+ * Sanity ceiling for any persisted timestamp. Values larger than this almost
+ * certainly indicate corrupted storage (e.g. another tab wrote garbage) and
+ * are silently ignored on read.
+ */
 const MAX_REASONABLE_SECONDS = 60 * 60 * 6; // 6h guard against corrupt storage
 
+/**
+ * Localized user-facing strings for player error / success states.
+ * Keyed by `StoryLang` so the active language drives every toast and banner.
+ */
 const MESSAGES = {
   bn: {
     playBlocked: "ব্রাউজার অটোমেটিক প্লে আটকেছে — প্লে বাটনে ট্যাপ করুন।",
@@ -86,13 +145,32 @@ const MESSAGES = {
   },
 } as const;
 
+/**
+ * Detect whether a thrown error came from `localStorage` exceeding its quota.
+ * The browser-standard name is `QuotaExceededError`, but some engines (older
+ * iOS Safari) only set the message — we fall back to a substring check.
+ *
+ * @param err - Any thrown value from a `setItem` call.
+ * @returns `true` when the error is recognizably a storage-quota failure.
+ */
 function isQuotaError(err: unknown): boolean {
   if (!(err instanceof Error)) return false;
   return err.name === "QuotaExceededError" || /quota/i.test(err.message);
 }
 
+/** Shape persisted under {@link PROGRESS_KEY}. */
 type SavedProgress = { time: number; updatedAt: number };
 
+/**
+ * Load the most recently saved playback position from localStorage.
+ *
+ * Performs defensive validation so a malformed or out-of-range payload
+ * (corrupt storage, third-party JS, older schema) silently degrades to
+ * "no saved progress" instead of throwing.
+ *
+ * @returns The saved `{ time, updatedAt }` envelope, or `null` if none is
+ *          available, valid, or far enough in (≤ 2s is considered noise).
+ */
 function readProgress(): SavedProgress | null {
   try {
     if (typeof localStorage === "undefined") return null;
@@ -116,6 +194,12 @@ function readProgress(): SavedProgress | null {
   }
 }
 
+/**
+ * Load the user's single pinned bookmark position from localStorage.
+ *
+ * @returns Playback time in seconds, or `null` when no valid bookmark
+ *          is stored (missing, NaN, negative, or absurdly large).
+ */
 function readBookmark(): number | null {
   try {
     if (typeof localStorage === "undefined") return null;
