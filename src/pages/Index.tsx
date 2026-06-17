@@ -645,49 +645,52 @@ const Index = () => {
       {/* ============= 5b-ii. QUIET POSITIONS — Parallel Emotional Archive ============= */}
       <section
         aria-labelledby="quiet-positions-heading"
-        className="relative isolate overflow-hidden bg-[#0a0a0a] py-20 sm:py-28"
+        className="relative isolate overflow-hidden bg-muted py-28 sm:py-32"
       >
+        {/* hairline top */}
+        <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.7) 100%)",
+              "radial-gradient(ellipse at center, hsl(var(--primary) / 0.04), transparent 60%)",
           }}
         />
-        <div className="relative mx-auto max-w-3xl px-6 text-center lg:px-10">
-          <div className="mb-6 flex items-center justify-center gap-3">
-            <span aria-hidden className="h-px w-10 bg-white/20" />
-            <span className="font-serif text-[10px] uppercase tracking-[0.42em] text-white/55">
-              Parallel Chapter · An Emotional Archive
-            </span>
-            <span aria-hidden className="h-px w-10 bg-white/20" />
-          </div>
-          <h2
-            id="quiet-positions-heading"
-            lang="bn"
-            className="font-serif text-[34px] leading-[1.15] text-white/92 sm:text-[48px] md:text-[60px]"
-          >
-            নীরব অবস্থান
-          </h2>
-          <p lang="en" className="mt-3 font-serif text-[18px] italic text-white/55 sm:text-[22px]">
-            Quiet Positions
-          </p>
-          <p className="mx-auto mt-8 max-w-xl text-[15px] leading-[1.8] text-white/65">
-            Not every position is spoken aloud. A restrained, civic reflection on
-            how a society remembers the people who chose to stay near without
-            making a claim.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <Link
-              to="/quiet-positions"
-              className="group inline-flex items-center gap-2 rounded-sm border border-white/25 px-6 py-3 text-sm font-medium text-white/90 transition-colors hover:border-white/60 hover:text-white"
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.3em] text-primary">
+              <span className="h-1 w-1 rounded-full bg-primary" />
+              Parallel Chapter · Emotional Archive
+            </p>
+            <h2
+              id="quiet-positions-heading"
+              lang="bn"
+              className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[44px] md:leading-[1.05]"
             >
-              Enter Quiet Positions
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
+              নীরব অবস্থান
+            </h2>
+            <p lang="en" className="mt-3 font-display text-lg italic text-muted-foreground sm:text-xl">
+              Quiet Positions
+            </p>
+            <p className="mx-auto mt-6 max-w-xl text-[15px] leading-[1.7] text-muted-foreground sm:text-[16px]">
+              Not every position is spoken aloud. A restrained, civic reflection on
+              how a society remembers the people who chose to stay near without
+              making a claim.
+            </p>
+            <div className="mt-10 flex items-center justify-center">
+              <Link
+                to="/quiet-positions"
+                className="group inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+              >
+                Enter Quiet Positions
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+            </div>
           </div>
         </div>
+        {/* hairline bottom */}
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </section>
 
 

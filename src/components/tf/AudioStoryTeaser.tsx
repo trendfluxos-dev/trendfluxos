@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pause, Play, ArrowUpRight, Headphones, Clock } from "lucide-react";
+import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2 } from "lucide-react";
 import audioAsset from "@/assets/algorithm-torture-cell.mp3.asset.json";
 
 function fmt(s: number) {
@@ -17,9 +17,12 @@ function fmt(s: number) {
  */
 export default function AudioStoryTeaser() {
   const ref = useRef<HTMLAudioElement | null>(null);
+  const barRef = useRef<HTMLDivElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [cur, setCur] = useState(0);
   const [dur, setDur] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [buffered, setBuffered] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
@@ -27,21 +30,52 @@ export default function AudioStoryTeaser() {
     const t = () => setCur(el.currentTime);
     const m = () => setDur(el.duration);
     const e = () => setPlaying(false);
+    const wait = () => setLoading(true);
+    const can = () => setLoading(false);
+    const onPlay = () => { setPlaying(true); setLoading(false); };
+    const onPause = () => setPlaying(false);
+    const onProgress = () => {
+      try {
+        if (el.buffered.length && el.duration) {
+          setBuffered((el.buffered.end(el.buffered.length - 1) / el.duration) * 100);
+        }
+      } catch {}
+    };
     el.addEventListener("timeupdate", t);
     el.addEventListener("loadedmetadata", m);
     el.addEventListener("ended", e);
+    el.addEventListener("waiting", wait);
+    el.addEventListener("canplay", can);
+    el.addEventListener("playing", onPlay);
+    el.addEventListener("pause", onPause);
+    el.addEventListener("progress", onProgress);
     return () => {
       el.removeEventListener("timeupdate", t);
       el.removeEventListener("loadedmetadata", m);
       el.removeEventListener("ended", e);
+      el.removeEventListener("waiting", wait);
+      el.removeEventListener("canplay", can);
+      el.removeEventListener("playing", onPlay);
+      el.removeEventListener("pause", onPause);
+      el.removeEventListener("progress", onProgress);
     };
   }, []);
 
   const toggle = () => {
     const el = ref.current;
     if (!el) return;
-    if (playing) { el.pause(); setPlaying(false); }
-    else { void el.play(); setPlaying(true); }
+    if (playing) { el.pause(); }
+    else { setLoading(true); void el.play().catch(() => setLoading(false)); }
+  };
+
+  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    const bar = barRef.current;
+    if (!el || !bar || !dur) return;
+    const rect = bar.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    el.currentTime = ratio * dur;
+    setCur(el.currentTime);
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
@@ -112,10 +146,13 @@ export default function AudioStoryTeaser() {
               <button
                 type="button"
                 onClick={toggle}
-                aria-label={playing ? "Pause" : "Play"}
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.6)] transition-all hover:bg-primary-glow hover:shadow-[0_14px_36px_-12px_hsl(var(--primary)/0.75)]"
+                aria-label={loading ? "Loading" : playing ? "Pause" : "Play"}
+                aria-pressed={playing}
+                className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.6)] transition-all hover:bg-primary-glow hover:shadow-[0_14px_36px_-12px_hsl(var(--primary)/0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
               >
-                {playing ? (
+                {loading ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : playing ? (
                   <Pause className="h-5 w-5" />
                 ) : (
                   <Play className="h-5 w-5 translate-x-[1px]" />
@@ -123,20 +160,44 @@ export default function AudioStoryTeaser() {
               </button>
               <div className="min-w-0 flex-1">
                 <div
+                  ref={barRef}
+                  onClick={seek}
                   role="progressbar"
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-valuenow={Math.round(pct)}
-                  className="h-[3px] w-full overflow-hidden rounded-full bg-muted"
+                  aria-label="Audio progress"
+                  className="group/bar relative h-2 w-full cursor-pointer overflow-hidden rounded-full bg-muted ring-1 ring-inset ring-border transition-colors hover:bg-muted/80"
                 >
+                  {/* buffered */}
                   <div
-                    className="h-full bg-primary transition-[width] duration-150"
+                    aria-hidden
+                    className="absolute inset-y-0 left-0 bg-primary/15"
+                    style={{ width: `${buffered}%` }}
+                  />
+                  {/* played */}
+                  <div
+                    className="relative h-full bg-primary transition-[width] duration-150"
                     style={{ width: `${pct}%` }}
                   />
+                  {/* scrubber thumb */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary opacity-0 shadow-[0_2px_8px_hsl(var(--primary)/0.45)] ring-2 ring-background transition-opacity group-hover/bar:opacity-100"
+                    style={{ left: `${pct}%` }}
+                  />
                 </div>
-                <div className="mt-3 flex items-center justify-between font-mono text-[11px] tabular-nums text-muted-foreground">
-                  <span>{fmt(cur)}</span>
-                  <span>{fmt(dur)}</span>
+                <div className="mt-2.5 flex items-center justify-between font-mono text-[11px] tabular-nums text-muted-foreground">
+                  <span className="text-foreground/80">{fmt(cur)}</span>
+                  <span className="inline-flex items-center gap-2">
+                    {loading && (
+                      <span className="inline-flex items-center gap-1 text-primary">
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                        Loading
+                      </span>
+                    )}
+                    <span>{dur ? fmt(dur) : "—:—"}</span>
+                  </span>
                 </div>
               </div>
             </div>
