@@ -319,7 +319,7 @@ const RELATED: {
     titleEn: "Quiet Positions",
     duration: "≈ 12 min",
     status: "Upcoming",
-    href: "/quiet-positions",
+    href: "/quiet-positions?chapter=quiet-positions",
   },
   {
     id: "humanity-restored",
@@ -328,7 +328,7 @@ const RELATED: {
     titleEn: "Humanity Restored",
     duration: "≈ 9 min",
     status: "Draft",
-    href: "/the-stand",
+    href: "/the-stand?chapter=humanity-restored#humanity-restored",
   },
   {
     id: "justice-appeal",
@@ -337,7 +337,7 @@ const RELATED: {
     titleEn: "Justice Appeal",
     duration: "≈ 7 min",
     status: "Live",
-    href: "/justice-appeal",
+    href: "/justice-appeal?chapter=justice-appeal",
   },
   {
     id: "media-wall",
@@ -346,7 +346,7 @@ const RELATED: {
     titleEn: "Press Archive",
     duration: "18 sources",
     status: "Live",
-    href: "/the-stand#press",
+    href: "/the-stand?chapter=press#press",
   },
 ];
 
