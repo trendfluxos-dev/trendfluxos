@@ -15,6 +15,7 @@ import { HumanityRestored } from "@/components/the-stand/HumanityRestored";
 import { AudioStory } from "@/components/the-stand/AudioStory";
 import { MediaWall } from "@/components/the-stand/MediaWall";
 import { DocumentaryEmbed } from "@/components/the-stand/DocumentaryEmbed";
+import { SharedFilms } from "@/components/the-stand/SharedFilms";
 import { InfrastructurePivot } from "@/components/the-stand/InfrastructurePivot";
 import { ArchiveUtilities } from "@/components/the-stand/ArchiveUtilities";
 import { ClosingStatement } from "@/components/the-stand/ClosingStatement";
@@ -118,6 +119,9 @@ export default function TheStand() {
           <MediaWall />
         </div>
         <DocumentaryEmbed />
+        <div id="shared-files" className="chapter-anchor scroll-mt-24">
+          <SharedFilms />
+        </div>
         <InfrastructurePivot />
         <ArchiveUtilities />
         <ClosingStatement />
