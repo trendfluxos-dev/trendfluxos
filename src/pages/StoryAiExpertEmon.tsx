@@ -1,3 +1,24 @@
+/**
+ * StoryAiExpertEmon — long-form audio story page.
+ *
+ * Responsibilities:
+ * - Render the bilingual (bn/en) narrative, kicker, pull quote, and themes.
+ * - Provide a custom audio player with chapter markers, transcript sync,
+ *   bookmark, and resume-from-last-position behavior backed by localStorage.
+ * - Surface a 5-bullet AI summary, key takeaways, and a downloadable share card.
+ * - Emit article-level SEO + Open Graph metadata via `useSeo`.
+ *
+ * Persistence keys:
+ * - `PROGRESS_KEY` — auto-saved playback time, restored as a "Resume?" prompt.
+ * - `BOOKMARK_KEY` — single user-pinned moment, drawn on the seek bar.
+ *
+ * Performance notes:
+ * - `timeupdate` fires ~4×/s; we coalesce React state updates to once per
+ *   whole second OR a chapter boundary crossing to avoid re-rendering the
+ *   full transcript on every tick.
+ * - The transcript is split into a memoized child so only the paragraph
+ *   whose active state flips re-renders.
+ */
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Bookmark, BookmarkCheck, Download, Headphones, ListMusic, Pause, Play, RotateCcw, Share2, Sparkles, Lightbulb } from "lucide-react";
@@ -16,6 +37,12 @@ import {
 } from "@/data/aiExpertEmonStory";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
 
+/**
+ * Format a duration in seconds as `m:ss`.
+ *
+ * @param s - Time in seconds. Non-finite or negative values are coerced to 0.
+ * @returns A short clock string, e.g. `4:07`.
+ */
 function fmt(s: number) {
   if (!Number.isFinite(s) || s < 0) return "0:00";
   const m = Math.floor(s / 60);
@@ -23,8 +50,16 @@ function fmt(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
-// Compute which chapter the playhead is in. Linear scan is fine (N ~= 7) and
-// avoids per-render closure allocation of an IIFE.
+/**
+ * Resolve the chapter index that contains a given playback time.
+ *
+ * Chapters are stored in ascending `time` order, so a single linear pass
+ * over the (small, N ≈ 7) array is faster and simpler than binary search.
+ * Times before chapter 0 still return index 0.
+ *
+ * @param time - Current playback position in seconds.
+ * @returns Zero-based chapter index into `AI_EXPERT_EMON_CHAPTERS`.
+ */
 function chapterIndexAt(time: number): number {
   let idx = 0;
   for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
@@ -33,14 +68,27 @@ function chapterIndexAt(time: number): number {
   return idx;
 }
 
-// Memoized transcript paragraph — only the paragraph whose `isActive` flips
-// re-renders when the audio playhead crosses a chapter boundary.
+/**
+ * Props for {@link TranscriptParagraph}.
+ *
+ * @property text     - Paragraph body (already localized).
+ * @property isActive - True when this paragraph is the current chapter's anchor.
+ * @property lang     - Language code, propagated to the DOM `lang` attribute
+ *                      for correct hyphenation and screen-reader pronunciation.
+ * @property setRef   - Ref setter so the parent can scroll this paragraph
+ *                      into view when the chapter / bookmark is jumped to.
+ */
 type ParagraphProps = {
   text: string;
   isActive: boolean;
   lang: StoryLang;
   setRef: (el: HTMLParagraphElement | null) => void;
 };
+/**
+ * One paragraph of the transcript. Memoized so that re-rendering the page
+ * on every audio tick (e.g. seek-bar updates) does not also re-render every
+ * paragraph — only the one whose `isActive` flag changed.
+ */
 const TranscriptParagraph = memo(function TranscriptParagraph({
   text, isActive, lang, setRef,
 }: ParagraphProps) {
@@ -59,10 +107,21 @@ const TranscriptParagraph = memo(function TranscriptParagraph({
   );
 });
 
+/** localStorage key for the auto-saved playback position (JSON envelope). */
 const PROGRESS_KEY = "story:ai-expert-emon:progress";
+/** localStorage key for the user's single pinned bookmark (raw float seconds). */
 const BOOKMARK_KEY = "story:ai-expert-emon:bookmark";
+/**
+ * Sanity ceiling for any persisted timestamp. Values larger than this almost
+ * certainly indicate corrupted storage (e.g. another tab wrote garbage) and
+ * are silently ignored on read.
+ */
 const MAX_REASONABLE_SECONDS = 60 * 60 * 6; // 6h guard against corrupt storage
 
+/**
+ * Localized user-facing strings for player error / success states.
+ * Keyed by `StoryLang` so the active language drives every toast and banner.
+ */
 const MESSAGES = {
   bn: {
     playBlocked: "ব্রাউজার অটোমেটিক প্লে আটকেছে — প্লে বাটনে ট্যাপ করুন।",
@@ -86,13 +145,32 @@ const MESSAGES = {
   },
 } as const;
 
+/**
+ * Detect whether a thrown error came from `localStorage` exceeding its quota.
+ * The browser-standard name is `QuotaExceededError`, but some engines (older
+ * iOS Safari) only set the message — we fall back to a substring check.
+ *
+ * @param err - Any thrown value from a `setItem` call.
+ * @returns `true` when the error is recognizably a storage-quota failure.
+ */
 function isQuotaError(err: unknown): boolean {
   if (!(err instanceof Error)) return false;
   return err.name === "QuotaExceededError" || /quota/i.test(err.message);
 }
 
+/** Shape persisted under {@link PROGRESS_KEY}. */
 type SavedProgress = { time: number; updatedAt: number };
 
+/**
+ * Load the most recently saved playback position from localStorage.
+ *
+ * Performs defensive validation so a malformed or out-of-range payload
+ * (corrupt storage, third-party JS, older schema) silently degrades to
+ * "no saved progress" instead of throwing.
+ *
+ * @returns The saved `{ time, updatedAt }` envelope, or `null` if none is
+ *          available, valid, or far enough in (≤ 2s is considered noise).
+ */
 function readProgress(): SavedProgress | null {
   try {
     if (typeof localStorage === "undefined") return null;
@@ -116,6 +194,12 @@ function readProgress(): SavedProgress | null {
   }
 }
 
+/**
+ * Load the user's single pinned bookmark position from localStorage.
+ *
+ * @returns Playback time in seconds, or `null` when no valid bookmark
+ *          is stored (missing, NaN, negative, or absurdly large).
+ */
 function readBookmark(): number | null {
   try {
     if (typeof localStorage === "undefined") return null;
@@ -145,8 +229,20 @@ const StoryAiExpertEmon = () => {
   const justJumpedToBookmarkRef = useRef(false);
   const [audioError, setAudioError] = useState<string | null>(null);
 
+  /** Localized strings bound to the current language toggle. */
   const msgs = MESSAGES[lang];
 
+  /**
+   * Start playback on an `<audio>` element while gracefully handling the
+   * Promise rejection returned by modern browsers when playback is blocked
+   * (autoplay policy) or cannot start (network / decode error).
+   *
+   * On `NotAllowedError` / `AbortError` we show an informational toast asking
+   * the user to tap Play; on anything else we surface a generic failure toast
+   * and reset the `playing` state so the UI doesn't appear stuck.
+   *
+   * @param el - The `<audio>` element to play (may be `null` during teardown).
+   */
   const safePlay = useCallback((el: HTMLAudioElement | null) => {
     if (!el) return;
     const p = el.play();
@@ -174,6 +270,20 @@ const StoryAiExpertEmon = () => {
     imageAlt: `${copy.title} — chapter list and author`,
   });
 
+  /**
+   * Wire all `<audio>` element listeners and own their lifecycle.
+   *
+   * Events handled:
+   * - `timeupdate`: throttled state update (see inline note) + auto-save
+   *   playback position to localStorage every 2.5s.
+   * - `loadedmetadata`: capture the real duration once known.
+   * - `ended`: clear saved progress (next visit starts at 0) + reset UI.
+   * - `error` / `stalled`: surface friendly inline + toast messages.
+   * - `playing`: clear any previously shown error banner.
+   *
+   * Re-runs only when the language changes (which rebinds the listener
+   * closures so they see the latest localized strings).
+   */
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
@@ -248,14 +358,23 @@ const StoryAiExpertEmon = () => {
     };
   }, [msgs]);
 
-  // Load saved progress + bookmark once on mount
+  /**
+   * On mount, hydrate UI state from localStorage:
+   * - If a valid saved playback position exists, show the "Resume?" banner.
+   * - If a bookmark exists, draw its pin on the seek bar.
+   */
   useEffect(() => {
     const p = readProgress();
     if (p) setResumeAt(p.time);
     setBookmark(readBookmark());
   }, []);
 
-  // Save final position on unload
+  /**
+   * Best-effort final flush of the playback position on page hide / unload,
+   * and on component unmount (e.g. client-side navigation away from the
+   * story page). Browsers run `pagehide` reliably on iOS where
+   * `beforeunload` is ignored; we register both for cross-browser coverage.
+   */
   useEffect(() => {
     const save = () => {
       const el = audioRef.current;
@@ -278,6 +397,11 @@ const StoryAiExpertEmon = () => {
     };
   }, []);
 
+  /**
+   * Toggle play/pause on the audio element. Also dismisses the "Resume?"
+   * banner — pressing Play instead of Resume signals the user wants to start
+   * from the current head, not the saved position.
+   */
   const toggle = () => {
     const el = audioRef.current;
     if (!el) return;
@@ -291,6 +415,12 @@ const StoryAiExpertEmon = () => {
     }
   };
 
+  /**
+   * Seek to a clicked position on the custom progress bar.
+   *
+   * @param e - Mouse event from the bar; `clientX` is translated to a 0..1
+   *            ratio against the bar's bounding box and applied to `duration`.
+   */
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = audioRef.current;
     const bar = barRef.current;
@@ -308,12 +438,29 @@ const StoryAiExpertEmon = () => {
     }
   };
 
+  /** Progress-bar fill percentage (0..100). */
   const pct = dur ? (cur / dur) * 100 : 0;
-  const effectiveDur = dur || 960; // fallback ~16 min until metadata loads
-  // Cheap O(n) over a 7-item list, but memoized so referential equality holds
-  // for memoized children that consume it.
+  /**
+   * Duration used to position chapter ticks before `loadedmetadata` fires.
+   * Falls back to ~16 minutes (the recorded length) so ticks don't jump
+   * once the real duration is known.
+   */
+  const effectiveDur = dur || 960;
+  /**
+   * Index of the chapter the playhead is currently in. Memoized so
+   * referential equality holds for memoized children that consume it.
+   */
   const activeChapterIdx = useMemo(() => chapterIndexAt(cur), [cur]);
 
+  /**
+   * Jump the audio to a specific timestamp, start playback if paused, and
+   * scroll the matching transcript paragraph into view.
+   *
+   * Used by chapter clicks and the "Go to bookmark" affordance.
+   *
+   * @param t - Target time in seconds. Non-finite or negative values are
+   *            rejected with a friendly toast.
+   */
   const jumpTo = (t: number) => {
     const el = audioRef.current;
     if (!el) return;
@@ -343,6 +490,16 @@ const StoryAiExpertEmon = () => {
     }
   };
 
+  /**
+   * Apply the saved "Resume?" position from localStorage.
+   *
+   * Defends against two real-world failure modes:
+   * 1. Stale or corrupted saves that exceed the current track length — the
+   *    target is clamped to `duration - 1`.
+   * 2. Browsers (e.g. some mobile Safari builds) that silently drop a
+   *    `currentTime` write before `loadedmetadata` — when `readyState < 1`
+   *    we defer the seek until metadata is ready.
+   */
   const resume = () => {
     if (resumeAt == null) return;
     const el = audioRef.current;
@@ -388,6 +545,10 @@ const StoryAiExpertEmon = () => {
     setResumeAt(null);
   };
 
+  /**
+   * Discard the saved playback position and hide the "Resume?" banner so
+   * the listener starts fresh from 0.
+   */
   const dismissResume = () => {
     setResumeAt(null);
     try {
@@ -397,6 +558,17 @@ const StoryAiExpertEmon = () => {
     }
   };
 
+  /**
+   * Pin or clear the user's single bookmark.
+   *
+   * Rules:
+   * - If a bookmark is already set within 1.5s of the current playhead
+   *   AND the user did not just jump to it, the click is treated as
+   *   "remove" (the obvious second-press behavior at the same spot).
+   * - Otherwise the click overwrites the bookmark with the current time.
+   * - A failed `setItem` (quota / private-mode) is rolled back so UI state
+   *   stays consistent with what actually persisted.
+   */
   const toggleBookmark = () => {
     const el = audioRef.current;
     if (!el) return;
@@ -433,6 +605,11 @@ const StoryAiExpertEmon = () => {
     justJumpedToBookmarkRef.current = false;
   };
 
+  /**
+   * Seek to the saved bookmark, if any. Sets a sentinel so the next
+   * {@link toggleBookmark} call doesn't immediately reinterpret the press
+   * as a "remove" (because the playhead is now sitting on the bookmark).
+   */
   const goToBookmark = () => {
     if (bookmark == null) return;
     justJumpedToBookmarkRef.current = true;
