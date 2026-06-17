@@ -397,6 +397,11 @@ const StoryAiExpertEmon = () => {
     };
   }, []);
 
+  /**
+   * Toggle play/pause on the audio element. Also dismisses the "Resume?"
+   * banner — pressing Play instead of Resume signals the user wants to start
+   * from the current head, not the saved position.
+   */
   const toggle = () => {
     const el = audioRef.current;
     if (!el) return;
@@ -410,6 +415,12 @@ const StoryAiExpertEmon = () => {
     }
   };
 
+  /**
+   * Seek to a clicked position on the custom progress bar.
+   *
+   * @param e - Mouse event from the bar; `clientX` is translated to a 0..1
+   *            ratio against the bar's bounding box and applied to `duration`.
+   */
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = audioRef.current;
     const bar = barRef.current;
@@ -427,12 +438,29 @@ const StoryAiExpertEmon = () => {
     }
   };
 
+  /** Progress-bar fill percentage (0..100). */
   const pct = dur ? (cur / dur) * 100 : 0;
-  const effectiveDur = dur || 960; // fallback ~16 min until metadata loads
-  // Cheap O(n) over a 7-item list, but memoized so referential equality holds
-  // for memoized children that consume it.
+  /**
+   * Duration used to position chapter ticks before `loadedmetadata` fires.
+   * Falls back to ~16 minutes (the recorded length) so ticks don't jump
+   * once the real duration is known.
+   */
+  const effectiveDur = dur || 960;
+  /**
+   * Index of the chapter the playhead is currently in. Memoized so
+   * referential equality holds for memoized children that consume it.
+   */
   const activeChapterIdx = useMemo(() => chapterIndexAt(cur), [cur]);
 
+  /**
+   * Jump the audio to a specific timestamp, start playback if paused, and
+   * scroll the matching transcript paragraph into view.
+   *
+   * Used by chapter clicks and the "Go to bookmark" affordance.
+   *
+   * @param t - Target time in seconds. Non-finite or negative values are
+   *            rejected with a friendly toast.
+   */
   const jumpTo = (t: number) => {
     const el = audioRef.current;
     if (!el) return;
@@ -462,6 +490,16 @@ const StoryAiExpertEmon = () => {
     }
   };
 
+  /**
+   * Apply the saved "Resume?" position from localStorage.
+   *
+   * Defends against two real-world failure modes:
+   * 1. Stale or corrupted saves that exceed the current track length — the
+   *    target is clamped to `duration - 1`.
+   * 2. Browsers (e.g. some mobile Safari builds) that silently drop a
+   *    `currentTime` write before `loadedmetadata` — when `readyState < 1`
+   *    we defer the seek until metadata is ready.
+   */
   const resume = () => {
     if (resumeAt == null) return;
     const el = audioRef.current;
@@ -507,6 +545,10 @@ const StoryAiExpertEmon = () => {
     setResumeAt(null);
   };
 
+  /**
+   * Discard the saved playback position and hide the "Resume?" banner so
+   * the listener starts fresh from 0.
+   */
   const dismissResume = () => {
     setResumeAt(null);
     try {
@@ -516,6 +558,17 @@ const StoryAiExpertEmon = () => {
     }
   };
 
+  /**
+   * Pin or clear the user's single bookmark.
+   *
+   * Rules:
+   * - If a bookmark is already set within 1.5s of the current playhead
+   *   AND the user did not just jump to it, the click is treated as
+   *   "remove" (the obvious second-press behavior at the same spot).
+   * - Otherwise the click overwrites the bookmark with the current time.
+   * - A failed `setItem` (quota / private-mode) is rolled back so UI state
+   *   stays consistent with what actually persisted.
+   */
   const toggleBookmark = () => {
     const el = audioRef.current;
     if (!el) return;
@@ -552,6 +605,11 @@ const StoryAiExpertEmon = () => {
     justJumpedToBookmarkRef.current = false;
   };
 
+  /**
+   * Seek to the saved bookmark, if any. Sets a sentinel so the next
+   * {@link toggleBookmark} call doesn't immediately reinterpret the press
+   * as a "remove" (because the playhead is now sitting on the bookmark).
+   */
   const goToBookmark = () => {
     if (bookmark == null) return;
     justJumpedToBookmarkRef.current = true;
