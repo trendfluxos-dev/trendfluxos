@@ -19,4 +19,23 @@ export default defineConfig(({ mode }) => ({
     },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
   },
+  build: {
+    // Manual vendor splitting keeps the initial JS payload small. The biggest
+    // libraries (recharts ~4.6MB, Radix ~3.5MB, lucide ~29MB on disk) are
+    // each isolated so that pages which don't import them never pay the
+    // download cost, and the rest of node_modules collapses into a single
+    // shared `vendor` chunk for predictable HTTP caching.
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return undefined;
+          if (id.includes("/recharts/") || id.includes("/d3-")) return "recharts";
+          if (id.includes("@radix-ui/")) return "radix";
+          if (id.includes("/lucide-react/")) return "icons";
+          if (id.includes("/react-dom/") || id.includes("/react/") || id.includes("/scheduler/")) return "react";
+          return "vendor";
+        },
+      },
+    },
+  },
 }));
