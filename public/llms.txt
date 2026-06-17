@@ -1,0 +1,48 @@
+# TrendFlux
+
+> The AI-Native Growth Execution OS — one connected system for automation, CRM, paid media, creative, and analytics. Built for founders who want infrastructure, not retainers.
+
+TrendFlux replaces fragmented marketing stacks with a single Growth OS: six integrated modules (Meta Ads, AI Automation, CRM, Funnel Engineering, Creative Strategy, Founder Branding) deployed standalone or as a full operating layer. Founded and operated by Zahid Hasan Emon.
+
+## Pages
+
+- [Home](/): Overview of the TrendFlux Growth OS, hero proof, and primary CTAs.
+- [Ecosystem](/ecosystem): Map of the six modules and how they compose into one operating layer.
+- [Services](/services): Six growth disciplines — Meta Ads, AI Automation, CRM, Funnels, Creative, Founder Branding.
+- [About](/about): The operator behind TrendFlux and the four non-negotiable principles.
+- [Contact](/contact): Inquiries, partnerships, and engagement requests.
+- [Explore](/explore): Index of essays, case studies, and tools across the ecosystem.
+- [Showcase](/showcase): Selected work, research, and implementations.
+- [Portfolio](/portfolio): Engagement portfolio and selected executions.
+- [Enterprise](/enterprise): Enterprise engagement, demo requests, and scope.
+- [Toolkit](/toolkit): Operator toolkit, frameworks, and downloadable assets.
+- [Masterclass](/masterclass): Masterclass landing and curriculum overview.
+- [Course · TrendFlux](/course/trendflux): Self-serve TrendFlux course enrollment.
+
+## Stories
+
+- [Story · Zahid Hasan Emon](/stories/ai-expert-emon): Bilingual audio story — the architect by day, the campus reality by night.
+- [The Stand](/the-stand): Long-form refusal essay and ethical-index manifesto.
+- [Quiet Positions](/quiet-positions): Position papers on operator ethics and growth philosophy.
+
+## Case studies
+
+- [Organic reach — 485k](/case-studies/organic-reach-485k)
+- [Content engine — 200×](/case-studies/content-engine-200)
+- [Global strategy — US/UK](/case-studies/global-strategy-us-uk)
+- [WhatsApp lead conversion](/case-studies/whatsapp-lead-conversion)
+- [SME growth architecture](/case-studies/sme-growth-architecture)
+- [Personal brand authority](/case-studies/personal-brand-authority)
+
+## Brands in the ecosystem
+
+- [BrandToki](/brandtoki): Bengali-first brand studio.
+- [TrendFlux Talent](/trendflux-talent): Operator and talent network.
+- [Luxe Veil](/luxe-veil): Premium private offering.
+- [BrandOpen](/brand-open): Open brand experiments.
+
+## Optional
+
+- [Share kit](/share-kit): Press and partner share assets.
+- [Media reports](/media-reports): Press mentions and coverage index.
+- [Justice appeal](/justice-appeal): Public appeal page.
