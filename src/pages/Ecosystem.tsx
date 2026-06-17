@@ -43,6 +43,7 @@ const Ecosystem = () => {
         className="pt-40"
         eyebrow="The Architecture"
         title="The TrendFlux Growth Operating System."
+        titleAs="h1"
         intro="Four layers. Six modules. One connected system designed for founders who want operational leverage — not another agency relationship."
       >
         <EcosystemMap />

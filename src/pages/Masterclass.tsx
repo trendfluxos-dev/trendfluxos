@@ -74,7 +74,7 @@ const Masterclass = () => {
   }, []);
 
   useSeo({
-    title: "Advanced AI Masterclass — Become an AI Growth Operator | TrendFlux",
+    title: "Advanced AI Masterclass — AI Growth Operator | TrendFlux",
     description:
       "Stop using AI like everyone else. Build automation, content and growth systems. Operator-grade training — limited batch.",
     canonical: `${BRAND.url}/masterclass`,

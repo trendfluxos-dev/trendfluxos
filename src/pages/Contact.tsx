@@ -21,6 +21,7 @@ const Contact = () => {
         className="pt-40"
         eyebrow="Contact"
         title="Start a conversation."
+        titleAs="h1"
         intro="Tell us about the system you're trying to build. We'll respond within one business day."
       >
         <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">

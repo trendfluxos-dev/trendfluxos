@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { TfSection, TfCard } from "@/components/tf/Section";
 import { useSeo } from "@/hooks/useSeo";
+import { useJsonLd } from "@/hooks/useJsonLd";
+import { BRAND } from "@/config/brand";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import { Link } from "react-router-dom";
 import { ArrowRight, ShieldCheck, GitBranch, Layers, Eye } from "lucide-react";
@@ -18,6 +20,24 @@ const About = () => {
     title: "About — TrendFlux & Zahid Hasan Emon",
     description: "The strategic operator and ethical growth architect behind TrendFlux — building AI-native growth infrastructure for modern brands.",
   });
+  useJsonLd(
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Zahid Hasan Emon",
+      jobTitle: "Founder & Growth Architect",
+      image: `${BRAND.url}${emonPortrait}`,
+      url: `${BRAND.url}/about`,
+      worksFor: {
+        "@type": "Organization",
+        name: "TrendFlux",
+        url: BRAND.url,
+      },
+      description:
+        "Strategic operator and ethical growth architect behind TrendFlux — building AI-native growth infrastructure for modern brands.",
+    },
+    "ld-person",
+  );
 
   return (
     <main className="min-h-screen bg-background text-foreground font-sans antialiased">

@@ -4,6 +4,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { TfSection, TfCard } from "@/components/tf/Section";
 import { useSeo } from "@/hooks/useSeo";
+import { useJsonLd } from "@/hooks/useJsonLd";
+import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import {
   Megaphone,
@@ -61,6 +63,22 @@ const Services = () => {
     title: "Services — TrendFlux Growth OS",
     description: "Six integrated growth disciplines — Meta Ads, AI Automation, CRM, Funnels, Creative, Founder Branding. Deployed standalone or as a full OS.",
   });
+  useJsonLd(
+    SERVICES.map((s) => ({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: s.title,
+      description: s.desc,
+      provider: {
+        "@type": "Organization",
+        name: "TrendFlux",
+        url: BRAND.url,
+      },
+      areaServed: "Worldwide",
+      url: `${BRAND.url}/services`,
+    })),
+    "ld-services",
+  );
 
   return (
     <main className="min-h-screen bg-background text-foreground font-sans antialiased">
