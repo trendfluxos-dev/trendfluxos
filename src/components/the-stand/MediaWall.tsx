@@ -219,13 +219,21 @@ export function MediaWall() {
                           </p>
                         </div>
 
-                        <span
-                          lang={lang}
-                          className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))] group-hover:text-[hsl(var(--stand-red))] transition-colors"
-                        >
-                          {t.read}
-                          <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                        </span>
+                        <div className="flex flex-col gap-3 border-t border-[hsl(var(--stand-hairline))] pt-5">
+                          <span
+                            lang="en"
+                            className="font-mono text-[11px] leading-snug text-[hsl(var(--stand-muted))] break-all group-hover:text-[hsl(var(--stand-ink))] transition-colors"
+                          >
+                            {item.href.replace(/^https?:\/\//, "")}
+                          </span>
+                          <span
+                            lang={lang}
+                            className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))] group-hover:text-[hsl(var(--stand-red))] transition-colors"
+                          >
+                            {t.read}
+                            <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                          </span>
+                        </div>
                       </a>
                     </Reveal>
                   );
