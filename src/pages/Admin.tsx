@@ -13,6 +13,7 @@ import { PressItemPreview } from "@/components/PressItemPreview";
 import { normalizeHref } from "@/lib/url";
 import { useSeo } from "@/hooks/useSeo";
 import SiteSettingsPanel from "@/components/admin/SiteSettingsPanel";
+import PressBackupPanel from "@/components/admin/PressBackupPanel";
 
 type Row = PressItem & { _dirty?: boolean; _new?: boolean };
 
@@ -214,6 +215,7 @@ export default function Admin() {
 
       <main className="container mx-auto py-8 space-y-4">
         <SiteSettingsPanel />
+        <PressBackupPanel onChanged={refresh} />
         {loading && <Loader2 className="h-5 w-5 animate-spin text-gold" />}
         {rows.map((r, i) => (
           <div key={r.id ?? `new-${i}`} className="rounded-xl glass p-5 space-y-3">
