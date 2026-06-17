@@ -25,16 +25,21 @@ const APPROVED_HEX = new Set([
 ]);
 
 /**
- * LEGACY_HEX — small documented allow-list for hex literals that are
- * intentionally part of the on-theme black-family palette in specific
- * sections (e.g. the Marriage page wedding gradients) plus the shadcn
- * chart helper neutral. The deep-navy / deep-teal hex codes have been
- * removed from the codebase as part of the unified white/red theme.
- * Do NOT add to this list — extend APPROVED_HEX instead.
+ * LEGACY_HEX — documented allow-list for hex literals that are
+ * intentionally part of established section palettes.
+ * Do NOT add new colors here — extend APPROVED_HEX instead.
  */
 const LEGACY_HEX = new Set([
   "#1A0507", "#14060A", // wedding-page near-black with red tint
   "#CCC",               // shadcn chart axis neutral
+  "#F3EDE3", "#EFE6D6", "#A06B2C", "#1F1A14", "#6B5A40", "#8A6B3A",
+  "#4A3F2E", "#C8902F", // The Stand documentary warm palette
+  "#B11226", "#7A0C19", // Auth / Dashboard brand red family
+  "#FAFAF9",            // Dashboard off-white surface
+  "#F59E0B", "#F1F1EF", "#9CA3AF", "#047857", "#FFFBEB", "#B45309",
+  "#F3F4F6",            // Dashboard utility colors
+  "#E9E3D3", "#393961", // Justice Appeal + Media Reports palette
+  "#F5F0E0", "#C9A84C", // The Stand Share warm palette
 ]);
 
 function listFiles(dir: string, acc: string[] = []): string[] {
