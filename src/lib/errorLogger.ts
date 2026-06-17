@@ -22,6 +22,48 @@ const SESSION_CAP = 50;
 
 const RELEASE = (import.meta.env.VITE_BUILD_SHA as string | undefined) ?? "dev";
 
+/**
+ * Generate a short, sortable correlation id. Used to stitch together related
+ * log entries (an initial error, its retry attempts, a chunk-reload that
+ * follows it, and any post-reload follow-up errors).
+ */
+export const newCorrelationId = (): string => {
+  const rand =
+    (crypto as Crypto & { randomUUID?: () => string }).randomUUID?.() ??
+    `${Math.random().toString(36).slice(2, 10)}`;
+  return `cid_${Date.now().toString(36)}_${rand.slice(0, 8)}`;
+};
+
+// The most-recent correlation id observed by any logger entry-point. Lets
+// global handlers (window.onerror, unhandledrejection, console.error) tag
+// follow-up noise with the same id as the originating boundary error.
+let lastCorrelationId: string | null = null;
+export const getLastCorrelationId = () => lastCorrelationId;
+export const setLastCorrelationId = (id: string | null) => {
+  lastCorrelationId = id;
+};
+
+// Persisted across a hard reload (chunkReload) so post-reload errors can be
+// linked back to the chunk-load failure that triggered the reload.
+const PENDING_CID_KEY = "__client_error_pending_cid";
+export const getPendingCorrelationId = (): string | null => {
+  if (typeof window === "undefined") return null;
+  try {
+    return sessionStorage.getItem(PENDING_CID_KEY);
+  } catch {
+    return null;
+  }
+};
+export const setPendingCorrelationId = (id: string | null) => {
+  if (typeof window === "undefined") return;
+  try {
+    if (id) sessionStorage.setItem(PENDING_CID_KEY, id);
+    else sessionStorage.removeItem(PENDING_CID_KEY);
+  } catch {
+    /* noop */
+  }
+};
+
 // Stable per-tab session id so a sequence of errors from one user can be
 // correlated in the client_errors table without exposing PII.
 const SESSION_KEY = "__client_error_session_id";
@@ -84,6 +126,17 @@ export async function logClientError(payload: ErrorPayload) {
     if (shouldDrop(key)) return;
     sentCount += 1;
 
+    // Correlation id resolution priority:
+    //   1. explicit meta.correlation_id from the caller (boundary/retry)
+    //   2. pending id persisted across a chunk reload
+    //   3. last id observed in this tab (global handler follow-ups)
+    //   4. freshly minted id
+    const explicitCid =
+      (payload.meta?.correlation_id as string | undefined) ?? undefined;
+    const correlation_id =
+      explicitCid ?? getPendingCorrelationId() ?? lastCorrelationId ?? newCorrelationId();
+    lastCorrelationId = correlation_id;
+
     const { data: auth } = await supabase.auth.getUser();
     const { data: sessionData } = await supabase.auth.getSession();
     const user = auth?.user;
@@ -100,6 +153,7 @@ export async function logClientError(payload: ErrorPayload) {
       ...buildContextMeta(),
       ...authMeta,
       ...(payload.meta ?? {}),
+      correlation_id,
     };
 
     await supabase.from("client_errors").insert({

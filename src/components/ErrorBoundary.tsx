@@ -1,5 +1,5 @@
 import { Component, ReactNode } from "react";
-import { logClientError } from "@/lib/errorLogger";
+import { logClientError, newCorrelationId, setLastCorrelationId } from "@/lib/errorLogger";
 import { getSentry } from "@/lib/sentry";
 
 interface Props {
@@ -9,6 +9,8 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
+  correlationId: string | null;
+  retryCount: number;
 }
 
 /**
@@ -17,31 +19,55 @@ interface State {
  * loaded). Used in main.tsx to wrap the whole app.
  */
 export class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, error: null };
+  state: State = { hasError: false, error: null, correlationId: null, retryCount: 0 };
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    return { hasError: true, error, correlationId: null, retryCount: 0 };
   }
 
   componentDidCatch(error: Error, info: { componentStack?: string | null }) {
-    console.error("ErrorBoundary caught error", error, info);
+    const correlationId = this.state.correlationId ?? newCorrelationId();
+    setLastCorrelationId(correlationId);
+    this.setState({ correlationId });
+    console.error("ErrorBoundary caught error", correlationId, error, info);
     void logClientError({
       message: error.message || "React render error",
       stack: error.stack,
       source: "ErrorBoundary",
       severity: "error",
-      meta: { componentStack: info.componentStack ?? "" },
+      meta: {
+        componentStack: info.componentStack ?? "",
+        correlation_id: correlationId,
+        boundary: "ErrorBoundary",
+        retry_count: this.state.retryCount,
+      },
     });
     const sentry = getSentry();
     if (sentry) {
       sentry.captureException(error, {
         contexts: { react: { componentStack: info.componentStack ?? "" } },
+        tags: { correlation_id: correlationId, boundary: "ErrorBoundary" },
       });
     }
   }
 
   private handleReset = () => {
-    this.setState({ hasError: false, error: null });
+    const parentCid = this.state.correlationId;
+    const nextCount = this.state.retryCount + 1;
+    if (parentCid) {
+      void logClientError({
+        message: "ErrorBoundary retry",
+        source: "ErrorBoundary:retry",
+        severity: "info",
+        meta: {
+          correlation_id: parentCid,
+          parent_correlation_id: parentCid,
+          retry_count: nextCount,
+          boundary: "ErrorBoundary",
+        },
+      });
+    }
+    this.setState({ hasError: false, error: null, retryCount: nextCount });
   };
 
   private handleReload = () => {
