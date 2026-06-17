@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Bookmark, BookmarkCheck, Download, Headphones, ListMusic, Pause, Play, RotateCcw, Share2, Sparkles, Lightbulb } from "lucide-react";
 import { toast } from "sonner";
@@ -22,6 +22,42 @@ function fmt(s: number) {
   const r = Math.floor(s % 60);
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
+
+// Compute which chapter the playhead is in. Linear scan is fine (N ~= 7) and
+// avoids per-render closure allocation of an IIFE.
+function chapterIndexAt(time: number): number {
+  let idx = 0;
+  for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
+    if (time >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
+  }
+  return idx;
+}
+
+// Memoized transcript paragraph — only the paragraph whose `isActive` flips
+// re-renders when the audio playhead crosses a chapter boundary.
+type ParagraphProps = {
+  text: string;
+  isActive: boolean;
+  lang: StoryLang;
+  setRef: (el: HTMLParagraphElement | null) => void;
+};
+const TranscriptParagraph = memo(function TranscriptParagraph({
+  text, isActive, lang, setRef,
+}: ParagraphProps) {
+  return (
+    <p
+      ref={setRef}
+      lang={lang}
+      className={`scroll-mt-28 rounded-md border-l-2 py-1 pl-4 text-[16px] leading-[1.85] transition-colors duration-300 sm:text-[17px] ${
+        isActive
+          ? "border-primary bg-primary/[0.04] text-foreground"
+          : "border-transparent text-foreground/85"
+      }`}
+    >
+      {text}
+    </p>
+  );
+});
 
 const PROGRESS_KEY = "story:ai-expert-emon:progress";
 const BOOKMARK_KEY = "story:ai-expert-emon:bookmark";
