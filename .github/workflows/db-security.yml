@@ -54,6 +54,8 @@ jobs:
           supabase db lint --level info --output json | tee reports/supabase-lint.json
 
       - name: Apply baseline gate
+        env:
+          SUPABASE_LINT_HTML_REPORT: reports/supabase-lint.html
         run: node scripts/check-supabase-lint.mjs reports/supabase-lint.json
 
       - name: Stop local Supabase stack
@@ -66,5 +68,14 @@ jobs:
         with:
           name: supabase-lint-report
           path: reports/supabase-lint.json
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload HTML security report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-lint-report-html
+          path: reports/supabase-lint.html
           retention-days: 14
           if-no-files-found: ignore
