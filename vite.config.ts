@@ -35,14 +35,13 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return undefined;
+          // Only isolate libs that are loaded lazily / on specific routes.
+          // Splitting React + Radix + general vendor across chunks created a
+          // temporal-dead-zone cycle ("Cannot access 'A' before initialization")
+          // in production, so let Rollup co-locate the rest automatically.
           if (id.includes("/recharts/") || id.includes("/d3-")) return "recharts";
-          if (id.includes("@radix-ui/")) return "react";
-          if (id.includes("/lucide-react/")) return "icons";
-          // Sentry is loaded lazily — pin it to its own chunk so it never
-          // ends up bundled into the main `vendor` chunk by accident.
           if (id.includes("@sentry/")) return "sentry";
-          if (id.includes("/react-dom/") || id.includes("/react/") || id.includes("/scheduler/")) return "react";
-          return "vendor";
+          return undefined;
         },
       },
     },
