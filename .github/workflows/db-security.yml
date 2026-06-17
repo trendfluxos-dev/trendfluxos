@@ -79,6 +79,14 @@ jobs:
           restore-keys: |
             supabase-images-${{ runner.os }}-
 
+      - name: Log Docker images cache status
+        run: |
+          if [ "${{ steps.cache-supabase-images.outputs.cache-hit }}" = "true" ]; then
+            echo "✅ Supabase Docker images cache RESTORED"
+          else
+            echo "❌ Supabase Docker images cache MISSED — images will be pulled and saved"
+          fi
+
       - name: Restore Supabase Docker images
         if: steps.cache-supabase-images.outputs.cache-hit == 'true'
         run: |
