@@ -74,9 +74,28 @@ export function MediaWall() {
   const { items } = usePressItems();
   const { lang } = useStandLang();
   const t = lang === "bn" ? STAND_MEDIA.bn : STAND_MEDIA.en;
+  const [queries, setQueries] = useState<Record<SectionKey, string>>({
+    initial: "",
+    safety: "",
+    background: "",
+    institutional: "",
+    other: "",
+  });
+
   if (!items.length) return null;
 
   const count = lang === "bn" ? toBnDigits(items.length) : items.length;
+
+  const matchesQuery = (item: (typeof items)[number], q: string) => {
+    if (!q.trim()) return true;
+    const term = q.toLowerCase();
+    const date = formatDate(item.created_at, lang);
+    return (
+      item.outlet.toLowerCase().includes(term) ||
+      item.headline.toLowerCase().includes(term) ||
+      (date ? date.toLowerCase().includes(term) : false)
+    );
+  };
 
   const grouped = SECTION_ORDER.map((key) => ({
     key,
