@@ -77,7 +77,15 @@ const ShareDialog = ({ open, onOpenChange, payload }: Props) => {
         },
       });
       if (error) throw error;
-      const text = (data as { caption?: string })?.caption ?? "";
+      const responseData = data as { caption?: string; error?: string } | null;
+      if (responseData?.error === "rate_limited") {
+        toast.error("Too many AI generations — please wait a few minutes and try again.");
+        setCaption(
+          `${payloadArg.title}\n\n${payloadArg.summary}\n\n${payloadArg.url}`,
+        );
+        return;
+      }
+      const text = responseData?.caption ?? "";
       setCaption(text);
       setTouched(false);
     } catch (err) {

@@ -1,11 +1,16 @@
-import { lazy, ComponentType } from "react";
+import { lazy, type ComponentType, type LazyExoticComponent } from "react";
 
-type Loader = () => Promise<{ default: ComponentType<any> }>;
+// Route components have no public props (React Router passes none) — accept
+// any component shape so each page can declare whatever internal props it
+// likes, but still avoid `any` for the loader signature itself.
+type AnyComponent = ComponentType<Record<string, unknown>>;
+type Loader = () => Promise<{ default: AnyComponent }>;
+type PreloadableLazy = LazyExoticComponent<AnyComponent> & { preload: Loader };
 
-const make = (loader: Loader) => {
-  const Comp = lazy(loader);
-  (Comp as any).preload = loader;
-  return Comp as ReturnType<typeof lazy> & { preload: Loader };
+const make = (loader: Loader): PreloadableLazy => {
+  const Comp = lazy(loader) as PreloadableLazy;
+  Comp.preload = loader;
+  return Comp;
 };
 
 export const routes = {
