@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Bookmark, BookmarkCheck, Download, Headphones, ListMusic, Pause, Play, RotateCcw, Share2, Sparkles, Lightbulb } from "lucide-react";
 import { toast } from "sonner";
@@ -22,6 +22,42 @@ function fmt(s: number) {
   const r = Math.floor(s % 60);
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
+
+// Compute which chapter the playhead is in. Linear scan is fine (N ~= 7) and
+// avoids per-render closure allocation of an IIFE.
+function chapterIndexAt(time: number): number {
+  let idx = 0;
+  for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
+    if (time >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
+  }
+  return idx;
+}
+
+// Memoized transcript paragraph — only the paragraph whose `isActive` flips
+// re-renders when the audio playhead crosses a chapter boundary.
+type ParagraphProps = {
+  text: string;
+  isActive: boolean;
+  lang: StoryLang;
+  setRef: (el: HTMLParagraphElement | null) => void;
+};
+const TranscriptParagraph = memo(function TranscriptParagraph({
+  text, isActive, lang, setRef,
+}: ParagraphProps) {
+  return (
+    <p
+      ref={setRef}
+      lang={lang}
+      className={`scroll-mt-28 rounded-md border-l-2 py-1 pl-4 text-[16px] leading-[1.85] transition-colors duration-300 sm:text-[17px] ${
+        isActive
+          ? "border-primary bg-primary/[0.04] text-foreground"
+          : "border-transparent text-foreground/85"
+      }`}
+    >
+      {text}
+    </p>
+  );
+});
 
 const PROGRESS_KEY = "story:ai-expert-emon:progress";
 const BOOKMARK_KEY = "story:ai-expert-emon:bookmark";
@@ -111,7 +147,7 @@ const StoryAiExpertEmon = () => {
 
   const msgs = MESSAGES[lang];
 
-  const safePlay = (el: HTMLAudioElement | null) => {
+  const safePlay = useCallback((el: HTMLAudioElement | null) => {
     if (!el) return;
     const p = el.play();
     if (p && typeof p.then === "function") {
@@ -125,7 +161,7 @@ const StoryAiExpertEmon = () => {
         }
       });
     }
-  };
+  }, [msgs]);
 
   useSeo({
     title: `${copy.title} · Zahid Hasan Emon`,
@@ -141,15 +177,29 @@ const StoryAiExpertEmon = () => {
   useEffect(() => {
     const el = audioRef.current;
     if (!el) return;
+    // `timeupdate` fires ~4×/s. Re-rendering the whole page (transcript,
+    // chapter list, summary, share card) that often is wasteful — the visible
+    // UI is second-resolution and chapter highlight only flips at known
+    // boundaries. We coalesce state updates to: (a) once per whole second of
+    // playback, OR (b) immediately when the active chapter changes.
+    let lastSecond = -1;
+    let lastActiveChapter = -1;
     const t = () => {
-      setCur(el.currentTime);
+      const time = el.currentTime;
+      const second = Math.floor(time);
+      const activeChapter = chapterIndexAt(time);
+      if (second !== lastSecond || activeChapter !== lastActiveChapter) {
+        lastSecond = second;
+        lastActiveChapter = activeChapter;
+        setCur(time);
+      }
       const now = Date.now();
-      if (now - lastSavedRef.current > 2500 && el.currentTime > 2) {
+      if (now - lastSavedRef.current > 2500 && time > 2) {
         lastSavedRef.current = now;
         try {
           localStorage.setItem(
             PROGRESS_KEY,
-            JSON.stringify({ time: el.currentTime, updatedAt: now }),
+            JSON.stringify({ time, updatedAt: now }),
           );
         } catch {
           /* ignore quota */
@@ -259,15 +309,10 @@ const StoryAiExpertEmon = () => {
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
-
   const effectiveDur = dur || 960; // fallback ~16 min until metadata loads
-  const activeChapterIdx = (() => {
-    let idx = 0;
-    for (let i = 0; i < AI_EXPERT_EMON_CHAPTERS.length; i++) {
-      if (cur >= AI_EXPERT_EMON_CHAPTERS[i].time) idx = i;
-    }
-    return idx;
-  })();
+  // Cheap O(n) over a 7-item list, but memoized so referential equality holds
+  // for memoized children that consume it.
+  const activeChapterIdx = useMemo(() => chapterIndexAt(cur), [cur]);
 
   const jumpTo = (t: number) => {
     const el = audioRef.current;
@@ -396,13 +441,24 @@ const StoryAiExpertEmon = () => {
 
   const summary = AI_EXPERT_EMON_SUMMARY[lang];
 
-  const sharePayload: SharePayload = {
+  // Stable identity prevents ShareDialog from re-rendering on every audio tick.
+  const sharePayload = useMemo<SharePayload>(() => ({
     title: copy.title,
     summary: copy.kicker,
-    url: typeof window !== "undefined" ? window.location.href : "https://trendfluxdigitalbd.lovable.app/stories/ai-expert-emon",
+    url: typeof window !== "undefined"
+      ? window.location.href
+      : "https://trendfluxdigitalbd.lovable.app/stories/ai-expert-emon",
     category: "Audio Story",
     tags: AI_EXPERT_EMON_THEMES,
-  };
+  }), [copy.title, copy.kicker]);
+
+  // Per-index stable ref setters so memoized paragraphs don't re-render
+  // just because the parent rendered a fresh inline arrow.
+  const setParagraphRef = useMemo(() => {
+    return copy.paragraphs.map((_, i) => (el: HTMLParagraphElement | null) => {
+      paragraphRefs.current[i] = el;
+    });
+  }, [copy.paragraphs]);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -665,18 +721,13 @@ const StoryAiExpertEmon = () => {
           {/* Narrative */}
           <div className="mt-14 space-y-6">
             {copy.paragraphs.map((p, i) => (
-              <p
+              <TranscriptParagraph
                 key={i}
-                ref={(el) => { paragraphRefs.current[i] = el; }}
+                text={p}
                 lang={lang}
-                className={`scroll-mt-28 rounded-md border-l-2 py-1 pl-4 text-[16px] leading-[1.85] transition-colors duration-300 sm:text-[17px] ${
-                  i === activeChapterIdx
-                    ? "border-primary bg-primary/[0.04] text-foreground"
-                    : "border-transparent text-foreground/85"
-                }`}
-              >
-                {p}
-              </p>
+                isActive={i === activeChapterIdx}
+                setRef={setParagraphRef[i]}
+              />
             ))}
           </div>
 
