@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { useEffect } from "react";
 import { useSeo } from "@/hooks/useSeo";
 import { StandLanguageProvider } from "@/context/StandLanguageContext";
 import { FilmGrain } from "@/components/the-stand/FilmGrain";
@@ -25,6 +26,27 @@ import { ClosingStatement } from "@/components/the-stand/ClosingStatement";
  * (quiet utilities) → closing. Tools are demoted; emotion leads.
  */
 export default function TheStand() {
+  const { search, hash } = useLocation();
+
+  // Deep-link preload: ?chapter=<slug> or #<slug> scrolls into the
+  // matching chapter and adds a brief highlight ring.
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    const target = params.get("chapter") || hash.replace(/^#/, "");
+    if (!target) return;
+    const tryScroll = () => {
+      const el = document.getElementById(target);
+      if (!el) return false;
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      el.setAttribute("data-chapter-active", "true");
+      window.setTimeout(() => el.removeAttribute("data-chapter-active"), 2400);
+      return true;
+    };
+    // Defer until sections mount
+    const id = window.setTimeout(tryScroll, 250);
+    return () => window.clearTimeout(id);
+  }, [search, hash]);
+
   useSeo({
     title: "The Stand — Zahid Hasan Emon · TrendFlux Ecosystem",
     description:
@@ -86,9 +108,15 @@ export default function TheStand() {
         <ReconstructionTimeline />
         <PrinciplesList />
         <MemoryLayer24 />
-        <HumanityRestored />
-        <AudioStory />
-        <MediaWall />
+        <div id="humanity-restored" className="chapter-anchor scroll-mt-24">
+          <HumanityRestored />
+        </div>
+        <div id="audio-story" className="chapter-anchor scroll-mt-24">
+          <AudioStory />
+        </div>
+        <div id="press" className="chapter-anchor scroll-mt-24">
+          <MediaWall />
+        </div>
         <DocumentaryEmbed />
         <InfrastructurePivot />
         <ArchiveUtilities />
