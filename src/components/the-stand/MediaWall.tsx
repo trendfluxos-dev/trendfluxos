@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { useStandLang } from "@/context/StandLanguageContext";
 import { STAND_MEDIA } from "@/content/theStand";
 import { usePressItems } from "@/hooks/usePressItems";
 import { Reveal } from "./Reveal";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Search } from "lucide-react";
 
 const BN_DIGITS = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
 const toBnDigits = (s: string | number) =>
@@ -73,9 +74,28 @@ export function MediaWall() {
   const { items } = usePressItems();
   const { lang } = useStandLang();
   const t = lang === "bn" ? STAND_MEDIA.bn : STAND_MEDIA.en;
+  const [queries, setQueries] = useState<Record<SectionKey, string>>({
+    initial: "",
+    safety: "",
+    background: "",
+    institutional: "",
+    other: "",
+  });
+
   if (!items.length) return null;
 
   const count = lang === "bn" ? toBnDigits(items.length) : items.length;
+
+  const matchesQuery = (item: (typeof items)[number], q: string) => {
+    if (!q.trim()) return true;
+    const term = q.toLowerCase();
+    const date = formatDate(item.created_at, lang);
+    return (
+      item.outlet.toLowerCase().includes(term) ||
+      item.headline.toLowerCase().includes(term) ||
+      (date ? date.toLowerCase().includes(term) : false)
+    );
+  };
 
   const grouped = SECTION_ORDER.map((key) => ({
     key,
@@ -183,62 +203,88 @@ export function MediaWall() {
                 </div>
               </Reveal>
 
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-px bg-[hsl(var(--stand-hairline))] border border-[hsl(var(--stand-hairline))]">
-                {group.entries.map((item, i) => {
-                  const date = formatDate(item.created_at, lang);
-                  const isBn = /[\u0980-\u09FF]/.test(item.headline);
-                  return (
-                    <Reveal key={item.id ?? item.href} delay={(i % 6) * 50}>
-                      <a
-                        href={item.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex h-full flex-col justify-between gap-10 bg-[hsl(var(--stand-bone))] p-8 md:p-10 transition-colors hover:bg-[hsl(var(--stand-bone-soft))]"
-                      >
-                        <div>
-                          <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))]">
-                            <span
-                              aria-hidden
-                              className="inline-block h-1 w-1 rounded-full bg-[hsl(var(--stand-red))]"
-                            />
-                            <span lang="en" className="font-mono text-[hsl(var(--stand-ink))]">
-                              {item.outlet}
-                            </span>
-                            {date && (
-                              <>
-                                <span aria-hidden className="text-[hsl(var(--stand-muted))]/40">·</span>
-                                <span lang={lang} className="font-mono">{date}</span>
-                              </>
-                            )}
-                          </div>
-                          <p
-                            lang={isBn ? "bn" : "en"}
-                            className="mt-6 font-display text-lg md:text-xl leading-snug text-[hsl(var(--stand-ink))]"
-                          >
-                            {item.headline}
-                          </p>
-                        </div>
-
-                        <div className="flex flex-col gap-3 border-t border-[hsl(var(--stand-hairline))] pt-5">
-                          <span
-                            lang="en"
-                            className="font-mono text-[11px] leading-snug text-[hsl(var(--stand-muted))] break-all group-hover:text-[hsl(var(--stand-ink))] transition-colors"
-                          >
-                            {item.href.replace(/^https?:\/\//, "")}
-                          </span>
-                          <span
-                            lang={lang}
-                            className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))] group-hover:text-[hsl(var(--stand-red))] transition-colors"
-                          >
-                            {t.read}
-                            <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                          </span>
-                        </div>
-                      </a>
-                    </Reveal>
-                  );
-                })}
+              <div className="mt-6 flex items-center gap-3">
+                <Search className="h-3.5 w-3.5 text-[hsl(var(--stand-muted))]" />
+                <input
+                  type="text"
+                  value={queries[group.key]}
+                  onChange={(e) =>
+                    setQueries((prev) => ({ ...prev, [group.key]: e.target.value }))
+                  }
+                  placeholder={t.searchPlaceholder}
+                  lang={lang}
+                  className="w-full max-w-md bg-transparent text-sm text-[hsl(var(--stand-ink))] placeholder:text-[hsl(var(--stand-muted))]/60 focus:outline-none"
+                />
               </div>
+
+              {(() => {
+                const filtered = group.entries.filter((it) => matchesQuery(it, queries[group.key]));
+                if (filtered.length === 0) {
+                  return (
+                    <p lang={lang} className="mt-6 text-sm text-[hsl(var(--stand-muted))]">
+                      {t.noResults}
+                    </p>
+                  );
+                }
+                return (
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-px bg-[hsl(var(--stand-hairline))] border border-[hsl(var(--stand-hairline))]">
+                    {filtered.map((item, i) => {
+                      const date = formatDate(item.created_at, lang);
+                      const isBn = /[\u0980-\u09FF]/.test(item.headline);
+                      return (
+                        <Reveal key={item.id ?? item.href} delay={(i % 6) * 50}>
+                          <a
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex h-full flex-col justify-between gap-10 bg-[hsl(var(--stand-bone))] p-8 md:p-10 transition-colors hover:bg-[hsl(var(--stand-bone-soft))]"
+                          >
+                            <div>
+                              <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))]">
+                                <span
+                                  aria-hidden
+                                  className="inline-block h-1 w-1 rounded-full bg-[hsl(var(--stand-red))]"
+                                />
+                                <span lang="en" className="font-mono text-[hsl(var(--stand-ink))]">
+                                  {item.outlet}
+                                </span>
+                                {date && (
+                                  <>
+                                    <span aria-hidden className="text-[hsl(var(--stand-muted))]/40">·</span>
+                                    <span lang={lang} className="font-mono">{date}</span>
+                                  </>
+                                )}
+                              </div>
+                              <p
+                                lang={isBn ? "bn" : "en"}
+                                className="mt-6 font-display text-lg md:text-xl leading-snug text-[hsl(var(--stand-ink))]"
+                              >
+                                {item.headline}
+                              </p>
+                            </div>
+
+                            <div className="flex flex-col gap-3 border-t border-[hsl(var(--stand-hairline))] pt-5">
+                              <span
+                                lang="en"
+                                className="font-mono text-[11px] leading-snug text-[hsl(var(--stand-muted))] break-all group-hover:text-[hsl(var(--stand-ink))] transition-colors"
+                              >
+                                {item.href.replace(/^https?:\/\//, "")}
+                              </span>
+                              <span
+                                lang={lang}
+                                className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))] group-hover:text-[hsl(var(--stand-red))] transition-colors"
+                              >
+                                {t.read}
+                                <ArrowUpRight className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                              </span>
+                            </div>
+                          </a>
+                        </Reveal>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
             </div>
           ))}
         </div>
