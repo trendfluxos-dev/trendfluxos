@@ -454,6 +454,28 @@ const StoryAiExpertEmon = () => {
           <div className="mt-10 rounded-2xl border border-border bg-card p-5 sm:p-6">
             <audio ref={audioRef} preload="metadata" src={audioAsset.url} />
 
+            {audioError && (
+              <div
+                role="alert"
+                className="mb-4 flex items-center justify-between gap-3 rounded-lg border border-destructive/30 bg-destructive/[0.06] px-3 py-2 text-[12px] text-destructive"
+              >
+                <span lang={lang}>{audioError}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = audioRef.current;
+                    if (!el) return;
+                    setAudioError(null);
+                    try { el.load(); } catch { /* ignore */ }
+                    safePlay(el);
+                  }}
+                  className="rounded-full border border-destructive/40 px-2.5 py-0.5 text-[11px] font-medium text-destructive hover:bg-destructive/10"
+                >
+                  {lang === "bn" ? "আবার চেষ্টা" : "Retry"}
+                </button>
+              </div>
+            )}
+
             {resumeAt != null && (
               <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2">
                 <div className="flex items-center gap-2 text-[12px] text-foreground/85">
