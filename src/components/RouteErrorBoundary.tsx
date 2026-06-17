@@ -1,6 +1,6 @@
 import { Component, ReactNode } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { logClientError } from "@/lib/errorLogger";
+import { logClientError, newCorrelationId, setLastCorrelationId } from "@/lib/errorLogger";
 import { getSentry } from "@/lib/sentry";
 
 interface Props {
@@ -13,6 +13,8 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
+  correlationId: string | null;
+  retryCount: number;
 }
 
 /**
@@ -22,14 +24,17 @@ interface State {
  * fully interactive.
  */
 export class RouteErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, error: null };
+  state: State = { hasError: false, error: null, correlationId: null, retryCount: 0 };
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    return { hasError: true, error, correlationId: null, retryCount: 0 };
   }
 
   componentDidCatch(error: Error, info: { componentStack?: string | null }) {
-    console.error("RouteErrorBoundary caught error", error, info);
+    const correlationId = this.state.correlationId ?? newCorrelationId();
+    setLastCorrelationId(correlationId);
+    this.setState({ correlationId });
+    console.error("RouteErrorBoundary caught error", correlationId, error, info);
     void logClientError({
       message: error.message || "Route render error",
       stack: error.stack,
@@ -37,6 +42,9 @@ export class RouteErrorBoundary extends Component<Props, State> {
       severity: "error",
       meta: {
         componentStack: info.componentStack ?? "",
+        correlation_id: correlationId,
+        boundary: "RouteErrorBoundary",
+        retry_count: this.state.retryCount,
         route: {
           pathname: this.props.pathname,
           search: this.props.search,
@@ -48,13 +56,37 @@ export class RouteErrorBoundary extends Component<Props, State> {
     if (sentry) {
       sentry.captureException(error, {
         contexts: { react: { componentStack: info.componentStack ?? "" } },
-        tags: { pathname: this.props.pathname },
+        tags: {
+          pathname: this.props.pathname,
+          correlation_id: correlationId,
+          boundary: "RouteErrorBoundary",
+        },
       });
     }
   }
 
   private handleReset = () => {
-    this.setState({ hasError: false, error: null });
+    const parentCid = this.state.correlationId;
+    const nextCount = this.state.retryCount + 1;
+    if (parentCid) {
+      void logClientError({
+        message: "RouteErrorBoundary retry",
+        source: `RouteErrorBoundary:retry:${this.props.pathname}`,
+        severity: "info",
+        meta: {
+          correlation_id: parentCid,
+          parent_correlation_id: parentCid,
+          retry_count: nextCount,
+          boundary: "RouteErrorBoundary",
+          route: {
+            pathname: this.props.pathname,
+            search: this.props.search,
+            params: this.props.params,
+          },
+        },
+      });
+    }
+    this.setState({ hasError: false, error: null, retryCount: nextCount });
   };
 
   private handleHome = () => {
