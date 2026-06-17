@@ -203,8 +203,22 @@ export function MediaWall() {
                 </div>
               </Reveal>
 
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-px bg-[hsl(var(--stand-hairline))] border border-[hsl(var(--stand-hairline))]">
-                {group.entries.map((item, i) => {
+              <div className="mt-6 flex items-center gap-3">
+                <Search className="h-3.5 w-3.5 text-[hsl(var(--stand-muted))]" />
+                <input
+                  type="text"
+                  value={queries[group.key]}
+                  onChange={(e) =>
+                    setQueries((prev) => ({ ...prev, [group.key]: e.target.value }))
+                  }
+                  placeholder={t.searchPlaceholder}
+                  lang={lang}
+                  className="w-full max-w-md bg-transparent text-sm text-[hsl(var(--stand-ink))] placeholder:text-[hsl(var(--stand-muted))]/60 focus:outline-none"
+                />
+              </div>
+
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-px bg-[hsl(var(--stand-hairline))] border border-[hsl(var(--stand-hairline))]">
+                {group.entries.filter((it) => matchesQuery(it, queries[group.key])).map((item, i) => {
                   const date = formatDate(item.created_at, lang);
                   const isBn = /[\u0980-\u09FF]/.test(item.headline);
                   return (
