@@ -304,6 +304,17 @@
     border-radius: 999px;
     background: linear-gradient(180deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.3) 100%);
   }
+
+  /* Deep-link chapter highlight — pulses briefly after navigation */
+  .chapter-anchor[data-chapter-active="true"] {
+    animation: chapterPulse 2.2s ease-out 1;
+    border-radius: 1rem;
+  }
+  @keyframes chapterPulse {
+    0%   { box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+    20%  { box-shadow: 0 0 0 6px hsl(var(--primary) / 0.18); }
+    100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+  }
 }
 
 @layer utilities {
