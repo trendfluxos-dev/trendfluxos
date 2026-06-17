@@ -1,4 +1,5 @@
-import belalPortrait from "@/assets/belal-hossen.jpg";
+import belalPortraitAsset from "@/assets/belal-hossen.webp.asset.json";
+const belalPortrait = belalPortraitAsset.url;
 import zahidPress from "@/assets/zahid-press-moment.jpg";
 import { Reveal } from "./Reveal";
 

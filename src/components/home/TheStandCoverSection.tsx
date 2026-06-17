@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { InlineEditProvider, InlineEditToggle, EditableText } from "@/components/InlineEditable";
-import theStandCover from "@/assets/the-stand-cover.jpg";
+import theStandCoverAsset from "@/assets/the-stand-cover.webp.asset.json";
+const theStandCover = theStandCoverAsset.url;
 
 /**
  * Cinematic cover panel for "The Stand". All headline/quote copy is rendered
