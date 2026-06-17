@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSeo } from "@/hooks/useSeo";
+import { BRAND } from "@/config/brand";
+import portraitOg from "@/assets/zahid-hasan-emon.webp";
 import {
   ArrowRight,
   ArrowUpRight,
