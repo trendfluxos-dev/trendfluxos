@@ -20,7 +20,7 @@ import ConsentBannerGate from "./components/ConsentBannerGate";
 import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
-import { SentryErrorBoundary } from "@/lib/sentry";
+import { AppErrorBoundary } from "@/components/AppErrorBoundary";
 import RequireRole from "@/components/auth/RequireRole";
 
 // Dev-only diagnostic panels. They are heavy and only ever rendered when
@@ -86,7 +86,7 @@ const PageFallback = () => (
 );
 
 const App = () => (
-  <SentryErrorBoundary
+  <AppErrorBoundary
     fallback={
       <div className="flex min-h-screen items-center justify-center bg-background p-6 text-center">
         <div className="max-w-md space-y-3">
@@ -189,7 +189,7 @@ const App = () => (
       <Analytics />
     </TooltipProvider>
   </QueryClientProvider>
-  </SentryErrorBoundary>
+  </AppErrorBoundary>
 );
 
 export default App;
