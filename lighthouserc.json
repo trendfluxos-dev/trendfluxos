@@ -9,6 +9,7 @@
       "settings": {
         "preset": "desktop",
         "throttlingMethod": "simulate",
+        "chromeFlags": "--no-sandbox --disable-dev-shm-usage --headless=new",
         "skipAudits": ["uses-http2", "canonical", "redirects-http"],
         "budgetsPath": "./lighthouse-budget.json"
       }
