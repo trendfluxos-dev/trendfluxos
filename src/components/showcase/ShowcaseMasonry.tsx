@@ -1,0 +1,109 @@
+import { ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import type { ShowcaseItem } from "@/data/showcase";
+
+const accentRing: Record<NonNullable<ShowcaseItem["accent"]>, string> = {
+  cyan: "before:bg-gradient-to-br before:from-cyan-400/20 before:to-transparent",
+  gold: "before:bg-gradient-to-br before:from-amber-400/20 before:to-transparent",
+  violet: "before:bg-gradient-to-br before:from-violet-400/20 before:to-transparent",
+  rose: "before:bg-gradient-to-br before:from-rose-400/20 before:to-transparent",
+  emerald: "before:bg-gradient-to-br before:from-emerald-400/20 before:to-transparent",
+};
+
+const Card = ({ item }: { item: ShowcaseItem }) => {
+  const inner = (
+    <article
+      className={[
+        "group relative overflow-hidden rounded-3xl border border-border/50 bg-card/40 backdrop-blur-sm",
+        "p-6 lg:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_60px_-25px_hsl(var(--primary)/0.35)]",
+        "before:absolute before:inset-0 before:opacity-60 before:pointer-events-none",
+        accentRing[item.accent ?? "cyan"],
+      ].join(" ")}
+    >
+      <div className="relative z-10">
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-primary/80 font-medium">
+            {item.category}
+          </span>
+          <span className="text-[10px] text-foreground/45 whitespace-nowrap">
+            {item.year}
+          </span>
+        </div>
+
+        <h3 className="font-display text-xl lg:text-2xl font-bold leading-tight flex items-start gap-2">
+          <span className="flex-1">{item.title}</span>
+          {item.href && (
+            <ArrowUpRight className="h-4 w-4 mt-1 text-foreground/40 transition-all group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          )}
+        </h3>
+
+        <p className="text-foreground/70 text-sm leading-relaxed mt-3">
+          {item.summary}
+        </p>
+
+        {item.metrics && item.metrics.length > 0 && (
+          <div className="grid grid-cols-2 gap-3 mt-5">
+            {item.metrics.map((m) => (
+              <div
+                key={m.label}
+                className="rounded-xl border border-border/40 bg-background/40 px-3 py-2.5"
+              >
+                <div className="font-display text-lg font-bold text-gradient">
+                  {m.value}
+                </div>
+                <div className="text-[10px] uppercase tracking-wider text-foreground/50 mt-0.5">
+                  {m.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {item.tags && item.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-5">
+            {item.tags.map((t) => (
+              <span
+                key={t}
+                className="text-[10px] px-2.5 py-1 rounded-full border border-border/40 bg-background/30 text-foreground/60"
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+
+  if (!item.href) return inner;
+  if (item.external) {
+    return (
+      <a href={item.href} target="_blank" rel="noreferrer" className="block">
+        {inner}
+      </a>
+    );
+  }
+  return (
+    <Link to={item.href} className="block">
+      {inner}
+    </Link>
+  );
+};
+
+type Props = {
+  items: ShowcaseItem[];
+};
+
+const ShowcaseMasonry = ({ items }: Props) => {
+  return (
+    <div className="columns-1 md:columns-2 lg:columns-3 gap-5 lg:gap-6 [column-fill:_balance]">
+      {items.map((item) => (
+        <div key={item.id} className="mb-5 lg:mb-6 break-inside-avoid">
+          <Card item={item} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default ShowcaseMasonry;
