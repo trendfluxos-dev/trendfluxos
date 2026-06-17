@@ -92,12 +92,18 @@ export default function QuietPositions() {
           name="description"
           content="An emotional archive — a quiet, civic reflection on how a society remembers the people who chose to stay near without making a claim."
         />
+        <meta property="og:type" content="article" />
         <meta property="og:title" content="নীরব অবস্থান · Quiet Positions" />
         <meta
           property="og:description"
           content="An emotional archive — silent support, dignity in distance, memory without bitterness."
         />
+        <meta property="og:url" content="https://trendflux.digital/quiet-positions" />
         <meta property="og:image" content={textureUrl} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="নীরব অবস্থান · Quiet Positions" />
+        <meta name="twitter:description" content="An emotional archive — silent support, dignity in distance, memory without bitterness." />
+        <meta name="twitter:image" content={textureUrl} />
         <meta name="theme-color" content="#0a0a0a" />
         <link rel="canonical" href="https://trendflux.digital/quiet-positions" />
       </Helmet>
