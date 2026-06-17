@@ -19,6 +19,12 @@ export default defineConfig(({ mode }) => ({
     },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
   },
+  // Strip `console.*` and `debugger` statements in production builds so
+  // analytics/perf logs that slipped past `import.meta.env.DEV` guards
+  // don't leak to the user-facing console. Dev keeps everything intact.
+  esbuild: mode === "production"
+    ? { drop: ["console", "debugger"] }
+    : undefined,
   build: {
     // Manual vendor splitting keeps the initial JS payload small. The biggest
     // libraries (recharts ~4.6MB, Radix ~3.5MB, lucide ~29MB on disk) are

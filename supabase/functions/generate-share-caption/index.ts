@@ -2,6 +2,26 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 type Platform = "facebook" | "linkedin" | "youtube" | "twitter";
 
+// Per-instance in-memory rate limit: 10 caption generations per IP per
+// 10 minutes. This function calls the Lovable AI gateway (paid) and is
+// reachable by anonymous visitors via the public Showcase / ResearchDetail
+// share dialogs, so an unbounded endpoint would let any bot burn tokens.
+// Cold-start resets the bucket — fine for spam smoothing, not a hard SLA.
+const RATE_LIMIT = 10;
+const RATE_WINDOW_MS = 10 * 60_000;
+const rateBuckets = new Map<string, { count: number; reset: number }>();
+function rateLimit(ip: string): boolean {
+  const now = Date.now();
+  const b = rateBuckets.get(ip);
+  if (!b || now > b.reset) {
+    rateBuckets.set(ip, { count: 1, reset: now + RATE_WINDOW_MS });
+    return true;
+  }
+  if (b.count >= RATE_LIMIT) return false;
+  b.count++;
+  return true;
+}
+
 const PROMPTS: Record<Platform, string> = {
   facebook:
     "Write a Facebook post in Bangla mixed with light English (Banglish where natural). Tone: warm, story-driven, conversational. 3-5 short paragraphs separated by line breaks. Open with a hook line. Include 1-2 relevant emojis (not more). End with 4-6 hashtags on the last line. Keep under 1200 characters total.",
@@ -27,6 +47,21 @@ const FALLBACK: Record<Platform, (ctx: { title: string; summary: string; url: st
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
+  }
+
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() || "unknown";
+  if (!rateLimit(ip)) {
+    return new Response(
+      JSON.stringify({ error: "rate_limited", retryAfterSeconds: Math.ceil(RATE_WINDOW_MS / 1000) }),
+      {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Retry-After": String(Math.ceil(RATE_WINDOW_MS / 1000)),
+        },
+      },
+    );
   }
 
   try {

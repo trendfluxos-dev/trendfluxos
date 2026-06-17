@@ -33,6 +33,13 @@ const PerfMonitor = import.meta.env.DEV
   ? lazy(() => import("@/components/PerfMonitor"))
   : null;
 
+// Resolved once at module load. The `?perf` flag is dev-only and never
+// changes within a session, so there's no reason to re-parse window.location
+// on every render of <App />.
+const PERF_FLAG =
+  typeof window !== "undefined" &&
+  new URLSearchParams(window.location.search).has("perf");
+
 const queryClient = new QueryClient();
 
 const Index = routes["/"];
@@ -114,12 +121,12 @@ const App = () => (
           <TelegramGroupPopup />
           <ConsentBannerGate />
           <AccessRequestGate />
-          {ThemeDebugPanel && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && (
+          {ThemeDebugPanel && PERF_FLAG && (
             <Suspense fallback={null}>
               <ThemeDebugPanel />
             </Suspense>
           )}
-          {PerfMonitor && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("perf") && (
+          {PerfMonitor && PERF_FLAG && (
             <Suspense fallback={null}>
               <PerfMonitor />
             </Suspense>

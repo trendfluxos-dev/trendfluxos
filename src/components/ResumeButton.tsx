@@ -6,10 +6,15 @@ const PORTFOLIO_PATH = "/portfolio";
 const trackResumeEvent = (label: string) => {
   const payload = { event: "resume_cv_click", label, href: PORTFOLIO_PATH, ts: Date.now() };
   try {
-    (window as any).dataLayer = (window as any).dataLayer || [];
-    (window as any).dataLayer.push(payload);
-  } catch { /* ignore */ }
-  console.info("[analytics]", payload);
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(payload);
+  } catch {
+    /* dataLayer push can throw if a CSP/extension blocks gtag — analytics
+       is best-effort, never a blocker for navigation. */
+  }
+  if (import.meta.env.DEV) {
+    console.info("[analytics]", payload);
+  }
 };
 
 export const ResumeButton = () => {
