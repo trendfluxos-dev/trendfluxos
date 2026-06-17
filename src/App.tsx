@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -21,6 +21,7 @@ import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
 import { AppErrorBoundary } from "@/components/AppErrorBoundary";
+import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import RequireRole from "@/components/auth/RequireRole";
 
 // Dev-only diagnostic panels. They are heavy and only ever rendered when
@@ -92,6 +93,60 @@ const PageFallback = () => (
   </div>
 );
 
+const RoutedApp = () => {
+  const { pathname } = useLocation();
+  return (
+    <RouteErrorBoundary key={pathname} pathname={pathname}>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/ecosystem" element={<Ecosystem />} />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/project-lead" element={<ProjectLead />} />
+        <Route path="/showcase" element={<Showcase />} />
+        <Route path="/research/:slug" element={<ResearchDetail />} />
+        <Route path="/implementations/:slug" element={<ImplementationDetail />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<RequireRole roles={["admin", "editor"]}><Admin /></RequireRole>} />
+        <Route path="/admin/luxe-veil" element={<RequireRole roles={["admin"]}><LuxeVeilAdmin /></RequireRole>} />
+        <Route path="/admin/conversions" element={<RequireRole roles={["admin"]}><ConversionDashboard /></RequireRole>} />
+        <Route path="/admin/enterprise-demos" element={<RequireRole roles={["admin"]}><EnterpriseDemos /></RequireRole>} />
+        <Route path="/admin/course-enrollments" element={<RequireRole roles={["admin"]}><CourseEnrollmentsAdmin /></RequireRole>} />
+        <Route path="/admin/uptime" element={<RequireRole roles={["admin"]}><UptimeAdmin /></RequireRole>} />
+        <Route path="/admin/errors" element={<RequireRole roles={["admin"]}><ErrorLogsAdmin /></RequireRole>} />
+        <Route path="/admin/web-vitals" element={<RequireRole roles={["admin"]}><WebVitalsAdmin /></RequireRole>} />
+        <Route path="/admin/ga4-check" element={<RequireRole roles={["admin"]}><Ga4Check /></RequireRole>} />
+        <Route path="/admin/secrets-health" element={<RequireRole roles={["admin"]}><SecretsHealthAdmin /></RequireRole>} />
+        <Route path="/press/:id" element={<PressDetail />} />
+        <Route path="/the-stand" element={<TheStand />} />
+        <Route path="/the-stand/share" element={<TheStandShare />} />
+        <Route path="/quiet-positions" element={<QuietPositions />} />
+        <Route path="/marriage" element={<Marriage />} />
+        <Route path="/brand-open" element={<BrandOpen />} />
+        <Route path="/trendflux-talent" element={<TrendfluxTalent />} />
+        <Route path="/luxe-veil" element={<LuxeVeil />} />
+        <Route path="/brandtoki" element={<BrandToki />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/enterprise" element={<Enterprise />} />
+        <Route path="/toolkit" element={<Toolkit />} />
+        <Route path="/course/trendflux" element={<CourseTrendflux />} />
+        <Route path="/masterclass" element={<Masterclass />} />
+        <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
+        <Route path="/justice-appeal" element={<JusticeAppeal />} />
+        <Route path="/media-reports" element={<MediaReports />} />
+        <Route path="/share-kit" element={<ShareKit />} />
+        <Route path="/stories/ai-expert-emon" element={<StoryAiExpertEmon />} />
+        {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </RouteErrorBoundary>
+  );
+};
+
 const App = () => (
   <AppErrorBoundary
     fallback={
@@ -143,52 +198,7 @@ const App = () => (
             Skip to main content
           </a>
           <div id="main-content" tabIndex={-1} className="outline-none">
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/ecosystem" element={<Ecosystem />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/project-lead" element={<ProjectLead />} />
-            <Route path="/showcase" element={<Showcase />} />
-            <Route path="/research/:slug" element={<ResearchDetail />} />
-            <Route path="/implementations/:slug" element={<ImplementationDetail />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/admin" element={<RequireRole roles={["admin", "editor"]}><Admin /></RequireRole>} />
-            <Route path="/admin/luxe-veil" element={<RequireRole roles={["admin"]}><LuxeVeilAdmin /></RequireRole>} />
-            <Route path="/admin/conversions" element={<RequireRole roles={["admin"]}><ConversionDashboard /></RequireRole>} />
-            <Route path="/admin/enterprise-demos" element={<RequireRole roles={["admin"]}><EnterpriseDemos /></RequireRole>} />
-            <Route path="/admin/course-enrollments" element={<RequireRole roles={["admin"]}><CourseEnrollmentsAdmin /></RequireRole>} />
-            <Route path="/admin/uptime" element={<RequireRole roles={["admin"]}><UptimeAdmin /></RequireRole>} />
-            <Route path="/admin/errors" element={<RequireRole roles={["admin"]}><ErrorLogsAdmin /></RequireRole>} />
-            <Route path="/admin/web-vitals" element={<RequireRole roles={["admin"]}><WebVitalsAdmin /></RequireRole>} />
-            <Route path="/admin/ga4-check" element={<RequireRole roles={["admin"]}><Ga4Check /></RequireRole>} />
-            <Route path="/admin/secrets-health" element={<RequireRole roles={["admin"]}><SecretsHealthAdmin /></RequireRole>} />
-            <Route path="/press/:id" element={<PressDetail />} />
-            <Route path="/the-stand" element={<TheStand />} />
-            <Route path="/the-stand/share" element={<TheStandShare />} />
-            <Route path="/quiet-positions" element={<QuietPositions />} />
-            <Route path="/marriage" element={<Marriage />} />
-            <Route path="/brand-open" element={<BrandOpen />} />
-            <Route path="/trendflux-talent" element={<TrendfluxTalent />} />
-            <Route path="/luxe-veil" element={<LuxeVeil />} />
-            <Route path="/brandtoki" element={<BrandToki />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/enterprise" element={<Enterprise />} />
-            <Route path="/toolkit" element={<Toolkit />} />
-            <Route path="/course/trendflux" element={<CourseTrendflux />} />
-            <Route path="/masterclass" element={<Masterclass />} />
-            <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
-            <Route path="/justice-appeal" element={<JusticeAppeal />} />
-            <Route path="/media-reports" element={<MediaReports />} />
-            <Route path="/share-kit" element={<ShareKit />} />
-            <Route path="/stories/ai-expert-emon" element={<StoryAiExpertEmon />} />
-            {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <RoutedApp />
           </div>
         </Suspense>
         </BrandPreviewProvider>

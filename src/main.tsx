@@ -5,6 +5,7 @@ import "./index.css";
 import { installErrorLogger } from "./lib/errorLogger";
 import { initSentry } from "./lib/sentry";
 import { installWebVitals } from "./lib/webVitals";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 // Sentry is heavy (~250KB). Defer its dynamic import until the browser is
 // idle so it never blocks the initial paint. Errors thrown before Sentry
@@ -49,6 +50,8 @@ window.addEventListener("load", () => sessionStorage.removeItem(RELOAD_KEY));
 
 createRoot(document.getElementById("root")!).render(
   <HelmetProvider>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </HelmetProvider>,
 );
