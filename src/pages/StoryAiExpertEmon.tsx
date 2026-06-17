@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Headphones, ListMusic, Pause, Play, Share2, Sparkles, Lightbulb } from "lucide-react";
+import { ArrowLeft, Download, Headphones, ListMusic, Pause, Play, Share2, Sparkles, Lightbulb } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
 import audioAsset from "@/assets/ai-bisheshoggo-emon.mp3.asset.json";
+import shareCard from "@/assets/ai-expert-emon-share.jpg";
 import {
   AI_EXPERT_EMON_CHAPTERS,
   AI_EXPERT_EMON_STORY,
@@ -26,6 +27,7 @@ const StoryAiExpertEmon = () => {
   const copy = AI_EXPERT_EMON_STORY[lang];
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const barRef = useRef<HTMLDivElement | null>(null);
+  const paragraphRefs = useRef<Array<HTMLParagraphElement | null>>([]);
   const [playing, setPlaying] = useState(false);
   const [cur, setCur] = useState(0);
   const [dur, setDur] = useState(0);
@@ -35,6 +37,11 @@ const StoryAiExpertEmon = () => {
     title: `${copy.title} · Zahid Hasan Emon`,
     description: copy.kicker,
     type: "article",
+    image: shareCard,
+    imageWidth: 1216,
+    imageHeight: 640,
+    imageType: "image/jpeg",
+    imageAlt: `${copy.title} — chapter list and author`,
   });
 
   useEffect(() => {
@@ -89,6 +96,13 @@ const StoryAiExpertEmon = () => {
     if (!playing) {
       void el.play();
       setPlaying(true);
+    }
+    const idx = AI_EXPERT_EMON_CHAPTERS.findIndex((c) => c.time === t);
+    if (idx >= 0) {
+      const node = paragraphRefs.current[idx];
+      if (node) {
+        node.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     }
   };
 
@@ -282,8 +296,13 @@ const StoryAiExpertEmon = () => {
             {copy.paragraphs.map((p, i) => (
               <p
                 key={i}
+                ref={(el) => { paragraphRefs.current[i] = el; }}
                 lang={lang}
-                className="text-[16px] leading-[1.85] text-foreground/85 sm:text-[17px]"
+                className={`scroll-mt-28 rounded-md border-l-2 py-1 pl-4 text-[16px] leading-[1.85] transition-colors duration-300 sm:text-[17px] ${
+                  i === activeChapterIdx
+                    ? "border-primary bg-primary/[0.04] text-foreground"
+                    : "border-transparent text-foreground/85"
+                }`}
               >
                 {p}
               </p>
@@ -301,6 +320,32 @@ const StoryAiExpertEmon = () => {
           <p className="mt-16 text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
             Recorded narrative · Zahid Hasan Emon · 2026
           </p>
+
+          {/* Shareable story card */}
+          <section className="mt-14 rounded-2xl border border-border bg-card p-5 sm:p-6">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                <Share2 className="h-3 w-3 text-primary" />
+                {lang === "bn" ? "শেয়ার কার্ড" : "Share Card"}
+              </div>
+              <a
+                href={shareCard}
+                download="zahid-hasan-emon-story.jpg"
+                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-[11px] font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+              >
+                <Download className="h-3.5 w-3.5" />
+                {lang === "bn" ? "ডাউনলোড" : "Download"}
+              </a>
+            </div>
+            <img
+              src={shareCard}
+              width={1216}
+              height={640}
+              loading="lazy"
+              alt={`${copy.title} — chapter list and author`}
+              className="w-full rounded-lg border border-border"
+            />
+          </section>
         </div>
       </section>
 
