@@ -18,7 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
  * @param children The protected view.
  * @param fallback Optional custom redirect (defaults to "/auth").
  */
-export type AppRole = "admin" | "moderator" | "user" | "editor";
+export type AppRole = "admin" | "editor" | "user";
 
 interface RequireRoleProps {
   roles: AppRole[];
