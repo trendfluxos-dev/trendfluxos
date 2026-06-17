@@ -66,6 +66,7 @@ const CaseStudyPage = routes["/case-studies/:slug"];
 const JusticeAppeal = routes["/justice-appeal"];
 const MediaReports = routes["/media-reports"];
 const ShareKit = routes["/share-kit"];
+const StoryAiExpertEmon = routes["/stories/ai-expert-emon"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 
@@ -152,6 +153,7 @@ const App = () => (
             <Route path="/justice-appeal" element={<JusticeAppeal />} />
             <Route path="/media-reports" element={<MediaReports />} />
             <Route path="/share-kit" element={<ShareKit />} />
+            <Route path="/stories/ai-expert-emon" element={<StoryAiExpertEmon />} />
             {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

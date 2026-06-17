@@ -27,6 +27,7 @@ import { QuoteDialog } from "@/components/QuoteDialog";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import theStandCover from "@/assets/the-stand-cover.jpg";
 import AudioStoryTeaser from "@/components/tf/AudioStoryTeaser";
+import AiExpertStoryTeaser from "@/components/home/AiExpertStoryTeaser";
 import { TfSection, TfCard } from "@/components/tf/Section";
 import { InlineEditProvider, InlineEditToggle, EditableText } from "@/components/InlineEditable";
 import DashboardMock from "@/components/tf/DashboardMock";
