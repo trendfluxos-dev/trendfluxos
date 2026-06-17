@@ -68,6 +68,14 @@ const Navbar = () => {
             >
               Browse
             </Link>
+            <Link
+              to="/showcase"
+              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
+                pathname === "/showcase" ? "text-foreground" : ""
+              }`}
+            >
+              Showcase
+            </Link>
           </div>
 
           {/* Right: Search + Apply Access + Login */}
@@ -129,6 +137,13 @@ const Navbar = () => {
                     className="rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
                   >
                     Browse all pages
+                  </Link>
+                  <Link
+                    to="/showcase"
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl px-3 py-3 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    Showcase
                   </Link>
                   <button
                     type="button"
