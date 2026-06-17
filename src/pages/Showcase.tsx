@@ -1,12 +1,14 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
+import ResearchList from "@/components/showcase/ResearchList";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
 import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
 import { SHOWCASE_ITEMS, SHOWCASE_CATEGORIES, type ShowcaseCategory } from "@/data/showcase";
+import { RESEARCH_ITEMS, IMPLEMENTATION_ITEMS } from "@/data/research";
 import { ArrowRight, Sparkles, Share2 } from "lucide-react";
 
 const SHARE_URL =
@@ -19,6 +21,24 @@ const SHARE_TEXT =
 const Showcase = () => {
   const [filter, setFilter] = useState<ShowcaseCategory | "All">("All");
   const [shareOpen, setShareOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  type Tab = "projects" | "research" | "implementations";
+  const initialTab = (searchParams.get("tab") as Tab) || "projects";
+  const [tab, setTab] = useState<Tab>(
+    initialTab === "research" || initialTab === "implementations" ? initialTab : "projects",
+  );
+
+  useEffect(() => {
+    const current = searchParams.get("tab");
+    const next = tab === "projects" ? null : tab;
+    if (current !== next) {
+      const params = new URLSearchParams(searchParams);
+      if (next) params.set("tab", next);
+      else params.delete("tab");
+      setSearchParams(params, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
 
   useSeo({
     title: "Showcase — Zahid Hasan Emon | TrendFlux",
@@ -49,6 +69,12 @@ const Showcase = () => {
     category: "Portfolio",
     tags: ["TrendFlux", "GrowthOperator", "AIAutomation", "Bangladesh"],
   };
+
+  const TABS: { id: Tab; label: string; count: number }[] = [
+    { id: "projects", label: "Projects", count: SHOWCASE_ITEMS.length },
+    { id: "research", label: "Research", count: RESEARCH_ITEMS.length },
+    { id: "implementations", label: "Implementations", count: IMPLEMENTATION_ITEMS.length },
+  ];
 
   return (
     <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -87,26 +113,26 @@ const Showcase = () => {
 
       <ShareDialog open={shareOpen} onOpenChange={setShareOpen} payload={pageSharePayload} />
 
-      {/* FILTER BAR */}
+      {/* TAB SWITCHER */}
       <section className="px-6 lg:px-10">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap gap-2 border-b border-border/40 pb-5">
-            {(["All", ...SHOWCASE_CATEGORIES] as const).map((c) => {
-              const active = filter === c;
+          <div className="flex flex-wrap items-center gap-1 border-b border-border/40 pb-0">
+            {TABS.map((t) => {
+              const active = tab === t.id;
               return (
                 <button
-                  key={c}
+                  key={t.id}
                   type="button"
-                  onClick={() => setFilter(c)}
+                  onClick={() => setTab(t.id)}
                   className={[
-                    "text-xs px-3.5 py-1.5 rounded-full border transition-all",
+                    "relative text-sm px-4 py-3 -mb-px transition-colors",
                     active
-                      ? "border-primary/60 bg-primary/10 text-foreground"
-                      : "border-border/50 bg-background/30 text-foreground/60 hover:text-foreground hover:border-foreground/30",
+                      ? "text-foreground border-b-2 border-primary"
+                      : "text-foreground/55 hover:text-foreground border-b-2 border-transparent",
                   ].join(" ")}
                 >
-                  {c}
-                  <span className="ml-1.5 text-foreground/40">{totalByCategory[c] ?? 0}</span>
+                  {t.label}
+                  <span className="ml-1.5 text-[11px] text-foreground/40">{t.count}</span>
                 </button>
               );
             })}
@@ -114,18 +140,79 @@ const Showcase = () => {
         </div>
       </section>
 
-      {/* MASONRY GRID */}
-      <section className="px-6 lg:px-10 pt-10 pb-20">
-        <div className="max-w-7xl mx-auto">
-          <ShowcaseMasonry items={filtered} />
-
-          {filtered.length === 0 && (
-            <div className="text-center py-20 text-foreground/50 text-sm">
-              No items in this category yet.
+      {/* PROJECTS TAB */}
+      {tab === "projects" && (
+        <>
+          <section className="px-6 lg:px-10 pt-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-wrap gap-2 pb-5">
+                {(["All", ...SHOWCASE_CATEGORIES] as const).map((c) => {
+                  const active = filter === c;
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      onClick={() => setFilter(c)}
+                      className={[
+                        "text-xs px-3.5 py-1.5 rounded-full border transition-all",
+                        active
+                          ? "border-primary/60 bg-primary/10 text-foreground"
+                          : "border-border/50 bg-background/30 text-foreground/60 hover:text-foreground hover:border-foreground/30",
+                      ].join(" ")}
+                    >
+                      {c}
+                      <span className="ml-1.5 text-foreground/40">{totalByCategory[c] ?? 0}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          )}
-        </div>
-      </section>
+          </section>
+
+          <section className="px-6 lg:px-10 pt-4 pb-20">
+            <div className="max-w-7xl mx-auto">
+              <ShowcaseMasonry items={filtered} />
+              {filtered.length === 0 && (
+                <div className="text-center py-20 text-foreground/50 text-sm">
+                  No items in this category yet.
+                </div>
+              )}
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* RESEARCH TAB */}
+      {tab === "research" && (
+        <section className="px-6 lg:px-10 pt-10 pb-20">
+          <div className="max-w-7xl mx-auto">
+            <header className="mb-8 max-w-2xl">
+              <h2 className="font-display text-2xl md:text-3xl font-bold">Research</h2>
+              <p className="text-foreground/65 text-sm mt-2 leading-relaxed">
+                Field notes and studies — what was asked, how it was tested, what the data showed,
+                and what it means for founders building in Bangladesh.
+              </p>
+            </header>
+            <ResearchList items={RESEARCH_ITEMS} basePath="/research" />
+          </div>
+        </section>
+      )}
+
+      {/* IMPLEMENTATIONS TAB */}
+      {tab === "implementations" && (
+        <section className="px-6 lg:px-10 pt-10 pb-20">
+          <div className="max-w-7xl mx-auto">
+            <header className="mb-8 max-w-2xl">
+              <h2 className="font-display text-2xl md:text-3xl font-bold">Implementations</h2>
+              <p className="text-foreground/65 text-sm mt-2 leading-relaxed">
+                Build logs — the goal, the method, the outcome, and the takeaway from every system
+                shipped end-to-end.
+              </p>
+            </header>
+            <ResearchList items={IMPLEMENTATION_ITEMS} basePath="/implementations" />
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="px-6 lg:px-10 pb-24">

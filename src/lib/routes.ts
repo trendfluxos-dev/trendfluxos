@@ -17,6 +17,8 @@ export const routes = {
   "/explore": make(() => import("@/pages/Explore")),
   "/project-lead": make(() => import("@/pages/ProjectLead")),
   "/showcase": make(() => import("@/pages/Showcase")),
+  "/research/:slug": make(() => import("@/pages/ResearchDetail")),
+  "/implementations/:slug": make(() => import("@/pages/ResearchDetail")),
   "/auth": make(() => import("@/pages/Auth")),
   "/dashboard": make(() => import("@/pages/Dashboard")),
   "/admin": make(() => import("@/pages/Admin")),
@@ -59,6 +61,8 @@ export const preloadRoute = (path: string) => {
   // Dynamic match by prefix
   if (path.startsWith("/press/")) return routes["/press/:id"].preload();
   if (path.startsWith("/case-studies/")) return routes["/case-studies/:slug"].preload();
+  if (path.startsWith("/research/")) return routes["/research/:slug"].preload();
+  if (path.startsWith("/implementations/")) return routes["/implementations/:slug"].preload();
 };
 
 export type PageType = "Main" | "Brand" | "Admin" | "Account";
