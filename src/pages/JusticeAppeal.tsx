@@ -15,7 +15,8 @@ import {
   Building2,
   PhoneCall,
 } from "lucide-react";
-import referencedFigure from "@/assets/justice/referenced-figure.png";
+import referencedFigureAsset from "@/assets/justice/referenced-figure.webp.asset.json";
+const referencedFigure = referencedFigureAsset.url;
 
 
 const navy = "bg-[hsl(220,45%,8%)]";
