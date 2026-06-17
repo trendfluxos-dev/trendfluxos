@@ -36,6 +36,10 @@ const LEGACY_HEX = new Set([
   "#4A3F2E", "#C8902F", // The Stand documentary warm palette
   "#B11226", "#7A0C19", // Auth / Dashboard brand red family
   "#FAFAF9",            // Dashboard off-white surface
+  "#F59E0B", "#F1F1EF", "#9CA3AF", "#047857", "#FFFBEB", "#B45309",
+  "#F3F4F6",            // Dashboard utility colors
+  "#E9E3D3", "#393961", // Justice Appeal + Media Reports palette
+  "#F5F0E0", "#C9A84C", // The Stand Share warm palette
 ]);
 
 function listFiles(dir: string, acc: string[] = []): string[] {
