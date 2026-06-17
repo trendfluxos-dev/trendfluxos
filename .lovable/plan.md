@@ -1,26 +1,38 @@
-## লক্ষ্য
-`src/pages/MediaReports.tsx`-এ প্রতিটি প্রাইমারি সোর্স সেকশন (০১–০৫) ভাঁজ-খোলা (collapsible) ফরম্যাটে রূপান্তর। ডিফল্ট অবস্থায় সব সেকশন **বন্ধ** — শুধু শিরোনাম + এক লাইন সারাংশ প্রিভিউ দেখা যাবে। ক্লিকে সেকশন খুলে পূর্ণ ফ্যাক্টস/বুলেট/কোট/কার্ড দৃশ্যমান হবে।
+## Problem
 
-## পরিবর্তন
+The published site `https://trendfluxdigital-bd.lovable.app` renders a blank white page. The publish settings are correct (public, published) — the issue is a runtime JavaScript error in the production bundle:
 
-### ১. নতুন `CollapsibleSection` wrapper (একই ফাইলে)
-- `useState` দিয়ে open/closed state।
-- Header row: সেকশন নম্বর + outlet নাম + এক-লাইন সারাংশ (preview) + chevron আইকন।
-- Closed state: শুধু header + এক লাইন গ্রে preview text।
-- Open state: header + পুরো content (headline blockquote, bullets, legal note, source links)।
-- Smooth height transition (Tailwind `transition-all`, subtle — workspace standard অনুযায়ী)।
+```
+TypeError: Cannot read properties of undefined (reading 'forwardRef')
+    at assets/radix-DphWDIxd.js
+```
 
-### ২. `SourceCard` রিফ্যাক্টর
-- নতুন optional prop: `summary: string` (এক লাইনের preview)।
-- বাইরের `<section>` র‍্যাপারটি `CollapsibleSection` ব্যবহার করবে।
-- পুরো article body (headline + bullets + legal + links) collapsible body-তে যাবে।
+This means the Radix UI chunk is evaluating before the React chunk has finished initializing, so `React.forwardRef` is undefined when Radix tries to call it. The site never mounts.
 
-### ৩. সেকশন ০৫ (Jugantor allegation cards) collapsible-এ
-- একই `CollapsibleSection` দিয়ে wrap।
-- Summary: "যুগান্তর প্রতিবেদনের ৩টি স্বতন্ত্র অভিযোগ — কার্ড অনুযায়ী।"
-- গ্রিড + কার্ডগুলো collapsible body-তে।
+## Root cause
 
-### ৪. প্রতিটি সেকশনের summary লাইন
-- ০১ Jugantor: "প্রথম পাতার শিরোনাম — অস্ত্র ও মাদক ব্যবসা নিয়ন্ত্রণ সংক্রান্ত প্রতিবেদন।"
-- ০২ NTV: "আওয়ামী লীগের তিন নেতা গ্রেপ্তার — গোয়েন্দা পুলিশের অভিযান।"
-- ০৩ BD Pratidin: "আদালতের নির্দেশনায় ডিবির গ্রেপ্তার — হত্যা মামলায় এজাহার
+`vite.config.ts` uses a custom `manualChunks` splitter that puts every `@radix-ui/*` package into its own `radix` chunk, separated from the `react` chunk. With ~30+ Radix packages all depending on `react`, this split creates a chunk-evaluation order problem at module init time and produces the undefined-React error in production.
+
+The chunk split is an optimization, not a requirement. Letting Vite/Rollup auto-split vendors (or keeping React + Radix together) is safe and fixes the crash.
+
+## Fix
+
+Edit `vite.config.ts` to merge the `radix` chunk into the `react` chunk so React is guaranteed to be initialized before any Radix module evaluates. Keep the other splits (`recharts`, `icons`, `sentry`, `vendor`) — those don't depend on React's module-init order in the same way.
+
+### Technical detail
+
+In `manualChunks(id)`:
+- Change `if (id.includes("@radix-ui/")) return "radix";` to return `"react"` instead (so Radix ships in the same chunk as React).
+- Leave the rest unchanged.
+
+This guarantees `React.forwardRef` is defined at the moment any Radix component module evaluates, eliminating the runtime crash.
+
+## Verify
+
+1. After the edit, publish the project.
+2. Load `https://trendfluxdigital-bd.lovable.app` in the browser and confirm the homepage renders (no white screen, no `forwardRef` error in console).
+
+## Out of scope
+
+- No content, SEO, routing, or backend changes.
+- No changes to publish visibility (already public) or custom domain setup.
