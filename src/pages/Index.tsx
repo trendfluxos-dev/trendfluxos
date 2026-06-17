@@ -643,6 +643,9 @@ const Index = () => {
       {/* ============= 5b-i. AUDIO STORY — অ্যালগরিদম আর টর্চার সেলের রুদ্ধশ্বাস জীবন ============= */}
       <AudioStoryTeaser />
 
+      {/* ============= 5b-i+. AUDIO STORY — এআই বিশেষজ্ঞ ইমন ============= */}
+      <AiExpertStoryTeaser />
+
       {/* ============= 5b-ii. QUIET POSITIONS — Parallel Emotional Archive ============= */}
       <section
         aria-labelledby="quiet-positions-heading"
