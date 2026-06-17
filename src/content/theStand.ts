@@ -315,6 +315,8 @@ export const STAND_MEDIA = {
     countSuffix: "টি দলিলভুক্ত প্রতিবেদন",
     read: "কভারেজ পড়ুন",
     timelineEyebrow: "কভারেজ ধারাবাহিকতা",
+    searchPlaceholder: "সোর্স, শিরোনাম বা তারিখ দিয়ে খুঁজুন...",
+    noResults: "কোনো ফলাফল পাওয়া যায়নি।",
     timeline: [
       { year: "২০২৩", label: "প্রাথমিক প্রতিবেদন" },
       { year: "২০২৪", label: "জাতীয় কভারেজ" },
@@ -329,6 +331,8 @@ export const STAND_MEDIA = {
     countSuffix: "documented reports",
     read: "Read coverage",
     timelineEyebrow: "Coverage continuity",
+    searchPlaceholder: "Search by source, headline or date...",
+    noResults: "No results found.",
     timeline: [
       { year: "2023", label: "Initial reporting" },
       { year: "2024", label: "National coverage" },
