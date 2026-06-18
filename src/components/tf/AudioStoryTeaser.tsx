@@ -39,6 +39,8 @@ export default function AudioStoryTeaser() {
   // Track which milestones we've already fired so we never duplicate.
   const milestonesRef = useRef<Set<25 | 50 | 75>>(new Set());
   const completedRef = useRef(false);
+  const [liveMsg, setLiveMsg] = useState("");
+  const seekCountRef = useRef(0);
 
   useEffect(() => {
     const el = ref.current;
@@ -96,9 +98,14 @@ export default function AudioStoryTeaser() {
     const onEndedAnalytics = () => {
       if (completedRef.current) return;
       completedRef.current = true;
+      setLiveMsg("Chapter I finished playing.");
       track("audio_complete", {
         ...ANALYTICS_CONTEXT,
+        event_type: "final_completion",
+        position_sec: Math.round(el.duration || 0),
         duration_sec: Math.round(el.duration || 0),
+        percent_listened: 100,
+        seek_count: seekCountRef.current,
       });
     };
     el.addEventListener("timeupdate", onMilestone);
@@ -180,6 +187,8 @@ export default function AudioStoryTeaser() {
     const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
     el.currentTime = ratio * dur;
     setCur(el.currentTime);
+    seekCountRef.current += 1;
+    setLiveMsg(`Seeked to ${fmt(el.currentTime)}.`);
     if (ratio < 0.25) {
       milestonesRef.current.clear();
       completedRef.current = false;
@@ -214,6 +223,8 @@ export default function AudioStoryTeaser() {
     e.preventDefault();
     el.currentTime = next;
     setCur(next);
+    seekCountRef.current += 1;
+    setLiveMsg(`Seeked to ${fmt(next)}.`);
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
@@ -291,6 +302,9 @@ export default function AudioStoryTeaser() {
             </div>
 
             <audio ref={ref} preload="metadata" src={audioAsset.url} />
+            <div aria-live="polite" aria-atomic="true" className="sr-only">
+              {liveMsg}
+            </div>
 
             {/* player row */}
             <div className="mt-6 flex items-center gap-5">
