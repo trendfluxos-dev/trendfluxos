@@ -2,6 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import audioAsset from "@/assets/mayer-nishedh-chapter-1.mp3.asset.json";
+import { track } from "@/lib/analytics";
+
+const ANALYTICS_CONTEXT = {
+  chapter: "chapter-1",
+  story_id: "mayer-nishedh",
+  surface: "home-teaser",
+} as const;
 
 function fmt(s: number) {
   if (!Number.isFinite(s) || s < 0) return "0:00";
@@ -29,6 +36,9 @@ export default function AudioStoryTeaser() {
   const [previewing, setPreviewing] = useState(false);
   const previewedOnce = useRef(false);
   const previewTimer = useRef<number | null>(null);
+  // Track which milestones we've already fired so we never duplicate.
+  const milestonesRef = useRef<Set<25 | 50 | 75>>(new Set());
+  const completedRef = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -55,6 +65,46 @@ export default function AudioStoryTeaser() {
     el.addEventListener("playing", onPlay);
     el.addEventListener("pause", onPause);
     el.addEventListener("progress", onProgress);
+    const onMilestone = () => {
+      if (!el.duration || !Number.isFinite(el.duration)) return;
+      const pct = (el.currentTime / el.duration) * 100;
+      ([25, 50, 75] as const).forEach((mark) => {
+        if (pct >= mark && !milestonesRef.current.has(mark)) {
+          milestonesRef.current.add(mark);
+          track("audio_progress", {
+            ...ANALYTICS_CONTEXT,
+            milestone: mark,
+            position_sec: Math.round(el.currentTime),
+          });
+        }
+      });
+    };
+    const onPlayAnalytics = () =>
+      track("audio_play", {
+        ...ANALYTICS_CONTEXT,
+        position_sec: Math.round(el.currentTime),
+      });
+    const onPauseAnalytics = () => {
+      if (completedRef.current) return;
+      if (el.currentTime <= 0) return;
+      track("audio_pause", {
+        ...ANALYTICS_CONTEXT,
+        position_sec: Math.round(el.currentTime),
+        duration_sec: Math.round(el.duration || 0),
+      });
+    };
+    const onEndedAnalytics = () => {
+      if (completedRef.current) return;
+      completedRef.current = true;
+      track("audio_complete", {
+        ...ANALYTICS_CONTEXT,
+        duration_sec: Math.round(el.duration || 0),
+      });
+    };
+    el.addEventListener("timeupdate", onMilestone);
+    el.addEventListener("play", onPlayAnalytics);
+    el.addEventListener("pause", onPauseAnalytics);
+    el.addEventListener("ended", onEndedAnalytics);
     return () => {
       el.removeEventListener("timeupdate", t);
       el.removeEventListener("loadedmetadata", m);
@@ -64,6 +114,10 @@ export default function AudioStoryTeaser() {
       el.removeEventListener("playing", onPlay);
       el.removeEventListener("pause", onPause);
       el.removeEventListener("progress", onProgress);
+      el.removeEventListener("timeupdate", onMilestone);
+      el.removeEventListener("play", onPlayAnalytics);
+      el.removeEventListener("pause", onPauseAnalytics);
+      el.removeEventListener("ended", onEndedAnalytics);
       if (previewTimer.current) window.clearTimeout(previewTimer.current);
     };
   }, []);
@@ -126,6 +180,40 @@ export default function AudioStoryTeaser() {
     const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
     el.currentTime = ratio * dur;
     setCur(el.currentTime);
+    if (ratio < 0.25) {
+      milestonesRef.current.clear();
+      completedRef.current = false;
+    }
+    track("audio_seek", {
+      ...ANALYTICS_CONTEXT,
+      position_sec: Math.round(el.currentTime),
+      duration_sec: Math.round(dur),
+    });
+  };
+
+  // Keyboard scrubbing on the seek slider.
+  const onBarKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el || !dur) return;
+    let next: number | null = null;
+    switch (e.key) {
+      case "ArrowRight": next = Math.min(dur, el.currentTime + 5); break;
+      case "ArrowLeft":  next = Math.max(0, el.currentTime - 5); break;
+      case "ArrowUp":    next = Math.min(dur, el.currentTime + 10); break;
+      case "ArrowDown":  next = Math.max(0, el.currentTime - 10); break;
+      case "Home":       next = 0; break;
+      case "End":        next = dur; break;
+      case " ":
+      case "Enter":
+        e.preventDefault();
+        toggle();
+        return;
+      default: return;
+    }
+    if (next == null) return;
+    e.preventDefault();
+    el.currentTime = next;
+    setCur(next);
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
@@ -209,9 +297,16 @@ export default function AudioStoryTeaser() {
               <button
                 type="button"
                 onClick={toggle}
-                aria-label={loading ? "Loading" : playing ? "Pause" : "Play"}
+                aria-label={
+                  loading
+                    ? "Loading Chapter I audio"
+                    : playing
+                      ? "Pause Chapter I audio"
+                      : "Play Chapter I audio"
+                }
                 aria-pressed={playing}
-                className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.6)] transition-all hover:bg-primary-glow hover:shadow-[0_14px_36px_-12px_hsl(var(--primary)/0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+                aria-busy={loading || undefined}
+                className="relative flex h-14 w-14 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.6)] transition-all hover:bg-primary-glow hover:shadow-[0_14px_36px_-12px_hsl(var(--primary)/0.75)] focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
               >
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -225,12 +320,16 @@ export default function AudioStoryTeaser() {
                 <div
                   ref={barRef}
                   onClick={seek}
-                  role="progressbar"
+                  onKeyDown={onBarKeyDown}
+                  role="slider"
+                  tabIndex={0}
                   aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={Math.round(pct)}
-                  aria-label="Audio progress"
-                  className="group/bar relative h-2 w-full cursor-pointer overflow-hidden rounded-full bg-muted ring-1 ring-inset ring-border transition-colors hover:bg-muted/80"
+                  aria-valuemax={Math.max(1, Math.round(dur))}
+                  aria-valuenow={Math.round(cur)}
+                  aria-valuetext={dur ? `${fmt(cur)} of ${fmt(dur)}` : "Loading"}
+                  aria-label="Seek Chapter I audio"
+                  aria-orientation="horizontal"
+                  className="group/bar relative h-2 w-full cursor-pointer overflow-hidden rounded-full bg-muted ring-1 ring-inset ring-border transition-colors hover:bg-muted/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
                 >
                   {/* buffered */}
                   <div
@@ -254,7 +353,11 @@ export default function AudioStoryTeaser() {
                   <span className="text-foreground/80">{fmt(cur)}</span>
                   <span className="inline-flex items-center gap-2">
                     {loading && (
-                      <span className="inline-flex items-center gap-1 text-primary">
+                      <span
+                        role="status"
+                        aria-live="polite"
+                        className="inline-flex items-center gap-1 text-primary"
+                      >
                         <Loader2 className="h-3 w-3 animate-spin" />
                         Loading
                       </span>
