@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
-import audioAsset from "@/assets/algorithm-torture-cell.mp3.asset.json";
+import audioAsset from "@/assets/mayer-nishedh-chapter-1.mp3.asset.json";
 
 function fmt(s: number) {
   if (!Number.isFinite(s) || s < 0) return "0:00";
