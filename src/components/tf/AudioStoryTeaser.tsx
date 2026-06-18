@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles, Zap, ZapOff } from "lucide-react";
+import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles, Zap, ZapOff, AlertTriangle, Copy, X } from "lucide-react";
 import audioAsset from "@/assets/mayer-nishedh-chapter-1.mp3.asset.json";
 import { track } from "@/lib/analytics";
 import { useAutoplayPreview, useEffectiveReducedMotion } from "@/lib/audioPreferences";
@@ -48,6 +48,22 @@ export default function AudioStoryTeaser() {
   // Effective autoplay = user pref AND not reduced-motion.
   const allowAutoPreview = autoplayPreview && !reducedMotion;
 
+  // Diagnostics — surfaces mute/volume/autoplay-policy/source when playback fails.
+  const [diag, setDiag] = useState<null | {
+    code?: number;
+    message: string;
+    name?: string;
+    at: number;
+  }>(null);
+  const [diagDismissed, setDiagDismissed] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const autoplayPolicy =
+    typeof navigator !== "undefined" && "getAutoplayPolicy" in navigator
+      // @ts-ignore - experimental API
+      ? (navigator.getAutoplayPolicy?.("mediaelement") as string) ?? "unknown"
+      : "unknown";
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -73,6 +89,26 @@ export default function AudioStoryTeaser() {
     el.addEventListener("playing", onPlay);
     el.addEventListener("pause", onPause);
     el.addEventListener("progress", onProgress);
+    const onVol = () => { setMuted(el.muted); setVolume(el.volume); };
+    const onError = () => {
+      const err = el.error;
+      setDiag({
+        code: err?.code,
+        message: err?.message || mediaErrorText(err?.code),
+        name: "MediaError",
+        at: Date.now(),
+      });
+      setDiagDismissed(false);
+      track("audio_error", {
+        ...ANALYTICS_CONTEXT,
+        code: err?.code,
+        message: err?.message || mediaErrorText(err?.code),
+        src: el.currentSrc || el.src,
+      });
+    };
+    el.addEventListener("volumechange", onVol);
+    el.addEventListener("error", onError);
+    onVol();
     const onMilestone = () => {
       if (!el.duration || !Number.isFinite(el.duration)) return;
       const pct = (el.currentTime / el.duration) * 100;
@@ -127,6 +163,8 @@ export default function AudioStoryTeaser() {
       el.removeEventListener("playing", onPlay);
       el.removeEventListener("pause", onPause);
       el.removeEventListener("progress", onProgress);
+      el.removeEventListener("volumechange", onVol);
+      el.removeEventListener("error", onError);
       el.removeEventListener("timeupdate", onMilestone);
       el.removeEventListener("play", onPlayAnalytics);
       el.removeEventListener("pause", onPauseAnalytics);
@@ -183,7 +221,25 @@ export default function AudioStoryTeaser() {
       return;
     }
     if (playing) { el.pause(); }
-    else { setLoading(true); void el.play().catch(() => setLoading(false)); }
+    else {
+      setLoading(true);
+      void el.play().catch((err: unknown) => {
+        setLoading(false);
+        const e = err as { name?: string; message?: string };
+        setDiag({
+          name: e?.name || "PlayError",
+          message: e?.message || "Playback was blocked.",
+          at: Date.now(),
+        });
+        setDiagDismissed(false);
+        track("audio_error", {
+          ...ANALYTICS_CONTEXT,
+          name: e?.name,
+          message: e?.message,
+          src: el.currentSrc || el.src,
+        });
+      });
+    }
   };
 
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
