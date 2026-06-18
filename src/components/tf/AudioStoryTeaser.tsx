@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles, Zap, ZapOff } from "lucide-react";
 import audioAsset from "@/assets/mayer-nishedh-chapter-1.mp3.asset.json";
 import { track } from "@/lib/analytics";
 
@@ -9,6 +9,19 @@ const ANALYTICS_CONTEXT = {
   story_id: "mayer-nishedh",
   surface: "home-teaser",
 } as const;
+
+const AUTOPLAY_PREF_KEY = "tf:chapter1:autoplayPreview";
+
+function readAutoplayPref(): boolean {
+  if (typeof window === "undefined") return true;
+  try {
+    const v = window.localStorage.getItem(AUTOPLAY_PREF_KEY);
+    if (v === null) return true;
+    return v === "true";
+  } catch {
+    return true;
+  }
+}
 
 function fmt(s: number) {
   if (!Number.isFinite(s) || s < 0) return "0:00";
@@ -41,6 +54,28 @@ export default function AudioStoryTeaser() {
   const completedRef = useRef(false);
   const [liveMsg, setLiveMsg] = useState("");
   const seekCountRef = useRef(0);
+  const [autoplayPreview, setAutoplayPreview] = useState<boolean>(() => readAutoplayPref());
+  const [reducedMotion, setReducedMotion] = useState<boolean>(false);
+
+  // Honor system reduced-motion / accessibility preferences.
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => setReducedMotion(mq.matches);
+    apply();
+    mq.addEventListener?.("change", apply);
+    return () => mq.removeEventListener?.("change", apply);
+  }, []);
+
+  // Persist the autoplay-preview preference.
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(AUTOPLAY_PREF_KEY, String(autoplayPreview));
+    } catch {}
+  }, [autoplayPreview]);
+
+  // Effective autoplay = user pref AND not reduced-motion.
+  const allowAutoPreview = autoplayPreview && !reducedMotion;
 
   useEffect(() => {
     const el = ref.current;
@@ -147,6 +182,7 @@ export default function AudioStoryTeaser() {
   const startPreview = () => {
     const el = ref.current;
     if (!el || playing || previewing) return;
+    if (!allowAutoPreview) return;
     if (previewedOnce.current) return; // only fire once per session
     previewedOnce.current = true;
     el.volume = 0.35;
@@ -274,12 +310,12 @@ export default function AudioStoryTeaser() {
         {/* Player card — single, centered, structured */}
         <div
           className="mx-auto mt-10 max-w-3xl sm:mt-14"
-          onMouseEnter={startPreview}
-          onMouseLeave={stopPreview}
+          onMouseEnter={allowAutoPreview ? startPreview : undefined}
+          onMouseLeave={allowAutoPreview ? stopPreview : undefined}
         >
           <div
             className="relative rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7 lg:p-8"
-            onClick={() => { if (!previewedOnce.current) startPreview(); }}
+            onClick={() => { if (allowAutoPreview && !previewedOnce.current) startPreview(); }}
           >
             {previewing && (
               <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-primary">
@@ -392,9 +428,41 @@ export default function AudioStoryTeaser() {
 
             {/* CTA */}
             <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
-              <span className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-                {previewing ? "Auto-stops in 8s · click play for full" : "Recorded narrative"}
-              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={autoplayPreview}
+                  aria-label={
+                    autoplayPreview
+                      ? "Disable autoplay preview for Chapter I"
+                      : "Enable autoplay preview for Chapter I"
+                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const next = !autoplayPreview;
+                    setAutoplayPreview(next);
+                    if (!next) stopPreview();
+                    setLiveMsg(next ? "Autoplay preview enabled." : "Autoplay preview disabled.");
+                    track("audio_setting_change", {
+                      ...ANALYTICS_CONTEXT,
+                      setting: "autoplay_preview",
+                      value: next,
+                    });
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/60 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+                >
+                  {autoplayPreview ? <Zap className="h-3 w-3 text-primary" /> : <ZapOff className="h-3 w-3" />}
+                  Autoplay {autoplayPreview ? "on" : "off"}
+                </button>
+                <span className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+                  {reducedMotion
+                    ? "Reduced motion · preview off"
+                    : previewing
+                      ? "Auto-stops in 8s · click play for full"
+                      : "Recorded narrative"}
+                </span>
+              </div>
               <Link
                 to="/the-stand"
                 className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary transition-colors hover:text-primary-glow"
