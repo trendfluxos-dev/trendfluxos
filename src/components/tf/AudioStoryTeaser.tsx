@@ -463,6 +463,97 @@ export default function AudioStoryTeaser() {
               “মায়ের নিষেধ আছে।”
             </blockquote>
 
+            {diag && !diagDismissed && (
+              <div
+                role="alert"
+                aria-live="assertive"
+                className="mt-6 rounded-xl border border-destructive/30 bg-destructive/[0.04] p-4 text-[12px] text-foreground"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                    <div>
+                      <div className="text-[12px] font-semibold uppercase tracking-[0.2em] text-destructive">
+                        Playback diagnostics
+                      </div>
+                      <p className="mt-1 text-foreground/90">{diag.message}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="Dismiss diagnostics"
+                    onClick={() => setDiagDismissed(true)}
+                    className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <dl className="mt-3 grid grid-cols-1 gap-x-6 gap-y-1.5 font-mono text-[11px] sm:grid-cols-2">
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">Mute</dt>
+                    <dd>{muted ? "muted" : "unmuted"}</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">Volume</dt>
+                    <dd>{Math.round(volume * 100)}%</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">Autoplay policy</dt>
+                    <dd>{autoplayPolicy}</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">Error code</dt>
+                    <dd>{diag.code ?? diag.name ?? "—"}</dd>
+                  </div>
+                  <div className="col-span-full mt-1 flex items-start gap-2">
+                    <dt className="shrink-0 text-muted-foreground">Source</dt>
+                    <dd className="min-w-0 flex-1 truncate" title={ref.current?.currentSrc || audioAsset.url}>
+                      {ref.current?.currentSrc || audioAsset.url}
+                    </dd>
+                    <button
+                      type="button"
+                      aria-label="Copy source URL"
+                      onClick={() => {
+                        const url = ref.current?.currentSrc || audioAsset.url;
+                        void navigator.clipboard?.writeText(url);
+                        setLiveMsg("Source URL copied.");
+                      }}
+                      className="inline-flex items-center gap-1 rounded-md border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                    >
+                      <Copy className="h-3 w-3" />
+                      Copy
+                    </button>
+                  </div>
+                </dl>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const el = ref.current;
+                      if (!el) return;
+                      el.muted = false;
+                      el.volume = 1;
+                      el.load();
+                      setDiag(null);
+                      setLoading(true);
+                      void el.play().catch(() => setLoading(false));
+                    }}
+                    className="rounded-md bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground transition-colors hover:bg-primary-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  >
+                    Retry playback
+                  </button>
+                  <a
+                    href={ref.current?.currentSrc || audioAsset.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-md border border-border px-2.5 py-1 text-[11px] font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  >
+                    Open source in new tab
+                  </a>
+                </div>
+              </div>
+            )}
+
             {/* CTA */}
             <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
               <div className="flex items-center gap-3">
