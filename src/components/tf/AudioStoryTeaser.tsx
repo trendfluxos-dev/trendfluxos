@@ -187,6 +187,8 @@ export default function AudioStoryTeaser() {
     const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
     el.currentTime = ratio * dur;
     setCur(el.currentTime);
+    seekCountRef.current += 1;
+    setLiveMsg(`Seeked to ${fmt(el.currentTime)}.`);
     if (ratio < 0.25) {
       milestonesRef.current.clear();
       completedRef.current = false;
