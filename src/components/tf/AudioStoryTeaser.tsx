@@ -98,9 +98,14 @@ export default function AudioStoryTeaser() {
     const onEndedAnalytics = () => {
       if (completedRef.current) return;
       completedRef.current = true;
+      setLiveMsg("Chapter I finished playing.");
       track("audio_complete", {
         ...ANALYTICS_CONTEXT,
+        event_type: "final_completion",
+        position_sec: Math.round(el.duration || 0),
         duration_sec: Math.round(el.duration || 0),
+        percent_listened: 100,
+        seek_count: seekCountRef.current,
       });
     };
     el.addEventListener("timeupdate", onMilestone);
