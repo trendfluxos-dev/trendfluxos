@@ -302,6 +302,9 @@ export default function AudioStoryTeaser() {
             </div>
 
             <audio ref={ref} preload="metadata" src={audioAsset.url} />
+            <div aria-live="polite" aria-atomic="true" className="sr-only">
+              {liveMsg}
+            </div>
 
             {/* player row */}
             <div className="mt-6 flex items-center gap-5">
