@@ -297,9 +297,16 @@ export default function AudioStoryTeaser() {
               <button
                 type="button"
                 onClick={toggle}
-                aria-label={loading ? "Loading" : playing ? "Pause" : "Play"}
+                aria-label={
+                  loading
+                    ? "Loading Chapter I audio"
+                    : playing
+                      ? "Pause Chapter I audio"
+                      : "Play Chapter I audio"
+                }
                 aria-pressed={playing}
-                className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.6)] transition-all hover:bg-primary-glow hover:shadow-[0_14px_36px_-12px_hsl(var(--primary)/0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+                aria-busy={loading || undefined}
+                className="relative flex h-14 w-14 min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.6)] transition-all hover:bg-primary-glow hover:shadow-[0_14px_36px_-12px_hsl(var(--primary)/0.75)] focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
               >
                 {loading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -313,12 +320,16 @@ export default function AudioStoryTeaser() {
                 <div
                   ref={barRef}
                   onClick={seek}
-                  role="progressbar"
+                  onKeyDown={onBarKeyDown}
+                  role="slider"
+                  tabIndex={0}
                   aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={Math.round(pct)}
-                  aria-label="Audio progress"
-                  className="group/bar relative h-2 w-full cursor-pointer overflow-hidden rounded-full bg-muted ring-1 ring-inset ring-border transition-colors hover:bg-muted/80"
+                  aria-valuemax={Math.max(1, Math.round(dur))}
+                  aria-valuenow={Math.round(cur)}
+                  aria-valuetext={dur ? `${fmt(cur)} of ${fmt(dur)}` : "Loading"}
+                  aria-label="Seek Chapter I audio"
+                  aria-orientation="horizontal"
+                  className="group/bar relative h-2 w-full cursor-pointer overflow-hidden rounded-full bg-muted ring-1 ring-inset ring-border transition-colors hover:bg-muted/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-card"
                 >
                   {/* buffered */}
                   <div
@@ -342,7 +353,11 @@ export default function AudioStoryTeaser() {
                   <span className="text-foreground/80">{fmt(cur)}</span>
                   <span className="inline-flex items-center gap-2">
                     {loading && (
-                      <span className="inline-flex items-center gap-1 text-primary">
+                      <span
+                        role="status"
+                        aria-live="polite"
+                        className="inline-flex items-center gap-1 text-primary"
+                      >
                         <Loader2 className="h-3 w-3 animate-spin" />
                         Loading
                       </span>
