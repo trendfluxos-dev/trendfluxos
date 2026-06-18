@@ -1,9 +1,11 @@
 import { useStandLang } from "@/context/StandLanguageContext";
 import { Reveal } from "./Reveal";
+import { VideoWithDiagnostics } from "@/components/media/VideoWithDiagnostics";
 import algorithmFilm from "@/assets/algorithm-torture-cell.mp4.asset.json";
 import architectFilm from "@/assets/architect-of-violence.mp4.asset.json";
 
 type Film = {
+  id: string;
   src: string;
   eyebrow: { bn: string; en: string };
   title: { bn: string; en: string };
@@ -12,6 +14,7 @@ type Film = {
 
 const FILMS: Film[] = [
   {
+    id: "algorithm-torture-cell",
     src: algorithmFilm.url,
     eyebrow: { bn: "শেয়ারকৃত ফাইল ০১", en: "Shared file 01" },
     title: {
@@ -24,6 +27,7 @@ const FILMS: Film[] = [
     },
   },
   {
+    id: "architect-of-violence",
     src: architectFilm.url,
     eyebrow: { bn: "শেয়ারকৃত ফাইল ০২", en: "Shared file 02" },
     title: {
@@ -85,7 +89,8 @@ export function SharedFilms() {
                   {film.title[lang]}
                 </h3>
                 <div className="mt-5 overflow-hidden border border-[hsl(var(--stand-hairline))] bg-[hsl(var(--stand-charcoal))]">
-                  <video
+                  <VideoWithDiagnostics
+                    analyticsId={film.id}
                     src={film.src}
                     controls
                     preload="metadata"
