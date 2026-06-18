@@ -180,6 +180,40 @@ export default function AudioStoryTeaser() {
     const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
     el.currentTime = ratio * dur;
     setCur(el.currentTime);
+    if (ratio < 0.25) {
+      milestonesRef.current.clear();
+      completedRef.current = false;
+    }
+    track("audio_seek", {
+      ...ANALYTICS_CONTEXT,
+      position_sec: Math.round(el.currentTime),
+      duration_sec: Math.round(dur),
+    });
+  };
+
+  // Keyboard scrubbing on the seek slider.
+  const onBarKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el || !dur) return;
+    let next: number | null = null;
+    switch (e.key) {
+      case "ArrowRight": next = Math.min(dur, el.currentTime + 5); break;
+      case "ArrowLeft":  next = Math.max(0, el.currentTime - 5); break;
+      case "ArrowUp":    next = Math.min(dur, el.currentTime + 10); break;
+      case "ArrowDown":  next = Math.max(0, el.currentTime - 10); break;
+      case "Home":       next = 0; break;
+      case "End":        next = dur; break;
+      case " ":
+      case "Enter":
+        e.preventDefault();
+        toggle();
+        return;
+      default: return;
+    }
+    if (next == null) return;
+    e.preventDefault();
+    el.currentTime = next;
+    setCur(next);
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
