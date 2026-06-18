@@ -56,6 +56,7 @@ export const routes = {
   "/share-kit": make(() => import("@/pages/ShareKit")),
   "/stories/ai-expert-emon": make(() => import("@/pages/StoryAiExpertEmon")),
   "/trust": make(() => import("@/pages/Trust")),
+  "/settings": make(() => import("@/pages/Settings")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
@@ -105,4 +106,5 @@ export const navigablePages: {
   { label: "Web Vitals", path: "/admin/web-vitals", type: "Admin", keywords: "performance web vitals lcp inp cls fcp ttfb speed core" },
   { label: "Sign In", path: "/auth", type: "Account", keywords: "login auth signin" },
   { label: "Dashboard", path: "/dashboard", type: "Account", keywords: "dashboard hub account home enrollments luxe veil admin" },
+  { label: "Site Settings", path: "/settings", type: "Account", keywords: "settings preferences autoplay reduced motion accessibility audio chapter" },
 ];

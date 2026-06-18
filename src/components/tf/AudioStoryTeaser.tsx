@@ -3,25 +3,13 @@ import { Link } from "react-router-dom";
 import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles, Zap, ZapOff } from "lucide-react";
 import audioAsset from "@/assets/mayer-nishedh-chapter-1.mp3.asset.json";
 import { track } from "@/lib/analytics";
+import { useAutoplayPreview, useEffectiveReducedMotion } from "@/lib/audioPreferences";
 
 const ANALYTICS_CONTEXT = {
   chapter: "chapter-1",
   story_id: "mayer-nishedh",
   surface: "home-teaser",
 } as const;
-
-const AUTOPLAY_PREF_KEY = "tf:chapter1:autoplayPreview";
-
-function readAutoplayPref(): boolean {
-  if (typeof window === "undefined") return true;
-  try {
-    const v = window.localStorage.getItem(AUTOPLAY_PREF_KEY);
-    if (v === null) return true;
-    return v === "true";
-  } catch {
-    return true;
-  }
-}
 
 function fmt(s: number) {
   if (!Number.isFinite(s) || s < 0) return "0:00";
@@ -54,25 +42,8 @@ export default function AudioStoryTeaser() {
   const completedRef = useRef(false);
   const [liveMsg, setLiveMsg] = useState("");
   const seekCountRef = useRef(0);
-  const [autoplayPreview, setAutoplayPreview] = useState<boolean>(() => readAutoplayPref());
-  const [reducedMotion, setReducedMotion] = useState<boolean>(false);
-
-  // Honor system reduced-motion / accessibility preferences.
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => setReducedMotion(mq.matches);
-    apply();
-    mq.addEventListener?.("change", apply);
-    return () => mq.removeEventListener?.("change", apply);
-  }, []);
-
-  // Persist the autoplay-preview preference.
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(AUTOPLAY_PREF_KEY, String(autoplayPreview));
-    } catch {}
-  }, [autoplayPreview]);
+  const [autoplayPreview, setAutoplayPreview] = useAutoplayPreview();
+  const reducedMotion = useEffectiveReducedMotion();
 
   // Effective autoplay = user pref AND not reduced-motion.
   const allowAutoPreview = autoplayPreview && !reducedMotion;
