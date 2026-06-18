@@ -223,6 +223,8 @@ export default function AudioStoryTeaser() {
     e.preventDefault();
     el.currentTime = next;
     setCur(next);
+    seekCountRef.current += 1;
+    setLiveMsg(`Seeked to ${fmt(next)}.`);
   };
 
   const pct = dur ? (cur / dur) * 100 : 0;
