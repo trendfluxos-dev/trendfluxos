@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, VideoHTMLAttributes } from "react";
-import { AlertTriangle, Copy, X } from "lucide-react";
+import { AlertTriangle, Copy, RefreshCw, X } from "lucide-react";
 import { track } from "@/lib/analytics";
 
 function mediaErrorText(code?: number) {
