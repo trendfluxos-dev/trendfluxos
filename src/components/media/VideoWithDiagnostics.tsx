@@ -143,14 +143,32 @@ export function VideoWithDiagnostics({
               onClick={() => {
                 const el = ref.current;
                 if (!el) return;
+                const wasMuted = el.muted;
+                const prevVolume = el.volume;
+                el.load();
+                el.muted = wasMuted;
+                el.volume = prevVolume;
+                setDiag(null);
+                void el.play().catch(() => {});
+              }}
+              className="inline-flex items-center gap-1.5 rounded-md bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground transition-colors hover:bg-primary-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            >
+              <RefreshCw className="h-3 w-3" />
+              Auto-retry
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const el = ref.current;
+                if (!el) return;
                 el.muted = false;
                 el.load();
                 setDiag(null);
                 void el.play().catch(() => {});
               }}
-              className="rounded-md bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground transition-colors hover:bg-primary-glow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              className="rounded-md border border-border px-2.5 py-1 text-[11px] font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
             >
-              Retry playback
+              Retry unmuted
             </button>
             {currentSrc && (
               <a
