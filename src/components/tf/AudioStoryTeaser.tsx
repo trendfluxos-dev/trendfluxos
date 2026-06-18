@@ -18,6 +18,16 @@ function fmt(s: number) {
   return `${m}:${r.toString().padStart(2, "0")}`;
 }
 
+function mediaErrorText(code?: number) {
+  switch (code) {
+    case 1: return "Playback aborted (MEDIA_ERR_ABORTED).";
+    case 2: return "Network error while loading audio (MEDIA_ERR_NETWORK).";
+    case 3: return "Audio decode failed (MEDIA_ERR_DECODE).";
+    case 4: return "Audio source not supported (MEDIA_ERR_SRC_NOT_SUPPORTED).";
+    default: return "Unknown media error.";
+  }
+}
+
 /**
  * AudioStoryTeaser — compact home-page section featuring the recorded
  * narrative "অ্যালগরিদম আর টর্চার সেলের রুদ্ধশ্বাস জীবন".
