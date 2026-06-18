@@ -46,7 +46,6 @@ export default function Settings() {
     description:
       "Manage Chapter I audio autoplay and reduced-motion accessibility preferences in one place.",
     canonical: "/settings",
-    robots: "noindex,follow",
   });
 
   const [autoplayPreview, setAutoplayPreview] = useAutoplayPreview();
