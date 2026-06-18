@@ -2,6 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import audioAsset from "@/assets/mayer-nishedh-chapter-1.mp3.asset.json";
+import { track } from "@/lib/analytics";
+
+const ANALYTICS_CONTEXT = {
+  chapter: "chapter-1",
+  story_id: "mayer-nishedh",
+  surface: "home-teaser",
+} as const;
 
 function fmt(s: number) {
   if (!Number.isFinite(s) || s < 0) return "0:00";
@@ -29,6 +36,9 @@ export default function AudioStoryTeaser() {
   const [previewing, setPreviewing] = useState(false);
   const previewedOnce = useRef(false);
   const previewTimer = useRef<number | null>(null);
+  // Track which milestones we've already fired so we never duplicate.
+  const milestonesRef = useRef<Set<25 | 50 | 75>>(new Set());
+  const completedRef = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
