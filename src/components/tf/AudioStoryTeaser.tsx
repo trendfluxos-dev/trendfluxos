@@ -65,6 +65,46 @@ export default function AudioStoryTeaser() {
     el.addEventListener("playing", onPlay);
     el.addEventListener("pause", onPause);
     el.addEventListener("progress", onProgress);
+    const onMilestone = () => {
+      if (!el.duration || !Number.isFinite(el.duration)) return;
+      const pct = (el.currentTime / el.duration) * 100;
+      ([25, 50, 75] as const).forEach((mark) => {
+        if (pct >= mark && !milestonesRef.current.has(mark)) {
+          milestonesRef.current.add(mark);
+          track("audio_progress", {
+            ...ANALYTICS_CONTEXT,
+            milestone: mark,
+            position_sec: Math.round(el.currentTime),
+          });
+        }
+      });
+    };
+    const onPlayAnalytics = () =>
+      track("audio_play", {
+        ...ANALYTICS_CONTEXT,
+        position_sec: Math.round(el.currentTime),
+      });
+    const onPauseAnalytics = () => {
+      if (completedRef.current) return;
+      if (el.currentTime <= 0) return;
+      track("audio_pause", {
+        ...ANALYTICS_CONTEXT,
+        position_sec: Math.round(el.currentTime),
+        duration_sec: Math.round(el.duration || 0),
+      });
+    };
+    const onEndedAnalytics = () => {
+      if (completedRef.current) return;
+      completedRef.current = true;
+      track("audio_complete", {
+        ...ANALYTICS_CONTEXT,
+        duration_sec: Math.round(el.duration || 0),
+      });
+    };
+    el.addEventListener("timeupdate", onMilestone);
+    el.addEventListener("play", onPlayAnalytics);
+    el.addEventListener("pause", onPauseAnalytics);
+    el.addEventListener("ended", onEndedAnalytics);
     return () => {
       el.removeEventListener("timeupdate", t);
       el.removeEventListener("loadedmetadata", m);
@@ -74,6 +114,10 @@ export default function AudioStoryTeaser() {
       el.removeEventListener("playing", onPlay);
       el.removeEventListener("pause", onPause);
       el.removeEventListener("progress", onProgress);
+      el.removeEventListener("timeupdate", onMilestone);
+      el.removeEventListener("play", onPlayAnalytics);
+      el.removeEventListener("pause", onPauseAnalytics);
+      el.removeEventListener("ended", onEndedAnalytics);
       if (previewTimer.current) window.clearTimeout(previewTimer.current);
     };
   }, []);
