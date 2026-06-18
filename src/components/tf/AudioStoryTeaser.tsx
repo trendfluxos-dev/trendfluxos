@@ -39,6 +39,8 @@ export default function AudioStoryTeaser() {
   // Track which milestones we've already fired so we never duplicate.
   const milestonesRef = useRef<Set<25 | 50 | 75>>(new Set());
   const completedRef = useRef(false);
+  const [liveMsg, setLiveMsg] = useState("");
+  const seekCountRef = useRef(0);
 
   useEffect(() => {
     const el = ref.current;
