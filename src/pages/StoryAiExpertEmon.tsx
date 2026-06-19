@@ -809,6 +809,11 @@ const StoryAiExpertEmon = () => {
               </div>
             </div>
 
+            {/* CDN/headers verifier */}
+            <div className="mt-4 flex items-center justify-end">
+              <CdnStatusChip url={audioAsset.url} expectedTypePrefix="audio/" label="Audio CDN" />
+            </div>
+
             {/* Chapter list */}
             <div className="mt-6 border-t border-border pt-5">
               <div className="mb-3 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
