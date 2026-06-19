@@ -64,7 +64,7 @@ export default function BrandToki() {
   });
 
   return (
-    <div className="min-h-dvh bg-white text-[var(--brandtoki-ink)] font-[Inter,system-ui,sans-serif]">
+    <div data-brand="brandtoki" className="min-h-dvh bg-[var(--brandtoki-bg)] text-[var(--brandtoki-ink)] font-[Inter,system-ui,sans-serif]">
       {/* NAV */}
       <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-[var(--brandtoki-border)]">
         <div className="mx-auto max-w-7xl px-5 md:px-8 h-16 flex items-center justify-between">
