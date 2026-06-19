@@ -90,7 +90,7 @@ const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 
 const PageFallback = () => (
-  <div className="flex min-h-screen items-center justify-center bg-background">
+  <div className="flex min-h-dvh items-center justify-center bg-background">
     <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
   </div>
 );
@@ -155,7 +155,7 @@ const RoutedApp = () => {
 const App = () => (
   <AppErrorBoundary
     fallback={
-      <div className="flex min-h-screen items-center justify-center bg-background p-6 text-center">
+      <div className="flex min-h-dvh items-center justify-center bg-background p-6 text-center">
         <div className="max-w-md space-y-3">
           <h1 className="text-xl font-semibold text-foreground">Something went wrong</h1>
           <p className="text-sm text-muted-foreground">
