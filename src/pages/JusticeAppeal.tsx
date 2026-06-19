@@ -18,12 +18,15 @@ import {
 import referencedFigure from "@/assets/justice/referenced-figure.png";
 
 
-const navy = "bg-[hsl(220,45%,8%)]";
-const navyCard = "bg-[hsl(220,40%,11%)]";
-const navyBorder = "border-[hsl(220,30%,20%)]";
-const accent = "text-[hsl(0,65%,55%)]";
-const accentBg = "bg-[hsl(0,65%,55%)]";
-const accentBorder = "border-[hsl(0,65%,55%)]";
+// Justice sub-brand tokens — defined in src/index.css under
+// `[data-brand="justice"]`. Page root sets `data-brand="justice"` so the
+// CSS variables resolve correctly and don't leak into other routes.
+const navy = "bg-[var(--justice-bg)]";
+const navyCard = "bg-[var(--justice-card)]";
+const navyBorder = "border-[var(--justice-border)]";
+const accent = "text-[var(--justice-accent)]";
+const accentBg = "bg-[var(--justice-accent)]";
+const accentBorder = "border-[var(--justice-accent)]";
 
 const timeline = [
   { date: "১৭ মার্চ ২০২২", title: "প্রথম ফোন যোগাযোগ ও অভিযুক্ত হুমকি", body: "অভিযোগ অনুযায়ী, ফোনকলের মাধ্যমে হুমকি পাওয়া যায়।" },
@@ -44,7 +47,7 @@ const evidenceItems = [
 
 export default function JusticeAppeal() {
   return (
-    <div className={`min-h-dvh ${navy} text-slate-100`}>
+    <div data-brand="justice" className={`min-h-dvh ${navy} text-[var(--justice-ink)]`}>
       <Helmet>
         <title>Pabna Accountability Project — Public Interest Documentation</title>
         <meta name="description" content="A documentary archive of a written complaint and related media references, requesting lawful investigation and safety protection." />
@@ -185,7 +188,7 @@ export default function JusticeAppeal() {
           <ol className="mt-10 space-y-0 border-l border-white/10 pl-6">
             {timeline.map((t, i) => (
               <li key={i} className="relative pb-8 last:pb-0">
-                <span className={`absolute -left-[31px] top-1 h-3 w-3 rounded-full ${accentBg} ring-4 ring-[hsl(220,45%,8%)]`} />
+                <span className={`absolute -left-[31px] top-1 h-3 w-3 rounded-full ${accentBg} ring-4 ring-[var(--justice-bg)]`} />
                 <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">{t.date}</div>
                 <h3 className="mt-1.5 text-base font-semibold text-white">{t.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{t.body}</p>
