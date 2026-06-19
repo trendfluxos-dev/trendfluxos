@@ -193,7 +193,8 @@ const Marriage = () => {
   return (
     <main
       lang={bangla ? "bn" : "en"}
-      className="min-h-dvh text-white"
+      data-brand="marriage"
+      className="min-h-dvh text-[var(--marriage-ink)]"
       style={{
         background:
           "radial-gradient(ellipse at top, rgba(220,38,38,0.22), transparent 45%), radial-gradient(ellipse at bottom, rgba(220,38,38,0.10), transparent 55%), linear-gradient(180deg, var(--marriage-bg-1) 0%, var(--marriage-bg-2) 50%, var(--marriage-bg-3) 100%)",
