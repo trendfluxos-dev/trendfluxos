@@ -359,7 +359,7 @@ export default function MediaReports() {
   const [filter, setFilter] = useState<SourceKey>("all");
   const show = (k: SourceKey) => filter === "all" || filter === k;
   return (
-    <div className={`min-h-dvh ${navy} text-slate-100`}>
+    <div data-brand="justice" className={`min-h-dvh ${navy} text-[var(--justice-ink)]`}>
       <Helmet>
         <title>মিডিয়া রিপোর্টস — পাবনা অ্যাকাউন্টেবিলিটি প্রজেক্ট</title>
         <meta
