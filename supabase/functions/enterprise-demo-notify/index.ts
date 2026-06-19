@@ -122,10 +122,10 @@ Deno.serve(async (req) => {
     );
   }
 
-  // Best-effort admin notification log (Lovable Emails wiring can be added later).
-  console.log(
-    `New enterprise demo request: ${parsed.data.email} · ${parsed.data.company} · id=${data.id}`,
-  );
+  // Best-effort admin notification log. PII (email, company) is intentionally
+  // omitted — logs are visible to all project members with log access.
+  // Look up the row in the `enterprise_demo_requests` table by id when needed.
+  console.log(`New enterprise demo request received · id=${data.id}`);
 
   return new Response(JSON.stringify({ ok: true, id: data.id }), {
     status: 200,

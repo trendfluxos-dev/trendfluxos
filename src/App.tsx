@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { Analytics } from "@vercel/analytics/react";
@@ -9,6 +9,7 @@ import OverflowDetector from "@/components/dev/OverflowDetector";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routes } from "./lib/routes";
+import { queryClient } from "@/lib/queryClient";
 import ScrollToTop from "./components/ScrollToTop";
 import ScrollProgress from "./components/ScrollProgress";
 import CommandPalette from "./components/CommandPalette";
@@ -41,8 +42,6 @@ const PerfMonitor = import.meta.env.DEV
 const PERF_FLAG =
   typeof window !== "undefined" &&
   new URLSearchParams(window.location.search).has("perf");
-
-const queryClient = new QueryClient();
 
 const Index = routes["/"];
 const Ecosystem = routes["/ecosystem"];
@@ -170,7 +169,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <BrandPreviewProvider>
           <SeoHead />
           <ScrollToTop />

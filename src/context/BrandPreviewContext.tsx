@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { BRAND_CONTACTS, BrandKey, getBrandForRoute } from "@/config/socialConfig";
 import { track } from "@/lib/analytics";
@@ -32,16 +32,15 @@ const readInitialOverride = (): BrandKey | null => {
 export const BrandPreviewProvider = ({ children }: { children: ReactNode }) => {
   const [override, setOverrideState] = useState<BrandKey | null>(() => readInitialOverride());
 
-  const setOverride = (b: BrandKey | null) => {
+  const setOverride = useCallback((b: BrandKey | null) => {
     setOverrideState(b);
     if (typeof window === "undefined") return;
     try {
       if (b) window.localStorage.setItem(STORAGE_KEY, b);
       else window.localStorage.removeItem(STORAGE_KEY);
     } catch { /* ignore */ }
-  };
+  }, []);
 
-  // Re-read ?brand= when URL changes (e.g. SPA navigation)
   const { search, pathname } = useLocation();
   useEffect(() => {
     const url = new URLSearchParams(search).get("brand");
@@ -67,9 +66,9 @@ export const BrandPreviewProvider = ({ children }: { children: ReactNode }) => {
       });
       setOverride(url);
     }
-  }, [search, pathname, override]);
+  }, [search, pathname, override, setOverride]);
 
-  const value = useMemo(() => ({ override, setOverride }), [override]);
+  const value = useMemo(() => ({ override, setOverride }), [override, setOverride]);
   return <BrandPreviewContext.Provider value={value}>{children}</BrandPreviewContext.Provider>;
 };
 
