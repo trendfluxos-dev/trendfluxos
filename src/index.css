@@ -659,6 +659,70 @@
   }
   ::selection { background: hsl(var(--primary) / 0.18); color: hsl(var(--foreground)); }
 
+  /* ============================================================
+     SUB-BRAND NAMESPACES
+     Activated by setting `data-brand="<name>"` on a page root.
+     Each namespace is fully self-contained: no token leaks into or
+     out of the global theme. Add a new namespace by copying one
+     block and renaming the data attribute + variables.
+     ============================================================ */
+
+  /* --- Justice: navy legal / public-interest documentation -------- */
+  [data-brand="justice"] {
+    --justice-bg: #0c1424;            /* hsl(220 45% 8%) */
+    --justice-card: #121d33;          /* hsl(220 40% 11%) */
+    --justice-border: #2a3a55;        /* hsl(220 30% 20%) */
+    --justice-accent: #cf4a4a;        /* hsl(0 65% 55%) */
+    --justice-accent-strong: #b03434;
+    --justice-ink: #e2e8f0;           /* slate-200 */
+    --justice-ink-strong: #f8fafc;    /* slate-50  */
+    --justice-ink-muted: #94a3b8;     /* slate-400 */
+    --justice-ink-subtle: #64748b;    /* slate-500 */
+  }
+
+  /* --- Marriage: dark warm-red wedding profile ------------------- */
+  [data-brand="marriage"] {
+    --marriage-bg-1: #0a0a0a;
+    --marriage-bg-2: #14060a;
+    --marriage-bg-3: #000000;
+    --marriage-tint: #1a0507;
+    --marriage-accent: #dc2626;       /* red-600 */
+    --marriage-accent-soft: #ef4444;  /* red-500 */
+    --marriage-accent-deep: #b91c1c;  /* red-700 */
+    --marriage-glow-strong: rgba(220, 38, 38, 0.55);
+    --marriage-glow-soft: rgba(220, 38, 38, 0.22);
+    --marriage-ink: #ffffff;
+    --marriage-ink-muted: rgba(255, 255, 255, 0.65);
+    --marriage-surface: rgba(0, 0, 0, 0.4);
+  }
+
+  /* --- BrandToki: white-first premium studio --------------------- */
+  [data-brand="brandtoki"] {
+    --brandtoki-bg: #ffffff;
+    --brandtoki-bg-soft: #f8fafc;
+    --brandtoki-ink: #111111;
+    --brandtoki-ink-muted: #4b5563;
+    --brandtoki-border: #e5e7eb;
+    --brandtoki-chip-dark: #0a0a0a;
+    --brandtoki-accent: #dc2626;
+    --brandtoki-accent-deep: #b91c1c;
+    --brandtoki-accent-tint: #fef2f2;
+    --brandtoki-accent-edge: #fecaca;
+    --brandtoki-accent-soft: #ffe4e6;
+    --brandtoki-accent-pale: #fff5f5;
+    --brandtoki-success: #16a34a;
+    --brandtoki-success-tint: #ecfdf5;
+    --brandtoki-success-edge: #a7f3d0;
+    --brandtoki-warn: #f97316;
+  }
+
+  /* Sub-brands manage their own background — let the root paint it. */
+  body:has([data-brand="marriage"]),
+  body:has([data-brand="justice"]),
+  body:has([data-brand="brandtoki"]) {
+    background: transparent;
+  }
+
   /* Default global typographic rhythm — only applies when a heading
      has no explicit font/size class on it, so existing pages stay intact. */
   h1:not([class*="text-"]):not([class*="font-"]),
