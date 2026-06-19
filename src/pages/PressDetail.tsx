@@ -79,7 +79,7 @@ export default function PressDetail() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-dvh flex items-center justify-center bg-background">
         <Loader2 className="h-6 w-6 animate-spin text-gold" />
       </div>
     );
@@ -112,7 +112,7 @@ export default function PressDetail() {
   const isPreview = status === "unpublished-preview";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
       <main className="mx-auto max-w-3xl px-6 py-16 md:px-10 md:py-24">
         <Link
@@ -201,7 +201,7 @@ function FriendlyState({
   onBack: () => void;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-6">
+    <div className="min-h-dvh flex items-center justify-center bg-background p-6">
       <div className="max-w-md text-center space-y-5 rounded-2xl glass p-10">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gold/10 ring-1 ring-gold/30">
           {icon}

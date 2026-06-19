@@ -203,13 +203,14 @@
   }
 
   /* Consistent, premium focus ring for all clickable elements */
-  a, button, [role="button"], summary {
-    @apply outline-none;
-  }
+  /* Only suppress the native outline when our custom focus-visible ring
+     takes over — preserves the browser default for :focus (e.g. programmatic
+     focus from skip-links, dialog restoration). */
   a:focus-visible,
   button:focus-visible,
   [role="button"]:focus-visible,
   summary:focus-visible {
+    outline: none;
     box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--gold) / 0.6);
     border-radius: 0.5rem;
   }

@@ -639,7 +639,7 @@ const StoryAiExpertEmon = () => {
   }, [copy.paragraphs]);
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-dvh bg-background text-foreground">
       <Navbar />
 
       <section className="relative isolate overflow-hidden pt-32 pb-16 sm:pt-40">

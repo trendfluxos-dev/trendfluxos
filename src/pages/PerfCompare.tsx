@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useSeo } from "@/hooks/useSeo";
 
 /**
  * DEV-only Perf Compare view.
@@ -42,6 +43,11 @@ const arrow = (d: number | null) => {
 };
 
 const PerfCompare = () => {
+  useSeo({
+    title: "Perf Compare — Dev",
+    description: "Internal performance session comparison.",
+    noindex: true,
+  });
   const [a, setA] = useState<Session | null>(null);
   const [b, setB] = useState<Session | null>(null);
   const [aName, setAName] = useState("");
@@ -116,7 +122,7 @@ const PerfCompare = () => {
   }, [a, b]);
 
   return (
-    <main className="min-h-screen bg-background text-foreground px-6 py-12">
+    <main className="min-h-dvh bg-background text-foreground px-6 py-12">
       <div className="mx-auto max-w-5xl">
         <h1 className="font-display text-3xl tracking-tight">Perf Compare</h1>
         <p className="mt-2 text-sm text-foreground/60">

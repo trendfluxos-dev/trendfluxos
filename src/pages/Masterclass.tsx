@@ -93,7 +93,7 @@ const Masterclass = () => {
   });
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-dvh bg-background text-foreground">
       {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-0" aria-hidden>
         <div className="absolute -top-32 right-0 h-[560px] w-[560px] rounded-full bg-primary/10 blur-[180px]" />

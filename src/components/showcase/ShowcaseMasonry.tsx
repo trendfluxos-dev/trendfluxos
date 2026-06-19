@@ -44,7 +44,7 @@ const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload
         }}
         aria-label={`Share ${item.title}`}
         title="AI Share"
-        className="absolute top-3 right-3 z-20 inline-flex items-center justify-center h-8 w-8 rounded-full border border-border/50 bg-background/70 backdrop-blur-sm text-foreground/60 opacity-0 group-hover:opacity-100 hover:text-primary hover:border-primary/50 transition-all"
+        className="absolute top-3 right-3 z-20 inline-flex items-center justify-center h-11 w-11 rounded-full border border-border/50 bg-background/70 backdrop-blur-sm text-foreground/60 opacity-0 group-hover:opacity-100 hover:text-primary hover:border-primary/50 transition-all"
       >
         <Share2 className="h-3.5 w-3.5" />
       </button>

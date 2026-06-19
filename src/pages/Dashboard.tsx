@@ -153,14 +153,14 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen grid place-items-center bg-background">
+      <div className="min-h-dvh grid place-items-center bg-background">
         <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#B11226] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAF9] text-[#111111] font-[Inter,system-ui,sans-serif]">
+    <div className="min-h-dvh bg-[#FAFAF9] text-[#111111] font-[Inter,system-ui,sans-serif]">
       {/* HEADER */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E5E7EB]">
         <div className="mx-auto max-w-6xl px-5 md:px-8 h-14 flex items-center justify-between">

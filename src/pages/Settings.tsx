@@ -71,7 +71,7 @@ export default function Settings() {
   };
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-dvh bg-background">
       <div className="mx-auto max-w-2xl px-6 py-20 sm:py-28">
         <header className="mb-12">
           <p className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Preferences</p>

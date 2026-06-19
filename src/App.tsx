@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import { Analytics } from "@vercel/analytics/react";
@@ -9,6 +9,7 @@ import OverflowDetector from "@/components/dev/OverflowDetector";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routes } from "./lib/routes";
+import { queryClient } from "@/lib/queryClient";
 import ScrollToTop from "./components/ScrollToTop";
 import ScrollProgress from "./components/ScrollProgress";
 import CommandPalette from "./components/CommandPalette";
@@ -41,8 +42,6 @@ const PerfMonitor = import.meta.env.DEV
 const PERF_FLAG =
   typeof window !== "undefined" &&
   new URLSearchParams(window.location.search).has("perf");
-
-const queryClient = new QueryClient();
 
 const Index = routes["/"];
 const Ecosystem = routes["/ecosystem"];
@@ -91,7 +90,7 @@ const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 
 const PageFallback = () => (
-  <div className="flex min-h-screen items-center justify-center bg-background">
+  <div className="flex min-h-dvh items-center justify-center bg-background">
     <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
   </div>
 );
@@ -156,7 +155,7 @@ const RoutedApp = () => {
 const App = () => (
   <AppErrorBoundary
     fallback={
-      <div className="flex min-h-screen items-center justify-center bg-background p-6 text-center">
+      <div className="flex min-h-dvh items-center justify-center bg-background p-6 text-center">
         <div className="max-w-md space-y-3">
           <h1 className="text-xl font-semibold text-foreground">Something went wrong</h1>
           <p className="text-sm text-muted-foreground">
@@ -170,7 +169,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter
+        future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+      >
         <BrandPreviewProvider>
           <SeoHead />
           <ScrollToTop />

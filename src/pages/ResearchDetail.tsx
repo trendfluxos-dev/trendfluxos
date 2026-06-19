@@ -100,7 +100,7 @@ const ResearchDetail = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <main className="min-h-dvh bg-background text-foreground overflow-x-hidden">
       <Navbar />
 
       <article className="relative pt-32 pb-20 px-6 lg:px-10">

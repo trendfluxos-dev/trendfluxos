@@ -162,7 +162,7 @@ export default function EnterpriseDemos() {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-dvh flex items-center justify-center bg-background">
         <Loader2 className="w-6 h-6 animate-spin text-primary" />
       </div>
     );
@@ -170,7 +170,7 @@ export default function EnterpriseDemos() {
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background px-6">
+      <div className="min-h-dvh flex items-center justify-center bg-background px-6">
         <div className="glass rounded-2xl p-8 max-w-md text-center">
           <ShieldCheck className="w-8 h-8 mx-auto text-primary" />
           <h1 className="font-display text-xl font-bold mt-4">Admin access required</h1>
@@ -186,7 +186,7 @@ export default function EnterpriseDemos() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-dvh bg-background">
       <header className="border-b border-border/60">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-6 flex items-center justify-between gap-4">
           <div>

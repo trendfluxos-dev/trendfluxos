@@ -190,11 +190,11 @@ export default function CourseEnrollmentsAdmin() {
   const signOut = async () => { await supabase.auth.signOut(); navigate("/auth"); };
 
   if (!authChecked) {
-    return <div className="min-h-screen grid place-items-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
+    return <div className="min-h-dvh grid place-items-center"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>;
   }
   if (!hasAccess) {
     return (
-      <div className="min-h-screen grid place-items-center bg-background p-6">
+      <div className="min-h-dvh grid place-items-center bg-background p-6">
         <div className="max-w-md text-center space-y-4 rounded-2xl border border-border p-8">
           <h1 className="font-display text-2xl font-bold">Admin only</h1>
           <p className="text-sm text-muted-foreground">You need the admin role to view enrollments.</p>
@@ -208,7 +208,7 @@ export default function CourseEnrollmentsAdmin() {
   const totalPending = bundles.reduce((s, b) => s + b.pendingCount, 0);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-10 border-b border-border bg-background/85 backdrop-blur">
         <div className="container mx-auto flex flex-wrap items-center justify-between gap-3 py-4">
           <div>
