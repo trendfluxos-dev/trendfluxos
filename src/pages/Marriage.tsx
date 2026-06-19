@@ -196,7 +196,7 @@ const Marriage = () => {
       className="min-h-dvh text-white"
       style={{
         background:
-          "radial-gradient(ellipse at top, rgba(220,38,38,0.22), transparent 45%), radial-gradient(ellipse at bottom, rgba(220,38,38,0.10), transparent 55%), linear-gradient(180deg, #0a0a0a 0%, #14060a 50%, #000000 100%)",
+          "radial-gradient(ellipse at top, rgba(220,38,38,0.22), transparent 45%), radial-gradient(ellipse at bottom, rgba(220,38,38,0.10), transparent 55%), linear-gradient(180deg, var(--marriage-bg-1) 0%, var(--marriage-bg-2) 50%, var(--marriage-bg-3) 100%)",
         backgroundAttachment: "fixed",
       }}
     >
@@ -213,7 +213,7 @@ const Marriage = () => {
 
         {/* Personalized welcome */}
         {inquirer && (
-          <div className="mt-4 rounded-2xl border border-white/15 bg-gradient-to-r from-black/70 via-[#1a0507]/80 to-black/70 px-5 py-4 backdrop-blur shadow-[0_10px_30px_-10px_rgba(220,38,38,0.5)] flex flex-wrap items-center justify-between gap-3">
+          <div className="mt-4 rounded-2xl border border-white/15 bg-gradient-to-r from-black/70 via-[var(--marriage-tint)]/80 to-black/70 px-5 py-4 backdrop-blur shadow-[0_10px_30px_-10px_rgba(220,38,38,0.5)] flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center text-black font-bold border border-white/30">
                 {greetingName?.[0]?.toUpperCase() ?? "♥"}
@@ -527,7 +527,7 @@ const Marriage = () => {
 
         {/* Premium Footer */}
         <footer className="mb-10 mt-2">
-          <div className="marriage-footer-card mx-auto max-w-2xl text-center rounded-3xl px-6 py-8 border border-red-500/40 bg-gradient-to-br from-black/80 via-[#1a0507]/90 to-black/80 backdrop-blur-md shadow-[0_30px_80px_-20px_rgba(220,38,38,0.45)]">
+          <div className="marriage-footer-card mx-auto max-w-2xl text-center rounded-3xl px-6 py-8 border border-red-500/40 bg-gradient-to-br from-black/80 via-[var(--marriage-tint)]/90 to-black/80 backdrop-blur-md shadow-[0_30px_80px_-20px_rgba(220,38,38,0.45)]">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-red-500/50 bg-red-600/10 text-red-300 text-xs font-bold uppercase tracking-[0.2em]">
               <Heart className="h-3.5 w-3.5 fill-current" />
               {t("Privately Curated Profile", "ব্যক্তিগতভাবে নির্বাচিত প্রোফাইল")}
