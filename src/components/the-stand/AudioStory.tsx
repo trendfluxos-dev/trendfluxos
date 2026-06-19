@@ -3,6 +3,7 @@ import { Pause, Play, Volume2 } from "lucide-react";
 import { useStandLang } from "@/context/StandLanguageContext";
 import { Reveal } from "./Reveal";
 import audioAsset from "@/assets/algorithm-torture-cell.mp3.asset.json";
+import { CdnStatusChip } from "@/components/media/CdnStatusChip";
 
 /**
  * AudioStory — a long-form narrative chapter pairing the recorded reflection
@@ -224,6 +225,9 @@ export function AudioStory() {
                 />
               </div>
               <Volume2 className="hidden h-4 w-4 text-[hsl(var(--stand-muted))] md:block" />
+            </div>
+            <div className="mt-4 flex items-center justify-end">
+              <CdnStatusChip url={audioAsset.url} expectedTypePrefix="audio/" label="Audio CDN" />
             </div>
           </div>
         </Reveal>
