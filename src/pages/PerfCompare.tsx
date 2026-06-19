@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useSeo } from "@/hooks/useSeo";
 
 /**
  * DEV-only Perf Compare view.
@@ -42,6 +43,11 @@ const arrow = (d: number | null) => {
 };
 
 const PerfCompare = () => {
+  useSeo({
+    title: "Perf Compare — Dev",
+    description: "Internal performance session comparison.",
+    noindex: true,
+  });
   const [a, setA] = useState<Session | null>(null);
   const [b, setB] = useState<Session | null>(null);
   const [aName, setAName] = useState("");

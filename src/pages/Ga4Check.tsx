@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Loader2, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import { useSeo } from "@/hooks/useSeo";
 
 interface CheckResult {
   url: string;
@@ -25,6 +26,12 @@ const DEFAULT_URLS = [
 ].join("\n");
 
 export default function Ga4Check() {
+  useSeo({
+    title: "GA4 Check — Admin",
+    description: "Internal GA4 installation verification tool.",
+    noindex: true,
+  });
+
   const [input, setInput] = useState(DEFAULT_URLS);
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<CheckResult[]>([]);
