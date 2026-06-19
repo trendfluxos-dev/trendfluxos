@@ -168,7 +168,7 @@ export default function ShareKit() {
   const encodedShort = encodeURIComponent(blocks[0].text);
 
   return (
-    <div className={`min-h-dvh ${navy} text-slate-100`}>
+    <div data-brand="justice" className={`min-h-dvh ${navy} text-[var(--justice-ink)]`}>
       <Helmet>
         <title>শেয়ার কিট — পাবনা অ্যাকাউন্টেবিলিটি প্রজেক্ট</title>
         <meta

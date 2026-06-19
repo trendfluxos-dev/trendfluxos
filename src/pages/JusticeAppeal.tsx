@@ -18,6 +18,9 @@ import {
 import referencedFigure from "@/assets/justice/referenced-figure.png";
 
 
+// Justice sub-brand tokens — defined in src/index.css under
+// `[data-brand="justice"]`. Page root sets `data-brand="justice"` so the
+// CSS variables resolve correctly and don't leak into other routes.
 const navy = "bg-[var(--justice-bg)]";
 const navyCard = "bg-[var(--justice-card)]";
 const navyBorder = "border-[var(--justice-border)]";
@@ -44,7 +47,7 @@ const evidenceItems = [
 
 export default function JusticeAppeal() {
   return (
-    <div className={`min-h-dvh ${navy} text-slate-100`}>
+    <div data-brand="justice" className={`min-h-dvh ${navy} text-[var(--justice-ink)]`}>
       <Helmet>
         <title>Pabna Accountability Project — Public Interest Documentation</title>
         <meta name="description" content="A documentary archive of a written complaint and related media references, requesting lawful investigation and safety protection." />
