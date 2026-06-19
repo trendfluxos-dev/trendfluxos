@@ -116,7 +116,7 @@ const PerfCompare = () => {
   }, [a, b]);
 
   return (
-    <main className="min-h-screen bg-background text-foreground px-6 py-12">
+    <main className="min-h-dvh bg-background text-foreground px-6 py-12">
       <div className="mx-auto max-w-5xl">
         <h1 className="font-display text-3xl tracking-tight">Perf Compare</h1>
         <p className="mt-2 text-sm text-foreground/60">

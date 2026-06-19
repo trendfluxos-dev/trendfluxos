@@ -147,14 +147,14 @@ export default function SecretsHealthAdmin() {
 
   if (!authChecked) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex min-h-dvh items-center justify-center bg-background">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
     );
   }
   if (!isAdmin) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background p-6">
+      <div className="flex min-h-dvh items-center justify-center bg-background p-6">
         <div className="max-w-md text-center text-foreground">
           <ShieldCheck className="mx-auto mb-3 h-8 w-8 text-destructive" />
           <h1 className="text-xl font-semibold">Admin access required</h1>
@@ -167,7 +167,7 @@ export default function SecretsHealthAdmin() {
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 py-10 text-foreground">
+    <div className="min-h-dvh bg-background px-4 py-10 text-foreground">
       <div className="mx-auto max-w-4xl space-y-8">
         <header className="space-y-1">
           <h1 className="flex items-center gap-2 text-2xl font-semibold">

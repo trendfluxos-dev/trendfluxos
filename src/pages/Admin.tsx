@@ -168,7 +168,7 @@ export default function Admin() {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-gold" />
       </div>
     );
@@ -176,7 +176,7 @@ export default function Admin() {
 
   if (!hasAccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-6">
+      <div className="min-h-dvh flex items-center justify-center bg-background p-6">
         <div className="max-w-md text-center space-y-4 rounded-2xl glass p-8">
           <h1 className="font-display text-2xl font-bold">No access</h1>
           <p className="text-sm text-foreground/60">
@@ -190,7 +190,7 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur">
         <div className="container mx-auto flex items-center justify-between py-4">
           <div>

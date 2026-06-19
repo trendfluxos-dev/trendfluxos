@@ -77,7 +77,7 @@ const Movement = ({
   className?: string;
 }) => (
   <section
-    className={`relative flex w-full min-h-[88vh] items-center justify-center px-6 py-24 sm:px-10 md:min-h-screen md:px-16 ${className}`}
+    className={`relative flex w-full min-h-[88vh] items-center justify-center px-6 py-24 sm:px-10 md:min-h-dvh md:px-16 ${className}`}
   >
     {children}
   </section>

@@ -63,7 +63,7 @@ export default function TheStandShare() {
   const previewH = Math.round((ratio.h / ratio.w) * previewW);
 
   return (
-    <main lang="bn" className="min-h-screen bg-background text-foreground">
+    <main lang="bn" className="min-h-dvh bg-background text-foreground">
       <section className="px-6 lg:px-10 pt-20 pb-10">
         <div className="mx-auto max-w-6xl">
           <Link

@@ -146,14 +146,14 @@ export default function LuxeVeilAdmin() {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-gold" />
       </div>
     );
   }
   if (!hasAccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-6">
+      <div className="min-h-dvh flex items-center justify-center bg-background p-6">
         <div className="max-w-md text-center space-y-4 rounded-2xl glass p-8">
           <h1 className="font-display text-2xl font-bold">Admin only</h1>
           <p className="text-sm text-foreground/60">You need an admin role to view Luxe Veil requests.</p>
@@ -173,7 +173,7 @@ export default function LuxeVeilAdmin() {
     sortField === f ? (sortDir === "asc" ? <ArrowUp className="inline h-3 w-3 ml-1" /> : <ArrowDown className="inline h-3 w-3 ml-1" />) : null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur">
         <div className="container mx-auto flex flex-wrap items-center justify-between gap-3 py-4">
           <div>

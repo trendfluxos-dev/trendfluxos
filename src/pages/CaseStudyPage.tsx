@@ -101,7 +101,7 @@ const CaseStudyPage = () => {
 
   if (!study) {
     return (
-      <main className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-6 text-center">
+      <main className="min-h-dvh bg-background text-foreground flex flex-col items-center justify-center px-6 text-center">
         <p className="text-sm uppercase tracking-[0.3em] text-gold mb-4">404</p>
         <h1 className="font-display text-3xl md:text-5xl font-bold">
           Case study not found
@@ -119,7 +119,7 @@ const CaseStudyPage = () => {
   const Icon = study.Icon;
 
   return (
-    <main className="min-h-screen bg-background text-foreground font-sans overflow-hidden">
+    <main className="min-h-dvh bg-background text-foreground font-sans overflow-hidden">
       <div className="fixed inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-0 right-0 w-[520px] h-[520px] bg-primary/20 blur-[160px]" />
         <div className="absolute bottom-0 left-0 w-[520px] h-[520px] bg-primary-glow/15 blur-[160px]" />

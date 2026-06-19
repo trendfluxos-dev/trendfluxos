@@ -193,7 +193,7 @@ const Marriage = () => {
   return (
     <main
       lang={bangla ? "bn" : "en"}
-      className="min-h-screen text-white"
+      className="min-h-dvh text-white"
       style={{
         background:
           "radial-gradient(ellipse at top, rgba(220,38,38,0.22), transparent 45%), radial-gradient(ellipse at bottom, rgba(220,38,38,0.10), transparent 55%), linear-gradient(180deg, #0a0a0a 0%, #14060a 50%, #000000 100%)",

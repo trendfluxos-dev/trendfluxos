@@ -35,7 +35,7 @@ const Toolkit = () => {
   }, [navigate]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background">
+    <main className="flex min-h-dvh items-center justify-center bg-background">
       <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" />
     </main>
   );

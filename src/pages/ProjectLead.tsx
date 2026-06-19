@@ -102,7 +102,7 @@ const ProjectLead = () => {
     imageAlt: "Zahid Hasan Emon — Founder, TrendFlux Ecosystem",
   });
   return (
-    <main className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <main className="min-h-dvh bg-background text-foreground overflow-x-hidden">
       <MarriageInquiryDialog open={marriageOpen} onOpenChange={setMarriageOpen} />
       <Navbar />
 

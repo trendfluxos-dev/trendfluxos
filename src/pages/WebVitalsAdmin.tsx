@@ -109,7 +109,7 @@ export default function WebVitalsAdmin() {
   }, [rows]);
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="min-h-dvh bg-background text-foreground">
       <div className="container max-w-6xl py-8">
         <div className="mb-6 flex items-center justify-between">
           <Link

@@ -152,14 +152,14 @@ export default function CourseTrendflux() {
 
   if (loading) {
     return (
-      <div className="min-h-screen grid place-items-center bg-background text-foreground/70">
+      <div className="min-h-dvh grid place-items-center bg-background text-foreground/70">
         Loading…
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
       {/* Ambient brand glow */}
       <div className="pointer-events-none fixed inset-0" aria-hidden>
         <div className="absolute -top-24 right-0 h-[420px] w-[420px] rounded-full bg-primary/10 blur-[160px]" />

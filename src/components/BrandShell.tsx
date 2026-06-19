@@ -27,7 +27,7 @@ export const BrandShell = ({
   const meta = tierMeta[tier];
   return (
     <main
-      className="relative min-h-screen bg-background text-foreground overflow-hidden"
+      className="relative min-h-dvh bg-background text-foreground overflow-hidden"
       style={{
         background:
           "radial-gradient(60% 40% at 50% -10%, hsl(var(--primary) / 0.07), transparent 70%), linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)",

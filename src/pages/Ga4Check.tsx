@@ -71,7 +71,7 @@ export default function Ga4Check() {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
+    <div className="min-h-dvh bg-background p-4 md:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
         <header className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight text-foreground">GA4 Integration Check</h1>

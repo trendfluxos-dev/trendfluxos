@@ -44,7 +44,7 @@ const evidenceItems = [
 
 export default function JusticeAppeal() {
   return (
-    <div className={`min-h-screen ${navy} text-slate-100`}>
+    <div className={`min-h-dvh ${navy} text-slate-100`}>
       <Helmet>
         <title>Pabna Accountability Project — Public Interest Documentation</title>
         <meta name="description" content="A documentary archive of a written complaint and related media references, requesting lawful investigation and safety protection." />

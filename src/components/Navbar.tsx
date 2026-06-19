@@ -89,7 +89,7 @@ const Navbar = () => {
               onClick={() => openCommandPalette()}
               aria-label="Search pages"
               title="Search pages (⌘K)"
-              className="inline-flex items-center justify-center h-9 w-9 rounded-full border border-border/50 bg-background/30 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-border/50 bg-background/30 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <Search className="h-3.5 w-3.5" />
             </button>

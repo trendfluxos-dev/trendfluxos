@@ -14,7 +14,7 @@ const Contact = () => {
   });
 
   return (
-    <main className="min-h-screen bg-background text-foreground font-sans antialiased">
+    <main className="min-h-dvh bg-background text-foreground font-sans antialiased">
       <Navbar />
 
       <TfSection

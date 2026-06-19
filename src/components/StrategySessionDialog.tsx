@@ -187,7 +187,7 @@ export const StrategySessionDialog = ({
                   type="button"
                   onClick={copyReference}
                   aria-label="Copy reference ID"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-foreground/15 text-foreground/70 transition hover:border-gold/50 hover:text-gold"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-foreground/15 text-foreground/70 transition hover:border-gold/50 hover:text-gold"
                 >
                   <Copy className="h-3.5 w-3.5" />
                 </button>
