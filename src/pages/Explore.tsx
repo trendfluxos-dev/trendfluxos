@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 import { Search } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { navigablePages, preloadRoute, type PageType } from "@/lib/routes";
 import { openCommandPalette } from "@/lib/commandPalette";
+import { useSeo } from "@/hooks/useSeo";
 
 const DESCRIPTIONS: Record<string, string> = {
   "/": "Start here — overview of TrendFlux.",
@@ -35,6 +35,21 @@ const SECTION_BLURB: Record<PageType, string> = {
 const ORDER: PageType[] = ["Main", "Brand", "Account", "Admin"];
 
 const Explore = () => {
+  useSeo({
+    title: "Browse — TrendFlux Digital",
+    description:
+      "Browse every section of TrendFlux Digital — brands, courses, studio, enterprise, and more.",
+    canonical: "https://trendflux.digital/explore",
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: "Browse — TrendFlux Digital",
+      url: "https://trendflux.digital/explore",
+      description:
+        "Browse every section of TrendFlux Digital — brands, courses, studio, enterprise, and more.",
+    },
+  });
+
   const grouped = ORDER.map((type) => ({
     type,
     items: navigablePages.filter((p) => p.type === type),
@@ -42,22 +57,6 @@ const Explore = () => {
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
-      <Helmet>
-        <title>Browse — TrendFlux Digital</title>
-        <meta
-          name="description"
-          content="Browse every section of TrendFlux Digital — brands, courses, studio, enterprise, and more."
-        />
-        <link rel="canonical" href="https://trendflux.digital/explore" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Browse — TrendFlux Digital" />
-        <meta property="og:description" content="Browse every section of TrendFlux Digital — brands, courses, studio, enterprise, and more." />
-        <meta property="og:url" content="https://trendflux.digital/explore" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="Browse — TrendFlux Digital" />
-        <meta name="twitter:description" content="Browse every section of TrendFlux Digital — brands, courses, studio, enterprise, and more." />
-      </Helmet>
-
       <Navbar />
 
       <main className="pt-28 pb-20 px-6 lg:px-10">
