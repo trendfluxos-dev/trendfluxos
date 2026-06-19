@@ -15,12 +15,12 @@ import {
   Send,
 } from "lucide-react";
 
-const navy = "bg-[hsl(220,45%,8%)]";
-const navyCard = "bg-[hsl(220,40%,11%)]";
-const navyBorder = "border-[hsl(220,30%,20%)]";
-const accent = "text-[hsl(0,65%,55%)]";
-const accentBg = "bg-[hsl(0,65%,55%)]";
-const accentBorder = "border-[hsl(0,65%,55%)]";
+const navy = "bg-[var(--justice-bg)]";
+const navyCard = "bg-[var(--justice-card)]";
+const navyBorder = "border-[var(--justice-border)]";
+const accent = "text-[var(--justice-accent)]";
+const accentBg = "bg-[var(--justice-accent)]";
+const accentBorder = "border-[var(--justice-accent)]";
 
 const PAGE_URL = "https://trendflux.digital/justice-appeal";
 

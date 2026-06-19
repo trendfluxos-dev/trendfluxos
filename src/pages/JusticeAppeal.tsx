@@ -18,12 +18,12 @@ import {
 import referencedFigure from "@/assets/justice/referenced-figure.png";
 
 
-const navy = "bg-[hsl(220,45%,8%)]";
-const navyCard = "bg-[hsl(220,40%,11%)]";
-const navyBorder = "border-[hsl(220,30%,20%)]";
-const accent = "text-[hsl(0,65%,55%)]";
-const accentBg = "bg-[hsl(0,65%,55%)]";
-const accentBorder = "border-[hsl(0,65%,55%)]";
+const navy = "bg-[var(--justice-bg)]";
+const navyCard = "bg-[var(--justice-card)]";
+const navyBorder = "border-[var(--justice-border)]";
+const accent = "text-[var(--justice-accent)]";
+const accentBg = "bg-[var(--justice-accent)]";
+const accentBorder = "border-[var(--justice-accent)]";
 
 const timeline = [
   { date: "১৭ মার্চ ২০২২", title: "প্রথম ফোন যোগাযোগ ও অভিযুক্ত হুমকি", body: "অভিযোগ অনুযায়ী, ফোনকলের মাধ্যমে হুমকি পাওয়া যায়।" },
