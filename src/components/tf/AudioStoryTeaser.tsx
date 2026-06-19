@@ -4,6 +4,8 @@ import { Pause, Play, ArrowUpRight, Headphones, Clock, Loader2, ChevronLeft, Che
 import audioAsset from "@/assets/mayer-nishedh-chapter-1.mp3.asset.json";
 import { track } from "@/lib/analytics";
 import { useAutoplayPreview, useEffectiveReducedMotion } from "@/lib/audioPreferences";
+import { CdnStatusChip } from "@/components/media/CdnStatusChip";
+import { useCdnHeaderCheck } from "@/lib/cdnHeaderCheck";
 
 const ANALYTICS_CONTEXT = {
   chapter: "chapter-1",
@@ -73,6 +75,9 @@ export default function AudioStoryTeaser() {
       // @ts-ignore - experimental API
       ? (navigator.getAutoplayPolicy?.("mediaelement") as string) ?? "unknown"
       : "unknown";
+
+  // Real-time CDN header verifier — probes Content-Type + HTTP status.
+  const cdn = useCdnHeaderCheck(audioAsset.url);
 
   useEffect(() => {
     const el = ref.current;
@@ -379,6 +384,11 @@ export default function AudioStoryTeaser() {
               {liveMsg}
             </div>
 
+            {/* Always-on CDN/headers verifier */}
+            <div className="mt-4 flex items-center justify-end">
+              <CdnStatusChip url={audioAsset.url} expectedTypePrefix="audio/" label="Audio CDN" />
+            </div>
+
             {/* player row */}
             <div className="mt-6 flex items-center gap-5">
               <button
@@ -504,6 +514,24 @@ export default function AudioStoryTeaser() {
                   <div className="flex justify-between gap-3">
                     <dt className="text-muted-foreground">Error code</dt>
                     <dd>{diag.code ?? diag.name ?? "—"}</dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">CDN status</dt>
+                    <dd className={cdn.ok ? "" : "text-destructive"}>
+                      {cdn.checking ? "checking…" : cdn.error ? `error: ${cdn.error}` : `${cdn.status}${cdn.ok ? " OK" : ""}`}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <dt className="text-muted-foreground">Content-Type</dt>
+                    <dd
+                      className={
+                        cdn.contentType && cdn.contentType.toLowerCase().startsWith("audio/")
+                          ? ""
+                          : "text-destructive"
+                      }
+                    >
+                      {cdn.contentType ?? "—"}
+                    </dd>
                   </div>
                   <div className="col-span-full mt-1 flex items-start gap-2">
                     <dt className="shrink-0 text-muted-foreground">Source</dt>
