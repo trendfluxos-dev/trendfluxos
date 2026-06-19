@@ -185,7 +185,7 @@ export default function JusticeAppeal() {
           <ol className="mt-10 space-y-0 border-l border-white/10 pl-6">
             {timeline.map((t, i) => (
               <li key={i} className="relative pb-8 last:pb-0">
-                <span className={`absolute -left-[31px] top-1 h-3 w-3 rounded-full ${accentBg} ring-4 ring-[hsl(220,45%,8%)]`} />
+                <span className={`absolute -left-[31px] top-1 h-3 w-3 rounded-full ${accentBg} ring-4 ring-[var(--justice-bg)]`} />
                 <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">{t.date}</div>
                 <h3 className="mt-1.5 text-base font-semibold text-white">{t.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{t.body}</p>
