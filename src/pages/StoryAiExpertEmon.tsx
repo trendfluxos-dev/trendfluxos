@@ -27,6 +27,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
 import audioAsset from "@/assets/ai-bisheshoggo-emon.mp3.asset.json";
+import { CdnStatusChip } from "@/components/media/CdnStatusChip";
 import shareCard from "@/assets/ai-expert-emon-share.jpg";
 import {
   AI_EXPERT_EMON_CHAPTERS,
