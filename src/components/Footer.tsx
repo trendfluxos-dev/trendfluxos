@@ -58,7 +58,17 @@ const Footer = () => {
             </li>
             <li><a href="#cases" className="story-link hover:text-foreground transition-colors">Case Studies</a></li>
             <li><Link to="/the-stand" className="story-link hover:text-foreground transition-colors">The Stand</Link></li>
-            <li><Link to="/toolkit" className="story-link hover:text-foreground transition-colors">Course & Toolkit</Link></li>
+            <li>
+              <a
+                href="https://kormoshikkha.trendflux.digital/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="story-link hover:text-foreground transition-colors inline-flex items-center gap-1.5"
+              >
+                KormoShikkha — Edtech
+                <span className="text-[10px] uppercase tracking-[0.2em] text-foreground/35">↗</span>
+              </a>
+            </li>
             <li><Link to="/contact" className="story-link hover:text-foreground transition-colors">Contact</Link></li>
           </ul>
         </nav>

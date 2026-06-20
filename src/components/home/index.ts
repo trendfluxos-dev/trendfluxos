@@ -1,5 +1,6 @@
 export { HomeHeroSection } from "./HomeHeroSection";
 export { TrustBar } from "./TrustBar";
+export { QuickAccess } from "./QuickAccess";
 export { EcosystemSection } from "./EcosystemSection";
 export { ServicesSection } from "./ServicesSection";
 export { SystemsHeBuiltSection } from "./SystemsHeBuiltSection";
