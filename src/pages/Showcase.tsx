@@ -1,13 +1,22 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
 import ResearchList from "@/components/showcase/ResearchList";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
+import ShowcaseFilters, {
+  type FacetKey,
+  type FacetState,
+} from "@/components/showcase/ShowcaseFilters";
 import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
-import { SHOWCASE_ITEMS, SHOWCASE_CATEGORIES, type ShowcaseCategory } from "@/data/showcase";
+import {
+  SHOWCASE_ITEMS,
+  SHOWCASE_INDUSTRIES,
+  SHOWCASE_SERVICES,
+  SHOWCASE_TECH,
+} from "@/data/showcase";
 import { RESEARCH_ITEMS, IMPLEMENTATION_ITEMS } from "@/data/research";
 import { ArrowRight, Sparkles, Share2 } from "lucide-react";
 
@@ -19,7 +28,12 @@ const SHARE_TEXT =
   "Zahid Hasan Emon — Showcase: brands, systems and initiatives built end-to-end.";
 
 const Showcase = () => {
-  const [filter, setFilter] = useState<ShowcaseCategory | "All">("All");
+  // Multi-facet filter state: AND across facets, OR within each facet.
+  const [facets, setFacets] = useState<FacetState>({
+    industry: new Set<string>(),
+    service: new Set<string>(),
+    tech: new Set<string>(),
+  });
   const [shareOpen, setShareOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   type Tab = "projects" | "research" | "implementations";
@@ -48,18 +62,53 @@ const Showcase = () => {
     imageAlt: "Zahid Hasan Emon — Showcase of work",
   });
 
-  const filtered = useMemo(
-    () => (filter === "All" ? SHOWCASE_ITEMS : SHOWCASE_ITEMS.filter((i) => i.category === filter)),
-    [filter],
-  );
-
-  const totalByCategory = useMemo(() => {
-    const m: Record<string, number> = { All: SHOWCASE_ITEMS.length };
-    for (const c of SHOWCASE_CATEGORIES) {
-      m[c] = SHOWCASE_ITEMS.filter((i) => i.category === c).length;
+  const filtered = useMemo(() => {
+    const { industry, service, tech } = facets;
+    if (industry.size === 0 && service.size === 0 && tech.size === 0) {
+      return SHOWCASE_ITEMS;
     }
-    return m;
+    return SHOWCASE_ITEMS.filter((item) => {
+      if (industry.size && !(item.industry && industry.has(item.industry))) {
+        return false;
+      }
+      if (
+        service.size &&
+        !(item.services ?? []).some((s) => service.has(s))
+      ) {
+        return false;
+      }
+      if (tech.size && !(item.tech ?? []).some((t) => tech.has(t))) {
+        return false;
+      }
+      return true;
+    });
+  }, [facets]);
+
+  const toggleFacet = useCallback((key: FacetKey, value: string) => {
+    setFacets((prev) => {
+      const next = new Set(prev[key]);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return { ...prev, [key]: next };
+    });
   }, []);
+
+  const clearFacets = useCallback(() => {
+    setFacets({
+      industry: new Set<string>(),
+      service: new Set<string>(),
+      tech: new Set<string>(),
+    });
+  }, []);
+
+  const filterGroups = useMemo(
+    () => [
+      { key: "industry" as const, label: "Industry", options: SHOWCASE_INDUSTRIES },
+      { key: "service" as const, label: "Service", options: SHOWCASE_SERVICES },
+      { key: "tech" as const, label: "Tech Stack", options: SHOWCASE_TECH },
+    ],
+    [],
+  );
 
   const pageSharePayload: SharePayload = {
     title: "Zahid Hasan Emon — Showcase",
@@ -145,36 +194,32 @@ const Showcase = () => {
         <>
           <section className="px-6 lg:px-10 pt-6">
             <div className="max-w-7xl mx-auto">
-              <div className="flex flex-wrap gap-2 pb-5">
-                {(["All", ...SHOWCASE_CATEGORIES] as const).map((c) => {
-                  const active = filter === c;
-                  return (
-                    <button
-                      key={c}
-                      type="button"
-                      onClick={() => setFilter(c)}
-                      className={[
-                        "text-xs px-3.5 py-1.5 rounded-full border transition-all",
-                        active
-                          ? "border-primary/60 bg-primary/10 text-foreground"
-                          : "border-border/50 bg-background/30 text-foreground/60 hover:text-foreground hover:border-foreground/30",
-                      ].join(" ")}
-                    >
-                      {c}
-                      <span className="ml-1.5 text-foreground/40">{totalByCategory[c] ?? 0}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              <ShowcaseFilters
+                groups={filterGroups}
+                state={facets}
+                onToggle={toggleFacet}
+                onClear={clearFacets}
+                resultCount={filtered.length}
+                totalCount={SHOWCASE_ITEMS.length}
+              />
             </div>
           </section>
 
-          <section className="px-6 lg:px-10 pt-4 pb-20">
+          <section className="px-6 lg:px-10 pt-6 pb-20">
             <div className="max-w-7xl mx-auto">
               <ShowcaseMasonry items={filtered} />
               {filtered.length === 0 && (
-                <div className="text-center py-20 text-foreground/50 text-sm">
-                  No items in this category yet.
+                <div className="text-center py-20">
+                  <p className="text-foreground/60 text-sm">
+                    No projects match the selected filters.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={clearFacets}
+                    className="mt-3 text-xs text-primary underline-offset-4 hover:underline"
+                  >
+                    Clear all filters
+                  </button>
                 </div>
               )}
             </div>
