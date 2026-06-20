@@ -33,11 +33,38 @@ const setState = (next: SeoProps) => {
   listeners.forEach((l) => l());
 };
 
+const CANONICAL_ORIGIN = "https://trendflux.digital";
+
 const toAbsolute = (url?: string) => {
   if (!url) return url;
   if (/^https?:\/\//i.test(url)) return url;
   if (typeof window === "undefined") return url;
   return new URL(url, window.location.origin).toString();
+};
+
+/**
+ * Build a canonical URL for the current route.
+ *
+ * - Always uses the production origin (https://trendflux.digital) so that
+ *   the preview/Lovable subdomain, the *.vercel.app deploy URL, and the
+ *   custom domain all collapse to a single canonical — preventing Google
+ *   from indexing the same content under three hosts.
+ * - Strips the query string and hash. Tracking params (utm_*, fbclid,
+ *   gclid…) and in-page anchors are NOT separate documents.
+ * - Strips trailing slashes except for the root, matching what the
+ *   sitemap advertises.
+ */
+const buildCanonical = (override?: string) => {
+  if (override) {
+    if (/^https?:\/\//i.test(override)) return override;
+    return `${CANONICAL_ORIGIN}${override.startsWith("/") ? override : `/${override}`}`;
+  }
+  if (typeof window === "undefined") return CANONICAL_ORIGIN;
+  let pathname = window.location.pathname || "/";
+  if (pathname.length > 1 && pathname.endsWith("/")) {
+    pathname = pathname.replace(/\/+$/, "");
+  }
+  return `${CANONICAL_ORIGIN}${pathname}`;
 };
 
 export const useSeo = (props: SeoProps = {}) => {
@@ -63,9 +90,10 @@ export const SeoHead = () => {
   const image = toAbsolute(s.image ?? BRAND.ogImage);
   const imageAlt = s.imageAlt ?? `${BRAND.name} — ${BRAND.tagline}`;
   const type = s.type ?? "website";
-  const url =
-    s.canonical ||
-    (typeof window !== "undefined" ? window.location.href.split("#")[0] : BRAND.url);
+  // Canonical + og:url MUST self-reference the page itself, normalized
+  // to the production origin. Otherwise crawlers attribute this page's
+  // metadata to whatever URL the canonical points at.
+  const url = buildCanonical(s.canonical);
 
   return (
     <Helmet>
