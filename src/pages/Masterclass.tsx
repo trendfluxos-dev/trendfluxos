@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { EDTECH } from "@/config/edtech";
 import {
   ArrowRight,
   Sparkles,
@@ -67,10 +67,11 @@ const apply = (source: string) => {
 };
 
 const Masterclass = () => {
-  const [hookIdx, setHookIdx] = useState(0);
+  // Consolidated learning experience: all masterclass traffic flows to the
+  // dedicated edtech platform (KormoShikkha). This route is preserved for
+  // backward-compat links and SEO continuity, and performs a fast redirect.
   useEffect(() => {
-    const id = setInterval(() => setHookIdx((i) => (i + 1) % HOOKS.length), 3800);
-    return () => clearInterval(id);
+    window.location.replace(EDTECH.url);
   }, []);
 
   useSeo({
@@ -91,6 +92,27 @@ const Masterclass = () => {
       url: BRAND.url,
     },
   });
+
+  return (
+    <main className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-background px-6 text-center text-foreground">
+      <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary border-t-transparent" aria-hidden />
+      <p className="text-sm text-muted-foreground">
+        Redirecting to {EDTECH.name} —{" "}
+        <a href={EDTECH.url} className="text-primary underline-offset-4 hover:underline">
+          open the platform
+        </a>
+      </p>
+    </main>
+  );
+};
+
+export default Masterclass;
+
+// ---------------------------------------------------------------------------
+// Legacy landing-page data retained below for reference / future re-enable.
+// Not rendered — kept out of the bundle by being unused after redirect.
+// ---------------------------------------------------------------------------
+const _LEGACY = () => {
 
   return (
     <main className="min-h-dvh bg-background text-foreground">
