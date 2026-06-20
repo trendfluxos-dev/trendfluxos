@@ -8,6 +8,47 @@ export type ShowcaseCategory =
 
 export type ShowcaseSize = "sm" | "md" | "lg";
 
+/**
+ * Faceted taxonomies used by the /showcase filter UI.
+ * Keep these closed unions so the filter chips render only known values.
+ */
+export type ShowcaseIndustry =
+  | "EdTech"
+  | "Civic / Non-profit"
+  | "Media & Storytelling"
+  | "Wedding & Lifestyle"
+  | "Studio & Production"
+  | "HR & Careers"
+  | "Enterprise / B2B"
+  | "Personal Brand"
+  | "Advocacy"
+  | "Press";
+
+export type ShowcaseService =
+  | "Web Development"
+  | "Brand Architecture"
+  | "Content Engine"
+  | "AI Automation"
+  | "CRM & Workflow"
+  | "Paid Media"
+  | "Community Ops"
+  | "Documentary";
+
+export type ShowcaseTech =
+  | "React"
+  | "TypeScript"
+  | "Tailwind"
+  | "Supabase"
+  | "Vercel"
+  | "n8n"
+  | "OpenAI"
+  | "Meta Ads"
+  | "Facebook"
+  | "LinkedIn"
+  | "WordPress"
+  | "Wix"
+  | "GHL";
+
 export type ShowcaseItem = {
   id: string;
   title: string;
@@ -16,6 +57,9 @@ export type ShowcaseItem = {
   summary: string;
   metrics?: { label: string; value: string }[];
   tags?: string[];
+  industry?: ShowcaseIndustry;
+  services?: ShowcaseService[];
+  tech?: ShowcaseTech[];
   href?: string; // internal route or external URL
   external?: boolean;
   size?: ShowcaseSize; // controls visual prominence
@@ -24,6 +68,26 @@ export type ShowcaseItem = {
 };
 
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
+  {
+    id: "kormoshikkha",
+    title: "KormoShikkha — Online Edtech Platform",
+    category: "Enterprise System",
+    year: "2025 — Present",
+    summary:
+      "TrendFlux's online learning platform — cohort-based AI masterclasses, modular curriculum and recordings. Designed and operated end-to-end.",
+    metrics: [
+      { label: "Modules", value: "7+" },
+      { label: "Status", value: "Live" },
+    ],
+    tags: ["EdTech", "AI Masterclass", "Cohort"],
+    industry: "EdTech",
+    services: ["Web Development", "Brand Architecture", "Content Engine"],
+    tech: ["React", "TypeScript", "Tailwind", "Supabase", "Vercel"],
+    href: "https://kormoshikkha.trendflux.digital/",
+    external: true,
+    size: "lg",
+    accent: "emerald",
+  },
   {
     id: "trendflux-ecosystem",
     title: "TrendFlux Ecosystem",
@@ -36,6 +100,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
       { label: "Modules Shipped", value: "12+" },
     ],
     tags: ["Founder", "AI Automation", "Growth OS"],
+    industry: "Enterprise / B2B",
+    services: ["AI Automation", "CRM & Workflow", "Brand Architecture", "Content Engine"],
+    tech: ["React", "TypeScript", "Tailwind", "Supabase", "OpenAI", "n8n"],
     href: "/ecosystem",
     size: "lg",
     accent: "cyan",
@@ -52,6 +119,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
       { label: "Organic Reach", value: "82%" },
     ],
     tags: ["Civic Brand", "Content Engine", "Bangladesh"],
+    industry: "Civic / Non-profit",
+    services: ["Brand Architecture", "Content Engine", "Community Ops"],
+    tech: ["Facebook", "WordPress"],
     size: "lg",
     accent: "gold",
   },
@@ -63,6 +133,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "A personal whistleblower archive — long-form documentary, audio story, refusal stanzas and shareable quote engine.",
     tags: ["Storytelling", "Documentary", "Archive"],
+    industry: "Media & Storytelling",
+    services: ["Documentary", "Web Development", "Content Engine"],
+    tech: ["React", "TypeScript", "Tailwind"],
     href: "/the-stand",
     size: "md",
     accent: "rose",
@@ -75,6 +148,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "Private invite-only wedding concierge platform — gated access, application flow and admin moderation panel.",
     tags: ["Invite-only", "Concierge", "Premium"],
+    industry: "Wedding & Lifestyle",
+    services: ["Web Development", "CRM & Workflow", "Brand Architecture"],
+    tech: ["React", "TypeScript", "Tailwind", "Supabase"],
     href: "/luxe-veil",
     size: "md",
     accent: "violet",
@@ -87,6 +163,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "Production studio site — photography, videography and podcast booking flow for a Gulshan-based studio.",
     tags: ["Studio", "Production", "Booking"],
+    industry: "Studio & Production",
+    services: ["Web Development", "Brand Architecture"],
+    tech: ["React", "TypeScript", "Tailwind"],
     href: "/brandtoki",
     size: "sm",
     accent: "gold",
@@ -99,6 +178,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "Careers + talent platform connecting growth operators with founder-led brands across Bangladesh.",
     tags: ["Careers", "Talent"],
+    industry: "HR & Careers",
+    services: ["Web Development", "CRM & Workflow"],
+    tech: ["React", "TypeScript", "Tailwind", "Supabase"],
     href: "/trendflux-talent",
     size: "sm",
     accent: "cyan",
@@ -111,6 +193,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "ERP-style control portal — dashboards, automation, compliance and audit modules for mid-market operators.",
     tags: ["ERP", "Automation", "Compliance"],
+    industry: "Enterprise / B2B",
+    services: ["AI Automation", "CRM & Workflow", "Web Development"],
+    tech: ["React", "TypeScript", "Tailwind", "Supabase", "n8n"],
     href: "/enterprise",
     size: "md",
     accent: "emerald",
@@ -123,6 +208,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "Training program for growth operators — AI workflows, automation, income systems and applied case studies.",
     tags: ["Education", "AI", "Training"],
+    industry: "EdTech",
+    services: ["Content Engine", "Brand Architecture"],
+    tech: ["OpenAI", "React", "Tailwind"],
     href: "/masterclass",
     size: "sm",
     accent: "gold",
@@ -139,6 +227,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
       { label: "Interaction", value: "65%" },
     ],
     tags: ["Authority Brand", "Education", "Reels"],
+    industry: "Personal Brand",
+    services: ["Content Engine", "Community Ops"],
+    tech: ["Facebook"],
     href: "https://www.facebook.com/zhemongrowth/",
     external: true,
     size: "md",
@@ -152,6 +243,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "Founder voice on LinkedIn — narrative-led posts on AI, automation and growth operating systems.",
     tags: ["LinkedIn", "Thought Leadership"],
+    industry: "Personal Brand",
+    services: ["Content Engine"],
+    tech: ["LinkedIn"],
     href: "https://www.linkedin.com/in/zhemongrowth",
     external: true,
     size: "sm",
@@ -165,6 +259,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "Public appeal page with documented evidence, legal context and shareable summary cards.",
     tags: ["Advocacy", "Documentation"],
+    industry: "Advocacy",
+    services: ["Web Development", "Documentary"],
+    tech: ["React", "TypeScript", "Tailwind"],
     href: "/justice-appeal",
     size: "sm",
     accent: "rose",
@@ -177,6 +274,9 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     summary:
       "Curated press mentions, interviews and reports — verified URLs with backup snapshots.",
     tags: ["Press", "Interviews"],
+    industry: "Press",
+    services: ["Content Engine"],
+    tech: ["React", "Tailwind"],
     href: "/media-reports",
     size: "sm",
     accent: "gold",
@@ -191,3 +291,16 @@ export const SHOWCASE_CATEGORIES: ShowcaseCategory[] = [
   "Personal Initiative",
   "Media Coverage",
 ];
+
+// Derived facet lists — single source of truth for the filter UI.
+export const SHOWCASE_INDUSTRIES = Array.from(
+  new Set(SHOWCASE_ITEMS.flatMap((i) => (i.industry ? [i.industry] : []))),
+).sort() as ShowcaseIndustry[];
+
+export const SHOWCASE_SERVICES = Array.from(
+  new Set(SHOWCASE_ITEMS.flatMap((i) => i.services ?? [])),
+).sort() as ShowcaseService[];
+
+export const SHOWCASE_TECH = Array.from(
+  new Set(SHOWCASE_ITEMS.flatMap((i) => i.tech ?? [])),
+).sort() as ShowcaseTech[];
