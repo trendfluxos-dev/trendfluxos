@@ -172,8 +172,8 @@ export const KormoShikkhaShowcase = () => {
                 <ExternalLink className="h-4 w-4" aria-hidden />
               </a>
               <a
-                href="/portfolio"
-                onClick={() => track("portfolio_open", { location: "kormoshikkha_showcase" })}
+                href="/showcase"
+                onClick={() => track("showcase_open", { location: "kormoshikkha_showcase" })}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-border bg-background px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 See More Projects
