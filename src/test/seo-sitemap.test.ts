@@ -45,9 +45,21 @@ const PUBLIC_INDEXABLE_ROUTES = [
 const NOINDEX_ROUTES = ["/justice-appeal", "/media-reports", "/share-kit"];
 
 describe("Sitemap & noindex hygiene", () => {
-  const sitemap = read("public/sitemap.xml");
-  const locs = Array.from(sitemap.matchAll(/<loc>https:\/\/trendflux\.digital([^<]*)<\/loc>/g))
-    .map((m) => m[1]);
+  // Read every child sitemap referenced by the sitemap index so this
+  // test stays valid whether the project uses one flat sitemap or a
+  // sitemap-index split into category files.
+  const sitemapFiles = [
+    "public/sitemap-pages.xml",
+    "public/sitemap-case-studies.xml",
+    "public/sitemap-research.xml",
+    "public/sitemap-implementations.xml",
+  ].filter((f) => fs.existsSync(path.join(ROOT, f)));
+  const combined = sitemapFiles.length
+    ? sitemapFiles.map(read).join("\n")
+    : read("public/sitemap.xml");
+  const locs = Array.from(
+    combined.matchAll(/<loc>https:\/\/trendflux\.digital([^<]*)<\/loc>/g),
+  ).map((m) => m[1]);
 
   it("excludes every noindex public route from the sitemap", () => {
     for (const r of NOINDEX_ROUTES) {

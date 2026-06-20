@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 /**
- * Regenerates public/sitemap.xml.
+ * Regenerates public/sitemap.xml (a sitemap INDEX) and one child
+ * sitemap per content category:
+ *   - sitemap-pages.xml             core static pages
+ *   - sitemap-case-studies.xml      /case-studies/:slug
+ *   - sitemap-research.xml          /research/:slug
+ *   - sitemap-implementations.xml   /implementations/:slug
+ *
+ * Why a sitemap index: it lets Google fetch each category independently
+ * and rediscovers new pages faster (only the touched child changes
+ * `lastmod`, so Google re-crawls just that file).
  *
  * Usage: `node scripts/generate-sitemap.mjs`
- *
- * Source of truth for the sitemap. Runs automatically before every
- * `vite build` via the `prebuild` npm hook so deployed builds always
- * ship a sitemap that mirrors the routes in `src/App.tsx`.
- *
- * Two lists below:
- *   - `staticRoutes` — every public, indexable React-Router route
- *   - `noindexRoutes` — public routes that explicitly set
- *     <meta name="robots" content="noindex" /> via Helmet. They are
- *     INTENTIONALLY OMITTED from the sitemap to avoid sending Google
- *     conflicting signals (sitemap = please index; meta = please don't).
+ * Runs automatically before every `vite build` via the `prebuild` hook.
  *
  * Add a new route to `staticRoutes` whenever a new public page ships.
- * Add it to `noindexRoutes` instead when the page is noindex'd.
+ * Add it to `noindexRoutes` instead when the page is noindex'd
+ * (those are intentionally omitted to avoid conflicting signals).
  * Kept dependency-free so it runs in any Node 18+ env.
  */
 import fs from "node:fs";
@@ -93,13 +93,6 @@ const noindexRoutes = [
 
 const today = new Date().toISOString().split("T")[0];
 
-const urls = [
-  ...staticRoutes,
-  ...caseSlugs.map((s) => `/case-studies/${s}`),
-  ...researchSlugs.map((s) => `/research/${s}`),
-  ...implementationSlugs.map((s) => `/implementations/${s}`),
-];
-
 function priorityFor(p) {
   if (p === "/") return "1.0";
   if (p === "/services" || p === "/portfolio") return "0.9";
@@ -115,22 +108,61 @@ function changefreqFor(p) {
   if (p === "/showcase" || p === "/explore") return "weekly";
   return "monthly";
 }
-
-const xml = `<?xml version="1.0" encoding="UTF-8"?>
+function buildUrlset(paths) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
-  .map((p) => {
-    return `  <url>
+${paths
+  .map(
+    (p) => `  <url>
     <loc>${SITE_URL}${p}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${changefreqFor(p)}</changefreq>
     <priority>${priorityFor(p)}</priority>
-  </url>`;
-  })
+  </url>`,
+  )
   .join("\n")}
 </urlset>
 `;
+}
 
-const outPath = path.join(root, "public", "sitemap.xml");
-fs.writeFileSync(outPath, xml);
-console.log(`Wrote ${outPath} (${urls.length} URLs)`);
+const children = [
+  { file: "sitemap-pages.xml", paths: staticRoutes },
+  {
+    file: "sitemap-case-studies.xml",
+    paths: caseSlugs.map((s) => `/case-studies/${s}`),
+  },
+  {
+    file: "sitemap-research.xml",
+    paths: researchSlugs.map((s) => `/research/${s}`),
+  },
+  {
+    file: "sitemap-implementations.xml",
+    paths: implementationSlugs.map((s) => `/implementations/${s}`),
+  },
+];
+
+const publicDir = path.join(root, "public");
+let total = 0;
+for (const { file, paths } of children) {
+  fs.writeFileSync(path.join(publicDir, file), buildUrlset(paths));
+  total += paths.length;
+  console.log(`Wrote public/${file} (${paths.length} URLs)`);
+}
+
+const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${children
+  .map(
+    ({ file }) => `  <sitemap>
+    <loc>${SITE_URL}/${file}</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>`,
+  )
+  .join("\n")}
+</sitemapindex>
+`;
+
+fs.writeFileSync(path.join(publicDir, "sitemap.xml"), indexXml);
+console.log(
+  `Wrote public/sitemap.xml (index of ${children.length} sitemaps, ${total} URLs total)`,
+);
