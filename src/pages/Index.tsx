@@ -10,6 +10,7 @@ import AiExpertStoryTeaser from "@/components/home/AiExpertStoryTeaser";
 import {
   HomeHeroSection,
   TrustBar,
+  QuickAccess,
   EcosystemSection,
   ServicesSection,
   SystemsHeBuiltSection,
@@ -79,6 +80,7 @@ const Index = () => {
 
       <HomeHeroSection onOpenQuote={openQuote} />
       <TrustBar />
+      <QuickAccess />
       <EcosystemSection />
       <ServicesSection />
       <SystemsHeBuiltSection />
