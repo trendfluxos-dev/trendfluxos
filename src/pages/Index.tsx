@@ -19,6 +19,7 @@ import {
   QuietPositionsSection,
   JusticeAppealSection,
   AcademySection,
+  KormoShikkhaShowcase,
   OperatedBrandsSection,
   LuxeVeilSection,
   ProofSection,
@@ -91,6 +92,7 @@ const Index = () => {
       <QuietPositionsSection />
       <JusticeAppealSection />
       <AcademySection />
+      <KormoShikkhaShowcase />
       <OperatedBrandsSection />
       <LuxeVeilSection />
       <ProofSection />
