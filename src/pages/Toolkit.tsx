@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
+import { EDTECH } from "@/config/edtech";
 
 /**
  * /toolkit is now a thin entry point that routes traffic into the
@@ -25,9 +26,12 @@ const Toolkit = () => {
     (async () => {
       const { data } = await supabase.auth.getSession();
       if (cancelled) return;
-      navigate(data.session ? "/course/trendflux" : "/masterclass", {
-        replace: true,
-      });
+      if (data.session) {
+        navigate("/course/trendflux", { replace: true });
+      } else {
+        // Cold traffic → official Edtech platform (KormoShikkha)
+        window.location.replace(EDTECH.url);
+      }
     })();
     return () => {
       cancelled = true;
