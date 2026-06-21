@@ -148,6 +148,7 @@ const Navbar = () => {
                     {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary" /> : <LogIn className="h-4 w-4 text-primary" />}
                     {signedIn ? "Dashboard" : "Login"}
                   </Link>
+                  </div>
                 </nav>
 
                 <div className="mt-6 border-t border-border/60 pt-6">
