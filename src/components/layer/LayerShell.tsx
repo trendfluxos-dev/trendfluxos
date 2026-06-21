@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import EcosystemReturn from "./EcosystemReturn";
+import LayerBreadcrumb from "./LayerBreadcrumb";
+import LayerFlowNav from "./LayerFlowNav";
 import { getNode } from "@/config/siteLayers";
 
 /**
@@ -14,6 +16,11 @@ const LayerShell = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
   const node = getNode(pathname);
   const isSystem = node?.layer === "system" || node?.noindex;
+  // Only the narrative layers (founder + brand) get the breadcrumb /
+  // flow-nav chrome. Company hub pages and the home page already define
+  // their own hero spacing, and system routes stay clean.
+  const showLayerChrome =
+    !!node && (node.layer === "founder" || node.layer === "brand");
 
   // Force `noindex,nofollow` on system routes imperatively so the signal
   // lands even if a page doesn't call useSeo(). We avoid calling useSeo()
@@ -28,7 +35,9 @@ const LayerShell = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
+      {showLayerChrome && <LayerBreadcrumb />}
       {children}
+      {showLayerChrome && <LayerFlowNav />}
       <EcosystemReturn />
     </>
   );
