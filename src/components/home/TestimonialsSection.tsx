@@ -7,7 +7,7 @@ type TestimonialsSectionProps = {
   title?: string;
   intro?: string;
   items?: Testimonial[];
-  tone?: "muted" | "default";
+  tone?: "muted" | "light";
 };
 
 export const TestimonialsSection = ({
