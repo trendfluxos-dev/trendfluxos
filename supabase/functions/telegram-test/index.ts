@@ -76,12 +76,33 @@ Deno.serve(async (req) => {
   });
   const data = await tgRes.json().catch(() => ({}));
 
+  const ok = tgRes.ok && (data as { ok?: boolean }).ok === true;
+  const description = (data as { description?: string }).description;
+  const messageId = (data as { result?: { message_id?: number } }).result?.message_id;
+
+  // Persist outcome for the admin dashboard. Failures here must not break the response.
+  try {
+    const admin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+    await admin.from("telegram_test_logs").insert({
+      mode,
+      chat_id: chatId,
+      status: tgRes.status,
+      ok,
+      description: description ?? null,
+      message_id: messageId ?? null,
+      tester_user_id: gate.userId,
+    });
+  } catch (_e) { /* logging is best-effort */ }
+
   return new Response(JSON.stringify({
-    ok: tgRes.ok && (data as { ok?: boolean }).ok === true,
+    ok,
     mode,
     status: tgRes.status,
-    description: (data as { description?: string }).description,
-    message_id: (data as { result?: { message_id?: number } }).result?.message_id,
+    description,
+    message_id: messageId,
     sent_at: new Date().toISOString(),
   }), {
     status: tgRes.ok ? 200 : 502,
