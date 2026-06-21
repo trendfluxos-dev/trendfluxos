@@ -9,6 +9,8 @@ import SocialIcons from "@/components/social/SocialIcons";
 import { supabase } from "@/integrations/supabase/client";
 import logoAsset from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 import ThemeToggle from "@/components/ThemeToggle";
+import LayerMegaMenu from "@/components/layer/LayerMegaMenu";
+import { LAYER_META, nodesByLayer, type Layer } from "@/config/siteLayers";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -52,36 +54,8 @@ const Navbar = () => {
             <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
           </Link>
 
-          {/* Center: Explore + Browse */}
-          <div className="hidden md:flex flex-nowrap items-center gap-5 text-[12px] lg:text-[13px] text-foreground/65">
-            <Link
-              to="/"
-              aria-current={pathname === "/" ? "page" : undefined}
-              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
-                pathname === "/" ? "text-foreground" : ""
-              }`}
-            >
-              Explore
-            </Link>
-            <Link
-              to="/explore"
-              aria-current={pathname === "/explore" ? "page" : undefined}
-              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
-                pathname === "/explore" ? "text-foreground" : ""
-              }`}
-            >
-              Browse
-            </Link>
-            <Link
-              to="/showcase"
-              aria-current={pathname === "/showcase" ? "page" : undefined}
-              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
-                pathname === "/showcase" ? "text-foreground" : ""
-              }`}
-            >
-              Showcase
-            </Link>
-          </div>
+          {/* Center: 4-layer mega-menu (Company / Founder / Brands) */}
+          <LayerMegaMenu />
 
           {/* Right: Search + Apply Access + Login */}
           <div className="flex flex-nowrap items-center gap-1.5 shrink-0">
