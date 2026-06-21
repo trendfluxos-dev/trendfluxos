@@ -51,6 +51,11 @@ export const routes = {
   "/toolkit": make(() => import("@/pages/Toolkit")),
   "/course/trendflux": make(() => import("@/pages/CourseTrendflux")),
   "/masterclass": make(() => import("@/pages/Masterclass")),
+  "/edtech": make(() => import("@/pages/edtech/EdtechHome")),
+  "/edtech/courses": make(() => import("@/pages/edtech/EdtechCourses")),
+  "/edtech/courses/:slug": make(() => import("@/pages/edtech/EdtechCourseDetail")),
+  "/edtech/enroll/:slug": make(() => import("@/pages/edtech/EdtechEnroll")),
+  "/edtech/pricing": make(() => import("@/pages/edtech/EdtechPricing")),
   "/press/:id": make(() => import("@/pages/PressDetail")),
   "/case-studies/:slug": make(() => import("@/pages/CaseStudyPage")),
   "/justice-appeal": make(() => import("@/pages/JusticeAppeal")),
@@ -73,6 +78,8 @@ export const preloadRoute = (path: string) => {
   if (path.startsWith("/case-studies/")) return routes["/case-studies/:slug"].preload();
   if (path.startsWith("/research/")) return routes["/research/:slug"].preload();
   if (path.startsWith("/implementations/")) return routes["/implementations/:slug"].preload();
+  if (path.startsWith("/edtech/enroll/")) return routes["/edtech/enroll/:slug"].preload();
+  if (path.startsWith("/edtech/courses/")) return routes["/edtech/courses/:slug"].preload();
 };
 
 export type PageType = "Main" | "Brand" | "Admin" | "Account";
