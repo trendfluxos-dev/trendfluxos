@@ -87,7 +87,13 @@ export const SERVICES: Service[] = [
   { icon: Target, title: "Founder Branding", desc: "Position founders as category operators, not commodity service providers." },
 ];
 
-export type Testimonial = { quote: string; name: string; role: string };
+export type Testimonial = {
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+  logo: string;
+};
 
 export const TESTIMONIALS: Testimonial[] = [
   {
@@ -95,18 +101,24 @@ export const TESTIMONIALS: Testimonial[] = [
       "TrendFlux replaced three agencies and two internal hires. Our pipeline is now an audited system, not a guessing game.",
     name: "Director of Growth",
     role: "Series-A SaaS · $14M ARR",
+    company: "Starpath Technology",
+    logo: brandStarpath,
   },
   {
     quote:
       "Within 60 days we cut CAC by 38% and reclaimed 22 founder hours a week. The OS framing is real — not marketing copy.",
     name: "Founder & CEO",
     role: "DTC portfolio · 7-figure scale",
+    company: "H&B EduVerse",
+    logo: brandHbEduverse,
   },
   {
     quote:
       "The only operator I've worked with who treats growth like infrastructure. Every workflow is observable and ownable.",
     name: "Head of Operations",
     role: "B2B services · $6M ARR",
+    company: "Pabna Nagorik Committee",
+    logo: brandPabnaNagorik,
   },
 ];
 

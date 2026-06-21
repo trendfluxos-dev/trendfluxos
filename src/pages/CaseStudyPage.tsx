@@ -8,6 +8,7 @@ import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import trendfluxLogo from "@/assets/trendflux-logo.webp";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 
 const Section = ({ label, body }: { label: string; body: string }) => (
   <div>
@@ -236,6 +237,16 @@ const CaseStudyPage = () => {
       </article>
 
       <QuoteDialog open={quoteOpen} onOpenChange={setQuoteOpen} />
+
+      <section className="relative px-6 pb-20 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-5xl">
+          <TestimonialsSection
+            eyebrow="Operator Signal"
+            title="Why operators trust the OS."
+            intro="Feedback from founders running live TrendFlux OS engagements across SaaS, DTC, and B2B services."
+          />
+        </div>
+      </section>
     </main>
   );
 };
