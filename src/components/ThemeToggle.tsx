@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { toast } from "sonner";
 
 type Theme = "dark" | "light";
 const STORAGE_KEY = "tf-theme";
@@ -30,6 +31,10 @@ export default function ThemeToggle() {
       /* ignore */
     }
     setTheme(next);
+    toast(next === "dark" ? "Dark mode activated" : "Light mode activated", {
+      icon: next === "dark" ? "🌙" : "☀️",
+      duration: 1800,
+    });
   };
 
   const isDark = theme === "dark";
