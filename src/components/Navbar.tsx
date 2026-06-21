@@ -9,6 +9,8 @@ import SocialIcons from "@/components/social/SocialIcons";
 import { supabase } from "@/integrations/supabase/client";
 import logoAsset from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 import ThemeToggle from "@/components/ThemeToggle";
+import LayerMegaMenu from "@/components/layer/LayerMegaMenu";
+import { LAYER_META, nodesByLayer, type Layer } from "@/config/siteLayers";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -52,36 +54,8 @@ const Navbar = () => {
             <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
           </Link>
 
-          {/* Center: Explore + Browse */}
-          <div className="hidden md:flex flex-nowrap items-center gap-5 text-[12px] lg:text-[13px] text-foreground/65">
-            <Link
-              to="/"
-              aria-current={pathname === "/" ? "page" : undefined}
-              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
-                pathname === "/" ? "text-foreground" : ""
-              }`}
-            >
-              Explore
-            </Link>
-            <Link
-              to="/explore"
-              aria-current={pathname === "/explore" ? "page" : undefined}
-              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
-                pathname === "/explore" ? "text-foreground" : ""
-              }`}
-            >
-              Browse
-            </Link>
-            <Link
-              to="/showcase"
-              aria-current={pathname === "/showcase" ? "page" : undefined}
-              className={`story-link whitespace-nowrap transition-colors duration-200 hover:text-foreground ${
-                pathname === "/showcase" ? "text-foreground" : ""
-              }`}
-            >
-              Showcase
-            </Link>
-          </div>
+          {/* Center: 4-layer mega-menu (Company / Founder / Brands) */}
+          <LayerMegaMenu />
 
           {/* Right: Search + Apply Access + Login */}
           <div className="flex flex-nowrap items-center gap-1.5 shrink-0">
@@ -131,32 +105,32 @@ const Navbar = () => {
                     <span className="text-foreground/55 font-normal"> {BRAND.nameTrail}</span>
                   </SheetTitle>
                 </SheetHeader>
-                <nav aria-label="Mobile" className="mt-8 flex flex-col gap-1">
-                  <Link
-                    to="/"
-                    aria-current={pathname === "/" ? "page" : undefined}
-                    onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
-                  >
-                    Explore
-                  </Link>
-                  <Link
-                    to="/explore"
-                    aria-current={pathname === "/explore" ? "page" : undefined}
-                    onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
-                  >
-                    Browse all pages
-                  </Link>
-                  <Link
-                    to="/showcase"
-                    aria-current={pathname === "/showcase" ? "page" : undefined}
-                    onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
-                  >
-                    Showcase
-                  </Link>
-                  <button
+                <nav aria-label="Mobile" className="mt-6 flex flex-col gap-5">
+                  {(["company", "founder", "brand"] as Layer[]).map((layer) => {
+                    const meta = LAYER_META[layer];
+                    const items = nodesByLayer(layer, { includeAlsoIn: true });
+                    return (
+                      <div key={layer} className="flex flex-col gap-0.5">
+                        <p className="px-3 text-[10.5px] uppercase tracking-[0.22em] text-foreground/45 font-medium mb-1">
+                          {meta.label}
+                        </p>
+                        {items.map((node) => (
+                          <Link
+                            key={`${layer}-${node.path}`}
+                            to={node.path}
+                            aria-current={pathname === node.path ? "page" : undefined}
+                            onClick={() => setOpen(false)}
+                            className="rounded-xl px-3 py-2.5 min-h-10 text-[14.5px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
+                          >
+                            {node.title}
+                          </Link>
+                        ))}
+                      </div>
+                    );
+                  })}
+
+                  <div className="flex flex-col gap-0.5 pt-2 border-t border-border/50">
+                    <button
                     type="button"
                     onClick={() => {
                       setOpen(false);
@@ -174,6 +148,7 @@ const Navbar = () => {
                     {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary" /> : <LogIn className="h-4 w-4 text-primary" />}
                     {signedIn ? "Dashboard" : "Login"}
                   </Link>
+                  </div>
                 </nav>
 
                 <div className="mt-6 border-t border-border/60 pt-6">
