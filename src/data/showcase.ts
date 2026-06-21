@@ -93,8 +93,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     industry: "EdTech",
     services: ["Web Development", "Brand Architecture", "Content Engine"],
     tech: ["React", "TypeScript", "Tailwind", "Supabase", "Vercel"],
-    href: "https://kormoshikkha.trendflux.digital/",
-    external: true,
+    href: "/edtech",
     size: "lg",
     accent: "emerald",
     caseStudy: {
