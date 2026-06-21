@@ -1,8 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <script>
+      // Honor user's saved theme; default to dark (root theme).
+      (function () {
+        try {
+          var saved = localStorage.getItem("tf-theme");
+          var isLight = saved === "light";
+          document.documentElement.classList.toggle("dark", !isLight);
+        } catch (_) { /* default dark class already on <html> */ }
+      })();
+    </script>
     <title>TrendFlux — AI-Native Growth Execution OS</title>
     <meta name="description" content="TrendFlux is the AI-Native Growth Execution OS — one connected system for automation, CRM, paid media, creative, and analytics. Reclaim 20+ hours weekly.">
     <meta name="author" content="TrendFlux Ecosystem" />
