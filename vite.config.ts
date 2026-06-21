@@ -11,6 +11,18 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: true,
     },
+    // The `/__l5e/assets-v1/*` paths are served by Lovable's CDN infrastructure
+    // in preview/production. The local Vite dev server doesn't know about that
+    // route, so without this proxy every request falls through to the SPA
+    // index.html — audio/video elements then fail with
+    // `DEMUXER_ERROR_COULD_NOT_OPEN` because the "media" is HTML.
+    proxy: {
+      "/__l5e": {
+        target: "https://id-preview--ec1d2bd9-2410-431c-96d7-0959d7084992.lovable.app",
+        changeOrigin: true,
+        secure: true,
+      },
+    },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
