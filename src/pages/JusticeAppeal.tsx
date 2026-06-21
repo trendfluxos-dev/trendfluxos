@@ -47,7 +47,7 @@ const evidenceItems = [
 
 export default function JusticeAppeal() {
   return (
-    <div data-brand="justice" className={`min-h-dvh ${navy} text-[var(--justice-ink)]`}>
+    <div data-brand="justice" lang="bn" className={`min-h-dvh ${navy} text-[var(--justice-ink)]`}>
       <Helmet>
         <title>Pabna Accountability Project — Public Interest Documentation</title>
         <meta name="description" content="A documentary archive of a written complaint and related media references, requesting lawful investigation and safety protection." />
@@ -88,9 +88,9 @@ export default function JusticeAppeal() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-3">
             <span className={`inline-block h-2 w-2 rounded-full ${accentBg}`} />
-            <span className="font-serif text-sm tracking-[0.18em] text-white">PABNA ACCOUNTABILITY PROJECT</span>
+            <span lang="en" className="font-serif text-sm tracking-[0.18em] text-white">PABNA ACCOUNTABILITY PROJECT</span>
           </Link>
-          <span className="hidden text-[10px] uppercase tracking-[0.25em] text-slate-500 sm:inline">Public Interest Documentation · Vol. 01</span>
+          <span lang="en" className="hidden text-[10px] uppercase tracking-[0.25em] text-slate-500 sm:inline">Public Interest Documentation · Vol. 01</span>
         </div>
       </header>
 
@@ -107,23 +107,23 @@ export default function JusticeAppeal() {
         <div className="relative mx-auto max-w-6xl px-6 py-16 sm:py-24">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.4fr_1fr] lg:items-center">
             <div>
-              <div className={`inline-flex items-center gap-2 rounded-full border ${accentBorder}/40 ${accentBg}/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] ${accent}`}>
+              <div lang="en" className={`inline-flex items-center gap-2 rounded-full border ${accentBorder}/40 ${accentBg}/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] ${accent}`}>
                 <Shield className="h-3.5 w-3.5" /> Public Interest Dossier
               </div>
-              <h1 className="mt-6 font-serif text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-[52px]">
+              <h1 lang="en" className="mt-6 font-serif text-3xl font-semibold leading-[1.1] tracking-tight text-white sm:text-[52px]">
                 When fear replaces justice,<br className="hidden sm:block" />{" "}
                 <span className="italic text-slate-300">documentation becomes necessary.</span>
               </h1>
               <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-slate-300 sm:text-base">
                 একটি লিখিত অভিযোগ ও সংশ্লিষ্ট সংবাদ রেফারেন্সের ভিত্তিতে নির্মিত আর্কাইভ —
                 নিরপেক্ষ তদন্ত, আইনগত সুরক্ষা ও প্রাতিষ্ঠানিক জবাবদিহিতার আবেদন।
-                A structured public-interest dossier — not a campaign of attack.
+                <span lang="en"> A structured public-interest dossier — not a campaign of attack.</span>
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <a href="#timeline" className={`inline-flex items-center gap-2 rounded-md ${accentBg} px-5 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90`}>
+                <a lang="en" href="#timeline" className={`inline-flex items-center gap-2 rounded-md ${accentBg} px-5 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90`}>
                   Read Timeline
                 </a>
-                <a href="#complaint" className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]">
+                <a lang="en" href="#complaint" className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]">
                   View Documents
                 </a>
               </div>
@@ -370,8 +370,8 @@ export default function JusticeAppeal() {
       {/* Disclaimer */}
       <section>
         <div className="mx-auto max-w-3xl px-6 py-20">
-          <div className="text-xs uppercase tracking-[0.2em] text-slate-400">হয়রানি নিষিদ্ধ · আইনি দাবিত্যাগ</div>
-          <p className="mt-4 text-sm leading-relaxed text-slate-400">
+          <div className="text-xs text-slate-300/80">হয়রানি নিষিদ্ধ · আইনি দাবিত্যাগ</div>
+          <p className="mt-4 text-[15px] leading-[1.85] text-slate-200/85">
             এই পেজটি কোনো হয়রানি, হুমকি, mob action, মানহানি বা ব্যক্তিগত আক্রমণে উৎসাহ দেওয়ার
             উদ্দেশ্যে তৈরি করা হয়নি। এটি কেবলমাত্র আইনগত তদন্ত, ব্যক্তিগত নিরাপত্তা এবং প্রাতিষ্ঠানিক
             জবাবদিহিতার সমর্থনে তৈরি।
