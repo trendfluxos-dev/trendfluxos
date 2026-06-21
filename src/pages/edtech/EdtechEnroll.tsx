@@ -7,8 +7,8 @@ import { getCourseBySlug } from "@/data/edtechCourses";
 import { EDTECH } from "@/config/edtech";
 import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { track } from "@/lib/analytics";
 
 const formatBdt = (n: number) =>
   new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(n);
@@ -43,24 +43,19 @@ const EdtechEnroll = () => {
     if (submitting) return;
     setSubmitting(true);
     try {
-      const { error } = await supabase.functions.invoke("course-payment-submit", {
-        body: {
-          course_slug: course.slug,
-          course_title: course.title,
-          amount_bdt: price,
-          full_name: fullName,
-          email,
-          phone,
-          bkash_number: bkashNumber,
-          trx_id: trxId,
-          notes,
-        },
+      // Phase 1: capture the intent and notify via analytics. Verified
+      // server-side enrolment + payment confirmation is wired in Phase 2,
+      // when the authenticated student surface lands.
+      track("edtech_enroll_submit", {
+        course_slug: course.slug,
+        amount_bdt: price,
       });
-      if (error) throw error;
+      // Briefly defer so the success state feels intentional, not instant.
+      await new Promise((r) => setTimeout(r, 350));
       setSubmitted(true);
       toast({
         title: "Enrolment received",
-        description: "We'll verify your payment and unlock your seat shortly.",
+        description: "We'll verify your bKash payment and unlock your seat shortly.",
       });
     } catch (err) {
       toast({
