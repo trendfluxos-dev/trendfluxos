@@ -111,6 +111,7 @@ export function AudioStory() {
   const { lang } = useStandLang();
   const copy = COPY[lang];
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const nearAudio = useNearViewport(audioRef, "500px");
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
