@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import LayerFlowNav from "./LayerFlowNav";
 import EcosystemReturn from "./EcosystemReturn";
 import { getNode } from "@/config/siteLayers";
 
@@ -30,7 +29,6 @@ const LayerShell = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       {children}
-      <LayerFlowNav />
       <EcosystemReturn />
     </>
   );
