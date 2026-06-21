@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useSeo } from "@/hooks/useSeo";
-import trendfluxLogo from "@/assets/trendflux-logo.webp";
+import trendfluxLogo from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 
 /**
  * Map raw auth errors to friendly, bilingual messages so we never leak
@@ -116,9 +116,9 @@ export default function Auth() {
         <div className="flex flex-col items-center text-center mb-8">
           <div className="flex items-center gap-2.5">
             <img
-              src={trendfluxLogo}
+              src={trendfluxLogo.url}
               alt="TrendFlux Digital"
-              className="h-8 w-8 object-contain"
+              className="h-8 w-8 rounded-md bg-white object-contain p-0.5"
             />
             <span className="font-display text-[15px] font-semibold tracking-tight">
               TrendFlux <span className="text-foreground/55 font-normal">Digital</span>

@@ -7,7 +7,7 @@ import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
 import { openCommandPalette } from "@/lib/commandPalette";
 import SocialIcons from "@/components/social/SocialIcons";
 import { supabase } from "@/integrations/supabase/client";
-import logo from "@/assets/trendflux-logo.webp";
+import logoAsset from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const Navbar = () => {
@@ -47,7 +47,7 @@ const Navbar = () => {
           }`}
         >
           <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-[14px] lg:text-[15px] whitespace-nowrap shrink-0 tracking-tight">
-            <img src={logo} alt={`${BRAND.name} logo`} className="h-7 w-7 rounded-md object-contain" />
+            <img src={logoAsset.url} alt={`${BRAND.name} logo`} className="h-7 w-7 rounded-md bg-white object-contain p-0.5" />
             <span className="text-gradient">{BRAND.nameLead}</span>
             <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
           </Link>

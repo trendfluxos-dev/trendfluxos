@@ -21,7 +21,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
 import { toast } from "sonner";
-import trendfluxLogo from "@/assets/trendflux-logo.webp";
+import trendfluxLogo from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 
 type Role = "admin" | "editor" | null;
 
@@ -165,7 +165,7 @@ export default function Dashboard() {
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E5E7EB]">
         <div className="mx-auto max-w-6xl px-5 md:px-8 h-14 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
-            <img src={trendfluxLogo} alt="TrendFlux" className="h-7 w-7 object-contain" />
+            <img src={trendfluxLogo.url} alt="TrendFlux" className="h-7 w-7 rounded-md bg-white object-contain p-0.5" />
             <span className="font-semibold tracking-tight text-[14px]">
               TrendFlux <span className="text-foreground/50 font-normal">Dashboard</span>
             </span>
