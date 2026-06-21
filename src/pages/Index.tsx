@@ -97,6 +97,7 @@ const Index = () => {
         <ServicesSection />
         <LayerBand layer="founder" />
         <SystemsHeBuiltSection />
+        <KormoShikkhaShowcase />
         <FounderSection />
         <TheStandCoverSection />
         <AudioStoryTeaser />
@@ -105,7 +106,6 @@ const Index = () => {
         <JusticeAppealSection />
         <LayerBand layer="brand" />
         <AcademySection />
-        <KormoShikkhaShowcase />
         <OperatedBrandsSection />
         <LuxeVeilSection />
         <ProofSection />
