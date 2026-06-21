@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
+import { ArrowRight, ChevronDown, ShieldCheck, Sparkles } from "lucide-react";
 import DashboardMock from "@/components/tf/DashboardMock";
 
 /**
@@ -41,21 +41,28 @@ export const HomeHeroSection = ({ onOpenQuote }: { onOpenQuote: () => void }) =>
           manual scaling — built for founders who operate beyond marketing.
         </p>
 
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-3.5 lg:justify-start">
+        <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:mt-11 sm:flex-row sm:gap-3.5 lg:justify-start">
           <button
             type="button"
             onClick={onOpenQuote}
-            className="tf-btn-primary inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_rgba(220,38,38,0.5)] hover:bg-primary/90 sm:w-auto"
+            className="tf-btn-primary group relative inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 text-[14px] font-semibold tracking-[-0.005em] text-primary-foreground shadow-[0_12px_40px_-10px_hsl(var(--primary)/0.6)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-glow hover:shadow-[0_18px_48px_-10px_hsl(var(--primary)/0.75)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto"
           >
-            Book Strategy Call <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            <Sparkles className="h-4 w-4 opacity-90" aria-hidden="true" />
+            Book a Free Strategy Call
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
           </button>
           <a
             href="#quick-access-heading"
-            className="inline-flex w-full items-center justify-center rounded-full border border-border bg-muted/50 px-7 py-3.5 text-sm font-semibold text-foreground transition-all duration-200 hover:-translate-y-px hover:border-foreground/20 hover:bg-muted sm:w-auto"
+            className="inline-flex w-full items-center justify-center rounded-full border border-border bg-muted/40 px-7 py-4 text-[14px] font-medium text-foreground transition-all duration-200 hover:-translate-y-px hover:border-foreground/25 hover:bg-muted sm:w-auto"
           >
             Explore the OS
           </a>
         </div>
+
+        {/* Trust line — sits directly under the CTAs to remove friction */}
+        <p className="mt-4 text-center text-[11.5px] leading-[1.6] text-muted-foreground sm:mt-5 lg:text-left">
+          Free 20-minute consult · No spam, ever · Reply within 24 hours · NDA on request
+        </p>
 
         {/* Proof strip — grid on mobile (no awkward wrap), inline on desktop */}
         <dl className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-y-3 gap-x-6 border-t border-border/60 pt-6 text-left text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:mt-10 sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2 sm:border-0 sm:pt-0 lg:justify-start">
