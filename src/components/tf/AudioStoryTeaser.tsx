@@ -6,6 +6,7 @@ import { track } from "@/lib/analytics";
 import { useAutoplayPreview, useEffectiveReducedMotion } from "@/lib/audioPreferences";
 import { CdnStatusChip } from "@/components/media/CdnStatusChip";
 import { useCdnHeaderCheck } from "@/lib/cdnHeaderCheck";
+import { useNearViewport } from "@/hooks/useNearViewport";
 
 const ANALYTICS_CONTEXT = {
   chapter: "chapter-1",
@@ -38,6 +39,8 @@ function mediaErrorText(code?: number) {
 export default function AudioStoryTeaser() {
   const ref = useRef<HTMLAudioElement | null>(null);
   const barRef = useRef<HTMLDivElement | null>(null);
+  // Only fetch audio metadata when the player approaches the viewport.
+  const nearViewport = useNearViewport(ref, "500px");
   const [playing, setPlaying] = useState(false);
   const [cur, setCur] = useState(0);
   const [dur, setDur] = useState(0);
@@ -379,7 +382,11 @@ export default function AudioStoryTeaser() {
               </span>
             </div>
 
-            <audio ref={ref} preload="metadata" src={audioAsset.url} />
+            <audio
+              ref={ref}
+              preload={nearViewport ? "metadata" : "none"}
+              src={audioAsset.url}
+            />
             <div aria-live="polite" aria-atomic="true" className="sr-only">
               {liveMsg}
             </div>

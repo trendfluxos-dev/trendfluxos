@@ -1,6 +1,8 @@
+import { useRef } from "react";
 import { useStandLang } from "@/context/StandLanguageContext";
 import { Reveal } from "./Reveal";
 import { VideoWithDiagnostics } from "@/components/media/VideoWithDiagnostics";
+import { useNearViewport } from "@/hooks/useNearViewport";
 import algorithmFilm from "@/assets/algorithm-torture-cell.mp4.asset.json";
 import architectFilm from "@/assets/architect-of-violence.mp4.asset.json";
 
@@ -88,16 +90,7 @@ export function SharedFilms() {
                 >
                   {film.title[lang]}
                 </h3>
-                <div className="mt-5 overflow-hidden border border-[hsl(var(--stand-hairline))] bg-[hsl(var(--stand-charcoal))]">
-                  <VideoWithDiagnostics
-                    analyticsId={film.id}
-                    src={film.src}
-                    controls
-                    preload="metadata"
-                    playsInline
-                    className="block aspect-video w-full"
-                  />
-                </div>
+                <FilmPlayer film={film} />
                 <p
                   lang={lang}
                   className="mt-4 text-xs leading-relaxed text-[hsl(var(--stand-muted))]"
@@ -110,5 +103,26 @@ export function SharedFilms() {
         </div>
       </div>
     </section>
+  );
+}
+
+function FilmPlayer({ film }: { film: Film }) {
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  // Defer metadata fetch until the card approaches the viewport.
+  const near = useNearViewport(wrapRef, "500px");
+  return (
+    <div
+      ref={wrapRef}
+      className="mt-5 overflow-hidden border border-[hsl(var(--stand-hairline))] bg-[hsl(var(--stand-charcoal))]"
+    >
+      <VideoWithDiagnostics
+        analyticsId={film.id}
+        src={film.src}
+        controls
+        preload={near ? "metadata" : "none"}
+        playsInline
+        className="block aspect-video w-full"
+      />
+    </div>
   );
 }

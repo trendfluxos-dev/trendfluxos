@@ -4,6 +4,7 @@ import { useStandLang } from "@/context/StandLanguageContext";
 import { Reveal } from "./Reveal";
 import audioAsset from "@/assets/algorithm-torture-cell.mp3.asset.json";
 import { CdnStatusChip } from "@/components/media/CdnStatusChip";
+import { useNearViewport } from "@/hooks/useNearViewport";
 
 /**
  * AudioStory — a long-form narrative chapter pairing the recorded reflection
@@ -110,6 +111,7 @@ export function AudioStory() {
   const { lang } = useStandLang();
   const copy = COPY[lang];
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const nearAudio = useNearViewport(audioRef, "500px");
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -188,7 +190,11 @@ export function AudioStory() {
         {/* Audio player */}
         <Reveal delay={220}>
           <div className="mt-12 rounded-2xl border border-[hsl(var(--stand-hairline))] bg-[hsl(var(--stand-ink))]/[0.015] p-5 md:p-6">
-            <audio ref={audioRef} preload="metadata" src={audioAsset.url} />
+            <audio
+              ref={audioRef}
+              preload={nearAudio ? "metadata" : "none"}
+              src={audioAsset.url}
+            />
             <div className="flex items-center gap-4">
               <button
                 type="button"
