@@ -36,6 +36,7 @@ export const routes = {
   "/admin/web-vitals": make(() => import("@/pages/WebVitalsAdmin")),
   "/admin/ga4-check": make(() => import("@/pages/Ga4Check")),
   "/admin/secrets-health": make(() => import("@/pages/SecretsHealthAdmin")),
+  "/admin/telegram-tests": make(() => import("@/pages/TelegramTestLogsAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/the-stand/share": make(() => import("@/pages/TheStandShare")),
