@@ -320,7 +320,7 @@ const EdtechCertificate = () => {
                         {verificationId}
                       </p>
                       <p className="mt-2 uppercase tracking-[0.18em] text-white/55">Verification ID</p>
-                      <p className="text-white/45">verify at {BRAND.url.replace(/^https?:\/\//, "")}/edtech</p>
+                      <p className="text-white/45">verify at {BRAND.url.replace(/^https?:\/\//, "")}/edtech/verify</p>
                     </div>
                     <div className="text-right">
                       <p className="border-b border-white/25 pb-2 font-display text-base text-white">
