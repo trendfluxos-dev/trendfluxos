@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Activity, RefreshCw } from "lucide-react";
+import { ArrowLeft, Activity, RefreshCw, Gauge, ExternalLink } from "lucide-react";
 import {
   CartesianGrid,
   Line,
@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
+import { BRAND } from "@/config/brand";
 
 type Sample = {
   id: string;
@@ -148,6 +149,51 @@ export default function WebVitalsAdmin() {
             {err}
           </div>
         )}
+
+        <div className="mb-6 rounded-lg border bg-card p-4">
+          <div className="mb-2 flex items-center gap-2">
+            <Gauge className="h-4 w-4 text-primary" />
+            <h2 className="text-sm font-semibold">Lighthouse / PageSpeed</h2>
+          </div>
+          <p className="mb-3 text-xs text-muted-foreground">
+            Run a fresh lab audit (Performance, Accessibility, Best Practices, SEO) and field-data CrUX report for the live site.
+            Use after every publish to confirm Core Web Vitals stay in the green.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href={`https://pagespeed.web.dev/analysis?url=${encodeURIComponent(BRAND.url)}&form_factor=mobile`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-md border bg-background px-3 py-1.5 text-xs font-medium hover:bg-muted"
+            >
+              PageSpeed — Mobile <ExternalLink className="h-3 w-3" />
+            </a>
+            <a
+              href={`https://pagespeed.web.dev/analysis?url=${encodeURIComponent(BRAND.url)}&form_factor=desktop`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-md border bg-background px-3 py-1.5 text-xs font-medium hover:bg-muted"
+            >
+              PageSpeed — Desktop <ExternalLink className="h-3 w-3" />
+            </a>
+            <a
+              href={`https://search.google.com/test/rich-results?url=${encodeURIComponent(BRAND.url)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-md border bg-background px-3 py-1.5 text-xs font-medium hover:bg-muted"
+            >
+              Rich Results Test <ExternalLink className="h-3 w-3" />
+            </a>
+            <a
+              href={`https://search.google.com/test/mobile-friendly?url=${encodeURIComponent(BRAND.url)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-md border bg-background px-3 py-1.5 text-xs font-medium hover:bg-muted"
+            >
+              Mobile-Friendly Test <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
+        </div>
 
         <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-5">
           {METRICS.map((m) => {
