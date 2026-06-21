@@ -9,6 +9,7 @@ import { EDTECH_COURSES, getCourseBySlug, type Course } from "@/data/edtechCours
 import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Course-completion certificate.
@@ -75,6 +76,24 @@ const EdtechCertificate = () => {
 
   const studentName = name.trim() || "Your Name";
 
+  // Persist the certificate to the backend so /edtech/verify can validate it.
+  // Safe to retry — the edge function upserts on verification_id.
+  const persistCertificate = async () => {
+    if (!course || !name.trim()) return;
+    try {
+      await supabase.functions.invoke("issue-certificate", {
+        body: {
+          student_name: name.trim(),
+          course_slug: course.slug,
+          course_title: course.title,
+        },
+      });
+    } catch (err) {
+      // Non-blocking — generation still works, just won't be verifiable.
+      console.warn("issue-certificate failed", err);
+    }
+  };
+
   const handleDownloadPng = async () => {
     if (!certRef.current || !course || !name.trim()) {
       toast.error("Enter your name first to generate the certificate.");
@@ -82,6 +101,7 @@ const EdtechCertificate = () => {
     }
     try {
       setDownloading(true);
+      await persistCertificate();
       const dataUrl = await toPng(certRef.current, {
         cacheBust: true,
         pixelRatio: 2,
@@ -105,6 +125,7 @@ const EdtechCertificate = () => {
       toast.error("Enter your name first to print the certificate.");
       return;
     }
+    void persistCertificate();
     window.print();
   };
 
