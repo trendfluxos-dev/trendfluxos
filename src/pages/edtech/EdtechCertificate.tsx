@@ -233,8 +233,11 @@ const EdtechCertificate = () => {
               </p>
               <p className="mt-1 font-mono text-[13px] tracking-wider text-foreground">{verificationId}</p>
               <p className="mt-2 leading-relaxed">
-                Cohort verification will be enabled in Phase 2 once the learner
-                dashboard is wired to live progress data.
+                যেকোনো ব্যক্তি{" "}
+                <Link to={EDTECH.routes.verify} className="text-primary hover:underline">
+                  /edtech/verify
+                </Link>{" "}
+                পেইজে এই ID ও আপনার নাম দিয়ে সত্যতা যাচাই করতে পারবেন।
               </p>
             </div>
           </aside>
@@ -320,7 +323,7 @@ const EdtechCertificate = () => {
                         {verificationId}
                       </p>
                       <p className="mt-2 uppercase tracking-[0.18em] text-white/55">Verification ID</p>
-                      <p className="text-white/45">verify at {BRAND.url.replace(/^https?:\/\//, "")}/edtech</p>
+                      <p className="text-white/45">verify at {BRAND.url.replace(/^https?:\/\//, "")}/edtech/verify</p>
                     </div>
                     <div className="text-right">
                       <p className="border-b border-white/25 pb-2 font-display text-base text-white">
