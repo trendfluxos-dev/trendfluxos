@@ -251,6 +251,19 @@
     line-height: 1.7;
   }
 
+  /* Hard override — Tailwind's `tracking-[…]` utilities are a single class
+     (specificity 0,1,0) and would otherwise shatter Bangla conjuncts on
+     eyebrows/labels (e.g. `uppercase tracking-[0.3em]`). Doubling the
+     selector raises us to (0,2,0) so Bangla text always renders with
+     zero letter-spacing and proper line breaking regardless of utilities. */
+  :lang(bn):lang(bn),
+  [lang="bn"][lang="bn"] {
+    letter-spacing: 0 !important;
+    word-break: keep-all;
+    line-break: strict;
+    text-transform: none;
+  }
+
   /* Long URLs / tokens should still wrap so they never overflow */
   a[href], code, pre {
     overflow-wrap: anywhere;
