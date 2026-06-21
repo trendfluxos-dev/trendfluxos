@@ -629,7 +629,7 @@ const StoryAiExpertEmon = () => {
     summary: copy.kicker,
     url: typeof window !== "undefined"
       ? window.location.href
-      : "https://trendfluxdigitalbd.lovable.app/stories/ai-expert-emon",
+      : "https://trendflux.digital/stories/ai-expert-emon",
     category: "Audio Story",
     tags: AI_EXPERT_EMON_THEMES,
   }), [copy.title, copy.kicker]);
