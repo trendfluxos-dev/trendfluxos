@@ -359,7 +359,7 @@ export default function MediaReports() {
   const [filter, setFilter] = useState<SourceKey>("all");
   const show = (k: SourceKey) => filter === "all" || filter === k;
   return (
-    <div data-brand="justice" className={`min-h-dvh ${navy} text-[var(--justice-ink)]`}>
+    <div data-brand="justice" lang="bn" className={`min-h-dvh ${navy} text-[var(--justice-ink)]`}>
       <Helmet>
         <title>মিডিয়া রিপোর্টস — পাবনা অ্যাকাউন্টেবিলিটি প্রজেক্ট</title>
         <meta
@@ -386,7 +386,7 @@ export default function MediaReports() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link to="/justice-appeal" className="flex items-center gap-3">
             <span className={`inline-block h-2 w-2 rounded-full ${accentBg}`} />
-            <span className="font-serif text-sm tracking-[0.18em] text-white">
+            <span lang="en" className="font-serif text-sm tracking-[0.18em] text-white">
               PABNA ACCOUNTABILITY PROJECT
             </span>
           </Link>
@@ -402,7 +402,7 @@ export default function MediaReports() {
       {/* Hero */}
       <section className="border-b border-white/5">
         <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
-          <div
+          <div lang="en"
             className={`inline-flex items-center gap-2 rounded-full border ${accentBorder}/40 ${accentBg}/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] ${accent}`}
           >
             <Archive className="h-3.5 w-3.5" /> Media Reference Gallery · Vol. 01
