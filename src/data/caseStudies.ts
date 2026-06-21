@@ -43,6 +43,35 @@ export type CaseStudy = {
 
 export const caseStudies: CaseStudy[] = [
   {
+    slug: "kormoshikkha-edtech-platform",
+    category: "EdTech Platform",
+    title: "KormoShikkha — Online EdTech Platform",
+    description:
+      "Designed and operated TrendFlux's flagship online learning platform — cohort-based AI masterclasses with modular curriculum, recordings, and end-to-end delivery infrastructure.",
+    results: ["7+ modules live", "Cohort-based delivery", "End-to-end ownership"],
+    Icon: ContentEngineIcon,
+    situation:
+      "TrendFlux needed a dedicated learning surface to productize its AI and growth expertise beyond 1-1 client work.",
+    problem:
+      "Knowledge lived in scattered docs and sessions — no scalable way to enroll students, deliver lessons, or track progress as a real platform.",
+    solution:
+      "Built KormoShikkha as a full edtech product: modular curriculum, cohort enrollment flow, recordings, payment + admin tooling, and an operating cadence for releases.",
+    insight:
+      "An edtech platform is an operating system, not a course — sustained value comes from the delivery loop, not the content drop.",
+    service: "AI Automation",
+    industry: "Education",
+    stack: ["CRM"],
+    stage: "Growth",
+    map: {
+      city: "Dhaka",
+      region: "Bangladesh · EdTech",
+      x: 54,
+      y: 50,
+      system: "ecosystem",
+      outcome: "KormoShikkha — AI EdTech platform",
+    },
+  },
+  {
     slug: "organic-reach-485k",
     category: "Organic Growth System",
     title: "Scaling Organic Reach to 485K+",
