@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import LayerBreadcrumb from "./LayerBreadcrumb";
 import LayerFlowNav from "./LayerFlowNav";
 import EcosystemReturn from "./EcosystemReturn";
-import { useSeo } from "@/hooks/useSeo";
 import { getNode } from "@/config/siteLayers";
 
 /**
@@ -18,12 +17,9 @@ const LayerShell = ({ children }: { children: React.ReactNode }) => {
   const node = getNode(pathname);
   const isSystem = node?.layer === "system" || node?.noindex;
 
-  // Apply system-layer SEO defaults. Page-level useSeo() calls still win
-  // because they re-set state after this effect.
-  useSeo(isSystem ? { noindex: true } : {});
-
-  // Belt-and-suspenders: also set the robots meta imperatively so any
-  // page that forgets to call useSeo() still gets the right signal.
+  // Force `noindex,nofollow` on system routes imperatively so the signal
+  // lands even if a page doesn't call useSeo(). We avoid calling useSeo()
+  // here because the shared store would otherwise overwrite per-page SEO.
   useEffect(() => {
     if (!isSystem) return;
     const tag = document.querySelector('meta[name="robots"]');
