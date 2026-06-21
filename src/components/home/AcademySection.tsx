@@ -1,4 +1,5 @@
-import { ArrowUpRight, GraduationCap, ExternalLink } from "lucide-react";
+import { ArrowUpRight, GraduationCap } from "lucide-react";
+import { Link } from "react-router-dom";
 import { TfSection, TfCard } from "@/components/tf/Section";
 import { ACADEMY_MODULES } from "@/data/home";
 import { EDTECH } from "@/config/edtech";
@@ -35,29 +36,25 @@ export const AcademySection = () => (
             Browse the Advanced AI Masterclass, cohorts, and module library on the official learning platform.
           </p>
         </div>
-        <a
-          href={EDTECH.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to={EDTECH.routes.home}
           onClick={() => track("edtech_platform_open", { location: "academy_section" })}
           className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-md"
         >
           Open Platform
-          <ExternalLink className="h-4 w-4" aria-hidden="true" />
-        </a>
+          <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
       </div>
     </div>
 
     <div className="mt-6 text-center">
-      <a
-        href={EDTECH.url}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        to={EDTECH.routes.courses}
         onClick={() => track("edtech_platform_open", { location: "academy_section_secondary" })}
         className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
       >
         Explore all masterclasses <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-      </a>
+      </Link>
     </div>
   </TfSection>
 );

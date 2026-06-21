@@ -1,5 +1,5 @@
 import {
-  ExternalLink,
+  ArrowUpRight,
   GraduationCap,
   Sparkles,
   CheckCircle2,
@@ -9,6 +9,7 @@ import {
   LineChart,
   ArrowRight,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { EDTECH } from "@/config/edtech";
 import { track } from "@/lib/analytics";
 
@@ -66,12 +67,10 @@ export const KormoShikkhaShowcase = () => {
 
         <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:items-center">
           {/* Hand-crafted in-browser preview */}
-          <a
-            href={EDTECH.url}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to={EDTECH.routes.home}
             onClick={() => onOpen("showcase_preview")}
-            aria-label="Open KormoShikkha platform in a new tab"
+            aria-label="Open KormoShikkha platform"
             className="group relative block overflow-hidden rounded-3xl border border-border/70 bg-card/60 backdrop-blur-xl shadow-[0_20px_60px_-30px_hsl(var(--primary)/0.35)] ring-1 ring-foreground/[0.04] transition-all duration-500 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-[0_30px_80px_-25px_hsl(var(--primary)/0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             {/* Subtle gradient halo behind the card */}
@@ -92,9 +91,9 @@ export const KormoShikkhaShowcase = () => {
               </span>
               <div className="ml-2 flex flex-1 items-center gap-2 truncate rounded-md border border-border/60 bg-background/70 backdrop-blur px-3 py-1 text-[11px] text-muted-foreground">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-[hsl(var(--lv-gold))] shadow-[0_0_8px_hsl(var(--lv-gold)/0.6)]" aria-hidden />
-                <span className="truncate">kormoshikkha.trendflux.digital</span>
+                <span className="truncate">trendflux.digital/edtech</span>
               </div>
-              <ExternalLink className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-foreground" aria-hidden />
+              <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-foreground" aria-hidden />
             </div>
 
             {/* Rendered "page" preview */}
@@ -173,9 +172,9 @@ export const KormoShikkhaShowcase = () => {
 
             {/* Hover overlay CTA */}
             <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 bg-gradient-to-t from-foreground/90 via-foreground/60 to-transparent px-4 py-5 text-[11px] font-semibold text-background opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              Open live platform <ExternalLink className="h-3 w-3" aria-hidden />
+              Open KormoShikkha <ArrowUpRight className="h-3 w-3" aria-hidden />
             </span>
-          </a>
+          </Link>
 
           {/* Project metadata */}
           <div>
@@ -228,23 +227,21 @@ export const KormoShikkhaShowcase = () => {
             </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={EDTECH.url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to={EDTECH.routes.home}
                 onClick={() => onOpen("showcase_primary_cta")}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
-                Visit Live Platform
-                <ExternalLink className="h-4 w-4" aria-hidden />
-              </a>
-              <a
-                href="/showcase"
+                Open KormoShikkha
+                <ArrowUpRight className="h-4 w-4" aria-hidden />
+              </Link>
+              <Link
+                to="/showcase"
                 onClick={() => track("showcase_open", { location: "kormoshikkha_showcase" })}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-border bg-background px-6 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 See More Projects
-              </a>
+              </Link>
             </div>
           </div>
         </div>

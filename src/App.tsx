@@ -81,6 +81,11 @@ const Enterprise = routes["/enterprise"];
 const Toolkit = routes["/toolkit"];
 const CourseTrendflux = routes["/course/trendflux"];
 const Masterclass = routes["/masterclass"];
+const EdtechHome = routes["/edtech"];
+const EdtechCourses = routes["/edtech/courses"];
+const EdtechCourseDetail = routes["/edtech/courses/:slug"];
+const EdtechEnroll = routes["/edtech/enroll/:slug"];
+const EdtechPricing = routes["/edtech/pricing"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const JusticeAppeal = routes["/justice-appeal"];
 const MediaReports = routes["/media-reports"];
@@ -138,6 +143,11 @@ const RoutedApp = () => {
         <Route path="/toolkit" element={<Toolkit />} />
         <Route path="/course/trendflux" element={<CourseTrendflux />} />
         <Route path="/masterclass" element={<Masterclass />} />
+        <Route path="/edtech" element={<EdtechHome />} />
+        <Route path="/edtech/courses" element={<EdtechCourses />} />
+        <Route path="/edtech/courses/:slug" element={<EdtechCourseDetail />} />
+        <Route path="/edtech/enroll/:slug" element={<EdtechEnroll />} />
+        <Route path="/edtech/pricing" element={<EdtechPricing />} />
         <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
         <Route path="/justice-appeal" element={<JusticeAppeal />} />
         <Route path="/media-reports" element={<MediaReports />} />

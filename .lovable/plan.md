@@ -1,149 +1,64 @@
+## Goal
 
-# 4-Layer Ecosystem Re-Architecture — Plan Only
+Stop relying on the external `kormoshikkha.trendflux.digital` embed. Build KormoShikkha as a **first-class platform inside TrendFlux** at `/edtech/*`, using TrendFlux's own design tokens, navbar, footer, brand layer treatment — same UI, same structure, but a real edtech product surface.
 
-No new pages, no backend, no content rewrites. This is a **navigation + chrome + metadata** layer built on top of existing routes in `src/lib/routes.ts` and `src/App.tsx`.
+## Why phased
 
----
+The uploaded KormoShikkha codebase has 100+ routes (courses, teachers, live classes, payments, certificates, flashcards, AI tutor, admin, referrals, rewards, monetization, on-demand). Porting all of it in one shot is unrealistic and would destabilise the TrendFlux project. We ship a credible **Phase 1** now, then unlock more phases as you ask.
 
-## 1. Single source of truth
+## Phase 1 — Public storefront (this turn)
 
-**New file:** `src/config/siteLayers.ts`
-
-```ts
-export type Layer = "company" | "founder" | "brand" | "system";
-
-export interface LayerNode {
-  path: string;
-  title: string;
-  layer: Layer;
-  parentPath?: string;     // for breadcrumbs
-  siblings?: string[];     // for forward/back within a layer
-  ctaNext?: string;        // recommended next path (cross-layer funnel)
-  seo?: { noindex?: boolean };
-}
-
-export const SITE_LAYERS: LayerNode[] = [ /* all routes mapped */ ];
-export const getNode = (path: string) => ...;
-export const getLayer = (path: string) => ...;
-```
-
-Layer assignments:
-
-| Layer | Routes |
-|---|---|
-| company | `/`, `/explore`, `/ecosystem`, `/services`, `/enterprise`, `/toolkit`, `/contact` |
-| founder | `/project-lead`, `/portfolio`, `/the-stand`, `/quiet-positions`, `/justice-appeal`, `/media-reports`, `/stories/ai-expert-emon`, `/trust` |
-| brand | `/luxe-veil`, `/brandtoki`, `/trendflux-talent`, `/marriage`, `/masterclass`, `/course/trendflux` |
-| system | `/auth`, `/dashboard`, `/settings`, `/admin/*` → `noindex: true` |
-
----
-
-## 2. Chrome components (new)
-
-- `src/components/layer/LayerBreadcrumb.tsx` — `Home › <Layer> › <Page>`, hidden on `/`
-- `src/components/layer/EcosystemReturn.tsx` — sticky pill "← Back to Ecosystem", shown on brand + founder, hidden on company + system
-- `src/components/layer/LayerFlowNav.tsx` — page-bottom prev/next using `siblings` + `ctaNext`
-  - Brand: `← All Brands` · `Next brand →` · `Back to Ecosystem`
-  - Founder: `← Portfolio` · `Next story →` · `Back to Trust`
-  - Company: linear flow Home → Explore → Ecosystem → Services → Enterprise → Contact
-- `src/components/layer/LayerShell.tsx` — wraps Outlet, mounts the three above based on current layer
-
-Mount `<LayerShell>` once in `src/App.tsx` around `<Routes>` so every page gets it without per-page edits.
-
----
-
-## 3. Edited components
-
-- `src/components/Navbar.tsx` — regroup top-level into 3 dropdowns (Company / Founder / Brands) + auth/dashboard on the right. Mobile sheet groups by layer headers.
-- `src/components/Footer.tsx` — 4 columns matching layers.
-- `src/pages/Index.tsx` — reorder existing sections (no new content) into 4 labeled bands:
-  1. **The Company** — Hero, Ecosystem, Services, Enterprise, Contact CTA
-  2. **The Founder** — Zahid/Emon, AiExpertStoryTeaser, Operated Brands, Academy, Proof/Testimonials
-  3. **The Brands** — Brand grid + Masterclass + Course teasers
-  4. **The System** — Dashboard/Admin shortcuts (only when logged in)
-
----
-
-## 4. SEO per layer
-
-- Extend `useSeo` defaults so System routes emit `<meta name="robots" content="noindex,nofollow">`.
-- `scripts/generate-sitemap` (or equivalent) reads `SITE_LAYERS` and excludes `system`.
-- Founder pages: `article` schema. Brand pages: `Product`/`Service` schema. Company: `Organization`.
-
----
-
-## 5. Wireframes (ASCII)
-
-**Home hero + layer bands**
+Routes added (all under `/edtech/*`, mounted in `App.tsx`):
 
 ```text
-┌──────────────────────────────────────────────────────┐
-│  NAV  [Company▾] [Founder▾] [Brands▾]   Auth | Dash │
-├──────────────────────────────────────────────────────┤
-│  ◆ icon   TRENDFLUX DIGITAL                          │
-│           One ecosystem. Three engines.              │
-│           [Explore Ecosystem]  [Meet the Founder]    │
-├──────── THE COMPANY ─────────────────────────────────┤
-│  Ecosystem | Services | Enterprise | Contact         │
-├──────── THE FOUNDER ─────────────────────────────────┤
-│  Zahid/Emon story • AI Expert Emon • Trust           │
-├──────── THE BRANDS ──────────────────────────────────┤
-│  Luxe Veil | Brandtoki | Talent | Marriage | Course  │
-├──────── THE SYSTEM (auth only) ──────────────────────┤
-│  Dashboard • Settings • Admin                        │
-└──────────────────────────────────────────────────────┘
+/edtech                    KormoShikkha home — hero, value props, featured courses, cohort CTA
+/edtech/courses            Full catalog grid with category/level filters
+/edtech/courses/:slug      Course detail — curriculum, outcomes, instructor, pricing, enroll CTA
+/edtech/enroll/:slug       Enrollment + payment submit (reuses existing course-payment-submit edge fn)
+/edtech/pricing            Tiers + cohort schedule
 ```
 
-**Inner page shell (any non-home route)**
+Design system:
+- Wrap in `LayerShell` with a new `edtech` layer in `siteLayers.ts` (cyan/emerald accent, matches existing KormoShikkha brand colour).
+- Reuse TrendFlux `Navbar`, `Footer`, `LayerBand`, `LayerBreadcrumb`, `LayerFlowNav` — zero visual drift.
+- Course/lesson cards mirror existing showcase card geometry (rounded-3xl, border-border/50, glass surface).
+
+Data:
+- New `src/data/edtechCourses.ts` — seed with 7+ modules pulled from the zip's course data (titles, summaries, durations, modules count, price).
+- `src/config/edtech.ts` updated: `url: "/edtech"` (internal), add `courses` accessor.
+- `KormoShikkhaShowcase.tsx`, `AcademySection.tsx`, `QuickAccess.tsx`, `siteLayers.ts` repointed to `/edtech`.
+
+Backend (already exists, reuse as-is):
+- `course-payment-submit` edge function → enrollment intake
+- `course-payment-decision` edge function → admin approve/reject
+- `CourseEnrollmentsAdmin.tsx` → admin queue
+
+SEO: each route gets `useSeo` title + meta + JSON-LD `Course` schema.
+
+## Phase 2 — Authenticated student surface (next turn, on request)
 
 ```text
-NAV
-Home › Founder › The Stand               ← breadcrumb
-┌────────────────────────────────────┐
-│            PAGE CONTENT            │
-└────────────────────────────────────┘
-[← Quiet Positions]  [Justice Appeal →]  ← LayerFlowNav
-              ↳ Back to Trust            ← cross-layer ctaNext
-                                          (floating pill: ← Ecosystem)
-FOOTER (4 columns)
+/edtech/dashboard          My courses, progress, next live class
+/edtech/learn/:slug/:lid   Lesson watch page (video + notes + mark complete)
+/edtech/certificates       Issued certificates + share/verify
 ```
 
-**Founder story funnel**
+## Phase 3 — Teacher + admin surfaces (later, on request)
 
-```text
-Project Lead → Portfolio → The Stand → Quiet Positions
-     → Justice Appeal → Media Reports → AI Expert Emon → Trust → [CTA: Work with us /contact]
-```
+Teacher dashboard, live class room, admin curriculum builder, payouts, growth analytics — ported in slices from the zip.
 
-**Ecosystem architecture**
+## Phase 4 — Advanced edtech features (optional)
 
-```text
-                  ┌─────────────────┐
-                  │   COMPANY (/)   │
-                  │  brain · discovery│
-                  └────────┬────────┘
-              ┌────────────┼────────────┐
-              ▼            ▼            ▼
-        ┌─────────┐  ┌─────────┐  ┌──────────┐
-        │ FOUNDER │  │ BRANDS  │  │  SYSTEM  │
-        │  trust  │  │ revenue │  │ control  │
-        └────┬────┘  └────┬────┘  └────┬─────┘
-             └──── feeds back to Company hub ────┘
-```
+AI Tutor, flashcards, referrals, rewards, on-demand teacher booking, masterbook store. Each is a sizable port; we'll scope per request.
 
----
+## Out of scope
 
-## 6. Out of scope
+- Mobile Capacitor wrapper from the zip (not needed for web).
+- Replacing TrendFlux home/founder/brand layers (TrendFlux stays the parent shell; KormoShikkha is the `/edtech` layer inside it).
+- Migrating any DB schema from the standalone KormoShikkha Supabase — TrendFlux's Lovable Cloud is the new backend. Phase 1 only uses tables that already exist (`course_enrollments`, `profiles`, `user_roles`).
 
-- No new pages, no copy rewrites
-- No backend / RLS / edge function changes
-- No domain / DNS / deployment changes
-- No edits to `src/integrations/supabase/*`
+## Confirm before I build
 
----
-
-## Open questions before I build
-
-1. Navbar grouping — **mega-menu** (rich dropdown with descriptions per layer) or **simple dropdown** (text list)?
-2. "Back to Ecosystem" pill — floating bottom-right, or inline above the footer?
-3. Should `/portfolio` count as **founder** only, or appear under both Founder and Brand groupings in the nav (it overlaps per your spec)?
+1. **Phase 1 only this turn** — yes / no?
+2. **Mount path `/edtech`** — keep, or use `/kormoshikkha` instead?
+3. **Course list source** — extract from the uploaded zip's data files, or you'll dictate the 7+ courses manually after Phase 1 ships?
