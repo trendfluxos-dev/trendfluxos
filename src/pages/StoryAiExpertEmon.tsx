@@ -28,6 +28,7 @@ import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
 import audioAsset from "@/assets/ai-bisheshoggo-emon.mp3.asset.json";
 import { CdnStatusChip } from "@/components/media/CdnStatusChip";
+import { useNearViewport } from "@/hooks/useNearViewport";
 import shareCard from "@/assets/ai-expert-emon-share.jpg";
 import {
   AI_EXPERT_EMON_CHAPTERS,
@@ -218,6 +219,7 @@ const StoryAiExpertEmon = () => {
   const [lang, setLang] = useState<StoryLang>("bn");
   const copy = AI_EXPERT_EMON_STORY[lang];
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const nearAudio = useNearViewport(audioRef, "500px");
   const barRef = useRef<HTMLDivElement | null>(null);
   const paragraphRefs = useRef<Array<HTMLParagraphElement | null>>([]);
   const [playing, setPlaying] = useState(false);
@@ -686,7 +688,11 @@ const StoryAiExpertEmon = () => {
 
           {/* Player */}
           <div className="mt-10 rounded-2xl border border-border bg-card p-5 sm:p-6">
-            <audio ref={audioRef} preload="metadata" src={audioAsset.url} />
+            <audio
+              ref={audioRef}
+              preload={nearAudio ? "metadata" : "none"}
+              src={audioAsset.url}
+            />
 
             {audioError && (
               <div
