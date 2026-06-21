@@ -25,6 +25,7 @@ import { AppErrorBoundary } from "@/components/AppErrorBoundary";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import RequireRole from "@/components/auth/RequireRole";
 import { AppBoomTrigger, RouteBoom } from "@/components/dev/BoomTrigger";
+import LayerShell from "@/components/layer/LayerShell";
 
 // Dev-only diagnostic panels. They are heavy and only ever rendered when
 // `?perf` is in the URL during development, so we code-split them out of the
@@ -234,7 +235,9 @@ const App = () => (
             Skip to main content
           </a>
           <div id="main-content" tabIndex={-1} className="outline-none">
-          <RoutedApp />
+          <LayerShell>
+            <RoutedApp />
+          </LayerShell>
           </div>
         </Suspense>
         </BrandPreviewProvider>
