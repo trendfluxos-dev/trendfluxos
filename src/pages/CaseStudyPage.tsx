@@ -7,7 +7,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
-import trendfluxLogo from "@/assets/trendflux-logo.webp";
+import trendfluxLogo from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 
 const Section = ({ label, body }: { label: string; body: string }) => (
@@ -129,7 +129,7 @@ const CaseStudyPage = () => {
       <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-7xl rounded-full glass-strong">
         <div className="flex items-center justify-between px-5 md:px-8 py-3.5">
           <Link to="/" className="flex items-center gap-2 font-display text-lg font-bold tracking-tight">
-            <img src={trendfluxLogo} alt={`${BRAND.name} logo`} className="h-8 w-8 object-contain" />
+            <img src={trendfluxLogo.url} alt={`${BRAND.name} logo`} className="h-8 w-8 rounded-md bg-white object-contain p-0.5" />
             {BRAND.nameLead} <span className="text-gradient">{BRAND.nameTrail}</span>
           </Link>
           <button
