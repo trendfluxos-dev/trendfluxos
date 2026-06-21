@@ -192,7 +192,7 @@ export default function ShareKit() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
           <Link to="/justice-appeal" className="flex items-center gap-3">
             <span className={`inline-block h-2 w-2 rounded-full ${accentBg}`} />
-            <span className="font-serif text-sm tracking-[0.18em] text-white">
+            <span lang="en" className="font-serif text-sm tracking-[0.18em] text-white">
               PABNA ACCOUNTABILITY PROJECT
             </span>
           </Link>
@@ -208,7 +208,7 @@ export default function ShareKit() {
       {/* Hero */}
       <section className="border-b border-white/5">
         <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
-          <div
+          <div lang="en"
             className={`inline-flex items-center gap-2 rounded-full border ${accentBorder}/40 ${accentBg}/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] ${accent}`}
           >
             <Share2 className="h-3.5 w-3.5" /> Legal-Safe Share Kit
