@@ -219,7 +219,9 @@ const StoryAiExpertEmon = () => {
   const [lang, setLang] = useState<StoryLang>("bn");
   const copy = AI_EXPERT_EMON_STORY[lang];
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const nearAudio = useNearViewport(audioRef, "500px");
+  const playerCardRef = useRef<HTMLDivElement | null>(null);
+  // Observe the visible card; the <audio> element itself has zero size.
+  const nearAudio = useNearViewport(playerCardRef, "500px");
   const barRef = useRef<HTMLDivElement | null>(null);
   const paragraphRefs = useRef<Array<HTMLParagraphElement | null>>([]);
   const [playing, setPlaying] = useState(false);
@@ -687,7 +689,7 @@ const StoryAiExpertEmon = () => {
           </p>
 
           {/* Player */}
-          <div className="mt-10 rounded-2xl border border-border bg-card p-5 sm:p-6">
+          <div ref={playerCardRef} className="mt-10 rounded-2xl border border-border bg-card p-5 sm:p-6">
             <audio
               ref={audioRef}
               preload={nearAudio ? "metadata" : "none"}

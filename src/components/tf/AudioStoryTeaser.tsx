@@ -39,8 +39,10 @@ function mediaErrorText(code?: number) {
 export default function AudioStoryTeaser() {
   const ref = useRef<HTMLAudioElement | null>(null);
   const barRef = useRef<HTMLDivElement | null>(null);
-  // Only fetch audio metadata when the player approaches the viewport.
-  const nearViewport = useNearViewport(ref, "500px");
+  // Observe the visible section (the <audio> element itself has 0×0 dimensions,
+  // which causes IntersectionObserver to never report intersection).
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const nearViewport = useNearViewport(sectionRef, "500px");
   const [playing, setPlaying] = useState(false);
   const [cur, setCur] = useState(0);
   const [dur, setDur] = useState(0);
@@ -312,6 +314,7 @@ export default function AudioStoryTeaser() {
 
   return (
     <section
+      ref={sectionRef}
       aria-labelledby="audio-story-teaser-heading"
       className="relative isolate overflow-hidden bg-background py-20 sm:py-24 lg:py-28"
     >
