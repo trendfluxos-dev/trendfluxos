@@ -1,32 +1,40 @@
-import { useCallback, useState } from "react";
+import { Suspense, lazy, useCallback, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
-import AudioStoryTeaser from "@/components/tf/AudioStoryTeaser";
-import AiExpertStoryTeaser from "@/components/home/AiExpertStoryTeaser";
 import {
   HomeHeroSection,
   TrustBar,
   QuickAccess,
-  EcosystemSection,
-  ServicesSection,
-  SystemsHeBuiltSection,
-  FounderSection,
-  TheStandCoverSection,
-  QuietPositionsSection,
-  JusticeAppealSection,
-  AcademySection,
-  KormoShikkhaShowcase,
-  OperatedBrandsSection,
-  LuxeVeilSection,
-  ProofSection,
-  TestimonialsSection,
-  FitSection,
-  FinalCtaSection,
 } from "@/components/home";
+
+// Below-the-fold sections are code-split so the initial home payload only
+// ships the hero + trust bar + quick-access strip. The rest streams in as
+// the user scrolls, dramatically cutting LCP and TBT.
+const EcosystemSection = lazy(() => import("@/components/home/EcosystemSection").then(m => ({ default: m.EcosystemSection })));
+const ServicesSection = lazy(() => import("@/components/home/ServicesSection").then(m => ({ default: m.ServicesSection })));
+const SystemsHeBuiltSection = lazy(() => import("@/components/home/SystemsHeBuiltSection").then(m => ({ default: m.SystemsHeBuiltSection })));
+const FounderSection = lazy(() => import("@/components/home/FounderSection").then(m => ({ default: m.FounderSection })));
+const TheStandCoverSection = lazy(() => import("@/components/home/TheStandCoverSection").then(m => ({ default: m.TheStandCoverSection })));
+const AudioStoryTeaser = lazy(() => import("@/components/tf/AudioStoryTeaser"));
+const AiExpertStoryTeaser = lazy(() => import("@/components/home/AiExpertStoryTeaser"));
+const QuietPositionsSection = lazy(() => import("@/components/home/QuietPositionsSection").then(m => ({ default: m.QuietPositionsSection })));
+const JusticeAppealSection = lazy(() => import("@/components/home/JusticeAppealSection").then(m => ({ default: m.JusticeAppealSection })));
+const AcademySection = lazy(() => import("@/components/home/AcademySection").then(m => ({ default: m.AcademySection })));
+const KormoShikkhaShowcase = lazy(() => import("@/components/home/KormoShikkhaShowcase").then(m => ({ default: m.KormoShikkhaShowcase })));
+const OperatedBrandsSection = lazy(() => import("@/components/home/OperatedBrandsSection").then(m => ({ default: m.OperatedBrandsSection })));
+const LuxeVeilSection = lazy(() => import("@/components/home/LuxeVeilSection").then(m => ({ default: m.LuxeVeilSection })));
+const ProofSection = lazy(() => import("@/components/home/ProofSection").then(m => ({ default: m.ProofSection })));
+const TestimonialsSection = lazy(() => import("@/components/home/TestimonialsSection").then(m => ({ default: m.TestimonialsSection })));
+const FitSection = lazy(() => import("@/components/home/FitSection").then(m => ({ default: m.FitSection })));
+const FinalCtaSection = lazy(() => import("@/components/home/FinalCtaSection").then(m => ({ default: m.FinalCtaSection })));
+
+const SectionFallback = () => (
+  <div aria-hidden className="min-h-[40vh]" />
+);
 
 /**
  * Home page (TrendFlux Growth OS). Composition-only: each section is a
@@ -82,23 +90,25 @@ const Index = () => {
       <HomeHeroSection onOpenQuote={openQuote} />
       <TrustBar />
       <QuickAccess />
-      <EcosystemSection />
-      <ServicesSection />
-      <SystemsHeBuiltSection />
-      <FounderSection />
-      <TheStandCoverSection />
-      <AudioStoryTeaser />
-      <AiExpertStoryTeaser />
-      <QuietPositionsSection />
-      <JusticeAppealSection />
-      <AcademySection />
-      <KormoShikkhaShowcase />
-      <OperatedBrandsSection />
-      <LuxeVeilSection />
-      <ProofSection />
-      <TestimonialsSection />
-      <FitSection onOpenQuote={openQuote} />
-      <FinalCtaSection onOpenQuote={openQuote} />
+      <Suspense fallback={<SectionFallback />}>
+        <EcosystemSection />
+        <ServicesSection />
+        <SystemsHeBuiltSection />
+        <FounderSection />
+        <TheStandCoverSection />
+        <AudioStoryTeaser />
+        <AiExpertStoryTeaser />
+        <QuietPositionsSection />
+        <JusticeAppealSection />
+        <AcademySection />
+        <KormoShikkhaShowcase />
+        <OperatedBrandsSection />
+        <LuxeVeilSection />
+        <ProofSection />
+        <TestimonialsSection />
+        <FitSection onOpenQuote={openQuote} />
+        <FinalCtaSection onOpenQuote={openQuote} />
+      </Suspense>
 
       <Footer />
 
