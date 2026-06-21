@@ -62,6 +62,42 @@ export type Database = {
         }
         Relationships: []
       }
+      certificates: {
+        Row: {
+          course_slug: string
+          course_title: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          issued_at: string
+          revoked: boolean
+          student_name: string
+          verification_id: string
+        }
+        Insert: {
+          course_slug: string
+          course_title: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          issued_at?: string
+          revoked?: boolean
+          student_name: string
+          verification_id: string
+        }
+        Update: {
+          course_slug?: string
+          course_title?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          issued_at?: string
+          revoked?: boolean
+          student_name?: string
+          verification_id?: string
+        }
+        Relationships: []
+      }
       client_errors: {
         Row: {
           created_at: string
