@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
 import DashboardMock from "@/components/tf/DashboardMock";
 
 /**
@@ -6,7 +6,7 @@ import DashboardMock from "@/components/tf/DashboardMock";
  * dialog and passes `onOpenQuote` so this section stays presentational.
  */
 export const HomeHeroSection = ({ onOpenQuote }: { onOpenQuote: () => void }) => (
-  <section className="relative isolate overflow-hidden bg-background pt-32 pb-24 sm:pt-44 sm:pb-32">
+  <section className="relative isolate overflow-hidden bg-background pt-24 pb-16 sm:pt-36 sm:pb-24 lg:pt-44 lg:pb-32">
     <div aria-hidden className="pointer-events-none absolute inset-0 tf-grid-bg" />
     <div
       aria-hidden
@@ -17,7 +17,7 @@ export const HomeHeroSection = ({ onOpenQuote }: { onOpenQuote: () => void }) =>
       className="pointer-events-none absolute bottom-0 right-0 h-[380px] w-[480px] translate-x-1/3 translate-y-1/3 rounded-full bg-primary/5 blur-[140px]"
     />
 
-    <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:px-10">
+    <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 sm:gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:px-10">
       <div className="tf-rise text-center lg:text-left">
         <div className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/50 px-3 py-1 backdrop-blur-sm">
           <span className="relative flex h-1.5 w-1.5">
@@ -29,20 +29,19 @@ export const HomeHeroSection = ({ onOpenQuote }: { onOpenQuote: () => void }) =>
           </span>
         </div>
 
-        <h1 className="mt-8 font-display text-[40px] font-semibold leading-[1.04] tracking-[-0.025em] text-foreground sm:text-[56px] lg:text-[68px] lg:leading-[1.0]">
+        <h1 className="mt-7 font-display text-[36px] font-semibold leading-[1.06] tracking-[-0.025em] text-foreground sm:text-[52px] lg:text-[68px] lg:leading-[1.0]">
           Your AI-Powered
           <br />
           <span className="tf-text-electric">Growth Operating System</span>
           <span className="text-primary">.</span>
         </h1>
 
-        <p className="mx-auto mt-7 max-w-xl text-[15px] leading-[1.7] text-muted-foreground sm:text-[16.5px] lg:mx-0">
-          Replace scattered tools, disconnected workflows, and manual scaling
-          with one unified AI-driven ecosystem — built for founders who
-          operate beyond marketing.
+        <p className="mx-auto mt-5 max-w-xl text-[14.5px] leading-[1.65] text-muted-foreground sm:mt-7 sm:text-[16.5px] sm:leading-[1.7] lg:mx-0">
+          One unified AI-driven ecosystem that replaces scattered tools and
+          manual scaling — built for founders who operate beyond marketing.
         </p>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-3.5 lg:justify-start">
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-3.5 lg:justify-start">
           <button
             type="button"
             onClick={onOpenQuote}
@@ -51,29 +50,43 @@ export const HomeHeroSection = ({ onOpenQuote }: { onOpenQuote: () => void }) =>
             Book Strategy Call <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </button>
           <a
-            href="#ecosystem"
+            href="#quick-access-heading"
             className="inline-flex w-full items-center justify-center rounded-full border border-border bg-muted/50 px-7 py-3.5 text-sm font-semibold text-foreground transition-all duration-200 hover:-translate-y-px hover:border-foreground/20 hover:bg-muted sm:w-auto"
           >
             Explore the OS
           </a>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground lg:justify-start">
-          <span className="inline-flex items-center gap-1.5">
-            <ShieldCheck className="h-3 w-3 text-primary" aria-hidden="true" /> NDA-ready
-          </span>
-          <span className="h-0.5 w-0.5 rounded-full bg-muted-foreground" />
-          <span>$8.4M ad spend</span>
-          <span className="h-0.5 w-0.5 rounded-full bg-muted-foreground" />
-          <span>47 ops deployed</span>
-          <span className="h-0.5 w-0.5 rounded-full bg-muted-foreground" />
-          <span>4.82x avg ROAS</span>
-        </div>
+        {/* Proof strip — grid on mobile (no awkward wrap), inline on desktop */}
+        <dl className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-y-3 gap-x-6 border-t border-border/60 pt-6 text-left text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:mt-10 sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2 sm:border-0 sm:pt-0 lg:justify-start">
+          <div className="inline-flex items-center gap-1.5">
+            <ShieldCheck className="h-3 w-3 text-primary" aria-hidden="true" />
+            <dt className="sr-only">Compliance</dt>
+            <dd>NDA-ready</dd>
+          </div>
+          <span aria-hidden className="hidden h-0.5 w-0.5 rounded-full bg-muted-foreground sm:inline-block" />
+          <div><dt className="sr-only">Ad spend managed</dt><dd>$8.4M ad spend</dd></div>
+          <span aria-hidden className="hidden h-0.5 w-0.5 rounded-full bg-muted-foreground sm:inline-block" />
+          <div><dt className="sr-only">Operations deployed</dt><dd>47 ops deployed</dd></div>
+          <span aria-hidden className="hidden h-0.5 w-0.5 rounded-full bg-muted-foreground sm:inline-block" />
+          <div><dt className="sr-only">Average ROAS</dt><dd>4.82x avg ROAS</dd></div>
+        </dl>
+
+        {/* Subtle bridge to the directory section below — only on mobile/tablet */}
+        <a
+          href="#quick-access-heading"
+          className="mx-auto mt-10 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground backdrop-blur transition-colors hover:border-primary/40 hover:text-primary lg:hidden"
+        >
+          See what's inside
+          <ChevronDown className="h-3.5 w-3.5 animate-bounce" aria-hidden />
+        </a>
       </div>
 
-      <div className="relative">
+      {/* Dashboard preview — desktop only; on mobile the hero stays focused on
+          message + CTAs and the directory grid takes over below. */}
+      <div className="relative hidden lg:block">
         <DashboardMock />
-      </div>
+        </div>
     </div>
   </section>
 );
