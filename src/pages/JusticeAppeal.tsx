@@ -370,8 +370,8 @@ export default function JusticeAppeal() {
       {/* Disclaimer */}
       <section>
         <div className="mx-auto max-w-3xl px-6 py-20">
-          <div className="text-xs uppercase tracking-[0.2em] text-slate-400">হয়রানি নিষিদ্ধ · আইনি দাবিত্যাগ</div>
-          <p className="mt-4 text-sm leading-relaxed text-slate-400">
+          <div className="text-xs text-slate-300/80">হয়রানি নিষিদ্ধ · আইনি দাবিত্যাগ</div>
+          <p className="mt-4 text-[15px] leading-[1.85] text-slate-200/85">
             এই পেজটি কোনো হয়রানি, হুমকি, mob action, মানহানি বা ব্যক্তিগত আক্রমণে উৎসাহ দেওয়ার
             উদ্দেশ্যে তৈরি করা হয়নি। এটি কেবলমাত্র আইনগত তদন্ত, ব্যক্তিগত নিরাপত্তা এবং প্রাতিষ্ঠানিক
             জবাবদিহিতার সমর্থনে তৈরি।
