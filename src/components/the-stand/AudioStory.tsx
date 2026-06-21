@@ -5,6 +5,7 @@ import { Reveal } from "./Reveal";
 import audioAsset from "@/assets/algorithm-torture-cell.mp3.asset.json";
 import { CdnStatusChip } from "@/components/media/CdnStatusChip";
 import { useNearViewport } from "@/hooks/useNearViewport";
+import { MediaErrorNotice, mediaErrorMessage } from "@/components/media/MediaErrorNotice";
 
 /**
  * AudioStory — a long-form narrative chapter pairing the recorded reflection
@@ -117,6 +118,7 @@ export function AudioStory() {
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [mediaError, setMediaError] = useState<null | { code?: number; message: string }>(null);
 
   useEffect(() => {
     const el = audioRef.current;
@@ -124,13 +126,27 @@ export function AudioStory() {
     const onTime = () => setCurrent(el.currentTime);
     const onMeta = () => setDuration(el.duration);
     const onEnd = () => setPlaying(false);
+    const onError = () => {
+      const err = el.error;
+      const message = err?.message || mediaErrorMessage(err?.code, "audio");
+      // eslint-disable-next-line no-console
+      console.error("[AudioStory] audio failed to load", {
+        code: err?.code,
+        message,
+        src: el.currentSrc || el.src,
+      });
+      setMediaError({ code: err?.code, message });
+      setPlaying(false);
+    };
     el.addEventListener("timeupdate", onTime);
     el.addEventListener("loadedmetadata", onMeta);
     el.addEventListener("ended", onEnd);
+    el.addEventListener("error", onError);
     return () => {
       el.removeEventListener("timeupdate", onTime);
       el.removeEventListener("loadedmetadata", onMeta);
       el.removeEventListener("ended", onEnd);
+      el.removeEventListener("error", onError);
     };
   }, []);
 
@@ -141,9 +157,27 @@ export function AudioStory() {
       el.pause();
       setPlaying(false);
     } else {
-      void el.play();
-      setPlaying(true);
+      void el.play().then(() => setPlaying(true)).catch((err: unknown) => {
+        const e = err as { name?: string; message?: string };
+        // eslint-disable-next-line no-console
+        console.error("[AudioStory] play() rejected", e);
+        setMediaError({ message: e?.message || "Playback was blocked by your browser." });
+        setPlaying(false);
+      });
     }
+  };
+
+  const retry = () => {
+    const el = audioRef.current;
+    if (!el) return;
+    setMediaError(null);
+    try { el.load(); } catch { /* noop */ }
+    void el.play().then(() => setPlaying(true)).catch((err: unknown) => {
+      const e = err as { name?: string; message?: string };
+      // eslint-disable-next-line no-console
+      console.error("[AudioStory] retry failed", e);
+      setMediaError({ message: e?.message || "Still couldn't play. Please try again." });
+    });
   };
 
   const seek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -240,6 +274,14 @@ export function AudioStory() {
             <div className="mt-4 flex items-center justify-end">
               <CdnStatusChip url={audioAsset.url} expectedTypePrefix="audio/" label="Audio CDN" />
             </div>
+            {mediaError && (
+              <MediaErrorNotice
+                kind="audio"
+                code={mediaError.code}
+                message={mediaError.message}
+                onRetry={retry}
+              />
+            )}
           </div>
         </Reveal>
 
