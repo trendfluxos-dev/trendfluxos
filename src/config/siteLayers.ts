@@ -35,7 +35,7 @@ export const LAYER_META: Record<Layer, { label: string; tagline: string; hubPath
 // Ordered flow within each layer (used for prev/next).
 const COMPANY_FLOW = ["/", "/explore", "/ecosystem", "/services", "/enterprise", "/toolkit", "/contact"];
 const FOUNDER_FLOW = ["/project-lead", "/portfolio", "/the-stand", "/quiet-positions", "/justice-appeal", "/media-reports", "/stories/ai-expert-emon", "/trust"];
-const BRAND_FLOW   = ["/luxe-veil", "/brandtoki", "/trendflux-talent", "/marriage", "/portfolio", "/masterclass", "/course/trendflux"];
+const BRAND_FLOW   = ["/luxe-veil", "/brandtoki", "/trendflux-talent", "/marriage", "/portfolio", "/edtech", "/masterclass", "/course/trendflux"];
 
 export const SITE_LAYERS: LayerNode[] = [
   // ---------- COMPANY ----------
@@ -63,6 +63,7 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/trendflux-talent",  title: "Trendflux Talent", layer: "brand", blurb: "Careers and talent platform",          siblings: BRAND_FLOW },
   { path: "/marriage",          title: "Marriage",         layer: "brand", blurb: "Marriage planning service",            siblings: BRAND_FLOW },
   { path: "/masterclass",       title: "Masterclass",      layer: "brand", blurb: "Advanced AI masterclass",              siblings: BRAND_FLOW },
+  { path: "/edtech",            title: "KormoShikkha",     layer: "brand", blurb: "TrendFlux's online EdTech platform",   siblings: BRAND_FLOW, ctaNext: { path: "/masterclass", label: "See the masterclass" } },
   { path: "/course/trendflux",  title: "Trendflux Course", layer: "brand", blurb: "Growth operator course",               siblings: BRAND_FLOW, ctaNext: { path: "/ecosystem", label: "Back to ecosystem" } },
 
   // ---------- SYSTEM ----------
