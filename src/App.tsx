@@ -1,6 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
@@ -8,7 +8,7 @@ import OverflowDetector from "@/components/dev/OverflowDetector";
 
 
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { routes } from "./lib/routes";
+import { routes, preloadRoute } from "./lib/routes";
 import { queryClient } from "@/lib/queryClient";
 import ScrollToTop from "./components/ScrollToTop";
 import ScrollProgress from "./components/ScrollProgress";
@@ -152,6 +152,31 @@ const RoutedApp = () => {
   );
 };
 
+const IdlePrefetcher = () => {
+  useEffect(() => {
+    // Prefetch high-traffic routes when the browser is idle so subsequent
+    // navigations resolve from cache instantly instead of waiting on a
+    // network round-trip for the lazy chunk.
+    const paths = [
+      "/", "/about", "/portfolio", "/the-stand", "/showcase", "/explore",
+      "/services", "/contact", "/project-lead", "/masterclass", "/marriage",
+      "/brandtoki", "/luxe-veil", "/justice-appeal",
+    ];
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+    };
+    const schedule = w.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 800));
+    const handle = schedule(() => {
+      paths.forEach((p) => { try { preloadRoute(p); } catch { /* noop */ } });
+    }, { timeout: 2500 });
+    return () => {
+      const cancel = (window as unknown as { cancelIdleCallback?: (h: number) => void }).cancelIdleCallback;
+      if (cancel && typeof handle === "number") cancel(handle);
+    };
+  }, []);
+  return null;
+};
+
 const App = () => (
   <AppErrorBoundary
     fallback={
@@ -195,6 +220,7 @@ const App = () => (
             </Suspense>
           )}
           <OverflowDetector />
+          <IdlePrefetcher />
 
 
 
