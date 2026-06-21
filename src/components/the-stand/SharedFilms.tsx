@@ -5,10 +5,13 @@ import { VideoWithDiagnostics } from "@/components/media/VideoWithDiagnostics";
 import { useNearViewport } from "@/hooks/useNearViewport";
 import algorithmFilm from "@/assets/algorithm-torture-cell.mp4.asset.json";
 import architectFilm from "@/assets/architect-of-violence.mp4.asset.json";
+import algorithmPoster from "@/assets/algorithm-torture-cell-poster.jpg";
+import architectPoster from "@/assets/architect-of-violence-poster.jpg";
 
 type Film = {
   id: string;
   src: string;
+  poster: string;
   eyebrow: { bn: string; en: string };
   title: { bn: string; en: string };
   caption: { bn: string; en: string };
@@ -18,6 +21,7 @@ const FILMS: Film[] = [
   {
     id: "algorithm-torture-cell",
     src: algorithmFilm.url,
+    poster: algorithmPoster,
     eyebrow: { bn: "শেয়ারকৃত ফাইল ০১", en: "Shared file 01" },
     title: {
       bn: "অ্যালগরিদম ও টর্চার সেল",
@@ -31,6 +35,7 @@ const FILMS: Film[] = [
   {
     id: "architect-of-violence",
     src: architectFilm.url,
+    poster: architectPoster,
     eyebrow: { bn: "শেয়ারকৃত ফাইল ০২", en: "Shared file 02" },
     title: {
       bn: "সহিংসতার স্থপতি",
@@ -118,6 +123,7 @@ function FilmPlayer({ film }: { film: Film }) {
       <VideoWithDiagnostics
         analyticsId={film.id}
         src={film.src}
+        poster={film.poster}
         controls
         preload={near ? "metadata" : "none"}
         playsInline
