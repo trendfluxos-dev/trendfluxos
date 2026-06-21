@@ -58,6 +58,7 @@ export const routes = {
   "/edtech/pricing": make(() => import("@/pages/edtech/EdtechPricing")),
   "/edtech/certificate": make(() => import("@/pages/edtech/EdtechCertificate")),
   "/edtech/certificate/:slug": make(() => import("@/pages/edtech/EdtechCertificate")),
+  "/edtech/verify": make(() => import("@/pages/edtech/EdtechVerify")),
   "/press/:id": make(() => import("@/pages/PressDetail")),
   "/case-studies/:slug": make(() => import("@/pages/CaseStudyPage")),
   "/justice-appeal": make(() => import("@/pages/JusticeAppeal")),
