@@ -86,6 +86,7 @@ const EdtechCourses = routes["/edtech/courses"];
 const EdtechCourseDetail = routes["/edtech/courses/:slug"];
 const EdtechEnroll = routes["/edtech/enroll/:slug"];
 const EdtechPricing = routes["/edtech/pricing"];
+const EdtechCertificate = routes["/edtech/certificate"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const JusticeAppeal = routes["/justice-appeal"];
 const MediaReports = routes["/media-reports"];
@@ -148,6 +149,8 @@ const RoutedApp = () => {
         <Route path="/edtech/courses/:slug" element={<EdtechCourseDetail />} />
         <Route path="/edtech/enroll/:slug" element={<EdtechEnroll />} />
         <Route path="/edtech/pricing" element={<EdtechPricing />} />
+        <Route path="/edtech/certificate" element={<EdtechCertificate />} />
+        <Route path="/edtech/certificate/:slug" element={<EdtechCertificate />} />
         <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
         <Route path="/justice-appeal" element={<JusticeAppeal />} />
         <Route path="/media-reports" element={<MediaReports />} />
