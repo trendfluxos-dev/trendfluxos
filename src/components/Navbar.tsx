@@ -8,6 +8,7 @@ import { openCommandPalette } from "@/lib/commandPalette";
 import SocialIcons from "@/components/social/SocialIcons";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/trendflux-logo.webp";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Navbar = () => {
   const { pathname } = useLocation();
@@ -93,6 +94,7 @@ const Navbar = () => {
             >
               <Search className="h-3.5 w-3.5" />
             </button>
+            <ThemeToggle />
             <button
               type="button"
               onClick={() => openLuxeVeilGate({ source: "navbar" })}

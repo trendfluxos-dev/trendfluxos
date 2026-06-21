@@ -90,6 +90,66 @@
     --lv-gold-soft: 38 75% 70%;
     --lv-hairline: 36 28% 80%;
   }
+
+  /* ===========================================================
+     Dark theme — applied via <html class="dark"> (root default).
+     Tokens mirror the light set; brand red is preserved so all
+     existing primary/accent utilities continue to read correctly.
+     =========================================================== */
+  .dark {
+    --background: 0 0% 6%;              /* near-black canvas */
+    --foreground: 0 0% 98%;             /* near-white text  */
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 78% 56%;               /* slightly brighter red for dark bg */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 0 84% 64%;
+
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 96%;
+
+    --gold: 0 78% 56%;
+    --gold-foreground: 0 0% 100%;
+
+    --muted: 0 0% 11%;
+    --muted-foreground: 220 9% 65%;
+
+    --accent: 0 78% 56%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 78% 56%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 0 78% 56%;
+
+    --glass: 0 0% 8%;
+    --glass-border: 0 0% 18%;
+
+    --gradient-hero:
+      radial-gradient(circle at 85% -10%, hsl(0 78% 56% / 0.18), transparent 50%),
+      radial-gradient(circle at -10% 110%, hsl(24 95% 53% / 0.10), transparent 50%);
+    --gradient-text: linear-gradient(135deg, hsl(0 0% 98%) 0%, hsl(0 78% 56%) 100%);
+
+    --shadow-cyan: 0 10px 30px -12px hsl(0 78% 56% / 0.45);
+    --shadow-gold: 0 14px 40px -14px hsl(0 78% 56% / 0.45);
+    --shadow-elegant: 0 24px 60px -28px hsl(0 0% 0% / 0.6);
+
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 0 78% 56%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 11%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 16%;
+    --sidebar-ring: 0 78% 56%;
+  }
 }
 
 @layer components {
