@@ -1,4 +1,5 @@
 import { lazy, type ComponentType, type LazyExoticComponent } from "react";
+import { SITE_LAYERS, type Layer } from "@/config/siteLayers";
 
 // Route components have no public props (React Router passes none) — accept
 // any component shape so each page can declare whatever internal props it
@@ -76,36 +77,70 @@ export const preloadRoute = (path: string) => {
 
 export type PageType = "Main" | "Brand" | "Admin" | "Account";
 
-export const navigablePages: {
+export type NavigablePage = {
   label: string;
   path: string;
   type: PageType;
   keywords?: string;
-}[] = [
-  { label: "Home", path: "/", type: "Main", keywords: "index landing start" },
-  { label: "Browse all pages", path: "/explore", type: "Main", keywords: "sitemap browse explore directory map all pages navigation" },
-  { label: "The Stand — Zahid Hasan Emon", path: "/the-stand", type: "Main", keywords: "zahid emon jahid hasan jabi torture cell whistleblower mayer nishedh ache integrity stand story" },
+};
+
+// Per-path overrides: search keywords, custom labels, and `type` mapping
+// for routes that don't follow the default layer → type mapping.
+// Paths NOT present in SITE_LAYERS (e.g. /showcase, /the-stand/share) are
+// added via `EXTRA_PAGES` below.
+const PAGE_META: Record<string, { label?: string; keywords?: string; type?: PageType }> = {
+  "/":                         { keywords: "index landing start" },
+  "/explore":                  { label: "Browse all pages", keywords: "sitemap browse explore directory map all pages navigation" },
+  "/the-stand":                { label: "The Stand — Zahid Hasan Emon", keywords: "zahid emon jahid hasan jabi torture cell whistleblower mayer nishedh ache integrity stand story" },
+  "/project-lead":             { keywords: "lead form contact" },
+  "/stories/ai-expert-emon":   { label: "Audio Story — এআই বিশেষজ্ঞ ইমন", keywords: "audio story ai expert emon zahid hasan narrative voice note bangla" },
+  "/marriage":                 { keywords: "wedding" },
+  "/trendflux-talent":         { keywords: "careers talent platform" },
+  "/luxe-veil":                { label: "Luxe Veil", keywords: "wedding luxe private invite" },
+  "/brandtoki":                { label: "Studio BrandToki", keywords: "studio production photography videography podcast gulshan" },
+  "/portfolio":                { label: "Portfolio — Zahid Hasan Emon", keywords: "resume cv portfolio executive zahid emon brand architect" },
+  "/enterprise":               { label: "Enterprise Control", keywords: "enterprise control portal erp dashboard automation compliance audit" },
+  "/toolkit":                  { label: "Growth Operator Toolkit Hub", keywords: "toolkit hub execution system modules prompt library automation portfolio growth operator" },
+  "/masterclass":              { label: "Advanced AI Masterclass", keywords: "masterclass ai course growth operator automation income system training apply" },
+  "/auth":                     { label: "Sign In", keywords: "login auth signin" },
+  "/dashboard":                { keywords: "dashboard hub account home enrollments luxe veil admin" },
+  "/settings":                 { label: "Site Settings", keywords: "settings preferences autoplay reduced motion accessibility audio chapter" },
+  "/admin":                    { keywords: "dashboard manage" },
+  // System layer → split into Account vs. Admin for the explore UI.
+  "/admin/luxe-veil":          { label: "Luxe Veil Admin", type: "Admin", keywords: "admin luxe manage" },
+};
+
+// Pages discoverable in /explore + ⌘K that aren't part of the 4-layer map
+// (one-off utility routes, admin sub-routes, etc.).
+const EXTRA_PAGES: NavigablePage[] = [
   { label: "The Stand — Share Quote Cards", path: "/the-stand/share", type: "Main", keywords: "share quote card facebook instagram story generator the stand zahid emon mayer nishedh ache" },
-  { label: "Project Lead", path: "/project-lead", type: "Main", keywords: "lead form contact" },
   { label: "Showcase — Zahid Hasan Emon", path: "/showcase", type: "Main", keywords: "showcase portfolio work brands websites enterprise systems social platforms initiatives zahid emon" },
-  { label: "Audio Story — এআই বিশেষজ্ঞ ইমন", path: "/stories/ai-expert-emon", type: "Main", keywords: "audio story ai expert emon zahid hasan narrative voice note bangla" },
-  { label: "Marriage", path: "/marriage", type: "Main", keywords: "wedding" },
   { label: "Brand Open", path: "/brand-open", type: "Brand", keywords: "branding open mass public" },
-  { label: "Trendflux Talent", path: "/trendflux-talent", type: "Brand", keywords: "careers talent platform" },
-  { label: "Luxe Veil", path: "/luxe-veil", type: "Brand", keywords: "wedding luxe private invite" },
-  { label: "Studio BrandToki", path: "/brandtoki", type: "Brand", keywords: "studio production photography videography podcast gulshan" },
-  { label: "Portfolio — Zahid Hasan Emon", path: "/portfolio", type: "Brand", keywords: "resume cv portfolio executive zahid emon brand architect" },
-  { label: "Enterprise Control", path: "/enterprise", type: "Brand", keywords: "enterprise control portal erp dashboard automation compliance audit" },
-  { label: "Growth Operator Toolkit Hub", path: "/toolkit", type: "Brand", keywords: "toolkit hub execution system modules prompt library automation portfolio growth operator" },
-  { label: "Advanced AI Masterclass", path: "/masterclass", type: "Brand", keywords: "masterclass ai course growth operator automation income system training apply" },
-  { label: "Admin", path: "/admin", type: "Admin", keywords: "dashboard manage" },
-  { label: "Luxe Veil Admin", path: "/admin/luxe-veil", type: "Admin", keywords: "admin luxe manage" },
   { label: "Enterprise Demo Requests", path: "/admin/enterprise-demos", type: "Admin", keywords: "admin demos enterprise leads requests triage" },
   { label: "Course Enrollments", path: "/admin/course-enrollments", type: "Admin", keywords: "admin course enrollments telegram bkash trx timeline" },
   { label: "Uptime Monitor", path: "/admin/uptime", type: "Admin", keywords: "uptime monitor status health probe alert downtime telegram" },
   { label: "Client Error Logs", path: "/admin/errors", type: "Admin", keywords: "errors runtime client logs sentry stack trace" },
   { label: "Web Vitals", path: "/admin/web-vitals", type: "Admin", keywords: "performance web vitals lcp inp cls fcp ttfb speed core" },
-  { label: "Sign In", path: "/auth", type: "Account", keywords: "login auth signin" },
-  { label: "Dashboard", path: "/dashboard", type: "Account", keywords: "dashboard hub account home enrollments luxe veil admin" },
-  { label: "Site Settings", path: "/settings", type: "Account", keywords: "settings preferences autoplay reduced motion accessibility audio chapter" },
 ];
+
+// Default mapping from the 4-layer architecture to the legacy PageType
+// taxonomy used by /explore + ⌘K. `system` is split between Account and
+// Admin via `PAGE_META` overrides — by default system routes are Account.
+const LAYER_TO_TYPE: Record<Layer, PageType> = {
+  company: "Main",
+  founder: "Main",
+  brand:   "Brand",
+  system:  "Account",
+};
+
+const derived: NavigablePage[] = SITE_LAYERS.map((node) => {
+  const meta = PAGE_META[node.path] ?? {};
+  return {
+    path: node.path,
+    label: meta.label ?? node.title,
+    type: meta.type ?? LAYER_TO_TYPE[node.layer],
+    keywords: meta.keywords,
+  };
+});
+
+export const navigablePages: NavigablePage[] = [...derived, ...EXTRA_PAGES];
