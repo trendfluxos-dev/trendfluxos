@@ -1,38 +1,149 @@
-## Problem
 
-The published site `https://trendfluxdigital-bd.lovable.app` renders a blank white page. The publish settings are correct (public, published) — the issue is a runtime JavaScript error in the production bundle:
+# 4-Layer Ecosystem Re-Architecture — Plan Only
 
+No new pages, no backend, no content rewrites. This is a **navigation + chrome + metadata** layer built on top of existing routes in `src/lib/routes.ts` and `src/App.tsx`.
+
+---
+
+## 1. Single source of truth
+
+**New file:** `src/config/siteLayers.ts`
+
+```ts
+export type Layer = "company" | "founder" | "brand" | "system";
+
+export interface LayerNode {
+  path: string;
+  title: string;
+  layer: Layer;
+  parentPath?: string;     // for breadcrumbs
+  siblings?: string[];     // for forward/back within a layer
+  ctaNext?: string;        // recommended next path (cross-layer funnel)
+  seo?: { noindex?: boolean };
+}
+
+export const SITE_LAYERS: LayerNode[] = [ /* all routes mapped */ ];
+export const getNode = (path: string) => ...;
+export const getLayer = (path: string) => ...;
 ```
-TypeError: Cannot read properties of undefined (reading 'forwardRef')
-    at assets/radix-DphWDIxd.js
+
+Layer assignments:
+
+| Layer | Routes |
+|---|---|
+| company | `/`, `/explore`, `/ecosystem`, `/services`, `/enterprise`, `/toolkit`, `/contact` |
+| founder | `/project-lead`, `/portfolio`, `/the-stand`, `/quiet-positions`, `/justice-appeal`, `/media-reports`, `/stories/ai-expert-emon`, `/trust` |
+| brand | `/luxe-veil`, `/brandtoki`, `/trendflux-talent`, `/marriage`, `/masterclass`, `/course/trendflux` |
+| system | `/auth`, `/dashboard`, `/settings`, `/admin/*` → `noindex: true` |
+
+---
+
+## 2. Chrome components (new)
+
+- `src/components/layer/LayerBreadcrumb.tsx` — `Home › <Layer> › <Page>`, hidden on `/`
+- `src/components/layer/EcosystemReturn.tsx` — sticky pill "← Back to Ecosystem", shown on brand + founder, hidden on company + system
+- `src/components/layer/LayerFlowNav.tsx` — page-bottom prev/next using `siblings` + `ctaNext`
+  - Brand: `← All Brands` · `Next brand →` · `Back to Ecosystem`
+  - Founder: `← Portfolio` · `Next story →` · `Back to Trust`
+  - Company: linear flow Home → Explore → Ecosystem → Services → Enterprise → Contact
+- `src/components/layer/LayerShell.tsx` — wraps Outlet, mounts the three above based on current layer
+
+Mount `<LayerShell>` once in `src/App.tsx` around `<Routes>` so every page gets it without per-page edits.
+
+---
+
+## 3. Edited components
+
+- `src/components/Navbar.tsx` — regroup top-level into 3 dropdowns (Company / Founder / Brands) + auth/dashboard on the right. Mobile sheet groups by layer headers.
+- `src/components/Footer.tsx` — 4 columns matching layers.
+- `src/pages/Index.tsx` — reorder existing sections (no new content) into 4 labeled bands:
+  1. **The Company** — Hero, Ecosystem, Services, Enterprise, Contact CTA
+  2. **The Founder** — Zahid/Emon, AiExpertStoryTeaser, Operated Brands, Academy, Proof/Testimonials
+  3. **The Brands** — Brand grid + Masterclass + Course teasers
+  4. **The System** — Dashboard/Admin shortcuts (only when logged in)
+
+---
+
+## 4. SEO per layer
+
+- Extend `useSeo` defaults so System routes emit `<meta name="robots" content="noindex,nofollow">`.
+- `scripts/generate-sitemap` (or equivalent) reads `SITE_LAYERS` and excludes `system`.
+- Founder pages: `article` schema. Brand pages: `Product`/`Service` schema. Company: `Organization`.
+
+---
+
+## 5. Wireframes (ASCII)
+
+**Home hero + layer bands**
+
+```text
+┌──────────────────────────────────────────────────────┐
+│  NAV  [Company▾] [Founder▾] [Brands▾]   Auth | Dash │
+├──────────────────────────────────────────────────────┤
+│  ◆ icon   TRENDFLUX DIGITAL                          │
+│           One ecosystem. Three engines.              │
+│           [Explore Ecosystem]  [Meet the Founder]    │
+├──────── THE COMPANY ─────────────────────────────────┤
+│  Ecosystem | Services | Enterprise | Contact         │
+├──────── THE FOUNDER ─────────────────────────────────┤
+│  Zahid/Emon story • AI Expert Emon • Trust           │
+├──────── THE BRANDS ──────────────────────────────────┤
+│  Luxe Veil | Brandtoki | Talent | Marriage | Course  │
+├──────── THE SYSTEM (auth only) ──────────────────────┤
+│  Dashboard • Settings • Admin                        │
+└──────────────────────────────────────────────────────┘
 ```
 
-This means the Radix UI chunk is evaluating before the React chunk has finished initializing, so `React.forwardRef` is undefined when Radix tries to call it. The site never mounts.
+**Inner page shell (any non-home route)**
 
-## Root cause
+```text
+NAV
+Home › Founder › The Stand               ← breadcrumb
+┌────────────────────────────────────┐
+│            PAGE CONTENT            │
+└────────────────────────────────────┘
+[← Quiet Positions]  [Justice Appeal →]  ← LayerFlowNav
+              ↳ Back to Trust            ← cross-layer ctaNext
+                                          (floating pill: ← Ecosystem)
+FOOTER (4 columns)
+```
 
-`vite.config.ts` uses a custom `manualChunks` splitter that puts every `@radix-ui/*` package into its own `radix` chunk, separated from the `react` chunk. With ~30+ Radix packages all depending on `react`, this split creates a chunk-evaluation order problem at module init time and produces the undefined-React error in production.
+**Founder story funnel**
 
-The chunk split is an optimization, not a requirement. Letting Vite/Rollup auto-split vendors (or keeping React + Radix together) is safe and fixes the crash.
+```text
+Project Lead → Portfolio → The Stand → Quiet Positions
+     → Justice Appeal → Media Reports → AI Expert Emon → Trust → [CTA: Work with us /contact]
+```
 
-## Fix
+**Ecosystem architecture**
 
-Edit `vite.config.ts` to merge the `radix` chunk into the `react` chunk so React is guaranteed to be initialized before any Radix module evaluates. Keep the other splits (`recharts`, `icons`, `sentry`, `vendor`) — those don't depend on React's module-init order in the same way.
+```text
+                  ┌─────────────────┐
+                  │   COMPANY (/)   │
+                  │  brain · discovery│
+                  └────────┬────────┘
+              ┌────────────┼────────────┐
+              ▼            ▼            ▼
+        ┌─────────┐  ┌─────────┐  ┌──────────┐
+        │ FOUNDER │  │ BRANDS  │  │  SYSTEM  │
+        │  trust  │  │ revenue │  │ control  │
+        └────┬────┘  └────┬────┘  └────┬─────┘
+             └──── feeds back to Company hub ────┘
+```
 
-### Technical detail
+---
 
-In `manualChunks(id)`:
-- Change `if (id.includes("@radix-ui/")) return "radix";` to return `"react"` instead (so Radix ships in the same chunk as React).
-- Leave the rest unchanged.
+## 6. Out of scope
 
-This guarantees `React.forwardRef` is defined at the moment any Radix component module evaluates, eliminating the runtime crash.
+- No new pages, no copy rewrites
+- No backend / RLS / edge function changes
+- No domain / DNS / deployment changes
+- No edits to `src/integrations/supabase/*`
 
-## Verify
+---
 
-1. After the edit, publish the project.
-2. Load `https://trendfluxdigital-bd.lovable.app` in the browser and confirm the homepage renders (no white screen, no `forwardRef` error in console).
+## Open questions before I build
 
-## Out of scope
-
-- No content, SEO, routing, or backend changes.
-- No changes to publish visibility (already public) or custom domain setup.
+1. Navbar grouping — **mega-menu** (rich dropdown with descriptions per layer) or **simple dropdown** (text list)?
+2. "Back to Ecosystem" pill — floating bottom-right, or inline above the footer?
+3. Should `/portfolio` count as **founder** only, or appear under both Founder and Brand groupings in the nav (it overlaps per your spec)?
