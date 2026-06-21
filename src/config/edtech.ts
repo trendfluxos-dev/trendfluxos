@@ -14,5 +14,7 @@ export const EDTECH = {
     course: (slug: string) => `/edtech/courses/${slug}`,
     enroll: (slug: string) => `/edtech/enroll/${slug}`,
     pricing: "/edtech/pricing",
+    certificate: "/edtech/certificate",
+    certificateFor: (slug: string) => `/edtech/certificate/${slug}`,
   },
 } as const;

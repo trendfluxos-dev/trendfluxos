@@ -187,6 +187,12 @@ const EdtechCourseDetail = () => {
               <p className="mt-3 text-center text-[11px] text-foreground/55">
                 Secure payment · seat confirmed after admin verification
               </p>
+              <Link
+                to={EDTECH.routes.certificateFor(course.slug)}
+                className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border/60 bg-background/40 px-4 py-2 text-[12px] font-medium text-foreground/75 hover:bg-background/70 hover:text-foreground"
+              >
+                Already completed? Get your certificate
+              </Link>
             </div>
           </aside>
         </div>
