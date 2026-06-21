@@ -10,6 +10,7 @@ import {
   TrustBar,
   QuickAccess,
 } from "@/components/home";
+import LayerBand from "@/components/layer/LayerBand";
 
 // Below-the-fold sections are code-split so the initial home payload only
 // ships the hero + trust bar + quick-access strip. The rest streams in as
@@ -91,8 +92,10 @@ const Index = () => {
       <TrustBar />
       <QuickAccess />
       <Suspense fallback={<SectionFallback />}>
+        <LayerBand layer="company" />
         <EcosystemSection />
         <ServicesSection />
+        <LayerBand layer="founder" />
         <SystemsHeBuiltSection />
         <FounderSection />
         <TheStandCoverSection />
@@ -100,6 +103,7 @@ const Index = () => {
         <AiExpertStoryTeaser />
         <QuietPositionsSection />
         <JusticeAppealSection />
+        <LayerBand layer="brand" />
         <AcademySection />
         <KormoShikkhaShowcase />
         <OperatedBrandsSection />
