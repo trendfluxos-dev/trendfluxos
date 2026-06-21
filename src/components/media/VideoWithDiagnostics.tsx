@@ -49,16 +49,24 @@ export function VideoWithDiagnostics({
     const onVol = () => { setMuted(el.muted); setVolume(el.volume); };
     const onError = () => {
       const err = el.error;
+      const message = err?.message || mediaErrorText(err?.code);
+      // eslint-disable-next-line no-console
+      console.error("[VideoWithDiagnostics] video failed to load", {
+        analyticsId,
+        code: err?.code,
+        message,
+        src: el.currentSrc || (videoProps.src as string | undefined),
+      });
       setDiag({
         code: err?.code,
-        message: err?.message || mediaErrorText(err?.code),
+        message,
         name: "MediaError",
       });
       setDismissed(false);
       track("video_error", {
         analytics_id: analyticsId,
         code: err?.code,
-        message: err?.message || mediaErrorText(err?.code),
+        message,
         src: el.currentSrc || (videoProps.src as string | undefined),
       });
     };
