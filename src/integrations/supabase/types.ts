@@ -484,6 +484,42 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_test_logs: {
+        Row: {
+          chat_id: string | null
+          description: string | null
+          id: string
+          message_id: number | null
+          mode: string
+          ok: boolean
+          sent_at: string
+          status: number | null
+          tester_user_id: string | null
+        }
+        Insert: {
+          chat_id?: string | null
+          description?: string | null
+          id?: string
+          message_id?: number | null
+          mode: string
+          ok?: boolean
+          sent_at?: string
+          status?: number | null
+          tester_user_id?: string | null
+        }
+        Update: {
+          chat_id?: string | null
+          description?: string | null
+          id?: string
+          message_id?: number | null
+          mode?: string
+          ok?: boolean
+          sent_at?: string
+          status?: number | null
+          tester_user_id?: string | null
+        }
+        Relationships: []
+      }
       uptime_checks: {
         Row: {
           checked_at: string

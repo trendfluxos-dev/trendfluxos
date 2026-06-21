@@ -65,6 +65,7 @@ const ErrorLogsAdmin = routes["/admin/errors"];
 const WebVitalsAdmin = routes["/admin/web-vitals"];
 const Ga4Check = routes["/admin/ga4-check"];
 const SecretsHealthAdmin = routes["/admin/secrets-health"];
+const TelegramTestLogsAdmin = routes["/admin/telegram-tests"];
 const PressDetail = routes["/press/:id"];
 const TheStand = routes["/the-stand"];
 const TheStandShare = routes["/the-stand/share"];
@@ -121,6 +122,7 @@ const RoutedApp = () => {
         <Route path="/admin/web-vitals" element={<RequireRole roles={["admin"]}><WebVitalsAdmin /></RequireRole>} />
         <Route path="/admin/ga4-check" element={<RequireRole roles={["admin"]}><Ga4Check /></RequireRole>} />
         <Route path="/admin/secrets-health" element={<RequireRole roles={["admin"]}><SecretsHealthAdmin /></RequireRole>} />
+        <Route path="/admin/telegram-tests" element={<RequireRole roles={["admin"]}><TelegramTestLogsAdmin /></RequireRole>} />
         <Route path="/press/:id" element={<PressDetail />} />
         <Route path="/the-stand" element={<TheStand />} />
         <Route path="/the-stand/share" element={<TheStandShare />} />
