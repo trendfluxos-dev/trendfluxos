@@ -25,7 +25,7 @@ const ResearchList = ({ items, basePath }: Props) => {
   const origin =
     typeof window !== "undefined"
       ? window.location.origin
-      : "https://trendfluxdigitalbd.lovable.app";
+      : "https://trendflux.digital";
 
   const payload: SharePayload | null = shareFor
     ? {

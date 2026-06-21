@@ -11,6 +11,7 @@ import ShowcaseFilters, {
 } from "@/components/showcase/ShowcaseFilters";
 import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
+import { BRAND } from "@/config/brand";
 import {
   SHOWCASE_ITEMS,
   SHOWCASE_INDUSTRIES,
@@ -23,7 +24,7 @@ import { ArrowRight, Sparkles, Share2 } from "lucide-react";
 const SHARE_URL =
   typeof window !== "undefined"
     ? `${window.location.origin}/showcase`
-    : "https://trendfluxdigitalbd.lovable.app/showcase";
+    : `${BRAND.url}/showcase`;
 const SHARE_TEXT =
   "Zahid Hasan Emon — Showcase: brands, systems and initiatives built end-to-end.";
 

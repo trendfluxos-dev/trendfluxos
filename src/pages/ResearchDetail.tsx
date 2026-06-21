@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
 import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
+import { BRAND } from "@/config/brand";
 import {
   getEntryBySlug,
   RESEARCH_ITEMS,
@@ -46,7 +47,7 @@ const ResearchDetail = () => {
   const entry = slug ? getEntryBySlug(slug) : undefined;
 
   const articleUrl = entry
-    ? `https://trendfluxdigital-bd.lovable.app${entry.kind === "research" ? "/research" : "/implementations"}/${entry.slug}`
+    ? `${BRAND.url}${entry.kind === "research" ? "/research" : "/implementations"}/${entry.slug}`
     : undefined;
   useSeo({
     title: entry ? `${entry.title} — Zahid Hasan Emon` : "Not found",
@@ -70,8 +71,8 @@ const ResearchDetail = () => {
           },
           publisher: {
             "@type": "Organization",
-            name: "TrendFlux",
-            url: "https://trendfluxdigital-bd.lovable.app",
+            name: BRAND.legalName,
+            url: BRAND.url,
           },
         }
       : undefined,
@@ -87,9 +88,7 @@ const ResearchDetail = () => {
 
   const basePath = entry.kind === "research" ? "/research" : "/implementations";
   const origin =
-    typeof window !== "undefined"
-      ? window.location.origin
-      : "https://trendfluxdigitalbd.lovable.app";
+    typeof window !== "undefined" ? window.location.origin : BRAND.url;
 
   const payload: SharePayload = {
     title: entry.title,
