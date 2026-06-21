@@ -105,32 +105,32 @@ const Navbar = () => {
                     <span className="text-foreground/55 font-normal"> {BRAND.nameTrail}</span>
                   </SheetTitle>
                 </SheetHeader>
-                <nav aria-label="Mobile" className="mt-8 flex flex-col gap-1">
-                  <Link
-                    to="/"
-                    aria-current={pathname === "/" ? "page" : undefined}
-                    onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
-                  >
-                    Explore
-                  </Link>
-                  <Link
-                    to="/explore"
-                    aria-current={pathname === "/explore" ? "page" : undefined}
-                    onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
-                  >
-                    Browse all pages
-                  </Link>
-                  <Link
-                    to="/showcase"
-                    aria-current={pathname === "/showcase" ? "page" : undefined}
-                    onClick={() => setOpen(false)}
-                    className="rounded-xl px-3 py-3 min-h-11 text-[15px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
-                  >
-                    Showcase
-                  </Link>
-                  <button
+                <nav aria-label="Mobile" className="mt-6 flex flex-col gap-5">
+                  {(["company", "founder", "brand"] as Layer[]).map((layer) => {
+                    const meta = LAYER_META[layer];
+                    const items = nodesByLayer(layer, { includeAlsoIn: true });
+                    return (
+                      <div key={layer} className="flex flex-col gap-0.5">
+                        <p className="px-3 text-[10.5px] uppercase tracking-[0.22em] text-foreground/45 font-medium mb-1">
+                          {meta.label}
+                        </p>
+                        {items.map((node) => (
+                          <Link
+                            key={`${layer}-${node.path}`}
+                            to={node.path}
+                            aria-current={pathname === node.path ? "page" : undefined}
+                            onClick={() => setOpen(false)}
+                            className="rounded-xl px-3 py-2.5 min-h-10 text-[14.5px] text-foreground/80 hover:text-foreground hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-foreground aria-[current=page]:bg-muted/60"
+                          >
+                            {node.title}
+                          </Link>
+                        ))}
+                      </div>
+                    );
+                  })}
+
+                  <div className="flex flex-col gap-0.5 pt-2 border-t border-border/50">
+                    <button
                     type="button"
                     onClick={() => {
                       setOpen(false);
