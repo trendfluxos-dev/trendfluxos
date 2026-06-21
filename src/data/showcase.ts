@@ -65,6 +65,16 @@ export type ShowcaseItem = {
   size?: ShowcaseSize; // controls visual prominence
   accent?: "cyan" | "gold" | "violet" | "rose" | "emerald";
   videoUrl?: string; // if set, YouTube-share tab unlocks
+  /**
+   * Optional at-a-glance case-study breakdown. When present, the showcase
+   * card renders a Problem → System → Result strip so the value lands in
+   * one read. Reserve for top-performing / flagship items.
+   */
+  caseStudy?: {
+    problem: string;
+    system: string;
+    result: string;
+  };
 };
 
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
@@ -87,6 +97,14 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     external: true,
     size: "lg",
     accent: "emerald",
+    caseStudy: {
+      problem:
+        "Founder Zahid Hasan Emon needed a structured online classroom — scattered cohorts, manual enrolments, no recordings home.",
+      system:
+        "End-to-end edtech platform: modular curriculum, cohort scheduling, payment-gated enrolment, recordings library and admin ops.",
+      result:
+        "Live platform running 7+ AI masterclass modules with recurring cohorts and an automated enrolment-to-classroom flow.",
+    },
   },
   {
     id: "trendflux-ecosystem",
@@ -106,6 +124,14 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     href: "/ecosystem",
     size: "lg",
     accent: "cyan",
+    caseStudy: {
+      problem:
+        "Growth work was fragmented across tools — content, automation, CRM and brand each lived in disconnected silos.",
+      system:
+        "Founder-built Growth OS unifying AI automation, content engines, brand architecture and client delivery on one stack.",
+      result:
+        "12+ shipped modules and 45%+ engagement growth across operated brands, run by a single operator-led ecosystem.",
+    },
   },
   {
     id: "pabna-nagarik",
@@ -124,6 +150,14 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     tech: ["Facebook", "WordPress"],
     size: "lg",
     accent: "gold",
+    caseStudy: {
+      problem:
+        "A civic committee with strong intent but no consistent voice, visual system or distribution rhythm on social.",
+      system:
+        "Structured content engine: narrative brand voice, 166 designs, 22 reels and a weekly publishing cadence.",
+      result:
+        "4.85L+ organic views and 82% organic reach — built without paid amplification.",
+    },
   },
   {
     id: "the-stand",
@@ -234,6 +268,14 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     external: true,
     size: "md",
     accent: "violet",
+    caseStudy: {
+      problem:
+        "A founder voice with deep expertise but no compounding authority surface for youth-focused growth content.",
+      system:
+        "Personal authority brand: weekly reels, long-form posts and a recognisable narrative POV around growth and AI.",
+      result:
+        "50,000+ engaged youth audience and 65% interaction growth across reels and long-form content.",
+    },
   },
   {
     id: "zhemongrowth-linkedin",

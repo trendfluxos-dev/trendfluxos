@@ -1,4 +1,4 @@
-import { ArrowUpRight, Share2 } from "lucide-react";
+import { ArrowUpRight, Share2, AlertCircle, Cog, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { ShowcaseItem } from "@/data/showcase";
@@ -69,6 +69,31 @@ const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload
         <p className="text-foreground/70 text-sm leading-relaxed mt-3">
           {item.summary}
         </p>
+
+        {item.caseStudy && (
+          <ol className="mt-5 space-y-2.5" aria-label="Case study breakdown">
+            {[
+              { icon: AlertCircle, label: "Problem", text: item.caseStudy.problem, tone: "text-rose-300/90" },
+              { icon: Cog, label: "System", text: item.caseStudy.system, tone: "text-cyan-300/90" },
+              { icon: Sparkles, label: "Result", text: item.caseStudy.result, tone: "text-amber-300/90" },
+            ].map(({ icon: Icon, label, text, tone }) => (
+              <li
+                key={label}
+                className="flex gap-3 rounded-xl border border-border/40 bg-background/40 px-3 py-2.5"
+              >
+                <Icon className={`h-3.5 w-3.5 mt-0.5 shrink-0 ${tone}`} aria-hidden />
+                <div className="min-w-0">
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-foreground/55 font-medium">
+                    {label}
+                  </div>
+                  <p className="text-[13px] leading-relaxed text-foreground/80 mt-0.5">
+                    {text}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
 
         {item.metrics && item.metrics.length > 0 && (
           <div className="grid grid-cols-2 gap-3 mt-5">
