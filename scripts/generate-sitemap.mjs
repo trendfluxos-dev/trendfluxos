@@ -76,6 +76,9 @@ const staticRoutes = [
   "/brandtoki",
   "/stories/ai-expert-emon",
   "/trust",
+  "/justice-appeal",
+  "/media-reports",
+  "/share-kit",
 ];
 
 // Public but Helmet-marked noindex. Intentionally omitted from sitemap.
