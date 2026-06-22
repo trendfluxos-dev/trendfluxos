@@ -80,6 +80,7 @@ export default function AudioStoryTeaser() {
       // @ts-ignore - experimental API
       ? (navigator.getAutoplayPolicy?.("mediaelement") as string) ?? "unknown"
       : "unknown";
+  const canAutoPreview = allowAutoPreview && autoplayPolicy === "allowed";
 
   // Real-time CDN header verifier — probes Content-Type + HTTP status.
   const cdn = useCdnHeaderCheck(audioAsset.url);
@@ -202,6 +203,7 @@ export default function AudioStoryTeaser() {
     }
     if (previewing) {
       el.pause();
+      el.muted = false;
       el.volume = 1;
       el.currentTime = 0;
       setPreviewing(false);
@@ -211,23 +213,37 @@ export default function AudioStoryTeaser() {
   const startPreview = () => {
     const el = ref.current;
     if (!el || playing || previewing) return;
-    if (!allowAutoPreview) return;
+    if (!canAutoPreview) {
+      setLiveMsg("Tap Play to start the audio.");
+      return;
+    }
     if (previewedOnce.current) return; // only fire once per session
-    previewedOnce.current = true;
+    setLoading(true);
+    setDiag(null);
+    el.muted = false;
     el.volume = 0.35;
     el.currentTime = 0;
-    setPreviewing(true);
-    void el.play().catch(() => setPreviewing(false));
-    previewTimer.current = window.setTimeout(() => {
-      if (!ref.current) return;
-      ref.current.pause();
-      ref.current.volume = 1;
-      ref.current.currentTime = 0;
+    void el.play().then(() => {
+      previewedOnce.current = true;
+      setPreviewing(true);
+      setLoading(false);
+      previewTimer.current = window.setTimeout(() => {
+        if (!ref.current) return;
+        ref.current.pause();
+        ref.current.muted = false;
+        ref.current.volume = 1;
+        ref.current.currentTime = 0;
+        setPreviewing(false);
+      }, PREVIEW_MS);
+    }).catch(() => {
       setPreviewing(false);
-    }, PREVIEW_MS);
+      setLoading(false);
+      setLiveMsg("Tap Play to start the audio.");
+    });
   };
 
-  const toggle = () => {
+  const toggle = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.stopPropagation();
     const el = ref.current;
     if (!el) return;
     // Taking over from preview → full-volume playback from start
@@ -237,12 +253,15 @@ export default function AudioStoryTeaser() {
         previewTimer.current = null;
       }
       el.volume = 1;
+      el.muted = false;
       setPreviewing(false);
-      return;
     }
     if (playing) { el.pause(); }
     else {
       setLoading(true);
+      setDiag(null);
+      el.muted = false;
+      if (el.networkState === HTMLMediaElement.NETWORK_EMPTY) el.load();
       void el.play().catch((err: unknown) => {
         setLoading(false);
         const e = err as { name?: string; message?: string };
@@ -358,12 +377,11 @@ export default function AudioStoryTeaser() {
         {/* Player card — single, centered, structured */}
         <div
           className="mx-auto mt-10 max-w-3xl sm:mt-14"
-          onMouseEnter={allowAutoPreview ? startPreview : undefined}
-          onMouseLeave={allowAutoPreview ? stopPreview : undefined}
+          onMouseEnter={canAutoPreview ? startPreview : undefined}
+          onMouseLeave={canAutoPreview ? stopPreview : undefined}
         >
           <div
             className="relative rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7 lg:p-8"
-            onClick={() => { if (allowAutoPreview && !previewedOnce.current) startPreview(); }}
           >
             {previewing && (
               <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-primary">
@@ -624,9 +642,11 @@ export default function AudioStoryTeaser() {
                 <span className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
                   {reducedMotion
                     ? "Reduced motion · preview off"
-                    : previewing
+                      : previewing
                       ? "Auto-stops in 8s · click play for full"
-                      : "Recorded narrative"}
+                        : canAutoPreview
+                          ? "Recorded narrative"
+                          : "Tap play to listen"}
                 </span>
               </div>
               <Link

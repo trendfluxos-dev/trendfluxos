@@ -413,6 +413,8 @@ const StoryAiExpertEmon = () => {
     if (playing) { el.pause(); setPlaying(false); }
     else {
       setPlaying(true);
+      setAudioError(null);
+      if (el.networkState === HTMLMediaElement.NETWORK_EMPTY) el.load();
       safePlay(el);
       // Pressing play instead of "Resume" means the user chose to start from
       // the current head — dismiss the stale resume prompt.
@@ -482,6 +484,8 @@ const StoryAiExpertEmon = () => {
     }
     if (!playing) {
       setPlaying(true);
+      setAudioError(null);
+      if (el.networkState === HTMLMediaElement.NETWORK_EMPTY) el.load();
       safePlay(el);
     }
     // Once the user moves the playhead, the stale "resume" banner is irrelevant.
@@ -521,6 +525,8 @@ const StoryAiExpertEmon = () => {
       }
       setCur(target);
       setPlaying(true);
+      setAudioError(null);
+      if (el.networkState === HTMLMediaElement.NETWORK_EMPTY) el.load();
       safePlay(el);
       toast.success(msgs.progressRestored);
       let idx = 0;
