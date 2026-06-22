@@ -377,8 +377,8 @@ export default function AudioStoryTeaser() {
         {/* Player card — single, centered, structured */}
         <div
           className="mx-auto mt-10 max-w-3xl sm:mt-14"
-          onMouseEnter={allowAutoPreview ? startPreview : undefined}
-          onMouseLeave={allowAutoPreview ? stopPreview : undefined}
+          onMouseEnter={canAutoPreview ? startPreview : undefined}
+          onMouseLeave={canAutoPreview ? stopPreview : undefined}
         >
           <div
             className="relative rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-7 lg:p-8"
