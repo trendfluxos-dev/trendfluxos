@@ -157,6 +157,8 @@ export function AudioStory() {
       el.pause();
       setPlaying(false);
     } else {
+      setMediaError(null);
+      if (el.networkState === HTMLMediaElement.NETWORK_EMPTY) el.load();
       void el.play().then(() => setPlaying(true)).catch((err: unknown) => {
         const e = err as { name?: string; message?: string };
         // eslint-disable-next-line no-console
