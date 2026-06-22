@@ -130,7 +130,6 @@ function FilmPlayer({ film }: { film: Film }) {
     >
       <VideoWithDiagnostics
         analyticsId={film.id}
-        src={film.src}
         poster={film.poster}
         controls
         preload={near ? "metadata" : "none"}
