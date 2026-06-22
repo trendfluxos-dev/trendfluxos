@@ -4,13 +4,15 @@ import { Reveal } from "./Reveal";
 import { VideoWithDiagnostics } from "@/components/media/VideoWithDiagnostics";
 import { useNearViewport } from "@/hooks/useNearViewport";
 import algorithmFilm from "@/assets/algorithm-torture-cell.mp4.asset.json";
+import algorithmFilmWebm from "@/assets/algorithm-torture-cell.webm.asset.json";
 import architectFilm from "@/assets/architect-of-violence.mp4.asset.json";
+import architectFilmWebm from "@/assets/architect-of-violence.webm.asset.json";
 import algorithmPoster from "@/assets/algorithm-torture-cell-poster.jpg";
 import architectPoster from "@/assets/architect-of-violence-poster.jpg";
 
 type Film = {
   id: string;
-  src: string;
+  sources: { src: string; type: string }[];
   poster: string;
   eyebrow: { bn: string; en: string };
   title: { bn: string; en: string };
@@ -20,7 +22,10 @@ type Film = {
 const FILMS: Film[] = [
   {
     id: "algorithm-torture-cell",
-    src: algorithmFilm.url,
+    sources: [
+      { src: algorithmFilmWebm.url, type: "video/webm" },
+      { src: algorithmFilm.url, type: "video/mp4" },
+    ],
     poster: algorithmPoster,
     eyebrow: { bn: "শেয়ারকৃত ফাইল ০১", en: "Shared file 01" },
     title: {
@@ -34,7 +39,10 @@ const FILMS: Film[] = [
   },
   {
     id: "architect-of-violence",
-    src: architectFilm.url,
+    sources: [
+      { src: architectFilmWebm.url, type: "video/webm" },
+      { src: architectFilm.url, type: "video/mp4" },
+    ],
     poster: architectPoster,
     eyebrow: { bn: "শেয়ারকৃত ফাইল ০২", en: "Shared file 02" },
     title: {
@@ -81,7 +89,7 @@ export function SharedFilms() {
 
         <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-px bg-[hsl(var(--stand-hairline))] border border-[hsl(var(--stand-hairline))]">
           {FILMS.map((film, i) => (
-            <Reveal key={film.src} delay={i * 80}>
+            <Reveal key={film.id} delay={i * 80}>
               <figure className="flex h-full flex-col bg-[hsl(var(--stand-bone))] p-6 md:p-8">
                 <figcaption
                   lang={lang}
@@ -122,13 +130,16 @@ function FilmPlayer({ film }: { film: Film }) {
     >
       <VideoWithDiagnostics
         analyticsId={film.id}
-        src={film.src}
         poster={film.poster}
         controls
         preload={near ? "metadata" : "none"}
         playsInline
         className="block aspect-video w-full"
-      />
+      >
+        {film.sources.map((source) => (
+          <source key={source.src} src={source.src} type={source.type} />
+        ))}
+      </VideoWithDiagnostics>
     </div>
   );
 }
