@@ -1415,6 +1415,7 @@ export type Database = {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
       }
+      get_audit_retention_days: { Args: never; Returns: number }
       get_class_by_share_token: {
         Args: { _token: string }
         Returns: {
@@ -1453,6 +1454,8 @@ export type Database = {
         }
         Returns: undefined
       }
+      purge_access_audit_logs: { Args: { _days?: number }; Returns: number }
+      set_audit_retention_days: { Args: { _days: number }; Returns: number }
     }
     Enums: {
       app_role:
