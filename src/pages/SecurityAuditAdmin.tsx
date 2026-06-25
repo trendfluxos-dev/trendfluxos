@@ -1,10 +1,11 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, RefreshCw, Shield, Filter } from "lucide-react";
+import { ArrowLeft, RefreshCw, Shield, Filter, Trash2, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
+import { toast } from "sonner";
 
 type AuditRow = {
   id: string;
@@ -35,6 +36,10 @@ export default function SecurityAuditAdmin() {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [filter, setFilter] = useState<Filter>("all");
   const [search, setSearch] = useState("");
+  const [retention, setRetention] = useState<number>(30);
+  const [retentionInput, setRetentionInput] = useState<string>("30");
+  const [savingRetention, setSavingRetention] = useState(false);
+  const [purging, setPurging] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -49,8 +54,48 @@ export default function SecurityAuditAdmin() {
     setLoading(false);
   };
 
+  const loadRetention = async () => {
+    const { data, error } = await supabase.rpc("get_audit_retention_days");
+    if (!error && typeof data === "number") {
+      setRetention(data);
+      setRetentionInput(String(data));
+    }
+  };
+
+  const saveRetention = async () => {
+    const n = parseInt(retentionInput, 10);
+    if (!Number.isFinite(n) || n < 1 || n > 3650) {
+      toast.error("Retention must be 1–3650 days");
+      return;
+    }
+    setSavingRetention(true);
+    const { data, error } = await supabase.rpc("set_audit_retention_days", { _days: n });
+    setSavingRetention(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setRetention((data as number) ?? n);
+    toast.success(`Retention set to ${n} days`);
+  };
+
+  const purgeNow = async () => {
+    const n = parseInt(retentionInput, 10) || retention;
+    if (!confirm(`Delete every audit row older than ${n} days?`)) return;
+    setPurging(true);
+    const { data, error } = await supabase.rpc("purge_access_audit_logs", { _days: n });
+    setPurging(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(`Purged ${data ?? 0} rows`);
+    void load();
+  };
+
   useEffect(() => {
     load();
+    void loadRetention();
     const channel = supabase
       .channel("access_audit_logs_changes")
       .on(
@@ -116,6 +161,34 @@ export default function SecurityAuditAdmin() {
           <Stat label="Total" value={stats.total} />
           <Stat label="Granted" value={stats.granted} tone="ok" />
           <Stat label="Denied" value={stats.denied} tone="warn" />
+        </div>
+
+        <div className="mb-4 rounded-lg border bg-card p-4">
+          <div className="mb-2 flex items-center justify-between">
+            <div>
+              <div className="text-sm font-semibold">Retention policy</div>
+              <div className="text-xs text-muted-foreground">
+                Records older than this are purged automatically each day at 03:15 UTC. Current: {retention} days.
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Input
+              type="number"
+              min={1}
+              max={3650}
+              value={retentionInput}
+              onChange={(e) => setRetentionInput(e.target.value)}
+              className="w-32"
+            />
+            <span className="text-xs text-muted-foreground">days</span>
+            <Button size="sm" onClick={saveRetention} disabled={savingRetention}>
+              <Save className="h-4 w-4" /> Save
+            </Button>
+            <Button size="sm" variant="outline" onClick={purgeNow} disabled={purging}>
+              <Trash2 className={`h-4 w-4 ${purging ? "animate-pulse" : ""}`} /> Purge now
+            </Button>
+          </div>
         </div>
 
         <div className="mb-4 flex flex-wrap items-center gap-2">
