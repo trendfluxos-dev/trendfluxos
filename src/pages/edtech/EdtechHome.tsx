@@ -3,7 +3,7 @@ import {
   ArrowRight, GraduationCap, Sparkles, CheckCircle2, Radio, ShieldCheck,
   Languages, Trophy, ShoppingBag, Video, MonitorPlay, CreditCard,
   LayoutDashboard, Bot, PlayCircle, Search, Tag, Star, ChevronDown,
-  Presentation, Wallet,
+  Presentation, Wallet, Mic, Volume2,
 } from "lucide-react";
 import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
@@ -379,6 +379,8 @@ function FeaturesGrid() {
     { icon: ShoppingBag, title: t("feats.mp.t"), body: t("feats.mp.b"), cta: { label: t("feats.mp.cta"), to: "/auth?role=student" } },
     { icon: Video, title: t("feats.vod.t"), body: t("feats.vod.b"), cta: { label: t("feats.vod.cta"), to: EDTECH.routes.courses } },
     { icon: MonitorPlay, title: t("feats.studio.t"), body: t("feats.studio.b"), cta: { label: t("feats.studio.cta"), to: EDTECH.routes.live } },
+    { icon: Mic, title: "Voice Notes → Study Sheet", body: "Record any lecture or note. Get an AI transcript, summary, flashcards and quiz — private to your account.", cta: { label: "Open Voice Notes", to: EDTECH.routes.voiceNotes } },
+    { icon: Volume2, title: "Voice Studio (Teachers)", body: "Save reference voice profiles with tone controls so future AI lessons keep your sound.", cta: { label: "Open Voice Studio", to: EDTECH.routes.voiceStudio } },
     { icon: CreditCard, title: t("feats.pay.t"), body: t("feats.pay.b"), cta: { label: t("feats.pay.cta"), to: EDTECH.routes.pricing } },
     { icon: LayoutDashboard, title: t("feats.admin.t"), body: t("feats.admin.b"), cta: { label: t("feats.admin.cta"), to: EDTECH.routes.adminLive } },
     { icon: Bot, title: t("feats.ai.t"), body: t("feats.ai.b"), cta: { label: t("feats.ai.cta"), to: EDTECH.routes.live } },
