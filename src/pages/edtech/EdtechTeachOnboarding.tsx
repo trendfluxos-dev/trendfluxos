@@ -48,7 +48,7 @@ const EdtechTeachOnboarding = () => {
         .upsert({ user_id: uid }, { onConflict: "user_id" });
       const [{ data: prof }, { count: classCount }] = await Promise.all([
         supabase.from("teacher_profiles").select("*").eq("user_id", uid).maybeSingle(),
-        supabase.from("live_classes").select("id", { count: "exact", head: true }).eq("host_id", uid),
+        supabase.from("live_classes").select("id", { count: "exact", head: true }).eq("created_by", uid),
       ]);
       setProfile(prof as Profile);
       setCounts({ classes: classCount ?? 0, materials: 0 });
