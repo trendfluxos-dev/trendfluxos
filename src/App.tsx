@@ -104,6 +104,7 @@ const EdtechTutorBook = routes["/edtech/tutors/:id/book"];
 const EdtechMyBookings = routes["/edtech/me/bookings"];
 const VoiceNotes = routes["/edtech/voice-notes"];
 const VoiceStudio = routes["/edtech/teach/voice-studio"];
+const VoiceClone = routes["/voice-clone"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const JusticeAppeal = routes["/justice-appeal"];
 const MediaReports = routes["/media-reports"];
@@ -191,6 +192,8 @@ const RoutedApp = () => {
         {/* Voice features */}
         <Route path="/edtech/voice-notes" element={<VoiceNotes />} />
         <Route path="/edtech/teach/voice-studio" element={<RequireRole roles={["admin","teacher","tutor"]}><VoiceStudio /></RequireRole>} />
+        {/* Personal AI Voice — founder-only standalone */}
+        <Route path="/voice-clone" element={<RequireRole roles={["admin"]}><VoiceClone /></RequireRole>} />
         <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
         <Route path="/justice-appeal" element={<JusticeAppeal />} />
         <Route path="/media-reports" element={<MediaReports />} />

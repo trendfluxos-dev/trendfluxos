@@ -78,6 +78,7 @@ export const routes = {
   "/edtech/me/bookings": make(() => import("@/pages/edtech/EdtechMyBookings")),
   "/edtech/voice-notes": make(() => import("@/pages/edtech/VoiceNotes")),
   "/edtech/teach/voice-studio": make(() => import("@/pages/edtech/VoiceStudio")),
+  "/voice-clone": make(() => import("@/pages/VoiceClone")),
   "/press/:id": make(() => import("@/pages/PressDetail")),
   "/case-studies/:slug": make(() => import("@/pages/CaseStudyPage")),
   "/justice-appeal": make(() => import("@/pages/JusticeAppeal")),
