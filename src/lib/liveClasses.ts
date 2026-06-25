@@ -136,6 +136,24 @@ export const updateLiveClass = async (id: string, patch: Partial<LiveClassInput>
   if (error) throw error;
 };
 
+export const getLiveClass = async (id: string) => {
+  const { data, error } = await supabase
+    .from("live_classes")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return (data ?? null) as LiveClass | null;
+};
+
+export const setLiveClassStatus = async (id: string, status: LiveClassStatus) => {
+  const { error } = await supabase
+    .from("live_classes")
+    .update({ status })
+    .eq("id", id);
+  if (error) throw error;
+};
+
 export const deleteLiveClass = async (id: string) => {
   const { error } = await supabase.from("live_classes").delete().eq("id", id);
   if (error) throw error;
