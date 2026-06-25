@@ -101,6 +101,8 @@ const EdtechTutors = routes["/edtech/tutors"];
 const EdtechTutorProfile = routes["/edtech/tutors/:id"];
 const EdtechTutorBook = routes["/edtech/tutors/:id/book"];
 const EdtechMyBookings = routes["/edtech/me/bookings"];
+const VoiceNotes = routes["/edtech/voice-notes"];
+const VoiceStudio = routes["/edtech/teach/voice-studio"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const JusticeAppeal = routes["/justice-appeal"];
 const MediaReports = routes["/media-reports"];
@@ -182,6 +184,9 @@ const RoutedApp = () => {
         <Route path="/edtech/tutors/:id" element={<EdtechTutorProfile />} />
         <Route path="/edtech/tutors/:id/book" element={<EdtechTutorBook />} />
         <Route path="/edtech/me/bookings" element={<EdtechMyBookings />} />
+        {/* Voice features */}
+        <Route path="/edtech/voice-notes" element={<RequireRole roles={["admin","teacher","tutor","user","editor"]}><VoiceNotes /></RequireRole>} />
+        <Route path="/edtech/teach/voice-studio" element={<RequireRole roles={["admin","teacher","tutor"]}><VoiceStudio /></RequireRole>} />
         <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
         <Route path="/justice-appeal" element={<JusticeAppeal />} />
         <Route path="/media-reports" element={<MediaReports />} />

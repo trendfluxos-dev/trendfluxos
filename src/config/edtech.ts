@@ -35,5 +35,8 @@ export const EDTECH = {
     tutorProfile: (id: string) => `/edtech/tutors/${id}`,
     tutorBook: (id: string) => `/edtech/tutors/${id}/book`,
     myBookings: "/edtech/me/bookings",
+    // Voice features
+    voiceNotes: "/edtech/voice-notes",
+    voiceStudio: "/edtech/teach/voice-studio",
   },
 } as const;
