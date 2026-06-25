@@ -43,88 +43,124 @@ const EdtechHome = () => {
     <EdtechShell>
       <EdtechHeader />
 
-      {/* HERO — eager, above the fold */}
-      <section
-        lang={lang}
-        className="relative isolate overflow-hidden border-b border-border edtech-stage-grid"
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_0%,hsl(var(--primary)/0.10),transparent_70%)]"
-        />
-        <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-6 sm:py-20 lg:py-28">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mx-auto mb-5 inline-flex items-center gap-2 rounded-full border edtech-border-gold edtech-bg-gold-soft px-3.5 py-1.5 text-[11px] font-medium text-foreground sm:text-xs">
-              <Sparkles className="h-3.5 w-3.5 edtech-text-gold" aria-hidden />
-              {t("hero.badge")}
-            </div>
-            <h1 className="text-[34px] font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-              {t("hero.title.a")}{" "}
-              <span className="edtech-text-gradient">{t("hero.title.brand")}</span>{" "}
-              {t("hero.title.b")}
-              <br />
-              {t("hero.title.c")}
-            </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-relaxed text-muted-foreground sm:mt-6 sm:text-lg">
-              {t("hero.subtitle")}
-            </p>
+      {/* HERO — Institutional Premium: framed ink card with embedded trust strip */}
+      <section lang={lang} className="relative isolate overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 sm:pt-14 lg:pt-16">
+          <div
+            className="relative overflow-hidden rounded-3xl border border-border"
+            style={{ background: "hsl(var(--edtech-ink))", boxShadow: "var(--edtech-shadow-stage)" }}
+          >
+            {/* Decorative accents */}
+            <div aria-hidden className="pointer-events-none absolute right-0 top-0 h-full w-1/3 translate-x-20 skew-x-12 bg-primary/10" />
+            <div aria-hidden className="absolute left-8 top-10 h-1 w-32 edtech-bg-gold sm:left-12" />
 
-            <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:mt-10 sm:grid-cols-2">
-              <Link to="/auth?role=student&redirect=/edtech/my-learning" className="group">
-                <div className="flex h-full items-center gap-3 rounded-2xl border-2 border-primary/40 bg-primary/5 p-4 text-left edtech-shadow-panel transition hover:-translate-y-0.5 hover:border-primary hover:bg-primary/10 hover:edtech-shadow-stage sm:p-5">
-                  <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md">
-                    <GraduationCap className="h-6 w-6" aria-hidden />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-primary">{t("hero.cta.student.kicker")}</div>
-                    <div className="text-base font-bold text-foreground sm:text-lg">{t("hero.cta.student.title")}</div>
-                    <div className="text-xs text-muted-foreground">{t("hero.cta.student.sub")}</div>
-                  </div>
-                  <ArrowRight className="h-5 w-5 shrink-0 text-primary transition group-hover:translate-x-0.5" />
+            <div className="relative z-10 grid items-center gap-10 p-7 sm:p-12 lg:grid-cols-2 lg:gap-12 lg:p-20">
+              {/* Text column */}
+              <div className="space-y-7">
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
+                  <span className="h-2 w-2 animate-pulse rounded-full edtech-bg-gold" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] edtech-text-gold">
+                    <Sparkles className="mr-1 inline h-3 w-3" aria-hidden /> {t("hero.badge")}
+                  </span>
                 </div>
-              </Link>
-              <Link to="/auth?role=teacher&redirect=/edtech/live" className="group">
-                <div className="flex h-full items-center gap-3 rounded-2xl border-2 edtech-border-gold edtech-bg-gold-soft p-4 text-left edtech-shadow-panel transition hover:-translate-y-0.5 hover:edtech-shadow-stage sm:p-5">
-                  <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl edtech-bg-gold edtech-text-gold shadow-md">
-                    <Presentation className="h-6 w-6" aria-hidden />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="text-[10px] font-bold uppercase tracking-wider edtech-text-gold">{t("hero.cta.teacher.kicker")}</div>
-                    <div className="text-base font-bold text-foreground sm:text-lg">{t("hero.cta.teacher.title")}</div>
-                    <div className="text-xs text-muted-foreground">{t("hero.cta.teacher.sub")}</div>
-                  </div>
-                  <ArrowRight className="h-5 w-5 shrink-0 edtech-text-gold transition group-hover:translate-x-0.5" />
+
+                <div className="space-y-3">
+                  <h1 className="text-[34px] font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+                    {t("hero.title.a")} <span className="edtech-text-gold">{t("hero.title.brand")}</span> {t("hero.title.b")}
+                    <br />
+                    {t("hero.title.c")}
+                  </h1>
+                  <p className="max-w-xl text-base leading-relaxed text-white/65 sm:text-lg">
+                    {t("hero.subtitle")}
+                  </p>
                 </div>
-              </Link>
-            </div>
-            <p className="mt-3 text-center text-xs text-muted-foreground">
-              {t("hero.signinHint.a")}{" "}
-              <Link to="/auth" className="font-medium text-foreground underline-offset-4 hover:underline">
-                {t("hero.signinHint.b")}
-              </Link>
-              {" · "}
-              {t("hero.signinHint.c")}
-            </p>
 
-            <div className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2 text-xs">
-              <Link to={EDTECH.routes.courses} className="rounded-full border border-border bg-card/60 px-3 py-1.5 font-medium text-foreground hover:bg-card">{t("hero.nav.courses")}</Link>
-              <Link to={EDTECH.routes.live} className="rounded-full border border-border bg-card/60 px-3 py-1.5 font-medium text-foreground hover:bg-card">{t("hero.nav.teachers")}</Link>
-              <Link to={EDTECH.routes.live} className="rounded-full border border-border bg-card/60 px-3 py-1.5 font-medium text-foreground hover:bg-card">{t("hero.nav.studio")}</Link>
+                <div className="flex flex-wrap gap-3 pt-2">
+                  <Link
+                    to="/auth?role=student&redirect=/edtech/my-learning"
+                    className="group inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-4 text-sm font-bold text-primary-foreground transition hover:opacity-90 sm:text-base"
+                  >
+                    <GraduationCap className="h-5 w-5" aria-hidden />
+                    {t("hero.cta.student.title")}
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                  </Link>
+                  <Link
+                    to="/auth?role=teacher&redirect=/edtech/live"
+                    className="inline-flex items-center gap-2 rounded-lg border border-white/20 px-7 py-4 text-sm font-semibold text-white transition hover:bg-white/10 sm:text-base"
+                  >
+                    <Presentation className="h-5 w-5" aria-hidden />
+                    {t("hero.cta.teacher.title")}
+                  </Link>
+                </div>
+
+                <p className="text-xs text-white/55">
+                  {t("hero.signinHint.a")}{" "}
+                  <Link to="/auth" className="font-medium text-white underline-offset-4 hover:underline">
+                    {t("hero.signinHint.b")}
+                  </Link>{" · "}{t("hero.signinHint.c")}
+                </p>
+              </div>
+
+              {/* Visual column — live preview card with floating stat */}
+              <div className="relative">
+                <div className="aspect-square rotate-3 rounded-3xl border edtech-border-gold bg-primary/15 p-3 sm:p-4">
+                  <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10" style={{ background: "hsl(var(--edtech-ink))" }}>
+                    <div className="select-none text-[120px] font-black leading-none edtech-text-gold opacity-15 sm:text-[160px]" style={{ transform: "rotate(-12deg) scale(1.2)" }}>
+                      FLUX
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
+                    <div className="absolute inset-x-5 bottom-5 sm:inset-x-7 sm:bottom-7">
+                      <div className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md sm:p-5">
+                        <div className="mb-3 flex items-center gap-3">
+                          <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                            <Radio className="h-4 w-4" aria-hidden />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate text-sm font-bold text-white">{t("hero.preview.title")}</div>
+                            <div className="text-xs edtech-text-gold">{t("hero.preview.watching")}</div>
+                          </div>
+                        </div>
+                        <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
+                          <div className="h-full w-2/3 edtech-bg-gold" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Floating stat */}
+                <div className="absolute -right-3 -top-3 rounded-2xl border edtech-border-gold bg-card p-5 edtech-shadow-panel sm:-right-6 sm:-top-6">
+                  <div className="text-3xl font-black text-foreground">98%</div>
+                  <div className="text-[10px] font-bold uppercase tracking-tighter text-primary">{t("hero.stat.success")}</div>
+                </div>
+              </div>
             </div>
 
-            <ul className="mt-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              {[
-                { Icon: ShieldCheck, label: t("hero.chip.verified") },
-                { Icon: Languages, label: t("hero.chip.lang") },
-                { Icon: Radio, label: t("hero.chip.studio") },
-                { Icon: Trophy, label: t("hero.chip.cert") },
-              ].map(({ Icon, label }) => (
-                <li key={label} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1.5 text-[11px] font-medium text-muted-foreground sm:text-xs">
-                  <Icon className="h-3.5 w-3.5 text-primary" aria-hidden /> {label}
-                </li>
-              ))}
-            </ul>
+            {/* Trust strip embedded in the card */}
+            <div className="relative z-10 border-t border-white/10 bg-background/95 px-6 py-8 sm:px-12 sm:py-10">
+              <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 md:grid-cols-4">
+                {[
+                  { Icon: ShieldCheck, label: t("hero.chip.verified") },
+                  { Icon: Radio, label: t("hero.chip.studio") },
+                  { Icon: Trophy, label: t("hero.chip.cert") },
+                  { Icon: Languages, label: t("hero.chip.lang") },
+                ].map(({ Icon, label }) => (
+                  <div key={label} className="group flex items-center gap-3">
+                    <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition group-hover:bg-primary group-hover:text-primary-foreground">
+                      <Icon className="h-5 w-5" aria-hidden />
+                    </div>
+                    <div className="min-w-0 text-sm font-semibold text-foreground">{label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+        </div>
+
+        {/* Subtle gold section divider */}
+        <div className="mx-auto flex max-w-7xl items-center justify-center px-6 py-12">
+          <div className="h-px flex-1 bg-[hsl(var(--edtech-gold)/0.3)]" />
+          <div className="px-6 text-[10px] font-bold uppercase tracking-[0.3em] edtech-text-gold">{t("hero.divider")}</div>
+          <div className="h-px flex-1 bg-[hsl(var(--edtech-gold)/0.3)]" />
         </div>
       </section>
 
