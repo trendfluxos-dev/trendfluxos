@@ -12,6 +12,7 @@ import {
 } from "@/components/home";
 import LayerBand from "@/components/layer/LayerBand";
 import { LazySection } from "@/components/LazySection";
+import { SectionSkeleton } from "@/components/home/SectionSkeleton";
 
 // Below-the-fold sections are code-split so the initial home payload only
 // ships the hero + trust bar + quick-access strip. The rest streams in as
@@ -100,27 +101,27 @@ const Index = () => {
 
       {/* Below-the-fold: each section gets its own IO-gated Suspense, so a
           slow chunk never blocks the others and unseen chunks never download. */}
-      <LazySection label="founder-band" minHeight="20vh">
+      <LazySection label="founder-band" minHeight="20vh" skeleton={<SectionSkeleton variant="band" />}>
         <LayerBand layer="founder" />
       </LazySection>
-      <LazySection label="systems"><SystemsHeBuiltSection /></LazySection>
-      <LazySection label="kormoshikkha"><KormoShikkhaShowcase /></LazySection>
-      <LazySection label="founder"><FounderSection /></LazySection>
-      <LazySection label="stand-cover"><TheStandCoverSection /></LazySection>
-      <LazySection label="audio-story"><AudioStoryTeaser /></LazySection>
-      <LazySection label="ai-expert"><AiExpertStoryTeaser /></LazySection>
-      <LazySection label="quiet-positions"><QuietPositionsSection /></LazySection>
-      <LazySection label="justice"><JusticeAppealSection /></LazySection>
-      <LazySection label="brand-band" minHeight="20vh">
+      <LazySection label="systems" skeleton={<SectionSkeleton variant="cards" />}><SystemsHeBuiltSection /></LazySection>
+      <LazySection label="kormoshikkha" skeleton={<SectionSkeleton variant="split" />}><KormoShikkhaShowcase /></LazySection>
+      <LazySection label="founder" skeleton={<SectionSkeleton variant="split" />}><FounderSection /></LazySection>
+      <LazySection label="stand-cover" skeleton={<SectionSkeleton variant="media" />}><TheStandCoverSection /></LazySection>
+      <LazySection label="audio-story" skeleton={<SectionSkeleton variant="media" />}><AudioStoryTeaser /></LazySection>
+      <LazySection label="ai-expert" skeleton={<SectionSkeleton variant="media" />}><AiExpertStoryTeaser /></LazySection>
+      <LazySection label="quiet-positions" skeleton={<SectionSkeleton variant="cards" />}><QuietPositionsSection /></LazySection>
+      <LazySection label="justice" skeleton={<SectionSkeleton variant="split" />}><JusticeAppealSection /></LazySection>
+      <LazySection label="brand-band" minHeight="20vh" skeleton={<SectionSkeleton variant="band" />}>
         <LayerBand layer="brand" />
       </LazySection>
-      <LazySection label="academy"><AcademySection /></LazySection>
-      <LazySection label="operated"><OperatedBrandsSection /></LazySection>
-      <LazySection label="luxe"><LuxeVeilSection /></LazySection>
-      <LazySection label="proof"><ProofSection /></LazySection>
-      <LazySection label="testimonials"><TestimonialsSection /></LazySection>
-      <LazySection label="fit"><FitSection onOpenQuote={openQuote} /></LazySection>
-      <LazySection label="final-cta"><FinalCtaSection onOpenQuote={openQuote} /></LazySection>
+      <LazySection label="academy" skeleton={<SectionSkeleton variant="cards" />}><AcademySection /></LazySection>
+      <LazySection label="operated" skeleton={<SectionSkeleton variant="row" />}><OperatedBrandsSection /></LazySection>
+      <LazySection label="luxe" skeleton={<SectionSkeleton variant="split" />}><LuxeVeilSection /></LazySection>
+      <LazySection label="proof" skeleton={<SectionSkeleton variant="cards" />}><ProofSection /></LazySection>
+      <LazySection label="testimonials" skeleton={<SectionSkeleton variant="cards" />}><TestimonialsSection /></LazySection>
+      <LazySection label="fit" skeleton={<SectionSkeleton variant="cards" />}><FitSection onOpenQuote={openQuote} /></LazySection>
+      <LazySection label="final-cta" skeleton={<SectionSkeleton variant="band" />}><FinalCtaSection onOpenQuote={openQuote} /></LazySection>
 
       <Footer />
 
