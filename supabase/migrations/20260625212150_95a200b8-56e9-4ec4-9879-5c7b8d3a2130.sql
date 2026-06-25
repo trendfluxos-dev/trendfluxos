@@ -1,0 +1,1 @@
+REVOKE SELECT (meeting_url, calendar_event_id) ON public.live_classes FROM anon, authenticated;
