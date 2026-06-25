@@ -49,6 +49,10 @@ export const DICT = {
   "hero.chip.lang": { bn: "বাংলা + English", en: "Bangla + English" },
   "hero.chip.studio": { bn: "নেটিভ লাইভ স্টুডিও", en: "Native live studio" },
   "hero.chip.cert": { bn: "সার্টিফিকেট দেওয়া হয়", en: "Certificates on completion" },
+  "hero.preview.title": { bn: "লাইভ এখন: অ্যাডভান্সড ফিজিক্স", en: "Live Now: Advanced Physics" },
+  "hero.preview.watching": { bn: "১.২হাজার শিক্ষার্থী দেখছেন", en: "1.2k students watching" },
+  "hero.stat.success": { bn: "সফলতার হার", en: "Success rate" },
+  "hero.divider": { bn: "ট্রেন্ডিং মডিউল", en: "Trending modules" },
 
   // two-ways
   "ways.eyebrow": { bn: "শেখার দুটি উপায়", en: "Two ways to learn" },
