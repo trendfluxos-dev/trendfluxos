@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
-const ALLOWED_BUCKETS = new Set(["voice-lectures", "lesson-pdfs"]);
+const ALLOWED_BUCKETS = new Set(["voice-lectures", "lesson-pdfs", "class-materials"]);
 const MAX_EXPIRES = 60 * 60; // 1 hour cap
 
 Deno.serve(async (req) => {
@@ -61,6 +61,13 @@ Deno.serve(async (req) => {
           .maybeSingle();
         if (enrErr || !enrolled) {
           return json({ error: "enrollment required" }, 403);
+        }
+      } else if (bucket === "class-materials") {
+        // teacher-owned only — path layout: <teacher_id>/<class_id>/<file>
+        // Students reach this via the teacher minting + broadcasting a
+        // signed URL inside live_state.payload.signed_url.
+        if (!path.startsWith(`${userId}/`)) {
+          return json({ error: "forbidden" }, 403);
         }
       }
     }

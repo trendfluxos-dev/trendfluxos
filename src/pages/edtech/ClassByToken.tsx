@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
+import { Whiteboard } from "@/components/edtech/Whiteboard";
 
 /**
  * No-account student join surface (`/class/:token`).
@@ -168,12 +169,23 @@ function LiveSurface({ data }: { data: TokenClass }) {
       );
     }
     case "material": {
-      const url = typeof payload.signed_url === "string" ? payload.signed_url : "";
+      const url =
+        typeof payload.signed_url === "string" ? payload.signed_url :
+        typeof payload.external_url === "string" ? payload.external_url : "";
       if (!url) return <Placeholder text="Material loading…" />;
+      const kind = typeof payload.kind === "string" ? payload.kind : "";
+      const title = typeof payload.title === "string" ? payload.title : "Material";
+      if (kind === "image") return <img src={url} alt={title} className="h-full w-full object-contain" />;
+      if (kind === "video") return <video src={url} controls autoPlay playsInline className="h-full w-full bg-black" />;
+      if (kind === "audio") return (
+        <div className="flex h-full items-center justify-center bg-card/40 p-6">
+          <audio src={url} controls autoPlay className="w-full max-w-xl" />
+        </div>
+      );
       return <iframe title="Live material" src={url} className="h-full w-full bg-white" />;
     }
     case "whiteboard":
-      return <Placeholder text="Whiteboard live — শীঘ্রই full canvas আসছে" />;
+      return <Whiteboard classId={data.id} mode="view" initialSnapshot={data.whiteboard_snapshot ?? undefined} />;
     default:
       return <Placeholder text="Waiting…" />;
   }
