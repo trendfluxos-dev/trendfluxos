@@ -1454,6 +1454,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      preview_purge_access_audit_logs: {
+        Args: { _days?: number }
+        Returns: number
+      }
       purge_access_audit_logs: { Args: { _days?: number }; Returns: number }
       set_audit_retention_days: { Args: { _days: number }; Returns: number }
     }

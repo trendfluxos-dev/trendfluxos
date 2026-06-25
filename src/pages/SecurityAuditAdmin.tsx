@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, RefreshCw, Shield, Filter, Trash2, Save } from "lucide-react";
+import { ArrowLeft, RefreshCw, Shield, Filter, Trash2, Save, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,6 +40,8 @@ export default function SecurityAuditAdmin() {
   const [retentionInput, setRetentionInput] = useState<string>("30");
   const [savingRetention, setSavingRetention] = useState(false);
   const [purging, setPurging] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
+  const [previewCount, setPreviewCount] = useState<number | null>(null);
 
   const load = async () => {
     setLoading(true);
@@ -81,7 +83,11 @@ export default function SecurityAuditAdmin() {
 
   const purgeNow = async () => {
     const n = parseInt(retentionInput, 10) || retention;
-    if (!confirm(`Delete every audit row older than ${n} days?`)) return;
+    const msg =
+      previewCount !== null
+        ? `Delete ${previewCount} audit row(s) older than ${n} days?`
+        : `Delete every audit row older than ${n} days?`;
+    if (!confirm(msg)) return;
     setPurging(true);
     const { data, error } = await supabase.rpc("purge_access_audit_logs", { _days: n });
     setPurging(false);
@@ -90,7 +96,30 @@ export default function SecurityAuditAdmin() {
       return;
     }
     toast.success(`Purged ${data ?? 0} rows`);
+    setPreviewCount(null);
     void load();
+  };
+
+  const previewPurge = async () => {
+    const n = parseInt(retentionInput, 10) || retention;
+    if (!Number.isFinite(n) || n < 1) {
+      toast.error("Enter a valid retention window");
+      return;
+    }
+    setPreviewing(true);
+    const { data, error } = await supabase.rpc("preview_purge_access_audit_logs", { _days: n });
+    setPreviewing(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const count = typeof data === "number" ? data : 0;
+    setPreviewCount(count);
+    toast.message(
+      count === 0
+        ? "Nothing to purge"
+        : `${count} row(s) would be deleted (older than ${n} days)`,
+    );
   };
 
   useEffect(() => {
@@ -178,16 +207,27 @@ export default function SecurityAuditAdmin() {
               min={1}
               max={3650}
               value={retentionInput}
-              onChange={(e) => setRetentionInput(e.target.value)}
+              onChange={(e) => {
+                setRetentionInput(e.target.value);
+                setPreviewCount(null);
+              }}
               className="w-32"
             />
             <span className="text-xs text-muted-foreground">days</span>
             <Button size="sm" onClick={saveRetention} disabled={savingRetention}>
               <Save className="h-4 w-4" /> Save
             </Button>
+            <Button size="sm" variant="secondary" onClick={previewPurge} disabled={previewing}>
+              <Eye className={`h-4 w-4 ${previewing ? "animate-pulse" : ""}`} /> Preview purge
+            </Button>
             <Button size="sm" variant="outline" onClick={purgeNow} disabled={purging}>
               <Trash2 className={`h-4 w-4 ${purging ? "animate-pulse" : ""}`} /> Purge now
             </Button>
+            {previewCount !== null && (
+              <span className="ml-1 rounded-md border bg-muted/40 px-2 py-1 text-xs text-muted-foreground">
+                Would delete <strong className="text-foreground">{previewCount}</strong> row(s)
+              </span>
+            )}
           </div>
         </div>
 
