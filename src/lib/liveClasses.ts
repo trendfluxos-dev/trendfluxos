@@ -9,7 +9,7 @@ export type LiveClassStatus = "scheduled" | "live" | "ended" | "cancelled";
  * to admins or RSVPed users.
  */
 const PUBLIC_COLUMNS =
-  "id,course_slug,title,description,host_name,starts_at,duration_min,status,created_by,created_at,updated_at";
+  "id,course_slug,title,description,host_name,starts_at,duration_min,status,created_by,created_at,updated_at,share_token,audience_mode";
 
 export interface LiveClass {
   id: string;
@@ -25,6 +25,8 @@ export interface LiveClass {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+  share_token?: string | null;
+  audience_mode?: "open" | "enrolled" | null;
 }
 
 export interface LiveClassRsvp {
