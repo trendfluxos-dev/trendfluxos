@@ -29,8 +29,8 @@ const EdtechEnroll = () => {
   const [submitted, setSubmitted] = useState(false);
 
   useSeo({
-    title: course ? `Enroll · ${course.title} — KormoShikkha` : "Enroll — KormoShikkha",
-    description: "Complete your KormoShikkha enrolment.",
+    title: course ? `Enroll · ${course.title} — কর্মশিক্ষা TED Plus` : "Enroll — কর্মশিক্ষা TED Plus",
+    description: "Complete your কর্মশিক্ষা TED Plus enrolment.",
     canonical: course ? `${BRAND.url}/edtech/enroll/${course.slug}` : undefined,
     noindex: true,
   });
@@ -80,7 +80,7 @@ const EdtechEnroll = () => {
         <div className="mx-auto grid max-w-5xl gap-10 px-6 lg:grid-cols-[1.4fr_1fr] lg:px-10">
           <div>
             <nav className="mb-6 text-[12px] text-foreground/55">
-              <Link to={EDTECH.routes.home} className="hover:text-foreground">KormoShikkha</Link>{" / "}
+              <Link to={EDTECH.routes.home} className="hover:text-foreground">কর্মশিক্ষা TED Plus</Link>{" / "}
               <Link to={EDTECH.routes.course(course.slug)} className="hover:text-foreground">{course.title}</Link>{" / "}
               <span className="text-foreground/75">Enroll</span>
             </nav>

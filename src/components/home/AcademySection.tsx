@@ -7,7 +7,7 @@ import { track } from "@/lib/analytics";
 
 export const AcademySection = () => (
   <TfSection
-    eyebrow="KormoShikkha · Online Edtech Platform"
+    eyebrow="কর্মশিক্ষা TED Plus · Online Edtech Platform"
     title="Train the operator behind the system."
     intro="Modular education for founders, ops leads, and growth engineers learning to build with AI-native systems. All masterclasses, cohorts, and recordings live on our dedicated learning platform."
     tone="muted"

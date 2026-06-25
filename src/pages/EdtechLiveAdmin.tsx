@@ -49,7 +49,7 @@ const toLocalInputValue = (iso: string) => {
 };
 
 const EdtechLiveAdmin = () => {
-  useSeo({ title: "Live classes admin — KormoShikkha", noindex: true });
+  useSeo({ title: "Live classes admin — কর্মশিক্ষা TED Plus", noindex: true });
 
   const [classes, setClasses] = useState<LiveClass[]>([]);
   const [draft, setDraft] = useState<Draft>(blank());

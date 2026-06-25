@@ -9,7 +9,7 @@ export { TheStandCoverSection } from "./TheStandCoverSection";
 export { QuietPositionsSection } from "./QuietPositionsSection";
 export { JusticeAppealSection } from "./JusticeAppealSection";
 export { AcademySection } from "./AcademySection";
-export { KormoShikkhaShowcase } from "./KormoShikkhaShowcase";
+export { কর্মশিক্ষা TED PlusShowcase } from "./কর্মশিক্ষা TED PlusShowcase";
 export { OperatedBrandsSection } from "./OperatedBrandsSection";
 export { LuxeVeilSection } from "./LuxeVeilSection";
 export { ProofSection } from "./ProofSection";

@@ -8,9 +8,9 @@ import { BRAND } from "@/config/brand";
 
 const EdtechCourses = () => {
   useSeo({
-    title: "Courses — KormoShikkha",
+    title: "Courses — কর্মশিক্ষা TED Plus",
     description:
-      "Browse every cohort and self-paced course on KormoShikkha — AI, growth operator, brand and career skills.",
+      "Browse every cohort and self-paced course on কর্মশিক্ষা TED Plus — AI, growth operator, brand and career skills.",
     canonical: `${BRAND.url}/edtech/courses`,
   });
 

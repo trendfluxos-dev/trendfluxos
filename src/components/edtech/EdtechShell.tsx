@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 
 /**
  * Wrapper for every /edtech/* route. Inherits TrendFlux navbar/footer so the
- * KormoShikkha surface stays inside the same shell and design language.
+ * কর্মশিক্ষা TED Plus surface stays inside the same shell and design language.
  */
 const EdtechShell = ({ children }: { children: ReactNode }) => (
   <div

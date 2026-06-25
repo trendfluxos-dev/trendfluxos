@@ -1,5 +1,5 @@
 /**
- * Selective live screen sharing for KormoShikkha live classes.
+ * Selective live screen sharing for কর্মশিক্ষা TED Plus live classes.
  *
  * The teacher uses the browser's getDisplayMedia picker to choose ONE
  * surface (window / tab / app). Constraints:

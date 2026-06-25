@@ -1,5 +1,5 @@
 /**
- * KormoShikkha — client-side enrolment + lesson progress.
+ * কর্মশিক্ষা TED Plus — client-side enrolment + lesson progress.
  *
  * Phase 1 stores per-course progress in localStorage so students get an
  * instant, login-free "My Learning" surface. Phase 2 will mirror this to

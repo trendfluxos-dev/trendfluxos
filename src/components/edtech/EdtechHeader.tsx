@@ -22,7 +22,7 @@ const EdtechHeader = () => {
           <span className="grid h-7 w-7 place-items-center rounded-lg bg-gradient-to-br from-primary to-primary-glow text-primary-foreground">
             <GraduationCap className="h-3.5 w-3.5" aria-hidden />
           </span>
-          KormoShikkha
+          কর্মশিক্ষা TED Plus
           <span className="ml-1 hidden text-[10px] font-medium uppercase tracking-[0.22em] text-foreground/45 sm:inline">
             · TrendFlux EdTech
           </span>

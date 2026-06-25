@@ -789,7 +789,7 @@
     --brandtoki-warn: #f97316;
   }
 
-  /* --- Edtech (KormoShikkha): forest green + warm gold ------------ */
+  /* --- Edtech (কর্মশিক্ষা TED Plus): forest green + warm gold ------------ */
   [data-brand="edtech"] {
     /* Override core shadcn tokens for this surface only */
     --background: 140 30% 97%;

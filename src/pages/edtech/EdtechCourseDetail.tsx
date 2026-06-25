@@ -16,8 +16,8 @@ const EdtechCourseDetail = () => {
   const course = slug ? getCourseBySlug(slug) : undefined;
 
   useSeo({
-    title: course ? `${course.title} — KormoShikkha` : "Course — KormoShikkha",
-    description: course?.summary ?? "KormoShikkha course detail.",
+    title: course ? `${course.title} — কর্মশিক্ষা TED Plus` : "Course — কর্মশিক্ষা TED Plus",
+    description: course?.summary ?? "কর্মশিক্ষা TED Plus course detail.",
     canonical: course ? `${BRAND.url}/edtech/courses/${course.slug}` : undefined,
   });
   useJsonLd(
@@ -56,7 +56,7 @@ const EdtechCourseDetail = () => {
         <div className="mx-auto max-w-5xl px-6 lg:px-10">
           <nav className="mb-6 text-[12px] text-foreground/55">
             <Link to={EDTECH.routes.home} className="hover:text-foreground">
-              KormoShikkha
+              কর্মশিক্ষা TED Plus
             </Link>{" "}
             /{" "}
             <Link to={EDTECH.routes.courses} className="hover:text-foreground">

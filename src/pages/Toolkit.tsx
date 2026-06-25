@@ -29,7 +29,7 @@ const Toolkit = () => {
       if (data.session) {
         navigate("/course/trendflux", { replace: true });
       } else {
-        // Cold traffic → official Edtech platform (KormoShikkha)
+        // Cold traffic → official Edtech platform (কর্মশিক্ষা TED Plus)
         window.location.replace(EDTECH.url);
       }
     })();
