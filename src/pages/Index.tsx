@@ -11,6 +11,7 @@ import {
   QuickAccess,
 } from "@/components/home";
 import LayerBand from "@/components/layer/LayerBand";
+import { LazySection } from "@/components/LazySection";
 
 // Below-the-fold sections are code-split so the initial home payload only
 // ships the hero + trust bar + quick-access strip. The rest streams in as
@@ -33,9 +34,7 @@ const TestimonialsSection = lazy(() => import("@/components/home/TestimonialsSec
 const FitSection = lazy(() => import("@/components/home/FitSection").then(m => ({ default: m.FitSection })));
 const FinalCtaSection = lazy(() => import("@/components/home/FinalCtaSection").then(m => ({ default: m.FinalCtaSection })));
 
-const SectionFallback = () => (
-  <div aria-hidden className="min-h-[40vh]" />
-);
+const SectionFallback = () => <div aria-hidden className="min-h-[40vh]" />;
 
 /**
  * Home page (TrendFlux Growth OS). Composition-only: each section is a
@@ -91,28 +90,37 @@ const Index = () => {
       <HomeHeroSection onOpenQuote={openQuote} />
       <TrustBar />
       <QuickAccess />
+
+      {/* Near-fold: mount eagerly with a shared Suspense so it streams in fast. */}
       <Suspense fallback={<SectionFallback />}>
         <LayerBand layer="company" />
         <EcosystemSection />
         <ServicesSection />
-        <LayerBand layer="founder" />
-        <SystemsHeBuiltSection />
-        <KormoShikkhaShowcase />
-        <FounderSection />
-        <TheStandCoverSection />
-        <AudioStoryTeaser />
-        <AiExpertStoryTeaser />
-        <QuietPositionsSection />
-        <JusticeAppealSection />
-        <LayerBand layer="brand" />
-        <AcademySection />
-        <OperatedBrandsSection />
-        <LuxeVeilSection />
-        <ProofSection />
-        <TestimonialsSection />
-        <FitSection onOpenQuote={openQuote} />
-        <FinalCtaSection onOpenQuote={openQuote} />
       </Suspense>
+
+      {/* Below-the-fold: each section gets its own IO-gated Suspense, so a
+          slow chunk never blocks the others and unseen chunks never download. */}
+      <LazySection label="founder-band" minHeight="20vh">
+        <LayerBand layer="founder" />
+      </LazySection>
+      <LazySection label="systems"><SystemsHeBuiltSection /></LazySection>
+      <LazySection label="kormoshikkha"><KormoShikkhaShowcase /></LazySection>
+      <LazySection label="founder"><FounderSection /></LazySection>
+      <LazySection label="stand-cover"><TheStandCoverSection /></LazySection>
+      <LazySection label="audio-story"><AudioStoryTeaser /></LazySection>
+      <LazySection label="ai-expert"><AiExpertStoryTeaser /></LazySection>
+      <LazySection label="quiet-positions"><QuietPositionsSection /></LazySection>
+      <LazySection label="justice"><JusticeAppealSection /></LazySection>
+      <LazySection label="brand-band" minHeight="20vh">
+        <LayerBand layer="brand" />
+      </LazySection>
+      <LazySection label="academy"><AcademySection /></LazySection>
+      <LazySection label="operated"><OperatedBrandsSection /></LazySection>
+      <LazySection label="luxe"><LuxeVeilSection /></LazySection>
+      <LazySection label="proof"><ProofSection /></LazySection>
+      <LazySection label="testimonials"><TestimonialsSection /></LazySection>
+      <LazySection label="fit"><FitSection onOpenQuote={openQuote} /></LazySection>
+      <LazySection label="final-cta"><FinalCtaSection onOpenQuote={openQuote} /></LazySection>
 
       <Footer />
 
