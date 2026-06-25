@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft, Copy, ExternalLink, Eye, EyeOff, FileText, Film, File as FileIcon,
-  Globe, Image as ImageIcon, Link2, Lock, MonitorPlay, Pencil, PlayCircle,
-  Radio, RotateCcw, Send, StopCircle, Trash2,
+  Globe, Image as ImageIcon, Link2, Lock, Pencil, PlayCircle, Play,
+  Radio, RotateCcw, Send, StopCircle, Trash2, ChevronDown,
 } from "lucide-react";
 import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
@@ -35,6 +35,14 @@ const KIND_ICON: Record<MaterialKind, typeof FileText> = {
   pdf: FileText, slide: FileText, image: ImageIcon, video: Film,
   audio: Film, doc: FileIcon, link: Link2,
 };
+
+const LIBRARY_GROUPS: { label: string; kinds: MaterialKind[] }[] = [
+  { label: "Slides", kinds: ["slide"] },
+  { label: "PDF",    kinds: ["pdf"] },
+  { label: "Video",  kinds: ["video"] },
+  { label: "Image",  kinds: ["image"] },
+  { label: "Doc",    kinds: ["doc", "audio", "link"] },
+];
 
 const EdtechLiveStudio = () => {
   const { id = "" } = useParams<{ id: string }>();
