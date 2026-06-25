@@ -1460,6 +1460,10 @@ export type Database = {
       }
       purge_access_audit_logs: { Args: { _days?: number }; Returns: number }
       set_audit_retention_days: { Args: { _days: number }; Returns: number }
+      student_cancel_booking: {
+        Args: { _booking_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role:
