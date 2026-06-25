@@ -59,14 +59,14 @@ const EdtechHome = () => {
               <div className="space-y-7">
                 <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
                   <span className="h-2 w-2 animate-pulse rounded-full edtech-bg-gold" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] edtech-text-gold">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: "hsl(var(--edtech-gold))" }}>
                     <Sparkles className="mr-1 inline h-3 w-3" aria-hidden /> {t("hero.badge")}
                   </span>
                 </div>
 
                 <div className="space-y-3">
                   <h1 className="text-[34px] font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                    {t("hero.title.a")} <span className="edtech-text-gold">{t("hero.title.brand")}</span> {t("hero.title.b")}
+                    {t("hero.title.a")} <span style={{ color: "hsl(var(--edtech-gold))" }}>{t("hero.title.brand")}</span> {t("hero.title.b")}
                     <br />
                     {t("hero.title.c")}
                   </h1>
@@ -117,7 +117,7 @@ const EdtechHome = () => {
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="truncate text-sm font-bold text-white">{t("hero.preview.title")}</div>
-                            <div className="text-xs edtech-text-gold">{t("hero.preview.watching")}</div>
+                            <div className="text-xs" style={{ color: "hsl(var(--edtech-gold))" }}>{t("hero.preview.watching")}</div>
                           </div>
                         </div>
                         <div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
