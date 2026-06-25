@@ -10,7 +10,13 @@ import {
   getLiveClass,
   type LiveClass,
 } from "@/lib/liveClasses";
-import { useStudentViewer } from "@/lib/liveScreenShare";
+// Legacy WebRTC viewer was removed in favor of the controlled-tab broadcast
+// model. Students now join via the share-token route (`/class/:token`). This
+// page stays as a fallback that renders the "waiting" state.
+const useStudentViewer = (_id: string, _enabled: boolean) => ({
+  stream: null as MediaStream | null,
+  status: "connecting" as const,
+});
 
 /**
  * In-app student viewer for a live class. Anyone can open it (no login
