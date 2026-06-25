@@ -5,7 +5,13 @@
 export type CourseLevel = "Beginner" | "Intermediate" | "Advanced";
 export type CourseFormat = "Cohort" | "Self-paced" | "Live + Recorded";
 
-export type LessonContentType = "video" | "audio" | "checklist" | "quiz" | "reading";
+export type LessonContentType =
+  | "video"
+  | "audio"
+  | "checklist"
+  | "quiz"
+  | "reading"
+  | "pdf";
 
 export interface QuizQuestion {
   q: string;
@@ -27,6 +33,9 @@ export interface LessonContent {
   /** for quiz — pass = passScore correct (default = all) */
   questions?: QuizQuestion[];
   passScore?: number;
+  /** for pdf — private storage object served via signed URL */
+  bucket?: "voice-lectures" | "lesson-pdfs";
+  path?: string;
 }
 
 export interface CourseLesson {
