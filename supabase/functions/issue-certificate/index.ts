@@ -34,6 +34,39 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  // Require a signed-in user. Admins always pass; everyone else must hold a
+  // confirmed enrollment. Without this gate, the public verifier would accept
+  // forged certificates issued by anonymous callers.
+  const authHeader = req.headers.get("Authorization") ?? "";
+  if (!authHeader.startsWith("Bearer ")) {
+    return json({ error: "Unauthorized" }, 401);
+  }
+  const userClient = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_ANON_KEY")!,
+    { global: { headers: { Authorization: authHeader } } },
+  );
+  const { data: userData, error: userErr } = await userClient.auth.getUser();
+  const user = userData?.user;
+  if (userErr || !user) {
+    return json({ error: "Unauthorized" }, 401);
+  }
+  const { data: isAdmin } = await userClient.rpc("current_user_has_role", {
+    _role: "admin",
+  });
+  if (!isAdmin) {
+    const { data: enrolled } = await userClient
+      .from("module_enrollments")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("status", "confirmed")
+      .limit(1)
+      .maybeSingle();
+    if (!enrolled) {
+      return json({ error: "Confirmed enrollment required" }, 403);
+    }
+  }
+
   let body: {
     student_name?: unknown;
     course_slug?: unknown;
