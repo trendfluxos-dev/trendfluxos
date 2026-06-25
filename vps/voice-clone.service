@@ -1,0 +1,30 @@
+[Unit]
+Description=Voice Clone Studio (XTTS-v2 FastAPI)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=voice
+Group=voice
+WorkingDirectory=/opt/voice-clone
+Environment=PORT=8000
+# Optional: bearer token enforced by reverse proxy / app middleware
+# Environment=XTTS_API_TOKEN=change-me
+ExecStart=/opt/voice-clone/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000 --workers 1
+Restart=always
+RestartSec=5
+# Zero-downtime-ish reloads: SIGHUP triggers graceful uvicorn restart
+KillSignal=SIGTERM
+TimeoutStopSec=30
+# Logs to journald (rotated automatically); inspect: journalctl -u voice-clone -f
+StandardOutput=journal
+StandardError=journal
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
