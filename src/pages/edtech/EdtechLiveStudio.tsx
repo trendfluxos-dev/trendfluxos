@@ -433,3 +433,53 @@ function StageView({ source, classId }: { source: StageSource; classId: string }
 }
 
 export default EdtechLiveStudio;
+
+function LibraryGroup({
+  label, items, stage, live, onPreview, onRemove,
+}: {
+  label: string;
+  items: ClassMaterial[];
+  stage: StageSource;
+  live: { source: StageSource; visible: boolean };
+  onPreview: (m: ClassMaterial) => void;
+  onRemove: (m: ClassMaterial) => void;
+}) {
+  const [open, setOpen] = useState(items.length > 0);
+  useEffect(() => { if (items.length > 0) setOpen(true); }, [items.length]);
+  return (
+    <div className="rounded-lg border border-border/60 bg-background/40">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-[13px] font-medium text-foreground/85 hover:text-foreground"
+      >
+        <span>{label}</span>
+        <span className="flex items-center gap-1.5 text-[10px] text-foreground/45">
+          {items.length > 0 && <span>{items.length}</span>}
+          <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
+        </span>
+      </button>
+      {open && items.length > 0 && (
+        <div className="space-y-1 border-t border-border/40 px-2 py-2">
+          {items.map((m) => {
+            const Icon = KIND_ICON[m.kind] ?? FileIcon;
+            const staged = stage.type === "material" && stage.payload.materialId === m.id;
+            const onLive = live.visible && live.source.type === "material" && (live.source.payload as { materialId?: string }).materialId === m.id;
+            return (
+              <div key={m.id} className={`group flex items-center gap-2 rounded-md px-2 py-1.5 text-[12.5px] transition ${staged ? "bg-primary/12 text-foreground" : "hover:bg-accent/40"}`}>
+                <button type="button" onClick={() => onPreview(m)} className="flex flex-1 items-center gap-2 truncate text-left">
+                  <Icon className={`h-3.5 w-3.5 shrink-0 ${staged ? "text-primary" : "text-foreground/55"}`} />
+                  <span className="truncate">{m.title}</span>
+                  {onLive && <span className="rounded-full bg-rose-500 px-1.5 py-0 text-[9px] font-bold text-white">LIVE</span>}
+                </button>
+                <button type="button" onClick={() => onRemove(m)} className="opacity-0 transition group-hover:opacity-100">
+                  <Trash2 className="h-3 w-3 text-muted-foreground hover:text-rose-500" />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
