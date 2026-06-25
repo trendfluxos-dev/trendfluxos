@@ -91,6 +91,8 @@ const EdtechVerify = routes["/edtech/verify"];
 const EdtechMyLearning = routes["/edtech/my-learning"];
 const EdtechLessonPlayer = routes["/edtech/learn/:slug"];
 const EdtechLive = routes["/edtech/live"];
+const EdtechLiveStudio = routes["/edtech/live/studio/:id"];
+const EdtechLiveWatch = routes["/edtech/live/watch/:id"];
 const EdtechLiveAdmin = routes["/admin/edtech/live"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const JusticeAppeal = routes["/justice-appeal"];
@@ -161,6 +163,8 @@ const RoutedApp = () => {
         <Route path="/edtech/learn/:slug" element={<EdtechLessonPlayer />} />
         <Route path="/edtech/learn/:slug/:lessonN" element={<EdtechLessonPlayer />} />
         <Route path="/edtech/live" element={<EdtechLive />} />
+        <Route path="/edtech/live/watch/:id" element={<EdtechLiveWatch />} />
+        <Route path="/edtech/live/studio/:id" element={<RequireRole roles={["admin"]}><EdtechLiveStudio /></RequireRole>} />
         <Route path="/admin/edtech/live" element={<RequireRole roles={["admin"]}><EdtechLiveAdmin /></RequireRole>} />
         <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
         <Route path="/justice-appeal" element={<JusticeAppeal />} />
