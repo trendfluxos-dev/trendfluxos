@@ -725,9 +725,36 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_live_classes: {
+        Args: never
+        Returns: {
+          course_slug: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          duration_min: number
+          host_name: string
+          id: string
+          meeting_url: string | null
+          starts_at: string
+          status: string
+          title: string
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "live_classes"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       current_user_has_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
+      }
+      get_live_class_meeting_url: {
+        Args: { _class_id: string }
+        Returns: string
       }
       has_role: {
         Args: {

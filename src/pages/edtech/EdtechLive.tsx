@@ -26,6 +26,7 @@ import {
   isJoinable,
   listLiveClasses,
   listMyRsvps,
+  getMeetingUrl,
   rsvp,
   type LiveClass,
 } from "@/lib/liveClasses";
@@ -292,21 +293,28 @@ const LiveCard = ({
             </button>
           )}
 
-          {joinable && cls.meeting_url ? (
-            <a
-              href={cls.meeting_url}
-              target="_blank"
-              rel="noreferrer"
+          {joinable && rsvped ? (
+            <button
+              type="button"
+              onClick={async () => {
+                const url = await getMeetingUrl(cls.id);
+                if (!url) {
+                  toast.error("Meeting link not available yet. Try again closer to start time.");
+                  return;
+                }
+                window.open(url, "_blank", "noopener,noreferrer");
+              }}
               className={[
                 "inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-semibold transition-colors",
                 isLive
                   ? "bg-rose-500 text-white hover:bg-rose-500/90"
                   : "border border-border/60 bg-background/60 text-foreground hover:bg-background/80",
               ].join(" ")}
+              aria-label={isLive ? "Join live meeting" : "Join meeting room"}
             >
               {isLive ? "Join live" : "Join room"}
               <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-            </a>
+            </button>
           ) : isLive ? (
             <Link
               to={`/edtech/live/watch/${cls.id}`}
