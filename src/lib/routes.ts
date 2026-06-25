@@ -52,6 +52,7 @@ export const routes = {
   "/course/trendflux": make(() => import("@/pages/CourseTrendflux")),
   "/masterclass": make(() => import("@/pages/Masterclass")),
   "/edtech": make(() => import("@/pages/edtech/EdtechHome")),
+  "/class/:token": make(() => import("@/pages/edtech/ClassByToken")),
   "/edtech/courses": make(() => import("@/pages/edtech/EdtechCourses")),
   "/edtech/courses/:slug": make(() => import("@/pages/edtech/EdtechCourseDetail")),
   "/edtech/enroll/:slug": make(() => import("@/pages/edtech/EdtechEnroll")),
