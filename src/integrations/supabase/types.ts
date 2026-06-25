@@ -98,6 +98,59 @@ export type Database = {
         }
         Relationships: []
       }
+      class_materials: {
+        Row: {
+          class_id: string
+          created_at: string
+          external_url: string | null
+          id: string
+          kind: string
+          mime: string | null
+          size_bytes: number | null
+          sort_order: number
+          storage_path: string | null
+          teacher_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          kind: string
+          mime?: string | null
+          size_bytes?: number | null
+          sort_order?: number
+          storage_path?: string | null
+          teacher_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          kind?: string
+          mime?: string | null
+          size_bytes?: number | null
+          sort_order?: number
+          storage_path?: string | null
+          teacher_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_materials_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_errors: {
         Row: {
           created_at: string
@@ -301,6 +354,7 @@ export type Database = {
           host_name: string
           id: string
           meeting_url: string | null
+          share_token: string | null
           starts_at: string
           status: string
           title: string
@@ -318,6 +372,7 @@ export type Database = {
           host_name?: string
           id?: string
           meeting_url?: string | null
+          share_token?: string | null
           starts_at: string
           status?: string
           title: string
@@ -335,12 +390,51 @@ export type Database = {
           host_name?: string
           id?: string
           meeting_url?: string | null
+          share_token?: string | null
           starts_at?: string
           status?: string
           title?: string
           updated_at?: string
         }
         Relationships: []
+      }
+      live_state: {
+        Row: {
+          active_source_type: string
+          class_id: string
+          is_live_visible: boolean
+          payload: Json
+          updated_at: string
+          updated_by: string | null
+          whiteboard_snapshot: Json | null
+        }
+        Insert: {
+          active_source_type?: string
+          class_id: string
+          is_live_visible?: boolean
+          payload?: Json
+          updated_at?: string
+          updated_by?: string | null
+          whiteboard_snapshot?: Json | null
+        }
+        Update: {
+          active_source_type?: string
+          class_id?: string
+          is_live_visible?: boolean
+          payload?: Json
+          updated_at?: string
+          updated_by?: string | null
+          whiteboard_snapshot?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_state_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: true
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       luxe_veil_requests: {
         Row: {
@@ -536,6 +630,41 @@ export type Database = {
           value?: Json | null
         }
         Relationships: []
+      }
+      teacher_notes: {
+        Row: {
+          class_id: string
+          content: string
+          created_at: string
+          id: string
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          class_id: string
+          content?: string
+          created_at?: string
+          id?: string
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          class_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          teacher_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_notes_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       teacher_profiles: {
         Row: {
@@ -1146,6 +1275,7 @@ export type Database = {
           host_name: string
           id: string
           meeting_url: string | null
+          share_token: string | null
           starts_at: string
           status: string
           title: string
@@ -1161,6 +1291,20 @@ export type Database = {
       current_user_has_role: {
         Args: { _role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
+      }
+      get_class_by_share_token: {
+        Args: { _token: string }
+        Returns: {
+          active_source_type: string
+          description: string
+          id: string
+          is_live_visible: boolean
+          payload: Json
+          starts_at: string
+          status: string
+          title: string
+          whiteboard_snapshot: Json
+        }[]
       }
       get_live_class_meeting_url: {
         Args: { _class_id: string }
