@@ -38,7 +38,11 @@ const EdtechTutorProfile = () => {
   useEffect(() => {
     (async () => {
       const [{ data: t }, { data: a }] = await Promise.all([
-        supabase.from("teacher_profiles").select("*").eq("user_id", id).maybeSingle(),
+        supabase
+          .from("teacher_profiles_public" as never)
+          .select("user_id,headline,bio,expertise,languages,hourly_rate,currency,avg_rating,response_sla_minutes,verified_at")
+          .eq("user_id", id)
+          .maybeSingle(),
         supabase.from("tutor_availability").select("id,weekday,start_time,end_time").eq("tutor_id", id),
       ]);
       setTutor(t as TutorRow);
