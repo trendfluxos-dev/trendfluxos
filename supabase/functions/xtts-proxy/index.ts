@@ -5,12 +5,15 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
  * xtts-proxy
  * Founder-only proxy to a self-hosted XTTS-v2 FastAPI server.
  * Endpoints (on the VPS, set via XTTS_ENDPOINT_URL):
- *   POST /upload    multipart/form-data { file }
- *   POST /generate?text=...&language=en|bn   → returns audio (wav) bytes
+ *   POST /upload-voice  multipart/form-data { file }
+ *                       → { status, voice_path }
+ *   POST /generate      multipart/form-data { text, voice_path? }
+ *                       → audio/wav bytes (voice_path optional → VPS uses
+ *                         latest file in voices/)
  *
  * Client calls this edge function with:
  *   action: "upload"   + multipart body (field "file")
- *   action: "generate" + JSON { text, language }
+ *   action: "generate" + JSON { text, voice_path?, language? }
  */
 
 const j = (b: unknown, status = 200) =>
@@ -67,7 +70,7 @@ Deno.serve(async (req: Request) => {
       const upstream = new FormData();
       upstream.append("file", file, file.name || "voice.wav");
 
-      const res = await fetch(`${base}/upload`, {
+      const res = await fetch(`${base}/upload-voice`, {
         method: "POST",
         headers: vpsHeaders(),
         body: upstream,
@@ -76,20 +79,28 @@ Deno.serve(async (req: Request) => {
       if (!res.ok) return j({ error: "xtts_upload_failed", status: res.status, body: text.slice(0, 500) }, 502);
       let parsed: unknown = text;
       try { parsed = JSON.parse(text); } catch { /* leave string */ }
-      return j({ ok: true, vps: parsed });
+      // Surface voice_path so the client can echo it back on /generate.
+      const voicePath =
+        (parsed && typeof parsed === "object" && "voice_path" in parsed)
+          ? String((parsed as { voice_path: unknown }).voice_path ?? "")
+          : "";
+      return j({ ok: true, voice_path: voicePath, vps: parsed });
     }
 
     if (action === "generate") {
       const body = await req.json().catch(() => ({} as Record<string, unknown>));
       const text = String((body as { text?: unknown }).text ?? "").trim();
-      const language = String((body as { language?: unknown }).language ?? "en").toLowerCase();
+      const voicePath = String((body as { voice_path?: unknown }).voice_path ?? "").trim();
       if (!text) return j({ error: "text_required" }, 400);
       if (text.length > 5000) return j({ error: "text_too_long_max_5000" }, 400);
 
-      const q = new URLSearchParams({ text, language });
-      const res = await fetch(`${base}/generate?${q.toString()}`, {
+      const upstream = new FormData();
+      upstream.append("text", text);
+      if (voicePath) upstream.append("voice_path", voicePath);
+      const res = await fetch(`${base}/generate`, {
         method: "POST",
         headers: vpsHeaders(),
+        body: upstream,
       });
       if (!res.ok) {
         const err = await res.text();
