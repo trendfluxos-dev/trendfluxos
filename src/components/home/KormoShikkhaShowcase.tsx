@@ -29,7 +29,7 @@ const PREVIEW_MODULES = [
 ];
 
 /**
- * Featured-project showcase for KormoShikkha. Renders a hand-crafted in-browser
+ * Featured-project showcase for কর্মশিক্ষা TED Plus. Renders a hand-crafted in-browser
  * preview (no iframe, no AI image) so the card stays crisp, on-brand, and
  * immune to the platform's X-Frame-Options block.
  */
@@ -57,7 +57,7 @@ export const KormoShikkhaShowcase = () => {
             id="kormoshikkha-title"
             className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[44px] md:leading-[1.05]"
           >
-            KormoShikkha — TrendFlux Online Edtech Platform
+            কর্মশিক্ষা TED Plus — TrendFlux Online Edtech Platform
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.7] text-muted-foreground sm:text-[16px]">
             A cohort-based AI learning platform built and operated end-to-end.
@@ -70,7 +70,7 @@ export const KormoShikkhaShowcase = () => {
           <Link
             to={EDTECH.routes.home}
             onClick={() => onOpen("showcase_preview")}
-            aria-label="Open KormoShikkha platform"
+            aria-label="Open কর্মশিক্ষা TED Plus platform"
             className="group relative block overflow-hidden rounded-3xl border border-border/70 bg-card/60 backdrop-blur-xl shadow-[0_20px_60px_-30px_hsl(var(--primary)/0.35)] ring-1 ring-foreground/[0.04] transition-all duration-500 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-[0_30px_80px_-25px_hsl(var(--primary)/0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             {/* Subtle gradient halo behind the card */}
@@ -113,7 +113,7 @@ export const KormoShikkhaShowcase = () => {
                     <GraduationCap className="h-3.5 w-3.5" aria-hidden />
                   </span>
                   <span className="font-display text-[13px] font-semibold tracking-tight text-foreground">
-                    KormoShikkha
+                    কর্মশিক্ষা TED Plus
                   </span>
                 </div>
                 <div className="hidden items-center gap-4 text-[10px] text-muted-foreground sm:flex">
@@ -172,7 +172,7 @@ export const KormoShikkhaShowcase = () => {
 
             {/* Hover overlay CTA */}
             <span className="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 bg-gradient-to-t from-foreground/90 via-foreground/60 to-transparent px-4 py-5 text-[11px] font-semibold text-background opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              Open KormoShikkha <ArrowUpRight className="h-3 w-3" aria-hidden />
+              Open কর্মশিক্ষা TED Plus <ArrowUpRight className="h-3 w-3" aria-hidden />
             </span>
           </Link>
 
@@ -232,7 +232,7 @@ export const KormoShikkhaShowcase = () => {
                 onClick={() => onOpen("showcase_primary_cta")}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
-                Open KormoShikkha
+                Open কর্মশিক্ষা TED Plus
                 <ArrowUpRight className="h-4 w-4" aria-hidden />
               </Link>
               <Link

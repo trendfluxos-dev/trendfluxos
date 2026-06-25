@@ -65,9 +65,9 @@ const EdtechVerify = () => {
   const [state, setState] = useState<ViewState>({ kind: "idle" });
 
   useSeo({
-    title: "Verify Certificate — KormoShikkha",
+    title: "Verify Certificate — কর্মশিক্ষা TED Plus",
     description:
-      "Confirm the authenticity of a KormoShikkha course-completion certificate by its Verification ID.",
+      "Confirm the authenticity of a কর্মশিক্ষা TED Plus course-completion certificate by its Verification ID.",
     canonical: `${BRAND.url}/edtech/verify`,
   });
 
@@ -121,7 +121,7 @@ const EdtechVerify = () => {
         <div className="mx-auto max-w-3xl px-6 lg:px-10">
           <nav className="mb-6 text-[12px] text-foreground/55">
             <Link to={EDTECH.routes.home} className="hover:text-foreground">
-              KormoShikkha
+              কর্মশিক্ষা TED Plus
             </Link>
             {" / "}
             <span className="text-foreground/75">Verify</span>
@@ -130,7 +130,7 @@ const EdtechVerify = () => {
             <ShieldCheck className="h-3.5 w-3.5" aria-hidden /> Certificate verification
           </p>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Verify a KormoShikkha certificate
+            Verify a কর্মশিক্ষা TED Plus certificate
           </h1>
           <p className="mt-3 max-w-2xl text-[15px] leading-[1.75] text-muted-foreground">
             সার্টিফিকেট-এ ছাপা <strong>Verification ID</strong> লিখুন — আমরা সার্ভার

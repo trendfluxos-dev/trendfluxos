@@ -28,7 +28,7 @@ const EdtechLiveWatch = () => {
 
   useSeo({
     title: cls ? `Watch live — ${cls.title}` : "Watch live class",
-    description: "Join the KormoShikkha live class — in-app, no install.",
+    description: "Join the কর্মশিক্ষা TED Plus live class — in-app, no install.",
   });
 
   useEffect(() => {

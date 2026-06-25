@@ -38,8 +38,8 @@ import {
  */
 const EdtechLive = () => {
   useSeo({
-    title: "Live Classes — KormoShikkha",
-    description: "Upcoming live cohort sessions on KormoShikkha. RSVP and join the call.",
+    title: "Live Classes — কর্মশিক্ষা TED Plus",
+    description: "Upcoming live cohort sessions on কর্মশিক্ষা TED Plus. RSVP and join the call.",
   });
 
   const [classes, setClasses] = useState<LiveClass[]>([]);

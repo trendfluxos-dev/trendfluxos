@@ -80,7 +80,7 @@ export type ShowcaseItem = {
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   {
     id: "kormoshikkha",
-    title: "KormoShikkha — Online Edtech Platform",
+    title: "কর্মশিক্ষা TED Plus — Online Edtech Platform",
     category: "Enterprise System",
     year: "2025 — Present",
     summary:

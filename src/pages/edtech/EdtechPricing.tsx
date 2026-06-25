@@ -40,7 +40,7 @@ const TIERS = [
 
 const EdtechPricing = () => {
   useSeo({
-    title: "Pricing & cohorts — KormoShikkha",
+    title: "Pricing & cohorts — কর্মশিক্ষা TED Plus",
     description: "Single courses, the operator bundle and private team cohorts.",
     canonical: `${BRAND.url}/edtech/pricing`,
   });

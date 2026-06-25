@@ -28,7 +28,7 @@ const TRUST_CHIPS = [
 
 const EdtechHome = () => {
   useSeo({
-    title: "KormoShikkha — TrendFlux Online EdTech Platform",
+    title: "কর্মশিক্ষা TED Plus — TrendFlux Online EdTech Platform",
     description:
       "Cohort-based AI masterclasses, growth operator training and career skills. Built and operated end-to-end by TrendFlux.",
     canonical: `${BRAND.url}/edtech`,

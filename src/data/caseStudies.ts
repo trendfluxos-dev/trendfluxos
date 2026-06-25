@@ -45,7 +45,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "kormoshikkha-edtech-platform",
     category: "EdTech Platform",
-    title: "KormoShikkha — Online EdTech Platform",
+    title: "কর্মশিক্ষা TED Plus — Online EdTech Platform",
     description:
       "Designed and operated TrendFlux's flagship online learning platform — cohort-based AI masterclasses with modular curriculum, recordings, and end-to-end delivery infrastructure.",
     results: ["7+ modules live", "Cohort-based delivery", "End-to-end ownership"],
@@ -55,7 +55,7 @@ export const caseStudies: CaseStudy[] = [
     problem:
       "Knowledge lived in scattered docs and sessions — no scalable way to enroll students, deliver lessons, or track progress as a real platform.",
     solution:
-      "Built KormoShikkha as a full edtech product: modular curriculum, cohort enrollment flow, recordings, payment + admin tooling, and an operating cadence for releases.",
+      "Built কর্মশিক্ষা TED Plus as a full edtech product: modular curriculum, cohort enrollment flow, recordings, payment + admin tooling, and an operating cadence for releases.",
     insight:
       "An edtech platform is an operating system, not a course — sustained value comes from the delivery loop, not the content drop.",
     service: "AI Automation",
@@ -68,7 +68,7 @@ export const caseStudies: CaseStudy[] = [
       x: 54,
       y: 50,
       system: "ecosystem",
-      outcome: "KormoShikkha — AI EdTech platform",
+      outcome: "কর্মশিক্ষা TED Plus — AI EdTech platform",
     },
   },
   {

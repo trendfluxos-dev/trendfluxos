@@ -5,7 +5,7 @@ import { BRAND } from "@/config/brand";
 import { EDTECH } from "@/config/edtech";
 
 /**
- * Advanced AI Masterclass now lives on the KormoShikkha edtech platform.
+ * Advanced AI Masterclass now lives on the কর্মশিক্ষা TED Plus edtech platform.
  * This route is preserved for backward-compatible links and SEO continuity,
  * and performs a fast client-side redirect to the platform.
  */
@@ -17,7 +17,7 @@ const Masterclass = () => {
   useSeo({
     title: "Advanced AI Masterclass — AI Growth Operator | TrendFlux",
     description:
-      "Operator-grade AI training: automation, content, and growth systems. Hosted on KormoShikkha — TrendFlux's online edtech platform.",
+      "Operator-grade AI training: automation, content, and growth systems. Hosted on কর্মশিক্ষা TED Plus — TrendFlux's online edtech platform.",
     canonical: `${BRAND.url}/masterclass`,
   });
   useJsonLd({
@@ -25,7 +25,7 @@ const Masterclass = () => {
     "@type": "Course",
     name: "Advanced AI Masterclass — Digital Growth & Transformation",
     description:
-      "Operator-grade AI training delivered on KormoShikkha — TrendFlux's online edtech platform.",
+      "Operator-grade AI training delivered on কর্মশিক্ষা TED Plus — TrendFlux's online edtech platform.",
     provider: { "@type": "Organization", name: BRAND.legalName, url: BRAND.url },
     url: EDTECH.url,
   });

@@ -57,9 +57,9 @@ const EdtechCertificate = () => {
   );
 
   useSeo({
-    title: "Certificate — KormoShikkha",
+    title: "Certificate — কর্মশিক্ষা TED Plus",
     description:
-      "Generate, view and download your KormoShikkha course-completion certificate.",
+      "Generate, view and download your কর্মশিক্ষা TED Plus course-completion certificate.",
     canonical: `${BRAND.url}/edtech/certificate`,
   });
 
@@ -171,7 +171,7 @@ const EdtechCertificate = () => {
       <section className="bg-background pt-12 pb-6" data-print-hide>
         <div className="mx-auto max-w-6xl px-6 lg:px-10">
           <nav className="mb-6 text-[12px] text-foreground/55">
-            <Link to={EDTECH.routes.home} className="hover:text-foreground">KormoShikkha</Link>{" / "}
+            <Link to={EDTECH.routes.home} className="hover:text-foreground">কর্মশিক্ষা TED Plus</Link>{" / "}
             <span className="text-foreground/75">Certificate</span>
           </nav>
           <div className="flex flex-wrap items-end justify-between gap-6">
@@ -327,7 +327,7 @@ const EdtechCertificate = () => {
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="text-[11px] font-medium uppercase tracking-[0.35em]" style={{ color: "#d4af37" }}>
-                        KormoShikkha · TrendFlux
+                        কর্মশিক্ষা TED Plus · TrendFlux
                       </p>
                       <p className="mt-1 text-[10px] uppercase tracking-[0.25em] text-white/55">
                         Online Edtech Platform
@@ -373,7 +373,7 @@ const EdtechCertificate = () => {
                         Zahid Hasan Emon
                       </p>
                       <p className="mt-2 uppercase tracking-[0.18em] text-white/55">Founder &amp; CEO</p>
-                      <p className="text-white/45">TrendFlux · KormoShikkha</p>
+                      <p className="text-white/45">TrendFlux · কর্মশিক্ষা TED Plus</p>
                     </div>
                     <div className="text-center">
                       <p className="font-mono text-[12px] tracking-widest" style={{ color: "#d4af37" }}>

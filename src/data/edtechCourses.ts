@@ -1,5 +1,5 @@
 /**
- * KormoShikkha course catalog — seed data for the native /edtech platform.
+ * কর্মশিক্ষা TED Plus course catalog — seed data for the native /edtech platform.
  * Replace with Supabase-backed `course_modules` query in Phase 2.
  */
 export type CourseLevel = "Beginner" | "Intermediate" | "Advanced";
@@ -253,7 +253,7 @@ export const EDTECH_COURSES: Course[] = [
       "A 90-day plan to deliver in your first role",
     ],
     audience: ["University students", "Career switchers"],
-    instructor: { name: "KormoShikkha Faculty", role: "TrendFlux Academy" },
+    instructor: { name: "কর্মশিক্ষা TED Plus Faculty", role: "TrendFlux Academy" },
     priceBdt: 1900,
     earlyBirdBdt: 990,
     nextCohort: "Available now",
@@ -309,7 +309,7 @@ export const EDTECH_COURSES: Course[] = [
       "Distribution loops, not one-off posts",
     ],
     audience: ["Solo founders", "Personal brands", "Content teams"],
-    instructor: { name: "KormoShikkha Faculty", role: "TrendFlux Academy" },
+    instructor: { name: "কর্মশিক্ষা TED Plus Faculty", role: "TrendFlux Academy" },
     priceBdt: 2400,
     earlyBirdBdt: 1490,
     nextCohort: "Available now",

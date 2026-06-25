@@ -1,10 +1,10 @@
 /**
- * KormoShikkha — TrendFlux's native online edtech platform.
+ * কর্মশিক্ষা TED Plus — TrendFlux's native online edtech platform.
  * All masterclass / course / academy traffic flows to /edtech (internal).
  * The legacy external subdomain is kept for backwards-compatible deep links.
  */
 export const EDTECH = {
-  name: "KormoShikkha",
+  name: "কর্মশিক্ষা TED Plus",
   tagline: "TrendFlux Online Edtech Platform",
   url: "/edtech",
   legacyUrl: "https://kormoshikkha.trendflux.digital/",

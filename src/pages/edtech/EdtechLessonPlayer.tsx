@@ -31,7 +31,7 @@ const EdtechLessonPlayer = () => {
   const course = slug ? getCourseBySlug(slug) : undefined;
 
   useSeo({
-    title: course ? `Learn · ${course.title} — KormoShikkha` : "Learn — KormoShikkha",
+    title: course ? `Learn · ${course.title} — কর্মশিক্ষা TED Plus` : "Learn — কর্মশিক্ষা TED Plus",
     description: course?.summary ?? "Lesson player.",
     noindex: true,
   });

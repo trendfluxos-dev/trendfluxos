@@ -17,8 +17,8 @@ import {
 
 const EdtechMyLearning = () => {
   useSeo({
-    title: "My Learning — KormoShikkha",
-    description: "Resume your enrolled KormoShikkha courses and track lesson progress.",
+    title: "My Learning — কর্মশিক্ষা TED Plus",
+    description: "Resume your enrolled কর্মশিক্ষা TED Plus courses and track lesson progress.",
     noindex: true,
   });
 
