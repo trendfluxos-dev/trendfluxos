@@ -10,6 +10,7 @@ export { QuietPositionsSection } from "./QuietPositionsSection";
 export { JusticeAppealSection } from "./JusticeAppealSection";
 export { AcademySection } from "./AcademySection";
 export { KormoShikkhaShowcase } from "./KormoShikkhaShowcase";
+export { LiveClassStudioSection } from "./LiveClassStudioSection";
 export { OperatedBrandsSection } from "./OperatedBrandsSection";
 export { LuxeVeilSection } from "./LuxeVeilSection";
 export { ProofSection } from "./ProofSection";
