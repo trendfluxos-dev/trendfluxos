@@ -5,10 +5,36 @@
 export type CourseLevel = "Beginner" | "Intermediate" | "Advanced";
 export type CourseFormat = "Cohort" | "Self-paced" | "Live + Recorded";
 
+export type LessonContentType = "video" | "audio" | "checklist" | "quiz" | "reading";
+
+export interface QuizQuestion {
+  q: string;
+  options: string[];
+  /** index of the correct option in `options` */
+  answer: number;
+  explain?: string;
+}
+
+export interface LessonContent {
+  type: LessonContentType;
+  /** for video / audio */
+  src?: string;
+  poster?: string;
+  /** for reading */
+  body?: string[];
+  /** for checklist — completion requires all items ticked */
+  items?: string[];
+  /** for quiz — pass = passScore correct (default = all) */
+  questions?: QuizQuestion[];
+  passScore?: number;
+}
+
 export interface CourseLesson {
   n: string;
   title: string;
   duration: string;
+  /** Optional structured content. Falls back to a "reading" stub. */
+  content?: LessonContent;
 }
 
 export interface Course {
