@@ -109,3 +109,17 @@ export async function deleteMaterial(material: ClassMaterial): Promise<void> {
     .eq("id", material.id);
   if (error) throw error;
 }
+
+/**
+ * Mint a signed URL for a private class-materials object via the
+ * `get-signed-url` edge function. Returns null for materials backed by
+ * an external_url (which should be used directly).
+ */
+export async function signMaterialUrl(material: ClassMaterial, expiresIn = 3600): Promise<string | null> {
+  if (!material.storage_path) return material.external_url;
+  const { data, error } = await supabase.functions.invoke("get-signed-url", {
+    body: { bucket: BUCKET, path: material.storage_path, expiresIn },
+  });
+  if (error) throw error;
+  return (data as { signedUrl?: string })?.signedUrl ?? null;
+}
