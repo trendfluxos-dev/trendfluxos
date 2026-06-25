@@ -38,6 +38,9 @@ export default function Auth() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const redirect = params.get("redirect") || "/dashboard";
+  const roleParam = params.get("role");
+  const role: "student" | "teacher" | null =
+    roleParam === "student" || roleParam === "teacher" ? roleParam : null;
   useSeo({
     title: "Sign In — TrendFlux Ecosystem",
     description: "Sign in to access TrendFlux Ecosystem admin tools.",
@@ -46,7 +49,7 @@ export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup">(role ? "signup" : "signin");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -85,7 +88,10 @@ export default function Auth() {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}${redirect}`,
-            data: { full_name: fullName.trim() },
+            data: {
+              full_name: fullName.trim(),
+              ...(role ? { role, intended_role: role } : {}),
+            },
           },
         });
         if (error) throw error;
@@ -108,6 +114,12 @@ export default function Auth() {
   };
 
   const isSignup = mode === "signup";
+  const roleBadge =
+    role === "teacher"
+      ? { label: "Teacher signup", sub: "Live studio · publish courses · earn" }
+      : role === "student"
+        ? { label: "Student signup", sub: "Live class · 3-month recording access" }
+        : null;
 
   return (
     <div className="min-h-dvh flex items-center justify-center bg-background px-5 py-10">
@@ -133,9 +145,21 @@ export default function Auth() {
           onSubmit={handle}
           className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm p-7 sm:p-8 space-y-5 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_24px_60px_-30px_rgba(0,0,0,0.25)]"
         >
+          {roleBadge && isSignup && (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 px-3 py-2">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-primary">{roleBadge.label}</div>
+              <div className="text-[12px] text-foreground/70">{roleBadge.sub}</div>
+            </div>
+          )}
           <div className="space-y-1.5">
             <h1 className="font-display text-[22px] font-semibold tracking-tight">
-              {isSignup ? "Create Account" : "Sign In"}
+              {isSignup
+                ? role === "teacher"
+                  ? "Create Teacher Account"
+                  : role === "student"
+                    ? "Create Student Account"
+                    : "Create Account"
+                : "Sign In"}
             </h1>
             <p className="text-[13px] leading-relaxed text-foreground/60">
               {isSignup

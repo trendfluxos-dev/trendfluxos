@@ -4,7 +4,9 @@
  * The legacy external subdomain is kept for backwards-compatible deep links.
  */
 export const EDTECH = {
-  name: "কর্মশিক্ষা TED Plus",
+  name: "TrendFlux EdTech",
+  nameBn: "ট্রেন্ডফ্লাক্স এডটেক",
+  legacyName: "কর্মশিক্ষা TED Plus",
   tagline: "TrendFlux Online Edtech Platform",
   url: "/edtech",
   legacyUrl: "https://kormoshikkha.trendflux.digital/",
