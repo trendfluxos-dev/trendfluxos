@@ -99,6 +99,91 @@ const FallbackReading = ({ lesson }: { lesson: CourseLesson }) => (
   </div>
 );
 
+const SignedPdf = ({
+  bucket,
+  path,
+  title,
+  isDone,
+  onAutoComplete,
+}: {
+  bucket: "voice-lectures" | "lesson-pdfs";
+  path: string;
+  title: string;
+  isDone: boolean;
+  onAutoComplete: () => void;
+}) => {
+  const { url, error } = useSignedUrl(bucket, path, 600);
+  const firedRef = useRef(isDone);
+
+  useEffect(() => {
+    firedRef.current = isDone;
+  }, [isDone]);
+
+  // Auto-complete after 10s of viewing (gives time for the PDF to render).
+  useEffect(() => {
+    if (!url || firedRef.current) return;
+    const t = setTimeout(() => {
+      if (!firedRef.current) {
+        firedRef.current = true;
+        onAutoComplete();
+      }
+    }, 10_000);
+    return () => clearTimeout(t);
+  }, [url, onAutoComplete]);
+
+  if (error) {
+    return (
+      <div className="flex items-start gap-3 px-6 py-6 text-[13px] text-foreground/75">
+        <AlertCircle className="mt-0.5 h-4 w-4 text-amber-400" aria-hidden />
+        <div>
+          <p className="font-medium text-foreground">PDF unavailable</p>
+          <p className="mt-1 text-foreground/60">
+            You may need to enroll in the course to view this material.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!url) {
+    return (
+      <div className="grid aspect-video w-full place-items-center bg-background/40 text-[12px] text-foreground/55">
+        Preparing secure link…
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      <object
+        data={url}
+        type="application/pdf"
+        aria-label={title}
+        className="block aspect-[4/5] w-full bg-background/40 sm:aspect-video"
+      >
+        <div className="flex flex-col items-start gap-3 px-6 py-6 text-[13px]">
+          <FileText className="h-5 w-5 text-primary" aria-hidden />
+          <p className="text-foreground">Your browser cannot embed this PDF.</p>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-3 py-1.5 text-[12px] font-semibold text-primary-foreground hover:bg-primary/90"
+          >
+            Open PDF in new tab
+          </a>
+        </div>
+      </object>
+      <div className="flex items-center justify-between px-4 py-2 text-[11px] text-foreground/55">
+        <span>Secure stream · link expires in 10 min</span>
+        <a href={url} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
+          Open ↗
+        </a>
+      </div>
+    </div>
+  );
+};
+
 const Reading = ({ body }: { body: string[] }) => (
   <div className="space-y-3 px-6 py-8 text-[15px] leading-[1.75] text-foreground/85">
     {body.map((p, i) => (
