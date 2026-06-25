@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      access_audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          ip: string | null
+          metadata: Json
+          outcome: string
+          reason: string | null
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          ip?: string | null
+          metadata?: Json
+          outcome: string
+          reason?: string | null
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          ip?: string | null
+          metadata?: Json
+          outcome?: string
+          reason?: string | null
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       access_requests: {
         Row: {
           created_at: string
@@ -1400,6 +1442,17 @@ export type Database = {
         Returns: boolean
       }
       live_class_rsvp_count: { Args: { _class_id: string }; Returns: number }
+      log_access_audit: {
+        Args: {
+          _action: string
+          _metadata?: Json
+          _outcome: string
+          _reason?: string
+          _resource_id: string
+          _resource_type: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role:
