@@ -10,6 +10,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { getProgress, progressPercent } from "@/lib/edtechProgress";
 
 /**
  * Course-completion certificate.
@@ -75,6 +76,15 @@ const EdtechCertificate = () => {
   );
 
   const studentName = name.trim() || "Your Name";
+
+  // Course completion gate — we don't block download but we surface progress.
+  const completion = useMemo(() => {
+    if (!course) return { pct: 0, done: 0, total: 0, complete: false };
+    const p = getProgress(course.slug);
+    const total = course.lessons.length;
+    const done = p.completed.length;
+    return { pct: progressPercent(done, total), done, total, complete: done === total && total > 0 };
+  }, [course]);
 
   // Persist the certificate to the backend so /edtech/verify can validate it.
   // Safe to retry — the edge function upserts on verification_id.
@@ -260,6 +270,32 @@ const EdtechCertificate = () => {
                 </Link>{" "}
                 পেইজে এই ID ও আপনার নাম দিয়ে সত্যতা যাচাই করতে পারবেন।
               </p>
+            </div>
+
+            <div
+              className={[
+                "rounded-3xl border p-5 text-[12px]",
+                completion.complete
+                  ? "border-emerald-500/30 bg-emerald-500/5 text-emerald-200"
+                  : "border-amber-500/30 bg-amber-500/5 text-amber-200",
+              ].join(" ")}
+            >
+              <p className="font-medium">
+                {completion.complete
+                  ? "Course complete — certificate unlocked"
+                  : "Course in progress"}
+              </p>
+              <p className="mt-1 leading-relaxed text-foreground/70">
+                {completion.done} of {completion.total} lessons · {completion.pct}%
+              </p>
+              {!completion.complete && (
+                <Link
+                  to={EDTECH.routes.learn(course.slug)}
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-amber-200 hover:bg-amber-500/15"
+                >
+                  Continue learning →
+                </Link>
+              )}
             </div>
           </aside>
 
