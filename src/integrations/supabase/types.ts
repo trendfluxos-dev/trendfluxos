@@ -290,11 +290,14 @@ export type Database = {
       }
       live_classes: {
         Row: {
+          audience_mode: string
+          calendar_event_id: string | null
           course_slug: string
           created_at: string
           created_by: string | null
           description: string | null
           duration_min: number
+          first_started_at: string | null
           host_name: string
           id: string
           meeting_url: string | null
@@ -304,11 +307,14 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          audience_mode?: string
+          calendar_event_id?: string | null
           course_slug: string
           created_at?: string
           created_by?: string | null
           description?: string | null
           duration_min?: number
+          first_started_at?: string | null
           host_name?: string
           id?: string
           meeting_url?: string | null
@@ -318,11 +324,14 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          audience_mode?: string
+          calendar_event_id?: string | null
           course_slug?: string
           created_at?: string
           created_by?: string | null
           description?: string | null
           duration_min?: number
+          first_started_at?: string | null
           host_name?: string
           id?: string
           meeting_url?: string | null
@@ -528,6 +537,66 @@ export type Database = {
         }
         Relationships: []
       }
+      teacher_profiles: {
+        Row: {
+          avg_rating: number | null
+          bio: string | null
+          calendar_connected_at: string | null
+          created_at: string
+          currency: string | null
+          drive_folder_url: string | null
+          expertise: string[] | null
+          headline: string | null
+          hourly_rate: number | null
+          languages: string[] | null
+          onboarded_at: string | null
+          payout_method: string | null
+          response_sla_minutes: number | null
+          share_link_copied_at: string | null
+          updated_at: string
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          avg_rating?: number | null
+          bio?: string | null
+          calendar_connected_at?: string | null
+          created_at?: string
+          currency?: string | null
+          drive_folder_url?: string | null
+          expertise?: string[] | null
+          headline?: string | null
+          hourly_rate?: number | null
+          languages?: string[] | null
+          onboarded_at?: string | null
+          payout_method?: string | null
+          response_sla_minutes?: number | null
+          share_link_copied_at?: string | null
+          updated_at?: string
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          avg_rating?: number | null
+          bio?: string | null
+          calendar_connected_at?: string | null
+          created_at?: string
+          currency?: string | null
+          drive_folder_url?: string | null
+          expertise?: string[] | null
+          headline?: string | null
+          hourly_rate?: number | null
+          languages?: string[] | null
+          onboarded_at?: string | null
+          payout_method?: string | null
+          response_sla_minutes?: number | null
+          share_link_copied_at?: string | null
+          updated_at?: string
+          user_id?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       telegram_error_logs: {
         Row: {
           api_method: string
@@ -633,6 +702,128 @@ export type Database = {
         }
         Relationships: []
       }
+      tutor_availability: {
+        Row: {
+          created_at: string
+          end_time: string
+          id: string
+          start_time: string
+          timezone: string
+          tutor_id: string
+          weekday: number
+        }
+        Insert: {
+          created_at?: string
+          end_time: string
+          id?: string
+          start_time: string
+          timezone?: string
+          tutor_id: string
+          weekday: number
+        }
+        Update: {
+          created_at?: string
+          end_time?: string
+          id?: string
+          start_time?: string
+          timezone?: string
+          tutor_id?: string
+          weekday?: number
+        }
+        Relationships: []
+      }
+      tutor_bookings: {
+        Row: {
+          created_at: string
+          currency: string
+          ends_at: string
+          expires_at: string | null
+          id: string
+          livekit_room: string | null
+          meeting_url: string | null
+          notes: string | null
+          price: number
+          responded_at: string | null
+          starts_at: string
+          status: string
+          student_id: string
+          subject: string
+          tutor_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          ends_at: string
+          expires_at?: string | null
+          id?: string
+          livekit_room?: string | null
+          meeting_url?: string | null
+          notes?: string | null
+          price?: number
+          responded_at?: string | null
+          starts_at: string
+          status?: string
+          student_id: string
+          subject: string
+          tutor_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          ends_at?: string
+          expires_at?: string | null
+          id?: string
+          livekit_room?: string | null
+          meeting_url?: string | null
+          notes?: string | null
+          price?: number
+          responded_at?: string | null
+          starts_at?: string
+          status?: string
+          student_id?: string
+          subject?: string
+          tutor_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tutor_reviews: {
+        Row: {
+          body: string | null
+          booking_id: string
+          created_at: string
+          rating: number
+          student_id: string
+          tutor_id: string
+        }
+        Insert: {
+          body?: string | null
+          booking_id: string
+          created_at?: string
+          rating: number
+          student_id: string
+          tutor_id: string
+        }
+        Update: {
+          body?: string | null
+          booking_id?: string
+          created_at?: string
+          rating?: number
+          student_id?: string
+          tutor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutor_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "tutor_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       uptime_checks: {
         Row: {
           checked_at: string
@@ -728,11 +919,14 @@ export type Database = {
       admin_list_live_classes: {
         Args: never
         Returns: {
+          audience_mode: string
+          calendar_event_id: string | null
           course_slug: string
           created_at: string
           created_by: string | null
           description: string | null
           duration_min: number
+          first_started_at: string | null
           host_name: string
           id: string
           meeting_url: string | null
@@ -756,6 +950,7 @@ export type Database = {
         Args: { _class_id: string }
         Returns: string
       }
+      has_confirmed_enrollment: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -766,7 +961,7 @@ export type Database = {
       live_class_rsvp_count: { Args: { _class_id: string }; Returns: number }
     }
     Enums: {
-      app_role: "admin" | "editor" | "user"
+      app_role: "admin" | "editor" | "user" | "tutor" | "finance"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -894,7 +1089,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "editor", "user"],
+      app_role: ["admin", "editor", "user", "tutor", "finance"],
     },
   },
 } as const
