@@ -1,0 +1,31 @@
+# Replace YOUR_DOMAIN with the FQDN pointing to this VPS (e.g. voice.trendflux.digital).
+# Caddy auto-provisions and renews Let's Encrypt certs.
+YOUR_DOMAIN {
+	encode zstd gzip
+
+	# Optional: protect with a static bearer token (matches XTTS_API_TOKEN).
+	# @noauth not header Authorization "Bearer CHANGE_ME"
+	# respond @noauth 401
+
+	# Large file uploads for voice samples
+	request_body {
+		max_size 25MB
+	}
+
+	reverse_proxy 127.0.0.1:8000 {
+		# XTTS first generation can be slow on CPU
+		transport http {
+			read_timeout 5m
+			write_timeout 5m
+			dial_timeout 10s
+		}
+	}
+
+	log {
+		output file /var/log/caddy/voice-clone.log {
+			roll_size 50MB
+			roll_keep 5
+		}
+		format json
+	}
+}
