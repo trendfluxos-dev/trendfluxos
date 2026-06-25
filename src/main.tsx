@@ -2,6 +2,15 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
+// Corporate edtech typography — Inter (latin) + Hind Siliguri (Bangla)
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import "@fontsource/hind-siliguri/400.css";
+import "@fontsource/hind-siliguri/500.css";
+import "@fontsource/hind-siliguri/600.css";
+import "@fontsource/hind-siliguri/700.css";
 import {
   installErrorLogger,
   getPendingCorrelationId,
