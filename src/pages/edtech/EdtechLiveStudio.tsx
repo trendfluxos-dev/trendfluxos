@@ -10,6 +10,7 @@ import EdtechShell from "@/components/edtech/EdtechShell";
 import StudioAiPanel from "@/components/edtech/StudioAiPanel";
 import { AddMaterialDialog } from "@/components/edtech/AddMaterialDialog";
 import { Whiteboard } from "@/components/edtech/Whiteboard";
+import { ShareWindowDialog } from "@/components/edtech/ShareWindowDialog";
 import { EDTECH } from "@/config/edtech";
 import { useSeo } from "@/hooks/useSeo";
 import {
@@ -22,7 +23,7 @@ import {
   fetchLiveState, setLiveState, type ActiveSourceType,
 } from "@/lib/liveState";
 import { supabase } from "@/integrations/supabase/client";
-import { pickWindowStream, startTeacherBroadcast, type BroadcastHandle } from "@/lib/screenBroadcast";
+import { startTeacherBroadcast, type BroadcastHandle } from "@/lib/screenBroadcast";
 
 type StageSource =
   | { type: "none"; payload: Record<string, unknown> }
@@ -55,25 +56,28 @@ const EdtechLiveStudio = () => {
   const [live, setLive] = useState<{ source: StageSource; visible: boolean }>({ source: EMPTY, visible: false });
   const [webUrl, setWebUrl] = useState("");
   const [sharing, setSharing] = useState(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const broadcastRef = useRef<BroadcastHandle | null>(null);
 
-  const startWindowShare = useCallback(async () => {
+  const openShareDialog = useCallback(() => {
     if (!id) return;
-    try {
-      const stream = await pickWindowStream();
-      const handle = startTeacherBroadcast(id, stream);
-      broadcastRef.current = handle;
-      setSharing(true);
-      stream.getVideoTracks()[0]?.addEventListener("ended", () => {
-        broadcastRef.current = null;
-        setSharing(false);
-        toast("Screen share ended");
-      });
-      toast.success("Sharing window with students");
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Could not start screen share";
-      if (!/cancel|denied/i.test(msg)) toast.error(msg);
-    }
+    setShareDialogOpen(true);
+  }, [id]);
+
+  const handleShareConfirmed = useCallback((stream: MediaStream) => {
+    if (!id) return;
+    // Replace any prior broadcast (supports repick mid-session).
+    broadcastRef.current?.stop();
+    const handle = startTeacherBroadcast(id, stream);
+    broadcastRef.current = handle;
+    setSharing(true);
+    setShareDialogOpen(false);
+    stream.getVideoTracks()[0]?.addEventListener("ended", () => {
+      broadcastRef.current = null;
+      setSharing(false);
+      toast("Screen share ended");
+    });
+    toast.success("Sharing window with students");
   }, [id]);
 
   const stopWindowShare = useCallback(() => {
@@ -304,11 +308,16 @@ const EdtechLiveStudio = () => {
               <RotateCcw className="h-3.5 w-3.5" /> Reset
             </button>
             {sharing ? (
-              <button type="button" onClick={stopWindowShare} className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-rose-500/90">
-                <MonitorOff className="h-3.5 w-3.5" /> Stop sharing
-              </button>
+              <>
+                <button type="button" onClick={openShareDialog} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80" title="অন্য window বেছে নিন">
+                  <MonitorUp className="h-3.5 w-3.5" /> Repick
+                </button>
+                <button type="button" onClick={stopWindowShare} className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-rose-500/90">
+                  <MonitorOff className="h-3.5 w-3.5" /> Stop sharing
+                </button>
+              </>
             ) : (
-              <button type="button" onClick={startWindowShare} className="inline-flex items-center gap-1.5 rounded-full border border-primary/50 bg-primary/10 px-3 py-1.5 text-[12px] font-semibold text-primary hover:bg-primary/20">
+              <button type="button" onClick={openShareDialog} className="inline-flex items-center gap-1.5 rounded-full border border-primary/50 bg-primary/10 px-3 py-1.5 text-[12px] font-semibold text-primary hover:bg-primary/20">
                 <MonitorUp className="h-3.5 w-3.5" /> Share window
               </button>
             )}
@@ -424,6 +433,12 @@ const EdtechLiveStudio = () => {
           </div>
         </aside>
       </main>
+      <ShareWindowDialog
+        open={shareDialogOpen}
+        onClose={() => setShareDialogOpen(false)}
+        onConfirm={handleShareConfirmed}
+        studentUrl={studentUrl || undefined}
+      />
     </EdtechShell>
   );
 };
