@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ArrowRight, CheckCircle2, Clock, GraduationCap, Users } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, Clock, GraduationCap, Users } from "lucide-react";
 import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
 import { getCourseBySlug } from "@/data/edtechCourses";
@@ -183,6 +183,12 @@ const EdtechCourseDetail = () => {
                 className="mt-5 inline-flex w-full min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 Enroll now <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+              <Link
+                to={EDTECH.routes.learn(course.slug)}
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full border border-border/60 bg-background/40 px-4 py-2 text-[12px] font-medium text-foreground/80 hover:bg-background/70 hover:text-foreground"
+              >
+                <BookOpen className="h-3.5 w-3.5" aria-hidden /> Preview lessons
               </Link>
               <p className="mt-3 text-center text-[11px] text-foreground/55">
                 Secure payment · seat confirmed after admin verification

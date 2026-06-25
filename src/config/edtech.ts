@@ -17,5 +17,8 @@ export const EDTECH = {
     certificate: "/edtech/certificate",
     certificateFor: (slug: string) => `/edtech/certificate/${slug}`,
     verify: "/edtech/verify",
+    myLearning: "/edtech/my-learning",
+    learn: (slug: string) => `/edtech/learn/${slug}`,
+    learnLesson: (slug: string, n: string) => `/edtech/learn/${slug}/${n}`,
   },
 } as const;

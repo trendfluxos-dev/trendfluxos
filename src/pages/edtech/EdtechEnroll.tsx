@@ -9,6 +9,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
 import { useToast } from "@/hooks/use-toast";
 import { track } from "@/lib/analytics";
+import { enroll as markEnrolled } from "@/lib/edtechProgress";
 
 const formatBdt = (n: number) =>
   new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(n);
@@ -50,6 +51,10 @@ const EdtechEnroll = () => {
         course_slug: course.slug,
         amount_bdt: price,
       });
+      // Unlock My Learning + Lesson Player for this device immediately.
+      // Server-verified enrolment still happens in Phase 2; this only powers
+      // the local progress UI so students can start prep work right away.
+      markEnrolled(course.slug);
       // Briefly defer so the success state feels intentional, not instant.
       await new Promise((r) => setTimeout(r, 350));
       setSubmitted(true);
@@ -98,10 +103,10 @@ const EdtechEnroll = () => {
                   You'll get an email once your seat is confirmed.
                 </p>
                 <Link
-                  to={EDTECH.routes.courses}
+                  to={EDTECH.routes.learn(course.slug)}
                   className="mt-6 inline-flex items-center justify-center rounded-full border border-border bg-background px-5 py-2 text-sm font-semibold text-foreground hover:bg-accent"
                 >
-                  Back to all courses
+                  Start learning →
                 </Link>
               </div>
             ) : (
