@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft, Copy, ExternalLink, Eye, EyeOff, FileText, Film, File as FileIcon,
   Globe, Image as ImageIcon, Link2, Lock, Pencil, PlayCircle, Play,
-  Radio, RotateCcw, Send, StopCircle, Trash2, ChevronDown,
+  Radio, RotateCcw, Send, StopCircle, Trash2, ChevronDown, MonitorUp, MonitorOff,
 } from "lucide-react";
 import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
@@ -22,6 +22,7 @@ import {
   fetchLiveState, setLiveState, type ActiveSourceType,
 } from "@/lib/liveState";
 import { supabase } from "@/integrations/supabase/client";
+import { pickWindowStream, startTeacherBroadcast, type BroadcastHandle } from "@/lib/screenBroadcast";
 
 type StageSource =
   | { type: "none"; payload: Record<string, unknown> }
