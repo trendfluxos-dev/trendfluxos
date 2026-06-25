@@ -791,53 +791,85 @@
 
   /* --- Edtech (কর্মশিক্ষা TED Plus): forest green + warm gold ------------ */
   [data-brand="edtech"] {
-    /* Override core shadcn tokens for this surface only */
-    --background: 140 30% 97%;
-    --foreground: 150 25% 12%;
+    /* TrendFlux EdTech — Corporate Premium palette
+       Primary #0F7B5F · Dark #0E1726 · Surface #F8FAFC
+       Accent Mint #DDF6EC · Gold #C7A86D · Text #0F172A / #64748B */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 150 25% 12%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 150 25% 12%;
-    --primary: 110 75% 26%;
-    --primary-foreground: 140 30% 98%;
-    --secondary: 140 20% 94%;
-    --secondary-foreground: 150 25% 18%;
-    --muted: 140 18% 95%;
-    --muted-foreground: 150 8% 42%;
-    --accent: 140 35% 90%;
-    --accent-foreground: 150 30% 20%;
-    --border: 140 18% 88%;
-    --input: 140 18% 90%;
-    --ring: 110 75% 26%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 165 78% 27%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 152 65% 92%;
+    --secondary-foreground: 165 78% 18%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 152 65% 92%;
+    --accent-foreground: 165 78% 20%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 165 78% 27%;
+    --radius: 1rem;
 
-    /* Brand-specific extras */
-    --edtech-gold: 43 89% 60%;
-    --edtech-gold-foreground: 38 60% 18%;
-    --edtech-shadow-stage: 0 30px 60px -20px hsl(150 30% 18% / 0.25);
-    --edtech-shadow-panel: 0 8px 24px -10px hsl(150 30% 18% / 0.15);
+    --edtech-gold: 39 45% 60%;
+    --edtech-gold-foreground: 38 55% 18%;
+    --edtech-ink: 218 46% 10%;
+    --edtech-mint: 152 65% 92%;
+    --edtech-shadow-stage: 0 24px 60px -28px hsl(218 46% 10% / 0.25);
+    --edtech-shadow-panel: 0 6px 18px -10px hsl(218 46% 10% / 0.12), 0 1px 0 0 hsl(214 32% 91% / 1);
   }
   .dark [data-brand="edtech"],
   [data-brand="edtech"].dark {
-    --background: 150 25% 9%;
-    --foreground: 140 25% 96%;
-    --card: 150 22% 13%;
-    --card-foreground: 140 25% 96%;
-    --popover: 150 22% 13%;
-    --popover-foreground: 140 25% 96%;
-    --primary: 110 55% 55%;
-    --primary-foreground: 150 30% 10%;
-    --secondary: 150 18% 18%;
-    --secondary-foreground: 140 25% 96%;
-    --muted: 150 18% 18%;
-    --muted-foreground: 140 8% 70%;
-    --accent: 150 20% 22%;
-    --accent-foreground: 140 25% 96%;
-    --border: 140 10% 22%;
-    --input: 140 10% 25%;
-    --ring: 110 55% 55%;
-    --edtech-gold: 43 85% 62%;
-    --edtech-gold-foreground: 38 60% 14%;
+    --background: 218 46% 8%;
+    --foreground: 210 40% 96%;
+    --card: 218 40% 12%;
+    --card-foreground: 210 40% 96%;
+    --popover: 218 40% 12%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 165 60% 48%;
+    --primary-foreground: 218 46% 8%;
+    --secondary: 218 30% 18%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 218 28% 16%;
+    --muted-foreground: 215 18% 68%;
+    --accent: 165 40% 22%;
+    --accent-foreground: 152 65% 92%;
+    --border: 218 24% 22%;
+    --input: 218 24% 22%;
+    --ring: 165 60% 48%;
+    --edtech-gold: 39 55% 65%;
+    --edtech-gold-foreground: 218 46% 8%;
+    --edtech-ink: 218 46% 6%;
+    --edtech-mint: 165 40% 22%;
+    --edtech-shadow-stage: 0 30px 60px -24px hsl(0 0% 0% / 0.6);
+    --edtech-shadow-panel: 0 6px 18px -10px hsl(0 0% 0% / 0.45), inset 0 1px 0 0 hsl(210 40% 96% / 0.04);
   }
+
+  /* Corporate typography — Inter (latin) + Hind Siliguri (Bangla) */
+  [data-brand="edtech"] {
+    font-family: 'Inter', 'Hind Siliguri', system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  [data-brand="edtech"] :lang(bn),
+  [data-brand="edtech"] [lang="bn"] {
+    font-family: 'Hind Siliguri', 'Inter', system-ui, sans-serif;
+    letter-spacing: 0;
+  }
+  [data-brand="edtech"] h1,
+  [data-brand="edtech"] h2,
+  [data-brand="edtech"] h3,
+  [data-brand="edtech"] h4 {
+    font-family: 'Inter', 'Hind Siliguri', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: hsl(var(--foreground));
+  }
+  [data-brand="edtech"] p,
+  [data-brand="edtech"] li { letter-spacing: 0; }
 
   /* Scoped utilities used by the edtech surface */
   [data-brand="edtech"] .edtech-stage-grid {
