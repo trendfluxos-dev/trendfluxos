@@ -5,6 +5,7 @@ import { EDTECH } from "@/config/edtech";
 const links = [
   { to: EDTECH.routes.home, label: "Home" },
   { to: EDTECH.routes.courses, label: "Courses" },
+  { to: EDTECH.routes.live, label: "Live" },
   { to: EDTECH.routes.myLearning, label: "My Learning" },
   { to: EDTECH.routes.pricing, label: "Pricing" },
 ];
