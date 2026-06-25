@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Sparkles, Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Sparkles, Loader2, Check } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { fetchTeacherNote, saveTeacherNote } from "@/lib/teacherNotes";
 
 type Preset = "explain" | "examples" | "quiz" | "summary" | "answer";
 
@@ -16,13 +17,59 @@ const PRESETS: { id: Preset; label: string }[] = [
 /**
  * Teacher-only AI helper. Output stays local — never broadcast to viewers.
  */
-const StudioAiPanel = () => {
+interface Props {
+  classId?: string;
+}
+
+const StudioAiPanel = ({ classId }: Props = {}) => {
   const [tab, setTab] = useState<"notes" | "ai" | "web">("notes");
   const [preset, setPreset] = useState<Preset>("explain");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [busy, setBusy] = useState(false);
   const [notes, setNotes] = useState("");
+  const [noteState, setNoteState] = useState<"idle" | "saving" | "saved">("idle");
+  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loadedFor = useRef<string | null>(null);
+
+  // Load notes once per class
+  useEffect(() => {
+    if (!classId) return;
+    let cancelled = false;
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || cancelled) return;
+      try {
+        const note = await fetchTeacherNote(classId, user.id);
+        if (!cancelled) {
+          setNotes(note?.content ?? "");
+          loadedFor.current = classId;
+        }
+      } catch (e) {
+        console.warn("notes load failed", e);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [classId]);
+
+  // Debounced autosave
+  useEffect(() => {
+    if (!classId || loadedFor.current !== classId) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    setNoteState("saving");
+    saveTimer.current = setTimeout(async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      try {
+        await saveTeacherNote(classId, user.id, notes);
+        setNoteState("saved");
+      } catch (e) {
+        setNoteState("idle");
+        toast.error(e instanceof Error ? e.message : "Could not save note");
+      }
+    }, 800);
+    return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
+  }, [notes, classId]);
 
   const run = async () => {
     if (!input.trim()) return;
@@ -116,13 +163,26 @@ const StudioAiPanel = () => {
       )}
 
       {tab === "notes" && (
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={10}
-          placeholder="Private notes…"
-          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-[13px]"
-        />
+        <>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={10}
+            placeholder={classId ? "Private notes — auto-saved…" : "Private notes…"}
+            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-[13px]"
+          />
+          {classId && (
+            <p className="mt-2 flex items-center gap-1 text-[10px] text-foreground/55">
+              {noteState === "saving" ? (
+                <><Loader2 className="h-3 w-3 animate-spin" /> Saving…</>
+              ) : noteState === "saved" ? (
+                <><Check className="h-3 w-3 text-emerald-500" /> Saved · only you can see this</>
+              ) : (
+                <>🔒 Private to you — never broadcast</>
+              )}
+            </p>
+          )}
+        </>
       )}
 
       {tab === "web" && (

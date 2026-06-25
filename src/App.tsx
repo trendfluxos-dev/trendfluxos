@@ -164,6 +164,7 @@ const RoutedApp = () => {
         <Route path="/edtech" element={<EdtechHome />} />
         {/* No-account student join via teacher's share link */}
         <Route path="/class/:token" element={<ClassByToken />} />
+        <Route path="/edtech/join/:token" element={<ClassByToken />} />
         <Route path="/edtech/courses" element={<EdtechCourses />} />
         <Route path="/edtech/courses/:slug" element={<EdtechCourseDetail />} />
         <Route path="/edtech/enroll/:slug" element={<EdtechEnroll />} />
