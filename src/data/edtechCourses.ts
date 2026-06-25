@@ -70,12 +70,92 @@ export const EDTECH_COURSES: Course[] = [
     format: "Live + Recorded",
     durationWeeks: 6,
     lessons: [
-      { n: "01", title: "AI Foundation & Prompting", duration: "60 min" },
-      { n: "02", title: "Workflow Automation with n8n", duration: "90 min" },
-      { n: "03", title: "CRM & Data Systems", duration: "75 min" },
-      { n: "04", title: "Content Engine on Autopilot", duration: "80 min" },
+      {
+        n: "01",
+        title: "AI Foundation & Prompting",
+        duration: "60 min",
+        content: {
+          type: "video",
+          src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+          poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg",
+        },
+      },
+      {
+        n: "02",
+        title: "Workflow Automation with n8n",
+        duration: "90 min",
+        content: {
+          type: "checklist",
+          items: [
+            "Install n8n locally or sign up for n8n cloud",
+            "Create a webhook → Supabase insert workflow",
+            "Add a Telegram alert on failure",
+            "Document the workflow in your runbook",
+          ],
+        },
+      },
+      {
+        n: "03",
+        title: "CRM & Data Systems",
+        duration: "75 min",
+        content: {
+          type: "reading",
+          body: [
+            "A CRM is not a contact list — it is the single source of truth for every revenue conversation in your business.",
+            "In this lesson we cover the four pipelines every growth operator should run: inbound, outbound, retention and reactivation.",
+            "By the end you should be able to score, route and report on leads without manual spreadsheet work.",
+          ],
+        },
+      },
+      {
+        n: "04",
+        title: "Content Engine on Autopilot",
+        duration: "80 min",
+        content: {
+          type: "audio",
+          src: "https://cdn.pixabay.com/audio/2022/10/30/audio_347111d654.mp3",
+        },
+      },
       { n: "05", title: "Analytics & Growth Loops", duration: "60 min" },
-      { n: "06", title: "Agents & Multi-step Reasoning", duration: "90 min" },
+      {
+        n: "06",
+        title: "Agents & Multi-step Reasoning",
+        duration: "90 min",
+        content: {
+          type: "quiz",
+          passScore: 2,
+          questions: [
+            {
+              q: "What's the safest first step before letting an AI agent take destructive actions?",
+              options: [
+                "Give it admin keys and watch logs",
+                "Wrap each action in a dry-run + human approval",
+                "Run it on production directly",
+              ],
+              answer: 1,
+              explain: "Dry-runs + human approvals catch >90% of bad agent behaviour.",
+            },
+            {
+              q: "Which signal is most useful for evaluating an agent's reliability over time?",
+              options: [
+                "Subjective vibes",
+                "Per-step success rate + cost",
+                "Total tokens spent",
+              ],
+              answer: 1,
+            },
+            {
+              q: "Multi-step reasoning works best when…",
+              options: [
+                "Steps are tiny, well-defined and verifiable",
+                "The prompt is one giant paragraph",
+                "The model picks its own tools without limits",
+              ],
+              answer: 0,
+            },
+          ],
+        },
+      },
       { n: "07", title: "Capstone Build & Review", duration: "120 min" },
     ],
     outcomes: [
