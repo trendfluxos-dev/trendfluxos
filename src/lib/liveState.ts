@@ -17,6 +17,7 @@
  */
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 export type ActiveSourceType =
   | "none"
@@ -71,9 +72,9 @@ export async function setLiveState(
   const row = {
     class_id: classId,
     active_source_type: patch.active_source_type ?? "none",
-    payload: patch.payload ?? {},
+    payload: (patch.payload ?? {}) as unknown as Json,
     is_live_visible: patch.is_live_visible ?? false,
-    whiteboard_snapshot: patch.whiteboard_snapshot ?? null,
+    whiteboard_snapshot: (patch.whiteboard_snapshot ?? null) as unknown as Json,
     updated_by: auth.user?.id ?? null,
   };
   const { error } = await supabase

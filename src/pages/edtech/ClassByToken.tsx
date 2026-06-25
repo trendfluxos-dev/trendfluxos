@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { SeoHead } from "@/hooks/useSeo";
+import { useSeo } from "@/hooks/useSeo";
 
 /**
  * No-account student join surface (`/class/:token`).
@@ -33,6 +33,7 @@ export default function ClassByToken() {
   const [data, setData] = useState<TokenClass | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  useSeo({ title: data ? `${data.title} — Live Class` : "Live Class" });
 
   useEffect(() => {
     let cancelled = false;
@@ -98,7 +99,6 @@ export default function ClassByToken() {
 
   return (
     <div className="min-h-dvh bg-background text-foreground" lang="bn">
-      <SeoHead title={`${data.title} — Live Class`} description={data.description ?? "Live class"} />
       <header className="border-b border-border/60 bg-card/40 px-4 py-3">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
           <div>
