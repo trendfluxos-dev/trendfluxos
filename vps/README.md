@@ -1,45 +1,62 @@
-# Voice Clone Studio — VPS (One-Prompt Publish)
+# Voice Clone Studio — VPS Deployment Package
 
-Stable single-voice XTTS-v2 backend. Pairs with TrendFlux `/voice-clone` + `xtts-proxy` edge function.
+Production-grade XTTS-v2 backend. Pairs with TrendFlux `/voice-clone` studio, `/voice-clone/deploy` console, and the `xtts-proxy` / `xtts-deploy` edge functions.
 
-## One-command deploy
+## Pick your path
 
-```bash
-cd vps
-bash deploy.sh
-```
+| Path | Best for | Command |
+|---|---|---|
+| **Dev / quick test** | Local box, smoke-test | `bash deploy.sh` |
+| **Production (systemd + Caddy HTTPS)** | Single VPS, sellable | `sudo bash install.sh voice.example.com` |
+| **Production (Docker)** | Portable, reproducible | `docker compose up -d` |
 
-What it does:
-1. Installs system + Python deps
-2. Creates venv, installs `requirements.txt`
-3. Creates `voices/` and `outputs/`
-4. Boots `uvicorn app:app` on `:8000` (background, logs → `server.log`)
-5. Waits for `/docs` health check (XTTS first-run model download = 2–5 min)
-6. Prints LIVE status + URL to paste into `XTTS_ENDPOINT_URL`
-
-## Wire to TrendFlux
-
-Add secrets in Lovable:
-- `XTTS_ENDPOINT_URL` = `http://<your-vps-ip>:8000` (or HTTPS domain)
-- `XTTS_API_TOKEN` *(optional)* = bearer token (also enforce in your reverse proxy)
-
-The `xtts-proxy` edge function will route requests immediately — no code change.
-
-## Endpoints
+All three serve the same API:
 
 | Method | Path | Body | Returns |
 |---|---|---|---|
-| POST | `/upload-voice` | multipart `file` | `{ voice_path }` (overwrites `voices/latest.wav`) |
-| POST | `/generate` | form `text`, optional `voice_path` | `audio/wav` |
+| POST | `/upload-voice` | multipart `file` | `{ voice_path }` (overwrites `voices/latest.wav`, triggers warmup) |
+| POST | `/generate` | form `text`, optional `voice_path` | `audio/wav` (single-flight lock) |
+| POST | `/warmup` | — | `{ warm: bool }` — manually warm the model |
 | GET  | `/health` | — | `{ status: "ok" }` |
 | GET  | `/docs` | — | Swagger UI |
 
-## Control layer
+## Production hardening included
 
-`deploy.json` is the single source of truth (mode, default voice, endpoints, languages). Edit once, redeploy with `bash deploy.sh`.
+- **`voice-clone.service`** — systemd unit with auto-restart, journald logs, sandbox hardening
+- **`Caddyfile`** — auto-HTTPS (Let's Encrypt), gzip+zstd, 5-min timeouts for slow first synth, log rotation
+- **`Dockerfile` + `docker-compose.yml`** — CPU build, persistent model cache, healthcheck (300s start period)
+- **`install.sh`** — one-command installer: deps → venv → systemd → Caddy + HTTPS → warmup → ready
+- **`deploy-webhook.sh`** — tiny redeploy script you can expose at a token-protected URL for the Lovable Deploy button
+- **Warmup on boot + on every upload** — eliminates cold-start latency
+- **Single-flight `/generate` lock** — prevents concurrent CPU saturation
+- **Zero-downtime-ish restart** — `systemctl restart voice-clone` (Caddy buffers in-flight requests)
 
-## Production hardening (optional)
+## Wire to TrendFlux (Lovable)
 
-- Caddy/Nginx in front of `:8000` for HTTPS + bearer auth
-- Run as systemd instead of `nohup`
-- GPU build: install CUDA torch and switch `TTS(..., gpu=True)` in `xtts_engine.py`
+Set these secrets in Lovable:
+- **`XTTS_ENDPOINT_URL`** = `https://voice.example.com` (your Caddy-fronted domain)
+- **`XTTS_API_TOKEN`** *(optional)* = bearer token (also enforce in `Caddyfile`)
+- **`XTTS_DEPLOY_WEBHOOK_URL`** *(optional)* = `https://voice.example.com/redeploy` (route `deploy-webhook.sh`)
+- **`XTTS_DEPLOY_WEBHOOK_TOKEN`** *(optional)* = bearer for the webhook
+
+Then the `/voice-clone/deploy` page lights up: live status, one-click deploy, smoke test.
+
+## Operations cheatsheet
+
+```bash
+# Tail logs
+journalctl -u voice-clone -f
+
+# Restart (graceful)
+sudo systemctl restart voice-clone
+
+# Warmup manually
+curl -X POST http://127.0.0.1:8000/warmup
+
+# Health
+curl https://voice.example.com/health
+```
+
+## GPU build (optional)
+
+Install CUDA torch and change `TTS(..., gpu=True)` in `xtts_engine.py`. Single-flight lock can be relaxed once GPU memory headroom is confirmed.
