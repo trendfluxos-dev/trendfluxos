@@ -21,6 +21,7 @@ import {
 import {
   fetchLiveState, setLiveState, type ActiveSourceType,
 } from "@/lib/liveState";
+import { supabase } from "@/integrations/supabase/client";
 
 type StageSource =
   | { type: "none"; payload: Record<string, unknown> }
@@ -142,13 +143,12 @@ const EdtechLiveStudio = () => {
         active_source_type: live.source.type as ActiveSourceType,
         payload: live.source.payload as Record<string, unknown>,
         is_live_visible: false,
-      }, { notifyStudents: true });
-      // Force broadcast even though is_live_visible is false:
-      await setLiveState(id, {
-        active_source_type: live.source.type as ActiveSourceType,
-        payload: live.source.payload as Record<string, unknown>,
-        is_live_visible: false,
       });
+      // Force-notify students that visibility flipped off.
+      const ch = supabase.channel(`class:${id}`);
+      await ch.subscribe();
+      await ch.send({ type: "broadcast", event: "live_changed", payload: { at: Date.now() } });
+      void supabase.removeChannel(ch);
       setLive({ ...live, visible: false });
       toast("Hidden — students see waiting screen");
     } catch (e) {
