@@ -1144,6 +1144,7 @@ export type Database = {
       voice_profiles: {
         Row: {
           created_at: string
+          elevenlabs_voice_id: string | null
           gender: string
           id: string
           language: string
@@ -1159,6 +1160,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          elevenlabs_voice_id?: string | null
           gender?: string
           id?: string
           language?: string
@@ -1174,6 +1176,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          elevenlabs_voice_id?: string | null
           gender?: string
           id?: string
           language?: string
