@@ -54,6 +54,36 @@ const EdtechLiveStudio = () => {
   const [stage, setStage] = useState<StageSource>(EMPTY);
   const [live, setLive] = useState<{ source: StageSource; visible: boolean }>({ source: EMPTY, visible: false });
   const [webUrl, setWebUrl] = useState("");
+  const [sharing, setSharing] = useState(false);
+  const broadcastRef = useRef<BroadcastHandle | null>(null);
+
+  const startWindowShare = useCallback(async () => {
+    if (!id) return;
+    try {
+      const stream = await pickWindowStream();
+      const handle = startTeacherBroadcast(id, stream);
+      broadcastRef.current = handle;
+      setSharing(true);
+      stream.getVideoTracks()[0]?.addEventListener("ended", () => {
+        broadcastRef.current = null;
+        setSharing(false);
+        toast("Screen share ended");
+      });
+      toast.success("Sharing window with students");
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Could not start screen share";
+      if (!/cancel|denied/i.test(msg)) toast.error(msg);
+    }
+  }, [id]);
+
+  const stopWindowShare = useCallback(() => {
+    broadcastRef.current?.stop();
+    broadcastRef.current = null;
+    setSharing(false);
+    toast("Stopped sharing");
+  }, []);
+
+  useEffect(() => () => { broadcastRef.current?.stop(); }, []);
 
   useSeo({ title: cls ? `Live studio — ${cls.title}` : "Live studio", noindex: true });
 
