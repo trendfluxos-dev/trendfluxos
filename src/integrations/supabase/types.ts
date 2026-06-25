@@ -256,6 +256,83 @@ export type Database = {
         }
         Relationships: []
       }
+      live_class_rsvps: {
+        Row: {
+          class_id: string
+          created_at: string
+          id: string
+          reminder_opt_in: boolean
+          user_id: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          id?: string
+          reminder_opt_in?: boolean
+          user_id: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          id?: string
+          reminder_opt_in?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_class_rsvps_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_classes: {
+        Row: {
+          course_slug: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          duration_min: number
+          host_name: string
+          id: string
+          meeting_url: string | null
+          starts_at: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          course_slug: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          duration_min?: number
+          host_name?: string
+          id?: string
+          meeting_url?: string | null
+          starts_at: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          course_slug?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          duration_min?: number
+          host_name?: string
+          id?: string
+          meeting_url?: string | null
+          starts_at?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       luxe_veil_requests: {
         Row: {
           created_at: string
@@ -659,6 +736,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      live_class_rsvp_count: { Args: { _class_id: string }; Returns: number }
     }
     Enums: {
       app_role: "admin" | "editor" | "user"
