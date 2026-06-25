@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft, Copy, ExternalLink, Eye, EyeOff, FileText, Film, File as FileIcon,
   Globe, Image as ImageIcon, Link2, Lock, Pencil, PlayCircle, Play,
-  Radio, RotateCcw, Send, StopCircle, Trash2, ChevronDown,
+  Radio, RotateCcw, Send, StopCircle, Trash2, ChevronDown, MonitorUp, MonitorOff,
 } from "lucide-react";
 import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
@@ -22,6 +22,7 @@ import {
   fetchLiveState, setLiveState, type ActiveSourceType,
 } from "@/lib/liveState";
 import { supabase } from "@/integrations/supabase/client";
+import { pickWindowStream, startTeacherBroadcast, type BroadcastHandle } from "@/lib/screenBroadcast";
 
 type StageSource =
   | { type: "none"; payload: Record<string, unknown> }
@@ -53,6 +54,36 @@ const EdtechLiveStudio = () => {
   const [stage, setStage] = useState<StageSource>(EMPTY);
   const [live, setLive] = useState<{ source: StageSource; visible: boolean }>({ source: EMPTY, visible: false });
   const [webUrl, setWebUrl] = useState("");
+  const [sharing, setSharing] = useState(false);
+  const broadcastRef = useRef<BroadcastHandle | null>(null);
+
+  const startWindowShare = useCallback(async () => {
+    if (!id) return;
+    try {
+      const stream = await pickWindowStream();
+      const handle = startTeacherBroadcast(id, stream);
+      broadcastRef.current = handle;
+      setSharing(true);
+      stream.getVideoTracks()[0]?.addEventListener("ended", () => {
+        broadcastRef.current = null;
+        setSharing(false);
+        toast("Screen share ended");
+      });
+      toast.success("Sharing window with students");
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Could not start screen share";
+      if (!/cancel|denied/i.test(msg)) toast.error(msg);
+    }
+  }, [id]);
+
+  const stopWindowShare = useCallback(() => {
+    broadcastRef.current?.stop();
+    broadcastRef.current = null;
+    setSharing(false);
+    toast("Stopped sharing");
+  }, []);
+
+  useEffect(() => () => { broadcastRef.current?.stop(); }, []);
 
   useSeo({ title: cls ? `Live studio — ${cls.title}` : "Live studio", noindex: true });
 
@@ -272,6 +303,15 @@ const EdtechLiveStudio = () => {
             <button type="button" onClick={resetStage} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80">
               <RotateCcw className="h-3.5 w-3.5" /> Reset
             </button>
+            {sharing ? (
+              <button type="button" onClick={stopWindowShare} className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-rose-500/90">
+                <MonitorOff className="h-3.5 w-3.5" /> Stop sharing
+              </button>
+            ) : (
+              <button type="button" onClick={startWindowShare} className="inline-flex items-center gap-1.5 rounded-full border border-primary/50 bg-primary/10 px-3 py-1.5 text-[12px] font-semibold text-primary hover:bg-primary/20">
+                <MonitorUp className="h-3.5 w-3.5" /> Share window
+              </button>
+            )}
             {cls.status === "live" ? (
               <button type="button" onClick={endClass} className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-rose-500/90">
                 <StopCircle className="h-3.5 w-3.5" /> End class
