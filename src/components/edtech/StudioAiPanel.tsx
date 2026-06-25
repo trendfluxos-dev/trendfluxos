@@ -17,7 +17,7 @@ const PRESETS: { id: Preset; label: string }[] = [
  * Teacher-only AI helper. Output stays local — never broadcast to viewers.
  */
 const StudioAiPanel = () => {
-  const [tab, setTab] = useState<"ai" | "notes" | "web">("ai");
+  const [tab, setTab] = useState<"notes" | "ai" | "web">("notes");
   const [preset, setPreset] = useState<Preset>("explain");
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
@@ -46,18 +46,18 @@ const StudioAiPanel = () => {
 
   return (
     <div className="rounded-3xl border border-border/60 bg-card/40 p-5">
-      <div className="mb-3 flex items-center gap-1 rounded-full border border-border/60 bg-background/60 p-1 text-[12px]">
-        {(["ai", "notes", "web"] as const).map((t) => (
+      <div className="mb-3 grid grid-cols-3 gap-1 rounded-full border border-border/60 bg-background/60 p-1 text-[11px]">
+        {(["notes", "ai", "web"] as const).map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => setTab(t)}
             className={[
-              "flex-1 rounded-full px-3 py-1.5 font-semibold transition-colors",
+              "rounded-full px-2 py-1.5 font-semibold transition-colors",
               tab === t ? "bg-primary text-primary-foreground" : "text-foreground/65 hover:text-foreground",
             ].join(" ")}
           >
-            {t === "ai" ? "AI" : t === "notes" ? "Notes" : "Web"}
+            {t === "notes" ? "Private notes" : t === "ai" ? "AI assistant" : "Quick search"}
           </button>
         ))}
       </div>
