@@ -10,7 +10,7 @@ import {
   createLiveClass,
   deleteLiveClass,
   formatStartsAt,
-  listLiveClasses,
+  adminListLiveClasses,
   updateLiveClass,
   type LiveClass,
   type LiveClassStatus,
