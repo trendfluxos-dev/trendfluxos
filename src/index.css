@@ -789,6 +789,76 @@
     --brandtoki-warn: #f97316;
   }
 
+  /* --- Edtech (KormoShikkha): forest green + warm gold ------------ */
+  [data-brand="edtech"] {
+    /* Override core shadcn tokens for this surface only */
+    --background: 140 30% 97%;
+    --foreground: 150 25% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 25% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 25% 12%;
+    --primary: 110 75% 26%;
+    --primary-foreground: 140 30% 98%;
+    --secondary: 140 20% 94%;
+    --secondary-foreground: 150 25% 18%;
+    --muted: 140 18% 95%;
+    --muted-foreground: 150 8% 42%;
+    --accent: 140 35% 90%;
+    --accent-foreground: 150 30% 20%;
+    --border: 140 18% 88%;
+    --input: 140 18% 90%;
+    --ring: 110 75% 26%;
+
+    /* Brand-specific extras */
+    --edtech-gold: 43 89% 60%;
+    --edtech-gold-foreground: 38 60% 18%;
+    --edtech-shadow-stage: 0 30px 60px -20px hsl(150 30% 18% / 0.25);
+    --edtech-shadow-panel: 0 8px 24px -10px hsl(150 30% 18% / 0.15);
+  }
+  .dark [data-brand="edtech"],
+  [data-brand="edtech"].dark {
+    --background: 150 25% 9%;
+    --foreground: 140 25% 96%;
+    --card: 150 22% 13%;
+    --card-foreground: 140 25% 96%;
+    --popover: 150 22% 13%;
+    --popover-foreground: 140 25% 96%;
+    --primary: 110 55% 55%;
+    --primary-foreground: 150 30% 10%;
+    --secondary: 150 18% 18%;
+    --secondary-foreground: 140 25% 96%;
+    --muted: 150 18% 18%;
+    --muted-foreground: 140 8% 70%;
+    --accent: 150 20% 22%;
+    --accent-foreground: 140 25% 96%;
+    --border: 140 10% 22%;
+    --input: 140 10% 25%;
+    --ring: 110 55% 55%;
+    --edtech-gold: 43 85% 62%;
+    --edtech-gold-foreground: 38 60% 14%;
+  }
+
+  /* Scoped utilities used by the edtech surface */
+  [data-brand="edtech"] .edtech-stage-grid {
+    background-image:
+      linear-gradient(hsl(var(--primary) / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.06) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  [data-brand="edtech"] .edtech-text-gradient {
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--edtech-gold)));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  [data-brand="edtech"] .edtech-bg-gold { background-color: hsl(var(--edtech-gold)); }
+  [data-brand="edtech"] .edtech-bg-gold-soft { background-color: hsl(var(--edtech-gold) / 0.12); }
+  [data-brand="edtech"] .edtech-text-gold { color: hsl(var(--edtech-gold-foreground)); }
+  [data-brand="edtech"] .edtech-border-gold { border-color: hsl(var(--edtech-gold) / 0.4); }
+  [data-brand="edtech"] .edtech-shadow-panel { box-shadow: var(--edtech-shadow-panel); }
+  [data-brand="edtech"] .edtech-shadow-stage { box-shadow: var(--edtech-shadow-stage); }
+
   /* Sub-brands manage their own background — let the root paint it. */
   body:has([data-brand="marriage"]),
   body:has([data-brand="justice"]),
