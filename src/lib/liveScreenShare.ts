@@ -1,4 +1,20 @@
 /**
+ * @deprecated — DOES NOT match the EISH "Controlled Tab Broadcast" lock
+ * spec. This module calls `getDisplayMedia`, which means the teacher's
+ * browser-level screen picker is involved and there is a non-zero chance
+ * of leaking a tab, window title, or notification overlay to students.
+ *
+ * The replacement architecture is `src/lib/liveState.ts` + `class_materials`
+ * + a Presenter Dock UI that publishes ONE selected, in-app surface
+ * (PDF / image / video / whiteboard / web tab) to students via the
+ * `class:<id>` broadcast channel — no `getDisplayMedia` anywhere.
+ *
+ * Kept temporarily so the existing `EdtechLiveStudio` / `EdtechLiveWatch`
+ * pages keep compiling while the Studio is rewritten in the next pass.
+ * Do not import this file in any new code.
+ *
+ * Original module docs below.
+ * ---
  * Selective live screen sharing for কর্মশিক্ষা TED Plus live classes.
  *
  * The teacher uses the browser's getDisplayMedia picker to choose ONE

@@ -82,6 +82,7 @@ const Toolkit = routes["/toolkit"];
 const CourseTrendflux = routes["/course/trendflux"];
 const Masterclass = routes["/masterclass"];
 const EdtechHome = routes["/edtech"];
+const ClassByToken = routes["/class/:token"];
 const EdtechCourses = routes["/edtech/courses"];
 const EdtechCourseDetail = routes["/edtech/courses/:slug"];
 const EdtechEnroll = routes["/edtech/enroll/:slug"];
@@ -161,6 +162,8 @@ const RoutedApp = () => {
         <Route path="/course/trendflux" element={<CourseTrendflux />} />
         <Route path="/masterclass" element={<Masterclass />} />
         <Route path="/edtech" element={<EdtechHome />} />
+        {/* No-account student join via teacher's share link */}
+        <Route path="/class/:token" element={<ClassByToken />} />
         <Route path="/edtech/courses" element={<EdtechCourses />} />
         <Route path="/edtech/courses/:slug" element={<EdtechCourseDetail />} />
         <Route path="/edtech/enroll/:slug" element={<EdtechEnroll />} />
