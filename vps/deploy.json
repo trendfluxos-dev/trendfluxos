@@ -1,0 +1,13 @@
+{
+  "name": "voice-clone-studio",
+  "mode": "single-voice",
+  "vps_url": "http://YOUR_VPS_IP:8000",
+  "default_voice": "latest.wav",
+  "endpoints": {
+    "upload": "/upload-voice",
+    "generate": "/generate",
+    "health": "/docs"
+  },
+  "model": "tts_models/multilingual/multi-dataset/xtts_v2",
+  "languages": ["bn", "en"]
+}
