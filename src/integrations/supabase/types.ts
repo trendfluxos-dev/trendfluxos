@@ -1098,6 +1098,38 @@ export type Database = {
         }
         Relationships: []
       }
+      tutor_reviews_public: {
+        Row: {
+          body: string | null
+          booking_id: string | null
+          created_at: string | null
+          rating: number | null
+          tutor_id: string | null
+        }
+        Insert: {
+          body?: string | null
+          booking_id?: string | null
+          created_at?: string | null
+          rating?: number | null
+          tutor_id?: string | null
+        }
+        Update: {
+          body?: string | null
+          booking_id?: string | null
+          created_at?: string | null
+          rating?: number | null
+          tutor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tutor_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "tutor_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       admin_list_live_classes: {
