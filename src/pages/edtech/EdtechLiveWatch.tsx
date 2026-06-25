@@ -10,13 +10,23 @@ import {
   getLiveClass,
   type LiveClass,
 } from "@/lib/liveClasses";
-// Legacy WebRTC viewer was removed in favor of the controlled-tab broadcast
-// model. Students now join via the share-token route (`/class/:token`). This
-// page stays as a fallback that renders the "waiting" state.
-const useStudentViewer = (_id: string, _enabled: boolean) => ({
-  stream: null as MediaStream | null,
-  status: "connecting" as const,
-});
+import { startStudentReceiver } from "@/lib/screenBroadcast";
+
+// WebRTC viewer ported from the standalone Live Class Studio project.
+// Subscribes to `screen:<classId>` and renders the teacher's chosen window.
+const useStudentViewer = (id: string, enabled: boolean) => {
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [status, setStatus] = useState<"connecting" | "live">("connecting");
+  useEffect(() => {
+    if (!id || !enabled) return;
+    const handle = startStudentReceiver(id, (s) => {
+      setStream(s);
+      setStatus(s ? "live" : "connecting");
+    });
+    return () => handle.stop();
+  }, [id, enabled]);
+  return { stream, status };
+};
 
 /**
  * In-app student viewer for a live class. Anyone can open it (no login
