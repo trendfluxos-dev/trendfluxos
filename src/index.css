@@ -794,7 +794,7 @@
     /* TrendFlux EdTech — Corporate Premium palette
        Primary #0F7B5F · Dark #0E1726 · Surface #F8FAFC
        Accent Mint #DDF6EC · Gold #C7A86D · Text #0F172A / #64748B */
-    --background: 210 40% 98%;
+    --background: 152 30% 97%;            /* mint-tinted off-white for warmth */
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
@@ -804,12 +804,12 @@
     --primary-foreground: 0 0% 100%;
     --secondary: 152 65% 92%;
     --secondary-foreground: 165 78% 18%;
-    --muted: 210 40% 96%;
+    --muted: 152 30% 94%;
     --muted-foreground: 215 16% 47%;
     --accent: 152 65% 92%;
     --accent-foreground: 165 78% 20%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --border: 152 25% 86%;
+    --input: 152 25% 86%;
     --ring: 165 78% 27%;
     --radius: 1rem;
 
@@ -819,6 +819,20 @@
     --edtech-mint: 152 65% 92%;
     --edtech-shadow-stage: 0 24px 60px -28px hsl(218 46% 10% / 0.25);
     --edtech-shadow-panel: 0 6px 18px -10px hsl(218 46% 10% / 0.12), 0 1px 0 0 hsl(214 32% 91% / 1);
+  }
+
+  /* Light-mode polish — subtle aurora glow at top + gentle section separators */
+  [data-brand="edtech"] {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(165 60% 88% / 0.55), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 0%, hsl(39 70% 88% / 0.35), transparent 55%);
+    background-attachment: fixed;
+  }
+  .dark [data-brand="edtech"],
+  [data-brand="edtech"].dark {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(165 60% 30% / 0.25), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 100% 0%, hsl(39 50% 35% / 0.12), transparent 55%);
   }
   .dark [data-brand="edtech"],
   [data-brand="edtech"].dark {
