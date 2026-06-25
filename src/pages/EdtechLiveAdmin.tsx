@@ -58,7 +58,7 @@ const EdtechLiveAdmin = () => {
 
   const refresh = useCallback(async () => {
     try {
-      setClasses(await listLiveClasses());
+      setClasses(await adminListLiveClasses());
     } catch (err) {
       console.error(err);
       toast.error("Could not load classes.");
