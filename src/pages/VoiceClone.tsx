@@ -24,6 +24,7 @@ const VoiceClone = () => {
   const [sampleFile, setSampleFile] = useState<File | null>(null);
   const [sampleSaved, setSampleSaved] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [voicePath, setVoicePath] = useState<string>("");
 
   const [text, setText] = useState("");
   const [language, setLanguage] = useState<"en" | "bn">("bn");
@@ -58,6 +59,7 @@ const VoiceClone = () => {
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error ?? `Upload failed (${res.status})`);
       setSampleSaved(true);
+      if (json.voice_path) setVoicePath(String(json.voice_path));
       toast.success("Voice sample saved on your XTTS server");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Upload failed");
@@ -79,7 +81,12 @@ const VoiceClone = () => {
       const res = await fetch(`${fnUrl}?action=generate`, {
         method: "POST",
         headers: { ...headers, "Content-Type": "application/json" },
-        body: JSON.stringify({ text: trimmed, language }),
+        body: JSON.stringify({
+          text: trimmed,
+          language,
+          // Optional — if omitted, VPS falls back to latest file in voices/.
+          ...(voicePath ? { voice_path: voicePath } : {}),
+        }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({} as Record<string, unknown>));
