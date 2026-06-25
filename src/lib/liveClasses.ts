@@ -2,6 +2,15 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type LiveClassStatus = "scheduled" | "live" | "ended" | "cancelled";
 
+/**
+ * Columns safe to expose to anon/auth via the standard table API.
+ * `meeting_url` is intentionally excluded — it's gated by the
+ * `get_live_class_meeting_url` SECURITY DEFINER RPC and only returned
+ * to admins or RSVPed users.
+ */
+const PUBLIC_COLUMNS =
+  "id,course_slug,title,description,host_name,starts_at,duration_min,status,created_by,created_at,updated_at";
+
 export interface LiveClass {
   id: string;
   course_slug: string;
@@ -10,6 +19,7 @@ export interface LiveClass {
   host_name: string;
   starts_at: string;
   duration_min: number;
+  /** Hidden from non-RSVPed users. Always null when fetched publicly — use {@link getMeetingUrl}. */
   meeting_url: string | null;
   status: LiveClassStatus;
   created_by: string | null;
@@ -72,12 +82,18 @@ export const formatRelative = (iso: string) => {
 // ---------------------------------------------------------------------------
 
 export const listLiveClasses = async (opts?: { courseSlug?: string; upcomingOnly?: boolean }) => {
-  let q = supabase.from("live_classes").select("*").order("starts_at", { ascending: true });
+  let q = supabase
+    .from("live_classes")
+    .select(PUBLIC_COLUMNS)
+    .order("starts_at", { ascending: true });
   if (opts?.courseSlug) q = q.eq("course_slug", opts.courseSlug);
   if (opts?.upcomingOnly) q = q.in("status", ["scheduled", "live"]);
   const { data, error } = await q;
   if (error) throw error;
-  return (data ?? []) as LiveClass[];
+  return ((data ?? []) as unknown as Omit<LiveClass, "meeting_url">[]).map((c) => ({
+    ...c,
+    meeting_url: null,
+  })) as LiveClass[];
 };
 
 export const getRsvpCount = async (classId: string) => {
@@ -125,10 +141,10 @@ export const createLiveClass = async (input: LiveClassInput, createdBy: string) 
   const { data, error } = await supabase
     .from("live_classes")
     .insert({ ...input, created_by: createdBy })
-    .select("*")
+    .select(PUBLIC_COLUMNS)
     .single();
   if (error) throw error;
-  return data as LiveClass;
+  return { ...(data as unknown as Omit<LiveClass, "meeting_url">), meeting_url: null } as LiveClass;
 };
 
 export const updateLiveClass = async (id: string, patch: Partial<LiveClassInput>) => {
@@ -139,11 +155,12 @@ export const updateLiveClass = async (id: string, patch: Partial<LiveClassInput>
 export const getLiveClass = async (id: string) => {
   const { data, error } = await supabase
     .from("live_classes")
-    .select("*")
+    .select(PUBLIC_COLUMNS)
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
-  return (data ?? null) as LiveClass | null;
+  if (!data) return null;
+  return { ...(data as unknown as Omit<LiveClass, "meeting_url">), meeting_url: null } as LiveClass;
 };
 
 export const setLiveClassStatus = async (id: string, status: LiveClassStatus) => {
@@ -157,4 +174,27 @@ export const setLiveClassStatus = async (id: string, status: LiveClassStatus) =>
 export const deleteLiveClass = async (id: string) => {
   const { error } = await supabase.from("live_classes").delete().eq("id", id);
   if (error) throw error;
+};
+
+/**
+ * Fetch the meeting URL for a class. Returns `null` for callers who are
+ * neither admins nor RSVPed — the gate is enforced server-side by the
+ * `get_live_class_meeting_url` SECURITY DEFINER function.
+ */
+export const getMeetingUrl = async (classId: string): Promise<string | null> => {
+  const { data, error } = await supabase.rpc("get_live_class_meeting_url", {
+    _class_id: classId,
+  });
+  if (error) return null;
+  return (data as string | null) ?? null;
+};
+
+/**
+ * Admin-only listing including the protected `meeting_url`. Throws when the
+ * caller is not an admin (server-side check).
+ */
+export const adminListLiveClasses = async (): Promise<LiveClass[]> => {
+  const { data, error } = await supabase.rpc("admin_list_live_classes");
+  if (error) throw error;
+  return (data ?? []) as LiveClass[];
 };
