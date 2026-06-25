@@ -1004,6 +1004,48 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_cache: {
+        Row: {
+          audio_path: string
+          byte_size: number
+          cache_key: string
+          char_count: number
+          created_at: string
+          engine: string
+          hit_count: number
+          id: string
+          last_used_at: string
+          user_id: string
+          voice_id: string
+        }
+        Insert: {
+          audio_path: string
+          byte_size?: number
+          cache_key: string
+          char_count?: number
+          created_at?: string
+          engine: string
+          hit_count?: number
+          id?: string
+          last_used_at?: string
+          user_id: string
+          voice_id: string
+        }
+        Update: {
+          audio_path?: string
+          byte_size?: number
+          cache_key?: string
+          char_count?: number
+          created_at?: string
+          engine?: string
+          hit_count?: number
+          id?: string
+          last_used_at?: string
+          user_id?: string
+          voice_id?: string
+        }
+        Relationships: []
+      }
       voice_lecture_materials: {
         Row: {
           created_at: string
