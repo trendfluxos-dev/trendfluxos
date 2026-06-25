@@ -26,5 +26,14 @@ export const EDTECH = {
     liveStudio: (id: string) => `/edtech/live/studio/${id}`,
     liveWatch: (id: string) => `/edtech/live/watch/${id}`,
     adminLive: "/admin/edtech/live",
+    // Teacher workspace
+    teachOnboarding: "/edtech/teach/onboarding",
+    teachClasses: "/edtech/teach/classes",
+    teachBookings: "/edtech/teach/bookings",
+    // Tutor marketplace (Uber-for-tutors)
+    tutors: "/edtech/tutors",
+    tutorProfile: (id: string) => `/edtech/tutors/${id}`,
+    tutorBook: (id: string) => `/edtech/tutors/${id}/book`,
+    myBookings: "/edtech/me/bookings",
   },
 } as const;
