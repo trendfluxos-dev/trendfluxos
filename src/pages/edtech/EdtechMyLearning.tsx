@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, BookOpen, CheckCircle2, GraduationCap, RotateCcw } from "lucide-react";
+import { ArrowRight, BookOpen, CheckCircle2, GraduationCap, RotateCcw, Search, X } from "lucide-react";
 import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
 import { EDTECH } from "@/config/edtech";
@@ -25,11 +25,43 @@ const EdtechMyLearning = () => {
   const [, force] = useState(0);
   useEffect(() => subscribeProgress(() => force((n) => n + 1)), []);
 
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState<"all" | "in-progress" | "completed" | "not-started">("all");
+  const [sort, setSort] = useState<"recent" | "title" | "progress">("recent");
+
   const enrolled = useMemo(() => {
     return getEnrolledSlugs()
       .map((slug) => getCourseBySlug(slug))
       .filter((c): c is NonNullable<ReturnType<typeof getCourseBySlug>> => Boolean(c));
   }, []);
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const filtered = enrolled.filter((c) => {
+      if (q) {
+        const hay = `${c.title} ${c.tagline} ${c.category}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      const p = getProgress(c.slug);
+      const total = c.lessons.length;
+      const done = p.completed.length;
+      const pct = progressPercent(done, total);
+      if (status === "completed" && pct !== 100) return false;
+      if (status === "in-progress" && (pct === 0 || pct === 100)) return false;
+      if (status === "not-started" && pct !== 0) return false;
+      return true;
+    });
+    return [...filtered].sort((a, b) => {
+      if (sort === "title") return a.title.localeCompare(b.title);
+      if (sort === "progress") {
+        const pa = progressPercent(getProgress(a.slug).completed.length, a.lessons.length);
+        const pb = progressPercent(getProgress(b.slug).completed.length, b.lessons.length);
+        return pb - pa;
+      }
+      // recent
+      return (getProgress(b.slug).updatedAt ?? 0) - (getProgress(a.slug).updatedAt ?? 0);
+    });
+  }, [enrolled, query, status, sort]);
 
   const totalEnrolled = enrolled.length;
   const totalCompleted = enrolled.reduce((acc, c) => {
@@ -66,8 +98,66 @@ const EdtechMyLearning = () => {
           {enrolled.length === 0 ? (
             <EmptyState />
           ) : (
-            <ul className="grid gap-4">
-              {enrolled.map((course) => {
+            <>
+              <div className="mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-border/60 bg-card/40 p-3 backdrop-blur-sm">
+                <label className="relative flex min-w-[220px] flex-1 items-center">
+                  <Search className="pointer-events-none absolute left-3 h-4 w-4 text-foreground/45" aria-hidden />
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search your courses…"
+                    className="w-full rounded-xl border border-border/60 bg-background/60 py-2 pl-9 pr-9 text-sm text-foreground placeholder:text-foreground/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  />
+                  {query && (
+                    <button
+                      type="button"
+                      onClick={() => setQuery("")}
+                      aria-label="Clear search"
+                      className="absolute right-2 rounded-full p-1 text-foreground/45 hover:bg-accent hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" aria-hidden />
+                    </button>
+                  )}
+                </label>
+
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {(["all", "in-progress", "completed", "not-started"] as const).map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setStatus(s)}
+                      className={[
+                        "rounded-full border px-3 py-1.5 text-[12px] font-medium transition-colors",
+                        status === s
+                          ? "border-primary/50 bg-primary/15 text-foreground"
+                          : "border-border/60 bg-background/40 text-foreground/65 hover:bg-background/60 hover:text-foreground",
+                      ].join(" ")}
+                    >
+                      {s === "all" ? "All" : s === "in-progress" ? "In progress" : s === "completed" ? "Completed" : "Not started"}
+                    </button>
+                  ))}
+                </div>
+
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as typeof sort)}
+                  aria-label="Sort by"
+                  className="rounded-xl border border-border/60 bg-background/60 px-3 py-2 text-[12px] text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                >
+                  <option value="recent">Recently active</option>
+                  <option value="progress">Most progress</option>
+                  <option value="title">Title (A–Z)</option>
+                </select>
+              </div>
+
+              {visible.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-border/60 bg-card/30 p-10 text-center text-sm text-foreground/65">
+                  No courses match your filters. Try clearing the search or switching status.
+                </div>
+              ) : (
+                <ul className="grid gap-4">
+                  {visible.map((course) => {
                 const p = getProgress(course.slug);
                 const total = course.lessons.length;
                 const done = p.completed.length;
@@ -157,7 +247,9 @@ const EdtechMyLearning = () => {
                   </li>
                 );
               })}
-            </ul>
+                </ul>
+              )}
+            </>
           )}
         </div>
       </section>
