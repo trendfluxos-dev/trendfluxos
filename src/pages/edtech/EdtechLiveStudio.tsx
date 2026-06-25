@@ -303,6 +303,15 @@ const EdtechLiveStudio = () => {
             <button type="button" onClick={resetStage} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80">
               <RotateCcw className="h-3.5 w-3.5" /> Reset
             </button>
+            {sharing ? (
+              <button type="button" onClick={stopWindowShare} className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-rose-500/90">
+                <MonitorOff className="h-3.5 w-3.5" /> Stop sharing
+              </button>
+            ) : (
+              <button type="button" onClick={startWindowShare} className="inline-flex items-center gap-1.5 rounded-full border border-primary/50 bg-primary/10 px-3 py-1.5 text-[12px] font-semibold text-primary hover:bg-primary/20">
+                <MonitorUp className="h-3.5 w-3.5" /> Share window
+              </button>
+            )}
             {cls.status === "live" ? (
               <button type="button" onClick={endClass} className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-rose-500/90">
                 <StopCircle className="h-3.5 w-3.5" /> End class
