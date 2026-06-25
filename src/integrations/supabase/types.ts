@@ -1056,7 +1056,48 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      teacher_profiles_public: {
+        Row: {
+          avg_rating: number | null
+          bio: string | null
+          created_at: string | null
+          currency: string | null
+          expertise: string[] | null
+          headline: string | null
+          hourly_rate: number | null
+          languages: string[] | null
+          response_sla_minutes: number | null
+          user_id: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          avg_rating?: number | null
+          bio?: string | null
+          created_at?: string | null
+          currency?: string | null
+          expertise?: string[] | null
+          headline?: string | null
+          hourly_rate?: number | null
+          languages?: string[] | null
+          response_sla_minutes?: number | null
+          user_id?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          avg_rating?: number | null
+          bio?: string | null
+          created_at?: string | null
+          currency?: string | null
+          expertise?: string[] | null
+          headline?: string | null
+          hourly_rate?: number | null
+          languages?: string[] | null
+          response_sla_minutes?: number | null
+          user_id?: string | null
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       admin_list_live_classes: {

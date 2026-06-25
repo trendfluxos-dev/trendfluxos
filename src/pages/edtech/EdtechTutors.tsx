@@ -32,7 +32,7 @@ const EdtechTutors = () => {
   useEffect(() => {
     (async () => {
       const { data } = await supabase
-        .from("teacher_profiles")
+        .from("teacher_profiles_public" as never)
         .select("user_id,headline,bio,expertise,languages,hourly_rate,currency,avg_rating,verified_at")
         .not("verified_at", "is", null)
         .order("avg_rating", { ascending: false, nullsFirst: false });
