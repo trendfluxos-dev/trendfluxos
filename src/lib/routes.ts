@@ -66,6 +66,15 @@ export const routes = {
   "/edtech/live/studio/:id": make(() => import("@/pages/edtech/EdtechLiveStudio")),
   "/edtech/live/watch/:id": make(() => import("@/pages/edtech/EdtechLiveWatch")),
   "/admin/edtech/live": make(() => import("@/pages/EdtechLiveAdmin")),
+  // Teacher workspace
+  "/edtech/teach/onboarding": make(() => import("@/pages/edtech/EdtechTeachOnboarding")),
+  "/edtech/teach/classes": make(() => import("@/pages/edtech/EdtechTeachClasses")),
+  "/edtech/teach/bookings": make(() => import("@/pages/edtech/EdtechTeachBookings")),
+  // Tutor marketplace
+  "/edtech/tutors": make(() => import("@/pages/edtech/EdtechTutors")),
+  "/edtech/tutors/:id": make(() => import("@/pages/edtech/EdtechTutorProfile")),
+  "/edtech/tutors/:id/book": make(() => import("@/pages/edtech/EdtechTutorBook")),
+  "/edtech/me/bookings": make(() => import("@/pages/edtech/EdtechMyBookings")),
   "/press/:id": make(() => import("@/pages/PressDetail")),
   "/case-studies/:slug": make(() => import("@/pages/CaseStudyPage")),
   "/justice-appeal": make(() => import("@/pages/JusticeAppeal")),
