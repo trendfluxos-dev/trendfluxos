@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
+import LessonContent from "@/components/edtech/LessonContent";
 import { EDTECH } from "@/config/edtech";
 import { getCourseBySlug } from "@/data/edtechCourses";
 import { useSeo } from "@/hooks/useSeo";
@@ -76,6 +77,10 @@ const EdtechLessonPlayer = () => {
   const toggleComplete = () => {
     if (isDone) markLessonIncomplete(course.slug, activeN);
     else markLessonComplete(course.slug, activeN);
+  };
+
+  const handleAutoComplete = () => {
+    if (!isDone) markLessonComplete(course.slug, activeN);
   };
 
   const completeAndContinue = () => {
@@ -164,32 +169,29 @@ const EdtechLessonPlayer = () => {
             <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               {lesson.title}
             </h1>
-            <p className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1 text-[12px] text-foreground/65">
-              <Clock className="h-3.5 w-3.5" aria-hidden /> {lesson.duration}
-            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1 text-[12px] text-foreground/65">
+                <Clock className="h-3.5 w-3.5" aria-hidden /> {lesson.duration}
+              </span>
+              {lesson.content?.type && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/[0.07] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-primary">
+                  {lesson.content.type}
+                </span>
+              )}
+            </div>
 
-            {/* Lesson canvas — placeholder content area until video/notes wiring lands */}
+            {/* Lesson canvas — renders the correct surface per content type. */}
             <div className="mt-6 overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-card/60 via-card/30 to-card/10">
-              <div className="aspect-video w-full grid place-items-center bg-background/40">
-                <div className="text-center">
-                  <Sparkles className="mx-auto h-8 w-8 text-primary" aria-hidden />
-                  <p className="mt-3 text-sm font-medium text-foreground">
-                    Cohort video & notes unlock 24h before each session
-                  </p>
-                  <p className="mt-1 text-[12px] text-foreground/55">
-                    Recordings, slides and worksheets appear here once the
-                    instructor publishes them.
-                  </p>
-                </div>
-              </div>
-              <div className="space-y-3 p-6 text-[15px] leading-[1.75] text-foreground/85">
+              <LessonContent
+                slug={course.slug}
+                lesson={lesson}
+                isDone={isDone}
+                onAutoComplete={handleAutoComplete}
+              />
+              <div className="space-y-2 border-t border-border/40 p-6 text-[14px] leading-[1.7] text-foreground/80">
                 <p>
                   <strong className="font-semibold text-foreground">What you'll learn:</strong>{" "}
                   {course.outcomes[idx % course.outcomes.length]}
-                </p>
-                <p className="text-foreground/70">
-                  Work through the prep, attend the live session, then mark this
-                  lesson complete to keep your streak and unlock the next module.
                 </p>
               </div>
             </div>
