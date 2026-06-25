@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
+  PlayCircle,
   Radio,
   Users,
   XCircle,
@@ -306,6 +307,13 @@ const LiveCard = ({
               {isLive ? "Join live" : "Join room"}
               <ExternalLink className="h-3.5 w-3.5" aria-hidden />
             </a>
+          ) : isLive ? (
+            <Link
+              to={`/edtech/live/watch/${cls.id}`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-4 py-2 text-[12px] font-semibold text-white hover:bg-rose-500/90"
+            >
+              <PlayCircle className="h-3.5 w-3.5" aria-hidden /> Watch in-app
+            </Link>
           ) : !isEnded && !isCancelled && rsvped ? (
             <p className="text-[11px] text-foreground/50">
               Join link unlocks 15 min before start

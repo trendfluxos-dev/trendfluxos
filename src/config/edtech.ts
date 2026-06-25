@@ -21,6 +21,8 @@ export const EDTECH = {
     learn: (slug: string) => `/edtech/learn/${slug}`,
     learnLesson: (slug: string, n: string) => `/edtech/learn/${slug}/${n}`,
     live: "/edtech/live",
+    liveStudio: (id: string) => `/edtech/live/studio/${id}`,
+    liveWatch: (id: string) => `/edtech/live/watch/${id}`,
     adminLive: "/admin/edtech/live",
   },
 } as const;
