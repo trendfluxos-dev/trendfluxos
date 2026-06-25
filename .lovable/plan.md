@@ -1,88 +1,151 @@
-## What I found right now
 
-**Homepage** (already shipped last turn)
-- Per-section `LazySection` (IntersectionObserver-gated Suspense + `min-height` reservation) is live for all 14 below-fold sections.
-- What's still missing: real skeleton shells (currently a blank reserved box), responsive `srcset`/AVIF+WebP on hero/founder/showcase imagery, `loading="lazy"` + `decoding="async"` audit on every `<img>`, video `poster` + `preload="none"` audit, and an actual Lighthouse run with the report saved.
+# TrendFlux EdTech — Teacher Onboarding + Uber-style Live Booking + Deploy Plan
 
-**TED Plus (कর্মশিক্ষা)** — what exists vs. what you asked for
-
-| Feature | Status |
-|---|---|
-| Student account (Supabase auth + `profiles`) | exists |
-| Teacher account / signup as a teacher role | missing (only `admin` role exists) |
-| Teacher dashboard (separate from admin) | missing |
-| Live class scheduling | exists (admin-only at `/admin/edtech/live`) |
-| Window/tab selective sharing in Live Studio | exists (`getDisplayMedia`) |
-| RSVP + gated meeting URL | exists |
-| Live onboarding flow for new learners | missing |
-| Uber/Pathao-style course request → teacher notification → accept | missing |
-| Voice cloning (e.g. for lesson narration) | missing |
-| Lightboard mode (mirrored writing surface) in Live Studio | missing |
-| Course-pick → teacher notification system | missing |
+Reference: uploaded screen recordings (EISH dual-signup landing, 7-step Teacher Onboarding checklist, "My Classes" Create modal with audience gate, Live Studio with window share + AI sidebar).
 
 ---
 
-## Plan
+## A. Roles & Access Model
 
-### Phase 1 — Homepage performance & CLS (ship first)
+`app_role` enum extended:
+- `student` — default for new signups
+- `teacher` — full course/class owner
+- `tutor` — 1:1 Uber-style bookings (subset of teacher)
+- `admin` — platform ops
+- `finance` — payouts only
 
-1. **Skeleton shells**: replace blank `min-height` fallback with section-typed skeletons (hero band, card grid, masonry, testimonial row, video poster). One shared `<SectionSkeleton variant="…" />` component using shadcn `Skeleton`. Each `<LazySection>` accepts a `skeleton` prop.
-2. **Image optimization**:
-   - Add `vite-imagetools`. Convert hero, founder portrait, KormoShikkha showcase, OperatedBrands logos, LuxeVeil cover to `?format=avif;webp;jpg&as=picture&w=480;768;1200;1600`.
-   - Replace `<img>` with `<picture>` for those five.
-   - Audit every other homepage `<img>`: enforce `width`/`height` attrs (kills CLS), `loading="lazy"` + `decoding="async"` for all non-LCP.
-   - Hero image: `fetchpriority="high"`, preload in `index.html`.
-3. **Video**: every `<video>` on home gets `preload="none"` + a real `poster` (we already have posters for the two films); lazy-mount via existing `useNearViewport`.
-4. **Lighthouse**: drive Playwright against `http://localhost:8080/` using `lighthouse` CLI (headless), save JSON + HTML to `/mnt/documents/lighthouse-home.html` and link it from the existing `/admin/web-vitals` page. Re-run after the fixes and report deltas (LCP, CLS, TBT).
-
-### Phase 2 — Teacher/Student account system
-
-1. Add `'teacher'` to `app_role` enum (migration).
-2. New page `/edtech/teach/apply` — public form → inserts into a new `teacher_applications` table (RLS: insert by anyone, select/update by admins). Admin approval mints a `user_roles` row with `'teacher'`.
-3. New `/edtech/teacher` dashboard (gated by `has_role('teacher')`): "My live classes", "Schedule new", "Course requests inbox". Reuses existing `EdtechLiveAdmin` UI but scoped to `host_user_id = auth.uid()`.
-4. Auth page already supports signup; add a "Sign up as Teacher" CTA that routes to the application form.
-5. Update `EdtechHome` with a visible "For Teachers" panel and "Become a teacher" CTA.
-
-### Phase 3 — Live onboarding
-
-1. First-login modal at `/edtech` (one-time, persisted in `localStorage` + `profiles.onboarded_at`): 4-step walkthrough — pick goal → pick course track → optional RSVP to next live class → join WhatsApp/Telegram cohort link.
-
-### Phase 4 — Course request marketplace (Uber/Pathao model)
-
-1. Tables: `course_requests` (student_id, course_slug, requested_at, status, matched_teacher_id), `course_request_offers` (request_id, teacher_id, status).
-2. Student flow: on course card → "Request a teacher" → creates `course_requests` row.
-3. Realtime fan-out via Supabase Realtime broadcast to all teachers qualified for that course slug; teacher dashboard shows incoming requests with **Accept / Decline**. First accept wins (DB unique constraint on `matched_teacher_id` per request).
-4. Both sides get an in-app toast + email (existing `resend` connector if available, otherwise Telegram notification via existing `TELEGRAM_BOT_TOKEN`).
-
-### Phase 5 — Live Studio extensions
-
-1. **Lightboard mode**: toggle in `EdtechLiveStudio` that mirrors the captured stream horizontally (CSS `transform: scaleX(-1)`) and adds a high-contrast pen overlay (`<canvas>` over the video). Selective window-sharing is preserved.
-2. **Tab vs window picker**: today we call `getDisplayMedia({ video: true })` which already shows the browser's source picker (window/tab/screen). Add an in-app hint and a "Re-pick source" button so it's obvious. Add a "Privacy check" badge that displays the active source label.
-3. Persist studio prefs (camera on/off, lightboard on/off, mic gain) in `localStorage`.
-
-### Phase 6 — Voice cloning (lesson narration)
-
-1. Use Lovable AI Gateway TTS. New `voice_profiles` table (owner, sample audio URL, voice_id from provider). Teacher dashboard → "Voice studio": upload 30s sample → call edge function `clone-voice` (server-side, never expose API key) → returns `voice_id`.
-2. Lesson editor (admin/teacher) gets "Narrate with my voice" button that calls `synthesize-lesson` edge function and stores the audio on Lovable Cloud storage.
-3. Learner side: the existing `LessonContent` audio variant just plays the generated track.
-
-> Note: If the chosen Gateway TTS provider doesn't support cloning, I'll wire ElevenLabs via `add_secret` for `ELEVENLABS_API_KEY` and clearly mark it as a 3rd-party. I'll ask before adding that secret.
+Role resolved server-side via existing `has_role()`; every protected route uses a `<RoleGate roles={[...]}>` wrapper, every table uses RLS that calls `has_role()`.
 
 ---
 
-## Technical details
+## B. Teacher Onboarding (7-step checklist — mirrors recording)
 
-- Schema migrations are split per phase so any one can ship/rollback independently.
-- All new `public` tables get `GRANT`s + RLS at creation (per project standard).
-- Teacher role checked via `has_role(auth.uid(), 'teacher')` reused inside RLS — no client-side role checks.
-- Realtime channel naming: `course-requests:{course_slug}` so teachers subscribe per qualification.
-- Voice clone audio stored in a private bucket (`voice-samples`), signed URLs only.
-- Lighthouse run is local-only (the sandbox dev server); for production scores the user keeps using the PageSpeed buttons on `/admin/web-vitals`.
+Route: `/edtech/teach/onboarding` (teacher-only, redirect to step 1 until `teacher_profiles.onboarded_at` is set).
+
+| # | Step | Storage | Done-condition |
+|---|---|---|---|
+| 1 | Google Calendar connect | `teacher_profiles.calendar_connected_at` | OAuth callback OK |
+| 2 | Google Drive / asset folder | `teacher_profiles.drive_folder_url` | URL saved |
+| 3 | Create first class | `live_classes` row exists | row count ≥ 1 |
+| 4 | Upload first material | `lesson_assets` row exists | row count ≥ 1 |
+| 5 | Copy student join link | `teacher_profiles.share_link_copied_at` | button click |
+| 6 | Schedule on calendar | `live_classes.calendar_event_id` not null | event created |
+| 7 | Start first live class | `live_classes.first_started_at` | studio "Go Live" |
+
+UI: stacked checklist cards (matches recording), each row collapsible with "চেক করুন" button, progress badge `0/7 → 7/7 ✅`. Persists per teacher; auto-advance.
 
 ---
 
-## Order of delivery
+## C. "My Classes" + Create Class Modal (matches recording)
 
-Ship **Phase 1** first as one PR (perf + Lighthouse report). Then Phase 2 (accounts) → 5 (lightboard) → 4 (marketplace) → 3 (onboarding) → 6 (voice clone, asks before adding the 3rd-party secret).
+Route: `/edtech/teach/classes` (teacher) — list view with "+ New Class" button.
 
-Approve and I'll start with Phase 1.
+Create modal fields:
+- Title (required)
+- Description (optional)
+- Attach to course (optional dropdown of teacher's courses)
+- Audience gate (radio):
+  - **Any registered student** — open join link
+  - **Course-enrolled only** — must pick a course; only paid/enrolled users can join
+
+Backend writes to `live_classes` with `audience_mode = 'open' | 'enrolled'` and `course_id` when enrolled. Join URL gated by existing `get_live_class_meeting_url()` RPC, extended to also check `audience_mode + enrollment` before returning the URL.
+
+---
+
+## D. Live Studio (extends existing `EdtechLiveStudio.tsx`)
+
+Header actions (matches recording): Copy link · Reset · Schedule · Open Meet · End class.
+Side panel (teacher-only): **AI** tab with Explain / Examples / Quiz / Summary / Answer presets — calls Lovable AI Gateway, results never broadcast. **Notes** and **Web** tabs as stubs.
+Bottom: Student-view URL with copy button.
+
+WebRTC: already implemented (window-pick via `getDisplayMedia`). Adds: low-bandwidth fallback toast, "Send to Live" gate (must select source first), automatic recording upload to `live_recordings` after `End class`.
+
+---
+
+## E. Uber-style Tutor Booking
+
+New routes:
+- `/edtech/tutors` — search/filter (subject, language, price, rating, next-available slot)
+- `/edtech/tutors/:id` — profile + weekly availability grid + Book button
+- `/edtech/tutors/:id/book?slot=...` — checkout (SSLCommerz/Stripe handled in Phase 2)
+- `/edtech/me/bookings` — student bookings
+- `/edtech/teach/bookings` — tutor inbox (accept/decline within 10 min, else auto-release)
+
+Backend matching RPC `match_tutors(subject, when, budget)` ranks by:
+`score = 0.4*rating + 0.3*response_sla + 0.2*price_fit + 0.1*recent_activity`.
+
+Booking lifecycle: `requested → accepted → confirmed (paid) → live → completed → reviewed`. Funds held 14 days then released to wallet (uses ledger schema from prior architecture doc).
+
+---
+
+## F. New Tables (this iteration only)
+
+Reuses existing `live_classes`, `live_class_rsvps`, `user_roles`, `profiles`.
+
+1. `teacher_profiles` (user_id PK, headline, bio, expertise[], calendar_connected_at, drive_folder_url, share_link_copied_at, onboarded_at, verified_at, payout_method, hourly_rate, currency)
+2. `tutor_availability` (id, tutor_id, weekday 0–6, start_time, end_time, timezone)
+3. `tutor_bookings` (id, tutor_id, student_id, subject, starts_at, ends_at, status, price, currency, livekit_room, meeting_url, created_at)
+4. `tutor_reviews` (booking_id PK, rating 1–5, body, created_at)
+5. Extend `live_classes`: add `audience_mode text default 'open'`, `calendar_event_id text`, `first_started_at timestamptz`.
+
+All tables: GRANT to `authenticated` + `service_role`, RLS ON, policies via `has_role()`.
+
+---
+
+## G. Role-based UI Shell
+
+- `src/components/RoleGate.tsx` — wraps route children, redirects unauth → `/auth`, wrong-role → `/edtech`.
+- Navbar in `/edtech/*` shows **Student signup** + **Teacher signup** when signed out (matches recording), and **Teach** / **Learn** / **Bookings** links when signed in based on role.
+- `src/lib/edtechRoles.ts` — `useCurrentRole()` hook (cached via React Query, uses `current_user_has_role` RPC).
+
+---
+
+## H. 4-Phase Rollout — Env, Services, Cron
+
+### Phase 1 — MVP (0–3 mo, ~1k learners)
+**Hosting:** Vercel (frontend) + Lovable Cloud (DB/auth/functions). No separate VPS.
+**Env vars (runtime secrets):** `LOVABLE_API_KEY` (✓), `TELEGRAM_BOT_TOKEN` (✓), `SSLCOMMERZ_STORE_ID`, `SSLCOMMERZ_STORE_PASS`, `BUNNY_STREAM_LIBRARY_ID`, `BUNNY_STREAM_API_KEY`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`.
+**Services:** Edge functions `sslcommerz-checkout`, `sslcommerz-webhook`, `bunny-upload-url`, `google-calendar-event`, `live-class-reminder`.
+**Cron (pg_cron):** every 5 min → `live-class-reminder`; nightly → `expire-stale-bookings`.
+
+### Phase 2 — Growth (3–9 mo, ~10k)
+**Add:** LiveKit Cloud (replaces ad-hoc WebRTC for >50 viewers), WhatsApp Cloud API, Resend email.
+**Env:** `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`, `LIVEKIT_URL`, `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_ID`, `RESEND_API_KEY`.
+**Services:** `livekit-token`, `whatsapp-notify`, `email-send`. Worker queue via Supabase Queues for transcoding callbacks.
+
+### Phase 3 — Scale (9–18 mo, ~100k)
+**Add:** Hetzner CCX cluster for NestJS API + workers, Redis (Upstash), CDN sharding (Bunny per-region), Postgres read replica.
+**Env:** `REDIS_URL`, `API_BASE_URL`, `INTERNAL_RPC_TOKEN` (generated), `SENTRY_DSN`, `STRIPE_SECRET_KEY`.
+**Services:** `api` (NestJS), `worker` (BullMQ), `cron` (node-cron container), `recordings-encoder`.
+
+### Phase 4 — Enterprise (18 mo+, 1M)
+**Add:** Multi-region (eu-central + ap-south), AI voice (Lovable AI + ElevenLabs), Pinecone for RAG tutor, dedicated payout rail (bKash Enterprise + bank APIs), SOC2 logging pipeline.
+**Env:** `PINECONE_API_KEY`, `ELEVENLABS_API_KEY`, `BKASH_ENTERPRISE_KEY`, `BANK_PAYOUT_TOKEN`, `LOGFLARE_API_KEY`.
+
+`add_secret` will be called only when the user is ready to wire each phase — not as part of this build.
+
+---
+
+## I. Deliverables in this iteration
+
+1. **DB migration** — new tables + `live_classes` extensions + RLS + GRANTs.
+2. **Frontend**
+   - `RoleGate.tsx`, `useCurrentRole.ts`
+   - `/edtech/teach/onboarding` 7-step checklist
+   - `/edtech/teach/classes` list + Create-Class modal (audience gate)
+   - `/edtech/tutors`, `/edtech/tutors/:id`, `/edtech/tutors/:id/book`
+   - `/edtech/me/bookings`, `/edtech/teach/bookings`
+   - Live Studio AI sidebar (Explain/Examples/Quiz/Summary/Answer)
+3. **Edge functions** — `tutor-match`, `tutor-book`, `studio-ai` (Lovable AI Gateway), extended `get_live_class_meeting_url` to honor `audience_mode`.
+4. **Mermaid diagram** at `/mnt/documents/TrendFlux_Phased_Deployment.mmd` showing Phase-1→4 services, queues, cron, external integrations.
+5. **No payment gateway secrets requested now** — Phase-1 booking ends at "request confirmed, pay later" until you greenlight SSLCommerz.
+
+---
+
+## J. Out of scope this turn
+- Actual SSLCommerz/Stripe wiring (Phase 2 trigger).
+- LiveKit migration (keeps current WebRTC for Phase 1).
+- Mobile app (Expo) — Phase 3+.
+- Pinecone/RAG tutor — Phase 4.
+
+Approve and I'll ship the migration first, then frontend + edge functions + diagram in one pass.

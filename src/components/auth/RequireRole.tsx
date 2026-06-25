@@ -18,7 +18,14 @@ import { supabase } from "@/integrations/supabase/client";
  * @param children The protected view.
  * @param fallback Optional custom redirect (defaults to "/auth").
  */
-export type AppRole = "admin" | "editor" | "user";
+export type AppRole =
+  | "admin"
+  | "editor"
+  | "user"
+  | "student"
+  | "teacher"
+  | "tutor"
+  | "finance";
 
 interface RequireRoleProps {
   roles: AppRole[];
@@ -42,7 +49,10 @@ export default function RequireRole({ roles, children, fallback = "/auth" }: Req
 
       // Probe each role via the security-definer RPC. Any match grants access.
       for (const role of roles) {
-        const { data, error } = await supabase.rpc("current_user_has_role", { _role: role });
+        const { data, error } = await supabase.rpc(
+          "current_user_has_role",
+          { _role: role as never },
+        );
         if (!error && data === true) {
           if (!cancelled) setState("allowed");
           return;
