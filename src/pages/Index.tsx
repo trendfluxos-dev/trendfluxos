@@ -25,7 +25,7 @@ const AiExpertStoryTeaser = lazy(() => import("@/components/home/AiExpertStoryTe
 const QuietPositionsSection = lazy(() => import("@/components/home/QuietPositionsSection").then(m => ({ default: m.QuietPositionsSection })));
 const JusticeAppealSection = lazy(() => import("@/components/home/JusticeAppealSection").then(m => ({ default: m.JusticeAppealSection })));
 const AcademySection = lazy(() => import("@/components/home/AcademySection").then(m => ({ default: m.AcademySection })));
-const কর্মশিক্ষা TED PlusShowcase = lazy(() => import("@/components/home/কর্মশিক্ষা TED PlusShowcase").then(m => ({ default: m.কর্মশিক্ষা TED PlusShowcase })));
+const KormoShikkhaShowcase = lazy(() => import("@/components/home/KormoShikkhaShowcase").then(m => ({ default: m.KormoShikkhaShowcase })));
 const OperatedBrandsSection = lazy(() => import("@/components/home/OperatedBrandsSection").then(m => ({ default: m.OperatedBrandsSection })));
 const LuxeVeilSection = lazy(() => import("@/components/home/LuxeVeilSection").then(m => ({ default: m.LuxeVeilSection })));
 const ProofSection = lazy(() => import("@/components/home/ProofSection").then(m => ({ default: m.ProofSection })));
@@ -97,7 +97,7 @@ const Index = () => {
         <ServicesSection />
         <LayerBand layer="founder" />
         <SystemsHeBuiltSection />
-        <কর্মশিক্ষা TED PlusShowcase />
+        <KormoShikkhaShowcase />
         <FounderSection />
         <TheStandCoverSection />
         <AudioStoryTeaser />

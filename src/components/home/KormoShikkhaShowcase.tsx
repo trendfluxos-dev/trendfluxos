@@ -33,7 +33,7 @@ const PREVIEW_MODULES = [
  * preview (no iframe, no AI image) so the card stays crisp, on-brand, and
  * immune to the platform's X-Frame-Options block.
  */
-export const কর্মশিক্ষা TED PlusShowcase = () => {
+export const KormoShikkhaShowcase = () => {
   const onOpen = (location: string) =>
     track("edtech_platform_open", { location });
 
