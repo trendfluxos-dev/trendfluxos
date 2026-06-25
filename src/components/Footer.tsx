@@ -53,10 +53,17 @@ const Footer = () => {
         })}
       </div>
 
-      <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-foreground/40 tracking-wide">
-        <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</p>
-        <div className="flex items-center gap-4">
-          <Link to="/trust" className="hover:text-foreground transition-colors">Trust & Privacy</Link>
+      <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-foreground/45 tracking-wide">
+        <div className="space-y-1">
+          <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</p>
+          <p className="text-foreground/55">
+            Designed, built &amp; copyrighted by{" "}
+            <span className="text-foreground/80 font-medium">Zahid Hasan Emon</span>
+            {" "}— Founder &amp; Brand Architect, TrendFlux.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Link to="/trust" className="hover:text-foreground transition-colors">Trust &amp; Privacy</Link>
           <Link to="/explore" className="hover:text-foreground transition-colors">Browse all pages</Link>
           <p>Built as a system, not a website.</p>
         </div>
