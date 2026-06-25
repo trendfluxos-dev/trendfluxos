@@ -1004,6 +1004,42 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_assets: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          language_hint: string | null
+          name: string
+          sample_size_bytes: number | null
+          updated_at: string
+          user_id: string
+          vps_path: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          language_hint?: string | null
+          name: string
+          sample_size_bytes?: number | null
+          updated_at?: string
+          user_id: string
+          vps_path: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          language_hint?: string | null
+          name?: string
+          sample_size_bytes?: number | null
+          updated_at?: string
+          user_id?: string
+          vps_path?: string
+        }
+        Relationships: []
+      }
       voice_cache: {
         Row: {
           audio_path: string
