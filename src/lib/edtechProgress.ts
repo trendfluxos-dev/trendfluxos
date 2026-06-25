@@ -9,6 +9,7 @@
 
 const ENROLL_KEY = "kormoshikkha:enrolled:v1";
 const PROGRESS_KEY = "kormoshikkha:progress:v1";
+const LESSON_STATE_KEY = "kormoshikkha:lessonState:v1";
 
 export interface CourseProgress {
   /** Lesson `n` strings that have been marked complete (e.g. "01"). */
@@ -19,6 +20,16 @@ export interface CourseProgress {
 }
 
 type ProgressMap = Record<string, CourseProgress>;
+
+/** Per-lesson granular state — checklist ticks, quiz answers, media position. */
+export interface LessonState {
+  checklist?: string[];
+  quizAnswers?: Record<number, number>;
+  mediaProgress?: number;
+}
+
+// keyed by `${slug}::${n}`
+type LessonStateMap = Record<string, LessonState>;
 
 const isBrowser = () => typeof window !== "undefined";
 
@@ -98,10 +109,29 @@ export const resetProgress = (slug: string) => {
   const all = getAllProgress();
   delete all[slug];
   writeJson(PROGRESS_KEY, all);
+  // also wipe per-lesson state for this course
+  const states = readJson<LessonStateMap>(LESSON_STATE_KEY, {});
+  for (const key of Object.keys(states)) {
+    if (key.startsWith(`${slug}::`)) delete states[key];
+  }
+  writeJson(LESSON_STATE_KEY, states);
 };
 
 export const progressPercent = (completed: number, total: number) =>
   total === 0 ? 0 : Math.round((completed / total) * 100);
+
+const stateKey = (slug: string, n: string) => `${slug}::${n}`;
+
+export const getLessonState = (slug: string, n: string): LessonState => {
+  const all = readJson<LessonStateMap>(LESSON_STATE_KEY, {});
+  return all[stateKey(slug, n)] ?? {};
+};
+
+export const setLessonState = (slug: string, n: string, next: LessonState) => {
+  const all = readJson<LessonStateMap>(LESSON_STATE_KEY, {});
+  all[stateKey(slug, n)] = next;
+  writeJson(LESSON_STATE_KEY, all);
+};
 
 /** Subscribe to enrolment / progress changes (same-tab + cross-tab). */
 export const subscribeProgress = (cb: () => void) => {
