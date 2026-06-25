@@ -8,6 +8,8 @@ interface LazySectionProps {
   rootMargin?: string;
   /** Optional label for devtools. */
   label?: string;
+  /** Optional skeleton shown both pre-mount AND as Suspense fallback. */
+  skeleton?: ReactNode;
 }
 
 /**
@@ -23,6 +25,7 @@ export function LazySection({
   minHeight = "40vh",
   rootMargin = "600px 0px",
   label,
+  skeleton,
 }: LazySectionProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -56,14 +59,16 @@ export function LazySection({
     };
   }, [mounted, rootMargin]);
 
+  const placeholder = skeleton ?? (
+    <div aria-hidden style={{ minHeight }} />
+  );
+
   return (
     <div ref={ref} data-lazy-section={label ?? undefined}>
       {mounted ? (
-        <Suspense fallback={<div aria-hidden style={{ minHeight }} />}>
-          {children}
-        </Suspense>
+        <Suspense fallback={placeholder}>{children}</Suspense>
       ) : (
-        <div aria-hidden style={{ minHeight }} />
+        placeholder
       )}
     </div>
   );

@@ -5,7 +5,15 @@ import { OPERATED_BRANDS, type OperatedBrand } from "@/data/home";
 const BrandCard = ({ b }: { b: OperatedBrand }) => (
   <TfCard className="flex h-full flex-col items-center text-center">
     <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-background ring-1 ring-border">
-      <img src={b.logo} alt={`${b.name} logo`} loading="lazy" className="h-full w-full object-contain p-1.5" />
+      <img
+        src={b.logo}
+        alt={`${b.name} logo`}
+        width={96}
+        height={96}
+        loading="lazy"
+        decoding="async"
+        className="h-full w-full object-contain p-1.5"
+      />
     </div>
     <h3 className="mt-3 font-display text-[13.5px] font-semibold leading-tight text-foreground">{b.name}</h3>
     <p className="mt-1 text-[11.5px] leading-snug text-muted-foreground">{b.role}</p>

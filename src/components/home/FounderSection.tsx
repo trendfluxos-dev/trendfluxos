@@ -12,8 +12,11 @@ export const FounderSection = () => (
           <img
             src={emonPortrait}
             alt="Zahid Hasan Emon — Founder of TrendFlux"
-            className="h-[380px] w-[320px] object-cover"
+            width={320}
+            height={380}
             loading="lazy"
+            decoding="async"
+            className="h-[380px] w-[320px] object-cover"
           />
         </div>
       </div>

@@ -30,7 +30,10 @@ export const TestimonialsSection = ({
               <img
                 src={t.logo}
                 alt={`${t.company} logo`}
+                width={40}
+                height={40}
                 loading="lazy"
+                decoding="async"
                 className="h-full w-full object-contain"
               />
             </div>
