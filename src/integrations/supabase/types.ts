@@ -875,6 +875,149 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_lecture_materials: {
+        Row: {
+          created_at: string
+          flashcards: Json
+          id: string
+          key_concepts: Json
+          lecture_id: string
+          model: string | null
+          quiz: Json
+          summary: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          flashcards?: Json
+          id?: string
+          key_concepts?: Json
+          lecture_id: string
+          model?: string | null
+          quiz?: Json
+          summary?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          flashcards?: Json
+          id?: string
+          key_concepts?: Json
+          lecture_id?: string
+          model?: string | null
+          quiz?: Json
+          summary?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voice_lecture_materials_lecture_id_fkey"
+            columns: ["lecture_id"]
+            isOneToOne: true
+            referencedRelation: "voice_lectures"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      voice_lectures: {
+        Row: {
+          audio_path: string | null
+          created_at: string
+          description: string | null
+          duration_sec: number | null
+          error_message: string | null
+          id: string
+          source: string
+          status: string
+          subject: string | null
+          title: string
+          transcript: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          audio_path?: string | null
+          created_at?: string
+          description?: string | null
+          duration_sec?: number | null
+          error_message?: string | null
+          id?: string
+          source?: string
+          status?: string
+          subject?: string | null
+          title: string
+          transcript?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          audio_path?: string | null
+          created_at?: string
+          description?: string | null
+          duration_sec?: number | null
+          error_message?: string | null
+          id?: string
+          source?: string
+          status?: string
+          subject?: string | null
+          title?: string
+          transcript?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      voice_profiles: {
+        Row: {
+          created_at: string
+          gender: string
+          id: string
+          language: string
+          name: string
+          pitch: number
+          preview_text: string | null
+          sample_filename: string | null
+          sample_path: string | null
+          similarity: number
+          stability: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          gender?: string
+          id?: string
+          language?: string
+          name: string
+          pitch?: number
+          preview_text?: string | null
+          sample_filename?: string | null
+          sample_path?: string | null
+          similarity?: number
+          stability?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          gender?: string
+          id?: string
+          language?: string
+          name?: string
+          pitch?: number
+          preview_text?: string | null
+          sample_filename?: string | null
+          sample_path?: string | null
+          similarity?: number
+          stability?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       web_vitals: {
         Row: {
           created_at: string
@@ -961,7 +1104,14 @@ export type Database = {
       live_class_rsvp_count: { Args: { _class_id: string }; Returns: number }
     }
     Enums: {
-      app_role: "admin" | "editor" | "user" | "tutor" | "finance"
+      app_role:
+        | "admin"
+        | "editor"
+        | "user"
+        | "tutor"
+        | "finance"
+        | "teacher"
+        | "student"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1089,7 +1239,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "editor", "user", "tutor", "finance"],
+      app_role: [
+        "admin",
+        "editor",
+        "user",
+        "tutor",
+        "finance",
+        "teacher",
+        "student",
+      ],
     },
   },
 } as const
