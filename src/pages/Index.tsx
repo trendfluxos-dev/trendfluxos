@@ -28,6 +28,7 @@ const QuietPositionsSection = lazy(() => import("@/components/home/QuietPosition
 const JusticeAppealSection = lazy(() => import("@/components/home/JusticeAppealSection").then(m => ({ default: m.JusticeAppealSection })));
 const AcademySection = lazy(() => import("@/components/home/AcademySection").then(m => ({ default: m.AcademySection })));
 const KormoShikkhaShowcase = lazy(() => import("@/components/home/KormoShikkhaShowcase").then(m => ({ default: m.KormoShikkhaShowcase })));
+const LiveClassStudioSection = lazy(() => import("@/components/home/LiveClassStudioSection").then(m => ({ default: m.LiveClassStudioSection })));
 const OperatedBrandsSection = lazy(() => import("@/components/home/OperatedBrandsSection").then(m => ({ default: m.OperatedBrandsSection })));
 const LuxeVeilSection = lazy(() => import("@/components/home/LuxeVeilSection").then(m => ({ default: m.LuxeVeilSection })));
 const ProofSection = lazy(() => import("@/components/home/ProofSection").then(m => ({ default: m.ProofSection })));
@@ -106,6 +107,7 @@ const Index = () => {
       </LazySection>
       <LazySection label="systems" skeleton={<SectionSkeleton variant="cards" />}><SystemsHeBuiltSection /></LazySection>
       <LazySection label="kormoshikkha" skeleton={<SectionSkeleton variant="split" />}><KormoShikkhaShowcase /></LazySection>
+      <LazySection label="live-studio" skeleton={<SectionSkeleton variant="split" />}><LiveClassStudioSection /></LazySection>
       <LazySection label="founder" skeleton={<SectionSkeleton variant="split" />}><FounderSection /></LazySection>
       <LazySection label="stand-cover" skeleton={<SectionSkeleton variant="media" />}><TheStandCoverSection /></LazySection>
       <LazySection label="audio-story" skeleton={<SectionSkeleton variant="media" />}><AudioStoryTeaser /></LazySection>
