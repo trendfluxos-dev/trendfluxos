@@ -7,7 +7,6 @@ import {
   Circle,
   Clock,
   GraduationCap,
-  Sparkles,
 } from "lucide-react";
 import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
