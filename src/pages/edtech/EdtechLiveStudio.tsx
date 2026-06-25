@@ -380,7 +380,7 @@ const EdtechLiveStudio = () => {
             <p className="flex items-center gap-1.5 px-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-400/90">
               <Lock className="h-3 w-3" /> Teacher only
             </p>
-            <StudioAiPanel />
+            <StudioAiPanel classId={id} />
           </div>
         </aside>
       </main>
