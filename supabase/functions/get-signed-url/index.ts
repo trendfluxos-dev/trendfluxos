@@ -7,9 +7,38 @@ const MAX_EXPIRES = 60 * 60; // 1 hour cap
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
+  const userAgent = req.headers.get("user-agent") ?? null;
+  let auditUserId: string | null = null;
+  let auditBucket = "";
+  let auditPath = "";
+
+  const admin = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  );
+
+  const audit = async (outcome: "granted" | "denied", reason: string) => {
+    try {
+      await admin.from("access_audit_logs").insert({
+        user_id: auditUserId,
+        action: "signed_url",
+        resource_type: `bucket:${auditBucket || "unknown"}`,
+        resource_id: auditPath || null,
+        outcome,
+        reason,
+        ip,
+        user_agent: userAgent,
+      });
+    } catch {
+      // Never fail the request because logging failed.
+    }
+  };
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
+      await audit("denied", "no_auth_header");
       return json({ error: "Unauthorized" }, 401);
     }
 
@@ -22,20 +51,28 @@ Deno.serve(async (req) => {
     const token = authHeader.replace("Bearer ", "");
     const { data: claims, error: claimsError } = await userClient.auth.getClaims(token);
     if (claimsError || !claims?.claims?.sub) {
+      await audit("denied", "invalid_token");
       return json({ error: "Unauthorized" }, 401);
     }
     const userId = claims.claims.sub as string;
+    auditUserId = userId;
 
     const body = await req.json().catch(() => null);
     const bucket = typeof body?.bucket === "string" ? body.bucket : "";
     const path = typeof body?.path === "string" ? body.path : "";
+    auditBucket = bucket;
+    auditPath = path;
     const expiresIn = Math.min(
       Math.max(parseInt(String(body?.expiresIn ?? 300), 10) || 300, 30),
       MAX_EXPIRES,
     );
 
-    if (!ALLOWED_BUCKETS.has(bucket)) return json({ error: "bucket not allowed" }, 400);
+    if (!ALLOWED_BUCKETS.has(bucket)) {
+      await audit("denied", "bucket_not_allowed");
+      return json({ error: "bucket not allowed" }, 400);
+    }
     if (!path || path.includes("..") || path.startsWith("/")) {
+      await audit("denied", "invalid_path");
       return json({ error: "invalid path" }, 400);
     }
 
@@ -46,12 +83,11 @@ Deno.serve(async (req) => {
 
     if (!isAdmin) {
       if (bucket === "voice-lectures") {
-        // owner-scoped folder: `${userId}/...`
         if (!path.startsWith(`${userId}/`)) {
+          await audit("denied", "not_owner");
           return json({ error: "forbidden" }, 403);
         }
       } else if (bucket === "lesson-pdfs") {
-        // gated by paid course enrollment
         const { data: enrolled, error: enrErr } = await userClient
           .from("module_enrollments")
           .select("id")
@@ -60,33 +96,30 @@ Deno.serve(async (req) => {
           .limit(1)
           .maybeSingle();
         if (enrErr || !enrolled) {
+          await audit("denied", "no_enrollment");
           return json({ error: "enrollment required" }, 403);
         }
       } else if (bucket === "class-materials") {
-        // teacher-owned only — path layout: <teacher_id>/<class_id>/<file>
-        // Students reach this via the teacher minting + broadcasting a
-        // signed URL inside live_state.payload.signed_url.
         if (!path.startsWith(`${userId}/`)) {
+          await audit("denied", "not_owner");
           return json({ error: "forbidden" }, 403);
         }
       }
     }
 
-    // Mint signed URL with service role (bypasses storage RLS after our checks)
-    const admin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
     const { data: signed, error: signErr } = await admin.storage
       .from(bucket)
       .createSignedUrl(path, expiresIn);
 
     if (signErr || !signed?.signedUrl) {
+      await audit("denied", `sign_error:${signErr?.message ?? "unknown"}`);
       return json({ error: signErr?.message ?? "could not sign url" }, 500);
     }
 
+    await audit("granted", isAdmin ? "admin" : "owner_or_enrolled");
     return json({ signedUrl: signed.signedUrl, expiresIn });
   } catch (e) {
+    await audit("denied", `exception:${e instanceof Error ? e.message : "unknown"}`);
     return json({ error: e instanceof Error ? e.message : "unknown error" }, 500);
   }
 });
