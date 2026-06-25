@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, CalendarPlus, Pencil, Save, Trash2, X } from "lucide-react";
+import { ArrowLeft, CalendarPlus, MonitorPlay, Pencil, Save, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { EDTECH } from "@/config/edtech";
 import { EDTECH_COURSES } from "@/data/edtechCourses";
@@ -309,6 +309,13 @@ const EdtechLiveAdmin = () => {
                       )}
                     </div>
                     <div className="flex shrink-0 gap-2">
+                      <Link
+                        to={EDTECH.routes.liveStudio(c.id)}
+                        className="inline-flex items-center gap-1 rounded-full bg-rose-500 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-rose-500/90"
+                        title="Open teacher studio"
+                      >
+                        <MonitorPlay className="h-3 w-3" aria-hidden /> Studio
+                      </Link>
                       <button
                         type="button"
                         onClick={() => startEdit(c)}
