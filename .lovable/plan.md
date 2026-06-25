@@ -1,69 +1,83 @@
 ## Goal
 
-Finish the in-flight TrendFlux EdTech build (teacher onboarding + tutor booking + studio AI panel), polish every `/edtech/*` URL with the EISH-inspired layout already approved, and restore the main homepage. Database tables `teacher_profiles`, `tutor_availability`, `tutor_bookings`, `tutor_reviews` and `live_classes.audience_mode` are already migrated — no schema changes this turn.
+Bring the two reference apps' best features into TrendFlux EdTech, but **rebuilt on our stack** (Lovable AI Gateway + Supabase, not Firebase / ElevenLabs / Gmail OAuth). Drop the parts that don't fit (Firebase auth, Make.com pane, Gmail studio, SaaS blueprint marketing page).
 
-## What ships
+Homepage `/` is already loading correctly (verified: 200, no errors). No fix needed there.
 
-### 1. Homepage fix (`/`)
-- Audit `src/pages/Index.tsx` + lazy `LazySection` boundaries for the regression the user reports.
-- Restore proper render order, ensure every `Suspense` has a skeleton, and reflow KormoShikkha showcase + case studies as before.
-- Verify with a Playwright screenshot of `/` at 1280×1800.
+## What goes in
 
-### 2. Role plumbing
-- `src/components/RoleGate.tsx` — wrapper that gates by role (student/teacher/tutor/admin/finance), redirects to `/auth` or `/edtech`.
-- `src/lib/edtechRoles.ts` already exists; add a `useCurrentRole()` React Query hook backed by `current_user_has_role` RPC.
+### A. Class Voice Extractor → `/edtech/voice-notes`
+From `class-voice-extractor.zip` (Recorder, LectureList, AudioPlayer, StudyHub).
 
-### 3. Teacher onboarding — `/edtech/teach/onboarding`
-- 7-step checklist (Calendar, Drive folder, First class, First material, Share link, Schedule, Go live) reading/writing `teacher_profiles`.
-- Progress badge `n/7`, collapsible cards, persistent across sessions.
-- Auto-redirect teachers without `onboarded_at` here from `/edtech/teach/*`.
+- **Recorder** with 3 tabs: Mic record (WAV via Web Audio, not MediaRecorder webm — per our STT knowledge), Audio upload, Synthesize-from-topic.
+- **Transcription** via edge function `transcribe-lecture` → `openai/gpt-4o-mini-transcribe`.
+- **Study sheet generation** via edge function `extract-study-sheet` → `google/gemini-3-flash-preview` with structured output (summary, key concepts, flashcards, quiz).
+- **Lecture list** with status (uploading → transcribing → ready) and per-lecture detail view with audio player + tabbed study materials.
+- All persisted in new `voice_lectures` + `voice_lecture_materials` tables (RLS scoped to `auth.uid()`).
 
-### 4. Teacher classes — `/edtech/teach/classes`
-- List teacher's `live_classes` with status pills (upcoming / live / past).
-- "+ New Class" modal: title, description, optional course, **audience mode** (Open / Enrolled-only). Writes `audience_mode` + `course_id`.
-- `get_live_class_meeting_url` already enforces audience gating.
+### B. Voice Cloner / AI Voice Sandbox → `/edtech/teach/voice-studio` (teachers only)
+From `voice-ai-integration-studio.zip` (VoiceCloner, LovableSandbox).
 
-### 5. Live Studio AI sidebar
-- Extend existing `EdtechLiveStudio.tsx` with a teacher-only right panel: tabs **AI / Notes / Web**.
-- AI tab: presets Explain / Examples / Quiz / Summary / Answer → new edge function `studio-ai` calling Lovable AI Gateway (`google/gemini-3-flash-preview`). Output never broadcast.
+- **Voice Profile manager**: upload 1–5 min reference sample, name + gender + stability/similarity sliders, "train" progress UI.
+- **TTS preview**: type Bangla/English text → synthesize via Gemini TTS (`google/gemini-3-flash-tts` if available, otherwise document a stub clearly). NO ElevenLabs (we don't have that key, and we'd need user consent + secret).
+- **Voice profiles** stored in `voice_profiles` table; sample audio in Supabase Storage bucket `voice-samples` (private, owner-only).
+- Surface "speak this" buttons inside the AI Studio panel so teachers can preview AI explanations in their cloned voice during prep.
 
-### 6. Uber-style tutor booking
-- `/edtech/tutors` — search & filter grid (subject, language, price, rating, next slot).
-- `/edtech/tutors/:id` — profile + weekly availability + Book CTA.
-- `/edtech/tutors/:id/book?slot=...` — booking form (Phase-1: ends at "request confirmed, pay later", no SSLCommerz wiring yet).
-- `/edtech/me/bookings` (student) and `/edtech/teach/bookings` (tutor inbox with accept/decline).
-- Edge functions: `tutor-match` (ranks by rating/SLA/price/recent activity), `tutor-book` (creates `tutor_bookings` row, RLS-safe).
+### C. Skipped / explicitly out of scope
+- Firebase auth (we use Supabase).
+- ElevenLabs direct calls (no key, would need user-provided secret + consent flow — propose later).
+- Gmail Studio / Make.com / SaaS Blueprint pages — unrelated to EdTech.
+- Real-time voice cloning during live class (deferred to Phase 6).
 
-### 7. Decorated `/edtech/*` URLs
-- Apply the EISH visual language (forest-green + warm-gold tokens already in `index.css`) consistently to every edtech page: cards with soft border, stage-grid hero, two-tone CTAs, bilingual labels via existing `useEdtechLang`.
-- New shared `EdtechPageHeader` and `EdtechSectionCard` components used by every edtech route.
-- Updated `EdtechShell` navbar: Marketplace · Courses · Teach · Live · Sign in · Student signup · Teacher signup.
+## Architecture
 
-### 8. Routes registered in `src/App.tsx`
+```text
+Client (React)
+  ├─ /edtech/voice-notes          (student + teacher)
+  │   ├─ Recorder.tsx (WAV via Web Audio)
+  │   ├─ LectureList.tsx
+  │   └─ LectureDetail.tsx (AudioPlayer + StudyHub tabs)
+  │
+  └─ /edtech/teach/voice-studio   (teacher/admin only)
+      ├─ VoiceProfileList.tsx
+      ├─ VoiceCloner.tsx (upload → train → save profile)
+      └─ TtsPreview.tsx
+
+Supabase
+  ├─ tables: voice_lectures, voice_lecture_materials, voice_profiles
+  ├─ bucket: voice-samples (private)
+  └─ edge functions:
+      ├─ transcribe-lecture   (multipart audio → STT → returns transcript)
+      ├─ extract-study-sheet  (transcript → Gemini structured JSON)
+      └─ synthesize-voice     (text + profile → audio URL; stub if TTS model unavailable)
 ```
-/edtech/teach/onboarding   [teacher]
-/edtech/teach/classes      [teacher]
-/edtech/teach/bookings     [tutor|teacher]
-/edtech/tutors             [public]
-/edtech/tutors/:id         [public]
-/edtech/tutors/:id/book    [auth]
-/edtech/me/bookings        [auth]
-```
 
-### 9. Verification
-- `tsgo` typecheck.
-- Playwright screenshots: `/`, `/edtech`, `/edtech/tutors`, `/edtech/teach/onboarding`.
+## Implementation order
 
-## Out of scope (deferred)
-- SSLCommerz / Stripe payment wiring (Phase 2).
-- LiveKit migration (Phase 2).
-- Google Calendar OAuth wiring — onboarding step 1 will save the connect intent and surface a "Connect Calendar" stub button (real OAuth ships when `GOOGLE_OAUTH_CLIENT_ID/SECRET` are added).
-- Mermaid Phase-1→4 deployment diagram (already exists at `/mnt/documents/TrendFlux_EdTech_Architecture.mmd`; will add `TrendFlux_Phased_Deployment.mmd` only if you ask).
+1. **DB migration** — `voice_lectures`, `voice_lecture_materials`, `voice_profiles` with GRANTs + RLS (owner-only) + `voice-samples` private bucket.
+2. **Edge functions**:
+   - `transcribe-lecture` — multipart upload → `openai/gpt-4o-mini-transcribe`, streamed SSE back.
+   - `extract-study-sheet` — Gemini with `Output.object` schema (summary, concepts[], flashcards[], quiz[]).
+   - `synthesize-voice` — text → audio (Gemini TTS) returning signed URL.
+3. **`/edtech/voice-notes` page** — Recorder + list + detail, hooked to functions.
+4. **`/edtech/teach/voice-studio`** — gated by `RequireRole admin|teacher`.
+5. **Nav wiring** in `EdtechShell` (Voice notes for everyone, Voice studio under teach).
+6. **Smoke test** — Playwright run across all new routes for 200 + zero errors.
 
-## Technical notes
-- All new tables already migrated with RLS + GRANTs.
-- Edge functions use Lovable AI Gateway via `@ai-sdk/openai-compatible` and `LOVABLE_API_KEY` (already set).
-- No new secrets requested this turn.
-- No business-logic changes to existing courses/lessons/certificates.
+## Adapted from reference, not copied
 
-Approve and I'll ship in one pass: homepage fix → role gate → teacher pages → tutor pages → studio AI → URL polish → verification.
+- Recorder: rewrite to use Web Audio → WAV (per our `ai-speech-to-text` rules), not `MediaRecorder` webm.
+- Voice profiles: drop ElevenLabs voice IDs; persist our own profile shape.
+- Strip Tailwind class collisions (the references hardcode `bg-slate-900`, `text-amber-500`, etc.) — re-skin with our semantic tokens (`bg-card`, `text-primary`, `border-border`).
+- Strip Firebase imports entirely.
+
+## Technical notes (devs only)
+
+- WAV-only uploads (16 kHz mono) to avoid Safari mp4 / OGG-Opus rejects.
+- Block uploads > 25 MiB on the client; chunk longer lectures.
+- All AI calls server-side; `LOVABLE_API_KEY` stays in edge functions.
+- Reuse existing `StudioAiPanel`'s pattern (presets + textarea) for the TTS preview.
+
+## Deliverable
+
+A working Voice Notes page that any signed-in student can use to record/upload a class and get an AI study sheet, plus a teacher-only Voice Studio for managing personal voice profiles and previewing TTS. Roughly 8–10 new files + 1 migration + 3 edge functions. No homepage changes.
