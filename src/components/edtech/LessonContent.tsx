@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { CheckCircle2, Circle, PlayCircle, Sparkles } from "lucide-react";
+import { AlertCircle, CheckCircle2, Circle, FileText, PlayCircle, Sparkles } from "lucide-react";
 import type { CourseLesson } from "@/data/edtechCourses";
 import {
   getLessonState,
   setLessonState,
   subscribeProgress,
 } from "@/lib/edtechProgress";
+import { useSignedUrl } from "@/lib/signedUrl";
 
 /**
  * Renders any lesson content type. Calls `onAutoComplete` exactly once when
@@ -69,6 +70,16 @@ const LessonContent = ({ slug, lesson, isDone, onAutoComplete }: Props) => {
       );
     case "reading":
       return <Reading body={content.body ?? []} />;
+    case "pdf":
+      return (
+        <SignedPdf
+          bucket={content.bucket ?? "lesson-pdfs"}
+          path={content.path ?? ""}
+          title={lesson.title}
+          isDone={isDone}
+          onAutoComplete={onAutoComplete}
+        />
+      );
     default:
       return <FallbackReading lesson={lesson} />;
   }
