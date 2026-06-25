@@ -13,6 +13,7 @@ import {
 import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
 import { EDTECH } from "@/config/edtech";
+import StudioAiPanel from "@/components/edtech/StudioAiPanel";
 import { useSeo } from "@/hooks/useSeo";
 import {
   formatStartsAt,
@@ -276,6 +277,8 @@ const EdtechLiveStudio = () => {
               Share this with cohort students if they don't already have access.
             </p>
           </div>
+
+          <StudioAiPanel />
         </aside>
       </main>
     </EdtechShell>

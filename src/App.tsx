@@ -94,6 +94,13 @@ const EdtechLive = routes["/edtech/live"];
 const EdtechLiveStudio = routes["/edtech/live/studio/:id"];
 const EdtechLiveWatch = routes["/edtech/live/watch/:id"];
 const EdtechLiveAdmin = routes["/admin/edtech/live"];
+const EdtechTeachOnboarding = routes["/edtech/teach/onboarding"];
+const EdtechTeachClasses = routes["/edtech/teach/classes"];
+const EdtechTeachBookings = routes["/edtech/teach/bookings"];
+const EdtechTutors = routes["/edtech/tutors"];
+const EdtechTutorProfile = routes["/edtech/tutors/:id"];
+const EdtechTutorBook = routes["/edtech/tutors/:id/book"];
+const EdtechMyBookings = routes["/edtech/me/bookings"];
 const CaseStudyPage = routes["/case-studies/:slug"];
 const JusticeAppeal = routes["/justice-appeal"];
 const MediaReports = routes["/media-reports"];
@@ -166,6 +173,15 @@ const RoutedApp = () => {
         <Route path="/edtech/live/watch/:id" element={<EdtechLiveWatch />} />
         <Route path="/edtech/live/studio/:id" element={<RequireRole roles={["admin"]}><EdtechLiveStudio /></RequireRole>} />
         <Route path="/admin/edtech/live" element={<RequireRole roles={["admin"]}><EdtechLiveAdmin /></RequireRole>} />
+        {/* Teacher workspace */}
+        <Route path="/edtech/teach/onboarding" element={<RequireRole roles={["admin","teacher","tutor"]}><EdtechTeachOnboarding /></RequireRole>} />
+        <Route path="/edtech/teach/classes" element={<RequireRole roles={["admin","teacher","tutor"]}><EdtechTeachClasses /></RequireRole>} />
+        <Route path="/edtech/teach/bookings" element={<RequireRole roles={["admin","teacher","tutor"]}><EdtechTeachBookings /></RequireRole>} />
+        {/* Tutor marketplace (public discovery + auth-gated booking) */}
+        <Route path="/edtech/tutors" element={<EdtechTutors />} />
+        <Route path="/edtech/tutors/:id" element={<EdtechTutorProfile />} />
+        <Route path="/edtech/tutors/:id/book" element={<EdtechTutorBook />} />
+        <Route path="/edtech/me/bookings" element={<EdtechMyBookings />} />
         <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
         <Route path="/justice-appeal" element={<JusticeAppeal />} />
         <Route path="/media-reports" element={<MediaReports />} />
