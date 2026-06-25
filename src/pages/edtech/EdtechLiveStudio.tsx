@@ -287,45 +287,30 @@ const EdtechLiveStudio = () => {
 
       {/* 3-column */}
       <main className="mx-auto grid max-w-[1400px] gap-4 px-4 py-4 lg:grid-cols-[280px_1fr_320px] lg:px-6">
-        {/* LEFT — Presenter Dock */}
+        {/* LEFT — Library */}
         <aside className="space-y-3">
           <div className="rounded-2xl border border-border/60 bg-card/40 p-4">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-foreground/65">Presenter Dock</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-foreground/70">Library</p>
               <AddMaterialDialog classId={id} onAdded={reloadMaterials} />
             </div>
 
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/50">Materials</p>
-            {materials.length === 0 ? (
-              <p className="mt-2 rounded-xl border border-dashed border-border/70 bg-background/40 px-3 py-3 text-center text-[12px] text-foreground/60">
-                Upload your first material →
-              </p>
-            ) : (
-              <div className="mt-2 space-y-1.5">
-                {materials.map((m) => {
-                  const Icon = KIND_ICON[m.kind] ?? FileIcon;
-                  const staged = stage.type === "material" && stage.payload.materialId === m.id;
-                  const onLive = live.visible && live.source.type === "material" && (live.source.payload as { materialId?: string }).materialId === m.id;
-                  return (
-                    <div key={m.id} className={`group flex items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-sm transition ${staged ? "border-primary/60 bg-primary/10" : "border-transparent hover:bg-accent/40"}`}>
-                      <button type="button" onClick={() => previewMaterial(m)} className="flex flex-1 items-center gap-2 text-left">
-                        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${staged ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
-                          <Icon className="h-4 w-4" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate font-medium text-foreground">{m.title}</div>
-                          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground">
-                            {m.kind}
-                            {onLive && <span className="rounded-full bg-rose-500 px-1.5 py-0 text-[9px] font-bold text-white">● LIVE</span>}
-                          </div>
-                        </div>
-                      </button>
-                      <button type="button" onClick={() => removeMaterial(m)} className="opacity-0 transition group-hover:opacity-100"><Trash2 className="h-3.5 w-3.5 text-muted-foreground hover:text-rose-500"/></button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+            <div className="space-y-1.5">
+              {LIBRARY_GROUPS.map((g) => {
+                const items = materials.filter((m) => g.kinds.includes(m.kind));
+                return (
+                  <LibraryGroup
+                    key={g.label}
+                    label={g.label}
+                    items={items}
+                    stage={stage}
+                    live={live}
+                    onPreview={previewMaterial}
+                    onRemove={removeMaterial}
+                  />
+                );
+              })}
+            </div>
 
             <p className="mt-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/50">Web page</p>
             <div className="mt-2 flex items-center gap-1.5 rounded-xl border border-border/60 bg-background/60 px-2 py-1.5">
@@ -333,12 +318,9 @@ const EdtechLiveStudio = () => {
               <button type="button" onClick={previewWeb} className="rounded-md bg-primary/90 p-1.5 text-primary-foreground hover:bg-primary"><Globe className="h-3.5 w-3.5" /></button>
             </div>
 
-            <button type="button" onClick={previewWhiteboard} className={`mt-3 flex w-full items-start gap-3 rounded-xl border px-3 py-3 text-left transition ${stage.type === "whiteboard" ? "border-primary/60 bg-primary/10" : "border-border/60 bg-background/40 hover:bg-background/60"}`}>
-              <Pencil className="mt-0.5 h-4 w-4 text-foreground/70" />
-              <div className="min-w-0">
-                <p className="text-[13px] font-semibold text-foreground">Whiteboard</p>
-                <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-foreground/45">Draw live</p>
-              </div>
+            <button type="button" onClick={previewWhiteboard} className={`mt-3 flex w-full items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition ${stage.type === "whiteboard" ? "border-primary/60 bg-primary/10" : "border-border/60 bg-background/40 hover:bg-background/60"}`}>
+              <Pencil className="h-4 w-4 text-foreground/70" />
+              <span className="text-[13px] font-medium text-foreground">Whiteboard</span>
             </button>
           </div>
 
@@ -395,7 +377,9 @@ const EdtechLiveStudio = () => {
         {/* RIGHT — AI sidebar */}
         <aside>
           <div className="rounded-2xl border border-border/60 bg-card/40 p-1.5">
-            <p className="px-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-amber-400/90">Teacher only</p>
+            <p className="flex items-center gap-1.5 px-3 pt-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-amber-400/90">
+              <Lock className="h-3 w-3" /> Teacher only
+            </p>
             <StudioAiPanel />
           </div>
         </aside>
@@ -426,10 +410,12 @@ function inflateSource(type: string, payload: Record<string, unknown>, mats: Cla
 function StageView({ source, classId }: { source: StageSource; classId: string }) {
   if (source.type === "none") {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-[radial-gradient(circle_at_1px_1px,hsl(var(--foreground)/0.08)_1px,transparent_0)] [background-size:18px_18px] px-6 text-foreground/55">
-        <div className="rounded-full border border-border/60 bg-background/60 p-3 text-foreground/60"><MonitorPlay className="h-10 w-10" /></div>
-        <p className="text-sm font-semibold text-foreground/80">Nothing on stage</p>
-        <p className="max-w-sm text-center text-[11px] leading-relaxed text-foreground/45">Pick a material, paste a web page, or open the whiteboard. It stays private until you press Send to Live.</p>
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-6 text-white"
+           style={{ background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary)/0.85) 55%, hsl(45 95% 60%) 100%)" }}>
+        <div className="inline-flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/80">
+          <Play className="h-7 w-7 translate-x-[2px]" fill="currentColor" />
+        </div>
+        <p className="text-[13px] font-medium tracking-wide text-white/95">Live Stage — what students see</p>
       </div>
     );
   }
