@@ -553,6 +553,61 @@ const EdtechLiveStudio = () => {
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" /> Live
               </div>
             )}
+            {mirrorOpen && (
+              mirrorMinimized ? (
+                <button
+                  type="button"
+                  onClick={() => setMirrorMinimized(false)}
+                  className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/95 px-3 py-1.5 text-xs font-medium shadow-lg hover:bg-card"
+                >
+                  <span className={`h-2 w-2 rounded-full ${live.visible ? "animate-pulse bg-rose-500" : "bg-muted-foreground"}`} />
+                  Student Mirror
+                  <Maximize2 className="h-3 w-3" />
+                </button>
+              ) : (
+                <div className="absolute bottom-3 right-3 z-20 w-[320px] overflow-hidden rounded-xl border border-border bg-card shadow-2xl ring-1 ring-black/10 dark:ring-white/10">
+                  <div className="flex items-center justify-between border-b border-border bg-card/90 px-2.5 py-1.5 text-[11px] backdrop-blur">
+                    <span className="inline-flex items-center gap-1.5 font-semibold">
+                      <span className={`h-2 w-2 rounded-full ${live.visible ? "animate-pulse bg-rose-500" : "bg-muted-foreground"}`} />
+                      {live.visible ? "LIVE — students দেখছে" : "Students অপেক্ষা করছে"}
+                    </span>
+                    <div className="flex items-center gap-0.5">
+                      <button type="button" title="Minimize" onClick={() => setMirrorMinimized(true)} className="rounded p-1 hover:bg-accent">
+                        <Minus className="h-3 w-3" />
+                      </button>
+                      <button type="button" title="Close" onClick={() => setMirrorOpen(false)} className="rounded p-1 hover:bg-accent">
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="relative aspect-video w-full overflow-hidden bg-muted/30">
+                    {live.visible && live.source.type !== "none" ? (
+                      <div className="pointer-events-none absolute inset-0">
+                        <StageView source={live.source} classId={id} />
+                      </div>
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-center text-muted-foreground">
+                        <div>
+                          <Lock className="mx-auto mb-1 h-6 w-6 opacity-50" />
+                          <p className="text-[11px] font-medium">
+                            {cls.status === "live" ? "কিছু publish হয়নি" : "Class শুরু হয়নি"}
+                          </p>
+                          <p className="text-[10px]">"Send to Live" চাপলে student দেখবে</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between border-t border-border px-2.5 py-1 text-[10px] text-muted-foreground">
+                    <span>Real-time student view</span>
+                    {studentUrl && (
+                      <a href={studentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-foreground">
+                        <ExternalLink className="h-3 w-3" /> Open full
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )
+            )}
           </div>
         </section>
 
