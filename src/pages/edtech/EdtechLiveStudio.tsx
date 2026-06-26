@@ -638,6 +638,15 @@ const EdtechLiveStudio = () => {
         durationSec={savePayload?.duration}
         onDiscard={() => setSavePayload(null)}
       />
+      <StudentLayoutPreview
+        open={layoutPreviewOpen}
+        onOpenChange={setLayoutPreviewOpen}
+        title={cls?.title ?? ""}
+        isLive={cls?.status === "live"}
+        hasPublishedContent={live.visible && live.source.type !== "none"}
+        hasMeetLink={!!cls?.meeting_url}
+        studentUrl={studentUrl}
+      />
     </EdtechShell>
   );
 };
