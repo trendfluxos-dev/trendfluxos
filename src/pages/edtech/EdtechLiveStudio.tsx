@@ -517,6 +517,19 @@ const EdtechLiveStudio = () => {
               )}
             </div>
             <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => { setMirrorOpen((o) => !o); setMirrorMinimized(false); }}
+                title="Real-time student mirror (যা student দেখছে)"
+                className={[
+                  "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold",
+                  mirrorOpen
+                    ? "bg-foreground/10 text-foreground"
+                    : "border border-border/60 bg-background/70 text-foreground/75 hover:bg-background/90",
+                ].join(" ")}
+              >
+                <Eye className="h-3 w-3" /> {mirrorOpen ? "Mirror on" : "Mirror"}
+              </button>
               {live.visible && (
                 <button type="button" onClick={hideFromStudents} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-3 py-1 text-[11px] font-semibold text-foreground/80 hover:bg-background/90">
                   <EyeOff className="h-3 w-3" /> Hide
