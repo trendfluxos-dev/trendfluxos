@@ -67,6 +67,8 @@ export const routes = {
   "/edtech/live": make(() => import("@/pages/edtech/EdtechLive")),
   "/edtech/live/studio/:id": make(() => import("@/pages/edtech/EdtechLiveStudio")),
   "/edtech/live/watch/:id": make(() => import("@/pages/edtech/EdtechLiveWatch")),
+  "/edtech/my-classes": make(() => import("@/pages/edtech/EdtechMyClasses")),
+  "/class-recording/:token": make(() => import("@/pages/edtech/ClassRecording")),
   "/admin/edtech/live": make(() => import("@/pages/EdtechLiveAdmin")),
   // Teacher workspace
   "/edtech/teach/onboarding": make(() => import("@/pages/edtech/EdtechTeachOnboarding")),
