@@ -389,6 +389,19 @@ const EdtechLiveStudio = () => {
                 <MonitorUp className="h-3.5 w-3.5" /> Share window
               </button>
             )}
+            {recording ? (
+              <button type="button" onClick={stopRecording}
+                className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-rose-600/90">
+                <Square className="h-3.5 w-3.5" fill="currentColor" />
+                Stop rec · {Math.floor(recElapsed / 60).toString().padStart(2,"0")}:{(recElapsed % 60).toString().padStart(2,"0")}
+              </button>
+            ) : sharing ? (
+              <button type="button" onClick={startRecording}
+                title="Shared window record করুন (mic সহ)"
+                className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/40 bg-rose-500/10 px-3 py-1.5 text-[12px] font-semibold text-rose-300 hover:bg-rose-500/20">
+                <Circle className="h-3.5 w-3.5" fill="currentColor" /> Record
+              </button>
+            ) : null}
             {cls.status === "live" ? (
               <button type="button" onClick={endClass} className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-4 py-1.5 text-[12px] font-semibold text-white hover:bg-rose-500/90">
                 <StopCircle className="h-3.5 w-3.5" /> End class
@@ -506,6 +519,17 @@ const EdtechLiveStudio = () => {
         onClose={() => setShareDialogOpen(false)}
         onConfirm={handleShareConfirmed}
         studentUrl={studentUrl || undefined}
+      />
+      <SaveRecordingDialog
+        open={!!savePayload}
+        onOpenChange={(v) => { if (!v) setSavePayload(null); }}
+        classId={cls?.id ?? null}
+        teacherId={teacherId ?? ""}
+        defaultTitle={cls ? `${cls.title} — ${new Date().toLocaleDateString()}` : "Class recording"}
+        blob={savePayload?.blob ?? null}
+        mimeType={savePayload?.mime ?? "video/webm"}
+        durationSec={savePayload?.duration}
+        onDiscard={() => setSavePayload(null)}
       />
     </EdtechShell>
   );
