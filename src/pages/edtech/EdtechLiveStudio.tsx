@@ -243,6 +243,7 @@ const EdtechLiveStudio = () => {
   const sendToLive = useCallback(async () => {
     if (stage.type === "none") return toast.error("Stage is empty.");
     await publish(stage);
+    markOnboarding("start");
     if (cls && cls.status !== "live") {
       try {
         await setLiveClassStatus(cls.id, "live");
