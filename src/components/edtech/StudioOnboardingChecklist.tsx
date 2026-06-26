@@ -47,7 +47,7 @@ export function StudioOnboardingChecklist({ classCount, firstClassId, hasLiveAct
   }, []);
 
   const studioHref = firstClassId
-    ? EDTECH.routes.adminLiveStudio(firstClassId)
+    ? EDTECH.routes.liveStudio(firstClassId)
     : EDTECH.routes.teachClasses;
 
   const steps: Step[] = [
