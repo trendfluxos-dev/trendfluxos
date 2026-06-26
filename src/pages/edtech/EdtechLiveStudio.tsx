@@ -4,6 +4,7 @@ import {
   ArrowLeft, Copy, ExternalLink, Eye, EyeOff, FileText, Film, File as FileIcon,
   Globe, Image as ImageIcon, Link2, Lock, Pencil, PlayCircle, Play,
   Radio, RotateCcw, Send, StopCircle, Trash2, ChevronDown, MonitorUp, MonitorOff,
+  Circle, Square,
 } from "lucide-react";
 import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
@@ -24,6 +25,8 @@ import {
 } from "@/lib/liveState";
 import { supabase } from "@/integrations/supabase/client";
 import { startTeacherBroadcast, type BroadcastHandle } from "@/lib/screenBroadcast";
+import { startClassRecorder, isRecorderSupported, type RecorderHandle } from "@/lib/classRecorder";
+import { SaveRecordingDialog } from "@/components/edtech/SaveRecordingDialog";
 
 type StageSource =
   | { type: "none"; payload: Record<string, unknown> }
@@ -58,6 +61,25 @@ const EdtechLiveStudio = () => {
   const [sharing, setSharing] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const broadcastRef = useRef<BroadcastHandle | null>(null);
+  const recorderRef = useRef<RecorderHandle | null>(null);
+  const shareStreamRef = useRef<MediaStream | null>(null);
+  const [recording, setRecording] = useState(false);
+  const [recElapsed, setRecElapsed] = useState(0);
+  const [savePayload, setSavePayload] = useState<{ blob: Blob; mime: string; duration: number } | null>(null);
+  const [teacherId, setTeacherId] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setTeacherId(data.user?.id ?? null));
+  }, []);
+
+  useEffect(() => {
+    if (!recording) return;
+    const t = setInterval(() => {
+      const started = recorderRef.current?.getStartedAt();
+      if (started) setRecElapsed(Math.floor((Date.now() - started) / 1000));
+    }, 1000);
+    return () => clearInterval(t);
+  }, [recording]);
 
   const openShareDialog = useCallback(() => {
     if (!id) return;
@@ -70,10 +92,12 @@ const EdtechLiveStudio = () => {
     broadcastRef.current?.stop();
     const handle = startTeacherBroadcast(id, stream);
     broadcastRef.current = handle;
+    shareStreamRef.current = stream;
     setSharing(true);
     setShareDialogOpen(false);
     stream.getVideoTracks()[0]?.addEventListener("ended", () => {
       broadcastRef.current = null;
+      shareStreamRef.current = null;
       setSharing(false);
       toast("Screen share ended");
     });
@@ -83,11 +107,52 @@ const EdtechLiveStudio = () => {
   const stopWindowShare = useCallback(() => {
     broadcastRef.current?.stop();
     broadcastRef.current = null;
+    shareStreamRef.current = null;
     setSharing(false);
     toast("Stopped sharing");
   }, []);
 
-  useEffect(() => () => { broadcastRef.current?.stop(); }, []);
+  useEffect(() => () => {
+    broadcastRef.current?.stop();
+    recorderRef.current?.cancel();
+  }, []);
+
+  const startRecording = useCallback(async () => {
+    if (!isRecorderSupported()) {
+      toast.error("এই browser-এ recording supported না।");
+      return;
+    }
+    const stream = shareStreamRef.current;
+    if (!stream) {
+      toast.error("আগে Share window করুন তারপর Record করুন।");
+      return;
+    }
+    try {
+      const rec = await startClassRecorder(stream);
+      recorderRef.current = rec;
+      setRecording(true);
+      setRecElapsed(0);
+      toast.success("Recording শুরু হলো");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Recorder শুরু করা গেল না");
+    }
+  }, []);
+
+  const stopRecording = useCallback(async () => {
+    const rec = recorderRef.current;
+    if (!rec) return;
+    try {
+      const blob = await rec.stop();
+      const duration = Math.floor((Date.now() - rec.getStartedAt()) / 1000);
+      recorderRef.current = null;
+      setRecording(false);
+      setSavePayload({ blob, mime: rec.getMimeType(), duration });
+    } catch (e) {
+      recorderRef.current = null;
+      setRecording(false);
+      toast.error(e instanceof Error ? e.message : "Recording থামানো গেল না");
+    }
+  }, []);
 
   useSeo({ title: cls ? `Live studio — ${cls.title}` : "Live studio", noindex: true });
 
@@ -217,12 +282,15 @@ const EdtechLiveStudio = () => {
   const endClass = useCallback(async () => {
     if (!cls) return;
     try {
+      if (recorderRef.current) {
+        await stopRecording();
+      }
       await hideFromStudents().catch(() => {});
       await setLiveClassStatus(cls.id, "ended");
       setCls({ ...cls, status: "ended" });
       toast.success("Class ended.");
     } catch { toast.error("Could not end."); }
-  }, [cls, hideFromStudents]);
+  }, [cls, hideFromStudents, stopRecording]);
 
   const removeMaterial = useCallback(async (m: ClassMaterial) => {
     if (!confirm(`Delete "${m.title}"?`)) return;
