@@ -393,6 +393,22 @@ const EdtechLiveStudio = () => {
                 <a href={studentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80">
                   <ExternalLink className="h-3.5 w-3.5" /> Preview
                 </a>
+                <button
+                  type="button"
+                  onClick={() => setLayoutPreviewOpen(true)}
+                  title="৩-প্যানেল student layout সিমুলেশন — publish ছাড়াই"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80"
+                >
+                  <MonitorPlay className="h-3.5 w-3.5" /> Layout
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResetLink}
+                  title="নতুন student link বানান (পুরোনো link বন্ধ হবে)"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" /> Reset link
+                </button>
               </>
             )}
             <button type="button" onClick={resetStage} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80">
