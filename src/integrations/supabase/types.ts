@@ -193,6 +193,78 @@ export type Database = {
           },
         ]
       }
+      class_recordings: {
+        Row: {
+          attached_lesson_index: number | null
+          attached_module_id: string | null
+          class_id: string | null
+          created_at: string
+          description: string | null
+          duration_sec: number | null
+          id: string
+          mime_type: string
+          public_token: string | null
+          recorded_at: string
+          size_bytes: number | null
+          storage_path: string
+          teacher_id: string
+          title: string
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          attached_lesson_index?: number | null
+          attached_module_id?: string | null
+          class_id?: string | null
+          created_at?: string
+          description?: string | null
+          duration_sec?: number | null
+          id?: string
+          mime_type?: string
+          public_token?: string | null
+          recorded_at?: string
+          size_bytes?: number | null
+          storage_path: string
+          teacher_id: string
+          title: string
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          attached_lesson_index?: number | null
+          attached_module_id?: string | null
+          class_id?: string | null
+          created_at?: string
+          description?: string | null
+          duration_sec?: number | null
+          id?: string
+          mime_type?: string
+          public_token?: string | null
+          recorded_at?: string
+          size_bytes?: number | null
+          storage_path?: string
+          teacher_id?: string
+          title?: string
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_recordings_attached_module_id_fkey"
+            columns: ["attached_module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_recordings_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_errors: {
         Row: {
           created_at: string
@@ -1434,6 +1506,18 @@ export type Database = {
         Args: { _class_id: string }
         Returns: string
       }
+      get_recording_by_token: {
+        Args: { _token: string }
+        Returns: {
+          description: string
+          duration_sec: number
+          id: string
+          mime_type: string
+          recorded_at: string
+          storage_path: string
+          title: string
+        }[]
+      }
       has_confirmed_enrollment: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
@@ -1458,12 +1542,14 @@ export type Database = {
         Args: { _days?: number }
         Returns: number
       }
+      publish_recording_public: { Args: { _id: string }; Returns: string }
       purge_access_audit_logs: { Args: { _days?: number }; Returns: number }
       set_audit_retention_days: { Args: { _days: number }; Returns: number }
       student_cancel_booking: {
         Args: { _booking_id: string }
         Returns: undefined
       }
+      unpublish_recording_public: { Args: { _id: string }; Returns: undefined }
     }
     Enums: {
       app_role:

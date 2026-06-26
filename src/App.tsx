@@ -103,6 +103,8 @@ const EdtechTutors = routes["/edtech/tutors"];
 const EdtechTutorProfile = routes["/edtech/tutors/:id"];
 const EdtechTutorBook = routes["/edtech/tutors/:id/book"];
 const EdtechMyBookings = routes["/edtech/me/bookings"];
+const EdtechMyClasses = routes["/edtech/my-classes"];
+const ClassRecording = routes["/class-recording/:token"];
 const VoiceNotes = routes["/edtech/voice-notes"];
 const VoiceStudio = routes["/edtech/teach/voice-studio"];
 const VoiceClone = routes["/voice-clone"];
@@ -177,6 +179,8 @@ const RoutedApp = () => {
         <Route path="/edtech/certificate/:slug" element={<EdtechCertificate />} />
         <Route path="/edtech/verify" element={<EdtechVerify />} />
         <Route path="/edtech/my-learning" element={<EdtechMyLearning />} />
+        <Route path="/edtech/my-classes" element={<EdtechMyClasses />} />
+        <Route path="/class-recording/:token" element={<ClassRecording />} />
         <Route path="/edtech/learn/:slug" element={<EdtechLessonPlayer />} />
         <Route path="/edtech/learn/:slug/:lessonN" element={<EdtechLessonPlayer />} />
         <Route path="/edtech/live" element={<EdtechLive />} />
