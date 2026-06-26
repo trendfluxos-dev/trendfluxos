@@ -4,7 +4,7 @@ import {
   ArrowLeft, Copy, ExternalLink, Eye, EyeOff, FileText, Film, File as FileIcon,
   Globe, Image as ImageIcon, Link2, Lock, Pencil, PlayCircle, Play,
   Radio, RotateCcw, Send, StopCircle, Trash2, ChevronDown, MonitorUp, MonitorOff,
-  Circle, Square,
+  Circle, Square, MonitorPlay, RefreshCw, Minus, Maximize2, X,
 } from "lucide-react";
 import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
@@ -27,6 +27,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { startTeacherBroadcast, type BroadcastHandle } from "@/lib/screenBroadcast";
 import { startClassRecorder, isRecorderSupported, type RecorderHandle } from "@/lib/classRecorder";
 import { SaveRecordingDialog } from "@/components/edtech/SaveRecordingDialog";
+import { StudentLayoutPreview } from "@/components/edtech/StudentLayoutPreview";
+import { resetShareToken } from "@/lib/liveClasses";
+import { markOnboarding } from "@/lib/studioOnboarding";
 
 type StageSource =
   | { type: "none"; payload: Record<string, unknown> }
@@ -60,6 +63,9 @@ const EdtechLiveStudio = () => {
   const [webUrl, setWebUrl] = useState("");
   const [sharing, setSharing] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [layoutPreviewOpen, setLayoutPreviewOpen] = useState(false);
+  const [mirrorOpen, setMirrorOpen] = useState(true);
+  const [mirrorMinimized, setMirrorMinimized] = useState(false);
   const broadcastRef = useRef<BroadcastHandle | null>(null);
   const recorderRef = useRef<RecorderHandle | null>(null);
   const shareStreamRef = useRef<MediaStream | null>(null);
