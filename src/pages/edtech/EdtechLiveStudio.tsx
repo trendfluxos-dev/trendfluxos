@@ -4,7 +4,7 @@ import {
   ArrowLeft, Copy, ExternalLink, Eye, EyeOff, FileText, Film, File as FileIcon,
   Globe, Image as ImageIcon, Link2, Lock, Pencil, PlayCircle, Play,
   Radio, RotateCcw, Send, StopCircle, Trash2, ChevronDown, MonitorUp, MonitorOff,
-  Circle, Square,
+  Circle, Square, MonitorPlay, RefreshCw, Minus, Maximize2, X,
 } from "lucide-react";
 import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
@@ -27,6 +27,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { startTeacherBroadcast, type BroadcastHandle } from "@/lib/screenBroadcast";
 import { startClassRecorder, isRecorderSupported, type RecorderHandle } from "@/lib/classRecorder";
 import { SaveRecordingDialog } from "@/components/edtech/SaveRecordingDialog";
+import { StudentLayoutPreview } from "@/components/edtech/StudentLayoutPreview";
+import { resetShareToken } from "@/lib/liveClasses";
+import { markOnboarding } from "@/lib/studioOnboarding";
 
 type StageSource =
   | { type: "none"; payload: Record<string, unknown> }
@@ -60,6 +63,9 @@ const EdtechLiveStudio = () => {
   const [webUrl, setWebUrl] = useState("");
   const [sharing, setSharing] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [layoutPreviewOpen, setLayoutPreviewOpen] = useState(false);
+  const [mirrorOpen, setMirrorOpen] = useState(true);
+  const [mirrorMinimized, setMirrorMinimized] = useState(false);
   const broadcastRef = useRef<BroadcastHandle | null>(null);
   const recorderRef = useRef<RecorderHandle | null>(null);
   const shareStreamRef = useRef<MediaStream | null>(null);
@@ -237,6 +243,7 @@ const EdtechLiveStudio = () => {
   const sendToLive = useCallback(async () => {
     if (stage.type === "none") return toast.error("Stage is empty.");
     await publish(stage);
+    markOnboarding("start");
     if (cls && cls.status !== "live") {
       try {
         await setLiveClassStatus(cls.id, "live");
@@ -310,9 +317,25 @@ const EdtechLiveStudio = () => {
 
   const copyStudentLink = useCallback(async () => {
     if (!studentUrl) return toast.error("No share link on this class.");
-    try { await navigator.clipboard.writeText(studentUrl); toast.success("Student link copied."); }
+    try {
+      await navigator.clipboard.writeText(studentUrl);
+      markOnboarding("linkCopied");
+      toast.success("Student link copied.");
+    }
     catch { toast.error(`Link: ${studentUrl}`); }
   }, [studentUrl]);
+
+  const handleResetLink = useCallback(async () => {
+    if (!cls) return;
+    if (!confirm("পুরোনো student link এখনই কাজ করা বন্ধ করবে। Reset করবেন?")) return;
+    try {
+      const token = await resetShareToken(cls.id);
+      setCls({ ...cls, share_token: token });
+      toast.success("নতুন student link তৈরি হয়েছে");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not reset link");
+    }
+  }, [cls]);
 
   const stageIsLive = live.visible && JSON.stringify(stage) === JSON.stringify(live.source);
 
@@ -370,6 +393,22 @@ const EdtechLiveStudio = () => {
                 <a href={studentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80">
                   <ExternalLink className="h-3.5 w-3.5" /> Preview
                 </a>
+                <button
+                  type="button"
+                  onClick={() => setLayoutPreviewOpen(true)}
+                  title="৩-প্যানেল student layout সিমুলেশন — publish ছাড়াই"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80"
+                >
+                  <MonitorPlay className="h-3.5 w-3.5" /> Layout
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResetLink}
+                  title="নতুন student link বানান (পুরোনো link বন্ধ হবে)"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" /> Reset link
+                </button>
               </>
             )}
             <button type="button" onClick={resetStage} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1.5 text-[12px] font-medium text-foreground/80 hover:bg-background/80">
@@ -478,6 +517,19 @@ const EdtechLiveStudio = () => {
               )}
             </div>
             <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => { setMirrorOpen((o) => !o); setMirrorMinimized(false); }}
+                title="Real-time student mirror (যা student দেখছে)"
+                className={[
+                  "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold",
+                  mirrorOpen
+                    ? "bg-foreground/10 text-foreground"
+                    : "border border-border/60 bg-background/70 text-foreground/75 hover:bg-background/90",
+                ].join(" ")}
+              >
+                <Eye className="h-3 w-3" /> {mirrorOpen ? "Mirror on" : "Mirror"}
+              </button>
               {live.visible && (
                 <button type="button" onClick={hideFromStudents} className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 px-3 py-1 text-[11px] font-semibold text-foreground/80 hover:bg-background/90">
                   <EyeOff className="h-3 w-3" /> Hide
@@ -500,6 +552,61 @@ const EdtechLiveStudio = () => {
               <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-rose-500/95 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white shadow-lg">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" /> Live
               </div>
+            )}
+            {mirrorOpen && (
+              mirrorMinimized ? (
+                <button
+                  type="button"
+                  onClick={() => setMirrorMinimized(false)}
+                  className="absolute bottom-3 right-3 z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/95 px-3 py-1.5 text-xs font-medium shadow-lg hover:bg-card"
+                >
+                  <span className={`h-2 w-2 rounded-full ${live.visible ? "animate-pulse bg-rose-500" : "bg-muted-foreground"}`} />
+                  Student Mirror
+                  <Maximize2 className="h-3 w-3" />
+                </button>
+              ) : (
+                <div className="absolute bottom-3 right-3 z-20 w-[320px] overflow-hidden rounded-xl border border-border bg-card shadow-2xl ring-1 ring-black/10 dark:ring-white/10">
+                  <div className="flex items-center justify-between border-b border-border bg-card/90 px-2.5 py-1.5 text-[11px] backdrop-blur">
+                    <span className="inline-flex items-center gap-1.5 font-semibold">
+                      <span className={`h-2 w-2 rounded-full ${live.visible ? "animate-pulse bg-rose-500" : "bg-muted-foreground"}`} />
+                      {live.visible ? "LIVE — students দেখছে" : "Students অপেক্ষা করছে"}
+                    </span>
+                    <div className="flex items-center gap-0.5">
+                      <button type="button" title="Minimize" onClick={() => setMirrorMinimized(true)} className="rounded p-1 hover:bg-accent">
+                        <Minus className="h-3 w-3" />
+                      </button>
+                      <button type="button" title="Close" onClick={() => setMirrorOpen(false)} className="rounded p-1 hover:bg-accent">
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="relative aspect-video w-full overflow-hidden bg-muted/30">
+                    {live.visible && live.source.type !== "none" ? (
+                      <div className="pointer-events-none absolute inset-0">
+                        <StageView source={live.source} classId={id} />
+                      </div>
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-center text-muted-foreground">
+                        <div>
+                          <Lock className="mx-auto mb-1 h-6 w-6 opacity-50" />
+                          <p className="text-[11px] font-medium">
+                            {cls.status === "live" ? "কিছু publish হয়নি" : "Class শুরু হয়নি"}
+                          </p>
+                          <p className="text-[10px]">"Send to Live" চাপলে student দেখবে</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between border-t border-border px-2.5 py-1 text-[10px] text-muted-foreground">
+                    <span>Real-time student view</span>
+                    {studentUrl && (
+                      <a href={studentUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-foreground">
+                        <ExternalLink className="h-3 w-3" /> Open full
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )
             )}
           </div>
         </section>
@@ -530,6 +637,15 @@ const EdtechLiveStudio = () => {
         mimeType={savePayload?.mime ?? "video/webm"}
         durationSec={savePayload?.duration}
         onDiscard={() => setSavePayload(null)}
+      />
+      <StudentLayoutPreview
+        open={layoutPreviewOpen}
+        onOpenChange={setLayoutPreviewOpen}
+        title={cls?.title ?? ""}
+        isLive={cls?.status === "live"}
+        hasPublishedContent={live.visible && live.source.type !== "none"}
+        hasMeetLink={!!cls?.meeting_url}
+        studentUrl={studentUrl}
       />
     </EdtechShell>
   );

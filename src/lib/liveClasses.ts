@@ -179,6 +179,26 @@ export const deleteLiveClass = async (id: string) => {
 };
 
 /**
+ * Generate a fresh share_token for a class. The old token stops working
+ * immediately (the public view RPC matches on the new value).
+ * Requires the caller to own the class (or be admin) per RLS.
+ */
+export const resetShareToken = async (id: string): Promise<string> => {
+  const newToken =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID().replace(/-/g, "")
+      : Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const { data, error } = await supabase
+    .from("live_classes")
+    .update({ share_token: newToken })
+    .eq("id", id)
+    .select("share_token")
+    .single();
+  if (error) throw error;
+  return (data as { share_token: string }).share_token;
+};
+
+/**
  * Fetch the meeting URL for a class. Returns `null` for callers who are
  * neither admins nor RSVPed — the gate is enforced server-side by the
  * `get_live_class_meeting_url` SECURITY DEFINER function.

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Sparkles, Loader2, Check } from "lucide-react";
+import { Sparkles, Loader2, Check, Search } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchTeacherNote, saveTeacherNote } from "@/lib/teacherNotes";
@@ -186,12 +186,74 @@ const StudioAiPanel = ({ classId }: Props = {}) => {
       )}
 
       {tab === "web" && (
-        <p className="text-[12px] text-foreground/60">
-          Web search panel coming in Phase 2.
-        </p>
+        <WebSearchPanel />
       )}
     </div>
   );
 };
 
 export default StudioAiPanel;
+
+function WebSearchPanel() {
+  const [q, setQ] = useState("");
+  const [engine, setEngine] = useState<"google" | "ddg" | "wiki">("google");
+
+  const go = (e: React.FormEvent) => {
+    e.preventDefault();
+    const query = q.trim();
+    if (!query) return;
+    const url =
+      engine === "google"
+        ? `https://www.google.com/search?q=${encodeURIComponent(query)}`
+        : engine === "ddg"
+        ? `https://duckduckgo.com/?q=${encodeURIComponent(query)}`
+        : `https://bn.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(query)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  return (
+    <form onSubmit={go} className="space-y-2">
+      <p className="text-[11px] text-foreground/60">
+        নতুন tab-এ private search খুলবে — students কখনো দেখবে না।
+      </p>
+      <div className="flex gap-1">
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Search the web…"
+          className="h-9 min-w-0 flex-1 rounded-md border border-border bg-background px-3 text-[12.5px] placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/40"
+        />
+        <button
+          type="submit"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+          aria-label="Search"
+        >
+          <Search className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="flex flex-wrap gap-1 text-[11px]">
+        {(
+          [
+            { id: "google" as const, label: "Google" },
+            { id: "ddg" as const, label: "DuckDuckGo" },
+            { id: "wiki" as const, label: "উইকিপিডিয়া" },
+          ]
+        ).map((opt) => (
+          <button
+            key={opt.id}
+            type="button"
+            onClick={() => setEngine(opt.id)}
+            className={[
+              "rounded-full px-2.5 py-0.5 font-medium transition-colors",
+              engine === opt.id
+                ? "bg-primary/15 text-primary"
+                : "border border-border/60 bg-background/60 text-foreground/65 hover:text-foreground",
+            ].join(" ")}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </form>
+  );
+}
