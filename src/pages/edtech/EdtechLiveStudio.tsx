@@ -316,9 +316,25 @@ const EdtechLiveStudio = () => {
 
   const copyStudentLink = useCallback(async () => {
     if (!studentUrl) return toast.error("No share link on this class.");
-    try { await navigator.clipboard.writeText(studentUrl); toast.success("Student link copied."); }
+    try {
+      await navigator.clipboard.writeText(studentUrl);
+      markOnboarding("linkCopied");
+      toast.success("Student link copied.");
+    }
     catch { toast.error(`Link: ${studentUrl}`); }
   }, [studentUrl]);
+
+  const handleResetLink = useCallback(async () => {
+    if (!cls) return;
+    if (!confirm("পুরোনো student link এখনই কাজ করা বন্ধ করবে। Reset করবেন?")) return;
+    try {
+      const token = await resetShareToken(cls.id);
+      setCls({ ...cls, share_token: token });
+      toast.success("নতুন student link তৈরি হয়েছে");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not reset link");
+    }
+  }, [cls]);
 
   const stageIsLive = live.visible && JSON.stringify(stage) === JSON.stringify(live.source);
 
