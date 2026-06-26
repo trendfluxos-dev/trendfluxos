@@ -13,6 +13,7 @@ import {
 import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
+import BookLiveSessionDialog from "@/components/edtech/BookLiveSessionDialog";
 import { EDTECH } from "@/config/edtech";
 import { useSeo } from "@/hooks/useSeo";
 import { supabase } from "@/integrations/supabase/client";
@@ -48,6 +49,8 @@ const EdtechLive = () => {
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingClassId, setBookingClassId] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -95,6 +98,11 @@ const EdtechLive = () => {
     return { upcoming: up, past: pa.reverse() };
   }, [classes]);
 
+  const openBooking = (classId?: string) => {
+    setBookingClassId(classId ?? null);
+    setBookingOpen(true);
+  };
+
   const handleRsvp = async (cls: LiveClass) => {
     if (!userId) {
       toast.error("Sign in to RSVP for live classes.");
@@ -133,6 +141,15 @@ const EdtechLive = () => {
             unlocks 15 minutes before start, and we'll mark the session as
             "Live" while it's in progress.
           </p>
+          <div className="mt-6">
+            <button
+              type="button"
+              onClick={() => openBooking()}
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+            >
+              <CalendarClock className="h-4 w-4" aria-hidden /> Book a Live Session
+            </button>
+          </div>
         </div>
       </section>
 
@@ -155,6 +172,7 @@ const EdtechLive = () => {
                     rsvped={rsvpIds.has(c.id)}
                     attendees={counts[c.id] ?? 0}
                     onRsvp={() => handleRsvp(c)}
+                    onBook={() => openBooking(c.id)}
                   />
                 ))}
               </ul>
@@ -182,6 +200,14 @@ const EdtechLive = () => {
           )}
         </div>
       </section>
+
+      <BookLiveSessionDialog
+        open={bookingOpen}
+        onOpenChange={setBookingOpen}
+        classes={upcoming}
+        selectedClassId={bookingClassId}
+        onBooked={refresh}
+      />
     </EdtechShell>
   );
 };
@@ -218,12 +244,14 @@ const LiveCard = ({
   rsvped,
   attendees,
   onRsvp,
+  onBook,
   compact,
 }: {
   cls: LiveClass;
   rsvped: boolean;
   attendees: number;
   onRsvp: () => void;
+  onBook?: () => void;
   compact?: boolean;
 }) => {
   const course = getCourseBySlug(cls.course_slug);
@@ -290,6 +318,16 @@ const LiveCard = ({
               ) : (
                 "RSVP"
               )}
+            </button>
+          )}
+
+          {!isEnded && !isCancelled && onBook && (
+            <button
+              type="button"
+              onClick={onBook}
+              className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-4 py-2 text-[12px] font-semibold text-primary hover:bg-primary/10"
+            >
+              <CalendarClock className="h-3.5 w-3.5" aria-hidden /> Book this session
             </button>
           )}
 
