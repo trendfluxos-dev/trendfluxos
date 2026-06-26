@@ -18,6 +18,7 @@ import BrandSwitcher from "./components/social/BrandSwitcher";
 import LuxeVeilGate from "./components/LuxeVeilGate";
 import TelegramGroupPopup from "./components/TelegramGroupPopup";
 import ConsentBannerGate from "./components/ConsentBannerGate";
+import SiteStatusBanner from "./components/SiteStatusBanner";
 import AccessRequestGate from "./components/AccessRequestGate";
 import { BrandPreviewProvider } from "./context/BrandPreviewContext";
 import { SeoHead } from "@/hooks/useSeo";
@@ -275,6 +276,7 @@ const App = () => (
           <LuxeVeilGate />
           <TelegramGroupPopup />
           <ConsentBannerGate />
+          <SiteStatusBanner />
           <AccessRequestGate />
           {ThemeDebugPanel && PERF_FLAG && (
             <Suspense fallback={null}>
