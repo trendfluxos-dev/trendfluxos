@@ -23,7 +23,6 @@ type ServerStatus = {
 export default function SiteStatusBanner() {
   const [checks, setChecks] = useState<Check[] | null>(null);
   const [dismissed, setDismissed] = useState(false);
-  const [server, setServer] = useState<ServerStatus | null>(null);
   const [checkedAt, setCheckedAt] = useState<string | null>(null);
 
   useEffect(() => {
@@ -74,7 +73,6 @@ export default function SiteStatusBanner() {
         ).finally(() => clearTimeout(t));
         const result = r.ok ? ((await r.json()) as ServerStatus) : null;
         if (!cancelled && result) {
-          setServer(result);
           setChecks(buildClient(result));
           setCheckedAt(new Date().toLocaleTimeString());
         }
