@@ -1,54 +1,93 @@
-## লক্ষ্য
 
-Live class হবে কোর্স থেকে আলাদা একটা system। class চলাকালীন teacher চাইলে browser-এই recording করতে পারবেন। class শেষ হলে recording + materials student-দের কাছে auto পৌঁছাবে (in-app + email), teacher চাইলে public link দিয়েও share করতে পারবেন, এবং recording-টিকে কোনো module-এর lesson হিসেবে attach করতে পারবেন।
+# Live Studio v2 — Feature-Parity Plan
 
-## যা তৈরি হবে
+আপনার দুটি reference project (`liveclassstdio-main` + `ClassFlow Studio`) থেকে যে features শ্রেণিভুক্ত করেছেন, আমাদের existing `EdtechLiveStudio`-এর সাথে gap analysis করলাম। নিচে যা missing/incomplete সেগুলোই ধাপে ধাপে port করব। প্রতিটা ধাপ আলাদা ডেলিভারেবল।
 
-### 1. Database (এক migration-এ)
-- `class_recordings` টেবিল — class_id, teacher_id, storage_path, mime_type, duration_sec, size_bytes, title, description, public_token (nullable, share করলে set হয়), is_public, attached_module_id, attached_lesson_id, recorded_at
-- নতুন private storage bucket `class-recordings`
-- RLS:
-  - Teacher/admin: own recordings-এ full access
-  - Student: শুধু সেই class-এর recording যেখানে তিনি RSVP/join করেছিলেন
-  - Public: শুধু RPC `get_recording_by_token(token)` দিয়ে — token থাকলে যেকেউ দেখতে পাবেন
-- RPC: `publish_recording_public(id)` → token generate করে, `unpublish_recording_public(id)` → token সরায়
+---
 
-### 2. Studio-তে Recording UI (`EdtechLiveStudio.tsx`)
-- নতুন **Record** button top bar-এ (Share window-এর পাশে)
-- Record শুরু হলে: shared window stream + mic mix → `MediaRecorder` (webm/vp9+opus)
-- Recording indicator + timer
-- Stop / class end হলে → **Save Recording** dialog
-  - Title (default: class title + date), description
-  - Visibility: Private (teacher only) / Students who joined / Public link
-  - Attach to module: dropdown — None / existing module → lesson
-  - Save চাপলে: webm blob → `class-recordings` bucket-এ upload, row insert, প্রয়োজনে token generate ও lesson-এ attach
+## Current state vs. reference (gap)
 
-### 3. Student delivery
-- নতুন page `/edtech/my-classes` — তাঁর RSVP করা সব class + recording + materials list
-- Class card click-এ recording player + materials list ("Save to my library" button — student-side download)
-- Email: `class-recording-ready` template — RSVP-করা student-দের কাছে recording link সহ যাবে (email infra আগে scaffold করা না থাকলে আমি setup করবো)
+| Feature | Reference | আমাদের state | Action |
+|---|---|---|---|
+| Stage vs Live Output separation | ✅ | ✅ আছে | keep |
+| Presenter Dock (left rail with materials + web + whiteboard) | ✅ | ⚠ আছে কিন্তু polish কম | redesign |
+| Send-to-Live, Hide, Hot-swap | ✅ | ✅ আছে | keep |
+| **Student Mirror** (PiP — teacher দেখে student real-time কী দেখছে) | ✅ | ❌ নেই | **port** |
+| **Layout Preview dialog** (3-panel student-view সিমুলেশন publish ছাড়াই) | ✅ | ❌ নেই | **port** |
+| Whiteboard (tldraw, live snapshot) | ✅ | ✅ আছে | verify realtime sync |
+| Web URL preview (iframe) | ✅ | ✅ আছে | keep |
+| Materials library + upload + Drive import | ✅ | partial (upload আছে, Drive import নেই) | **port Drive import (optional later)** |
+| Teacher AI panel (explain/example/quiz/summary/answer) | ✅ | ✅ আছে কিন্তু simpler | **upgrade modes** |
+| Teacher Notes (private, autosave) | ✅ | ✅ আছে | keep |
+| Web search shortcut tab | ✅ | ❌ নেই | port (small) |
+| Reset share token | ✅ | ❌ নেই | **port** |
+| Schedule on Google Calendar dialog | ✅ | partial (admin-side) | port to studio top-bar |
+| **PRIVATE STUDIO badge** + lock hints | ✅ | ❌ নেই | port |
+| **Onboarding wizard / checklist** (first-class UX) | ✅ | ❌ নেই | **port** |
+| Class share via `/class/$token` public viewer | ✅ | ✅ আছে (`/class/by-token/:token`) | verify parity with `live_state` |
+| Screen broadcast (WebRTC for window share) | optional | ✅ আছে | keep |
+| Recording (browser MediaRecorder + save dialog) | optional | ✅ আছে | keep |
 
-### 4. Public share page
-- নতুন route `/class-recording/:token`
-- কোনো auth লাগবে না — RPC দিয়ে recording fetch করে signed video URL দেখাবে
+---
 
-### 5. Module library integration
-- Save dialog থেকে recording module/lesson-এ attach করলে existing `course_modules` / lesson player সেটাকে video lesson হিসেবে দেখাবে
-- Admin চাইলে পরে `/edtech/admin/recordings`-এ গিয়ে recordings library থেকে module-এ move/attach করতে পারবেন
+## ধাপ ১ — Student Mirror + Layout Preview + Private badge
 
-## টেকনিক্যাল ডিটেইল
+Studio center stage-এ floating Mirror PiP (minimize/close-যোগ্য) যেখানে teacher দেখবে student বর্তমানে যা দেখছে। উপরে `PRIVATE STUDIO` badge, "Layout Preview" button (3-panel student view সিমুলেশন dialog), এবং `Reset link` button।
 
-- **Recorder source**: studio-র Share-window MediaStream-এর video track + `getUserMedia({audio:true})`-এর audio track মিশিয়ে একটি `MediaStream` → `MediaRecorder({mimeType:'video/webm;codecs=vp9,opus'})`। share বন্ধ থাকলে record disabled।
-- **Browser fallback**: MediaRecorder unsupported হলে clear notice + "Use external screen recorder, then upload manually" CTA।
-- **Upload**: chunked না — `recorder.ondataavailable` থেকে blobs জমিয়ে stop-এ single `.webm` upload (Supabase storage 5 GB/file)। বড় হলে warning দেখাবো।
-- **Public token**: 32-char `gen_random_uuid` base32; revoke করলে instantly invalid।
-- **Email**: যদি email infrastructure এখনো scaffold করা না থাকে, আমি `setup_email_infra` + `scaffold_transactional_email` চালাবো; domain না থাকলে আগে domain setup dialog দেখাবো।
+**Files**
+- `src/components/edtech/StudentMirror.tsx` (new)
+- `src/components/edtech/StudentLayoutPreview.tsx` (new — port from reference)
+- `src/pages/edtech/EdtechLiveStudio.tsx` (top-bar + stage overlay wiring)
 
-## ধাপ
-1. DB migration + storage bucket + RLS + RPCs
-2. Recorder + Save dialog UI (studio)
-3. `EdtechMyClasses` page + route
-4. Public `/class-recording/:token` page + route
-5. Email setup check → template + send hook
-6. Admin recordings library page
-7. Smoke test: record → save → student dashboard → public link → email
+---
+
+## ধাপ ২ — Presenter Dock polish + Web search panel + Onboarding checklist
+
+Left rail-কে রেফারেন্স-এর মতো grouped করব (Materials list with kind icons, Web page card, Whiteboard card, "Send to Live" badges দেখানো)। Right rail-এ Tabs: AI / Notes / Web Search। প্রথমবার studio খুললে collapsible onboarding checklist (5 ধাপ: Add material → Copy link → Schedule → Send to Live → End class) — localStorage-এ persist।
+
+**Files**
+- `src/components/edtech/OnboardingChecklist.tsx` (new — port)
+- `src/components/edtech/WebSearchPanel.tsx` (new — small)
+- `src/components/edtech/StudioAiPanel.tsx` (add 5 modes if missing)
+- `src/pages/edtech/EdtechLiveStudio.tsx` (Tabs restructure)
+
+---
+
+## ধাপ ৩ — Schedule on Google Calendar (studio top-bar)
+
+Reference-এর `ScheduleDialog` port করব। আমাদের existing `calendar-sync` edge function বা serverFn-এর সাথে wire করব। Onboarding-এর "scheduled" step এতেই tick হবে।
+
+**Files**
+- `src/components/edtech/ScheduleClassDialog.tsx` (new — port)
+- `src/pages/edtech/EdtechLiveStudio.tsx` (button in top-bar)
+
+---
+
+## ধাপ ৪ — Verify student viewer parity
+
+`EdtechLiveWatch.tsx` এবং `ClassByToken.tsx` যেন `live_state` subscribe করে stage hot-swap দেখায়, এবং `is_live_visible=false` হলে polished waiting screen দেখায় (reference-এর crossfade animation সহ)। কোনো DB change লাগবে না — শুধু client polish।
+
+**Files**
+- `src/pages/edtech/EdtechLiveWatch.tsx`
+- `src/pages/edtech/ClassByToken.tsx`
+
+---
+
+## ধাপ ৫ (optional, পরে) — Google Drive import + Admin Live Monitor
+
+Reference-এর `DriveImportDialog` + `drive.functions.ts` port করতে Google OAuth scope-extension লাগবে। Admin Live Monitor `/admin/live-monitor` reuse করে currently-live classes-এর read-only student view দেখাবে। এগুলো আলাদা turn-এ ধরব।
+
+---
+
+## Privacy & DB
+
+- কোনো নতুন table লাগবে না — `live_state`, `teacher_notes`, `class_materials`, `live_classes`, `class_recordings` সব already আছে।
+- "Reset link" → `live_classes.share_token` regenerate; existing RLS যথেষ্ট।
+- Onboarding/Layout preview/Mirror — পুরোটাই client-side; কিছু broadcast হয় না।
+- PRIVATE STUDIO badge হল visual confirmation — গাণিতিকভাবে দেখায় "কেবল আপনার চাপানো content student-এর `live_state` channel-এ যায়; desktop/notes কখনোই নয়।"
+
+---
+
+## প্রথমে কোনটা করব
+
+আপনি OK দিলে **ধাপ ১ → ২ → ৩ → ৪** এই ক্রমে যাব — প্রতি ধাপের পর দেখাবো। Drive import + admin monitor (ধাপ ৫) পরে আলাদা প্রম্পটে। কোনো ধাপ বাদ/পুনঃক্রম চাইলে এখনই বলুন।
