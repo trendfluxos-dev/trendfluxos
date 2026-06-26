@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
 import EdtechPageHeader from "@/components/edtech/EdtechPageHeader";
+import { StudioOnboardingChecklist } from "@/components/edtech/StudioOnboardingChecklist";
 import { EDTECH } from "@/config/edtech";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
@@ -60,6 +61,13 @@ const EdtechTeachClasses = () => {
         }
       />
       <main className="mx-auto max-w-5xl px-6 py-10 lg:px-10">
+        {!loading && (
+          <StudioOnboardingChecklist
+            classCount={classes.length}
+            firstClassId={classes[0]?.id ?? null}
+            hasLiveActivity={classes.some((c) => c.status === "live" || c.status === "ended")}
+          />
+        )}
         {loading ? (
           <div className="flex min-h-[30vh] items-center justify-center">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
