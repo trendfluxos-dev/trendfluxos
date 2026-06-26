@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, AlertTriangle, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 type Check = { label: string; ok: boolean; detail?: string };
+
+type ServerStatus = {
+  reachable: boolean;
+  published: boolean;
+  ssl: boolean;
+  status: number;
+  latency_ms: number;
+  checked_at: string;
+};
 
 /**
  * Lightweight, dependency-free status banner.
@@ -11,6 +21,8 @@ type Check = { label: string; ok: boolean; detail?: string };
 export default function SiteStatusBanner() {
   const [checks, setChecks] = useState<Check[] | null>(null);
   const [dismissed, setDismissed] = useState(false);
+  const [server, setServer] = useState<ServerStatus | null>(null);
+  const [checkedAt, setCheckedAt] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -18,15 +30,14 @@ export default function SiteStatusBanner() {
       setDismissed(true);
       return;
     }
-    const { protocol, hostname } = window.location;
-    const isSsl = protocol === "https:";
-    const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
-    const isPreview =
-      /lovable\.(app|dev)|lovableproject\.com/.test(hostname);
-    const isCustom = !isLocal && !isPreview;
-    const isLive = !isLocal && (isPreview || isCustom) && isSsl;
 
-    setChecks([
+    const { protocol, hostname, origin } = window.location;
+    const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+    const isPreview = /lovable\.(app|dev)|lovableproject\.com/.test(hostname);
+    const isCustom = !isLocal && !isPreview;
+    const isSslClient = protocol === "https:";
+
+    const buildClient = (s: ServerStatus | null): Check[] => [
       {
         label: isCustom
           ? `Custom domain (${hostname})`
@@ -36,9 +47,57 @@ export default function SiteStatusBanner() {
         ok: !isLocal,
         detail: hostname,
       },
-      { label: "Published & reachable", ok: isLive },
-      { label: "SSL active (HTTPS)", ok: isSsl },
-    ]);
+      {
+        label: s ? "Published & reachable" : "Published (local check)",
+        ok: s ? s.published && s.reachable : !isLocal && isSslClient,
+        detail: s ? `${s.status} · ${s.latency_ms}ms` : undefined,
+      },
+      {
+        label: "SSL active (HTTPS)",
+        ok: s ? s.ssl : isSslClient,
+      },
+    ];
+
+    setChecks(buildClient(null));
+
+    let cancelled = false;
+    const run = async () => {
+      if (isLocal) return; // skip server probe for local dev
+      try {
+        const { data, error } = await supabase.functions.invoke<ServerStatus>(
+          "site-status",
+          { method: "GET", body: undefined, headers: {}, // GET via query
+            // @ts-expect-error invoke supports query in URL
+            query: { url: origin } },
+        );
+        // Fallback if `query` isn't honored: call via fetch
+        const result = data ?? (error
+          ? await fetch(
+              `https://dnodqhwwzdqfqlndwhsf.supabase.co/functions/v1/site-status?url=${encodeURIComponent(origin)}`,
+            ).then((r) => (r.ok ? (r.json() as Promise<ServerStatus>) : null))
+          : null);
+        if (!cancelled && result) {
+          setServer(result);
+          setChecks(buildClient(result));
+          setCheckedAt(new Date().toLocaleTimeString());
+        }
+      } catch {
+        /* network hiccup — keep last known state */
+      }
+    };
+
+    // Defer first probe to idle so it never blocks first paint.
+    const ric = (window as unknown as { requestIdleCallback?: (cb: () => void) => void }).requestIdleCallback;
+    if (ric) ric(run); else setTimeout(run, 1500);
+
+    const id = window.setInterval(run, 60_000);
+    const onVis = () => { if (document.visibilityState === "visible") run(); };
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", onVis);
+    };
   }, []);
 
   if (dismissed || !checks) return null;
@@ -68,9 +127,15 @@ export default function SiteStatusBanner() {
                   c.ok ? "bg-emerald-400" : "bg-amber-400"
                 }`}
               />
-              <span className="opacity-90">{c.label}</span>
+              <span className="opacity-90">
+                {c.label}
+                {c.detail ? <span className="ml-1 opacity-60">· {c.detail}</span> : null}
+              </span>
             </span>
           ))}
+          {checkedAt && (
+            <span className="ml-auto text-[10px] opacity-50">checked {checkedAt}</span>
+          )}
         </div>
         <button
           type="button"
