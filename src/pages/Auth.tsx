@@ -53,6 +53,7 @@ export default function Auth() {
   const [mode, setMode] = useState<"signin" | "signup">(role ? "signup" : "signin");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -133,6 +134,27 @@ export default function Auth() {
       toast.error("Google sign-in ব্যর্থ হয়েছে।");
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleApple = async () => {
+    setAppleLoading(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("apple", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) {
+        toast.error("Apple sign-in ব্যর্থ হয়েছে। আবার চেষ্টা করুন।");
+        return;
+      }
+      if (result.redirected) return;
+      window.scrollTo({ top: 0, behavior: "auto" });
+      navigate(redirect, { replace: true });
+    } catch (err) {
+      console.error("Apple sign-in failed", err);
+      toast.error("Apple sign-in ব্যর্থ হয়েছে।");
+    } finally {
+      setAppleLoading(false);
     }
   };
 
@@ -258,6 +280,18 @@ export default function Auth() {
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.83C6.71 7.31 9.14 5.38 12 5.38z"/>
             </svg>
             {googleLoading ? "..." : "Continue with Google"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleApple}
+            disabled={appleLoading || loading}
+            className="w-full h-11 rounded-xl bg-black text-white hover:bg-black/90 transition-colors flex items-center justify-center gap-2.5 text-[14px] font-medium disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M16.365 1.43c0 1.14-.42 2.22-1.12 3.03-.76.88-1.99 1.56-3.01 1.48-.13-1.13.43-2.31 1.12-3.06.79-.86 2.12-1.5 3.01-1.45zM20.5 17.16c-.55 1.27-.81 1.84-1.52 2.96-1 1.56-2.4 3.49-4.14 3.51-1.55.02-1.95-1-4.05-.99-2.1.01-2.54 1.01-4.09.99-1.74-.02-3.07-1.77-4.07-3.32-2.79-4.34-3.08-9.44-1.36-12.15 1.22-1.93 3.15-3.06 4.96-3.06 1.84 0 3 1.01 4.52 1.01 1.47 0 2.37-1.01 4.5-1.01 1.61 0 3.32.88 4.54 2.4-3.99 2.18-3.34 7.87.71 9.66z"/>
+            </svg>
+            {appleLoading ? "..." : "Continue with Apple"}
           </button>
 
           <button
