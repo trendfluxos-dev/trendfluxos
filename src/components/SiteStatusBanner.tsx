@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, AlertTriangle, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const STATUS_ENDPOINT =
   "https://dnodqhwwzdqfqlndwhsf.supabase.co/functions/v1/site-status";
@@ -24,6 +31,12 @@ export default function SiteStatusBanner() {
   const [checks, setChecks] = useState<Check[] | null>(null);
   const [dismissed, setDismissed] = useState(false);
   const [checkedAt, setCheckedAt] = useState<string | null>(null);
+  const [server, setServer] = useState<ServerStatus | null>(null);
+  const [open, setOpen] = useState(false);
+  const [host, setHost] = useState<string>("");
+  const [isLocal, setIsLocal] = useState(false);
+  const [isPreview, setIsPreview] = useState(false);
+  const [isSslClient, setIsSslClient] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -33,29 +46,33 @@ export default function SiteStatusBanner() {
     }
 
     const { protocol, hostname, origin } = window.location;
-    const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
-    const isPreview = /lovable\.(app|dev)|lovableproject\.com/.test(hostname);
-    const isCustom = !isLocal && !isPreview;
-    const isSslClient = protocol === "https:";
+    const _isLocal = hostname === "localhost" || hostname === "127.0.0.1";
+    const _isPreview = /lovable\.(app|dev)|lovableproject\.com/.test(hostname);
+    const isCustom = !_isLocal && !_isPreview;
+    const _isSsl = protocol === "https:";
+    setHost(hostname);
+    setIsLocal(_isLocal);
+    setIsPreview(_isPreview);
+    setIsSslClient(_isSsl);
 
     const buildClient = (s: ServerStatus | null): Check[] => [
       {
         label: isCustom
           ? `Custom domain (${hostname})`
-          : isPreview
+          : _isPreview
             ? "Lovable preview domain"
             : "Local dev",
-        ok: !isLocal,
+        ok: !_isLocal,
         detail: hostname,
       },
       {
         label: s ? "Published & reachable" : "Published (local check)",
-        ok: s ? s.published && s.reachable : !isLocal && isSslClient,
+        ok: s ? s.published && s.reachable : !_isLocal && _isSsl,
         detail: s ? `${s.status} · ${s.latency_ms}ms` : undefined,
       },
       {
         label: "SSL active (HTTPS)",
-        ok: s ? s.ssl : isSslClient,
+        ok: s ? s.ssl : _isSsl,
       },
     ];
 
@@ -63,7 +80,7 @@ export default function SiteStatusBanner() {
 
     let cancelled = false;
     const run = async () => {
-      if (isLocal) return; // skip server probe for local dev
+      if (_isLocal) return; // skip server probe for local dev
       try {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 6000);
@@ -74,6 +91,7 @@ export default function SiteStatusBanner() {
         const result = r.ok ? ((await r.json()) as ServerStatus) : null;
         if (!cancelled && result) {
           setChecks(buildClient(result));
+          setServer(result);
           setCheckedAt(new Date().toLocaleTimeString());
         }
       } catch {
@@ -99,6 +117,7 @@ export default function SiteStatusBanner() {
   const allOk = checks.every((c) => c.ok);
 
   return (
+    <>
     <div
       role="status"
       aria-live="polite"
@@ -114,7 +133,12 @@ export default function SiteStatusBanner() {
         ) : (
           <AlertTriangle className="h-4 w-4 shrink-0" />
         )}
-        <div className="flex flex-1 flex-wrap items-center gap-x-4 gap-y-1">
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="flex flex-1 flex-wrap items-center gap-x-4 gap-y-1 text-left hover:opacity-90 focus:outline-none"
+          aria-label="View site status details"
+        >
           {checks.map((c) => (
             <span key={c.label} className="inline-flex items-center gap-1">
               <span
@@ -131,7 +155,10 @@ export default function SiteStatusBanner() {
           {checkedAt && (
             <span className="ml-auto text-[10px] opacity-50">checked {checkedAt}</span>
           )}
-        </div>
+          <span className="ml-2 rounded border border-current/30 px-1.5 py-0.5 text-[10px] opacity-70">
+            Details
+          </span>
+        </button>
         <button
           type="button"
           aria-label="Dismiss status banner"
@@ -145,5 +172,53 @@ export default function SiteStatusBanner() {
         </button>
       </div>
     </div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Site status details</DialogTitle>
+          <DialogDescription>
+            Live verification of DNS, publish state and SSL for the current origin.
+          </DialogDescription>
+        </DialogHeader>
+        <dl className="grid grid-cols-3 gap-y-2 text-sm">
+          <dt className="col-span-1 text-muted-foreground">Host</dt>
+          <dd className="col-span-2 font-mono break-all">{host}</dd>
+
+          <dt className="col-span-1 text-muted-foreground">Environment</dt>
+          <dd className="col-span-2">
+            {isLocal ? "Local dev" : isPreview ? "Lovable preview" : "Custom domain"}
+          </dd>
+
+          <dt className="col-span-1 text-muted-foreground">DNS / reachable</dt>
+          <dd className="col-span-2">
+            {server ? (server.reachable ? "✅ Resolves & responds" : "⚠️ Not reachable") : "—"}
+          </dd>
+
+          <dt className="col-span-1 text-muted-foreground">Published</dt>
+          <dd className="col-span-2">
+            {server ? (server.published ? `✅ HTTP ${server.status}` : `⚠️ HTTP ${server.status || "n/a"}`) : "—"}
+          </dd>
+
+          <dt className="col-span-1 text-muted-foreground">SSL (HTTPS)</dt>
+          <dd className="col-span-2">
+            {server ? (server.ssl ? "✅ Valid certificate" : "⚠️ No HTTPS") : isSslClient ? "✅ HTTPS (client)" : "⚠️ HTTP only"}
+          </dd>
+
+          <dt className="col-span-1 text-muted-foreground">Latency</dt>
+          <dd className="col-span-2">{server ? `${server.latency_ms} ms` : "—"}</dd>
+
+          <dt className="col-span-1 text-muted-foreground">Last checked</dt>
+          <dd className="col-span-2">
+            {server ? new Date(server.checked_at).toLocaleString() : checkedAt ?? "pending"}
+          </dd>
+        </dl>
+        <p className="text-xs text-muted-foreground">
+          If visitors still report errors, the domain's DNS may point elsewhere or a proxy/CDN
+          may be blocking the request. Re-verify A record → <code>185.158.133.1</code> and
+          disable any third-party proxy in front of the domain.
+        </p>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }
