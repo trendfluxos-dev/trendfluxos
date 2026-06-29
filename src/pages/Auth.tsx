@@ -53,6 +53,7 @@ export default function Auth() {
   const [mode, setMode] = useState<"signin" | "signup">(role ? "signup" : "signin");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -133,6 +134,27 @@ export default function Auth() {
       toast.error("Google sign-in ব্যর্থ হয়েছে।");
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleApple = async () => {
+    setAppleLoading(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("apple", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) {
+        toast.error("Apple sign-in ব্যর্থ হয়েছে। আবার চেষ্টা করুন।");
+        return;
+      }
+      if (result.redirected) return;
+      window.scrollTo({ top: 0, behavior: "auto" });
+      navigate(redirect, { replace: true });
+    } catch (err) {
+      console.error("Apple sign-in failed", err);
+      toast.error("Apple sign-in ব্যর্থ হয়েছে।");
+    } finally {
+      setAppleLoading(false);
     }
   };
 
