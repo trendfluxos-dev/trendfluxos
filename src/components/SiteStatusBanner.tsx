@@ -217,6 +217,89 @@ export default function SiteStatusBanner() {
           may be blocking the request. Re-verify A record → <code>185.158.133.1</code> and
           disable any third-party proxy in front of the domain.
         </p>
+
+        <div className="mt-2 max-h-[42vh] overflow-y-auto rounded-lg border border-border bg-muted/30 p-3 text-xs">
+          <p className="mb-2 font-semibold text-foreground">
+            Hostinger DNS/SSL troubleshooting checklist
+          </p>
+          <ol className="list-decimal space-y-2 pl-4 [&_code]:rounded [&_code]:bg-background [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono">
+            <li>
+              <b>Login → hPanel → Domains → DNS / Nameservers.</b> Make sure nameservers
+              are Hostinger's defaults (or your registrar's), not an old host.
+            </li>
+            <li>
+              <b>DNS Zone Editor → A records.</b> Delete any old A records for{" "}
+              <code>@</code> and <code>www</code>. Add:
+              <ul className="mt-1 list-disc pl-4">
+                <li>Type <code>A</code> · Name <code>@</code> · Points to <code>185.158.133.1</code> · TTL <code>14400</code></li>
+                <li>Type <code>A</code> · Name <code>www</code> · Points to <code>185.158.133.1</code> · TTL <code>14400</code></li>
+              </ul>
+            </li>
+            <li>
+              <b>Add the TXT verification record.</b> Type <code>TXT</code> · Name{" "}
+              <code>_lovable</code> · Value from Lovable → Project Settings → Domains.
+            </li>
+            <li>
+              <b>Remove conflicts:</b> delete legacy <code>CNAME</code>, <code>AAAA</code>,
+              or parking records pointing to Vercel / Hostinger park / GitHub Pages.
+            </li>
+            <li>
+              <b>Turn OFF Cloudflare proxy (orange cloud → grey).</b> Proxy mode breaks
+              Lovable SSL issuance. If you must keep Cloudflare, enable "Domain uses
+              Cloudflare or a similar proxy" inside Lovable's Connect Domain dialog.
+            </li>
+            <li>
+              <b>SSL in hPanel → Advanced → SSL:</b> remove any old "Hostinger SSL" or
+              AutoSSL bound to this domain. Lovable provisions Let's Encrypt automatically.
+            </li>
+            <li>
+              <b>CAA records:</b> if present, ensure they include{" "}
+              <code>0 issue "letsencrypt.org"</code> — otherwise SSL will fail.
+            </li>
+            <li>
+              <b>Wait & verify propagation:</b> 5 min – 72 h. Check at{" "}
+              <a className="underline" href="https://dnschecker.org" target="_blank" rel="noreferrer">
+                dnschecker.org
+              </a>{" "}
+              for both <code>{host || "yourdomain"}</code> and <code>www.{host || "yourdomain"}</code>.
+            </li>
+            <li>
+              <b>In Lovable → Project Settings → Domains:</b> add BOTH the root and{" "}
+              <code>www</code> as separate entries, then click <i>Retry</i> if status is
+              "Failed".
+            </li>
+            <li>
+              <b>Force-publish:</b> hit "Publish" once more so the latest bundle is
+              attached to the active domain.
+            </li>
+          </ol>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a
+              href={`https://dnschecker.org/#A/${host || ""}`}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded border border-border px-2 py-1 hover:bg-background"
+            >
+              Check DNS propagation →
+            </a>
+            <a
+              href={`https://www.ssllabs.com/ssltest/analyze.html?d=${host || ""}`}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded border border-border px-2 py-1 hover:bg-background"
+            >
+              Test SSL →
+            </a>
+            <a
+              href="https://hpanel.hostinger.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="rounded border border-border px-2 py-1 hover:bg-background"
+            >
+              Open Hostinger hPanel →
+            </a>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
     </>
