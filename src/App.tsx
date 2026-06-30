@@ -120,6 +120,7 @@ const Trust = routes["/trust"];
 const Settings = routes["/settings"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
+const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
 
 const PageFallback = () => (
   <div className="flex min-h-dvh items-center justify-center bg-background">
@@ -213,6 +214,7 @@ const RoutedApp = () => {
         <Route path="/trust" element={<Trust />} />
         <Route path="/settings" element={<Settings />} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
+        {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}
         {/* Synthetic error route for Playwright error-boundary smoke tests. */}
         <Route path="/__test/boom-route" element={<RouteBoom />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
