@@ -389,7 +389,7 @@ const ProjectLead = () => {
       </section>
 
       {/* DIRECT CTA */}
-      <section className="px-6 lg:px-10 py-24">
+      <section id="book" className="px-6 lg:px-10 py-24 scroll-mt-24">
         <div className="max-w-5xl mx-auto relative rounded-[2rem] glass-strong overflow-hidden p-10 md:p-16">
           <div className="absolute inset-0 bg-gradient-hero" aria-hidden />
           <div className="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
