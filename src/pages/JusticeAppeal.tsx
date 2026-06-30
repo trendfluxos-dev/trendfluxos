@@ -162,7 +162,7 @@ export default function JusticeAppeal() {
                 {/* clipping caption strip */}
                 <div className="mt-3 flex items-baseline justify-between px-1 text-black/80">
                   <span className="font-serif text-[11px] italic">Referenced in complaint and media reports</span>
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-black/50">Archive · 01</span>
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-black/75">Archive · 01</span>
                 </div>
               </div>
               <figcaption className="mt-5 max-w-sm text-[11px] leading-relaxed text-slate-300">
