@@ -1,93 +1,89 @@
+# Plan — Navbar Aliases + Dev Tools + Homepage Compaction + CI + Low-End Hardening
 
-# Live Studio v2 — Feature-Parity Plan
+A lot landed in one message. Grouping by deliverable so we can ship in one pass.
 
-আপনার দুটি reference project (`liveclassstdio-main` + `ClassFlow Studio`) থেকে যে features শ্রেণিভুক্ত করেছেন, আমাদের existing `EdtechLiveStudio`-এর সাথে gap analysis করলাম। নিচে যা missing/incomplete সেগুলোই ধাপে ধাপে port করব। প্রতিটা ধাপ আলাদা ডেলিভারেবল।
+## 1. Canonical-alias active state (navbar)
 
----
+Right now `pathname === node.path` decides "Current". Funnel routes like `/toolkit` and `/masterclass` redirect to `/edtech`, so the Toolkit/Masterclass dropdown items never glow.
 
-## Current state vs. reference (gap)
+- Add an optional `canonicalAlias?: string` field to nodes in `src/config/siteLayers.ts`. Example: `Toolkit` keeps `path: "/toolkit"` but gains `canonicalAlias: "/edtech"`.
+- In `LayerMegaMenu.tsx`, mark `isActive` when `pathname === node.path` **OR** `pathname === node.canonicalAlias` and no other sibling owns the path more specifically (sibling-with-exact-match wins to avoid double highlights).
+- The `/edtech` node itself stays the primary owner of `/edtech`; Toolkit/Masterclass get a secondary "via" highlight (lighter ring + `↪` glyph) so it's obvious they are funnels, not duplicates.
 
-| Feature | Reference | আমাদের state | Action |
-|---|---|---|---|
-| Stage vs Live Output separation | ✅ | ✅ আছে | keep |
-| Presenter Dock (left rail with materials + web + whiteboard) | ✅ | ⚠ আছে কিন্তু polish কম | redesign |
-| Send-to-Live, Hide, Hot-swap | ✅ | ✅ আছে | keep |
-| **Student Mirror** (PiP — teacher দেখে student real-time কী দেখছে) | ✅ | ❌ নেই | **port** |
-| **Layout Preview dialog** (3-panel student-view সিমুলেশন publish ছাড়াই) | ✅ | ❌ নেই | **port** |
-| Whiteboard (tldraw, live snapshot) | ✅ | ✅ আছে | verify realtime sync |
-| Web URL preview (iframe) | ✅ | ✅ আছে | keep |
-| Materials library + upload + Drive import | ✅ | partial (upload আছে, Drive import নেই) | **port Drive import (optional later)** |
-| Teacher AI panel (explain/example/quiz/summary/answer) | ✅ | ✅ আছে কিন্তু simpler | **upgrade modes** |
-| Teacher Notes (private, autosave) | ✅ | ✅ আছে | keep |
-| Web search shortcut tab | ✅ | ❌ নেই | port (small) |
-| Reset share token | ✅ | ❌ নেই | **port** |
-| Schedule on Google Calendar dialog | ✅ | partial (admin-side) | port to studio top-bar |
-| **PRIVATE STUDIO badge** + lock hints | ✅ | ❌ নেই | port |
-| **Onboarding wizard / checklist** (first-class UX) | ✅ | ❌ নেই | **port** |
-| Class share via `/class/$token` public viewer | ✅ | ✅ আছে (`/class/by-token/:token`) | verify parity with `live_state` |
-| Screen broadcast (WebRTC for window share) | optional | ✅ আছে | keep |
-| Recording (browser MediaRecorder + save dialog) | optional | ✅ আছে | keep |
+## 2. UI hint about redirect items
 
----
+Inside each dropdown panel, append a small footnote:
 
-## ধাপ ১ — Student Mirror + Layout Preview + Private badge
+> "↪ Items marked with an arrow funnel into another page; the destination stays highlighted too."
 
-Studio center stage-এ floating Mirror PiP (minimize/close-যোগ্য) যেখানে teacher দেখবে student বর্তমানে যা দেখছে। উপরে `PRIVATE STUDIO` badge, "Layout Preview" button (3-panel student view সিমুলেশন dialog), এবং `Reset link` button।
+Only renders when the open dropdown contains at least one node with `canonicalAlias`.
 
-**Files**
-- `src/components/edtech/StudentMirror.tsx` (new)
-- `src/components/edtech/StudentLayoutPreview.tsx` (new — port from reference)
-- `src/pages/edtech/EdtechLiveStudio.tsx` (top-bar + stage overlay wiring)
+## 3. Dev-only route preview page
 
----
+New route `/dev/routes` (gated by `import.meta.env.DEV` — returns `<NotFound />` in production builds, never added to sitemap, blocked in `robots.txt`).
 
-## ধাপ ২ — Presenter Dock polish + Web search panel + Onboarding checklist
+Three tables side-by-side:
+- **Dropdown nodes** — layer, title, path, canonicalAlias, external?
+- **Search aliases** — alias keyword → target path, plus a live "test resolver" input that calls `resolveRouteQuery`.
+- **Sitemap coverage** — fetches `/sitemap.xml`, parses it, and flags any dropdown path NOT present (red) and any sitemap path NOT in the dropdown/route registry (amber).
 
-Left rail-কে রেফারেন্স-এর মতো grouped করব (Materials list with kind icons, Web page card, Whiteboard card, "Send to Live" badges দেখানো)। Right rail-এ Tabs: AI / Notes / Web Search। প্রথমবার studio খুললে collapsible onboarding checklist (5 ধাপ: Add material → Copy link → Schedule → Send to Live → End class) — localStorage-এ persist।
+## 4. End-to-end click test
 
-**Files**
-- `src/components/edtech/OnboardingChecklist.tsx` (new — port)
-- `src/components/edtech/WebSearchPanel.tsx` (new — small)
-- `src/components/edtech/StudioAiPanel.tsx` (add 5 modes if missing)
-- `src/pages/edtech/EdtechLiveStudio.tsx` (Tabs restructure)
+`src/test/navbar-click.spec.ts` (Playwright via `bunx playwright test`, or a Node script under `scripts/` if Playwright isn't already wired into CI — will reuse the existing `/tmp/browser` pattern). For each `PUBLIC_LAYERS` × `nodesByLayer`:
+1. Open `http://localhost:8080/`.
+2. Hover the layer trigger, click the item.
+3. Assert final `location.pathname` equals either `node.path` or `node.canonicalAlias`.
+4. Assert no console errors.
 
----
+## 5. Homepage compaction — Brand Architect + The Stand + Algorithm Architecture
 
-## ধাপ ৩ — Schedule on Google Calendar (studio top-bar)
+Currently each is its own full-width section, making the homepage very tall. New layout:
 
-Reference-এর `ScheduleDialog` port করব। আমাদের existing `calendar-sync` edge function বা serverFn-এর সাথে wire করব। Onboarding-এর "scheduled" step এতেই tick হবে।
+```text
+┌──────────────────────────────────────────────┐
+│           Brand Architect (full)             │
+├───────────────────────┬──────────────────────┤
+│      The Stand        │ Algorithm Architect. │
+│   (half-width card)   │   (half-width card)  │
+└───────────────────────┴──────────────────────┘
+```
 
-**Files**
-- `src/components/edtech/ScheduleClassDialog.tsx` (new — port)
-- `src/pages/edtech/EdtechLiveStudio.tsx` (button in top-bar)
+- Wrap the two latter sections in a new `<TwoUpStrip>` container in `src/pages/Index.tsx` (or wherever they're composed). Each card keeps its CTA but drops oversized hero treatments; on `< md` they stack vertically — no behavior change on mobile.
+- Brand Architect section stays full-width but trims redundant subheading copy.
 
----
+## 6. CI: validate sitemap.xml and robots.txt on PR
 
-## ধাপ ৪ — Verify student viewer parity
+Add `scripts/validate-seo-files.mjs` that:
+- Parses `public/sitemap.xml` — verifies it's well-formed XML, every `<loc>` uses `https://trendflux.digital`, no duplicate URLs, every URL in the dropdown registry is present.
+- Parses `public/robots.txt` — verifies it has a `User-agent: *` block, no accidental site-wide `Disallow: /`, `/dev/routes` is disallowed, `Sitemap:` directive points to the production sitemap.
 
-`EdtechLiveWatch.tsx` এবং `ClassByToken.tsx` যেন `live_state` subscribe করে stage hot-swap দেখায়, এবং `is_live_visible=false` হলে polished waiting screen দেখায় (reference-এর crossfade animation সহ)। কোনো DB change লাগবে না — শুধু client polish।
+Add `.github/workflows/seo-validate.yml` running `node scripts/validate-seo-files.mjs` on pull_request.
 
-**Files**
-- `src/pages/edtech/EdtechLiveWatch.tsx`
-- `src/pages/edtech/ClassByToken.tsx`
+## 7. Low-end device + universal openability hardening
 
----
+Goal: site loads on 2 GB RAM phones, old browsers, slow networks; every `trendflux.digital/<anything>` either renders the right page or lands on a helpful page (never a hard error).
 
-## ধাপ ৫ (optional, পরে) — Google Drive import + Admin Live Monitor
+- **Bundle**: audit `src/App.tsx` lazy boundaries; ensure every route uses `React.lazy`. Add a tiny shared `<RouteFallback>` (no spinner library, pure CSS) so first paint stays cheap.
+- **Polyfills**: confirm Vite's `build.target` allows ES2018 (already default). No regression from newer syntax.
+- **Image budget**: convert oversized PNGs in `src/assets` flagged by an audit step to `loading="lazy"` and `decoding="async"`. (Will spot-check, not bulk-convert.)
+- **Service-worker-free fallback**: ensure `index.html` has inline minimal CSS so the very first paint shows brand chrome even before JS hydrates.
+- **Universal slash-search**: `NotFound.tsx` already routes via `resolveRouteQuery`. Add a final "soft-landing" fallback — if resolver returns nothing, show top 5 suggestions instead of a dead end.
+- **Robots / sitemap**: confirmed in step 6.
 
-Reference-এর `DriveImportDialog` + `drive.functions.ts` port করতে Google OAuth scope-extension লাগবে। Admin Live Monitor `/admin/live-monitor` reuse করে currently-live classes-এর read-only student view দেখাবে। এগুলো আলাদা turn-এ ধরব।
+## 8. Fix all errors
 
----
+After the above, run `tsgo`, the new `validate-seo-files.mjs`, and the navbar click test. Patch whatever surfaces — no behavior changes beyond what's specified above.
 
-## Privacy & DB
+## Technical notes
 
-- কোনো নতুন table লাগবে না — `live_state`, `teacher_notes`, `class_materials`, `live_classes`, `class_recordings` সব already আছে।
-- "Reset link" → `live_classes.share_token` regenerate; existing RLS যথেষ্ট।
-- Onboarding/Layout preview/Mirror — পুরোটাই client-side; কিছু broadcast হয় না।
-- PRIVATE STUDIO badge হল visual confirmation — গাণিতিকভাবে দেখায় "কেবল আপনার চাপানো content student-এর `live_state` channel-এ যায়; desktop/notes কখনোই নয়।"
+- `siteLayers.ts` is the single source of truth for dropdown items; tests, dev preview, and sitemap validator all import from it — no parallel registries.
+- `/dev/routes` won't appear in production bundles because its lazy import is gated `if (import.meta.env.DEV)` in `App.tsx`, so tree-shaking drops the chunk.
+- Canonical-alias logic is presentation-only; no router or redirect changes — `/toolkit` still resolves to its funnel page and then `<Navigate>`s to `/edtech` as today.
 
----
+## Out of scope (will confirm before doing)
 
-## প্রথমে কোনটা করব
+- Rewriting any brand sub-page content.
+- Changing the funnel target for `/toolkit` or `/masterclass`.
+- Adding a service worker / PWA — easy to misconfigure for the 2 GB-RAM goal, ask first.
 
-আপনি OK দিলে **ধাপ ১ → ২ → ৩ → ৪** এই ক্রমে যাব — প্রতি ধাপের পর দেখাবো। Drive import + admin monitor (ধাপ ৫) পরে আলাদা প্রম্পটে। কোনো ধাপ বাদ/পুনঃক্রম চাইলে এখনই বলুন।
+Approve and I'll ship sections 1–8 in one pass.

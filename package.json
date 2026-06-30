@@ -22,7 +22,9 @@
     "test:visual": "playwright test --project=visual-desktop",
     "test:visual:update": "playwright test --project=visual-desktop --update-snapshots",
     "audit:a11y": "npm run audit:bn-contrast && npm run audit:contrast",
-    "verify:redirects": "node scripts/verify-redirects.mjs"
+    "verify:redirects": "node scripts/verify-redirects.mjs",
+    "validate:seo": "node scripts/validate-seo-files.mjs",
+    "test:navbar": "node scripts/test-navbar-clicks.mjs"
   },
   "dependencies": {
     "@fontsource/hind-siliguri": "^5.2.7",

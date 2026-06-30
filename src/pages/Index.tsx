@@ -105,11 +105,19 @@ const Index = () => {
       <LazySection label="founder-band" minHeight="20vh" skeleton={<SectionSkeleton variant="band" />}>
         <LayerBand layer="founder" />
       </LazySection>
-      <LazySection label="systems" skeleton={<SectionSkeleton variant="cards" />}><SystemsHeBuiltSection /></LazySection>
       <LazySection label="kormoshikkha" skeleton={<SectionSkeleton variant="split" />}><KormoShikkhaShowcase /></LazySection>
       <LazySection label="live-studio" skeleton={<SectionSkeleton variant="split" />}><LiveClassStudioSection /></LazySection>
       <LazySection label="founder" skeleton={<SectionSkeleton variant="split" />}><FounderSection /></LazySection>
-      <LazySection label="stand-cover" skeleton={<SectionSkeleton variant="media" />}><TheStandCoverSection /></LazySection>
+      {/* Paired: The Stand + Algorithm Architecture share a two-up strip
+          on lg+ to keep the homepage compact. They stack on small screens. */}
+      <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-2 lg:gap-8 lg:px-8">
+        <LazySection label="stand-cover" skeleton={<SectionSkeleton variant="media" />}>
+          <TheStandCoverSection />
+        </LazySection>
+        <LazySection label="algorithm-arch" skeleton={<SectionSkeleton variant="cards" />}>
+          <SystemsHeBuiltSection />
+        </LazySection>
+      </div>
       <LazySection label="audio-story" skeleton={<SectionSkeleton variant="media" />}><AudioStoryTeaser /></LazySection>
       <LazySection label="ai-expert" skeleton={<SectionSkeleton variant="media" />}><AiExpertStoryTeaser /></LazySection>
       <LazySection label="quiet-positions" skeleton={<SectionSkeleton variant="cards" />}><QuietPositionsSection /></LazySection>
