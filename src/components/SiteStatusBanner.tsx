@@ -165,8 +165,8 @@ export default function SiteStatusBanner() {
       aria-live="polite"
       className={`w-full border-b text-xs sm:text-sm ${
         allOk
-          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-100"
-          : "border-amber-500/30 bg-amber-500/10 text-amber-100"
+          ? "border-emerald-500/40 bg-emerald-100 text-emerald-900 dark:bg-emerald-500/10 dark:text-emerald-100 dark:border-emerald-500/30"
+          : "border-amber-500/50 bg-amber-100 text-amber-900 dark:bg-amber-500/10 dark:text-amber-100 dark:border-amber-500/30"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-3 py-1.5">
