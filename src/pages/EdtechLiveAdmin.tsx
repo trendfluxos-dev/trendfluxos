@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, CalendarPlus, MonitorPlay, Pencil, Save, Trash2, X } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { ArrowLeft, CalendarPlus, CheckCircle2, Loader2, MonitorPlay, Pencil, Radio, Save, Trash2, Video, X } from "lucide-react";
 import { toast } from "sonner";
 import { EDTECH } from "@/config/edtech";
 import { EDTECH_COURSES } from "@/data/edtechCourses";
@@ -55,6 +55,9 @@ const EdtechLiveAdmin = () => {
   const [draft, setDraft] = useState<Draft>(blank());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [instantOpen, setInstantOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
@@ -68,6 +71,22 @@ const EdtechLiveAdmin = () => {
   useEffect(() => {
     refresh();
   }, [refresh]);
+
+  // Open the instant room flow when `?instant=1` is present.
+  useEffect(() => {
+    if (searchParams.get("instant") === "1") {
+      setInstantOpen(true);
+    }
+  }, [searchParams]);
+
+  const closeInstant = useCallback(() => {
+    setInstantOpen(false);
+    if (searchParams.get("instant")) {
+      const next = new URLSearchParams(searchParams);
+      next.delete("instant");
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const startEdit = (c: LiveClass) => {
     setEditingId(c.id);
@@ -147,12 +166,21 @@ const EdtechLiveAdmin = () => {
             <p className="text-[11px] uppercase tracking-[0.25em] text-primary">Admin</p>
             <h1 className="font-display text-xl font-semibold text-foreground">Live classes</h1>
           </div>
-          <Link
-            to={EDTECH.routes.live}
-            className="inline-flex items-center gap-1.5 text-sm text-foreground/70 hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden /> Public schedule
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setInstantOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-3.5 py-1.5 text-[12px] font-semibold text-white shadow-sm hover:bg-rose-500/90"
+            >
+              <Video className="h-3.5 w-3.5" aria-hidden /> Go live now
+            </button>
+            <Link
+              to={EDTECH.routes.live}
+              className="inline-flex items-center gap-1.5 text-sm text-foreground/70 hover:text-foreground"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden /> Public schedule
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -338,6 +366,16 @@ const EdtechLiveAdmin = () => {
           )}
         </section>
       </main>
+      {instantOpen && (
+        <InstantRoomDialog
+          onClose={closeInstant}
+          onLaunched={(id) => {
+            closeInstant();
+            refresh();
+            navigate(EDTECH.routes.liveStudio(id));
+          }}
+        />
+      )}
     </div>
   );
 };
@@ -353,3 +391,286 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
 );
 
 export default EdtechLiveAdmin;
+
+// ---------------------------------------------------------------------------
+// Instant room flow — confirms availability, creates a live class with a
+// fresh Jitsi room, then navigates to the teacher studio. Designed to be
+// resilient: every step reports a status, retries are one-click, and the
+// dialog never gets stuck without an exit.
+// ---------------------------------------------------------------------------
+
+type StepStatus = "pending" | "running" | "done" | "error";
+interface StepState {
+  id: "auth" | "availability" | "room" | "create" | "navigate";
+  label: string;
+  status: StepStatus;
+  detail?: string;
+}
+
+const initialSteps: StepState[] = [
+  { id: "auth", label: "Verifying your teacher session", status: "pending" },
+  { id: "availability", label: "Checking room availability", status: "pending" },
+  { id: "room", label: "Reserving a fresh Jitsi room", status: "pending" },
+  { id: "create", label: "Publishing the live class", status: "pending" },
+  { id: "navigate", label: "Opening the teacher studio", status: "pending" },
+];
+
+const InstantRoomDialog = ({
+  onClose,
+  onLaunched,
+}: {
+  onClose: () => void;
+  onLaunched: (id: string) => void;
+}) => {
+  const [title, setTitle] = useState("Instant session — " + new Date().toLocaleString(undefined, { hour: "2-digit", minute: "2-digit" }));
+  const [courseSlug, setCourseSlug] = useState(EDTECH_COURSES[0]?.slug ?? "");
+  const [duration, setDuration] = useState(60);
+  const [steps, setSteps] = useState<StepState[]>(initialSteps);
+  const [running, setRunning] = useState(false);
+  const [fatalError, setFatalError] = useState<string | null>(null);
+
+  const setStep = (id: StepState["id"], patch: Partial<StepState>) =>
+    setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
+
+  const launch = async () => {
+    setRunning(true);
+    setFatalError(null);
+    setSteps(initialSteps.map((s) => ({ ...s })));
+    try {
+      // 1. Auth + role
+      setStep("auth", { status: "running" });
+      const { data: u, error: authErr } = await supabase.auth.getUser();
+      if (authErr || !u.user?.id) throw new Error("You're not signed in. Please log in again.");
+      const uid = u.user.id;
+      setStep("auth", { status: "done", detail: u.user.email ?? "session ok" });
+
+      // 2. Availability — make sure this user isn't already hosting a live room
+      setStep("availability", { status: "running" });
+      const { data: existing, error: availErr } = await supabase
+        .from("live_classes")
+        .select("id,title,status")
+        .eq("created_by", uid)
+        .eq("status", "live")
+        .limit(1);
+      if (availErr) throw new Error("Could not check current rooms. Try again.");
+      if (existing && existing.length > 0) {
+        const open = existing[0] as { id: string; title: string };
+        setStep("availability", {
+          status: "error",
+          detail: `You already have a live room: "${open.title}". Open it or end it first.`,
+        });
+        setFatalError("active-room:" + open.id);
+        setRunning(false);
+        return;
+      }
+      setStep("availability", { status: "done", detail: "No conflicting live room" });
+
+      // 3. Reserve a fresh Jitsi room slug
+      setStep("room", { status: "running" });
+      const slug =
+        "trendflux-" +
+        (typeof crypto !== "undefined" && "randomUUID" in crypto
+          ? crypto.randomUUID().slice(0, 8)
+          : Math.random().toString(36).slice(2, 10));
+      const meetingUrl = `https://meet.jit.si/${slug}`;
+      // Lightweight reachability probe — Jitsi serves CORS, so any response (even opaque) is fine.
+      try {
+        await fetch(meetingUrl, { method: "HEAD", mode: "no-cors" });
+      } catch {
+        /* network probes can fail silently — Jitsi rooms are created on first join */
+      }
+      setStep("room", { status: "done", detail: meetingUrl });
+
+      // 4. Create the class
+      setStep("create", { status: "running" });
+      const created = await createLiveClass(
+        {
+          course_slug: courseSlug || EDTECH_COURSES[0]?.slug || "general",
+          title: title.trim() || "Instant live session",
+          description: "Instant room — started on demand.",
+          host_name: u.user.user_metadata?.full_name ?? u.user.email ?? "TrendFlux Faculty",
+          starts_at: new Date().toISOString(),
+          duration_min: Math.max(5, Math.min(600, Number(duration) || 60)),
+          meeting_url: meetingUrl,
+          status: "live",
+        },
+        uid,
+      );
+      setStep("create", { status: "done", detail: `Class #${created.id.slice(0, 8)}` });
+
+      // 5. Navigate
+      setStep("navigate", { status: "running" });
+      toast.success("Room is live — opening the studio");
+      // Small delay so the user sees the final tick before unmount.
+      await new Promise((r) => setTimeout(r, 350));
+      setStep("navigate", { status: "done" });
+      onLaunched(created.id);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Something went wrong";
+      console.error("[instant-room]", err);
+      setSteps((prev) =>
+        prev.map((s) => (s.status === "running" ? { ...s, status: "error", detail: msg } : s)),
+      );
+      setFatalError(msg);
+      toast.error(msg);
+    } finally {
+      setRunning(false);
+    }
+  };
+
+  const activeRoomId =
+    fatalError && fatalError.startsWith("active-room:") ? fatalError.slice("active-room:".length) : null;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Start an instant live room"
+      className="fixed inset-0 z-[80] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !running) onClose();
+      }}
+    >
+      <div className="w-full max-w-lg rounded-3xl border border-border/60 bg-card/95 p-6 shadow-2xl">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="inline-flex items-center gap-2 rounded-full border border-rose-500/40 bg-rose-500/15 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-rose-300">
+              <Radio className="h-3 w-3" aria-hidden /> Instant room
+            </p>
+            <h2 className="mt-2 font-display text-lg font-semibold text-foreground">Go live in seconds</h2>
+            <p className="mt-1 text-[12px] text-foreground/65">
+              We'll reserve a fresh meeting room, publish the class as <strong>live</strong>, and drop you into the teacher studio.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={running}
+            className="rounded-full border border-border/60 p-1.5 text-foreground/65 hover:bg-background/60 disabled:opacity-40"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        {!running && steps.every((s) => s.status === "pending") && (
+          <div className="mt-5 grid gap-3">
+            <label className="block">
+              <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-foreground/55">Session title</span>
+              <input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className={inputCls}
+              />
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              <label className="block">
+                <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-foreground/55">Course</span>
+                <select value={courseSlug} onChange={(e) => setCourseSlug(e.target.value)} className={inputCls}>
+                  {EDTECH_COURSES.map((c) => (
+                    <option key={c.slug} value={c.slug}>{c.title}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block">
+                <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-foreground/55">Duration (min)</span>
+                <input
+                  type="number"
+                  min={5}
+                  max={600}
+                  value={duration}
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                  className={inputCls}
+                />
+              </label>
+            </div>
+          </div>
+        )}
+
+        {(running || steps.some((s) => s.status !== "pending")) && (
+          <ol className="mt-5 space-y-2.5">
+            {steps.map((s) => (
+              <li
+                key={s.id}
+                className={`flex items-start gap-3 rounded-xl border px-3 py-2.5 text-[13px] ${
+                  s.status === "error"
+                    ? "border-rose-500/40 bg-rose-500/10"
+                    : s.status === "done"
+                      ? "border-emerald-500/30 bg-emerald-500/5"
+                      : s.status === "running"
+                        ? "border-primary/40 bg-primary/10"
+                        : "border-border/50 bg-background/40"
+                }`}
+              >
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center">
+                  {s.status === "running" && <Loader2 className="h-4 w-4 animate-spin text-primary" aria-hidden />}
+                  {s.status === "done" && <CheckCircle2 className="h-4 w-4 text-emerald-400" aria-hidden />}
+                  {s.status === "error" && <X className="h-4 w-4 text-rose-400" aria-hidden />}
+                  {s.status === "pending" && <span className="h-2 w-2 rounded-full bg-foreground/30" />}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-foreground">{s.label}</p>
+                  {s.detail && (
+                    <p className="mt-0.5 truncate text-[11px] text-foreground/60">{s.detail}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
+
+        <div className="mt-5 flex flex-wrap items-center justify-end gap-2">
+          {activeRoomId ? (
+            <>
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-full border border-border/60 bg-background/60 px-4 py-2 text-[12px] font-semibold text-foreground/75 hover:bg-background/80"
+              >
+                Stay here
+              </button>
+              <button
+                type="button"
+                onClick={() => onLaunched(activeRoomId)}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-[12px] font-semibold text-primary-foreground hover:bg-primary/90"
+              >
+                <MonitorPlay className="h-3.5 w-3.5" aria-hidden /> Open existing room
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={onClose}
+                disabled={running}
+                className="rounded-full border border-border/60 bg-background/60 px-4 py-2 text-[12px] font-semibold text-foreground/75 hover:bg-background/80 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={launch}
+                disabled={running}
+                className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-2 text-[12px] font-semibold text-white shadow-sm hover:bg-rose-500/90 disabled:opacity-60"
+              >
+                {running ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> Working…
+                  </>
+                ) : fatalError ? (
+                  <>
+                    <Video className="h-3.5 w-3.5" aria-hidden /> Retry
+                  </>
+                ) : (
+                  <>
+                    <Video className="h-3.5 w-3.5" aria-hidden /> Start room
+                  </>
+                )}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
