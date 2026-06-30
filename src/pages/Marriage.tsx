@@ -187,9 +187,48 @@ const Marriage = () => {
   const greetingName = inquirer?.name?.split(" ")[0];
   const inquirerWa = inquirer ? `${inquirer.country_code}${inquirer.whatsapp}` : null;
 
-  const waMsg = encodeURIComponent(
-    `Assalamu Alaikum${inquirer ? `, ${inquirer.name}` : ""},\n\nThank you for visiting Zahid Hasan Emon's marriage profile.${inquirerWa ? `\nYour contact on file: ${inquirerWa}` : ""}\n\nFor further discussion, please share:\n• Basic introduction\n• Family background\n• Contact number\n\nWe will get back to you shortly.`
-  );
+  // --- UTM attribution -------------------------------------------------
+  // WhatsApp's wa.me URL strips unknown query params, so UTMs must travel
+  // inside the prefilled `text` body. We also emit them in GA4/Meta events.
+  // Inbound campaign tags (?utm_source=fb&...) on /marriage are preserved
+  // and override the defaults so external campaigns attribute correctly.
+  type Utm = {
+    utm_source: string;
+    utm_medium: string;
+    utm_campaign: string;
+    utm_content: string;
+    utm_term?: string;
+  };
+  const buildUtm = (placement: string): Utm => {
+    const search = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    const inbound = (k: string) => search?.get(k) || undefined;
+    return {
+      utm_source: inbound("utm_source") ?? "marriage_profile",
+      utm_medium: inbound("utm_medium") ?? "whatsapp",
+      utm_campaign: inbound("utm_campaign") ?? "marriage_outreach",
+      utm_content: inbound("utm_content") ?? placement,
+      utm_term: inbound("utm_term") ?? (bangla ? "bn" : "en"),
+    };
+  };
+  const utmQuery = (u: Utm) =>
+    Object.entries(u)
+      .filter(([, v]) => v !== undefined && v !== "")
+      .map(([k, v]) => `${k}=${encodeURIComponent(String(v))}`)
+      .join("&");
+
+  // Compose a wa.me URL with prefilled text that carries the UTM tail so
+  // the recipient (and any forwarded reply screenshots) preserve attribution.
+  const buildWaUrl = (placement: "hero_primary" | "inquirer_banner" | "contact_section", phoneE164: string) => {
+    const u = buildUtm(placement);
+    const greet = `Assalamu Alaikum${inquirer ? `, ${inquirer.name}` : ""}`;
+    const onFile = inquirerWa ? `\nYour contact on file: ${inquirerWa}` : "";
+    const body =
+      `${greet},\n\nThank you for visiting Zahid Hasan Emon's marriage profile.${onFile}\n\n` +
+      `For further discussion, please share:\n• Basic introduction\n• Family background\n• Contact number\n\n` +
+      `We will get back to you shortly.\n\n— ref: ${utmQuery(u)}`;
+    const phone = phoneE164.replace(/^\+/, "");
+    return `https://wa.me/${phone}?text=${encodeURIComponent(body)}`;
+  };
 
   // Conversion tracking: every WhatsApp interaction on /marriage funnels through
   // here so GA4/GTM, Meta Pixel (mapped to `Contact`) and the in-app conversion
@@ -198,6 +237,7 @@ const Marriage = () => {
     placement: "hero_primary" | "inquirer_banner" | "contact_section" | "copy_number",
     extra: Record<string, string | number | boolean | undefined> = {},
   ) => {
+    const u = buildUtm(placement);
     const params = {
       page: "marriage",
       placement,
@@ -207,6 +247,7 @@ const Marriage = () => {
       inquirer_wa: inquirerWa ?? undefined,
       language: bangla ? "bn" : "en",
       referrer: typeof document !== "undefined" ? document.referrer || undefined : undefined,
+      ...u,
       ...extra,
     };
     // Primary unified conversion event (maps to Meta Pixel "Contact").
@@ -263,7 +304,7 @@ const Marriage = () => {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href={`https://wa.me/${inquirerWa?.replace("+", "")}`}
+                href={buildWaUrl("inquirer_banner", inquirerWa ?? "+8801410004037")}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => trackWhatsApp("inquirer_banner", { number: inquirerWa ?? undefined })}
@@ -342,7 +383,7 @@ const Marriage = () => {
           <div className="mt-8 mx-auto w-full max-w-md flex flex-col gap-4">
             {/* Primary: WhatsApp */}
             <a
-              href={`https://wa.me/8801410004037?text=${waMsg}`}
+              href={buildWaUrl("hero_primary", "+8801410004037")}
               target="_blank" rel="noreferrer"
               onClick={() => trackWhatsApp("hero_primary", { has_prefill: true })}
               className="group relative w-full flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-5 rounded-2xl shadow-[0_14px_36px_-12px_rgba(5,150,105,0.55)] transition-all duration-300 active:scale-[0.98]"
@@ -502,7 +543,7 @@ const Marriage = () => {
               <Phone className="w-4 h-4 text-red-400 shrink-0" />
               <a
                 className="hover:text-red-400 transition whitespace-nowrap"
-                href="https://wa.me/8801410004037"
+                href={buildWaUrl("contact_section", "+8801410004037")}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => trackWhatsApp("contact_section")}
