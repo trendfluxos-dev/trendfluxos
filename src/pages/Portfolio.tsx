@@ -423,7 +423,7 @@ export default function Portfolio() {
           </nav>
           <a
             href="#contact"
-            className="inline-flex items-center gap-1.5 rounded-full bg-primary hover:bg-primary text-white text-sm font-medium px-4 py-2 transition shadow-[0_8px_20px_-8px_rgba(220,38,38,0.55)]"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-medium px-4 py-2 transition shadow-[0_8px_20px_-8px_rgba(220,38,38,0.55)]"
           >
             Start Strategic Discussion <ArrowRight className="h-3.5 w-3.5" />
           </a>
@@ -449,7 +449,7 @@ export default function Portfolio() {
                 I help brands, startups, consultants and organizations scale through AI-powered content systems, digital strategy, automation, creator ecosystems and measurable growth execution.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a href="#systems" className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary text-white px-5 py-3 text-sm font-medium transition shadow-[0_12px_28px_-10px_rgba(220,38,38,0.5)]">
+                <a href="#systems" className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-3 text-sm font-medium transition shadow-[0_12px_28px_-10px_rgba(220,38,38,0.5)]">
                   View Systems <ArrowRight className="h-4 w-4" />
                 </a>
                 <a href="#contact" className="inline-flex items-center gap-2 rounded-full border border-border hover:border-foreground px-5 py-3 text-sm font-medium text-foreground transition">
@@ -670,19 +670,19 @@ export default function Portfolio() {
                 <Stat label="Performance-Aligned Outcome" value={fmt(perfOutcome)} accent="#F97316" />
                 <div className="h-px bg-background/10" />
                 <Stat label="Projected Partnership Value" value={fmt(projected)} accent="#DC2626" big />
-                <div className="flex items-center justify-between text-xs text-white/60">
+                <div className="flex items-center justify-between text-xs text-background/60">
                   <span>Growth Potential</span>
                   <span className="text-brand-green font-semibold">+{growth}%</span>
                 </div>
               </div>
               <div className="mt-7 space-y-3">
-                <a href="#contact" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary text-white px-5 py-3 text-sm font-medium transition">
+                <a href="#contact" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-3 text-sm font-medium transition">
                   Discuss Partnership Structure <ArrowRight className="h-4 w-4" />
                 </a>
-                <p className="text-[11px] text-white/55 leading-relaxed">
+                <p className="text-[11px] text-background/55 leading-relaxed">
                   Every collaboration structure is customized based on execution scope, project scale and measurable business objectives.
                 </p>
-                <p className="text-[11px] text-white/40">Open to retainer, performance-based and hybrid growth partnership structures.</p>
+                <p className="text-[11px] text-background/40">Open to retainer, performance-based and hybrid growth partnership structures.</p>
               </div>
             </aside>
           </div>
@@ -692,16 +692,16 @@ export default function Portfolio() {
             {PACKAGES.map((p) => (
               <div key={p.name} className={`rounded-2xl border p-6 transition hover:-translate-y-0.5 ${p.featured ? "border-foreground bg-foreground text-background" : "border-border bg-background"}`}>
                 <h3 className={`text-lg font-semibold tracking-tight ${p.featured ? "text-white" : "text-foreground"}`}>{p.name}</h3>
-                <p className={`mt-2 text-sm ${p.featured ? "text-white/70" : "text-muted-foreground"}`}>{p.summary}</p>
+                <p className={`mt-2 text-sm ${p.featured ? "text-background/70" : "text-muted-foreground"}`}>{p.summary}</p>
                 <ul className="mt-5 space-y-2 text-sm">
                   {p.perks.map((perk) => (
                     <li key={perk} className="flex gap-2">
                       <CheckCircle2 className={`h-4 w-4 mt-0.5 shrink-0 ${p.featured ? "text-brand-green" : "text-brand-green"}`} />
-                      <span className={p.featured ? "text-white/85" : "text-foreground"}>{perk}</span>
+                      <span className={p.featured ? "text-background/85" : "text-foreground"}>{perk}</span>
                     </li>
                   ))}
                 </ul>
-                <a href="#contact" className={`mt-6 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition ${p.featured ? "bg-primary hover:bg-primary text-white" : "bg-primary hover:bg-primary text-white"}`}>
+                <a href="#contact" className={`mt-6 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition ${p.featured ? "bg-primary hover:bg-primary/90 text-primary-foreground" : "bg-primary hover:bg-primary/90 text-primary-foreground"}`}>
                   Discuss this package <ArrowRight className="h-3.5 w-3.5" />
                 </a>
               </div>
@@ -946,7 +946,7 @@ export default function Portfolio() {
                 <button
                   type="button"
                   onClick={() => setFilter("All")}
-                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary hover:bg-primary text-white px-4 py-2 text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-muted"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-muted"
                 >
                   Show all documents
                 </button>
@@ -1010,7 +1010,7 @@ export default function Portfolio() {
             <div aria-hidden className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/30 blur-3xl" />
             <span className="inline-block text-xs font-semibold uppercase tracking-wider text-brand-orange">Contact</span>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Start a strategic discussion</h2>
-            <p className="mt-3 max-w-xl text-white/70">Open to retainer, performance-based and hybrid growth partnership structures across brands, organizations and creator ecosystems.</p>
+            <p className="mt-3 max-w-xl text-background/70">Open to retainer, performance-based and hybrid growth partnership structures across brands, organizations and creator ecosystems.</p>
 
             <div className="mt-8 grid sm:grid-cols-2 gap-4 text-sm">
               <a href="mailto:zhemongrowth@gmail.com" className="flex items-center gap-3 rounded-xl bg-background/[0.06] hover:bg-background/[0.1] px-4 py-3 transition">
@@ -1028,7 +1028,7 @@ export default function Portfolio() {
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="mailto:zhemongrowth@gmail.com" className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary text-white px-5 py-3 text-sm font-medium transition">
+              <a href="mailto:zhemongrowth@gmail.com" className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-3 text-sm font-medium transition">
                 Start Strategic Discussion <ArrowRight className="h-4 w-4" />
               </a>
               <a href="https://www.linkedin.com/in/zhemongrowth" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/20 hover:border-white text-white px-4 py-2.5 text-sm transition">
@@ -1145,7 +1145,7 @@ export default function Portfolio() {
 function Stat({ label, value, accent, big }: { label: string; value: string; accent?: string; big?: boolean }) {
   return (
     <div>
-      <div className="text-[11px] uppercase tracking-wider text-white/55 font-semibold">{label}</div>
+      <div className="text-[11px] uppercase tracking-wider text-background/55 font-semibold">{label}</div>
       <div className={`mt-1 font-bold tracking-tight tabular-nums ${big ? "text-3xl md:text-4xl" : "text-xl"}`} style={accent ? { color: accent } : undefined}>{value}</div>
     </div>
   );
