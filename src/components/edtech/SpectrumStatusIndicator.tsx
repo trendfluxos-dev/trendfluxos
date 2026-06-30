@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Activity, AlertCircle, Loader2, Wifi } from "lucide-react";
+import { AlertCircle, Loader2, Wifi } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
@@ -141,8 +141,3 @@ const STATE_VISUAL: Record<Health, { label: string; cls: string; dot: string; Ic
 };
 
 export default SpectrumStatusIndicator;
-
-// Marker so tree-shakers keep the export when used dynamically elsewhere.
-export const _SPECTRUM_INDICATOR_VERSION = 1 as const;
-export const _SPECTRUM_INDICATOR_KIND: "live-status" = "live-status";
-export const _activityKind = Activity;
