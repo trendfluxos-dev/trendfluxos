@@ -416,6 +416,102 @@
   .animate-fade-up {
     animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+
+  /* ─── Command Deck primitives ─────────────────────────────
+     Reusable chrome for the homepage "technical command deck"
+     direction. Lock into the existing token system so every
+     surface inherits theme changes for free. */
+
+  /* Mono micro-label: 0.24em tracking, uppercase, JetBrains. */
+  .cd-mono {
+    font-family: theme("fontFamily.mono");
+    font-size: 10px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: hsl(var(--muted-foreground));
+  }
+  .cd-mono-accent { color: hsl(var(--primary)); }
+
+  /* Eyebrow chip — small pill that opens hero or section blocks. */
+  .cd-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    background: hsl(var(--primary) / 0.10);
+    border: 1px solid hsl(var(--primary) / 0.22);
+    font-family: theme("fontFamily.mono");
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+  }
+  .cd-eyebrow::before {
+    content: "";
+    width: 5px; height: 5px;
+    border-radius: 9999px;
+    background: hsl(var(--primary));
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.7);
+    animation: pulse-glow 2.4s ease-in-out infinite;
+  }
+
+  /* Section divider header — title left, mono meta right, hairline rule. */
+  .cd-section-rule {
+    border-bottom: 1px solid hsl(var(--primary-deep, var(--border)) / 0.30);
+  }
+
+  /* Tech card — corner notch + maroon-tinted hairline + crimson hover.
+     Apply to <article>/<a>/<div> alongside layout classes. */
+  .cd-card {
+    position: relative;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--primary-deep, var(--border)) / 0.28);
+    transition:
+      border-color 280ms ease,
+      transform 280ms ease,
+      box-shadow 280ms ease,
+      background-color 280ms ease;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .cd-card:hover {
+    border-color: hsl(var(--primary) / 0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 38px -22px hsl(var(--primary) / 0.45);
+  }
+  /* Soft red sheen sweep on hover */
+  .cd-card::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(115deg, transparent 40%, hsl(var(--primary) / 0.10) 50%, transparent 60%);
+    transform: translateX(-110%);
+    transition: transform 700ms ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .cd-card:hover::after { transform: translateX(110%); }
+  .cd-card > * { position: relative; z-index: 1; }
+
+  /* Top-right corner notch carrying a mono code (e.g. M1 / 0xAF1) */
+  .cd-notch {
+    position: absolute;
+    top: 0; right: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    min-width: 36px;
+    padding: 0 8px;
+    background: hsl(var(--primary) / 0.08);
+    border-left: 1px solid hsl(var(--primary-deep, var(--border)) / 0.35);
+    border-bottom: 1px solid hsl(var(--primary-deep, var(--border)) / 0.35);
+    font-family: theme("fontFamily.mono");
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: hsl(var(--primary));
+  }
 }
 
 @keyframes pulse-glow {
