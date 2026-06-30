@@ -33,6 +33,7 @@ const LayerMegaMenu = () => {
                   "after:pointer-events-none after:absolute after:left-3.5 after:right-3.5 after:bottom-1 after:h-px after:bg-[#e25a5a]",
                   "after:origin-center after:scale-x-0 after:transition-transform after:duration-300",
                   "hover:after:scale-x-100 data-[state=open]:after:scale-x-100",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d] focus-visible:after:scale-x-100",
                   isActiveLayer
                     ? "text-white after:scale-x-100"
                     : "text-[#f0c9c9]/80 hover:text-white",
@@ -63,6 +64,7 @@ const LayerMegaMenu = () => {
                             className={[
                               "group block rounded-lg px-3 py-2.5 transition-all duration-300 ease-out",
                               "hover:bg-[#2a0f14]/60 hover:translate-x-0.5",
+                            "focus:outline-none focus-visible:bg-[#2a0f14]/70 focus-visible:translate-x-0.5 focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d]",
                               isActive
                                 ? "bg-[#3a1418]/70 ring-1 ring-[#e25a5a]/40"
                                 : "",
@@ -87,7 +89,7 @@ const LayerMegaMenu = () => {
                   <div className="mt-3 pt-3 border-t border-[#7a1e1e]/45">
                     <Link
                       to={meta.hubPath}
-                      className="text-[11.5px] uppercase tracking-[0.16em] text-[#e25a5a]/85 hover:text-white transition-colors"
+                      className="inline-block rounded-md text-[11.5px] uppercase tracking-[0.16em] text-[#e25a5a]/85 hover:text-white transition-colors focus:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d]"
                     >
                       View {meta.label} hub →
                     </Link>
