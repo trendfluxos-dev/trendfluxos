@@ -94,6 +94,7 @@ export const routes = {
   "/stories/ai-expert-emon": make(() => import("@/pages/StoryAiExpertEmon")),
   "/settings": make(() => import("@/pages/Settings")),
   "/privacy": make(() => import("@/pages/Privacy")),
+  "/growth-os": make(() => import("@/pages/GrowthOs")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
