@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useState } from "react";
+import { lazy, useCallback, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useSeo } from "@/hooks/useSeo";
@@ -21,8 +21,6 @@ const JusticeAppealSection  = lazy(() => import("@/components/home/JusticeAppeal
 const ProofSection          = lazy(() => import("@/components/home/ProofSection").then(m => ({ default: m.ProofSection })));
 const TestimonialsSection   = lazy(() => import("@/components/home/TestimonialsSection").then(m => ({ default: m.TestimonialsSection })));
 const FinalCtaSection       = lazy(() => import("@/components/home/FinalCtaSection").then(m => ({ default: m.FinalCtaSection })));
-
-const SectionFallback = () => <div aria-hidden className="min-h-[40vh]" />;
 
 /**
  * Home page (TrendFlux Growth OS). Composition-only: each section is a
