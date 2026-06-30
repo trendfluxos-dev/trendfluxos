@@ -53,12 +53,12 @@ export const TfSection = ({
       {/* hairline top */}
       <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      <div className="relative mx-auto max-w-7xl px-6 py-28 sm:py-32 lg:px-10">
+      <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-10 lg:py-28">
         {(eyebrow || title || intro) && (
           <div
             ref={headerRef}
             className={cn(
-              "tf-reveal mx-auto mb-20 max-w-2xl",
+              "tf-reveal mx-auto mb-12 max-w-2xl sm:mb-16 lg:mb-20",
               align === "center" ? "text-center" : "text-left mx-0",
             )}
           >
