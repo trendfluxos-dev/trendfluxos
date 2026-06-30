@@ -101,7 +101,7 @@ export default function SiteStatusBanner() {
 
     let cancelled = false;
     const run = async () => {
-      if (_isLocal) return; // skip server probe for local dev
+      if (_isLocal || _isPreview) return; // skip server probe for local/preview hosts
       try {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 6000);
