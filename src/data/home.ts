@@ -22,8 +22,8 @@ import brandHbEduverse from "@/assets/brands/hb-eduverse.jpeg";
 import brandMarieElliot from "@/assets/brands/marie-j-elliot.jpeg";
 import brandPabnaDebate from "@/assets/brands/pabna-debate-society.jpeg";
 import brandStarpath from "@/assets/brands/starpath-tech.jpeg";
-import brandVerdafluxSpectrum from "@/assets/brands/verdaflux-spectrum.png";
-import brandFluxBeam from "@/assets/brand-fluxbeam.png";
+import brandVerdafluxSpectrum from "@/assets/brands/verdaflux-spectrum.webp";
+import brandFluxBeam from "@/assets/brand-fluxbeam.webp";
 
 export type OperatedBrand = {
   name: string;

@@ -53,6 +53,9 @@ export default defineConfig(({ mode }) => ({
           // in production, so let Rollup co-locate the rest automatically.
           if (id.includes("/recharts/") || id.includes("/d3-")) return "recharts";
           if (id.includes("@sentry/")) return "sentry";
+          if (id.includes("/tldraw/") || id.includes("@tldraw/")) return "tldraw";
+          if (id.includes("/framer-motion/")) return "framer-motion";
+          if (id.includes("/lucide-react/")) return "icons";
           return undefined;
         },
       },

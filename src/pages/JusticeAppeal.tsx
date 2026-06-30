@@ -15,7 +15,7 @@ import {
   Building2,
   PhoneCall,
 } from "lucide-react";
-import referencedFigure from "@/assets/justice/referenced-figure.png";
+import referencedFigure from "@/assets/justice/referenced-figure.webp";
 
 
 // Justice sub-brand tokens — defined in src/index.css under
