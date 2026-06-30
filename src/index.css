@@ -1197,6 +1197,28 @@
     -webkit-text-fill-color: transparent;
   }
 
+  /* Marriage page paints a fixed dark backdrop that bleeds behind the
+     layer chrome (breadcrumb + flow nav) which sits OUTSIDE its
+     `data-brand="marriage"` root. Force those chrome regions to use
+     light text when the marriage page is mounted so links remain
+     readable on the dark surface. */
+  body:has([data-brand="marriage"]) [data-layer-chrome] {
+    color: rgb(255 255 255 / 0.82);
+  }
+  body:has([data-brand="marriage"]) [data-layer-chrome] a,
+  body:has([data-brand="marriage"]) [data-layer-chrome] span {
+    color: inherit;
+  }
+  body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/45,
+  body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/55,
+  body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/65 {
+    color: rgb(255 255 255 / 0.72);
+  }
+  body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/85,
+  body:has([data-brand="marriage"]) [data-layer-chrome] a:hover {
+    color: rgb(255 255 255 / 0.95);
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .hover-lift:hover { transform: translateY(-2px); }
     .hover-lift-md:hover { transform: translateY(-4px); box-shadow: var(--shadow-elegant); }
