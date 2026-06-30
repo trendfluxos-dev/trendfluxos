@@ -28,6 +28,17 @@ type CacheInfo = {
   ttl_s: number | null;
 };
 
+type CacheHeaders = {
+  x_cache: string | null;
+  age: string | null;
+  cache_control: string | null;
+  date: string | null;
+  expires: string | null;
+  etag: string | null;
+  last_modified: string | null;
+  vary: string | null;
+};
+
 /**
  * Lightweight, dependency-free status banner.
  * Shows whether the current origin is live, published, and SSL-secured.
@@ -39,6 +50,8 @@ export default function SiteStatusBanner() {
   const [checkedAt, setCheckedAt] = useState<string | null>(null);
   const [server, setServer] = useState<ServerStatus | null>(null);
   const [cacheInfo, setCacheInfo] = useState<CacheInfo | null>(null);
+  const [cacheHeaders, setCacheHeaders] = useState<CacheHeaders | null>(null);
+  const [debugView, setDebugView] = useState(false);
   const [open, setOpen] = useState(false);
   const [host, setHost] = useState<string>("");
   const [isLocal, setIsLocal] = useState(false);
@@ -108,6 +121,16 @@ export default function SiteStatusBanner() {
             hit: (xCache || "").toUpperCase() === "HIT",
             age_s: ageHdr ? Number(ageHdr) : null,
             ttl_s: ttlMatch ? Number(ttlMatch[1]) : null,
+          });
+          setCacheHeaders({
+            x_cache: xCache,
+            age: ageHdr,
+            cache_control: cc || null,
+            date: r.headers.get("date"),
+            expires: r.headers.get("expires"),
+            etag: r.headers.get("etag"),
+            last_modified: r.headers.get("last-modified"),
+            vary: r.headers.get("vary"),
           });
         }
       } catch {
