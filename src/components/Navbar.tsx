@@ -44,14 +44,14 @@ const Navbar = () => {
       <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 transition-all duration-300 ${scrolled ? "mt-2" : "mt-4"}`}>
         <nav
           aria-label="Primary"
-          className={`glass-strong rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4 pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border transition-all duration-300 ${
-            scrolled ? "border-border/60 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.18)]" : "border-border/40"
+          className={`rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4 pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border bg-white text-neutral-900 transition-all duration-300 ${
+            scrolled ? "border-black/10 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.25)]" : "border-black/10"
           }`}
         >
           <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-[14px] lg:text-[15px] whitespace-nowrap shrink-0 tracking-tight">
             <img src={logoAsset.url} alt={`${BRAND.name} logo`} className="h-7 w-7 rounded-md bg-white object-contain p-0.5" />
-            <span className="text-gradient">{BRAND.nameLead}</span>
-            <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
+            <span className="text-neutral-900">{BRAND.nameLead}</span>
+            <span className="text-neutral-500 font-normal">{BRAND.nameTrail}</span>
           </Link>
 
           {/* Center: 4-layer mega-menu (Company / Founder / Brands) */}
