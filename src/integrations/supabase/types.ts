@@ -537,8 +537,10 @@ export type Database = {
           n8n_forwarded: boolean
           n8n_response: Json | null
           name: string
+          owner_notes: string | null
           services: string[]
           source: string
+          stage: string
           updated_at: string
           user_agent: string | null
           website: string | null
@@ -555,8 +557,10 @@ export type Database = {
           n8n_forwarded?: boolean
           n8n_response?: Json | null
           name: string
+          owner_notes?: string | null
           services?: string[]
           source?: string
+          stage?: string
           updated_at?: string
           user_agent?: string | null
           website?: string | null
@@ -573,8 +577,10 @@ export type Database = {
           n8n_forwarded?: boolean
           n8n_response?: Json | null
           name?: string
+          owner_notes?: string | null
           services?: string[]
           source?: string
+          stage?: string
           updated_at?: string
           user_agent?: string | null
           website?: string | null

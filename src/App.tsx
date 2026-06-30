@@ -121,6 +121,7 @@ const StoryAiExpertEmon = routes["/stories/ai-expert-emon"];
 const Settings = routes["/settings"];
 const Privacy = routes["/privacy"];
 const GrowthOs = routes["/growth-os"];
+const GrowthConsole = routes["/admin/growth-console"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
@@ -219,6 +220,7 @@ const RoutedApp = () => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/growth-os" element={<GrowthOs />} />
+        <Route path="/admin/growth-console" element={<RequireRole roles={["admin"]}><GrowthConsole /></RequireRole>} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
         {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}
         {/* Synthetic error route for Playwright error-boundary smoke tests. */}
