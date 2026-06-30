@@ -91,7 +91,6 @@ export const routes = {
   "/media-reports": make(() => import("@/pages/MediaReports")),
   "/share-kit": make(() => import("@/pages/ShareKit")),
   "/stories/ai-expert-emon": make(() => import("@/pages/StoryAiExpertEmon")),
-  "/trust": make(() => import("@/pages/Trust")),
   "/settings": make(() => import("@/pages/Settings")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
