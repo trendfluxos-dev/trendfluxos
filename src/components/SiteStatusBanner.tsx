@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, AlertTriangle, X } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -108,20 +107,12 @@ export default function SiteStatusBanner() {
       try {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 6000);
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session?.access_token) return; // probe is auth-only
         const r = await fetch(
           `${STATUS_ENDPOINT}?url=${encodeURIComponent(origin)}`,
-          {
-            signal: ctrl.signal,
-            headers: { Authorization: `Bearer ${session.access_token}` },
-          },
+          { signal: ctrl.signal },
         ).finally(() => clearTimeout(t));
         if (!r.ok) {
-          const msg =
-            r.status === 401 || r.status === 403
-              ? "Status probe unauthorized — please sign in again."
-              : `Status probe failed (HTTP ${r.status}).`;
+          const msg = `Status probe failed (HTTP ${r.status}).`;
           if (!cancelled) {
             setProbeError(msg);
             if (!toastShown) {
