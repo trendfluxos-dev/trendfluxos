@@ -31,6 +31,7 @@ export const KNOWN_ROUTES: string[] = [
   "/brand-open",
   "/project-lead",
   "/course/trendflux",
+  "/stories/ai-expert-emon",
   "/edtech",
   "/edtech/courses",
   "/edtech/pricing",
