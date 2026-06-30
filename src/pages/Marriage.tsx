@@ -5,6 +5,12 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
+import {
+  getOrCreateInquirerId,
+  recordWhatsAppClick,
+  recordLeadAction,
+  setInquirerId,
+} from "@/lib/marriageAttribution";
 import profile from "@/assets/marriage/profile.webp";
 import photo1 from "@/assets/marriage/photo1.webp";
 import photo2 from "@/assets/marriage/photo2.webp";
@@ -167,8 +173,14 @@ const Marriage = () => {
   useEffect(() => {
     if (stateInquirer?.id) {
       try { localStorage.setItem("marriage_inquiry_id", stateInquirer.id); } catch { /* ignore */ }
+      // Bind attribution chain to the real inquiry id so any prior
+      // anonymous clicks now resolve to this submitter.
+      setInquirerId(stateInquirer.id);
       return;
     }
+    // Ensure an inquirer_id exists from first visit so WhatsApp clicks
+    // can be linked to a later lead action even without a form submit.
+    getOrCreateInquirerId();
     if (inquirer) return;
     let cancelled = false;
     const id = (() => { try { return localStorage.getItem("marriage_inquiry_id"); } catch { return null; } })();
@@ -243,22 +255,36 @@ const Marriage = () => {
     extra: Record<string, string | number | boolean | undefined> = {},
   ) => {
     const u = buildUtm(placement);
+    const attribInquirerId = inquirer?.id ?? getOrCreateInquirerId();
     const params = {
       page: "marriage",
       placement,
       number: "+8801410004037",
       personalized: Boolean(inquirer),
-      inquirer_id: inquirer?.id,
+      inquirer_id: attribInquirerId,
       inquirer_wa: inquirerWa ?? undefined,
       language: bangla ? "bn" : "en",
       referrer: typeof document !== "undefined" ? document.referrer || undefined : undefined,
       ...u,
       ...extra,
     };
+    // Persist click context so the next lead action on /marriage can be
+    // attributed back to this WhatsApp click via shared inquirer_id.
+    const ctx = recordWhatsAppClick({
+      placement,
+      number: typeof extra.number === "string" ? extra.number : "+8801410004037",
+      language: bangla ? "bn" : "en",
+      utm_source: u.utm_source,
+      utm_medium: u.utm_medium,
+      utm_campaign: u.utm_campaign,
+      utm_content: u.utm_content,
+      utm_term: u.utm_term,
+      inquirer_id: attribInquirerId,
+    });
     // Primary unified conversion event (maps to Meta Pixel "Contact").
-    track("whatsapp_open", params);
+    track("whatsapp_open", { ...params, wa_click_id: ctx.click_id });
     // Marriage-specific event for granular funnel reporting.
-    track("marriage_whatsapp_click", params);
+    track("marriage_whatsapp_click", { ...params, wa_click_id: ctx.click_id });
   };
 
   return (
@@ -412,6 +438,7 @@ const Marriage = () => {
               <a
                 href="https://facebook.com/zhemongrowth"
                 target="_blank" rel="noreferrer"
+                onClick={() => recordLeadAction("facebook_click", { placement: "hero_secondary" })}
                 className="flex flex-col items-center justify-center bg-white/5 border border-white/15 p-5 rounded-2xl backdrop-blur-sm shadow-sm hover:shadow-md hover:bg-white/10 hover:border-[#1877F2]/60 transition-all active:scale-[0.98]"
               >
                 <Facebook className="w-7 h-7 text-[#4f9bff] mb-2" />
@@ -427,6 +454,7 @@ const Marriage = () => {
                     "আসসালামু আলাইকুম,\n\nআপনার বিবাহ প্রোফাইল সম্পর্কে আগ্রহী। অনুগ্রহ করে বিস্তারিত শেয়ার করুন।\n\nনাম:\nপারিবারিক পরিচয়:\nঅবস্থান:\n\nজাযাকাল্লাহ খাইর।"
                   )
                 )}`}
+                onClick={() => recordLeadAction("gmail_click", { placement: "hero_secondary" })}
                 className="flex flex-col items-center justify-center bg-black/70 border border-red-500/40 p-5 rounded-2xl shadow-[0_12px_30px_-12px_rgba(220,38,38,0.5)] hover:bg-black/85 hover:border-red-500/70 transition-all active:scale-[0.98]"
               >
                 <div className="mb-2 relative">
@@ -562,6 +590,7 @@ const Marriage = () => {
                     await navigator.clipboard.writeText("+8801410004037");
                     toast.success(t("WhatsApp number copied", "WhatsApp নম্বর কপি হয়েছে"));
                     trackWhatsApp("copy_number", { action: "copy_success" });
+                    recordLeadAction("copy_number", { action: "copy_success" });
                   } catch {
                     toast.error(t("Could not copy", "কপি করা যায়নি"));
                     trackWhatsApp("copy_number", { action: "copy_failed" });
@@ -642,9 +671,10 @@ const Marriage = () => {
                     />
                     <CallButton
                       phoneE164={r.phoneE164}
-                      onInvoke={() =>
-                        trackReferenceEvent("reference_call", { name: r.nameEn, value: r.phoneE164 })
-                      }
+                      onInvoke={() => {
+                        trackReferenceEvent("reference_call", { name: r.nameEn, value: r.phoneE164 });
+                        recordLeadAction("reference_call", { reference: r.nameEn, phone: r.phoneE164 });
+                      }}
                     />
                   </div>
                 </div>
