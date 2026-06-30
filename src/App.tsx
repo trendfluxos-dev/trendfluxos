@@ -47,6 +47,7 @@ const PERF_FLAG =
 
 const Index = routes["/"];
 const Ecosystem = routes["/ecosystem"];
+const Brands = routes["/brands"];
 const ServicesPage = routes["/services"];
 const AboutPage = routes["/about"];
 const ContactPage = routes["/contact"];
@@ -132,6 +133,7 @@ const RoutedApp = () => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/ecosystem" element={<Ecosystem />} />
+        <Route path="/brands" element={<Brands />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
