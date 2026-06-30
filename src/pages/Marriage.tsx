@@ -383,7 +383,7 @@ const Marriage = () => {
           <div className="mt-8 mx-auto w-full max-w-md flex flex-col gap-4">
             {/* Primary: WhatsApp */}
             <a
-              href={`https://wa.me/8801410004037?text=${waMsg}`}
+              href={buildWaUrl("hero_primary", "+8801410004037")}
               target="_blank" rel="noreferrer"
               onClick={() => trackWhatsApp("hero_primary", { has_prefill: true })}
               className="group relative w-full flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-5 rounded-2xl shadow-[0_14px_36px_-12px_rgba(5,150,105,0.55)] transition-all duration-300 active:scale-[0.98]"
