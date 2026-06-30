@@ -56,7 +56,7 @@ const consoleErrors = [];
 
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 1400, height: 900 } });
-const page = await ctx.new_page ? await ctx.new_page() : await ctx.newPage();
+const page = await ctx.newPage();
 page.on("pageerror", (e) => consoleErrors.push(`pageerror: ${e.message}`));
 page.on("console", (m) => {
   if (m.type() === "error") consoleErrors.push(`console: ${m.text()}`);
