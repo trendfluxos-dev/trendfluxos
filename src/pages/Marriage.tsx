@@ -304,7 +304,7 @@ const Marriage = () => {
             </div>
             <div className="flex items-center gap-2">
               <a
-                href={`https://wa.me/${inquirerWa?.replace("+", "")}`}
+                href={buildWaUrl("inquirer_banner", inquirerWa ?? "+8801410004037")}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => trackWhatsApp("inquirer_banner", { number: inquirerWa ?? undefined })}
@@ -543,7 +543,7 @@ const Marriage = () => {
               <Phone className="w-4 h-4 text-red-400 shrink-0" />
               <a
                 className="hover:text-red-400 transition whitespace-nowrap"
-                href="https://wa.me/8801410004037"
+                href={buildWaUrl("contact_section", "+8801410004037")}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => trackWhatsApp("contact_section")}
