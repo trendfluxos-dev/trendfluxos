@@ -22,6 +22,7 @@ import { EDTECH } from "@/config/edtech";
 import { useSeo } from "@/hooks/useSeo";
 import { supabase } from "@/integrations/supabase/client";
 import { hasAny, useCurrentRoles } from "@/lib/edtechRoles";
+import TripleBridge from "@/components/ecosystem/TripleBridge";
 import { getCourseBySlug } from "@/data/edtechCourses";
 import {
   cancelRsvp,
@@ -170,7 +171,12 @@ const EdtechLive = () => {
 
       <section className="bg-background pb-2">
         <div className="mx-auto max-w-5xl px-6 lg:px-10">
-          <SpectrumBridge />
+          <TripleBridge
+            active="edtech"
+            bare
+            heading="Part of one connected ecosystem"
+            subheading="Live classes here are paired with TrendFlux Space (operations) and VerdaFlux Spectrum (analytics). Jump across at any time."
+          />
         </div>
       </section>
 
