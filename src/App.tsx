@@ -190,8 +190,8 @@ const RoutedApp = () => {
         <Route path="/edtech/live" element={<EdtechLive />} />
         <Route path="/edtech/live/watch/:id" element={<EdtechLiveWatch />} />
         <Route path="/edtech/live/recap/:id" element={<EdtechLiveRecap />} />
-        <Route path="/edtech/live/studio/:id" element={<RequireRole roles={["admin"]}><EdtechLiveStudio /></RequireRole>} />
-        <Route path="/admin/edtech/live" element={<RequireRole roles={["admin"]}><EdtechLiveAdmin /></RequireRole>} />
+        <Route path="/edtech/live/studio/:id" element={<RequireRole roles={["admin","teacher","tutor"]}><EdtechLiveStudio /></RequireRole>} />
+        <Route path="/admin/edtech/live" element={<RequireRole roles={["admin","teacher","tutor"]}><EdtechLiveAdmin /></RequireRole>} />
         {/* Teacher workspace */}
         <Route path="/edtech/teach/onboarding" element={<RequireRole roles={["admin","teacher","tutor"]}><EdtechTeachOnboarding /></RequireRole>} />
         <Route path="/edtech/teach/classes" element={<RequireRole roles={["admin","teacher","tutor"]}><EdtechTeachClasses /></RequireRole>} />
