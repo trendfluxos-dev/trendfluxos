@@ -671,9 +671,10 @@ const Marriage = () => {
                     />
                     <CallButton
                       phoneE164={r.phoneE164}
-                      onInvoke={() =>
-                        trackReferenceEvent("reference_call", { name: r.nameEn, value: r.phoneE164 })
-                      }
+                      onInvoke={() => {
+                        trackReferenceEvent("reference_call", { name: r.nameEn, value: r.phoneE164 });
+                        recordLeadAction("reference_call", { reference: r.nameEn, phone: r.phoneE164 });
+                      }}
                     />
                   </div>
                 </div>
