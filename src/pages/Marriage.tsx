@@ -191,6 +191,30 @@ const Marriage = () => {
     `Assalamu Alaikum${inquirer ? `, ${inquirer.name}` : ""},\n\nThank you for visiting Zahid Hasan Emon's marriage profile.${inquirerWa ? `\nYour contact on file: ${inquirerWa}` : ""}\n\nFor further discussion, please share:\n• Basic introduction\n• Family background\n• Contact number\n\nWe will get back to you shortly.`
   );
 
+  // Conversion tracking: every WhatsApp interaction on /marriage funnels through
+  // here so GA4/GTM, Meta Pixel (mapped to `Contact`) and the in-app conversion
+  // dashboard all receive a unified event.
+  const trackWhatsApp = (
+    placement: "hero_primary" | "inquirer_banner" | "contact_section" | "copy_number",
+    extra: Record<string, string | number | boolean | undefined> = {},
+  ) => {
+    const params = {
+      page: "marriage",
+      placement,
+      number: "+8801410004037",
+      personalized: Boolean(inquirer),
+      inquirer_id: inquirer?.id,
+      inquirer_wa: inquirerWa ?? undefined,
+      language: bangla ? "bn" : "en",
+      referrer: typeof document !== "undefined" ? document.referrer || undefined : undefined,
+      ...extra,
+    };
+    // Primary unified conversion event (maps to Meta Pixel "Contact").
+    track("whatsapp_open", params);
+    // Marriage-specific event for granular funnel reporting.
+    track("marriage_whatsapp_click", params);
+  };
+
   return (
     <main
       lang={bangla ? "bn" : "en"}
