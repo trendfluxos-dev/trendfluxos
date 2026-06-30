@@ -583,12 +583,21 @@ export type Database = {
           email: string
           id: string
           ip: string | null
+          last_contacted_at: string | null
+          lifecycle_history: Json
+          lifecycle_status: string
           message: string | null
           monthly_revenue: string | null
           n8n_forwarded: boolean
           n8n_response: Json | null
+          n8n_run_id: string | null
           name: string
+          next_followup_at: string | null
+          outreach_channel: string | null
           owner_notes: string | null
+          prospect_score: number
+          sequence_name: string | null
+          sequence_step: number
           services: string[]
           source: string
           stage: string
@@ -603,12 +612,21 @@ export type Database = {
           email: string
           id?: string
           ip?: string | null
+          last_contacted_at?: string | null
+          lifecycle_history?: Json
+          lifecycle_status?: string
           message?: string | null
           monthly_revenue?: string | null
           n8n_forwarded?: boolean
           n8n_response?: Json | null
+          n8n_run_id?: string | null
           name: string
+          next_followup_at?: string | null
+          outreach_channel?: string | null
           owner_notes?: string | null
+          prospect_score?: number
+          sequence_name?: string | null
+          sequence_step?: number
           services?: string[]
           source?: string
           stage?: string
@@ -623,12 +641,21 @@ export type Database = {
           email?: string
           id?: string
           ip?: string | null
+          last_contacted_at?: string | null
+          lifecycle_history?: Json
+          lifecycle_status?: string
           message?: string | null
           monthly_revenue?: string | null
           n8n_forwarded?: boolean
           n8n_response?: Json | null
+          n8n_run_id?: string | null
           name?: string
+          next_followup_at?: string | null
+          outreach_channel?: string | null
           owner_notes?: string | null
+          prospect_score?: number
+          sequence_name?: string | null
+          sequence_step?: number
           services?: string[]
           source?: string
           stage?: string
