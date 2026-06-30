@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "test:smoke": "vitest run --config vitest.smoke.config.ts",
     "test:e2e": "playwright test",
-    "test:e2e:install": "playwright install webkit"
+    "test:e2e:install": "playwright install webkit",
+    "audit:bn-contrast": "node scripts/contrast-bn-runtime.mjs"
   },
   "dependencies": {
     "@fontsource/hind-siliguri": "^5.2.7",
