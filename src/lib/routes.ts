@@ -17,6 +17,7 @@ const make = (loader: Loader): PreloadableLazy => {
 export const routes = {
   "/": make(() => import("@/pages/Index")),
   "/ecosystem": make(() => import("@/pages/Ecosystem")),
+  "/brands": make(() => import("@/pages/Brands")),
   "/services": make(() => import("@/pages/Services")),
   "/about": make(() => import("@/pages/About")),
   "/contact": make(() => import("@/pages/Contact")),
