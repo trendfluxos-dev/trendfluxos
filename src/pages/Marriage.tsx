@@ -590,6 +590,7 @@ const Marriage = () => {
                     await navigator.clipboard.writeText("+8801410004037");
                     toast.success(t("WhatsApp number copied", "WhatsApp নম্বর কপি হয়েছে"));
                     trackWhatsApp("copy_number", { action: "copy_success" });
+                    recordLeadAction("copy_number", { action: "copy_success" });
                   } catch {
                     toast.error(t("Could not copy", "কপি করা যায়নি"));
                     trackWhatsApp("copy_number", { action: "copy_failed" });
