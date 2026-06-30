@@ -22,6 +22,12 @@ type ServerStatus = {
   checked_at: string;
 };
 
+type CacheInfo = {
+  hit: boolean;
+  age_s: number | null;
+  ttl_s: number | null;
+};
+
 /**
  * Lightweight, dependency-free status banner.
  * Shows whether the current origin is live, published, and SSL-secured.
@@ -32,6 +38,7 @@ export default function SiteStatusBanner() {
   const [dismissed, setDismissed] = useState(false);
   const [checkedAt, setCheckedAt] = useState<string | null>(null);
   const [server, setServer] = useState<ServerStatus | null>(null);
+  const [cacheInfo, setCacheInfo] = useState<CacheInfo | null>(null);
   const [open, setOpen] = useState(false);
   const [host, setHost] = useState<string>("");
   const [isLocal, setIsLocal] = useState(false);
@@ -93,6 +100,15 @@ export default function SiteStatusBanner() {
           setChecks(buildClient(result));
           setServer(result);
           setCheckedAt(new Date().toLocaleTimeString());
+          const xCache = r.headers.get("x-cache");
+          const ageHdr = r.headers.get("age");
+          const cc = r.headers.get("cache-control") || "";
+          const ttlMatch = cc.match(/max-age=(\d+)/);
+          setCacheInfo({
+            hit: (xCache || "").toUpperCase() === "HIT",
+            age_s: ageHdr ? Number(ageHdr) : null,
+            ttl_s: ttlMatch ? Number(ttlMatch[1]) : null,
+          });
         }
       } catch {
         /* network hiccup — keep last known state */
@@ -210,6 +226,23 @@ export default function SiteStatusBanner() {
           <dt className="col-span-1 text-muted-foreground">Last checked</dt>
           <dd className="col-span-2">
             {server ? new Date(server.checked_at).toLocaleString() : checkedAt ?? "pending"}
+          </dd>
+
+          <dt className="col-span-1 text-muted-foreground">Cache</dt>
+          <dd className="col-span-2">
+            {cacheInfo ? (
+              <span>
+                {cacheInfo.hit ? "✅ HIT (served from cache)" : "🟡 MISS (fresh probe)"}
+              </span>
+            ) : "—"}
+          </dd>
+
+          <dt className="col-span-1 text-muted-foreground">Age</dt>
+          <dd className="col-span-2">
+            {cacheInfo?.age_s != null ? `${cacheInfo.age_s}s` : "0s"}
+            {cacheInfo?.ttl_s != null && (
+              <span className="ml-1 opacity-60">/ TTL {cacheInfo.ttl_s}s</span>
+            )}
           </dd>
         </dl>
         <p className="text-xs text-muted-foreground">
