@@ -1170,6 +1170,75 @@
   .hover-lift-md { @apply transition-all duration-300; }
   .ring-hairline { @apply ring-1 ring-border; }
 
+  /* ---------------------------------------------------------------
+     Light-mode contrast hardening (WCAG AA)
+     Two systemic patterns were repeatedly failing the audit:
+       1) `text-foreground/40..70` on white backgrounds rendered as
+          mid-greys with insufficient contrast for body copy.
+       2) `text-transparent bg-clip-text` gradient headings reported
+          `color: rgba(0,0,0,0)` (technically invisible to AT) even
+          though the gradient paints over them.
+     Both are corrected only in light mode; dark mode is untouched.
+     --------------------------------------------------------------- */
+  :root:not(.dark) .text-foreground\/40 { color: hsl(var(--foreground) / 0.70); }
+  :root:not(.dark) .text-foreground\/45 { color: hsl(var(--foreground) / 0.72); }
+  :root:not(.dark) .text-foreground\/50 { color: hsl(var(--foreground) / 0.75); }
+  :root:not(.dark) .text-foreground\/55 { color: hsl(var(--foreground) / 0.78); }
+  :root:not(.dark) .text-foreground\/60 { color: hsl(var(--foreground) / 0.80); }
+  :root:not(.dark) .text-foreground\/65 { color: hsl(var(--foreground) / 0.82); }
+  :root:not(.dark) .text-foreground\/70 { color: hsl(var(--foreground) / 0.85); }
+
+  /* Gradient headings: keep the painted gradient via -webkit-text-fill-color
+     while exposing a solid `color` so contrast tooling + non-WebKit
+     fallbacks read an accessible dark token. */
+  .text-transparent.bg-clip-text,
+  .bg-clip-text.text-transparent {
+    color: hsl(var(--foreground));
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Marriage page paints a fixed dark backdrop that bleeds behind the
+     layer chrome (breadcrumb + flow nav) which sits OUTSIDE its
+     `data-brand="marriage"` root. Force those chrome regions to use
+     light text when the marriage page is mounted so links remain
+     readable on the dark surface. */
+  body:has([data-brand="marriage"]) [data-layer-chrome] {
+    color: rgb(255 255 255 / 0.82);
+  }
+  body:has([data-brand="marriage"]) [data-layer-chrome] a,
+  body:has([data-brand="marriage"]) [data-layer-chrome] span {
+    color: inherit;
+  }
+  body:has([data-brand="marriage"]) [data-layer-chrome].text-foreground\/55,
+  body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/45,
+  body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/55,
+  body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/65 {
+    color: rgb(255 255 255 / 0.78) !important;
+  }
+  body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/85,
+  body:has([data-brand="marriage"]) [data-layer-chrome] a:hover {
+    color: rgb(255 255 255 / 0.96) !important;
+  }
+
+  /* Same treatment for the Justice Appeal dark surface. */
+  body:has([data-brand="justice"]) [data-layer-chrome] {
+    color: rgb(255 255 255 / 0.82);
+  }
+  body:has([data-brand="justice"]) [data-layer-chrome] a,
+  body:has([data-brand="justice"]) [data-layer-chrome] span {
+    color: inherit;
+  }
+  body:has([data-brand="justice"]) [data-layer-chrome].text-foreground\/55,
+  body:has([data-brand="justice"]) [data-layer-chrome] .text-foreground\/45,
+  body:has([data-brand="justice"]) [data-layer-chrome] .text-foreground\/55,
+  body:has([data-brand="justice"]) [data-layer-chrome] .text-foreground\/65 {
+    color: rgb(255 255 255 / 0.78) !important;
+  }
+  body:has([data-brand="justice"]) [data-layer-chrome] .text-foreground\/85,
+  body:has([data-brand="justice"]) [data-layer-chrome] a:hover {
+    color: rgb(255 255 255 / 0.96) !important;
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .hover-lift:hover { transform: translateY(-2px); }
     .hover-lift-md:hover { transform: translateY(-4px); box-shadow: var(--shadow-elegant); }
