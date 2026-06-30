@@ -97,49 +97,58 @@
      existing primary/accent utilities continue to read correctly.
      =========================================================== */
   .dark {
-    --background: 0 0% 6%;              /* near-black canvas */
-    --foreground: 0 0% 98%;             /* near-white text  */
+    /* ─── Command Deck palette ───────────────────────────────
+       Refined dark theme aligned with the homepage Technical
+       Command Deck direction. Background is a near-black with
+       a faint cool tint (#0b0b10); cards lift to #14141a;
+       borders carry a maroon undertone so dividers feel warm
+       and intentional instead of neutral grey. Primary maps
+       to crimson #e11d48 — sharper than the legacy red, with
+       a deeper maroon (#7a1e1e) reserved for rims and chips. */
+    --background: 240 18% 5%;           /* #0b0b10 */
+    --foreground: 240 7% 96%;           /* #f5f5f7 */
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 240 13% 9%;                 /* #14141a */
+    --card-foreground: 240 7% 96%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 240 13% 9%;
+    --popover-foreground: 240 7% 96%;
 
-    --primary: 0 78% 56%;               /* slightly brighter red for dark bg */
+    --primary: 349 77% 50%;             /* #e11d48 crimson */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 84% 64%;
+    --primary-glow: 349 90% 62%;        /* hover */
+    --primary-deep: 0 60% 30%;          /* #7a1e1e maroon for rims */
 
-    --secondary: 0 0% 11%;
-    --secondary-foreground: 0 0% 96%;
+    --secondary: 240 10% 11%;
+    --secondary-foreground: 240 7% 96%;
 
-    --gold: 0 78% 56%;
+    --gold: 349 77% 50%;
     --gold-foreground: 0 0% 100%;
 
-    --muted: 0 0% 11%;
-    --muted-foreground: 220 9% 65%;
+    --muted: 240 10% 11%;
+    --muted-foreground: 240 5% 67%;     /* #a1a1aa */
 
-    --accent: 0 78% 56%;
+    --accent: 349 77% 50%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 78% 56%;
+    --destructive: 349 77% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
-    --ring: 0 78% 56%;
+    --border: 0 28% 16%;                /* maroon-tinted hairline */
+    --input: 0 28% 16%;
+    --ring: 349 77% 50%;
 
-    --glass: 0 0% 8%;
-    --glass-border: 0 0% 18%;
+    --glass: 240 13% 9%;
+    --glass-border: 0 35% 22%;
 
     --gradient-hero:
-      radial-gradient(circle at 85% -10%, hsl(0 78% 56% / 0.18), transparent 50%),
-      radial-gradient(circle at -10% 110%, hsl(24 95% 53% / 0.10), transparent 50%);
-    --gradient-text: linear-gradient(135deg, hsl(0 0% 98%) 0%, hsl(0 78% 56%) 100%);
+      radial-gradient(circle at 85% -10%, hsl(349 77% 50% / 0.16), transparent 55%),
+      radial-gradient(circle at -10% 110%, hsl(0 60% 30% / 0.14), transparent 55%);
+    --gradient-text: linear-gradient(180deg, hsl(240 7% 96%) 0%, hsl(240 5% 67%) 100%);
 
-    --shadow-cyan: 0 10px 30px -12px hsl(0 78% 56% / 0.45);
-    --shadow-gold: 0 14px 40px -14px hsl(0 78% 56% / 0.45);
-    --shadow-elegant: 0 24px 60px -28px hsl(0 0% 0% / 0.6);
+    --shadow-cyan:    0 10px 30px -12px hsl(349 77% 50% / 0.40);
+    --shadow-gold:    0 14px 40px -14px hsl(349 77% 50% / 0.35);
+    --shadow-elegant: 0 24px 60px -28px hsl(0 0% 0% / 0.65);
 
     --sidebar-background: 0 0% 7%;
     --sidebar-foreground: 0 0% 96%;
@@ -406,6 +415,102 @@
   }
   .animate-fade-up {
     animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* ─── Command Deck primitives ─────────────────────────────
+     Reusable chrome for the homepage "technical command deck"
+     direction. Lock into the existing token system so every
+     surface inherits theme changes for free. */
+
+  /* Mono micro-label: 0.24em tracking, uppercase, JetBrains. */
+  .cd-mono {
+    font-family: theme("fontFamily.mono");
+    font-size: 10px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: hsl(var(--muted-foreground));
+  }
+  .cd-mono-accent { color: hsl(var(--primary)); }
+
+  /* Eyebrow chip — small pill that opens hero or section blocks. */
+  .cd-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    background: hsl(var(--primary) / 0.10);
+    border: 1px solid hsl(var(--primary) / 0.22);
+    font-family: theme("fontFamily.mono");
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: hsl(var(--primary));
+  }
+  .cd-eyebrow::before {
+    content: "";
+    width: 5px; height: 5px;
+    border-radius: 9999px;
+    background: hsl(var(--primary));
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.7);
+    animation: pulse-glow 2.4s ease-in-out infinite;
+  }
+
+  /* Section divider header — title left, mono meta right, hairline rule. */
+  .cd-section-rule {
+    border-bottom: 1px solid hsl(var(--primary-deep, var(--border)) / 0.30);
+  }
+
+  /* Tech card — corner notch + maroon-tinted hairline + crimson hover.
+     Apply to <article>/<a>/<div> alongside layout classes. */
+  .cd-card {
+    position: relative;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--primary-deep, var(--border)) / 0.28);
+    transition:
+      border-color 280ms ease,
+      transform 280ms ease,
+      box-shadow 280ms ease,
+      background-color 280ms ease;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .cd-card:hover {
+    border-color: hsl(var(--primary) / 0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 38px -22px hsl(var(--primary) / 0.45);
+  }
+  /* Soft red sheen sweep on hover */
+  .cd-card::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(115deg, transparent 40%, hsl(var(--primary) / 0.10) 50%, transparent 60%);
+    transform: translateX(-110%);
+    transition: transform 700ms ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .cd-card:hover::after { transform: translateX(110%); }
+  .cd-card > * { position: relative; z-index: 1; }
+
+  /* Top-right corner notch carrying a mono code (e.g. M1 / 0xAF1) */
+  .cd-notch {
+    position: absolute;
+    top: 0; right: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    min-width: 36px;
+    padding: 0 8px;
+    background: hsl(var(--primary) / 0.08);
+    border-left: 1px solid hsl(var(--primary-deep, var(--border)) / 0.35);
+    border-bottom: 1px solid hsl(var(--primary-deep, var(--border)) / 0.35);
+    font-family: theme("fontFamily.mono");
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: hsl(var(--primary));
   }
 }
 

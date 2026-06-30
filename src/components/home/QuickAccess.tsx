@@ -60,12 +60,10 @@ export const QuickAccess = () => (
     <div className="mx-auto max-w-7xl px-6 lg:px-10">
       {/* Heading block */}
       <div className="mx-auto mb-12 max-w-2xl text-center sm:mb-14">
-        <p className="text-[10px] font-medium uppercase tracking-[0.4em] text-muted-foreground">
-          Directory · Find what you need
-        </p>
+        <span className="cd-eyebrow">Directory · Find what you need</span>
         <h2
           id="quick-access-heading"
-          className="mt-4 font-display text-[26px] font-semibold leading-[1.15] tracking-[-0.02em] text-foreground sm:text-[34px]"
+          className="mt-5 font-display text-[26px] font-semibold leading-[1.1] tracking-[-0.02em] text-foreground sm:text-[36px]"
         >
           Everything inside the TrendFlux ecosystem
         </h2>
@@ -78,11 +76,13 @@ export const QuickAccess = () => (
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
         {ITEMS.map((it, i) => {
           const idx = String(i + 1).padStart(2, "0");
+          const code = `M${i + 1}`;
           const inner = (
             <>
+              <span aria-hidden className="cd-notch">{code}</span>
               <span className="flex items-start justify-between">
                 <span className="flex items-center gap-2.5">
-                  <span className="font-mono text-[10px] tabular-nums tracking-[0.16em] text-muted-foreground/70">
+                  <span className="font-mono text-[10px] tabular-nums tracking-[0.18em] text-muted-foreground/70">
                     {idx}
                   </span>
                   <span
@@ -93,27 +93,31 @@ export const QuickAccess = () => (
                   </span>
                 </span>
                 {it.badge ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-primary">
+                  <span className="mr-10 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-primary">
                     <span className="h-1 w-1 rounded-full bg-primary animate-pulse" />
                     {it.badge}
                   </span>
                 ) : (
                   <ArrowUpRight
                     aria-hidden
-                    className="h-3.5 w-3.5 text-muted-foreground/50 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
+                    className="mr-10 h-3.5 w-3.5 text-muted-foreground/50 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
                   />
                 )}
               </span>
-              <span className="mt-5 block text-[14px] font-semibold tracking-[-0.005em] text-foreground">
+              <span className="mt-5 block text-[14px] font-semibold tracking-[-0.005em] text-foreground group-hover:text-primary transition-colors">
                 {it.label}
               </span>
               <span className="mt-1 block text-[12.5px] leading-[1.55] text-muted-foreground">
                 {it.desc}
               </span>
+              <span aria-hidden className="mt-4 flex items-center gap-2">
+                <span className="h-px flex-1 bg-border/70 group-hover:bg-primary/50 transition-colors" />
+                <span className="cd-mono cd-mono-accent">Open</span>
+              </span>
             </>
           );
           const cls =
-            "group relative block h-full rounded-xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_8px_24px_-12px_hsl(var(--primary)/0.25)] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+            "cd-card group block h-full rounded-xl p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
           return (
             <li key={it.label}>
               {it.external && it.href ? (
