@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Compass, Home, Mail, Search } from "lucide-react";
+import { resolveRoute } from "@/lib/routeSearch";
 import { useSeo } from "@/hooks/useSeo";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -15,6 +16,13 @@ const SUGGESTED = [
 const NotFound = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const match = useMemo(
+    () => resolveRoute(location.pathname + location.search),
+    [location.pathname, location.search],
+  );
+  const willRedirect =
+    !!match && match.path !== location.pathname && match.score >= 0.7;
+  const [countdown, setCountdown] = useState(willRedirect ? 1 : 0);
 
   useSeo({
     title: "Page not found — TrendFlux Ecosystem",
@@ -26,6 +34,21 @@ const NotFound = () => {
     // eslint-disable-next-line no-console
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
   }, [location.pathname]);
+
+  // Instant smart redirect when we have a confident match.
+  useEffect(() => {
+    if (!willRedirect || !match) return;
+    const t = window.setTimeout(() => {
+      navigate(match.path, { replace: true });
+    }, 250);
+    return () => window.clearTimeout(t);
+  }, [willRedirect, match, navigate]);
+
+  useEffect(() => {
+    if (!willRedirect) return;
+    const i = window.setInterval(() => setCountdown((c) => Math.max(0, c - 1)), 1000);
+    return () => window.clearInterval(i);
+  }, [willRedirect]);
 
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
@@ -48,6 +71,20 @@ const NotFound = () => {
             </code>
             . The link may be outdated, or the page may have moved.
           </p>
+
+          {willRedirect && match && (
+            <p className="mx-auto mt-5 max-w-lg text-sm text-foreground">
+              Redirecting to{" "}
+              <Link
+                to={match.path}
+                replace
+                className="font-medium text-primary underline-offset-4 hover:underline"
+              >
+                {match.path}
+              </Link>
+              …
+            </p>
+          )}
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <button
