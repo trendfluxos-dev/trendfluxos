@@ -122,6 +122,7 @@ const Settings = routes["/settings"];
 const Privacy = routes["/privacy"];
 const GrowthOs = routes["/growth-os"];
 const GrowthConsole = routes["/admin/growth-console"];
+const LeadLifecycle = routes["/admin/lead-lifecycle"];
 const CreatorStudio = routes["/admin/creator-studio"];
 const GrowthOsHub = routes["/growth-os/hub"];
 const TaskQueue = routes["/admin/task-queue"];
@@ -228,6 +229,7 @@ const RoutedApp = () => {
         <Route path="/admin/task-queue" element={<RequireRole roles={["admin"]}><TaskQueue /></RequireRole>} />
         <Route path="/admin/class-analytics" element={<RequireRole roles={["admin","teacher","tutor"]}><ClassAnalytics /></RequireRole>} />
         <Route path="/admin/growth-console" element={<RequireRole roles={["admin"]}><GrowthConsole /></RequireRole>} />
+        <Route path="/admin/lead-lifecycle" element={<RequireRole roles={["admin"]}><LeadLifecycle /></RequireRole>} />
         <Route path="/admin/creator-studio" element={<RequireRole roles={["admin","editor","teacher","tutor"]}><CreatorStudio /></RequireRole>} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
         {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}

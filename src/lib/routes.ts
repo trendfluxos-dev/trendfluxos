@@ -97,6 +97,7 @@ export const routes = {
   "/growth-os": make(() => import("@/pages/GrowthOs")),
   "/growth-os/hub": make(() => import("@/pages/GrowthOsHub")),
   "/admin/growth-console": make(() => import("@/pages/GrowthConsole")),
+  "/admin/lead-lifecycle": make(() => import("@/pages/LeadLifecycle")),
   "/admin/creator-studio": make(() => import("@/pages/CreatorStudio")),
   "/admin/task-queue": make(() => import("@/pages/TaskQueue")),
   "/admin/class-analytics": make(() => import("@/pages/ClassAnalytics")),
