@@ -33,7 +33,7 @@ const ITEMS: Item[] = [
   { label: "The Stand",    desc: "Editorial · long-form record", icon: BookOpen,     to: "/the-stand" },
   { label: "Audio Stories",desc: "Listen to chapter I & II",     icon: Headphones,   to: "/stories/ai-expert-emon" },
   { label: "Masterclass",  desc: "Live cohorts & curricula",     icon: Sparkles,     to: "/masterclass" },
-  { label: "কর্মশিক্ষা TED Plus", desc: "Online edtech platform",       icon: GraduationCap, to: EDTECH.routes.home, badge: "Live" },
+  { label: "কর্মশিক্ষা", desc: "EdTech অনলাইন platform",       icon: GraduationCap, to: EDTECH.routes.home, badge: "Live" },
   { label: "Enterprise",   desc: "Private, NDA-grade control",   icon: ShieldCheck,  to: "/enterprise" },
   { label: "LuxeVeil",     desc: "Invite-only sub-brand",        icon: Crown,        to: "/luxe-veil" },
   { label: "Contact",      desc: "Talk to the team directly",    icon: Mail,         to: "/contact" },
