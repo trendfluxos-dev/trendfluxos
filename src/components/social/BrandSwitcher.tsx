@@ -5,30 +5,44 @@ import { cn } from "@/lib/utils";
 import { BRAND_CONTACTS, BrandKey, getBrandForRoute } from "@/config/socialConfig";
 import { useBrandPreview } from "@/context/BrandPreviewContext";
 
-type Entry =
-  | { kind: "preview"; key: BrandKey; label: string }
-  | { kind: "group"; key: string; label: string; items: BrandLink[] };
-
 type BrandLink = { label: string; href: string; external?: boolean };
 
-const BRAND_LINKS: BrandLink[] = [
-  { label: "TrendFlux Space", href: "https://trendflux.space", external: true },
-  { label: "VerdaFlux Spectrum", href: "https://spectrum.trendflux.space", external: true },
-  { label: "কর্মশিক্ষা — EdTech", href: "/edtech" },
-  { label: "TrendFlux Ecosystem", href: "/ecosystem" },
-  { label: "Luxe Veil", href: "/luxe-veil" },
-  { label: "Studio BrandToki", href: "/brandtoki" },
-  { label: "TrendFlux Talent", href: "/trendflux-talent" },
-  { label: "Enterprise Portal", href: "/enterprise" },
-  { label: "The Stand", href: "/the-stand" },
-  { label: "Advanced AI Masterclass", href: "/masterclass" },
-  { label: "Justice Appeal", href: "/justice-appeal" },
+type BrandSubgroup = { key: string; label: string; items: BrandLink[] };
+
+type Entry =
+  | { kind: "preview"; key: BrandKey; label: string }
+  | { kind: "group"; key: string; label: string; subgroups: BrandSubgroup[] };
+
+const BRAND_SUBGROUPS: BrandSubgroup[] = [
+  {
+    key: "internal",
+    label: "Internal brands",
+    items: [
+      { label: "কর্মশিক্ষা — EdTech", href: "/edtech" },
+      { label: "TrendFlux Ecosystem", href: "/ecosystem" },
+      { label: "Luxe Veil", href: "/luxe-veil" },
+      { label: "Studio BrandToki", href: "/brandtoki" },
+      { label: "TrendFlux Talent", href: "/trendflux-talent" },
+      { label: "Enterprise Portal", href: "/enterprise" },
+      { label: "The Stand", href: "/the-stand" },
+      { label: "Advanced AI Masterclass", href: "/masterclass" },
+      { label: "Justice Appeal", href: "/justice-appeal" },
+    ],
+  },
+  {
+    key: "external",
+    label: "External brands",
+    items: [
+      { label: "TrendFlux Space", href: "https://trendflux.space", external: true },
+      { label: "VerdaFlux Spectrum", href: "https://spectrum.trendflux.space", external: true },
+    ],
+  },
 ];
 
 const ENTRIES: Entry[] = [
   { kind: "preview", key: "trendflux", label: "Company — TrendFlux Digital" },
   { kind: "preview", key: "zahid", label: "Founder — Zahid Hasan Emon" },
-  { kind: "group", key: "brands", label: "Browse all brands", items: BRAND_LINKS },
+  { kind: "group", key: "brands", label: "Browse all brands", subgroups: BRAND_SUBGROUPS },
 ];
 
 export const BrandSwitcher = () => {
@@ -98,25 +112,34 @@ export const BrandSwitcher = () => {
                     <span>{e.label}</span>
                     <ChevronRight className={cn("w-3.5 h-3.5 transition-transform", brandsOpen && "rotate-90")} />
                   </button>
-                  {brandsOpen && (
-                    <div className="mt-1 ml-2 border-l border-gold/20 pl-2 space-y-0.5">
-                      {e.items.map((b) => (
-                        <button
-                          key={b.href}
-                          role="menuitem"
-                          onClick={() => {
-                            if (b.external) {
-                              window.open(b.href, "_blank", "noopener,noreferrer");
-                            } else {
-                              navigate(b.href);
-                            }
-                            setOpen(false);
-                          }}
-                          className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-[11px] text-foreground/75 hover:bg-foreground/5 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                        >
-                          <span>{b.label}</span>
-                          {b.external && <ExternalLink className="w-3 h-3 opacity-60" />}
-                        </button>
+              {brandsOpen && (
+                    <div className="mt-1 ml-2 border-l border-gold/20 pl-2 space-y-2">
+                      {e.subgroups.map((sg) => (
+                        <div key={sg.key} role="group" aria-label={sg.label}>
+                          <div className="px-2.5 pt-1 pb-1 text-[9px] uppercase tracking-[0.18em] text-foreground/45">
+                            {sg.label}
+                          </div>
+                          <div className="space-y-0.5">
+                            {sg.items.map((b) => (
+                              <button
+                                key={b.href}
+                                role="menuitem"
+                                onClick={() => {
+                                  if (b.external) {
+                                    window.open(b.href, "_blank", "noopener,noreferrer");
+                                  } else {
+                                    navigate(b.href);
+                                  }
+                                  setOpen(false);
+                                }}
+                                className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-[11px] text-foreground/75 hover:bg-foreground/5 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                              >
+                                <span>{b.label}</span>
+                                {b.external && <ExternalLink className="w-3 h-3 opacity-60" />}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   )}
