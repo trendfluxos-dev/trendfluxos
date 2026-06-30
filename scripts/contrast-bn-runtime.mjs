@@ -48,7 +48,7 @@ const REPORT_MD = "/tmp/bn-contrast-report.md";
 // element with text content. Resolves the effective background by walking
 // up the DOM until it finds a non-transparent backgroundColor, falling back
 // to the document body's computed background.
-const SAMPLER = `() => {
+const SAMPLER = `(() => {
   const parseRGB = (s) => {
     if (!s) return null;
     const m = s.match(/rgba?\\(([^)]+)\\)/);
@@ -116,7 +116,7 @@ const SAMPLER = `() => {
     });
   }
   return out;
-}`;
+})()`;
 
 const setTheme = async (page, theme) => {
   await page.evaluate((t) => {
