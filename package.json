@@ -25,6 +25,8 @@
     "verify:redirects": "node scripts/verify-redirects.mjs",
     "validate:seo": "node scripts/validate-seo-files.mjs",
     "test:navbar": "node scripts/test-navbar-clicks.mjs"
+    ,
+    "smoke:homepage": "node scripts/smoke-homepage-401.mjs"
   },
   "dependencies": {
     "@fontsource/hind-siliguri": "^5.2.7",
