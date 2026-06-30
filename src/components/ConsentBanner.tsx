@@ -50,8 +50,11 @@ const ConsentBanner = () => {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm leading-relaxed text-muted-foreground">
           We use cookies to analyse traffic and improve your experience. By
-          accepting, you allow analytics and personalised ads in line with our
-          privacy policy.
+          accepting, you allow analytics in line with our{" "}
+          <a href="/privacy" className="underline hover:text-foreground">
+            Privacy Policy
+          </a>
+          .
         </p>
         <div className="flex shrink-0 gap-2">
           <Button
