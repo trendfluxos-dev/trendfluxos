@@ -5,6 +5,12 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
+import {
+  getOrCreateInquirerId,
+  recordWhatsAppClick,
+  recordLeadAction,
+  setInquirerId,
+} from "@/lib/marriageAttribution";
 import profile from "@/assets/marriage/profile.webp";
 import photo1 from "@/assets/marriage/photo1.webp";
 import photo2 from "@/assets/marriage/photo2.webp";
@@ -167,8 +173,14 @@ const Marriage = () => {
   useEffect(() => {
     if (stateInquirer?.id) {
       try { localStorage.setItem("marriage_inquiry_id", stateInquirer.id); } catch { /* ignore */ }
+      // Bind attribution chain to the real inquiry id so any prior
+      // anonymous clicks now resolve to this submitter.
+      setInquirerId(stateInquirer.id);
       return;
     }
+    // Ensure an inquirer_id exists from first visit so WhatsApp clicks
+    // can be linked to a later lead action even without a form submit.
+    getOrCreateInquirerId();
     if (inquirer) return;
     let cancelled = false;
     const id = (() => { try { return localStorage.getItem("marriage_inquiry_id"); } catch { return null; } })();
@@ -243,22 +255,36 @@ const Marriage = () => {
     extra: Record<string, string | number | boolean | undefined> = {},
   ) => {
     const u = buildUtm(placement);
+    const attribInquirerId = inquirer?.id ?? getOrCreateInquirerId();
     const params = {
       page: "marriage",
       placement,
       number: "+8801410004037",
       personalized: Boolean(inquirer),
-      inquirer_id: inquirer?.id,
+      inquirer_id: attribInquirerId,
       inquirer_wa: inquirerWa ?? undefined,
       language: bangla ? "bn" : "en",
       referrer: typeof document !== "undefined" ? document.referrer || undefined : undefined,
       ...u,
       ...extra,
     };
+    // Persist click context so the next lead action on /marriage can be
+    // attributed back to this WhatsApp click via shared inquirer_id.
+    const ctx = recordWhatsAppClick({
+      placement,
+      number: typeof extra.number === "string" ? extra.number : "+8801410004037",
+      language: bangla ? "bn" : "en",
+      utm_source: u.utm_source,
+      utm_medium: u.utm_medium,
+      utm_campaign: u.utm_campaign,
+      utm_content: u.utm_content,
+      utm_term: u.utm_term,
+      inquirer_id: attribInquirerId,
+    });
     // Primary unified conversion event (maps to Meta Pixel "Contact").
-    track("whatsapp_open", params);
+    track("whatsapp_open", { ...params, wa_click_id: ctx.click_id });
     // Marriage-specific event for granular funnel reporting.
-    track("marriage_whatsapp_click", params);
+    track("marriage_whatsapp_click", { ...params, wa_click_id: ctx.click_id });
   };
 
   return (
