@@ -21,12 +21,14 @@ const BRAND_LINKS: BrandLink[] = [
   { label: "TrendFlux Talent", href: "/trendflux-talent" },
   { label: "Enterprise Portal", href: "/enterprise" },
   { label: "The Stand", href: "/the-stand" },
+  { label: "Advanced AI Masterclass", href: "/masterclass" },
+  { label: "Justice Appeal", href: "/justice-appeal" },
 ];
 
 const ENTRIES: Entry[] = [
   { kind: "preview", key: "trendflux", label: "Company — TrendFlux Digital" },
   { kind: "preview", key: "zahid", label: "Founder — Zahid Hasan Emon" },
-  { kind: "group", key: "brands", label: "Brands", items: BRAND_LINKS },
+  { kind: "group", key: "brands", label: "Browse all brands", items: BRAND_LINKS },
 ];
 
 export const BrandSwitcher = () => {
