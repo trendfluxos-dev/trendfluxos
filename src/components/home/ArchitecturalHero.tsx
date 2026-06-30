@@ -45,8 +45,8 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
       aria-labelledby="home-hero-heading"
       className="bg-[#08080d] text-[#f0c9c9] selection:bg-[#c11f1f] selection:text-white"
     >
-      <div className="mx-auto w-full max-w-6xl px-6 pt-10 pb-16 lg:pt-16 lg:pb-24">
-        <div className="grid grid-cols-12 gap-10 lg:gap-12 items-start">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 pt-10 pb-16 lg:pt-16 lg:pb-24 overflow-hidden">
+        <div className="grid grid-cols-12 gap-6 md:gap-10 lg:gap-12 items-start">
           {/* Hero column */}
           <div className="col-span-12 lg:col-span-7">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c11f1f]/10 border border-[#c11f1f]/20 mb-6">
@@ -56,7 +56,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
             </div>
             <h1
               id="home-hero-heading"
-              className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] mb-8"
+              className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] mb-8 break-words"
             >
               Building the <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c11f1f] to-[#e25a5a]">
@@ -139,7 +139,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
         </div>
 
         {/* Metrics footer strip */}
-        <div className="mt-16 lg:mt-20 pt-10 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="mt-16 lg:mt-20 pt-10 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {METRICS.map((m) => (
             <div key={m.label}>
               <div className="font-mono text-[10px] text-[#f0c9c9]/40 uppercase mb-2 tracking-widest">
