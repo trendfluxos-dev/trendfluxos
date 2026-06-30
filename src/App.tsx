@@ -122,6 +122,7 @@ const Settings = routes["/settings"];
 const Privacy = routes["/privacy"];
 const GrowthOs = routes["/growth-os"];
 const GrowthConsole = routes["/admin/growth-console"];
+const CreatorStudio = routes["/admin/creator-studio"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
@@ -221,6 +222,7 @@ const RoutedApp = () => {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/growth-os" element={<GrowthOs />} />
         <Route path="/admin/growth-console" element={<RequireRole roles={["admin"]}><GrowthConsole /></RequireRole>} />
+        <Route path="/admin/creator-studio" element={<RequireRole roles={["admin","editor","teacher","tutor"]}><CreatorStudio /></RequireRole>} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
         {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}
         {/* Synthetic error route for Playwright error-boundary smoke tests. */}
