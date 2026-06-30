@@ -408,3 +408,69 @@ const StatusPill = ({ status }: { status: "scheduled" | "live" | "ended" | "canc
 };
 
 export default EdtechLive;
+
+/* ------------------------------------------------------------------ */
+/* Teacher quick actions — visible only to admin / teacher / tutor.   */
+/* Surfaces BOTH modes: instant room + scheduled class.               */
+/* ------------------------------------------------------------------ */
+const TeacherQuickActions = () => (
+  <section className="bg-background pt-2 pb-6">
+    <div className="mx-auto max-w-5xl px-6 lg:px-10">
+      <div className="rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/[0.07] via-card/40 to-card/20 p-5 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+              <Sparkles className="h-3 w-3" aria-hidden /> Teacher console
+            </p>
+            <h2 className="mt-2 font-display text-lg font-semibold text-foreground sm:text-xl">
+              Start a class — instant or scheduled
+            </h2>
+            <p className="mt-1 max-w-xl text-[13px] leading-relaxed text-foreground/65">
+              Spin up a room right now, or schedule ahead so students get
+              notified and the join link unlocks automatically 15 min before
+              start.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/admin/edtech/live?instant=1"
+              className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-2 text-[12px] font-semibold text-white shadow-sm transition-colors hover:bg-rose-500/90"
+            >
+              <Video className="h-4 w-4" aria-hidden /> Go live now
+            </Link>
+            <Link
+              to="/admin/edtech/live"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-[12px] font-semibold text-primary hover:bg-primary/15"
+            >
+              <CalendarClock className="h-4 w-4" aria-hidden /> Schedule a class
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+/* ------------------------------------------------------------------ */
+/* Spectrum cross-link — surfaces the ecosystem connection between    */
+/* edtech live classes and VerdaFlux Spectrum (operations layer).     */
+/* ------------------------------------------------------------------ */
+const SpectrumBridge = () => (
+  <a
+    href="https://spectrum.trendflux.space/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/30 px-4 py-3 text-[12px] text-foreground/70 transition-colors hover:border-primary/40 hover:text-foreground"
+  >
+    <span className="inline-flex items-center gap-2">
+      <Layers className="h-4 w-4 text-primary" aria-hidden />
+      <span>
+        <span className="font-semibold text-foreground">VerdaFlux Spectrum</span>
+        <span className="text-foreground/55"> · operations & analytics for live cohorts</span>
+      </span>
+    </span>
+    <span className="inline-flex items-center gap-1 text-primary opacity-80 transition-opacity group-hover:opacity-100">
+      Open <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+    </span>
+  </a>
+);
