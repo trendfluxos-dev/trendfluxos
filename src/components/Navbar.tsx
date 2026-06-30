@@ -147,9 +147,16 @@ const Navbar = () => {
                             to={node.path}
                             aria-current={pathname === node.path ? "page" : undefined}
                             onClick={() => setOpen(false)}
-                            className="relative rounded-xl px-3 py-2.5 min-h-10 text-[14.5px] text-[#f0c9c9]/80 hover:text-white hover:bg-[#2a0f14]/60 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/60 aria-[current=page]:text-white aria-[current=page]:bg-[#3a1418]/70 aria-[current=page]:before:absolute aria-[current=page]:before:left-0 aria-[current=page]:before:top-1/2 aria-[current=page]:before:-translate-y-1/2 aria-[current=page]:before:h-5 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r aria-[current=page]:before:bg-[#e25a5a]"
+                            className="group/item relative block rounded-xl px-3 py-2.5 min-h-10 hover:bg-[#2a0f14]/60 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/60 aria-[current=page]:bg-[#3a1418]/70 aria-[current=page]:ring-1 aria-[current=page]:ring-[#e25a5a]/40 aria-[current=page]:before:absolute aria-[current=page]:before:left-0 aria-[current=page]:before:top-1/2 aria-[current=page]:before:-translate-y-1/2 aria-[current=page]:before:h-5 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r aria-[current=page]:before:bg-[#e25a5a]"
                           >
-                            {node.title}
+                            <span className="block text-[14px] text-[#f0c9c9]/85 group-hover/item:text-white aria-[current=page]:text-white transition-colors">
+                              {node.title}
+                            </span>
+                            {node.blurb && (
+                              <span className="block text-[11.5px] text-[#f0c9c9]/50 mt-0.5">
+                                {node.blurb}
+                              </span>
+                            )}
                           </Link>
                         ))}
                       </div>
