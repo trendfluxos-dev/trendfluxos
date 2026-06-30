@@ -1042,6 +1042,8 @@ export default function Portfolio() {
         </div>
       </section>
 
+      </main>
+
       <footer className="border-t border-[#E5E7EB] py-8">
         <div className="mx-auto max-w-7xl px-5 md:px-8 flex flex-wrap items-center justify-between gap-3 text-xs text-[#4B5563]">
           <span>© {new Date().getFullYear()} Zahid Hasan Emon · AI-Powered Growth Operator</span>
