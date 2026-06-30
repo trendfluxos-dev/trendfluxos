@@ -471,10 +471,15 @@ const Marriage = () => {
         {/* Contact */}
         <Card title={t("Contact Information", "যোগাযোগ")}>
           <ul className="space-y-3 text-white/85" id="contact">
-            <li className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-red-400" />
-              <a className="hover:text-red-400 transition" href="https://wa.me/8801410004037" target="_blank" rel="noreferrer">
-                WhatsApp: +880 1410-004037
+            <li className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <Phone className="w-4 h-4 text-red-400 shrink-0" />
+              <a
+                className="hover:text-red-400 transition whitespace-nowrap"
+                href="https://wa.me/8801410004037"
+                target="_blank"
+                rel="noreferrer"
+              >
+                WhatsApp: +880&nbsp;1410-004037
               </a>
               <button
                 type="button"
@@ -487,7 +492,7 @@ const Marriage = () => {
                   }
                 }}
                 aria-label={t("Copy WhatsApp number", "WhatsApp নম্বর কপি করুন")}
-                className="ml-1 inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/5 px-2 py-1 text-[11px] text-white/75 hover:text-white hover:border-red-500/60 hover:bg-red-500/10 transition active:scale-95"
+                className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/5 px-2 py-1 text-[11px] text-white/75 hover:text-white hover:border-red-500/60 hover:bg-red-500/10 transition active:scale-95 shrink-0"
               >
                 <Copy className="w-3.5 h-3.5" />
                 {t("Copy", "কপি")}
