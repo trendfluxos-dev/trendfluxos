@@ -22,6 +22,10 @@ const NotFound = () => {
   );
   const willRedirect =
     !!match && match.path !== location.pathname && match.score >= 0.7;
+  // High-confidence hits (exact / alias / substring) redirect on the next
+  // animation frame (~16ms — well under the 100ms budget). Fuzzy matches
+  // wait 250ms so the user can read what we're inferring before we jump.
+  const redirectDelayMs = match && match.score >= 0.85 ? 0 : 250;
   const [countdown, setCountdown] = useState(willRedirect ? 1 : 0);
 
   useSeo({
@@ -38,11 +42,17 @@ const NotFound = () => {
   // Instant smart redirect when we have a confident match.
   useEffect(() => {
     if (!willRedirect || !match) return;
+    if (redirectDelayMs === 0) {
+      const raf = window.requestAnimationFrame(() => {
+        navigate(match.path, { replace: true });
+      });
+      return () => window.cancelAnimationFrame(raf);
+    }
     const t = window.setTimeout(() => {
       navigate(match.path, { replace: true });
-    }, 250);
+    }, redirectDelayMs);
     return () => window.clearTimeout(t);
-  }, [willRedirect, match, navigate]);
+  }, [willRedirect, match, navigate, redirectDelayMs]);
 
   useEffect(() => {
     if (!willRedirect) return;
