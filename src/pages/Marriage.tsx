@@ -9,6 +9,11 @@ import profile from "@/assets/marriage/profile.webp";
 import photo1 from "@/assets/marriage/photo1.webp";
 import photo2 from "@/assets/marriage/photo2.webp";
 import photo3 from "@/assets/marriage/photo3.webp";
+import { caseStudies } from "@/data/caseStudies";
+import proofUniversity from "@/assets/proof/university-certificates.webp";
+import proofPzswa from "@/assets/proof/pzswa-presidential.webp";
+import proofNdfBd from "@/assets/proof/ndf-bd-appointment.webp";
+import proofIdentification from "@/assets/proof/official-identification.webp";
 
 type Bi = { en: string; bn: string };
 const T = ({ en, bn, bangla }: Bi & { bangla: boolean }) => <>{bangla ? bn : en}</>;
