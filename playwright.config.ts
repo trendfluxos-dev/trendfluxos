@@ -31,16 +31,28 @@ export default defineConfig({
 
   projects: [
     {
+      name: "visual-desktop",
+      testMatch: /visual-regression\.spec\.ts/,
+      use: {
+        viewport: { width: 1280, height: 800 },
+        deviceScaleFactor: 1,
+        colorScheme: "light",
+      },
+    },
+    {
       name: "iphone-se",
       use: { ...devices["iPhone SE"] },
+      testIgnore: /visual-regression\.spec\.ts/,
     },
     {
       name: "iphone-13",
       use: { ...devices["iPhone 13"] },
+      testIgnore: /visual-regression\.spec\.ts/,
     },
     {
       name: "iphone-14",
       use: { ...devices["iPhone 14"] },
+      testIgnore: /visual-regression\.spec\.ts/,
     },
   ],
   webServer: process.env.E2E_BASE_URL

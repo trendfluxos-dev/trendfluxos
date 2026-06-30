@@ -16,6 +16,12 @@
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install webkit",
     "audit:bn-contrast": "node scripts/contrast-bn-runtime.mjs",
+    "audit:contrast": "node scripts/contrast-runtime.mjs",
+    "audit:contrast:light": "THEMES=light node scripts/contrast-runtime.mjs",
+    "audit:contrast:dark": "THEMES=dark node scripts/contrast-runtime.mjs",
+    "test:visual": "playwright test --project=visual-desktop",
+    "test:visual:update": "playwright test --project=visual-desktop --update-snapshots",
+    "audit:a11y": "npm run audit:bn-contrast && npm run audit:contrast",
     "verify:redirects": "node scripts/verify-redirects.mjs"
   },
   "dependencies": {
