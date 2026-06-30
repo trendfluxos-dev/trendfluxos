@@ -195,7 +195,7 @@ export function AudioStory() {
   return (
     <section
       aria-label={copy.title}
-      className="px-6 lg:px-10 py-32 md:py-44"
+      className="px-6 lg:px-10 py-32 md:py-44 bg-[hsl(var(--stand-bone))]"
     >
       <div className="mx-auto max-w-3xl">
         <Reveal>
