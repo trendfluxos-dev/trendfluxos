@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, AlertTriangle, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -58,6 +59,7 @@ export default function SiteStatusBanner() {
   const [isLocal, setIsLocal] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const [isSslClient, setIsSslClient] = useState(false);
+  const [probeError, setProbeError] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -100,6 +102,7 @@ export default function SiteStatusBanner() {
     setChecks(buildClient(null));
 
     let cancelled = false;
+    let toastShown = false;
     const run = async () => {
       if (_isLocal || _isPreview) return; // skip server probe for local/preview hosts
       try {
@@ -114,8 +117,23 @@ export default function SiteStatusBanner() {
             headers: { Authorization: `Bearer ${session.access_token}` },
           },
         ).finally(() => clearTimeout(t));
-        const result = r.ok ? ((await r.json()) as ServerStatus) : null;
+        if (!r.ok) {
+          const msg =
+            r.status === 401 || r.status === 403
+              ? "Status probe unauthorized — please sign in again."
+              : `Status probe failed (HTTP ${r.status}).`;
+          if (!cancelled) {
+            setProbeError(msg);
+            if (!toastShown) {
+              toast.error("Site status check failed", { description: msg });
+              toastShown = true;
+            }
+          }
+          return;
+        }
+        const result = (await r.json()) as ServerStatus;
         if (!cancelled && result) {
+          setProbeError(null);
           setChecks(buildClient(result));
           setServer(result);
           setCheckedAt(new Date().toLocaleTimeString());
@@ -139,8 +157,17 @@ export default function SiteStatusBanner() {
             vary: r.headers.get("vary"),
           });
         }
-      } catch {
-        /* network hiccup — keep last known state */
+      } catch (err) {
+        if (cancelled) return;
+        const aborted = (err as { name?: string })?.name === "AbortError";
+        const msg = aborted
+          ? "Status probe timed out. Check your connection."
+          : "Couldn't reach the status service. We'll retry shortly.";
+        setProbeError(msg);
+        if (!toastShown) {
+          toast.error("Site status check failed", { description: msg });
+          toastShown = true;
+        }
       }
     };
 
@@ -162,7 +189,7 @@ export default function SiteStatusBanner() {
   const allOk = checks.every((c) => c.ok);
   // Quiet by default: only surface the banner when something actually fails.
   // Founders/admins can still open the dialog from the admin status page.
-  if (allOk) return null;
+  if (allOk && !probeError) return null;
 
   return (
     <>
@@ -202,6 +229,11 @@ export default function SiteStatusBanner() {
           ))}
           {checkedAt && (
             <span className="ml-auto text-[10px] opacity-50">checked {checkedAt}</span>
+          )}
+          {probeError && (
+            <span className="basis-full text-[11px] opacity-80">
+              ⚠ {probeError}
+            </span>
           )}
           <span className="ml-2 rounded border border-current/30 px-1.5 py-0.5 text-[10px] opacity-70">
             Details
