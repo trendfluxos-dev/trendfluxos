@@ -62,18 +62,21 @@ const LayerMegaMenu = () => {
                             {...linkProps}
                             aria-current={isActive ? "page" : undefined}
                             className={[
-                              "group block rounded-lg px-3 py-2.5 transition-all duration-300 ease-out",
+                              "group relative block rounded-lg px-3 py-2.5 pl-4 transition-all duration-300 ease-out",
                               "hover:bg-[#fbeaea] dark:hover:bg-[#2a0f14]/60 hover:translate-x-0.5",
                             "focus:outline-none focus-visible:bg-[#fbeaea] dark:focus-visible:bg-[#2a0f14]/70 focus-visible:translate-x-0.5 focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080d]",
                               isActive
-                                ? "bg-[#fbeaea] dark:bg-[#3a1418]/70 ring-1 ring-[#c11f1f]/40 dark:ring-[#e25a5a]/40"
+                                ? "bg-[#fbeaea] dark:bg-[#3a1418]/80 ring-1 ring-[#c11f1f]/50 dark:ring-[#e25a5a]/50 shadow-[inset_3px_0_0_0_#c11f1f] dark:shadow-[inset_3px_0_0_0_#e25a5a]"
                                 : "",
                             ].join(" ")}
                           >
-                            <span className={`block text-[13.5px] transition-colors ${isActive ? "text-[#1a0a0a] dark:text-white" : "text-[#3a0d10] dark:text-[#f0c9c9]/90 group-hover:text-[#1a0a0a] dark:group-hover:text-white"}`}>
+                            <span className={`flex items-center gap-2 text-[13.5px] transition-colors ${isActive ? "text-[#1a0a0a] dark:text-white font-medium" : "text-[#3a0d10] dark:text-[#f0c9c9]/90 group-hover:text-[#1a0a0a] dark:group-hover:text-white"}`}>
                               {node.title}
                               {node.external && (
                                 <span className="ml-1.5 text-[9.5px] uppercase tracking-[0.18em] text-[#9a1818] dark:text-[#e25a5a]/80 align-middle">↗</span>
+                              )}
+                              {isActive && (
+                                <span className="ml-auto text-[9px] uppercase tracking-[0.2em] text-[#c11f1f] dark:text-[#e25a5a] font-semibold">Current</span>
                               )}
                             </span>
                             {node.blurb && (
