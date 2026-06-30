@@ -313,27 +313,58 @@ const Marriage = () => {
             )}
           </p>
 
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 mx-auto w-full max-w-md flex flex-col gap-4">
+            {/* Primary: WhatsApp */}
             <a
               href={`https://wa.me/8801410004037?text=${waMsg}`}
               target="_blank" rel="noreferrer"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-red-700 via-red-600 to-red-700 text-white px-5 py-3 rounded-full font-bold hover:brightness-110 shadow-[0_10px_30px_-10px_rgba(220,38,38,0.7)] transition"
+              className="group relative w-full flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-5 rounded-2xl shadow-[0_14px_36px_-12px_rgba(5,150,105,0.55)] transition-all duration-300 active:scale-[0.98]"
+              aria-label={t("Message on WhatsApp", "WhatsApp-এ মেসেজ করুন")}
             >
-              <MessageCircle className="w-4 h-4" /> WhatsApp
+              <span className="flex items-center gap-4">
+                <span className="bg-white/20 p-2 rounded-lg">
+                  <MessageCircle className="w-6 h-6" />
+                </span>
+                <span className="font-semibold text-base md:text-lg tracking-wide text-left">
+                  {t("Message on WhatsApp", "WhatsApp-এ মেসেজ করুন")}
+                </span>
+              </span>
+              <svg className="w-5 h-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </a>
-            <a
-              href="https://facebook.com/zhemongrowth"
-              target="_blank" rel="noreferrer"
-              className="inline-flex items-center gap-2 border border-white/40 text-white px-5 py-3 rounded-full font-bold hover:bg-white hover:text-black transition"
-            >
-              <Facebook className="w-4 h-4" /> Facebook
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-2 border border-red-500/60 text-red-300 px-5 py-3 rounded-full font-bold hover:bg-red-600 hover:text-white hover:border-red-600 transition"
-            >
-              <Mail className="w-4 h-4" /> {t("Contact", "যোগাযোগ")}
-            </a>
+
+            {/* Secondary row */}
+            <div className="grid grid-cols-2 gap-4">
+              <a
+                href="https://facebook.com/zhemongrowth"
+                target="_blank" rel="noreferrer"
+                className="flex flex-col items-center justify-center bg-white/5 border border-white/15 p-5 rounded-2xl backdrop-blur-sm shadow-sm hover:shadow-md hover:bg-white/10 hover:border-[#1877F2]/60 transition-all active:scale-[0.98]"
+              >
+                <Facebook className="w-7 h-7 text-[#4f9bff] mb-2" />
+                <span className="text-white/85 font-medium text-sm">Facebook</span>
+              </a>
+
+              <a
+                href="#contact"
+                className="flex flex-col items-center justify-center bg-black/70 border border-red-500/40 p-5 rounded-2xl shadow-[0_12px_30px_-12px_rgba(220,38,38,0.5)] hover:bg-black/85 hover:border-red-500/70 transition-all active:scale-[0.98]"
+              >
+                <div className="mb-2 relative">
+                  <Mail className="w-7 h-7 text-amber-300" />
+                  <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                  </span>
+                </div>
+                <span className="text-white font-medium text-sm">
+                  {t("Get Details", "বিস্তারিত")}
+                </span>
+              </a>
+            </div>
+
+            <p className="text-center text-white/50 text-[11px] mt-1 uppercase tracking-[0.22em] font-medium">
+              {t("Secured response guaranteed", "নিশ্চিত গোপনীয় উত্তর")}
+            </p>
           </div>
         </section>
 
