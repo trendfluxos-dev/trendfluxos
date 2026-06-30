@@ -538,10 +538,12 @@
   /* Gold corner accent for the notch in light mode (crimson is reserved for
      hover bloom; gold gives a calmer resting state and >=3:1 on white). */
   html:not(.dark) .cd-notch {
-    background: hsl(var(--gold, 38 38% 60%) / 0.10);
-    border-left-color: hsl(var(--gold, 38 38% 50%) / 0.55);
-    border-bottom-color: hsl(var(--gold, 38 38% 50%) / 0.55);
-    color: hsl(var(--gold, 38 38% 32%));                /* darker gold for AA */
+    /* Use literal amber tones — project `--gold` token is repurposed to crimson
+       in light mode, so we can't read it for an actual gold accent. */
+    background: hsl(38 60% 50% / 0.10);
+    border-left-color: hsl(38 60% 42% / 0.50);
+    border-bottom-color: hsl(38 60% 42% / 0.50);
+    color: hsl(36 65% 28%);                             /* ~5.8:1 on white */
   }
   html:not(.dark) .cd-card:hover .cd-notch {
     background: hsl(var(--primary) / 0.10);
