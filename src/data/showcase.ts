@@ -79,6 +79,38 @@ export type ShowcaseItem = {
 
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   {
+    id: "trendflux-space",
+    title: "TrendFlux Space",
+    category: "Website",
+    year: "2025 — Present",
+    summary:
+      "TrendFlux Digital's dedicated product space — a sister surface that hosts experimental products, micro-tools and launch pads under the TrendFlux umbrella.",
+    tags: ["Product Hub", "Sister Site", "TrendFlux"],
+    industry: "Enterprise / B2B",
+    services: ["Web Development", "Brand Architecture"],
+    tech: ["React", "TypeScript", "Tailwind"],
+    href: "https://trendflux.space",
+    external: true,
+    size: "md",
+    accent: "cyan",
+  },
+  {
+    id: "verdaflux-spectrum",
+    title: "VerdaFlux Spectrum",
+    category: "Website",
+    year: "2025 — Present",
+    summary:
+      "Spectrum sub-product on TrendFlux Space — a focused VerdaFlux surface for spectrum/data-driven storytelling, operated as part of the TrendFlux Digital ecosystem.",
+    tags: ["Sub-product", "Spectrum", "VerdaFlux"],
+    industry: "Enterprise / B2B",
+    services: ["Web Development", "Content Engine"],
+    tech: ["React", "TypeScript", "Tailwind"],
+    href: "https://spectrum.trendflux.space",
+    external: true,
+    size: "md",
+    accent: "emerald",
+  },
+  {
     id: "kormoshikkha",
     title: "কর্মশিক্ষা TED Plus — Online Edtech Platform",
     category: "Enterprise System",
