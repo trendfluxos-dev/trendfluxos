@@ -95,7 +95,7 @@ export default function TheStand() {
         <Link
           to="/#story"
           lang="en"
-          className="fixed left-6 top-6 z-50 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))]/70 transition-colors hover:text-[hsl(var(--stand-red))]"
+          className="fixed left-6 top-6 z-50 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-[hsl(var(--stand-muted))] transition-colors hover:text-[hsl(var(--stand-red))]"
         >
           <ArrowLeft className="h-3 w-3" />
           Home
@@ -131,7 +131,7 @@ export default function TheStand() {
           <span aria-hidden className="h-px w-10 bg-[hsl(var(--stand-hairline))]" />
           <Link
             to="/quiet-positions"
-            className="text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-muted))]/65 transition-colors hover:text-[hsl(var(--stand-red))]"
+            className="text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-muted))] transition-colors hover:text-[hsl(var(--stand-red))]"
           >
             <span lang="bn">নীরব অবস্থান</span>
             <span aria-hidden> · </span>

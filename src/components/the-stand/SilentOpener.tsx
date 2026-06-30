@@ -13,7 +13,7 @@ export function SilentOpener() {
       <div className="mx-auto w-full max-w-4xl">
         <p
           lang={lang}
-          className="text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-muted))]/70 animate-[fadeIn_500ms_ease-out_both]"
+          className="text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-muted))] animate-[fadeIn_500ms_ease-out_both]"
           style={{ animationDelay: "80ms" }}
         >
           {t.eyebrow}
@@ -49,7 +49,7 @@ export function SilentOpener() {
       >
         <span
           lang={lang}
-          className="text-[10px] uppercase tracking-[0.5em] text-[hsl(var(--stand-muted))]/60"
+          className="text-[10px] uppercase tracking-[0.5em] text-[hsl(var(--stand-muted))]"
         >
           {t.scrollCue}
         </span>

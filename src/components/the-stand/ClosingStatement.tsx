@@ -21,7 +21,7 @@ export function ClosingStatement() {
           >
             {lines[0]}
             <br />
-            <span className="text-[hsl(var(--stand-bone))]/70">{lines[1]}</span>
+            <span className="text-[hsl(var(--stand-bone))]">{lines[1]}</span>
           </p>
         </Reveal>
 
@@ -29,7 +29,7 @@ export function ClosingStatement() {
           <div className="mt-24 flex flex-col items-center gap-4">
             <p
               lang="en"
-              className="font-mono text-[10px] uppercase tracking-[0.6em] text-[hsl(var(--stand-bone))]/70"
+              className="font-mono text-[10px] uppercase tracking-[0.6em] text-[hsl(var(--stand-bone))]"
             >
               {STAND_CLOSING.signature}
             </p>

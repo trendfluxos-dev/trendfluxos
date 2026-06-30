@@ -44,7 +44,7 @@ export function MemoryLayer24() {
           </h2>
           <p
             lang={lang}
-            className="mt-8 max-w-2xl text-base md:text-lg leading-relaxed text-[hsl(var(--stand-bone))]/70"
+            className="mt-8 max-w-2xl text-base md:text-lg leading-relaxed text-[hsl(var(--stand-bone))]"
           >
             {t.intro}
           </p>
@@ -73,7 +73,7 @@ export function MemoryLayer24() {
                 </h3>
                 <p
                   lang={lang}
-                  className="mt-4 max-w-2xl text-base md:text-lg leading-relaxed text-[hsl(var(--stand-bone))]/65"
+                  className="mt-4 max-w-2xl text-base md:text-lg leading-relaxed text-[hsl(var(--stand-bone))]"
                 >
                   {beat.body}
                 </p>
@@ -85,7 +85,7 @@ export function MemoryLayer24() {
         <Reveal delay={120}>
           <p
             lang={lang}
-            className="mt-12 max-w-2xl border-t border-[hsl(var(--stand-bone))]/15 pt-10 text-sm md:text-base italic text-[hsl(var(--stand-bone))]/60"
+            className="mt-12 max-w-2xl border-t border-[hsl(var(--stand-bone))]/15 pt-10 text-sm md:text-base italic text-[hsl(var(--stand-bone))]"
           >
             {t.closing}
           </p>
