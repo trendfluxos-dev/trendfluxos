@@ -5,3 +5,5 @@ project_id = "dnodqhwwzdqfqlndwhsf"
     verify_jwt = false
   [functions.process-email-queue]
     verify_jwt = true
+  [functions.alert-postgres-error]
+    verify_jwt = false
