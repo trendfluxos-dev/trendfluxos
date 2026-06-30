@@ -53,7 +53,7 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/the-stand",               title: "The Stand",       layer: "founder", blurb: "Philosophy and integrity stance",         siblings: FOUNDER_FLOW },
   { path: "/quiet-positions",         title: "Quiet Positions", layer: "founder", blurb: "Personal thoughts and reflections",       siblings: FOUNDER_FLOW },
   { path: "/justice-appeal",          title: "Justice Appeal",  layer: "founder", blurb: "Belief system and ethical stance",        siblings: FOUNDER_FLOW },
-  { path: "/marriage",                title: "Marriage Profile",layer: "founder", blurb: "Founder's marriage profile",              siblings: FOUNDER_FLOW },
+  { path: "/marriage",                title: "Marriage Profile",layer: "founder", blurb: "Private biodata · family · references",   siblings: FOUNDER_FLOW },
   { path: "/media-reports",           title: "Media Reports",   layer: "founder", blurb: "Public perception coverage",              siblings: FOUNDER_FLOW },
   { path: "/stories/ai-expert-emon",  title: "AI Expert Emon",  layer: "founder", blurb: "Identity evolution story",                siblings: FOUNDER_FLOW },
   { path: "/trust",                   title: "Trust",           layer: "founder", blurb: "Credibility and validation layer",        siblings: FOUNDER_FLOW, ctaNext: { path: "/contact", label: "Work with us" } },
