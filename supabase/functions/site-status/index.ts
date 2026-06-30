@@ -1,5 +1,4 @@
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { createClient } from "npm:@supabase/supabase-js@2";
 
 // Lightweight site status probe. Given a target origin, verifies that:
 //  - DNS resolves (implicit via fetch success)
@@ -65,20 +64,11 @@ Deno.serve(async (req) => {
       },
     });
 
-  // Require a signed-in user. The status banner is rendered to authenticated
-  // sessions and admin dashboards only; unauthenticated probes are not a
-  // supported use case and were the SSRF vector.
-  const authHeader = req.headers.get("Authorization") ?? "";
-  if (!authHeader.startsWith("Bearer ")) {
-    return json({ error: "unauthorized" }, 401);
-  }
-  const userClient = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_ANON_KEY")!,
-    { global: { headers: { Authorization: authHeader } } },
-  );
-  const { data: userData } = await userClient.auth.getUser();
-  if (!userData?.user) return json({ error: "unauthorized" }, 401);
+  // Public endpoint: the SiteStatusBanner runs for all visitors (including
+  // logged-out), so we do NOT require a Bearer token. SSRF is prevented by
+  // the strict `ALLOWED_HOSTS` allowlist + private-range block below — only
+  // a handful of our own public origins can ever be probed. Responses are
+  // cached and contain no sensitive data.
 
   if (!target) return json({ error: "missing url" }, 400);
 
