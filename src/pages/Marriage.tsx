@@ -438,6 +438,7 @@ const Marriage = () => {
               <a
                 href="https://facebook.com/zhemongrowth"
                 target="_blank" rel="noreferrer"
+                onClick={() => recordLeadAction("facebook_click", { placement: "hero_secondary" })}
                 className="flex flex-col items-center justify-center bg-white/5 border border-white/15 p-5 rounded-2xl backdrop-blur-sm shadow-sm hover:shadow-md hover:bg-white/10 hover:border-[#1877F2]/60 transition-all active:scale-[0.98]"
               >
                 <Facebook className="w-7 h-7 text-[#4f9bff] mb-2" />
@@ -453,6 +454,7 @@ const Marriage = () => {
                     "আসসালামু আলাইকুম,\n\nআপনার বিবাহ প্রোফাইল সম্পর্কে আগ্রহী। অনুগ্রহ করে বিস্তারিত শেয়ার করুন।\n\nনাম:\nপারিবারিক পরিচয়:\nঅবস্থান:\n\nজাযাকাল্লাহ খাইর।"
                   )
                 )}`}
+                onClick={() => recordLeadAction("gmail_click", { placement: "hero_secondary" })}
                 className="flex flex-col items-center justify-center bg-black/70 border border-red-500/40 p-5 rounded-2xl shadow-[0_12px_30px_-12px_rgba(220,38,38,0.5)] hover:bg-black/85 hover:border-red-500/70 transition-all active:scale-[0.98]"
               >
                 <div className="mb-2 relative">
