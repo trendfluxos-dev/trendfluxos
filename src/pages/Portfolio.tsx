@@ -436,7 +436,38 @@ export default function Portfolio() {
         <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(220,38,38,0.06),transparent_70%),linear-gradient(180deg,#FFFFFF,#F8FAFC)]" />
         <div className="mx-auto max-w-7xl px-5 md:px-8 pt-14 md:pt-20 pb-16 md:pb-24">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-5 lg:order-1">
+              <div className="relative">
+                <div className="absolute -inset-4 -z-10 rounded-[28px] bg-gradient-to-br from-[#FFE4E6] via-white to-[#FFF5F5] blur-2xl opacity-70" />
+                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden ring-1 ring-border shadow-[0_30px_70px_-30px_rgba(0,0,0,0.35)] bg-muted">
+                  <img src={portrait} alt="Zahid Hasan Emon — Brand Architect & Growth Operator" className="h-full w-full object-cover" />
+                  <div className="absolute left-4 bottom-4 right-4 flex items-center justify-between rounded-xl bg-background/95 backdrop-blur px-3 py-2 ring-1 ring-border">
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wider text-primary font-semibold">Brand Architect</div>
+                      <div className="text-sm font-semibold">Zahid Hasan Emon</div>
+                    </div>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-brand-green"><CheckCircle2 className="h-3.5 w-3.5" /> Verified</span>
+                  </div>
+                </div>
+                {/* floating metric */}
+                <div className="hidden md:flex absolute -right-8 top-10 items-center gap-2 rounded-xl bg-background px-3 py-2 ring-1 ring-border shadow-md">
+                  <BarChart3 className="h-4 w-4 text-primary" />
+                  <div>
+                    <div className="text-xs font-semibold">485K+ Views</div>
+                    <div className="text-[10px] text-muted-foreground">Organic campaigns</div>
+                  </div>
+                </div>
+                <div className="hidden md:flex absolute -left-6 bottom-16 items-center gap-2 rounded-xl bg-background px-3 py-2 ring-1 ring-border shadow-md">
+                  <Sparkles className="h-4 w-4 text-brand-green" />
+                  <div>
+                    <div className="text-xs font-semibold">82% Organic</div>
+                    <div className="text-[10px] text-muted-foreground">Reach quality</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 lg:order-2">
               <span className="inline-flex items-center gap-2 rounded-full bg-primary/5 text-primary text-xs font-semibold px-3 py-1 ring-1 ring-primary/30">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
                 Strategic Growth Operator · Available for partnerships
@@ -463,37 +494,6 @@ export default function Portfolio() {
                     <div className="text-[11px] text-muted-foreground mt-0.5">{t.l}</div>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            <div className="lg:col-span-5">
-              <div className="relative">
-                <div className="absolute -inset-4 -z-10 rounded-[28px] bg-gradient-to-br from-[#FFE4E6] via-white to-[#FFF5F5] blur-2xl opacity-70" />
-                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden ring-1 ring-border shadow-[0_30px_70px_-30px_rgba(0,0,0,0.35)] bg-muted">
-                  <img src={portrait} alt="Zahid Hasan Emon — Brand Architect & Growth Operator" className="h-full w-full object-cover" />
-                  <div className="absolute left-4 bottom-4 right-4 flex items-center justify-between rounded-xl bg-background/95 backdrop-blur px-3 py-2 ring-1 ring-border">
-                    <div>
-                      <div className="text-[11px] uppercase tracking-wider text-primary font-semibold">Brand Architect</div>
-                      <div className="text-sm font-semibold">Zahid Hasan Emon</div>
-                    </div>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-brand-green"><CheckCircle2 className="h-3.5 w-3.5" /> Verified</span>
-                  </div>
-                </div>
-                {/* floating metric */}
-                <div className="hidden md:flex absolute -left-8 top-10 items-center gap-2 rounded-xl bg-background px-3 py-2 ring-1 ring-border shadow-md">
-                  <BarChart3 className="h-4 w-4 text-primary" />
-                  <div>
-                    <div className="text-xs font-semibold">485K+ Views</div>
-                    <div className="text-[10px] text-muted-foreground">Organic campaigns</div>
-                  </div>
-                </div>
-                <div className="hidden md:flex absolute -right-6 bottom-16 items-center gap-2 rounded-xl bg-background px-3 py-2 ring-1 ring-border shadow-md">
-                  <Sparkles className="h-4 w-4 text-brand-green" />
-                  <div>
-                    <div className="text-xs font-semibold">82% Organic</div>
-                    <div className="text-[10px] text-muted-foreground">Reach quality</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
