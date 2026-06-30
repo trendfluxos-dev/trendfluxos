@@ -64,7 +64,7 @@ const Navbar = () => {
               onClick={() => openCommandPalette()}
               aria-label="Search pages"
               title="Search pages (⌘K)"
-              className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-border/50 bg-background/30 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-black/15 bg-white text-neutral-700 hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Search className="h-3.5 w-3.5" />
             </button>
@@ -72,13 +72,13 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => openLuxeVeilGate({ source: "navbar" })}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-white px-3 py-1.5 text-[12px] text-neutral-700 whitespace-nowrap hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               Apply Access
             </button>
             <Link
               to={signedIn ? "/admin" : "/auth"}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-white px-3 py-1.5 text-[12px] text-neutral-700 whitespace-nowrap hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               title={signedIn ? "Dashboard" : "Login"}
             >
               {signedIn ? <LayoutDashboard className="h-3.5 w-3.5 shrink-0" /> : <LogIn className="h-3.5 w-3.5 shrink-0" />}
@@ -93,7 +93,7 @@ const Navbar = () => {
                   aria-label="Open navigation menu"
                   aria-haspopup="dialog"
                   aria-expanded={open}
-                  className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-border/50 bg-background/40 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-black/15 bg-white text-neutral-700 hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <Menu className="h-4 w-4" />
                 </button>
