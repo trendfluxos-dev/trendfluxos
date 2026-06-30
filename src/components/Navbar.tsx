@@ -88,7 +88,9 @@ const Navbar = () => {
                   {BRAND.nameTrail}
                 </span>
               </span>
-              <span className="hidden sm:block mt-1 font-mono text-[9.5px] tracking-[0.3em] uppercase text-[#e25a5a]/70">
+              {/* WCAG AA: opaque, lightened red — ~5.0:1 on the dark glass bg
+                  (#2f2f34 effective). Old #e25a5a/70 measured ~2.5:1. */}
+              <span className="hidden sm:block mt-1 font-mono text-[9.5px] tracking-[0.3em] uppercase text-[#ff9a9a]">
                 Status · Live
               </span>
             </span>
