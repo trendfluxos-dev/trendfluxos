@@ -95,6 +95,7 @@ export const routes = {
   "/settings": make(() => import("@/pages/Settings")),
   "/privacy": make(() => import("@/pages/Privacy")),
   "/growth-os": make(() => import("@/pages/GrowthOs")),
+  "/admin/growth-console": make(() => import("@/pages/GrowthConsole")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
