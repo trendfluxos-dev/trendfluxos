@@ -11,6 +11,9 @@ import "@fontsource/hind-siliguri/400.css";
 import "@fontsource/hind-siliguri/500.css";
 import "@fontsource/hind-siliguri/600.css";
 import "@fontsource/hind-siliguri/700.css";
+// JetBrains Mono — used for micro-labels, mono meta, system codes
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
 import {
   installErrorLogger,
   getPendingCorrelationId,
