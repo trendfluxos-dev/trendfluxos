@@ -710,7 +710,26 @@ const InstantRoomDialog = ({
                   {s.status === "pending" && <span className="h-2 w-2 rounded-full bg-foreground/30" />}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium text-foreground">{s.label}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-foreground">{s.label}</p>
+                    {(s.status === "running" || s.status === "done") && typeof s.elapsedMs === "number" && s.elapsedMs > 250 && (
+                      <span
+                        className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] tabular-nums ${
+                          s.slow
+                            ? "bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30"
+                            : "bg-background/60 text-foreground/55 ring-1 ring-border/50"
+                        }`}
+                        aria-live="polite"
+                      >
+                        {(s.elapsedMs / 1000).toFixed(s.elapsedMs < 10_000 ? 1 : 0)}s
+                      </span>
+                    )}
+                  </div>
+                  {s.status === "running" && s.slow && !s.detail && (
+                    <p className="mt-0.5 text-[11px] text-amber-300/85">
+                      Still working — backend is taking longer than usual…
+                    </p>
+                  )}
                   {s.detail && (
                     <p className="mt-0.5 truncate text-[11px] text-foreground/60">{s.detail}</p>
                   )}
