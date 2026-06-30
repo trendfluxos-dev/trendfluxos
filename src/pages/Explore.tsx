@@ -59,7 +59,7 @@ const Explore = () => {
     <div className="min-h-dvh bg-background text-foreground">
       <Navbar />
 
-      <main className="pt-28 pb-20 px-6 lg:px-10">
+      <main id="main-content" className="pt-28 pb-20 px-6 lg:px-10">
         <div className="max-w-5xl mx-auto">
           <p className="text-[11px] font-medium uppercase tracking-[0.3em] text-muted-foreground">
             Site map
