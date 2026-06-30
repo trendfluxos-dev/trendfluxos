@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, CalendarPlus, CheckCircle2, Loader2, MonitorPlay, Pencil, Radio, Save, Trash2, Video, X } from "lucide-react";
 import { toast } from "sonner";
@@ -405,6 +405,9 @@ interface StepState {
   label: string;
   status: StepStatus;
   detail?: string;
+  startedAt?: number;
+  elapsedMs?: number;
+  slow?: boolean;
 }
 
 const initialSteps: StepState[] = [
@@ -428,9 +431,59 @@ const InstantRoomDialog = ({
   const [steps, setSteps] = useState<StepState[]>(initialSteps);
   const [running, setRunning] = useState(false);
   const [fatalError, setFatalError] = useState<string | null>(null);
+  const realtimeConfirmRef = useRef<{ classId?: string; confirmed: boolean }>({ confirmed: false });
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+
+  // Tick every 500ms while any step is running — keeps elapsed/slow flags fresh.
+  useEffect(() => {
+    if (!running) return;
+    const id = setInterval(() => {
+      setSteps((prev) => {
+        const now = Date.now();
+        let changed = false;
+        const next = prev.map((s) => {
+          if (s.status !== "running" || !s.startedAt) return s;
+          const elapsed = now - s.startedAt;
+          // "Slow" thresholds: backend work (room/create) gets 6s grace.
+          const slowAt = s.id === "room" || s.id === "create" ? 6000 : 4000;
+          const becameSlow = elapsed >= slowAt;
+          if (elapsed !== s.elapsedMs || becameSlow !== !!s.slow) {
+            changed = true;
+            return { ...s, elapsedMs: elapsed, slow: becameSlow };
+          }
+          return s;
+        });
+        return changed ? next : prev;
+      });
+    }, 500);
+    return () => clearInterval(id);
+  }, [running]);
+
+  // Always clean up the realtime channel on unmount.
+  useEffect(() => () => {
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+  }, []);
 
   const setStep = (id: StepState["id"], patch: Partial<StepState>) =>
-    setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, ...patch } : s)));
+    setSteps((prev) =>
+      prev.map((s) => {
+        if (s.id !== id) return s;
+        const merged: StepState = { ...s, ...patch };
+        if (patch.status === "running") {
+          merged.startedAt = Date.now();
+          merged.elapsedMs = 0;
+          merged.slow = false;
+        }
+        if (patch.status === "done" || patch.status === "error") {
+          merged.elapsedMs = merged.startedAt ? Date.now() - merged.startedAt : merged.elapsedMs;
+          merged.slow = false;
+        }
+        return merged;
+      }),
+    );
 
   const launch = async () => {
     setRunning(true);
@@ -443,6 +496,31 @@ const InstantRoomDialog = ({
       if (authErr || !u.user?.id) throw new Error("You're not signed in. Please log in again.");
       const uid = u.user.id;
       setStep("auth", { status: "done", detail: u.user.email ?? "session ok" });
+
+      // Subscribe to live_classes changes for this user BEFORE we insert, so the
+      // INSERT event lands even if the REST round-trip is slow.
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
+      realtimeConfirmRef.current = { confirmed: false };
+      channelRef.current = supabase
+        .channel(`instant-room-${uid}`)
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "live_classes", filter: `created_by=eq.${uid}` },
+          (payload) => {
+            const row = payload.new as { id: string; status: string };
+            if (row.status === "live") {
+              realtimeConfirmRef.current = { classId: row.id, confirmed: true };
+              setStep("create", {
+                status: "done",
+                detail: `Confirmed by backend · #${row.id.slice(0, 8)}`,
+              });
+            }
+          },
+        )
+        .subscribe();
 
       // 2. Availability — make sure this user isn't already hosting a live room
       setStep("availability", { status: "running" });
@@ -474,16 +552,30 @@ const InstantRoomDialog = ({
           : Math.random().toString(36).slice(2, 10));
       const meetingUrl = `https://meet.jit.si/${slug}`;
       // Lightweight reachability probe — Jitsi serves CORS, so any response (even opaque) is fine.
-      try {
-        await fetch(meetingUrl, { method: "HEAD", mode: "no-cors" });
-      } catch {
-        /* network probes can fail silently — Jitsi rooms are created on first join */
-      }
-      setStep("room", { status: "done", detail: meetingUrl });
+      // Race against an 8s watchdog so a hung probe never blocks the flow.
+      const probe = (async () => {
+        try {
+          await fetch(meetingUrl, { method: "HEAD", mode: "no-cors" });
+          return "ok" as const;
+        } catch {
+          return "skipped" as const;
+        }
+      })();
+      const timed = await Promise.race([
+        probe,
+        new Promise<"timeout">((r) => setTimeout(() => r("timeout"), 8000)),
+      ]);
+      setStep("room", {
+        status: "done",
+        detail:
+          timed === "timeout"
+            ? `${meetingUrl} · probe slow, continuing`
+            : meetingUrl,
+      });
 
       // 4. Create the class
       setStep("create", { status: "running" });
-      const created = await createLiveClass(
+      const createPromise = createLiveClass(
         {
           course_slug: courseSlug || EDTECH_COURSES[0]?.slug || "general",
           title: title.trim() || "Instant live session",
@@ -496,7 +588,12 @@ const InstantRoomDialog = ({
         },
         uid,
       );
-      setStep("create", { status: "done", detail: `Class #${created.id.slice(0, 8)}` });
+      // The realtime subscription above may flip this step to "done" first —
+      // either way we wait on the REST call's row to get the canonical id.
+      const created = await createPromise;
+      if (!realtimeConfirmRef.current.confirmed) {
+        setStep("create", { status: "done", detail: `Class #${created.id.slice(0, 8)}` });
+      }
 
       // 5. Navigate
       setStep("navigate", { status: "running" });
@@ -515,6 +612,10 @@ const InstantRoomDialog = ({
       toast.error(msg);
     } finally {
       setRunning(false);
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
     }
   };
 
@@ -609,7 +710,26 @@ const InstantRoomDialog = ({
                   {s.status === "pending" && <span className="h-2 w-2 rounded-full bg-foreground/30" />}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium text-foreground">{s.label}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-foreground">{s.label}</p>
+                    {(s.status === "running" || s.status === "done") && typeof s.elapsedMs === "number" && s.elapsedMs > 250 && (
+                      <span
+                        className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] tabular-nums ${
+                          s.slow
+                            ? "bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30"
+                            : "bg-background/60 text-foreground/55 ring-1 ring-border/50"
+                        }`}
+                        aria-live="polite"
+                      >
+                        {(s.elapsedMs / 1000).toFixed(s.elapsedMs < 10_000 ? 1 : 0)}s
+                      </span>
+                    )}
+                  </div>
+                  {s.status === "running" && s.slow && !s.detail && (
+                    <p className="mt-0.5 text-[11px] text-amber-300/85">
+                      Still working — backend is taking longer than usual…
+                    </p>
+                  )}
                   {s.detail && (
                     <p className="mt-0.5 truncate text-[11px] text-foreground/60">{s.detail}</p>
                   )}
