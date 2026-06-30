@@ -662,58 +662,120 @@ const Marriage = () => {
             )}
           </p>
           <div className="grid sm:grid-cols-2 gap-4">
+            {/* Founder Portfolio — with case preview tiles */}
             <Link
               to="/portfolio"
               onClick={() =>
                 track("marriage_verify_link_click", { target: "founder_portfolio", language: bangla ? "bn" : "en" })
               }
-              className="group rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 hover:bg-red-600/5 transition flex items-start gap-4"
+              className="group rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 hover:bg-red-600/5 transition flex flex-col"
             >
-              <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
-                <Briefcase className="h-4 w-4 text-black" />
+              <div className="flex items-start gap-4">
+                <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
+                  <Briefcase className="h-4 w-4 text-black" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-red-300">
+                    {t("Founder Portfolio", "ফাউন্ডার পোর্টফোলিও")}
+                  </p>
+                  <p className="mt-1.5 text-sm font-bold text-white">
+                    {t("Zahid Hasan Emon — Full Profile", "জাহিদ হাসান ইমন — সম্পূর্ণ প্রোফাইল")}
+                  </p>
+                  <p className="mt-1 text-xs text-white/60">
+                    {t(
+                      "Work, leadership, brands and achievements.",
+                      "কাজ, নেতৃত্ব, ব্র্যান্ড এবং অর্জনসমূহ।"
+                    )}
+                  </p>
+                </div>
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-red-300 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-red-300">
-                  {t("Founder Portfolio", "ফাউন্ডার পোর্টফোলিও")}
+
+              {/* Case preview thumbnails */}
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40 mb-2">
+                  {t("Featured Case Studies", "নির্বাচিত কেস স্টাডি")}
                 </p>
-                <p className="mt-1.5 text-sm font-bold text-white">
-                  {t("Zahid Hasan Emon — Full Profile", "জাহিদ হাসান ইমন — সম্পূর্ণ প্রোফাইল")}
-                </p>
-                <p className="mt-1 text-xs text-white/60">
-                  {t(
-                    "Work, leadership, brands and achievements.",
-                    "কাজ, নেতৃত্ব, ব্র্যান্ড এবং অর্জনসমূহ।"
-                  )}
+                <div className="grid grid-cols-4 gap-2">
+                  {caseStudies.slice(0, 4).map((cs) => {
+                    const Icon = cs.Icon;
+                    return (
+                      <div
+                        key={cs.slug}
+                        title={cs.category}
+                        className="aspect-square rounded-lg border border-red-500/20 bg-gradient-to-br from-red-600/15 via-black/60 to-black/80 flex items-center justify-center transition group-hover:border-red-500/50 group-hover:from-red-600/25"
+                      >
+                        <Icon className="h-5 w-5 text-red-300" />
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="mt-2 text-[10px] text-white/50">
+                  {t(`+${caseStudies.length - 4} more cases`, `+${caseStudies.length - 4}টি আরও কেস`)}
                 </p>
               </div>
-              <ArrowUpRight className="h-4 w-4 shrink-0 text-red-300 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
 
+            {/* Legal Documents — with proof image thumbnails */}
             <Link
               to="/portfolio#proof"
               onClick={() =>
                 track("marriage_verify_link_click", { target: "legal_documents", language: bangla ? "bn" : "en" })
               }
-              className="group rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 hover:bg-red-600/5 transition flex items-start gap-4"
+              className="group rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 hover:bg-red-600/5 transition flex flex-col"
             >
-              <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
-                <FileCheck className="h-4 w-4 text-black" />
+              <div className="flex items-start gap-4">
+                <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
+                  <FileCheck className="h-4 w-4 text-black" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-red-300">
+                    {t("Legal Documents", "লিগ্যাল ডকুমেন্ট")}
+                  </p>
+                  <p className="mt-1.5 text-sm font-bold text-white">
+                    {t("Verified Proof Vault", "যাচাইকৃত প্রমাণপত্র")}
+                  </p>
+                  <p className="mt-1 text-xs text-white/60">
+                    {t(
+                      "Original credentials, identity and leadership proofs.",
+                      "মূল সনদপত্র, পরিচয় এবং নেতৃত্বের প্রমাণসমূহ।"
+                    )}
+                  </p>
+                </div>
+                <ArrowUpRight className="h-4 w-4 shrink-0 text-red-300 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-red-300">
-                  {t("Legal Documents", "লিগ্যাল ডকুমেন্ট")}
+
+              {/* Document preview thumbnails */}
+              <div className="mt-4 pt-4 border-t border-white/10">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40 mb-2">
+                  {t("Document Preview", "ডকুমেন্ট প্রিভিউ")}
                 </p>
-                <p className="mt-1.5 text-sm font-bold text-white">
-                  {t("Verified Proof Vault", "যাচাইকৃত প্রমাণপত্র")}
-                </p>
-                <p className="mt-1 text-xs text-white/60">
-                  {t(
-                    "Original credentials, identity and leadership proofs.",
-                    "মূল সনদপত্র, পরিচয় এবং নেতৃত্বের প্রমাণসমূহ।"
-                  )}
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { src: proofUniversity, label: t("University", "বিশ্ববিদ্যালয়") },
+                    { src: proofPzswa, label: t("Leadership", "নেতৃত্ব") },
+                    { src: proofNdfBd, label: t("Appointment", "নিয়োগ") },
+                    { src: proofIdentification, label: t("Identity", "পরিচয়") },
+                  ].map((d) => (
+                    <div
+                      key={d.label}
+                      title={d.label}
+                      className="aspect-square overflow-hidden rounded-lg border border-red-500/20 bg-black/60 transition group-hover:border-red-500/50"
+                    >
+                      <img
+                        src={d.src}
+                        alt={d.label}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover opacity-80 transition group-hover:opacity-100 group-hover:scale-105"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-2 text-[10px] text-white/50">
+                  {t("Tap to open the full Proof Vault", "সম্পূর্ণ প্রুফ ভল্ট খুলতে ট্যাপ করুন")}
                 </p>
               </div>
-              <ArrowUpRight className="h-4 w-4 shrink-0 text-red-300 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </div>
         </Card>
