@@ -280,8 +280,17 @@
   }
 
   ::selection {
-    background: hsl(var(--primary) / 0.3);
+    /* Neutral, low-contrast selection so Bengali/Indic clusters don't get
+       covered by opaque red blocks (the red used to bleed across whole
+       lines on dark surfaces). Keep it subtle on both themes. */
+    background: hsl(var(--foreground) / 0.18);
     color: hsl(var(--foreground));
+    text-shadow: none;
+  }
+  ::-moz-selection {
+    background: hsl(var(--foreground) / 0.18);
+    color: hsl(var(--foreground));
+    text-shadow: none;
   }
 
   /* Consistent, premium focus ring for all clickable elements */
