@@ -552,22 +552,36 @@
     color: hsl(var(--primary));
   }
 
-  /* Bengali inside cards: bump weight + tighten leading so Hind Siliguri
-     matches Inter's optical density at the same px size. */
-  html:not(.dark) .cd-card :lang(bn),
-  html:not(.dark) .cd-card [lang="bn"] {
+  /* ===========================================================
+     Bengali contrast & weight bump — LIGHT MODE, GLOBAL
+     -----------------------------------------------------------
+     Hind Siliguri renders ~1 weight step lighter than Inter at
+     the same px size, so on white surfaces Bengali tiles,
+     headers and descriptions look washed out. We bump weight
+     globally in light mode and force muted Bengali copy back
+     to the high-contrast foreground token so contrast stays
+     above WCAG AA everywhere — tiles, sections, cards, lists. */
+  html:not(.dark) :lang(bn),
+  html:not(.dark) [lang="bn"] {
     font-weight: 600;
     letter-spacing: 0;
   }
-  html:not(.dark) .cd-card h1:lang(bn),
-  html:not(.dark) .cd-card h2:lang(bn),
-  html:not(.dark) .cd-card h3:lang(bn),
-  html:not(.dark) .cd-card h4:lang(bn),
-  html:not(.dark) .cd-card h1[lang="bn"],
-  html:not(.dark) .cd-card h2[lang="bn"],
-  html:not(.dark) .cd-card h3[lang="bn"],
-  html:not(.dark) .cd-card h4[lang="bn"] {
+  html:not(.dark) :is(h1, h2, h3, h4, h5, h6):lang(bn),
+  html:not(.dark) :is(h1, h2, h3, h4, h5, h6)[lang="bn"] {
     font-weight: 700;
+  }
+  html:not(.dark) :is(p, li, span, dd, dt, figcaption, label, small):lang(bn),
+  html:not(.dark) :is(p, li, span, dd, dt, figcaption, label, small)[lang="bn"] {
+    font-weight: 500;
+  }
+  /* Description text often uses muted-foreground which drops
+     to ~3:1 on white for Bengali. Promote to foreground when
+     the element is explicitly Bengali. */
+  html:not(.dark) .text-muted-foreground:lang(bn),
+  html:not(.dark) .text-muted-foreground[lang="bn"],
+  html:not(.dark) [class*="text-muted"]:lang(bn),
+  html:not(.dark) [class*="text-muted"][lang="bn"] {
+    color: hsl(var(--foreground) / 0.85);
   }
 }
 
