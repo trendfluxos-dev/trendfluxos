@@ -95,8 +95,11 @@ export const routes = {
   "/settings": make(() => import("@/pages/Settings")),
   "/privacy": make(() => import("@/pages/Privacy")),
   "/growth-os": make(() => import("@/pages/GrowthOs")),
+  "/growth-os/hub": make(() => import("@/pages/GrowthOsHub")),
   "/admin/growth-console": make(() => import("@/pages/GrowthConsole")),
   "/admin/creator-studio": make(() => import("@/pages/CreatorStudio")),
+  "/admin/task-queue": make(() => import("@/pages/TaskQueue")),
+  "/admin/class-analytics": make(() => import("@/pages/ClassAnalytics")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
