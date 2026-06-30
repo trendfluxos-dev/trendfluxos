@@ -22,7 +22,16 @@ const LayerMegaMenu = () => {
         {PUBLIC_LAYERS.map((layer) => {
           const meta = LAYER_META[layer];
           const items = nodesByLayer(layer, { includeAlsoIn: true });
-          const isActiveLayer = items.some((n) => pathname === n.path) || pathname === meta.hubPath;
+          // Active when the user is on a direct node path, the layer hub,
+          // or on the canonical destination of any funnel node in this layer.
+          const isActiveLayer =
+            items.some((n) => pathname === n.path || (n.canonicalAlias && pathname === n.canonicalAlias)) ||
+            pathname === meta.hubPath;
+          // If any sibling node owns the current pathname exactly, that
+          // exact-match wins — funnel siblings only highlight when no
+          // direct owner is present in the same dropdown.
+          const hasExactOwner = items.some((n) => pathname === n.path);
+          const hasFunnelInDropdown = items.some((n) => !!n.canonicalAlias);
           return (
             <NavigationMenuItem key={layer}>
               <NavigationMenuTrigger
@@ -51,7 +60,12 @@ const LayerMegaMenu = () => {
                   </div>
                   <ul className="grid gap-1 sm:grid-cols-2">
                     {items.map((node) => {
-                      const isActive = pathname === node.path;
+                      const isDirect = pathname === node.path;
+                      const isViaAlias =
+                        !isDirect &&
+                        !!node.canonicalAlias &&
+                        pathname === node.canonicalAlias;
+                      const isActive = isDirect || isViaAlias;
                       const LinkTag: any = node.external ? "a" : Link;
                       const linkProps = node.external
                         ? { href: node.path, target: "_blank", rel: "noopener noreferrer" }
@@ -60,13 +74,16 @@ const LayerMegaMenu = () => {
                         <li key={`${layer}-${node.path}`}>
                           <LinkTag
                             {...linkProps}
-                            aria-current={isActive ? "page" : undefined}
+                            aria-current={isDirect ? "page" : undefined}
+                            data-active-via={isViaAlias ? "alias" : undefined}
                             className={[
                               "group relative block rounded-lg px-3 py-2.5 pl-4 transition-all duration-300 ease-out",
                               "hover:bg-[#fbeaea] dark:hover:bg-[#2a0f14]/60 hover:translate-x-0.5",
                             "focus:outline-none focus-visible:bg-[#fbeaea] dark:focus-visible:bg-[#2a0f14]/70 focus-visible:translate-x-0.5 focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080d]",
-                              isActive
+                              isDirect
                                 ? "bg-[#fbeaea] dark:bg-[#3a1418]/80 ring-1 ring-[#c11f1f]/50 dark:ring-[#e25a5a]/50 shadow-[inset_3px_0_0_0_#c11f1f] dark:shadow-[inset_3px_0_0_0_#e25a5a]"
+                                : isViaAlias
+                                ? "bg-[#fbeaea]/60 dark:bg-[#3a1418]/40 ring-1 ring-[#c11f1f]/25 dark:ring-[#e25a5a]/25 shadow-[inset_2px_0_0_0_#c11f1f] dark:shadow-[inset_2px_0_0_0_#e25a5a]"
                                 : "",
                             ].join(" ")}
                           >
@@ -75,8 +92,18 @@ const LayerMegaMenu = () => {
                               {node.external && (
                                 <span className="ml-1.5 text-[9.5px] uppercase tracking-[0.18em] text-[#9a1818] dark:text-[#e25a5a]/80 align-middle">↗</span>
                               )}
-                              {isActive && (
+                              {node.canonicalAlias && !node.external && (
+                                <span
+                                  aria-label={`Funnels to ${node.canonicalAlias}`}
+                                  title={`Funnels to ${node.canonicalAlias}`}
+                                  className="ml-1 text-[10px] text-[#9a1818] dark:text-[#e25a5a]/80"
+                                >↪</span>
+                              )}
+                              {isDirect && (
                                 <span className="ml-auto text-[9px] uppercase tracking-[0.2em] text-[#c11f1f] dark:text-[#e25a5a] font-semibold">Current</span>
+                              )}
+                              {isViaAlias && (
+                                <span className="ml-auto text-[9px] uppercase tracking-[0.2em] text-[#c11f1f]/75 dark:text-[#e25a5a]/75 font-semibold">Via</span>
                               )}
                             </span>
                             {node.blurb && (
@@ -89,6 +116,13 @@ const LayerMegaMenu = () => {
                       );
                     })}
                   </ul>
+                  {hasFunnelInDropdown && (
+                    <p className="mt-3 text-[10.5px] leading-snug text-[#3a0d10]/65 dark:text-[#f0c9c9]/55">
+                      <span className="text-[#9a1818] dark:text-[#e25a5a]/80">↪</span>{" "}
+                      Items marked with an arrow funnel into another page;
+                      the destination stays highlighted with a "Via" tag.
+                    </p>
+                  )}
                   <div className="mt-3 pt-3 border-t border-[#c11f1f]/25 dark:border-[#7a1e1e]/45">
                     <Link
                       to={meta.hubPath}
