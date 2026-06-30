@@ -80,7 +80,7 @@ const Hero = () => {
                 একজন মানুষের অবস্থান, একটি জাতির বিবেক
               </p>
               <p lang="bn" className="mt-1 text-sm md:text-base font-medium text-foreground/85">
-                জাহিদ হাসান ইমন — &ldquo;মায়ের নিষেধ আছে&rdquo; থেকে জাতীয় দলিল পর্যন্ত
+                Zahid Hasan Emon — &ldquo;মায়ের নিষেধ আছে&rdquo; থেকে জাতীয় দলিল পর্যন্ত
               </p>
             </div>
             <ArrowRight className="h-4 w-4 shrink-0 text-gold transition-transform group-hover:translate-x-1" />

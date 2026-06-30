@@ -25,7 +25,7 @@ type Bi = { en: string; bn: string };
 const T = ({ en, bn, bangla }: Bi & { bangla: boolean }) => <>{bangla ? bn : en}</>;
 
 const info: { label: Bi; value: Bi }[] = [
-  { label: { en: "Full Name", bn: "পূর্ণ নাম" }, value: { en: "Zahid Hasan Emon", bn: "জাহিদ হাসান ইমন" } },
+  { label: { en: "Full Name", bn: "পূর্ণ নাম" }, value: { en: "Zahid Hasan Emon", bn: "Zahid Hasan Emon" } },
   { label: { en: "Date of Birth", bn: "জন্ম তারিখ" }, value: { en: "5 May 1998", bn: "৫ মে ১৯৯৮" } },
   { label: { en: "Age", bn: "বয়স" }, value: { en: "27 Years (Approx.)", bn: "প্রায় ২৭ বছর" } },
   { label: { en: "Height", bn: "উচ্চতা" }, value: { en: "5 Feet 5 Inches", bn: "৫ ফুট ৫ ইঞ্চি" } },
@@ -396,7 +396,7 @@ const Marriage = () => {
             />
           </div>
           <h1 className="mt-5 text-4xl md:text-5xl font-bold tracking-wide bg-gradient-to-r from-white via-red-400 to-white bg-clip-text text-transparent">
-            {t("Zahid Hasan Emon", "জাহিদ হাসান ইমন")}
+            {t("Zahid Hasan Emon", "Zahid Hasan Emon")}
           </h1>
           <p className="mt-3 text-white/80 text-base md:text-lg">
             {t(
@@ -709,7 +709,7 @@ const Marriage = () => {
                     {t("Founder Portfolio", "ফাউন্ডার পোর্টফোলিও")}
                   </p>
                   <p className="mt-1.5 text-sm font-bold text-white">
-                    {t("Zahid Hasan Emon — Full Profile", "জাহিদ হাসান ইমন — সম্পূর্ণ প্রোফাইল")}
+                    {t("Zahid Hasan Emon — Full Profile", "Zahid Hasan Emon — সম্পূর্ণ প্রোফাইল")}
                   </p>
                   <p className="mt-1 text-xs text-white/60">
                     {t(

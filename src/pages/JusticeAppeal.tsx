@@ -216,7 +216,7 @@ export default function JusticeAppeal() {
               <div className={`rounded border ${accentBorder}/40 ${accentBg}/10 px-2 py-0.5 text-[10px] uppercase tracking-wider ${accent}`}>অভিযুক্ত</div>
             </div>
             <p className="mt-6 text-[15px] leading-relaxed text-slate-300">
-              লিখিত অভিযোগ অনুযায়ী, <span className="text-white">জাহিদ হাসান ইমন</span> ১৭ মার্চ ২০২২ থেকে শুরু হওয়া
+              লিখিত অভিযোগ অনুযায়ী, <span className="text-white">Zahid Hasan Emon</span> ১৭ মার্চ ২০২২ থেকে শুরু হওয়া
               ঘটনার সাথে সম্পর্কিত অভিযুক্ত হুমকি ও হামলার পর তার ও তার পরিবারের জন্য আইনগত
               তদন্ত এবং সুরক্ষার আবেদন জানিয়েছেন।
             </p>
