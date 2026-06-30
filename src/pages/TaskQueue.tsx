@@ -45,7 +45,7 @@ export default function TaskQueue() {
       supabase.from("growth_leads").select("id,name,email,created_at,stage").eq("stage", "new").order("created_at", { ascending: true }).limit(50),
       supabase.from("creator_content").select("id,title,status,scheduled_at,updated_at").eq("status", "draft").order("scheduled_at", { ascending: true, nullsFirst: false }).limit(50),
       supabase.from("live_classes").select("id,title,starts_at,meeting_url,curriculum").gte("starts_at", new Date().toISOString()).lte("starts_at", in72h).limit(50),
-      supabase.from("telegram_error_logs").select("id,event_type,error_message,created_at").gte("created_at", last24h).order("created_at", { ascending: false }).limit(50),
+      supabase.from("telegram_error_logs").select("id,function_name,error_description,created_at").gte("created_at", last24h).order("created_at", { ascending: false }).limit(50),
     ]);
 
     const out: Task[] = [];
@@ -94,8 +94,8 @@ export default function TaskQueue() {
       out.push({
         id: `alert-${a.id}`,
         source: "alert",
-        title: `Acknowledge alert: ${a.event_type ?? "error"}`,
-        meta: (a.error_message ?? "").slice(0, 120),
+        title: `Acknowledge alert: ${a.function_name ?? "error"}`,
+        meta: (a.error_description ?? "").slice(0, 120),
         priority: 70,
         age: formatDistanceToNow(new Date(a.created_at), { addSuffix: true }),
         href: "/admin/errors",
