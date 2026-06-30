@@ -36,7 +36,18 @@ const Index = () => {
   // Stable identity so memoised sections don't re-render when the dialog toggles.
   const openQuote = useCallback(() => setQuoteOpen(true), []);
 
-  useSeo();
+  useSeo({
+    title: "Trendflux Digital — Operator portfolio of Zahid Hasan Emon",
+    description:
+      "Trendflux Digital is the operator portfolio of Zahid Hasan Emon — eight brands across EdTech (Kormoshikkha), Creative (BrandToki), LuxeVeil, TrendFlux Space and more, with The Stand manifesto and Algorithm Architecture case studies.",
+    canonical: "/",
+    type: "website",
+    image: `${BRAND.url}/og-home.jpg`,
+    imageAlt: "Trendflux Digital — operator portfolio of Zahid Hasan Emon",
+    imageWidth: 1200,
+    imageHeight: 630,
+    siteName: BRAND.name,
+  });
   useJsonLd([
     {
       "@context": "https://schema.org",
