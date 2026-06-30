@@ -354,6 +354,57 @@ export type Database = {
         }
         Relationships: []
       }
+      creator_content: {
+        Row: {
+          asset_url: string | null
+          body: string | null
+          channel: string
+          content_type: string
+          created_at: string
+          id: string
+          n8n_pushed: boolean
+          n8n_response: Json | null
+          owner_id: string
+          published_at: string | null
+          scheduled_at: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          asset_url?: string | null
+          body?: string | null
+          channel?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          n8n_pushed?: boolean
+          n8n_response?: Json | null
+          owner_id: string
+          published_at?: string | null
+          scheduled_at?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          asset_url?: string | null
+          body?: string | null
+          channel?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          n8n_pushed?: boolean
+          n8n_response?: Json | null
+          owner_id?: string
+          published_at?: string | null
+          scheduled_at?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       email_send_log: {
         Row: {
           created_at: string
