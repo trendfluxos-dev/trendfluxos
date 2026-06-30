@@ -55,6 +55,9 @@ const EdtechLiveAdmin = () => {
   const [draft, setDraft] = useState<Draft>(blank());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [instantOpen, setInstantOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     try {
@@ -68,6 +71,22 @@ const EdtechLiveAdmin = () => {
   useEffect(() => {
     refresh();
   }, [refresh]);
+
+  // Open the instant room flow when `?instant=1` is present.
+  useEffect(() => {
+    if (searchParams.get("instant") === "1") {
+      setInstantOpen(true);
+    }
+  }, [searchParams]);
+
+  const closeInstant = useCallback(() => {
+    setInstantOpen(false);
+    if (searchParams.get("instant")) {
+      const next = new URLSearchParams(searchParams);
+      next.delete("instant");
+      setSearchParams(next, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const startEdit = (c: LiveClass) => {
     setEditingId(c.id);
@@ -147,12 +166,21 @@ const EdtechLiveAdmin = () => {
             <p className="text-[11px] uppercase tracking-[0.25em] text-primary">Admin</p>
             <h1 className="font-display text-xl font-semibold text-foreground">Live classes</h1>
           </div>
-          <Link
-            to={EDTECH.routes.live}
-            className="inline-flex items-center gap-1.5 text-sm text-foreground/70 hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden /> Public schedule
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setInstantOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-full bg-rose-500 px-3.5 py-1.5 text-[12px] font-semibold text-white shadow-sm hover:bg-rose-500/90"
+            >
+              <Video className="h-3.5 w-3.5" aria-hidden /> Go live now
+            </button>
+            <Link
+              to={EDTECH.routes.live}
+              className="inline-flex items-center gap-1.5 text-sm text-foreground/70 hover:text-foreground"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden /> Public schedule
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -338,6 +366,16 @@ const EdtechLiveAdmin = () => {
           )}
         </section>
       </main>
+      {instantOpen && (
+        <InstantRoomDialog
+          onClose={closeInstant}
+          onLaunched={(id) => {
+            closeInstant();
+            refresh();
+            navigate(EDTECH.routes.liveStudio(id));
+          }}
+        />
+      )}
     </div>
   );
 };
