@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, AlertTriangle, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
   DialogContent,
@@ -104,9 +105,14 @@ export default function SiteStatusBanner() {
       try {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 6000);
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session?.access_token) return; // probe is auth-only
         const r = await fetch(
           `${STATUS_ENDPOINT}?url=${encodeURIComponent(origin)}`,
-          { signal: ctrl.signal },
+          {
+            signal: ctrl.signal,
+            headers: { Authorization: `Bearer ${session.access_token}` },
+          },
         ).finally(() => clearTimeout(t));
         const result = r.ok ? ((await r.json()) as ServerStatus) : null;
         if (!cancelled && result) {
