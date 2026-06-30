@@ -120,6 +120,7 @@ const ShareKit = routes["/share-kit"];
 const StoryAiExpertEmon = routes["/stories/ai-expert-emon"];
 const Settings = routes["/settings"];
 const Privacy = routes["/privacy"];
+const GrowthOs = routes["/growth-os"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
@@ -217,6 +218,7 @@ const RoutedApp = () => {
         <Route path="/stories/ai-expert-emon" element={<StoryAiExpertEmon />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/growth-os" element={<GrowthOs />} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
         {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}
         {/* Synthetic error route for Playwright error-boundary smoke tests. */}
