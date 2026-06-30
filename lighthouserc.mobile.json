@@ -4,14 +4,14 @@
       "staticDistDir": "./dist",
       "isSinglePageApplication": true,
       "url": [
-        "http://localhost/index.html",
-        "http://localhost/trust/index.html",
-        "http://localhost/portfolio/index.html",
-        "http://localhost/showcase/index.html",
-        "http://localhost/edtech/index.html",
-        "http://localhost/services/index.html",
-        "http://localhost/ecosystem/index.html",
-        "http://localhost/explore/index.html"
+        "http://localhost/",
+        "http://localhost/trust",
+        "http://localhost/portfolio",
+        "http://localhost/showcase",
+        "http://localhost/edtech",
+        "http://localhost/services",
+        "http://localhost/ecosystem",
+        "http://localhost/explore"
       ],
       "numberOfRuns": 3,
       "settings": {
