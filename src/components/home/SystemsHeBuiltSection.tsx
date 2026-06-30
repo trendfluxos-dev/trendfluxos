@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, CalendarCheck } from "lucide-react";
 import { TfSection, TfCard } from "@/components/tf/Section";
 import { SYSTEMS_HE_BUILT } from "@/data/home";
 
@@ -36,8 +36,16 @@ export const SystemsHeBuiltSection = () => (
       ))}
     </ol>
     <div className="mt-12 flex flex-col items-center gap-3 text-center">
-      <Link to="/services" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80">
-        See how the OS composes <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+      <Link
+        to="/project-lead#book"
+        className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      >
+        <CalendarCheck className="h-4 w-4" aria-hidden="true" />
+        Book Direct with Project Lead
+        <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+      </Link>
+      <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary transition-colors hover:text-primary/80">
+        See how the OS composes <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
       </Link>
       <p className="text-xs text-muted-foreground">90-day engagement · Founder-led · You own the stack</p>
     </div>
