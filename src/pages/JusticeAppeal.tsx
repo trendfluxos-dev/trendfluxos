@@ -27,6 +27,7 @@ const navyBorder = "border-[var(--justice-border)]";
 const accent = "text-[var(--justice-accent)]";
 const accentBg = "bg-[var(--justice-accent)]";
 const accentBorder = "border-[var(--justice-accent)]";
+const accentFill = "bg-[var(--justice-accent-strong)]";
 
 const timeline = [
   { date: "১৭ মার্চ ২০২২", title: "প্রথম ফোন যোগাযোগ ও অভিযুক্ত হুমকি", body: "অভিযোগ অনুযায়ী, ফোনকলের মাধ্যমে হুমকি পাওয়া যায়।" },
