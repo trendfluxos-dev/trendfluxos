@@ -211,6 +211,7 @@ const EdtechHome = () => {
 
       {/* FINAL CTA */}
       <LazySection label="cta" skeleton={<SectionSkeleton variant="band" />} minHeight="40vh">
+        <TripleBridge active="edtech" />
         <FinalCta />
       </LazySection>
     </EdtechShell>
