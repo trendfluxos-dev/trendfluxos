@@ -4,6 +4,7 @@ import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart, Copy, Check, Use
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
+import { track } from "@/lib/analytics";
 import profile from "@/assets/marriage/profile.webp";
 import photo1 from "@/assets/marriage/photo1.webp";
 import photo2 from "@/assets/marriage/photo2.webp";
