@@ -25,6 +25,13 @@ export interface LayerNode {
   noindex?: boolean;
   /** When true, `path` is an absolute URL opened in a new tab (external product). */
   external?: boolean;
+  /**
+   * Canonical destination when this node funnels/redirects somewhere else
+   * (e.g. `/toolkit` and `/masterclass` both land users on `/edtech`).
+   * Used by the navbar to keep the originating dropdown item highlighted
+   * after the funnel resolves. Purely presentation — no router behaviour.
+   */
+  canonicalAlias?: string;
 }
 
 export const LAYER_META: Record<Layer, { label: string; tagline: string; hubPath: string }> = {
@@ -49,7 +56,7 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/ecosystem",  title: "Ecosystem",   layer: "company", blurb: "How the four layers connect",          siblings: COMPANY_FLOW },
   { path: "/services",   title: "Services",    layer: "company", blurb: "AI automation, paid media, CRM, brand", siblings: COMPANY_FLOW },
   { path: "/enterprise", title: "Enterprise",  layer: "company", blurb: "Control portal for enterprise teams",  siblings: COMPANY_FLOW },
-  { path: "/toolkit",    title: "Toolkit",     layer: "company", blurb: "Growth operator execution modules",    siblings: COMPANY_FLOW },
+  { path: "/toolkit",    title: "Toolkit",     layer: "company", blurb: "Growth operator execution modules",    siblings: COMPANY_FLOW, canonicalAlias: "/edtech" },
   { path: "/contact",    title: "Contact",     layer: "company", blurb: "Start a conversation",                 siblings: COMPANY_FLOW, ctaNext: { path: "/project-lead", label: "Lead a project" } },
 
   // ---------- FOUNDER ----------
@@ -67,7 +74,7 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/luxe-veil",         title: "Luxe Veil",        layer: "brand", blurb: "Invite-only luxury weddings",          siblings: BRAND_FLOW },
   { path: "/brandtoki",         title: "Studio BrandToki", layer: "brand", blurb: "Production studio in Gulshan",         siblings: BRAND_FLOW },
   { path: "/trendflux-talent",  title: "Trendflux Talent", layer: "brand", blurb: "Careers and talent platform",          siblings: BRAND_FLOW },
-  { path: "/masterclass",       title: "Masterclass",      layer: "brand", blurb: "Advanced AI masterclass",              siblings: BRAND_FLOW },
+  { path: "/masterclass",       title: "Masterclass",      layer: "brand", blurb: "Advanced AI masterclass",              siblings: BRAND_FLOW, canonicalAlias: "/edtech" },
   { path: "/edtech",            title: "কর্মশিক্ষা TED Plus",     layer: "brand", blurb: "TrendFlux's online EdTech platform",   siblings: BRAND_FLOW, ctaNext: { path: "/masterclass", label: "See the masterclass" } },
   { path: "/course/trendflux",  title: "Trendflux Course", layer: "brand", blurb: "Growth operator course",               siblings: BRAND_FLOW, ctaNext: { path: "/ecosystem", label: "Back to ecosystem" } },
   { path: "https://trendflux.space",          title: "TrendFlux Space",     layer: "brand", blurb: "Live + on-demand EdTech product",     external: true },
