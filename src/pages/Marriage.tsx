@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart, Copy, Check, User } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { MessageCircle, Facebook, Mail, Phone, Linkedin, Heart, Copy, Check, User, Briefcase, FileCheck, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
