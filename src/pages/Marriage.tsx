@@ -467,7 +467,7 @@ const Marriage = () => {
             <li className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-red-400" />
               <a className="hover:text-red-400 transition" href="https://wa.me/8801410004037" target="_blank" rel="noreferrer">
-                WhatsApp: +8801410004037
+                WhatsApp: +880 1410-004037
               </a>
             </li>
             <li className="flex items-center gap-3">
