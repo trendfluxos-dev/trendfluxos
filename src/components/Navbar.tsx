@@ -67,7 +67,11 @@ const Navbar = () => {
         <nav
           aria-label="Primary"
           className={[
-            "group/nav relative overflow-hidden rounded-2xl flex flex-nowrap items-center justify-between gap-2 lg:gap-4",
+            // NOTE: overflow must stay visible so the Company/Founder/Brands
+            // dropdown panel (Radix NavigationMenu viewport) can render below
+            // the navbar. The decorative glow blob is clipped by its own
+            // inner wrapper instead.
+            "group/nav relative overflow-visible rounded-2xl flex flex-nowrap items-center justify-between gap-2 lg:gap-4",
             "border text-[#3a0d10] dark:text-[#f5d3d3] transition-all duration-500 ease-out",
             // bottom shine line
             "after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#e25a5a]/55 after:to-transparent",
@@ -76,11 +80,14 @@ const Navbar = () => {
               : "pl-4 sm:pl-5 pr-2 sm:pr-3 py-3 sm:py-3.5 bg-white/70 dark:bg-[#0e0e14]/55 backdrop-blur-2xl border-black/[0.05] dark:border-white/[0.05] shadow-xl dark:shadow-2xl",
           ].join(" ")}
         >
-          {/* Kinetic update orb — soft radial glow anchored behind the brand */}
+          {/* Kinetic update orb — clipped to the rounded nav shape so it
+              doesn't bleed outside, while letting the dropdown overflow. */}
           <span
             aria-hidden
-            className="pointer-events-none absolute -left-12 top-1/2 -translate-y-1/2 h-48 w-48 rounded-full bg-[#e25a5a]/15 dark:bg-[#7a1e1e]/25 blur-[80px] transition-colors duration-700 group-hover/nav:bg-[#e25a5a]/25 dark:group-hover/nav:bg-[#a02828]/35"
-          />
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl"
+          >
+            <span className="absolute -left-12 top-1/2 -translate-y-1/2 h-48 w-48 rounded-full bg-[#e25a5a]/15 dark:bg-[#7a1e1e]/25 blur-[80px] transition-colors duration-700 group-hover/nav:bg-[#e25a5a]/25 dark:group-hover/nav:bg-[#a02828]/35" />
+          </span>
 
           <Link
             to="/"
