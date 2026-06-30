@@ -88,7 +88,7 @@ export default function TheStand() {
 
   return (
     <StandLanguageProvider>
-      <main className="the-stand relative min-h-dvh">
+      <main className="the-stand relative min-h-dvh bg-[hsl(var(--stand-bone))] text-[hsl(var(--stand-ink))]">
         <FilmGrain />
 
         {/* Quiet back link — desaturated, easy to miss on purpose */}
