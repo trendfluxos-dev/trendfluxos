@@ -1209,14 +1209,15 @@
   body:has([data-brand="marriage"]) [data-layer-chrome] span {
     color: inherit;
   }
+  body:has([data-brand="marriage"]) [data-layer-chrome].text-foreground\/55,
   body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/45,
   body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/55,
   body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/65 {
-    color: rgb(255 255 255 / 0.72);
+    color: rgb(255 255 255 / 0.78) !important;
   }
   body:has([data-brand="marriage"]) [data-layer-chrome] .text-foreground\/85,
   body:has([data-brand="marriage"]) [data-layer-chrome] a:hover {
-    color: rgb(255 255 255 / 0.95);
+    color: rgb(255 255 255 / 0.96) !important;
   }
 
   @media (hover: hover) and (pointer: fine) {
