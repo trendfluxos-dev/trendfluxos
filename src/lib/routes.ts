@@ -93,6 +93,7 @@ export const routes = {
   "/share-kit": make(() => import("@/pages/ShareKit")),
   "/stories/ai-expert-emon": make(() => import("@/pages/StoryAiExpertEmon")),
   "/settings": make(() => import("@/pages/Settings")),
+  "/privacy": make(() => import("@/pages/Privacy")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
@@ -157,6 +158,7 @@ const EXTRA_PAGES: NavigablePage[] = [
   { label: "Uptime Monitor", path: "/admin/uptime", type: "Admin", keywords: "uptime monitor status health probe alert downtime telegram" },
   { label: "Client Error Logs", path: "/admin/errors", type: "Admin", keywords: "errors runtime client logs sentry stack trace" },
   { label: "Web Vitals", path: "/admin/web-vitals", type: "Admin", keywords: "performance web vitals lcp inp cls fcp ttfb speed core" },
+  { label: "Privacy Policy", path: "/privacy", type: "Main", keywords: "privacy policy data gdpr cookies retention rights legal" },
 ];
 
 // Default mapping from the 4-layer architecture to the legacy PageType
