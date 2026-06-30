@@ -44,14 +44,14 @@ const Navbar = () => {
       <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 transition-all duration-300 ${scrolled ? "mt-2" : "mt-4"}`}>
         <nav
           aria-label="Primary"
-          className={`glass-strong rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4 pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border transition-all duration-300 ${
-            scrolled ? "border-border/60 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.18)]" : "border-border/40"
+          className={`rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4 pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border bg-white text-neutral-900 transition-all duration-300 ${
+            scrolled ? "border-black/10 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.25)]" : "border-black/10"
           }`}
         >
           <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-[14px] lg:text-[15px] whitespace-nowrap shrink-0 tracking-tight">
             <img src={logoAsset.url} alt={`${BRAND.name} logo`} className="h-7 w-7 rounded-md bg-white object-contain p-0.5" />
-            <span className="text-gradient">{BRAND.nameLead}</span>
-            <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
+            <span className="text-neutral-900">{BRAND.nameLead}</span>
+            <span className="text-neutral-500 font-normal">{BRAND.nameTrail}</span>
           </Link>
 
           {/* Center: 4-layer mega-menu (Company / Founder / Brands) */}
@@ -64,7 +64,7 @@ const Navbar = () => {
               onClick={() => openCommandPalette()}
               aria-label="Search pages"
               title="Search pages (⌘K)"
-              className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-border/50 bg-background/30 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-black/15 bg-white text-neutral-700 hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Search className="h-3.5 w-3.5" />
             </button>
@@ -72,13 +72,13 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => openLuxeVeilGate({ source: "navbar" })}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-white px-3 py-1.5 text-[12px] text-neutral-700 whitespace-nowrap hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               Apply Access
             </button>
             <Link
               to={signedIn ? "/admin" : "/auth"}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-background/30 px-3 py-1.5 text-[12px] text-foreground/70 whitespace-nowrap hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-white px-3 py-1.5 text-[12px] text-neutral-700 whitespace-nowrap hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               title={signedIn ? "Dashboard" : "Login"}
             >
               {signedIn ? <LayoutDashboard className="h-3.5 w-3.5 shrink-0" /> : <LogIn className="h-3.5 w-3.5 shrink-0" />}
@@ -93,7 +93,7 @@ const Navbar = () => {
                   aria-label="Open navigation menu"
                   aria-haspopup="dialog"
                   aria-expanded={open}
-                  className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-border/50 bg-background/40 text-foreground/70 hover:text-foreground hover:border-foreground/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-black/15 bg-white text-neutral-700 hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <Menu className="h-4 w-4" />
                 </button>
