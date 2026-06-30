@@ -413,7 +413,7 @@ export default function Portfolio() {
       <header className="sticky top-0 z-50 bg-background/85 backdrop-blur-md border-b border-border">
         <div className="mx-auto max-w-7xl px-5 md:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="h-8 w-8 rounded-xl bg-foreground text-white grid place-items-center text-sm font-bold tracking-tight">ZE</span>
+            <span className="h-8 w-8 rounded-xl bg-foreground text-background grid place-items-center text-sm font-bold tracking-tight">ZE</span>
             <span className="font-semibold tracking-tight text-[15px] font-[Space_Grotesk,Inter,sans-serif]">Zahid Hasan Emon</span>
           </Link>
           <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
@@ -631,7 +631,7 @@ export default function Portfolio() {
                     key={p}
                     type="button"
                     onClick={() => applyPreset(p)}
-                    className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${preset === p ? "bg-foreground text-white" : "border border-border text-muted-foreground hover:border-foreground hover:text-foreground"}`}
+                    className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${preset === p ? "bg-foreground text-background" : "border border-border text-muted-foreground hover:border-foreground hover:text-foreground"}`}
                   >
                     {p}
                   </button>
@@ -664,7 +664,7 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <aside className="lg:col-span-5 rounded-2xl bg-foreground text-white p-7 md:p-8 flex flex-col justify-between shadow-[0_30px_70px_-40px_rgba(0,0,0,0.6)]">
+            <aside className="lg:col-span-5 rounded-2xl bg-foreground text-background p-7 md:p-8 flex flex-col justify-between shadow-[0_30px_70px_-40px_rgba(0,0,0,0.6)]">
               <div className="space-y-4">
                 <Stat label="Base Partnership Value" value={fmt(baseValue)} />
                 <Stat label="Performance-Aligned Outcome" value={fmt(perfOutcome)} accent="#F97316" />
@@ -690,7 +690,7 @@ export default function Portfolio() {
           {/* PACKAGES */}
           <div className="mt-16 grid md:grid-cols-3 gap-5">
             {PACKAGES.map((p) => (
-              <div key={p.name} className={`rounded-2xl border p-6 transition hover:-translate-y-0.5 ${p.featured ? "border-foreground bg-foreground text-white" : "border-border bg-background"}`}>
+              <div key={p.name} className={`rounded-2xl border p-6 transition hover:-translate-y-0.5 ${p.featured ? "border-foreground bg-foreground text-background" : "border-border bg-background"}`}>
                 <h3 className={`text-lg font-semibold tracking-tight ${p.featured ? "text-white" : "text-foreground"}`}>{p.name}</h3>
                 <p className={`mt-2 text-sm ${p.featured ? "text-white/70" : "text-muted-foreground"}`}>{p.summary}</p>
                 <ul className="mt-5 space-y-2 text-sm">
@@ -760,7 +760,7 @@ export default function Portfolio() {
                     <div key={p.name} className="group rounded-2xl border border-border bg-background p-6 hover:border-foreground transition">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
-                          <span className="h-10 w-10 rounded-xl bg-foreground text-white grid place-items-center text-[13px] font-bold tracking-tight shrink-0">
+                          <span className="h-10 w-10 rounded-xl bg-foreground text-background grid place-items-center text-[13px] font-bold tracking-tight shrink-0">
                             {p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
                           </span>
                           <div className="min-w-0">
@@ -916,7 +916,7 @@ export default function Portfolio() {
                     onClick={() => setFilter(c)}
                     className={`shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-muted ${
                       active
-                        ? "bg-foreground text-white shadow-[0_8px_20px_-10px_rgba(0,0,0,0.4)]"
+                        ? "bg-foreground text-background shadow-[0_8px_20px_-10px_rgba(0,0,0,0.4)]"
                         : "border border-border bg-background text-muted-foreground hover:text-foreground hover:border-foreground"
                     }`}
                   >
@@ -1006,7 +1006,7 @@ export default function Portfolio() {
       {/* CONTACT */}
       <section id="contact" className="py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-5 md:px-8">
-          <div className="rounded-3xl bg-foreground text-white p-8 md:p-12 relative overflow-hidden">
+          <div className="rounded-3xl bg-foreground text-background p-8 md:p-12 relative overflow-hidden">
             <div aria-hidden className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/30 blur-3xl" />
             <span className="inline-block text-xs font-semibold uppercase tracking-wider text-brand-orange">Contact</span>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Start a strategic discussion</h2>
