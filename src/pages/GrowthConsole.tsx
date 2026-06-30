@@ -123,7 +123,7 @@ export default function GrowthConsole() {
       <TfSection
         eyebrow="Growth OS"
         title="Growth Console"
-        subtitle="Meta Ads performance, CRM pipeline, and end-to-end lead lifecycle in one surface."
+        intro="Meta Ads performance, CRM pipeline, and end-to-end lead lifecycle in one surface."
       >
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <KpiCard label="30-day Ad Spend" value={`$${META_KPIS.spend_30d.toLocaleString()}`} hint="Meta Ads" />
