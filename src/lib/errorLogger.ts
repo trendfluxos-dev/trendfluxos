@@ -118,6 +118,36 @@ const shouldDrop = (key: string) => {
 const truncate = (s: string | undefined, n = 4000) =>
   s && s.length > n ? s.slice(0, n) + "…[truncated]" : s;
 
+// Critical Postgres errors that must page us via Telegram immediately.
+// Keep this list short — every match triggers an edge-function invocation.
+const ALERT_PATTERNS: RegExp[] = [
+  /permission denied for (?:table|relation) "?live_classes"?/i,
+];
+
+const alertedThisSession = new Set<string>();
+
+async function maybeFireCriticalAlert(payload: ErrorPayload, userId: string | null) {
+  const message = payload.message ?? "";
+  const pattern = ALERT_PATTERNS.find((r) => r.test(message));
+  if (!pattern) return;
+  const key = pattern.source;
+  if (alertedThisSession.has(key)) return;
+  alertedThisSession.add(key);
+  try {
+    await supabase.functions.invoke("alert-postgres-error", {
+      body: {
+        message,
+        url: payload.url ?? (typeof window !== "undefined" ? window.location.href : null),
+        pathname: typeof window !== "undefined" ? window.location.pathname : null,
+        user_id: userId,
+        release: payload.release ?? RELEASE,
+      },
+    });
+  } catch {
+    // Never throw from the alerter.
+  }
+}
+
 export async function logClientError(payload: ErrorPayload) {
   try {
     if (sentCount >= SESSION_CAP) return;
@@ -167,6 +197,10 @@ export async function logClientError(payload: ErrorPayload) {
       user_id: user?.id ?? null,
       meta: mergedMeta as never,
     });
+
+    // Fire critical alerts AFTER inserting the row so the edge-function
+    // dedupe query sees the latest record.
+    void maybeFireCriticalAlert({ ...payload, message }, user?.id ?? null);
   } catch {
     // Never throw from the logger.
   }
