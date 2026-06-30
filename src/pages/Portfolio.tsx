@@ -691,7 +691,7 @@ export default function Portfolio() {
           <div className="mt-16 grid md:grid-cols-3 gap-5">
             {PACKAGES.map((p) => (
               <div key={p.name} className={`rounded-2xl border p-6 transition hover:-translate-y-0.5 ${p.featured ? "border-foreground bg-foreground text-background" : "border-border bg-background"}`}>
-                <h3 className={`text-lg font-semibold tracking-tight ${p.featured ? "text-white" : "text-foreground"}`}>{p.name}</h3>
+                <h3 className={`text-lg font-semibold tracking-tight ${p.featured ? "text-background" : "text-foreground"}`}>{p.name}</h3>
                 <p className={`mt-2 text-sm ${p.featured ? "text-background/70" : "text-muted-foreground"}`}>{p.summary}</p>
                 <ul className="mt-5 space-y-2 text-sm">
                   {p.perks.map((perk) => (
@@ -923,7 +923,7 @@ export default function Portfolio() {
                     {c}
                     <span
                       className={`inline-flex h-4 min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-semibold ${
-                        active ? "bg-background/15 text-white" : "bg-muted text-muted-foreground"
+                        active ? "bg-background/15 text-background" : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {count}
@@ -1031,10 +1031,10 @@ export default function Portfolio() {
               <a href="mailto:zhemongrowth@gmail.com" className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-3 text-sm font-medium transition">
                 Start Strategic Discussion <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="https://www.linkedin.com/in/zhemongrowth" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/20 hover:border-white text-white px-4 py-2.5 text-sm transition">
+              <a href="https://www.linkedin.com/in/zhemongrowth" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-background/20 hover:border-background text-background px-4 py-2.5 text-sm transition">
                 <Linkedin className="h-4 w-4" /> LinkedIn
               </a>
-              <a href="https://www.facebook.com/zhemongrowth" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/20 hover:border-white text-white px-4 py-2.5 text-sm transition">
+              <a href="https://www.facebook.com/zhemongrowth" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-background/20 hover:border-background text-background px-4 py-2.5 text-sm transition">
                 <Facebook className="h-4 w-4" /> Facebook
               </a>
             </div>
@@ -1063,7 +1063,7 @@ export default function Portfolio() {
             type="button"
             aria-label="Close"
             onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
-            className="absolute top-4 right-4 h-10 w-10 rounded-full bg-background/10 hover:bg-background/20 text-white grid place-items-center text-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="absolute top-4 right-4 h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center text-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             ×
           </button>
@@ -1073,7 +1073,7 @@ export default function Portfolio() {
                 type="button"
                 aria-label="Previous"
                 onClick={(e) => { e.stopPropagation(); setLightbox((l) => l ? { ...l, index: (l.index - 1 + l.images.length) % l.images.length } : l); }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-background/10 hover:bg-background/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="absolute left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 ‹
               </button>
@@ -1081,7 +1081,7 @@ export default function Portfolio() {
                 type="button"
                 aria-label="Next"
                 onClick={(e) => { e.stopPropagation(); setLightbox((l) => l ? { ...l, index: (l.index + 1) % l.images.length } : l); }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-background/10 hover:bg-background/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="absolute right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 ›
               </button>
