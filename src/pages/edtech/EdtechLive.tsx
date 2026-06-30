@@ -5,8 +5,12 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
+  GraduationCap,
+  Layers,
   PlayCircle,
   Radio,
+  Sparkles,
+  Video,
   Users,
   XCircle,
 } from "lucide-react";
@@ -17,6 +21,7 @@ import BookLiveSessionDialog from "@/components/edtech/BookLiveSessionDialog";
 import { EDTECH } from "@/config/edtech";
 import { useSeo } from "@/hooks/useSeo";
 import { supabase } from "@/integrations/supabase/client";
+import { hasAny, useCurrentRoles } from "@/lib/edtechRoles";
 import { getCourseBySlug } from "@/data/edtechCourses";
 import {
   cancelRsvp,
@@ -51,6 +56,8 @@ const EdtechLive = () => {
   const [loading, setLoading] = useState(true);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingClassId, setBookingClassId] = useState<string | null>(null);
+  const roles = useCurrentRoles();
+  const isTeacher = hasAny(roles, ["admin", "teacher", "tutor"]);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -141,7 +148,7 @@ const EdtechLive = () => {
             unlocks 15 minutes before start, and we'll mark the session as
             "Live" while it's in progress.
           </p>
-          <div className="mt-6">
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={() => openBooking()}
@@ -149,11 +156,25 @@ const EdtechLive = () => {
             >
               <CalendarClock className="h-4 w-4" aria-hidden /> Book a Live Session
             </button>
+            <Link
+              to={EDTECH.routes.courses}
+              className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/40 px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/40 hover:text-foreground"
+            >
+              <GraduationCap className="h-4 w-4" aria-hidden /> Browse cohorts
+            </Link>
           </div>
         </div>
       </section>
 
-      <section className="bg-background pb-20">
+      {isTeacher && <TeacherQuickActions />}
+
+      <section className="bg-background pb-2">
+        <div className="mx-auto max-w-5xl px-6 lg:px-10">
+          <SpectrumBridge />
+        </div>
+      </section>
+
+      <section className="bg-background pb-20 pt-6">
         <div className="mx-auto max-w-5xl space-y-12 px-6 lg:px-10">
           <div>
             <h2 className="mb-4 font-display text-lg font-semibold text-foreground">
