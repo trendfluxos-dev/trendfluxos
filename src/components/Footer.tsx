@@ -42,9 +42,20 @@ const Footer = () => {
               <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
                 {items.map((n) => (
                   <li key={`${layer}-${n.path}`}>
-                    <Link to={n.path} className="story-link hover:text-foreground transition-colors">
-                      {n.title}
-                    </Link>
+                    {n.external ? (
+                      <a
+                        href={n.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="story-link hover:text-foreground transition-colors"
+                      >
+                        {n.title} <span className="text-foreground/40">↗</span>
+                      </a>
+                    ) : (
+                      <Link to={n.path} className="story-link hover:text-foreground transition-colors">
+                        {n.title}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

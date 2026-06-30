@@ -22,6 +22,7 @@ import brandHbEduverse from "@/assets/brands/hb-eduverse.jpeg";
 import brandMarieElliot from "@/assets/brands/marie-j-elliot.jpeg";
 import brandPabnaDebate from "@/assets/brands/pabna-debate-society.jpeg";
 import brandStarpath from "@/assets/brands/starpath-tech.jpeg";
+import brandVerdafluxSpectrum from "@/assets/brands/verdaflux-spectrum.png";
 
 export type OperatedBrand = {
   name: string;
@@ -41,6 +42,22 @@ export const OPERATED_BRANDS: OperatedBrand[] = [
     logo: "/trendflux-logo.webp",
     href: "https://trendflux.digital",
     fb: "https://www.facebook.com/trendfluxdigital/",
+  },
+  {
+    name: "TrendFlux Space",
+    role: "Product · Live + on-demand EdTech",
+    logo: "/trendflux-logo.webp",
+    href: "https://trendflux.space",
+    impact: "Verified teachers · Bangla + English",
+    tagline: "Real-time whiteboard, slides & AI assistant — live classes plus on-demand courses",
+  },
+  {
+    name: "VerdaFlux Spectrum",
+    role: "Product · Private access app",
+    logo: brandVerdafluxSpectrum,
+    href: "https://spectrum.trendflux.space",
+    impact: "A TrendFlux Product",
+    tagline: "PIN-gated workspace for authorised TrendFlux operators only",
   },
   {
     name: "Starpath Technology & Consultancy",

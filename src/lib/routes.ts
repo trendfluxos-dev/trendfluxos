@@ -167,7 +167,7 @@ const LAYER_TO_TYPE: Record<Layer, PageType> = {
   system:  "Account",
 };
 
-const derived: NavigablePage[] = SITE_LAYERS.map((node) => {
+const derived: NavigablePage[] = SITE_LAYERS.filter((n) => !n.external).map((node) => {
   const meta = PAGE_META[node.path] ?? {};
   return {
     path: node.path,

@@ -23,6 +23,8 @@ export interface LayerNode {
   /** Also surface this node in another layer's nav (e.g. portfolio). */
   alsoIn?: Layer[];
   noindex?: boolean;
+  /** When true, `path` is an absolute URL opened in a new tab (external product). */
+  external?: boolean;
 }
 
 export const LAYER_META: Record<Layer, { label: string; tagline: string; hubPath: string }> = {
@@ -65,6 +67,8 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/masterclass",       title: "Masterclass",      layer: "brand", blurb: "Advanced AI masterclass",              siblings: BRAND_FLOW },
   { path: "/edtech",            title: "কর্মশিক্ষা TED Plus",     layer: "brand", blurb: "TrendFlux's online EdTech platform",   siblings: BRAND_FLOW, ctaNext: { path: "/masterclass", label: "See the masterclass" } },
   { path: "/course/trendflux",  title: "Trendflux Course", layer: "brand", blurb: "Growth operator course",               siblings: BRAND_FLOW, ctaNext: { path: "/ecosystem", label: "Back to ecosystem" } },
+  { path: "https://trendflux.space",          title: "TrendFlux Space",     layer: "brand", blurb: "Live + on-demand EdTech product",     external: true },
+  { path: "https://spectrum.trendflux.space", title: "VerdaFlux Spectrum",  layer: "brand", blurb: "Private PIN-gated operator app",      external: true },
 
   // ---------- SYSTEM ----------
   { path: "/auth",      title: "Sign In",       layer: "system", blurb: "Account access",            noindex: true },

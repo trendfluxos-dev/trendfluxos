@@ -51,10 +51,14 @@ const LayerMegaMenu = () => {
                   <ul className="grid gap-1 sm:grid-cols-2">
                     {items.map((node) => {
                       const isActive = pathname === node.path;
+                      const LinkTag: any = node.external ? "a" : Link;
+                      const linkProps = node.external
+                        ? { href: node.path, target: "_blank", rel: "noopener noreferrer" }
+                        : { to: node.path };
                       return (
                         <li key={`${layer}-${node.path}`}>
-                          <Link
-                            to={node.path}
+                          <LinkTag
+                            {...linkProps}
                             aria-current={isActive ? "page" : undefined}
                             className={[
                               "group block rounded-lg px-3 py-2.5 transition-all duration-300 ease-out",
@@ -66,13 +70,16 @@ const LayerMegaMenu = () => {
                           >
                             <span className={`block text-[13.5px] transition-colors ${isActive ? "text-white" : "text-[#f0c9c9]/90 group-hover:text-white"}`}>
                               {node.title}
+                              {node.external && (
+                                <span className="ml-1.5 text-[9.5px] uppercase tracking-[0.18em] text-[#e25a5a]/80 align-middle">↗</span>
+                              )}
                             </span>
                             {node.blurb && (
                               <span className="block text-[11.5px] text-[#f0c9c9]/50 mt-0.5">
                                 {node.blurb}
                               </span>
                             )}
-                          </Link>
+                          </LinkTag>
                         </li>
                       );
                     })}
