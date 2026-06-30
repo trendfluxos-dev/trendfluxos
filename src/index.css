@@ -512,6 +512,63 @@
     letter-spacing: 0.18em;
     color: hsl(var(--primary));
   }
+
+  /* ---------- Light-mode card refinement (Precision Tactical Light) ----------
+     Goal: raise surface depth, sharpen border, make hover glow visible, and
+     improve Bengali text legibility — without changing layout or removing
+     notches. Disabled in dark mode (existing rules above remain authoritative). */
+  html:not(.dark) .cd-card {
+    background: #ffffff;
+    border-color: hsl(220 13% 82%);                     /* slate-300, ~4:1 vs white */
+    box-shadow:
+      0 1px 0 hsl(220 13% 91%),                         /* hairline base */
+      2px 2px 0 hsl(220 13% 91% / 0.55);                /* paper offset */
+  }
+  html:not(.dark) .cd-card:hover {
+    border-color: hsl(var(--primary) / 0.85);
+    transform: translateY(-2px);
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.18),             /* inner ring */
+      6px 6px 0 hsl(var(--primary) / 0.10),             /* tactical offset */
+      0 18px 40px -18px hsl(var(--primary) / 0.32);     /* soft bloom */
+  }
+  /* Kill the sheen sweep in light mode — reads as a wash on white. */
+  html:not(.dark) .cd-card::after { content: none; }
+
+  /* Gold corner accent for the notch in light mode (crimson is reserved for
+     hover bloom; gold gives a calmer resting state and >=3:1 on white). */
+  html:not(.dark) .cd-notch {
+    /* Use literal amber tones — project `--gold` token is repurposed to crimson
+       in light mode, so we can't read it for an actual gold accent. */
+    background: hsl(38 60% 50% / 0.10);
+    border-left-color: hsl(38 60% 42% / 0.50);
+    border-bottom-color: hsl(38 60% 42% / 0.50);
+    color: hsl(36 65% 28%);                             /* ~5.8:1 on white */
+  }
+  html:not(.dark) .cd-card:hover .cd-notch {
+    background: hsl(var(--primary) / 0.10);
+    border-left-color: hsl(var(--primary) / 0.55);
+    border-bottom-color: hsl(var(--primary) / 0.55);
+    color: hsl(var(--primary));
+  }
+
+  /* Bengali inside cards: bump weight + tighten leading so Hind Siliguri
+     matches Inter's optical density at the same px size. */
+  html:not(.dark) .cd-card :lang(bn),
+  html:not(.dark) .cd-card [lang="bn"] {
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  html:not(.dark) .cd-card h1:lang(bn),
+  html:not(.dark) .cd-card h2:lang(bn),
+  html:not(.dark) .cd-card h3:lang(bn),
+  html:not(.dark) .cd-card h4:lang(bn),
+  html:not(.dark) .cd-card h1[lang="bn"],
+  html:not(.dark) .cd-card h2[lang="bn"],
+  html:not(.dark) .cd-card h3[lang="bn"],
+  html:not(.dark) .cd-card h4[lang="bn"] {
+    font-weight: 700;
+  }
 }
 
 @keyframes pulse-glow {
