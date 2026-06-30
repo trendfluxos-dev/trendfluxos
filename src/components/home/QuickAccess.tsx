@@ -104,7 +104,15 @@ export const QuickAccess = () => (
                   />
                 )}
               </span>
-              <span className="mt-5 block text-[14px] font-semibold tracking-[-0.005em] text-foreground group-hover:text-primary transition-colors">
+              <span
+                lang={/[\u0980-\u09FF]/.test(it.label) ? "bn" : undefined}
+                className={
+                  "mt-5 block text-[14px] tracking-[-0.005em] text-foreground group-hover:text-primary transition-colors " +
+                  (/[\u0980-\u09FF]/.test(it.label)
+                    ? "font-bold text-[15px] leading-[1.25]"
+                    : "font-semibold")
+                }
+              >
                 {it.label}
               </span>
               <span className="mt-1 block text-[12.5px] leading-[1.55] text-muted-foreground">
