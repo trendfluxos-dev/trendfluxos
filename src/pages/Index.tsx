@@ -76,14 +76,19 @@ const Index = () => {
 
       <ArchitecturalHero onOpenQuote={openQuote} />
 
-      {/* Flagship pair — The Stand (manifesto) + Algorithm Architecture (systems).
-          Two columns on lg+, stacked on small screens. */}
+      {/* The Stand — full-width manifesto. Never paired side-by-side. */}
+      <LazySection label="stand-cover" skeleton={<SectionSkeleton variant="media" />}>
+        <TheStandCoverSection />
+      </LazySection>
+
+      {/* Beneath The Stand: Algorithm Architecture (Torture Cell · স্বাশুদ্ধি জীবন)
+          paired with Justice Appeal (আইন ও জাহিদ হাসানের মনের গল্প). */}
       <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-2 lg:gap-8 lg:px-8">
-        <LazySection label="stand-cover" skeleton={<SectionSkeleton variant="media" />}>
-          <TheStandCoverSection />
-        </LazySection>
         <LazySection label="algorithm-arch" skeleton={<SectionSkeleton variant="cards" />}>
           <SystemsHeBuiltSection />
+        </LazySection>
+        <LazySection label="justice" skeleton={<SectionSkeleton variant="split" />}>
+          <JusticeAppealSection />
         </LazySection>
       </div>
 
@@ -91,8 +96,6 @@ const Index = () => {
       <LazySection label="audio-story" skeleton={<SectionSkeleton variant="media" />}><AudioStoryTeaser /></LazySection>
       <LazySection label="ai-expert" skeleton={<SectionSkeleton variant="media" />}><AiExpertStoryTeaser /></LazySection>
 
-      {/* Ethical stance + brand band for ecosystem discovery */}
-      <LazySection label="justice" skeleton={<SectionSkeleton variant="split" />}><JusticeAppealSection /></LazySection>
       <LazySection label="brand-band" minHeight="20vh" skeleton={<SectionSkeleton variant="band" />}>
         <LayerBand layer="brand" />
       </LazySection>
