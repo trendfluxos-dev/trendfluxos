@@ -12,5 +12,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /dev/
+Disallow: /admin/
 
 Sitemap: https://trendflux.digital/sitemap.xml
