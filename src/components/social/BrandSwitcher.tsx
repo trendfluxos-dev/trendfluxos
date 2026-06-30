@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronDown, Eye, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BRAND_CONTACTS, BrandKey, getBrandForRoute } from "@/config/socialConfig";
 import { useBrandPreview } from "@/context/BrandPreviewContext";
 
-const BRANDS: BrandKey[] = ["trendflux", "zahid"];
+type Entry =
+  | { kind: "preview"; key: BrandKey; label: string }
+  | { kind: "link"; key: string; label: string; href: string };
+
+const ENTRIES: Entry[] = [
+  { kind: "preview", key: "trendflux", label: "Company — TrendFlux Digital" },
+  { kind: "preview", key: "zahid", label: "Founder — Zahid Hasan Emon" },
+  { kind: "link", key: "brands", label: "Brands", href: "/brands" },
+];
 
 export const BrandSwitcher = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { override, setOverride } = useBrandPreview();
   const [open, setOpen] = useState(false);
   const [enabled, setEnabled] = useState(false);
@@ -58,26 +67,33 @@ export const BrandSwitcher = () => {
           aria-label="Choose brand to preview"
           className="mt-2 w-56 rounded-xl border border-gold/30 bg-background/95 backdrop-blur p-1 shadow-xl animate-fade-in"
         >
-          {BRANDS.map((b) => (
-            <button
-              key={b}
-              role="menuitemradio"
-              aria-checked={active === b}
-              onClick={() => {
-                setOverride(b);
-                setOpen(false);
-              }}
-              className={cn(
-                "flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold",
-                active === b
-                  ? "bg-gold/15 text-gold"
-                  : "text-foreground/80 hover:bg-foreground/5",
-              )}
-            >
-              <span>{BRAND_CONTACTS[b].displayName}</span>
-              {active === b && <span aria-hidden>●</span>}
-            </button>
-          ))}
+          {ENTRIES.map((e) => {
+            const isActive = e.kind === "preview" && active === e.key;
+            return (
+              <button
+                key={e.key}
+                role="menuitemradio"
+                aria-checked={isActive}
+                onClick={() => {
+                  if (e.kind === "preview") {
+                    setOverride(e.key);
+                  } else {
+                    navigate(e.href);
+                  }
+                  setOpen(false);
+                }}
+                className={cn(
+                  "flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold",
+                  isActive
+                    ? "bg-gold/15 text-gold"
+                    : "text-foreground/80 hover:bg-foreground/5",
+                )}
+              >
+                <span>{e.label}</span>
+                {isActive && <span aria-hidden>●</span>}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
