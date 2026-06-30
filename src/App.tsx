@@ -97,6 +97,7 @@ const EdtechLessonPlayer = routes["/edtech/learn/:slug"];
 const EdtechLive = routes["/edtech/live"];
 const EdtechLiveStudio = routes["/edtech/live/studio/:id"];
 const EdtechLiveWatch = routes["/edtech/live/watch/:id"];
+const EdtechLiveRecap = routes["/edtech/live/recap/:id"];
 const EdtechLiveAdmin = routes["/admin/edtech/live"];
 const EdtechTeachOnboarding = routes["/edtech/teach/onboarding"];
 const EdtechTeachClasses = routes["/edtech/teach/classes"];
@@ -189,6 +190,7 @@ const RoutedApp = () => {
         <Route path="/edtech/learn/:slug/:lessonN" element={<EdtechLessonPlayer />} />
         <Route path="/edtech/live" element={<EdtechLive />} />
         <Route path="/edtech/live/watch/:id" element={<EdtechLiveWatch />} />
+        <Route path="/edtech/live/recap/:id" element={<EdtechLiveRecap />} />
         <Route path="/edtech/live/studio/:id" element={<RequireRole roles={["admin"]}><EdtechLiveStudio /></RequireRole>} />
         <Route path="/admin/edtech/live" element={<RequireRole roles={["admin"]}><EdtechLiveAdmin /></RequireRole>} />
         {/* Teacher workspace */}
