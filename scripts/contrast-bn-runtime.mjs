@@ -128,8 +128,22 @@ const setTheme = async (page, theme) => {
   await page.waitForTimeout(450);
 };
 
+const launchBrowser = async () => {
+  const exe = process.env.CHROMIUM_PATH;
+  try {
+    return await chromium.launch({ headless: true, ...(exe ? { executablePath: exe } : {}) });
+  } catch (err) {
+    // Fallback to a system chromium when the Playwright-managed browser is missing
+    // (common in CI sandboxes that don't run `npx playwright install`).
+    for (const candidate of ["/bin/chromium", "/usr/bin/chromium", "/usr/bin/google-chrome"]) {
+      try { return await chromium.launch({ headless: true, executablePath: candidate }); } catch {}
+    }
+    throw err;
+  }
+};
+
 const main = async () => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchBrowser();
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 1800 } });
   const page = await ctx.newPage();
   page.on("pageerror", (e) => console.warn("pageerror:", e.message));
