@@ -251,23 +251,65 @@ export default function SiteStatusBanner() {
             {server ? new Date(server.checked_at).toLocaleString() : checkedAt ?? "pending"}
           </dd>
 
-          <dt className="col-span-1 text-muted-foreground">Cache</dt>
-          <dd className="col-span-2">
-            {cacheInfo ? (
-              <span>
-                {cacheInfo.hit ? "✅ HIT (served from cache)" : "🟡 MISS (fresh probe)"}
-              </span>
-            ) : "—"}
-          </dd>
-
-          <dt className="col-span-1 text-muted-foreground">Age</dt>
-          <dd className="col-span-2">
-            {cacheInfo?.age_s != null ? `${cacheInfo.age_s}s` : "0s"}
-            {cacheInfo?.ttl_s != null && (
-              <span className="ml-1 opacity-60">/ TTL {cacheInfo.ttl_s}s</span>
-            )}
-          </dd>
         </dl>
+
+        <div className="mt-1 flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2">
+          <div className="text-xs">
+            <p className="font-semibold text-foreground">Cache info</p>
+            <p className="text-muted-foreground">
+              {debugView ? "Raw response headers" : "Human-readable summary"}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setDebugView((v) => !v)}
+            className="rounded border border-border px-2 py-1 text-[11px] hover:bg-background"
+            aria-pressed={debugView}
+          >
+            {debugView ? "Show friendly view" : "Show debug headers"}
+          </button>
+        </div>
+
+        {!debugView ? (
+          <dl className="grid grid-cols-3 gap-y-2 text-sm">
+            <dt className="col-span-1 text-muted-foreground">Cache</dt>
+            <dd className="col-span-2">
+              {cacheInfo ? (cacheInfo.hit ? "✅ HIT (served from cache)" : "🟡 MISS (fresh probe)") : "—"}
+            </dd>
+            <dt className="col-span-1 text-muted-foreground">Age</dt>
+            <dd className="col-span-2">
+              {cacheInfo?.age_s != null ? `${cacheInfo.age_s}s` : "0s"}
+              {cacheInfo?.ttl_s != null && (
+                <span className="ml-1 opacity-60">/ TTL {cacheInfo.ttl_s}s</span>
+              )}
+            </dd>
+          </dl>
+        ) : (
+          <div className="rounded-lg border border-border bg-background/60 p-2 font-mono text-[11px]">
+            {cacheHeaders ? (
+              <ul className="space-y-1">
+                {Object.entries({
+                  "x-cache": cacheHeaders.x_cache,
+                  age: cacheHeaders.age,
+                  "cache-control": cacheHeaders.cache_control,
+                  date: cacheHeaders.date,
+                  expires: cacheHeaders.expires,
+                  etag: cacheHeaders.etag,
+                  "last-modified": cacheHeaders.last_modified,
+                  vary: cacheHeaders.vary,
+                }).map(([k, v]) => (
+                  <li key={k} className="flex gap-2">
+                    <span className="w-32 shrink-0 text-muted-foreground">{k}:</span>
+                    <span className="break-all">{v ?? <span className="opacity-40">—</span>}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-muted-foreground">No headers captured yet.</p>
+            )}
+          </div>
+        )}
+
         <p className="text-xs text-muted-foreground">
           If visitors still report errors, the domain's DNS may point elsewhere or a proxy/CDN
           may be blocking the request. Re-verify A record → <code>185.158.133.1</code> and
