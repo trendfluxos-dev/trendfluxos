@@ -50,7 +50,7 @@ export const RESEARCH_ITEMS: ResearchEntry[] = [
     },
     method: {
       heading: "Method",
-      body: "Tracked 166 static designs + 22 reels over 6 months for Pabna Nagarik Committee. Compared narrative-led, hierarchy-respecting posts against a control batch of generic civic announcements.",
+      body: "Tracked 166 static designs + 22 reels over 6 months for Pabna Nagorik Committee. Compared narrative-led, hierarchy-respecting posts against a control batch of generic civic announcements.",
       bullets: [
         "Weekly cohort analysis: reach, saves, shares, comment sentiment",
         "Brand-voice scorecard scored by 3 reviewers per post",
@@ -71,7 +71,7 @@ export const RESEARCH_ITEMS: ResearchEntry[] = [
       body: "For civic brands in Bangladesh, building a small but disciplined content engine — with a single voice and a strict hook library — beats scattered paid pushes. The engine compounds; the spend doesn't.",
     },
     related: [
-      { label: "Showcase: Pabna Nagarik Committee", href: "/showcase" },
+      { label: "Showcase: Pabna Nagorik Committee", href: "/showcase" },
       { label: "Project Lead", href: "/project-lead" },
     ],
   }),

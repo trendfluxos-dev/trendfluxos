@@ -55,7 +55,7 @@ const expertise = [
 
 const portfolio = [
   {
-    title: "Pabna Nagarik Committee",
+    title: "Pabna Nagorik Committee",
     tag: "Civic Brand · Bangladesh",
     description:
       "4.85 Lakh+ views, 82% organic reach, 166 designs and 22 reels published as a structured content engine.",
@@ -80,7 +80,7 @@ const portfolio = [
 const leadership = [
   { role: "Organizing Secretary", org: "National Debate Federation Bangladesh (NDF-BD)" },
   { role: "Founder & Life Member", org: "Pabna Debate Society (PDS)" },
-  { role: "Member & Organizer", org: "Pabna Nagarik Committee (Full Permanent Committee)" },
+  { role: "Member & Organizer", org: "Pabna Nagorik Committee (Full Permanent Committee)" },
   { role: "Program Director", org: "Citizen Unity Gathering — Dhaka, March 2026" },
 ];
 

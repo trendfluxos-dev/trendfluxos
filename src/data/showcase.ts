@@ -166,7 +166,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "pabna-nagarik",
-    title: "Pabna Nagarik Committee",
+    title: "Pabna Nagorik Committee",
     category: "Client Project",
     year: "2024 — 2025",
     summary:
