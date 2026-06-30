@@ -35,7 +35,7 @@ export function InfrastructurePivot() {
           </h2>
           <p
             lang={lang}
-            className="mt-8 text-base md:text-lg text-[hsl(var(--stand-bone))]/70 leading-relaxed"
+            className="mt-8 text-base md:text-lg text-[hsl(var(--stand-bone))] leading-relaxed"
           >
             {t.body}
           </p>

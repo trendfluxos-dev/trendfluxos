@@ -213,7 +213,7 @@ export function MediaWall() {
                   }
                   placeholder={t.searchPlaceholder}
                   lang={lang}
-                  className="w-full max-w-md bg-transparent text-sm text-[hsl(var(--stand-ink))] placeholder:text-[hsl(var(--stand-muted))]/60 focus:outline-none"
+                  className="w-full max-w-md bg-transparent text-sm text-[hsl(var(--stand-ink))] placeholder:text-[hsl(var(--stand-muted))] focus:outline-none"
                 />
               </div>
 

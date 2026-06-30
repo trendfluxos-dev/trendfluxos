@@ -921,8 +921,8 @@
     --justice-bg: #0c1424;            /* hsl(220 45% 8%) */
     --justice-card: #121d33;          /* hsl(220 40% 11%) */
     --justice-border: #2a3a55;        /* hsl(220 30% 20%) */
-    --justice-accent: #cf4a4a;        /* hsl(0 65% 55%) */
-    --justice-accent-strong: #b03434;
+    --justice-accent: #f08a8a;        /* text-safe red on dark navy (≥6.5:1) */
+    --justice-accent-strong: #b03434; /* button fill: white text passes ≥8:1 */
     --justice-ink: #e2e8f0;           /* slate-200 */
     --justice-ink-strong: #f8fafc;    /* slate-50  */
     --justice-ink-muted: #94a3b8;     /* slate-400 */
@@ -1056,7 +1056,6 @@
     font-family: 'Inter', 'Hind Siliguri', system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: hsl(var(--foreground));
   }
   [data-brand="edtech"] p,
   [data-brand="edtech"] li { letter-spacing: 0; }
@@ -1254,9 +1253,9 @@
   --stand-silver: 40 6% 76%;          /* ~#C9C5BD */
   --stand-charcoal: 0 0% 10%;         /* #1A1A1A */
   --stand-ink: 0 0% 7%;
-  --stand-muted: 0 0% 32%;
-  --stand-red: 3 65% 47%;             /* #C8302A */
-  --stand-red-glow: 3 80% 55%;
+  --stand-muted: 0 0% 22%;            /* darker for AA on bone/bone-soft */
+  --stand-red: 3 78% 38%;             /* deeper red, AA on bone backgrounds */
+  --stand-red-glow: 3 90% 68%;        /* lighter glow, AA on dark surfaces */
   --stand-hairline: 40 10% 80%;
 
   background: hsl(var(--stand-bone));

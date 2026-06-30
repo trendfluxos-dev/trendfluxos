@@ -15,7 +15,7 @@ export function ArchiveUtilities() {
   return (
     <section
       aria-label="Archive utilities"
-      className="px-6 lg:px-10 py-24 md:py-32 bg-[hsl(var(--stand-bone-soft))]/60"
+      className="px-6 lg:px-10 py-24 md:py-32 bg-[hsl(var(--stand-bone-soft))]"
     >
       <div className="mx-auto max-w-4xl">
         <Reveal>

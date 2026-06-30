@@ -57,7 +57,7 @@ const EdtechHome = () => {
             <div className="relative z-10 grid items-center gap-10 p-7 sm:p-12 lg:grid-cols-2 lg:gap-12 lg:p-20">
               {/* Text column */}
               <div className="space-y-7">
-                <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5">
+                <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 px-3.5 py-1.5" style={{ background: "hsl(var(--edtech-ink))" }}>
                   <span className="h-2 w-2 animate-pulse rounded-full edtech-bg-gold" />
                   <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: "hsl(var(--edtech-gold))" }}>
                     <Sparkles className="mr-1 inline h-3 w-3" aria-hidden /> {t("hero.badge")}
@@ -105,12 +105,12 @@ const EdtechHome = () => {
               <div className="relative">
                 <div className="aspect-square rotate-3 rounded-3xl border edtech-border-gold bg-primary/15 p-3 sm:p-4">
                   <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-2xl border border-white/10" style={{ background: "hsl(var(--edtech-ink))" }}>
-                    <div className="select-none text-[120px] font-black leading-none edtech-text-gold opacity-15 sm:text-[160px]" style={{ transform: "rotate(-12deg) scale(1.2)" }}>
+                    <div aria-hidden lang="en" className="select-none text-[120px] font-black leading-none edtech-text-gold opacity-15 sm:text-[160px]" style={{ transform: "rotate(-12deg) scale(1.2)" }}>
                       FLUX
                     </div>
                     <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
                     <div className="absolute inset-x-5 bottom-5 sm:inset-x-7 sm:bottom-7">
-                      <div className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md sm:p-5">
+                      <div className="rounded-xl border border-white/10 p-4 backdrop-blur-md sm:p-5" style={{ background: "hsl(var(--edtech-ink))" }}>
                         <div className="mb-3 flex items-center gap-3">
                           <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
                             <Radio className="h-4 w-4" aria-hidden />
@@ -159,7 +159,7 @@ const EdtechHome = () => {
         {/* Subtle gold section divider */}
         <div className="mx-auto flex max-w-7xl items-center justify-center px-6 py-12">
           <div className="h-px flex-1 bg-[hsl(var(--edtech-gold)/0.3)]" />
-          <div className="px-6 text-[10px] font-bold uppercase tracking-[0.3em] edtech-text-gold">{t("hero.divider")}</div>
+          <div className="px-6 text-[10px] font-bold uppercase tracking-[0.3em] text-foreground">{t("hero.divider")}</div>
           <div className="h-px flex-1 bg-[hsl(var(--edtech-gold)/0.3)]" />
         </div>
       </section>

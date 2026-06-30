@@ -37,7 +37,7 @@ export function RefusalStanzas() {
               <article>
                 <p
                   lang="en"
-                  className="font-mono text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-muted))]/70"
+                  className="font-mono text-[10px] uppercase tracking-[0.4em] text-[hsl(var(--stand-muted))]"
                 >
                   {card.label}
                 </p>

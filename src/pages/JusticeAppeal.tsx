@@ -27,6 +27,7 @@ const navyBorder = "border-[var(--justice-border)]";
 const accent = "text-[var(--justice-accent)]";
 const accentBg = "bg-[var(--justice-accent)]";
 const accentBorder = "border-[var(--justice-accent)]";
+const accentFill = "bg-[var(--justice-accent-strong)]";
 
 const timeline = [
   { date: "১৭ মার্চ ২০২২", title: "প্রথম ফোন যোগাযোগ ও অভিযুক্ত হুমকি", body: "অভিযোগ অনুযায়ী, ফোনকলের মাধ্যমে হুমকি পাওয়া যায়।" },
@@ -90,7 +91,7 @@ export default function JusticeAppeal() {
             <span className={`inline-block h-2 w-2 rounded-full ${accentBg}`} />
             <span lang="en" className="font-serif text-sm tracking-[0.18em] text-white">PABNA ACCOUNTABILITY PROJECT</span>
           </Link>
-          <span lang="en" className="hidden text-[10px] uppercase tracking-[0.25em] text-slate-500 sm:inline">Public Interest Documentation · Vol. 01</span>
+          <span lang="en" className="hidden text-[10px] uppercase tracking-[0.25em] text-slate-300 sm:inline">Public Interest Documentation · Vol. 01</span>
         </div>
       </header>
 
@@ -120,7 +121,7 @@ export default function JusticeAppeal() {
                 <span lang="en"> A structured public-interest dossier — not a campaign of attack.</span>
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <a lang="en" href="#timeline" className={`inline-flex items-center gap-2 rounded-md ${accentBg} px-5 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90`}>
+                <a lang="en" href="#timeline" className={`inline-flex items-center gap-2 rounded-md ${accentFill} px-5 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90`}>
                   Read Timeline
                 </a>
                 <a lang="en" href="#complaint" className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]">
@@ -162,10 +163,10 @@ export default function JusticeAppeal() {
                 {/* clipping caption strip */}
                 <div className="mt-3 flex items-baseline justify-between px-1 text-black/80">
                   <span className="font-serif text-[11px] italic">Referenced in complaint and media reports</span>
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-black/50">Archive · 01</span>
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-black/75">Archive · 01</span>
                 </div>
               </div>
-              <figcaption className="mt-5 max-w-sm text-[11px] leading-relaxed text-slate-500">
+              <figcaption className="mt-5 max-w-sm text-[11px] leading-relaxed text-slate-300">
                 Allegations mentioned on this page remain subject to lawful investigation and verification.
                 No determination of guilt is made or implied.
               </figcaption>
@@ -209,7 +210,7 @@ export default function JusticeAppeal() {
           <div className={`mt-8 rounded-lg border ${navyBorder} ${navyCard} p-8 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.6)]`}>
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div>
-                <div className="text-[10px] font-medium uppercase tracking-[0.22em] text-slate-500">ডকুমেন্ট রেফারেন্স</div>
+                <div className="text-[10px] font-medium uppercase tracking-[0.22em] text-slate-300">ডকুমেন্ট রেফারেন্স</div>
                 <div className="mt-1 text-sm text-slate-200">লিখিত অভিযোগ · ২৯ আগস্ট ২০২৪</div>
               </div>
               <div className={`rounded border ${accentBorder}/40 ${accentBg}/10 px-2 py-0.5 text-[10px] uppercase tracking-wider ${accent}`}>অভিযুক্ত</div>
@@ -223,7 +224,7 @@ export default function JusticeAppeal() {
               <a
                 href="/pabna-accountability-complaint.pdf"
                 download
-                className={`inline-flex items-center gap-2 rounded-md ${accentBg} px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90`}
+                className={`inline-flex items-center gap-2 rounded-md ${accentFill} px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90`}
               >
                 <Download className="h-4 w-4" /> অভিযোগের PDF ডাউনলোড
               </a>
@@ -233,7 +234,7 @@ export default function JusticeAppeal() {
               >
                 <Newspaper className="h-4 w-4" /> মিডিয়া রিপোর্টস দেখুন
               </Link>
-              <span className="text-xs text-slate-500">A4 · বাংলা · জনস্বার্থে প্রকাশিত</span>
+              <span className="text-xs text-slate-300">A4 · বাংলা · জনস্বার্থে প্রকাশিত</span>
             </div>
           </div>
         </div>
@@ -257,14 +258,14 @@ export default function JusticeAppeal() {
             <div className="flex items-center justify-between border-b border-white/10 bg-black/30 px-5 py-3">
               <div className="flex items-baseline gap-3">
                 <span className="font-serif text-base italic tracking-wide text-white">দৈনিক যুগান্তর</span>
-                <span className="text-[10px] uppercase tracking-[0.22em] text-slate-500">প্রথম পাতা · Archive Ref #393961</span>
+                <span className="text-[10px] uppercase tracking-[0.22em] text-slate-300">প্রথম পাতা · Archive Ref #393961</span>
               </div>
               <span className={`rounded border ${accentBorder}/40 ${accentBg}/10 px-2 py-0.5 text-[10px] uppercase tracking-wider ${accent}`}>
                 Reported
               </span>
             </div>
             <div className="p-6 sm:p-8">
-              <div className="text-[11px] uppercase tracking-[0.22em] text-slate-500">প্রকাশিত শিরোনাম</div>
+              <div className="text-[11px] uppercase tracking-[0.22em] text-slate-300">প্রকাশিত শিরোনাম</div>
               <blockquote className="mt-3 border-l-2 border-white/15 pl-5 font-serif text-xl leading-snug text-white sm:text-2xl">
                 “পাবনায় রাজনৈতিক পরিচয়ে অস্ত্র ও মাদক ব্যবসা নিয়ন্ত্রণ”
               </blockquote>
@@ -289,13 +290,13 @@ export default function JusticeAppeal() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-md border border-white/15 px-4 py-2 text-sm text-slate-300 hover:bg-white/[0.04]"
                 >
-                  Web Archive <ExternalLink className="h-4 w-4 text-slate-500" />
+                  Web Archive <ExternalLink className="h-4 w-4 text-slate-300" />
                 </a>
               </div>
             </div>
           </figure>
 
-          <p className="mt-4 text-[11px] leading-relaxed text-slate-500">
+          <p className="mt-4 text-[11px] leading-relaxed text-slate-300">
             Source attribution: Dainik Jugantor, First Page, Article ID 393961. Reproduced
             here as a public-interest citation only; copyright remains with the publisher.
           </p>
@@ -320,7 +321,7 @@ export default function JusticeAppeal() {
                   <Icon className="h-4 w-4 text-slate-300" />
                 </div>
                 <div className="mt-4 text-sm font-medium text-white">{label}</div>
-                <div className="mt-1 text-[11px] uppercase tracking-wider text-slate-500">যাচাই প্রক্রিয়াধীন</div>
+                <div className="mt-1 text-[11px] uppercase tracking-wider text-slate-300">যাচাই প্রক্রিয়াধীন</div>
               </div>
             ))}
           </div>
@@ -382,7 +383,7 @@ export default function JusticeAppeal() {
       {/* Footer */}
       <footer className="border-t border-white/10">
         <div className="mx-auto flex max-w-3xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
-          <div className="text-[11px] uppercase tracking-[0.3em] text-slate-500">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-slate-300">
             ন্যায়বিচার · নিরাপত্তা · আইনি তদন্ত
           </div>
           <Link to="/" className="text-xs text-slate-400 hover:text-white">হোমে ফিরে যান</Link>
