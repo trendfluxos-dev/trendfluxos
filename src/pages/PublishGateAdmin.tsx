@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Loader2, RefreshCw, ShieldCheck, ShieldAlert, Rocket, ExternalLink, Upload } from "lucide-react";
 import { toast } from "sonner";
-import { LayerShell } from "@/components/layout/LayerShell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -102,7 +101,7 @@ const PublishGateAdmin = () => {
   };
 
   return (
-    <LayerShell layer="founder">
+    <>
       <Helmet>
         <title>Publish Gate · TrendFlux Admin</title>
         <meta name="robots" content="noindex,nofollow" />
@@ -230,7 +229,7 @@ const PublishGateAdmin = () => {
           </section>
         )}
       </main>
-    </LayerShell>
+    </>
   );
 };
 
