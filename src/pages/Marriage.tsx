@@ -696,7 +696,10 @@ const Marriage = () => {
                 <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40 mb-2">
                   {t("Featured Case Studies", "নির্বাচিত কেস স্টাডি")}
                 </p>
-                <div className="grid grid-cols-4 gap-2">
+                <div
+                  className="grid grid-cols-4 gap-2"
+                  style={{ ["--gold" as string]: "0 72% 70%" }}
+                >
                   {caseStudies.slice(0, 4).map((cs) => {
                     const Icon = cs.Icon;
                     return (
@@ -705,7 +708,7 @@ const Marriage = () => {
                         title={cs.category}
                         className="aspect-square rounded-lg border border-red-500/20 bg-gradient-to-br from-red-600/15 via-black/60 to-black/80 flex items-center justify-center transition group-hover:border-red-500/50 group-hover:from-red-600/25"
                       >
-                        <Icon className="h-5 w-5 text-red-300" />
+                        <Icon className="h-9 w-9" />
                       </div>
                     );
                   })}
