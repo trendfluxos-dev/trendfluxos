@@ -266,6 +266,7 @@ const Marriage = () => {
                 href={`https://wa.me/${inquirerWa?.replace("+", "")}`}
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => trackWhatsApp("inquirer_banner", { number: inquirerWa ?? undefined })}
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-700 via-red-600 to-red-700 px-4 py-2 text-xs font-bold uppercase tracking-[0.15em] text-white shadow-[0_8px_24px_-8px_rgba(220,38,38,0.7)] hover:brightness-110 transition"
               >
                 <MessageCircle className="h-3.5 w-3.5" />
@@ -343,6 +344,7 @@ const Marriage = () => {
             <a
               href={`https://wa.me/8801410004037?text=${waMsg}`}
               target="_blank" rel="noreferrer"
+              onClick={() => trackWhatsApp("hero_primary", { has_prefill: true })}
               className="group relative w-full flex items-center justify-between bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-5 rounded-2xl shadow-[0_14px_36px_-12px_rgba(5,150,105,0.55)] transition-all duration-300 active:scale-[0.98]"
               aria-label={t("Message on WhatsApp", "WhatsApp-এ মেসেজ করুন")}
             >
@@ -503,6 +505,7 @@ const Marriage = () => {
                 href="https://wa.me/8801410004037"
                 target="_blank"
                 rel="noreferrer"
+                onClick={() => trackWhatsApp("contact_section")}
               >
                 WhatsApp: +880&nbsp;1410-004037
               </a>
@@ -512,8 +515,10 @@ const Marriage = () => {
                   try {
                     await navigator.clipboard.writeText("+8801410004037");
                     toast.success(t("WhatsApp number copied", "WhatsApp নম্বর কপি হয়েছে"));
+                    trackWhatsApp("copy_number", { action: "copy_success" });
                   } catch {
                     toast.error(t("Could not copy", "কপি করা যায়নি"));
+                    trackWhatsApp("copy_number", { action: "copy_failed" });
                   }
                 }}
                 aria-label={t("Copy WhatsApp number", "WhatsApp নম্বর কপি করুন")}
