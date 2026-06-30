@@ -89,16 +89,15 @@ const Index = () => {
         <TheStandCoverSection />
       </LazySection>
 
-      {/* Beneath The Stand: Algorithm Architecture (Torture Cell · স্বাশুদ্ধি জীবন)
-          paired with Justice Appeal (আইন ও জাহিদ হাসানের মনের গল্প). */}
-      <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-2 lg:gap-8 lg:px-8">
-        <LazySection label="algorithm-arch" skeleton={<SectionSkeleton variant="cards" />}>
-          <SystemsHeBuiltSection />
-        </LazySection>
-        <LazySection label="justice" skeleton={<SectionSkeleton variant="split" />}>
-          <JusticeAppealSection />
-        </LazySection>
-      </div>
+      {/* Systems He Built — full-width, five sequential systems need horizontal room. */}
+      <LazySection label="algorithm-arch" skeleton={<SectionSkeleton variant="cards" />}>
+        <SystemsHeBuiltSection />
+      </LazySection>
+
+      {/* Justice Appeal — আইন ও জাহিদ হাসানের মনের গল্প. */}
+      <LazySection label="justice" skeleton={<SectionSkeleton variant="split" />}>
+        <JusticeAppealSection />
+      </LazySection>
 
       {/* Latest signal */}
       <LazySection label="audio-story" skeleton={<SectionSkeleton variant="media" />}><AudioStoryTeaser /></LazySection>
