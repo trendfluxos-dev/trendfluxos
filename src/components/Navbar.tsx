@@ -49,35 +49,59 @@ const Navbar = () => {
         <nav
           aria-label="Primary"
           className={[
-            "group/nav rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4",
+            "group/nav relative overflow-hidden rounded-2xl flex flex-nowrap items-center justify-between gap-2 lg:gap-4",
             "border text-[#f5d3d3] transition-all duration-500 ease-out",
+            // bottom shine line
+            "after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-[#e25a5a]/55 after:to-transparent",
             scrolled
-              ? "pl-3 sm:pl-4 pr-2 sm:pr-3 py-1.5 sm:py-2 bg-[#08080d]/90 backdrop-blur-2xl backdrop-saturate-150 border-[#7a1e1e]/75 shadow-[0_0_0_1px_rgba(200,60,60,0.28),0_20px_50px_-22px_rgba(200,60,60,0.55)]"
-              : "pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 bg-[#0b0b10]/70 backdrop-blur-xl border-[#7a1e1e]/55 shadow-[0_0_0_1px_rgba(180,40,40,0.15)]",
+              ? "pl-4 sm:pl-5 pr-2 sm:pr-3 py-2 sm:py-2.5 bg-[#0a0a10]/85 backdrop-blur-2xl backdrop-saturate-150 border-white/[0.06] shadow-[0_20px_60px_-25px_rgba(200,60,60,0.55)]"
+              : "pl-4 sm:pl-5 pr-2 sm:pr-3 py-3 sm:py-3.5 bg-[#0e0e14]/55 backdrop-blur-2xl border-white/[0.05] shadow-2xl",
           ].join(" ")}
         >
+          {/* Kinetic update orb — soft radial glow anchored behind the brand */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -left-12 top-1/2 -translate-y-1/2 h-48 w-48 rounded-full bg-[#7a1e1e]/25 blur-[80px] transition-colors duration-700 group-hover/nav:bg-[#a02828]/35"
+          />
+
           <Link
             to="/"
-            className="group/brand flex items-center gap-2.5 font-display whitespace-nowrap shrink-0 tracking-tight transition-transform duration-300 ease-out hover:-translate-y-[1px]"
+            className="group/brand relative flex items-center gap-3 font-display whitespace-nowrap shrink-0 tracking-tight transition-transform duration-300 ease-out hover:-translate-y-[1px]"
           >
+            {/* Refined update orb: pulsing dot replaces the boxy ring-heavy logo */}
+            <span className="relative flex items-center justify-center shrink-0" aria-hidden>
+              <span className="absolute inset-0 -m-1 rounded-full bg-[#e25a5a]/40 blur-md animate-pulse" />
+              <span className="relative h-2.5 w-2.5 rounded-full bg-[#e25a5a] border border-white/25 shadow-[0_0_15px_rgba(226,90,90,0.65)]" />
+            </span>
             <img
               src={logoAsset.url}
-              alt={`${BRAND.name} logo`}
-              className="h-7 w-7 rounded-md bg-white object-contain p-0.5 ring-1 ring-[#e25a5a]/30 transition-shadow duration-300 group-hover/brand:ring-[#e25a5a]/70 group-hover/brand:shadow-[0_0_18px_-4px_rgba(226,90,90,0.6)]"
+              alt=""
+              aria-hidden
+              className="hidden lg:block h-6 w-6 rounded-md object-contain opacity-90 transition-opacity duration-300 group-hover/brand:opacity-100"
             />
-            <span className="uppercase tracking-[0.24em] font-semibold text-[#f1c9c9] text-[12px] lg:text-[12.5px] [text-shadow:0_1px_0_rgba(0,0,0,0.45)] transition-colors duration-300 group-hover/brand:text-white">
-              {BRAND.nameLead}
-            </span>
-            <span className="uppercase tracking-[0.24em] font-medium text-[#e25a5a]/85 text-[12px] lg:text-[12.5px] transition-colors duration-300 group-hover/brand:text-[#e25a5a]">
-              {BRAND.nameTrail}
+            <span className="flex flex-col leading-none">
+              <span className="flex items-baseline gap-1.5">
+                <span className="uppercase tracking-[0.22em] font-bold text-white text-[12.5px] lg:text-[13px] transition-colors duration-300">
+                  {BRAND.nameLead}
+                </span>
+                <span className="uppercase tracking-[0.22em] font-bold text-[#e25a5a] text-[12.5px] lg:text-[13px] transition-colors duration-300 group-hover/brand:text-[#ff6b6b]">
+                  {BRAND.nameTrail}
+                </span>
+              </span>
+              <span className="hidden sm:block mt-1 font-mono text-[9.5px] tracking-[0.3em] uppercase text-[#e25a5a]/70">
+                Status · Live
+              </span>
             </span>
           </Link>
 
           {/* Center: 4-layer mega-menu (Company / Founder / Brands) */}
-          <LayerMegaMenu />
+          <div className="relative">
+            <LayerMegaMenu />
+          </div>
 
           {/* Right: Search + Apply Access + Login */}
-          <div className="flex flex-nowrap items-center gap-1.5 shrink-0">
+          <div className="relative flex flex-nowrap items-center gap-1.5 shrink-0">
+            <span aria-hidden className="hidden md:block h-4 w-px bg-white/10 mr-1" />
             <button
               type="button"
               onClick={() => openCommandPalette()}
