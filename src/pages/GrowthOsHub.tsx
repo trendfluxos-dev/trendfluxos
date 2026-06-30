@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { SeoHead } from "@/hooks/useSeo";
+import { useSeo } from "@/hooks/useSeo";
 import {
   Activity, BarChart3, FileText, GraduationCap, ListChecks, Radio,
   Sparkles, UserPlus, CalendarPlus, PenSquare, ArrowRight,
@@ -34,6 +34,7 @@ const MODULES = [
 ];
 
 export default function GrowthOsHub() {
+  useSeo({ title: "Growth OS Hub — TrendFlux Digital", description: "Unified command surface for live classes, CRM, creator studio and growth analytics.", noindex: true });
   const [kpis, setKpis] = useState<Kpis>({ leadsToday: 0, pendingTasks: 0, classesThisWeek: 0, draftsPending: 0 });
   const [loading, setLoading] = useState(true);
 
@@ -62,7 +63,6 @@ export default function GrowthOsHub() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SeoHead title="Growth OS Hub — TrendFlux Digital" description="Unified command surface for live classes, CRM, creator studio and growth analytics." noindex />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-col gap-2 mb-8">
           <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
