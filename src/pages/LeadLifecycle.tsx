@@ -154,7 +154,7 @@ export default function LeadLifecycle() {
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <Kpi label="Total leads" value={leads.length.toString()} />
           <Kpi label="Due now" value={dueNow.toString()} hint="next_followup_at ≤ now" />
-          <Kpi label="Active sequences" value={(counts.prospected ?? 0 + counts.contacted ?? 0).toString()} hint="prospected + contacted" />
+          <Kpi label="Active sequences" value={((counts.prospected ?? 0) + (counts.contacted ?? 0)).toString()} hint="prospected + contacted" />
           <Kpi label="Replied" value={(counts.replied ?? 0).toString()} />
         </div>
 
