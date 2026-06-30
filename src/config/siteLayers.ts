@@ -37,6 +37,9 @@ export const LAYER_META: Record<Layer, { label: string; tagline: string; hubPath
 // Ordered flow within each layer (used for prev/next).
 const COMPANY_FLOW = ["/", "/explore", "/ecosystem", "/services", "/enterprise", "/toolkit", "/contact"];
 const FOUNDER_FLOW = ["/project-lead", "/portfolio", "/the-stand", "/quiet-positions", "/justice-appeal", "/marriage", "/media-reports", "/stories/ai-expert-emon", "/trust"];
+// Marriage profile gets its own flow so "Next" lands on the project showcase
+// (the founder's professional work) instead of the public media coverage list.
+const MARRIAGE_FLOW = ["/justice-appeal", "/marriage", "/showcase"];
 const BRAND_FLOW   = ["/luxe-veil", "/brandtoki", "/trendflux-talent", "/portfolio", "/edtech", "/masterclass", "/course/trendflux"];
 
 export const SITE_LAYERS: LayerNode[] = [
@@ -55,7 +58,7 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/the-stand",               title: "The Stand",       layer: "founder", blurb: "Philosophy and integrity stance",         siblings: FOUNDER_FLOW },
   { path: "/quiet-positions",         title: "Quiet Positions", layer: "founder", blurb: "Personal thoughts and reflections",       siblings: FOUNDER_FLOW },
   { path: "/justice-appeal",          title: "Justice Appeal",  layer: "founder", blurb: "Belief system and ethical stance",        siblings: FOUNDER_FLOW },
-  { path: "/marriage",                title: "Marriage Profile",layer: "founder", blurb: "Private biodata · family · references",   siblings: FOUNDER_FLOW },
+  { path: "/marriage",                title: "Marriage Profile",layer: "founder", blurb: "Private biodata · family · references",   siblings: MARRIAGE_FLOW, ctaNext: { path: "/showcase", label: "See the project showcase" } },
   { path: "/media-reports",           title: "Media Reports",   layer: "founder", blurb: "Public perception coverage",              siblings: FOUNDER_FLOW },
   { path: "/stories/ai-expert-emon",  title: "AI Expert Emon",  layer: "founder", blurb: "Identity evolution story",                siblings: FOUNDER_FLOW },
   { path: "/trust",                   title: "Trust",           layer: "founder", blurb: "Credibility and validation layer",        siblings: FOUNDER_FLOW, ctaNext: { path: "/contact", label: "Work with us" } },
@@ -69,6 +72,7 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/course/trendflux",  title: "Trendflux Course", layer: "brand", blurb: "Growth operator course",               siblings: BRAND_FLOW, ctaNext: { path: "/ecosystem", label: "Back to ecosystem" } },
   { path: "https://trendflux.space",          title: "TrendFlux Space",     layer: "brand", blurb: "Live + on-demand EdTech product",     external: true },
   { path: "https://spectrum.trendflux.space", title: "VerdaFlux Spectrum",  layer: "brand", blurb: "Private PIN-gated operator app",      external: true },
+  { path: "/showcase",          title: "Project Showcase", layer: "brand", blurb: "Every project, product and case study" },
 
   // ---------- SYSTEM ----------
   { path: "/auth",      title: "Sign In",       layer: "system", blurb: "Account access",            noindex: true },
