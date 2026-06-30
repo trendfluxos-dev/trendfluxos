@@ -21,6 +21,7 @@ const JusticeAppealSection  = lazy(() => import("@/components/home/JusticeAppeal
 const ProofSection          = lazy(() => import("@/components/home/ProofSection").then(m => ({ default: m.ProofSection })));
 const TestimonialsSection   = lazy(() => import("@/components/home/TestimonialsSection").then(m => ({ default: m.TestimonialsSection })));
 const FinalCtaSection       = lazy(() => import("@/components/home/FinalCtaSection").then(m => ({ default: m.FinalCtaSection })));
+const TripleBridge          = lazy(() => import("@/components/ecosystem/TripleBridge"));
 
 /**
  * Home page (TrendFlux Growth OS). Composition-only: each section is a
@@ -99,6 +100,11 @@ const Index = () => {
       {/* Credibility */}
       <LazySection label="proof" skeleton={<SectionSkeleton variant="cards" />}><ProofSection /></LazySection>
       <LazySection label="testimonials" skeleton={<SectionSkeleton variant="cards" />}><TestimonialsSection /></LazySection>
+
+      {/* Ecosystem bridge — Kormoshikkha · Space · Spectrum */}
+      <LazySection label="ecosystem-bridge" skeleton={<SectionSkeleton variant="cards" />}>
+        <TripleBridge />
+      </LazySection>
 
       {/* Engage */}
       <LazySection label="final-cta" skeleton={<SectionSkeleton variant="band" />}><FinalCtaSection onOpenQuote={openQuote} /></LazySection>
