@@ -346,7 +346,14 @@ const Marriage = () => {
               </a>
 
               <a
-                href="#contact"
+                href={`mailto:zhemongrowth@gmail.com?subject=${encodeURIComponent(
+                  t("Marriage Profile Inquiry", "বিবাহ প্রোফাইল অনুসন্ধান")
+                )}&body=${encodeURIComponent(
+                  t(
+                    "Assalamu Alaikum,\n\nI am writing regarding your marriage profile. Please share further details.\n\nName:\nFamily background:\nLocation:\n\nJazakAllah khair.",
+                    "আসসালামু আলাইকুম,\n\nআপনার বিবাহ প্রোফাইল সম্পর্কে আগ্রহী। অনুগ্রহ করে বিস্তারিত শেয়ার করুন।\n\nনাম:\nপারিবারিক পরিচয়:\nঅবস্থান:\n\nজাযাকাল্লাহ খাইর।"
+                  )
+                )}`}
                 className="flex flex-col items-center justify-center bg-black/70 border border-red-500/40 p-5 rounded-2xl shadow-[0_12px_30px_-12px_rgba(220,38,38,0.5)] hover:bg-black/85 hover:border-red-500/70 transition-all active:scale-[0.98]"
               >
                 <div className="mb-2 relative">
@@ -357,7 +364,7 @@ const Marriage = () => {
                   </span>
                 </div>
                 <span className="text-white font-medium text-sm">
-                  {t("Get Details", "বিস্তারিত")}
+                  {t("Email Gmail", "Gmail ইমেইল")}
                 </span>
               </a>
             </div>
