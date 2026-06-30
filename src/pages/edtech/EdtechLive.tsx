@@ -22,6 +22,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { supabase } from "@/integrations/supabase/client";
 import { hasAny, useCurrentRoles } from "@/lib/edtechRoles";
 import TripleBridge from "@/components/ecosystem/TripleBridge";
+import SpectrumStatusIndicator from "@/components/edtech/SpectrumStatusIndicator";
 import { getCourseBySlug } from "@/data/edtechCourses";
 import {
   cancelRsvp,
@@ -137,9 +138,12 @@ const EdtechLive = () => {
 
       <section className="bg-background pt-12 pb-6">
         <div className="mx-auto max-w-5xl px-6 lg:px-10">
-          <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/[0.06] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-primary">
-            <Radio className="h-3.5 w-3.5" aria-hidden /> Live cohort sessions
-          </p>
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/[0.06] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.25em] text-primary">
+              <Radio className="h-3.5 w-3.5" aria-hidden /> Live cohort sessions
+            </p>
+            <SpectrumStatusIndicator />
+          </div>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             Join the next live class
           </h1>
