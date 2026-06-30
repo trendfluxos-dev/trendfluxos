@@ -159,7 +159,7 @@ const EdtechHome = () => {
         {/* Subtle gold section divider */}
         <div className="mx-auto flex max-w-7xl items-center justify-center px-6 py-12">
           <div className="h-px flex-1 bg-[hsl(var(--edtech-gold)/0.3)]" />
-          <div className="px-6 text-[10px] font-bold uppercase tracking-[0.3em]" style={{ color: "hsl(var(--edtech-gold))" }}>{t("hero.divider")}</div>
+          <div className="px-6 text-[10px] font-bold uppercase tracking-[0.3em] text-foreground">{t("hero.divider")}</div>
           <div className="h-px flex-1 bg-[hsl(var(--edtech-gold)/0.3)]" />
         </div>
       </section>
