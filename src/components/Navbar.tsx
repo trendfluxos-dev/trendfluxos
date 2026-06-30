@@ -41,6 +41,24 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 will-change-transform">
+      {/* Skip-to-content link — visible only on keyboard focus, lets screen
+          reader / keyboard users jump past the navbar straight into the
+          page's primary <main>. Targets the first <main> regardless of id. */}
+      <a
+        href="#main-content"
+        onClick={(e) => {
+          const target = document.querySelector("main");
+          if (target) {
+            e.preventDefault();
+            (target as HTMLElement).setAttribute("tabindex", "-1");
+            (target as HTMLElement).focus({ preventScroll: false });
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }}
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-md focus:bg-white focus:dark:bg-[#0a0a10] focus:px-4 focus:py-2 focus:text-[12px] focus:font-medium focus:uppercase focus:tracking-[0.18em] focus:text-[#1a0a0a] focus:dark:text-white focus:shadow-[0_8px_24px_-8px_rgba(120,20,20,0.45)] focus:outline-none focus:ring-2 focus:ring-[#e25a5a]/70"
+      >
+        Skip to main content
+      </a>
       <div
         className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 transition-[margin,padding] duration-500 ease-out ${
           scrolled ? "mt-2" : "mt-4"

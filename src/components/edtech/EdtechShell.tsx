@@ -14,7 +14,7 @@ const EdtechShell = ({ children }: { children: ReactNode }) => (
       className="min-h-dvh bg-background text-foreground font-sans antialiased"
     >
       <Navbar />
-      {children}
+      <main id="main-content">{children}</main>
       <Footer />
     </div>
   </EdtechLangProvider>

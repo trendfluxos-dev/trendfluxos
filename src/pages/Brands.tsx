@@ -40,7 +40,7 @@ const Brands = () => {
         <link rel="canonical" href="https://trendflux.digital/brands" />
       </Helmet>
 
-      <main className="container mx-auto px-4 py-16 lg:py-24">
+      <main id="main-content" className="container mx-auto px-4 py-16 lg:py-24">
         <header className="max-w-2xl mb-12">
           <p className="cd-eyebrow mb-3">Ecosystem · Browse</p>
           <h1 className="text-3xl lg:text-5xl font-bold tracking-tight">

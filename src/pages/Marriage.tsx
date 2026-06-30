@@ -288,7 +288,7 @@ const Marriage = () => {
   };
 
   return (
-    <main
+    <main id="main-content"
       lang={bangla ? "bn" : "en"}
       data-brand="marriage"
       className="min-h-dvh text-[var(--marriage-ink)]"

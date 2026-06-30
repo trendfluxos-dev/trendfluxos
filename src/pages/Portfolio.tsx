@@ -430,6 +430,7 @@ export default function Portfolio() {
         </div>
       </header>
 
+      <main id="main-content">
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(220,38,38,0.06),transparent_70%),linear-gradient(180deg,#FFFFFF,#F8FAFC)]" />
@@ -1040,6 +1041,8 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
+
+      </main>
 
       <footer className="border-t border-[#E5E7EB] py-8">
         <div className="mx-auto max-w-7xl px-5 md:px-8 flex flex-wrap items-center justify-between gap-3 text-xs text-[#4B5563]">
