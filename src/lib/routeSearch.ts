@@ -31,6 +31,7 @@ export const KNOWN_ROUTES: string[] = [
   "/brand-open",
   "/project-lead",
   "/course/trendflux",
+  "/stories/ai-expert-emon",
   "/edtech",
   "/edtech/courses",
   "/edtech/pricing",
@@ -141,6 +142,15 @@ export interface ResolvedRoute {
   reason: "exact" | "alias" | "substring" | "fuzzy";
 }
 
+// Precomputed once at module load — avoids per-call work on hot paths.
+const KNOWN_SET = new Set(KNOWN_ROUTES);
+const FLAT_ROUTES: { route: string; flat: string; collapsed: string }[] = KNOWN_ROUTES.map(
+  (route) => {
+    const flat = route.replace(/^\//, "").replace(/\//g, "-");
+    return { route, flat, collapsed: flat.replace(/-/g, "") };
+  },
+);
+
 /**
  * Resolve an arbitrary URL path (typed by user, shared link with typo,
  * legacy slug, etc.) to the closest known route. Returns null when no
@@ -153,7 +163,7 @@ export function resolveRoute(rawPath: string): ResolvedRoute | null {
   const withSlash = "/" + norm;
 
   // Exact match against the registry.
-  if (KNOWN_ROUTES.includes(withSlash)) {
+  if (KNOWN_SET.has(withSlash)) {
     return { path: withSlash, score: 1, reason: "exact" };
   }
 
@@ -168,8 +178,7 @@ export function resolveRoute(rawPath: string): ResolvedRoute | null {
 
   // Substring containment (e.g. "edtech-pricing" → "/edtech/pricing").
   const collapsed = norm.replace(/-/g, "");
-  for (const route of KNOWN_ROUTES) {
-    const r = route.replace(/[/-]/g, "");
+  for (const { route, collapsed: r } of FLAT_ROUTES) {
     if (!r) continue;
     if (r.includes(collapsed) || collapsed.includes(r)) {
       return { path: route, score: 0.85, reason: "substring" };
@@ -178,8 +187,7 @@ export function resolveRoute(rawPath: string): ResolvedRoute | null {
 
   // Fuzzy distance against each route's flattened slug.
   let best: ResolvedRoute | null = null;
-  for (const route of KNOWN_ROUTES) {
-    const r = route.replace(/^\//, "").replace(/\//g, "-");
+  for (const { route, flat: r } of FLAT_ROUTES) {
     if (!r) continue;
     const d = levenshtein(norm, r);
     const max = Math.max(norm.length, r.length);
