@@ -1056,7 +1056,6 @@
     font-family: 'Inter', 'Hind Siliguri', system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: -0.03em;
-    color: hsl(var(--foreground));
   }
   [data-brand="edtech"] p,
   [data-brand="edtech"] li { letter-spacing: 0; }
