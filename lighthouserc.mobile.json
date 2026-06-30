@@ -1,0 +1,71 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "isSinglePageApplication": true,
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/trust/index.html",
+        "http://localhost/portfolio/index.html",
+        "http://localhost/showcase/index.html",
+        "http://localhost/edtech/index.html",
+        "http://localhost/services/index.html",
+        "http://localhost/ecosystem/index.html",
+        "http://localhost/explore/index.html"
+      ],
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "perf",
+        "formFactor": "mobile",
+        "screenEmulation": {
+          "mobile": true,
+          "width": 412,
+          "height": 823,
+          "deviceScaleFactor": 1.75,
+          "disabled": false
+        },
+        "throttling": {
+          "rttMs": 150,
+          "throughputKbps": 1638.4,
+          "cpuSlowdownMultiplier": 4,
+          "requestLatencyMs": 0,
+          "downloadThroughputKbps": 0,
+          "uploadThroughputKbps": 0
+        },
+        "throttlingMethod": "simulate",
+        "chromeFlags": "--no-sandbox --disable-dev-shm-usage --headless=new",
+        "skipAudits": ["uses-http2", "canonical", "redirects-http"],
+        "budgetsPath": "./lighthouse-budget.mobile.json"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.75 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }],
+        "categories:seo": ["error", { "minScore": 0.9 }],
+
+        "first-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+        "largest-contentful-paint": ["error", { "maxNumericValue": 3500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 400 }],
+        "speed-index": ["warn", { "maxNumericValue": 4500 }],
+        "interactive": ["warn", { "maxNumericValue": 5000 }],
+
+        "uses-text-compression": "error",
+        "modern-image-formats": "warn",
+        "unused-javascript": ["warn", { "maxNumericValue": 60000 }],
+        "render-blocking-resources": ["warn", { "maxNumericValue": 500 }],
+
+        "resource-summary:script:size": ["error", { "maxNumericValue": 750000 }],
+        "resource-summary:stylesheet:size": ["error", { "maxNumericValue": 240000 }],
+        "resource-summary:image:size": ["warn", { "maxNumericValue": 600000 }],
+        "resource-summary:font:size": ["warn", { "maxNumericValue": 250000 }],
+        "resource-summary:total:size": ["error", { "maxNumericValue": 2200000 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
