@@ -1220,6 +1220,25 @@
     color: rgb(255 255 255 / 0.96) !important;
   }
 
+  /* Same treatment for the Justice Appeal dark surface. */
+  body:has([data-brand="justice"]) [data-layer-chrome] {
+    color: rgb(255 255 255 / 0.82);
+  }
+  body:has([data-brand="justice"]) [data-layer-chrome] a,
+  body:has([data-brand="justice"]) [data-layer-chrome] span {
+    color: inherit;
+  }
+  body:has([data-brand="justice"]) [data-layer-chrome].text-foreground\/55,
+  body:has([data-brand="justice"]) [data-layer-chrome] .text-foreground\/45,
+  body:has([data-brand="justice"]) [data-layer-chrome] .text-foreground\/55,
+  body:has([data-brand="justice"]) [data-layer-chrome] .text-foreground\/65 {
+    color: rgb(255 255 255 / 0.78) !important;
+  }
+  body:has([data-brand="justice"]) [data-layer-chrome] .text-foreground\/85,
+  body:has([data-brand="justice"]) [data-layer-chrome] a:hover {
+    color: rgb(255 255 255 / 0.96) !important;
+  }
+
   @media (hover: hover) and (pointer: fine) {
     .hover-lift:hover { transform: translateY(-2px); }
     .hover-lift-md:hover { transform: translateY(-4px); box-shadow: var(--shadow-elegant); }
