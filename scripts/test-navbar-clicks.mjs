@@ -40,7 +40,6 @@ const ITEMS = {
     { title: "Marriage Profile", path: "/marriage" },
     { title: "Media Reports", path: "/media-reports" },
     { title: "AI Expert Emon", path: "/stories/ai-expert-emon" },
-    { title: "Trust", path: "/trust" },
   ],
   brand: [
     { title: "Luxe Veil", path: "/luxe-veil" },

@@ -39,7 +39,6 @@ const PUBLIC_INDEXABLE_ROUTES = [
   "/luxe-veil",
   "/brandtoki",
   "/stories/ai-expert-emon",
-  "/trust",
 ];
 
 const NOINDEX_ROUTES = ["/justice-appeal", "/media-reports", "/share-kit"];

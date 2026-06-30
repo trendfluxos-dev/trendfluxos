@@ -75,7 +75,6 @@ const staticRoutes = [
   "/luxe-veil",
   "/brandtoki",
   "/stories/ai-expert-emon",
-  "/trust",
   "/justice-appeal",
   "/media-reports",
   "/share-kit",
