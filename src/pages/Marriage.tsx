@@ -650,6 +650,73 @@ const Marriage = () => {
 
         {/* Selective sharing notice */}
         <p className="text-center mt-10 mb-4 text-sm text-white/60 italic px-4">
+        </p>
+        {/* Verify Further — Founder Portfolio & Legal Documents */}
+        <Card title={t("Verify Further", "আরও যাচাই করুন")}>
+          <p className="text-sm text-white/60 mb-4">
+            {t(
+              "For deeper verification, explore the founder's full professional portfolio and original legal documents.",
+              "আরও গভীর যাচাইয়ের জন্য, ফাউন্ডারের সম্পূর্ণ পেশাগত পোর্টফোলিও এবং মূল লিগ্যাল ডকুমেন্টগুলো দেখুন।"
+            )}
+          </p>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Link
+              to="/portfolio"
+              onClick={() =>
+                track("marriage_verify_link_click", { target: "founder_portfolio", language: bangla ? "bn" : "en" })
+              }
+              className="group rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 hover:bg-red-600/5 transition flex items-start gap-4"
+            >
+              <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
+                <Briefcase className="h-4 w-4 text-black" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-red-300">
+                  {t("Founder Portfolio", "ফাউন্ডার পোর্টফোলিও")}
+                </p>
+                <p className="mt-1.5 text-sm font-bold text-white">
+                  {t("Zahid Hasan Emon — Full Profile", "জাহিদ হাসান ইমন — সম্পূর্ণ প্রোফাইল")}
+                </p>
+                <p className="mt-1 text-xs text-white/60">
+                  {t(
+                    "Work, leadership, brands and achievements.",
+                    "কাজ, নেতৃত্ব, ব্র্যান্ড এবং অর্জনসমূহ।"
+                  )}
+                </p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 shrink-0 text-red-300 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+
+            <Link
+              to="/portfolio#proof"
+              onClick={() =>
+                track("marriage_verify_link_click", { target: "legal_documents", language: bangla ? "bn" : "en" })
+              }
+              className="group rounded-2xl border border-red-500/25 bg-black/40 p-5 hover:border-red-500/60 hover:bg-red-600/5 transition flex items-start gap-4"
+            >
+              <div className="h-10 w-10 shrink-0 rounded-full bg-gradient-to-br from-red-600 via-white to-black flex items-center justify-center border border-white/30">
+                <FileCheck className="h-4 w-4 text-black" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-red-300">
+                  {t("Legal Documents", "লিগ্যাল ডকুমেন্ট")}
+                </p>
+                <p className="mt-1.5 text-sm font-bold text-white">
+                  {t("Verified Proof Vault", "যাচাইকৃত প্রমাণপত্র")}
+                </p>
+                <p className="mt-1 text-xs text-white/60">
+                  {t(
+                    "Original credentials, identity and leadership proofs.",
+                    "মূল সনদপত্র, পরিচয় এবং নেতৃত্বের প্রমাণসমূহ।"
+                  )}
+                </p>
+              </div>
+              <ArrowUpRight className="h-4 w-4 shrink-0 text-red-300 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          </div>
+        </Card>
+
+        <p className="text-center mt-10 mb-4 text-sm text-white/60 italic px-4">
           {t(
             "This profile is shared selectively for respectful family consideration.",
             "এই প্রোফাইলটি সম্মানজনক পারিবারিক বিবেচনার জন্য সীমিতভাবে শেয়ার করা হয়েছে।"
