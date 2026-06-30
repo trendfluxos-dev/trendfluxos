@@ -111,7 +111,7 @@ export const QuickAccess = () => (
                 {it.desc}
               </span>
               <span aria-hidden className="mt-4 flex items-center gap-2">
-                <span className="h-px flex-1 bg-[hsl(var(--primary-deep,var(--border)))/0.4] group-hover:bg-primary/40 transition-colors" />
+                <span className="h-px flex-1 bg-border/70 group-hover:bg-primary/50 transition-colors" />
                 <span className="cd-mono cd-mono-accent">Open</span>
               </span>
             </>
