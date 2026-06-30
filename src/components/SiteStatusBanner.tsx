@@ -154,6 +154,9 @@ export default function SiteStatusBanner() {
 
   if (dismissed || !checks) return null;
   const allOk = checks.every((c) => c.ok);
+  // Quiet by default: only surface the banner when something actually fails.
+  // Founders/admins can still open the dialog from the admin status page.
+  if (allOk) return null;
 
   return (
     <>
