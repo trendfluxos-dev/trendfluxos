@@ -33,8 +33,18 @@ const ConsentBanner = () => {
   };
 
   const handleGrant = () => {
-    // The actual gtag('consent','update') is handled by the listener in
-    // index.html (bound to #consent-grant-btn). We just close the banner.
+    try {
+      localStorage.setItem(STORAGE_KEY, "true");
+    } catch {
+      /* ignore */
+    }
+    // Trigger GA4 Consent Mode v2 update via the helper exposed by index.html.
+    try {
+      const w = window as unknown as { grantConsent?: () => void };
+      w.grantConsent?.();
+    } catch {
+      /* ignore */
+    }
     setVisible(false);
   };
 
