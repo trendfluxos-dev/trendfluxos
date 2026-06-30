@@ -121,7 +121,7 @@ export default function JusticeAppeal() {
                 <span lang="en"> A structured public-interest dossier — not a campaign of attack.</span>
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <a lang="en" href="#timeline" className={`inline-flex items-center gap-2 rounded-md ${accentBg} px-5 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90`}>
+                <a lang="en" href="#timeline" className={`inline-flex items-center gap-2 rounded-md ${accentFill} px-5 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90`}>
                   Read Timeline
                 </a>
                 <a lang="en" href="#complaint" className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/[0.06]">
@@ -224,7 +224,7 @@ export default function JusticeAppeal() {
               <a
                 href="/pabna-accountability-complaint.pdf"
                 download
-                className={`inline-flex items-center gap-2 rounded-md ${accentBg} px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90`}
+                className={`inline-flex items-center gap-2 rounded-md ${accentFill} px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90`}
               >
                 <Download className="h-4 w-4" /> অভিযোগের PDF ডাউনলোড
               </a>
