@@ -408,22 +408,22 @@ export default function Portfolio() {
   }, [lightbox]);
 
   return (
-    <div className="min-h-dvh bg-white text-[#111111] font-[Inter,system-ui,sans-serif] antialiased">
+    <div className="min-h-dvh bg-background text-foreground font-[Inter,system-ui,sans-serif] antialiased">
       {/* NAV */}
-      <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-[#E5E7EB]">
+      <header className="sticky top-0 z-50 bg-background/85 backdrop-blur-md border-b border-border">
         <div className="mx-auto max-w-7xl px-5 md:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
             <span className="h-8 w-8 rounded-xl bg-[#111111] text-white grid place-items-center text-sm font-bold tracking-tight">ZE</span>
             <span className="font-semibold tracking-tight text-[15px] font-[Space_Grotesk,Inter,sans-serif]">Zahid Hasan Emon</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-7 text-sm text-[#4B5563]">
+          <nav className="hidden md:flex items-center gap-7 text-sm text-muted-foreground">
             {NAV.map((n) => (
-              <a key={n.href} href={n.href} className="hover:text-[#111111] transition">{n.label}</a>
+              <a key={n.href} href={n.href} className="hover:text-foreground transition">{n.label}</a>
             ))}
           </nav>
           <a
             href="#contact"
-            className="inline-flex items-center gap-1.5 rounded-full bg-[#DC2626] hover:bg-[#B91C1C] text-white text-sm font-medium px-4 py-2 transition shadow-[0_8px_20px_-8px_rgba(220,38,38,0.55)]"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary hover:bg-primary text-white text-sm font-medium px-4 py-2 transition shadow-[0_8px_20px_-8px_rgba(220,38,38,0.55)]"
           >
             Start Strategic Discussion <ArrowRight className="h-3.5 w-3.5" />
           </a>
@@ -437,30 +437,30 @@ export default function Portfolio() {
         <div className="mx-auto max-w-7xl px-5 md:px-8 pt-14 md:pt-20 pb-16 md:pb-24">
           <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             <div className="lg:col-span-7">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#FEF2F2] text-[#B91C1C] text-xs font-semibold px-3 py-1 ring-1 ring-[#FECACA]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A]" />
+              <span className="inline-flex items-center gap-2 rounded-full bg-primary/5 text-primary text-xs font-semibold px-3 py-1 ring-1 ring-primary/30">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
                 Strategic Growth Operator · Available for partnerships
               </span>
               <h1 className="mt-5 text-[clamp(2.25rem,5vw,4rem)] font-bold leading-[1.05] tracking-tight font-[Space_Grotesk,Inter,sans-serif]">
                 AI-Powered Growth Systems
-                <br className="hidden md:block" /> Built for <span className="text-[#DC2626]">Real Business Outcomes</span>.
+                <br className="hidden md:block" /> Built for <span className="text-primary">Real Business Outcomes</span>.
               </h1>
-              <p className="mt-5 max-w-xl text-[15px] md:text-base text-[#4B5563] leading-relaxed">
+              <p className="mt-5 max-w-xl text-[15px] md:text-base text-muted-foreground leading-relaxed">
                 I help brands, startups, consultants and organizations scale through AI-powered content systems, digital strategy, automation, creator ecosystems and measurable growth execution.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a href="#systems" className="inline-flex items-center gap-2 rounded-full bg-[#DC2626] hover:bg-[#B91C1C] text-white px-5 py-3 text-sm font-medium transition shadow-[0_12px_28px_-10px_rgba(220,38,38,0.5)]">
+                <a href="#systems" className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary text-white px-5 py-3 text-sm font-medium transition shadow-[0_12px_28px_-10px_rgba(220,38,38,0.5)]">
                   View Systems <ArrowRight className="h-4 w-4" />
                 </a>
-                <a href="#contact" className="inline-flex items-center gap-2 rounded-full border border-[#E5E7EB] hover:border-[#111111] px-5 py-3 text-sm font-medium text-[#111111] transition">
+                <a href="#contact" className="inline-flex items-center gap-2 rounded-full border border-border hover:border-[#111111] px-5 py-3 text-sm font-medium text-foreground transition">
                   Start Discussion
                 </a>
               </div>
               <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {TRUST.map((t) => (
-                  <div key={t.l} className="rounded-xl border border-[#E5E7EB] bg-white px-4 py-3">
+                  <div key={t.l} className="rounded-xl border border-border bg-background px-4 py-3">
                     <div className="text-lg font-bold tracking-tight">{t.v}</div>
-                    <div className="text-[11px] text-[#4B5563] mt-0.5">{t.l}</div>
+                    <div className="text-[11px] text-muted-foreground mt-0.5">{t.l}</div>
                   </div>
                 ))}
               </div>
@@ -469,29 +469,29 @@ export default function Portfolio() {
             <div className="lg:col-span-5">
               <div className="relative">
                 <div className="absolute -inset-4 -z-10 rounded-[28px] bg-gradient-to-br from-[#FFE4E6] via-white to-[#FFF5F5] blur-2xl opacity-70" />
-                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden ring-1 ring-[#E5E7EB] shadow-[0_30px_70px_-30px_rgba(0,0,0,0.35)] bg-[#F8FAFC]">
+                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden ring-1 ring-[#E5E7EB] shadow-[0_30px_70px_-30px_rgba(0,0,0,0.35)] bg-muted">
                   <img src={portrait} alt="Zahid Hasan Emon — Brand Architect & Growth Operator" className="h-full w-full object-cover" />
-                  <div className="absolute left-4 bottom-4 right-4 flex items-center justify-between rounded-xl bg-white/95 backdrop-blur px-3 py-2 ring-1 ring-[#E5E7EB]">
+                  <div className="absolute left-4 bottom-4 right-4 flex items-center justify-between rounded-xl bg-background/95 backdrop-blur px-3 py-2 ring-1 ring-[#E5E7EB]">
                     <div>
-                      <div className="text-[11px] uppercase tracking-wider text-[#DC2626] font-semibold">Brand Architect</div>
+                      <div className="text-[11px] uppercase tracking-wider text-primary font-semibold">Brand Architect</div>
                       <div className="text-sm font-semibold">Zahid Hasan Emon</div>
                     </div>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[#16A34A]"><CheckCircle2 className="h-3.5 w-3.5" /> Verified</span>
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-brand-green"><CheckCircle2 className="h-3.5 w-3.5" /> Verified</span>
                   </div>
                 </div>
                 {/* floating metric */}
-                <div className="hidden md:flex absolute -left-8 top-10 items-center gap-2 rounded-xl bg-white px-3 py-2 ring-1 ring-[#E5E7EB] shadow-md">
-                  <BarChart3 className="h-4 w-4 text-[#DC2626]" />
+                <div className="hidden md:flex absolute -left-8 top-10 items-center gap-2 rounded-xl bg-background px-3 py-2 ring-1 ring-[#E5E7EB] shadow-md">
+                  <BarChart3 className="h-4 w-4 text-primary" />
                   <div>
                     <div className="text-xs font-semibold">485K+ Views</div>
-                    <div className="text-[10px] text-[#4B5563]">Organic campaigns</div>
+                    <div className="text-[10px] text-muted-foreground">Organic campaigns</div>
                   </div>
                 </div>
-                <div className="hidden md:flex absolute -right-6 bottom-16 items-center gap-2 rounded-xl bg-white px-3 py-2 ring-1 ring-[#E5E7EB] shadow-md">
-                  <Sparkles className="h-4 w-4 text-[#16A34A]" />
+                <div className="hidden md:flex absolute -right-6 bottom-16 items-center gap-2 rounded-xl bg-background px-3 py-2 ring-1 ring-[#E5E7EB] shadow-md">
+                  <Sparkles className="h-4 w-4 text-brand-green" />
                   <div>
                     <div className="text-xs font-semibold">82% Organic</div>
-                    <div className="text-[10px] text-[#4B5563]">Reach quality</div>
+                    <div className="text-[10px] text-muted-foreground">Reach quality</div>
                   </div>
                 </div>
               </div>
@@ -501,15 +501,15 @@ export default function Portfolio() {
       </section>
 
       {/* PROFILE */}
-      <section id="about" className="py-20 md:py-24 border-t border-[#E5E7EB]">
+      <section id="about" className="py-20 md:py-24 border-t border-border">
         <div className="mx-auto max-w-7xl px-5 md:px-8 grid lg:grid-cols-12 gap-12">
           <div className="lg:col-span-5">
-            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Profile</span>
+            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Profile</span>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Strategic Growth Operator</h2>
-            <p className="mt-4 text-[#4B5563] leading-relaxed">
+            <p className="mt-4 text-muted-foreground leading-relaxed">
               AI-powered Digital Growth Operator combining automation systems, creator-led growth, content infrastructure and digital strategy to deliver measurable outcomes for brands, organizations and growth-focused partners.
             </p>
-            <p className="mt-3 text-sm text-[#4B5563]">Focused on scalable execution — not task-based freelancing.</p>
+            <p className="mt-3 text-sm text-muted-foreground">Focused on scalable execution — not task-based freelancing.</p>
           </div>
           <div className="lg:col-span-7 grid sm:grid-cols-2 gap-3">
             {[
@@ -522,9 +522,9 @@ export default function Portfolio() {
               "Content infrastructure",
               "Performance analytics",
             ].map((s) => (
-              <div key={s} className="flex items-start gap-2.5 rounded-xl border border-[#E5E7EB] bg-white px-4 py-3">
-                <CheckCircle2 className="h-4 w-4 text-[#16A34A] mt-0.5 shrink-0" />
-                <span className="text-sm text-[#111111]">{s}</span>
+              <div key={s} className="flex items-start gap-2.5 rounded-xl border border-border bg-background px-4 py-3">
+                <CheckCircle2 className="h-4 w-4 text-brand-green mt-0.5 shrink-0" />
+                <span className="text-sm text-foreground">{s}</span>
               </div>
             ))}
           </div>
@@ -532,23 +532,23 @@ export default function Portfolio() {
       </section>
 
       {/* EXPERIENCE */}
-      <section className="py-20 md:py-24 bg-[#F8FAFC] border-y border-[#E5E7EB]">
+      <section className="py-20 md:py-24 bg-muted border-y border-border">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="flex items-end justify-between gap-6 flex-wrap">
             <div>
-              <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Experience</span>
+              <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Experience</span>
               <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Operator-grade execution across sectors</h2>
             </div>
-            <span className="text-sm text-[#4B5563]">EdTech · Civic · Agency · Founder</span>
+            <span className="text-sm text-muted-foreground">EdTech · Civic · Agency · Founder</span>
           </div>
           <div className="mt-10 grid md:grid-cols-2 gap-5">
             {EXPERIENCE.map((e) => (
-              <article key={e.role} className="rounded-2xl border border-[#E5E7EB] bg-white p-6 hover:shadow-[0_20px_50px_-30px_rgba(0,0,0,0.25)] transition">
-                <div className="flex items-center gap-2 text-xs text-[#DC2626] font-semibold uppercase tracking-wider"><Briefcase className="h-3.5 w-3.5" /> {e.org}</div>
+              <article key={e.role} className="rounded-2xl border border-border bg-background p-6 hover:shadow-[0_20px_50px_-30px_rgba(0,0,0,0.25)] transition">
+                <div className="flex items-center gap-2 text-xs text-primary font-semibold uppercase tracking-wider"><Briefcase className="h-3.5 w-3.5" /> {e.org}</div>
                 <h3 className="mt-2 text-lg font-semibold tracking-tight">{e.role}</h3>
-                <ul className="mt-3 space-y-1.5 text-sm text-[#4B5563]">
+                <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
                   {e.bullets.map((b) => (
-                    <li key={b} className="flex gap-2"><span className="mt-1.5 h-1 w-1 rounded-full bg-[#DC2626] shrink-0" />{b}</li>
+                    <li key={b} className="flex gap-2"><span className="mt-1.5 h-1 w-1 rounded-full bg-primary shrink-0" />{b}</li>
                   ))}
                 </ul>
               </article>
@@ -560,32 +560,32 @@ export default function Portfolio() {
       {/* SYSTEMS */}
       <section id="systems" className="py-20 md:py-24">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Casebook</span>
+          <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Casebook</span>
           <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif] max-w-2xl">Growth Systems & Execution Infrastructure</h2>
           <div className="mt-12 grid md:grid-cols-2 gap-6">
             {SYSTEMS.map((s) => {
               const Icon = s.icon;
               return (
-                <article key={s.n} className="group rounded-2xl border border-[#E5E7EB] bg-white p-7 hover:border-[#111111] transition">
+                <article key={s.n} className="group rounded-2xl border border-border bg-background p-7 hover:border-[#111111] transition">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold tracking-widest text-[#4B5563]">SYSTEM {s.n}</span>
-                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#DC2626]"><Icon className="h-4.5 w-4.5" /></span>
+                    <span className="text-xs font-semibold tracking-widest text-muted-foreground">SYSTEM {s.n}</span>
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/5 text-primary"><Icon className="h-4.5 w-4.5" /></span>
                   </div>
                   <h3 className="mt-4 text-xl font-semibold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">{s.title}</h3>
                   <div className="mt-5 grid sm:grid-cols-2 gap-5">
                     <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#4B5563]">Built</p>
-                      <ul className="mt-2 space-y-1.5 text-sm text-[#111111]">
-                        {s.built.map((b) => <li key={b} className="flex gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[#16A34A] mt-0.5 shrink-0" />{b}</li>)}
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Built</p>
+                      <ul className="mt-2 space-y-1.5 text-sm text-foreground">
+                        {s.built.map((b) => <li key={b} className="flex gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-brand-green mt-0.5 shrink-0" />{b}</li>)}
                       </ul>
                     </div>
                     <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#4B5563]">Results</p>
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Results</p>
                       <ul className="mt-2 space-y-1.5">
                         {s.results.map((r) => (
-                          <li key={r.l} className="flex items-baseline justify-between rounded-lg bg-[#F8FAFC] px-3 py-1.5">
-                            <span className="text-sm font-bold text-[#111111]">{r.v}</span>
-                            <span className="text-xs text-[#4B5563]">{r.l}</span>
+                          <li key={r.l} className="flex items-baseline justify-between rounded-lg bg-muted px-3 py-1.5">
+                            <span className="text-sm font-bold text-foreground">{r.v}</span>
+                            <span className="text-xs text-muted-foreground">{r.l}</span>
                           </li>
                         ))}
                       </ul>
@@ -599,15 +599,15 @@ export default function Portfolio() {
       </section>
 
       {/* METRICS */}
-      <section className="py-20 md:py-24 bg-[#F8FAFC] border-y border-[#E5E7EB]">
+      <section className="py-20 md:py-24 bg-muted border-y border-border">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Performance</span>
+          <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Performance</span>
           <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Verified outcomes across systems</h2>
           <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {METRICS.map((m) => (
-              <div key={m.l} className="rounded-2xl border border-[#E5E7EB] bg-white p-5">
+              <div key={m.l} className="rounded-2xl border border-border bg-background p-5">
                 <div className="text-2xl md:text-3xl font-bold tracking-tight" style={{ color: m.c }}>{m.v}</div>
-                <div className="mt-1 text-xs text-[#4B5563]">{m.l}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{m.l}</div>
               </div>
             ))}
           </div>
@@ -618,20 +618,20 @@ export default function Portfolio() {
       <section id="packages" className="py-20 md:py-24">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="max-w-2xl">
-            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Partnership</span>
+            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Partnership</span>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Partnership Value Projection</h2>
-            <p className="mt-4 text-[#4B5563]">Flexible growth partnership models designed around measurable execution, scalable collaboration and long-term business value.</p>
+            <p className="mt-4 text-muted-foreground">Flexible growth partnership models designed around measurable execution, scalable collaboration and long-term business value.</p>
           </div>
 
           <div className="mt-10 grid lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-7 rounded-2xl border border-[#E5E7EB] bg-white p-6 md:p-8 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]">
+            <div className="lg:col-span-7 rounded-2xl border border-border bg-background p-6 md:p-8 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.3)]">
               <div className="flex flex-wrap gap-2">
                 {(Object.keys(PRESETS) as (keyof typeof PRESETS)[]).map((p) => (
                   <button
                     key={p}
                     type="button"
                     onClick={() => applyPreset(p)}
-                    className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${preset === p ? "bg-[#111111] text-white" : "border border-[#E5E7EB] text-[#4B5563] hover:border-[#111111] hover:text-[#111111]"}`}
+                    className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${preset === p ? "bg-[#111111] text-white" : "border border-border text-muted-foreground hover:border-[#111111] hover:text-foreground"}`}
                   >
                     {p}
                   </button>
@@ -647,7 +647,7 @@ export default function Portfolio() {
                 ].map((f) => (
                   <div key={f.l}>
                     <div className="flex items-baseline justify-between">
-                      <label className="text-sm font-medium text-[#111111]">{f.l}</label>
+                      <label className="text-sm font-medium text-foreground">{f.l}</label>
                       <span className="text-sm font-semibold tabular-nums">{f.v}</span>
                     </div>
                     <input
@@ -668,15 +668,15 @@ export default function Portfolio() {
               <div className="space-y-4">
                 <Stat label="Base Partnership Value" value={fmt(baseValue)} />
                 <Stat label="Performance-Aligned Outcome" value={fmt(perfOutcome)} accent="#F97316" />
-                <div className="h-px bg-white/10" />
+                <div className="h-px bg-background/10" />
                 <Stat label="Projected Partnership Value" value={fmt(projected)} accent="#DC2626" big />
                 <div className="flex items-center justify-between text-xs text-white/60">
                   <span>Growth Potential</span>
-                  <span className="text-[#16A34A] font-semibold">+{growth}%</span>
+                  <span className="text-brand-green font-semibold">+{growth}%</span>
                 </div>
               </div>
               <div className="mt-7 space-y-3">
-                <a href="#contact" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#DC2626] hover:bg-[#B91C1C] text-white px-5 py-3 text-sm font-medium transition">
+                <a href="#contact" className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary text-white px-5 py-3 text-sm font-medium transition">
                   Discuss Partnership Structure <ArrowRight className="h-4 w-4" />
                 </a>
                 <p className="text-[11px] text-white/55 leading-relaxed">
@@ -690,18 +690,18 @@ export default function Portfolio() {
           {/* PACKAGES */}
           <div className="mt-16 grid md:grid-cols-3 gap-5">
             {PACKAGES.map((p) => (
-              <div key={p.name} className={`rounded-2xl border p-6 transition hover:-translate-y-0.5 ${p.featured ? "border-[#111111] bg-[#111111] text-white" : "border-[#E5E7EB] bg-white"}`}>
-                <h3 className={`text-lg font-semibold tracking-tight ${p.featured ? "text-white" : "text-[#111111]"}`}>{p.name}</h3>
-                <p className={`mt-2 text-sm ${p.featured ? "text-white/70" : "text-[#4B5563]"}`}>{p.summary}</p>
+              <div key={p.name} className={`rounded-2xl border p-6 transition hover:-translate-y-0.5 ${p.featured ? "border-[#111111] bg-[#111111] text-white" : "border-border bg-background"}`}>
+                <h3 className={`text-lg font-semibold tracking-tight ${p.featured ? "text-white" : "text-foreground"}`}>{p.name}</h3>
+                <p className={`mt-2 text-sm ${p.featured ? "text-white/70" : "text-muted-foreground"}`}>{p.summary}</p>
                 <ul className="mt-5 space-y-2 text-sm">
                   {p.perks.map((perk) => (
                     <li key={perk} className="flex gap-2">
-                      <CheckCircle2 className={`h-4 w-4 mt-0.5 shrink-0 ${p.featured ? "text-[#16A34A]" : "text-[#16A34A]"}`} />
-                      <span className={p.featured ? "text-white/85" : "text-[#111111]"}>{perk}</span>
+                      <CheckCircle2 className={`h-4 w-4 mt-0.5 shrink-0 ${p.featured ? "text-brand-green" : "text-brand-green"}`} />
+                      <span className={p.featured ? "text-white/85" : "text-foreground"}>{perk}</span>
                     </li>
                   ))}
                 </ul>
-                <a href="#contact" className={`mt-6 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition ${p.featured ? "bg-[#DC2626] hover:bg-[#B91C1C] text-white" : "bg-[#DC2626] hover:bg-[#B91C1C] text-white"}`}>
+                <a href="#contact" className={`mt-6 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium transition ${p.featured ? "bg-primary hover:bg-primary text-white" : "bg-primary hover:bg-primary text-white"}`}>
                   Discuss this package <ArrowRight className="h-3.5 w-3.5" />
                 </a>
               </div>
@@ -711,19 +711,19 @@ export default function Portfolio() {
       </section>
 
       {/* DELIVERABLES */}
-      <section id="deliverables" className="py-20 md:py-24 bg-[#F8FAFC] border-y border-[#E5E7EB]">
+      <section id="deliverables" className="py-20 md:py-24 bg-muted border-y border-border">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Deliverables</span>
+          <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Deliverables</span>
           <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">What ships every month</h2>
           <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {DELIVERABLES.map((d) => {
               const Icon = d.icon;
               return (
-                <div key={d.title} className="rounded-2xl border border-[#E5E7EB] bg-white p-6">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#DC2626]"><Icon className="h-5 w-5" /></span>
+                <div key={d.title} className="rounded-2xl border border-border bg-background p-6">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary/5 text-primary"><Icon className="h-5 w-5" /></span>
                   <h3 className="mt-4 font-semibold tracking-tight">{d.title}</h3>
-                  <ul className="mt-3 space-y-1.5 text-sm text-[#4B5563]">
-                    {d.items.map((i) => <li key={i} className="flex gap-2"><span className="mt-1.5 h-1 w-1 rounded-full bg-[#DC2626] shrink-0" />{i}</li>)}
+                  <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+                    {d.items.map((i) => <li key={i} className="flex gap-2"><span className="mt-1.5 h-1 w-1 rounded-full bg-primary shrink-0" />{i}</li>)}
                   </ul>
                 </div>
               );
@@ -736,11 +736,11 @@ export default function Portfolio() {
       <section id="pages" className="py-20 md:py-24">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="max-w-2xl">
-            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Pages & Brands</span>
+            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Pages & Brands</span>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">
               Communities, brands & pages operated by Zahid Hasan Emon
             </h2>
-            <p className="mt-3 text-[15px] text-[#4B5563] leading-relaxed">
+            <p className="mt-3 text-[15px] text-muted-foreground leading-relaxed">
               Grouped by context — civic activism, full-time employer work, and independent client engagements.
             </p>
           </div>
@@ -748,16 +748,16 @@ export default function Portfolio() {
           <div className="mt-12 space-y-14">
             {PAGE_GROUPS.map((g) => (
               <div key={g.key}>
-                <div className="flex items-end justify-between gap-4 border-b border-[#E5E7EB] pb-3">
+                <div className="flex items-end justify-between gap-4 border-b border-border pb-3">
                   <div>
                     <h3 className="text-lg font-semibold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">{g.label}</h3>
-                    <p className="text-sm text-[#4B5563] mt-1">{g.caption}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{g.caption}</p>
                   </div>
-                  <span className="text-xs text-[#6B7280] tabular-nums">{g.items.length} {g.items.length === 1 ? "page" : "pages"}</span>
+                  <span className="text-xs text-muted-foreground tabular-nums">{g.items.length} {g.items.length === 1 ? "page" : "pages"}</span>
                 </div>
                 <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                   {g.items.map((p) => (
-                    <div key={p.name} className="group rounded-2xl border border-[#E5E7EB] bg-white p-6 hover:border-[#111111] transition">
+                    <div key={p.name} className="group rounded-2xl border border-border bg-background p-6 hover:border-[#111111] transition">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
                           <span className="h-10 w-10 rounded-xl bg-[#111111] text-white grid place-items-center text-[13px] font-bold tracking-tight shrink-0">
@@ -765,23 +765,23 @@ export default function Portfolio() {
                           </span>
                           <div className="min-w-0">
                             <div className="font-semibold tracking-tight truncate">{p.name}</div>
-                            <div className="text-xs text-[#6B7280] mt-0.5">{p.role}</div>
+                            <div className="text-xs text-muted-foreground mt-0.5">{p.role}</div>
                           </div>
                         </div>
                         {p.badge && (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-[#FEF2F2] text-[#B91C1C] text-[10px] font-semibold px-2 py-1 ring-1 ring-[#FECACA] whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-primary/5 text-primary text-[10px] font-semibold px-2 py-1 ring-1 ring-primary/30 whitespace-nowrap">
                             <Globe className="h-3 w-3" />{p.badge}
                           </span>
                         )}
                       </div>
-                      <p className="mt-4 text-sm text-[#4B5563] leading-relaxed">{p.desc}</p>
+                      <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
                       <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                         {p.href && p.href !== "#" && (
                           <a
                             href={p.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 font-medium text-[#111111] hover:text-[#DC2626] transition"
+                            className="inline-flex items-center gap-1.5 font-medium text-foreground hover:text-primary transition"
                           >
                             <Facebook className="h-3.5 w-3.5" /> Visit page <ArrowUpRight className="h-3.5 w-3.5" />
                           </a>
@@ -791,7 +791,7 @@ export default function Portfolio() {
                             href={p.website.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 font-medium text-[#DC2626] hover:underline"
+                            className="inline-flex items-center gap-1.5 font-medium text-primary hover:underline"
                           >
                             <Globe className="h-3.5 w-3.5" /> {p.website.label} <ArrowUpRight className="h-3.5 w-3.5" />
                           </a>
@@ -812,44 +812,44 @@ export default function Portfolio() {
       <section className="py-20 md:py-24">
         <div className="mx-auto max-w-7xl px-5 md:px-8 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-5">
-            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Skills</span>
+            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Skills</span>
             <h2 className="mt-3 text-3xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Operating capabilities</h2>
             <div className="mt-6 flex flex-wrap gap-2">
               {SKILLS.map((s) => (
-                <span key={s} className="inline-flex items-center gap-1.5 rounded-full border border-[#E5E7EB] bg-white px-3 py-1.5 text-xs font-medium text-[#111111]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#DC2626]" />{s}
+                <span key={s} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />{s}
                 </span>
               ))}
             </div>
           </div>
 
           <div className="lg:col-span-4">
-            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Leadership</span>
+            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Leadership</span>
             <h2 className="mt-3 text-3xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Public trust roles</h2>
             <ul className="mt-6 space-y-3">
               {LEADERSHIP.map((l) => (
-                <li key={l} className="flex gap-2.5 text-sm text-[#111111]">
-                  <Award className="h-4 w-4 text-[#DC2626] mt-0.5 shrink-0" /> {l}
+                <li key={l} className="flex gap-2.5 text-sm text-foreground">
+                  <Award className="h-4 w-4 text-primary mt-0.5 shrink-0" /> {l}
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="lg:col-span-3">
-            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Education</span>
+            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Education</span>
             <h2 className="mt-3 text-3xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Academic</h2>
             <ul className="mt-6 space-y-4 text-sm">
               <li>
                 <div className="font-semibold">B.Sc. in Information Technology</div>
-                <div className="text-[#4B5563]">Jahangirnagar University</div>
+                <div className="text-muted-foreground">Jahangirnagar University</div>
               </li>
               <li>
                 <div className="font-semibold">HSC — GPA 5.00</div>
-                <div className="text-[#4B5563]">Shaheed Bulbul Govt. College</div>
+                <div className="text-muted-foreground">Shaheed Bulbul Govt. College</div>
               </li>
               <li>
                 <div className="font-semibold">SSC — GPA 5.00</div>
-                <div className="text-[#4B5563]">Pabna Zilla School</div>
+                <div className="text-muted-foreground">Pabna Zilla School</div>
               </li>
             </ul>
           </div>
@@ -857,47 +857,47 @@ export default function Portfolio() {
       </section>
 
       {/* PROOF VAULT */}
-      <section id="proof" className="py-20 md:py-24 bg-[#F8FAFC] border-y border-[#E5E7EB]">
+      <section id="proof" className="py-20 md:py-24 bg-muted border-y border-border">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           {/* Easy-move rail → The Stand & Quiet Positions */}
           <div className="mb-10 grid grid-cols-1 md:grid-cols-2 gap-3">
             <Link
               to="/the-stand"
-              className="group flex items-center justify-between gap-4 rounded-xl border border-[#111111]/10 bg-white px-5 py-4 transition-all hover:border-[#111111]/40 hover:shadow-[0_12px_30px_-18px_rgba(0,0,0,0.4)]"
+              className="group flex items-center justify-between gap-4 rounded-xl border border-[#111111]/10 bg-background px-5 py-4 transition-all hover:border-[#111111]/40 hover:shadow-[0_12px_30px_-18px_rgba(0,0,0,0.4)]"
             >
               <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#DC2626]">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-primary">
                   Featured · জাতীয় দলিল
                 </p>
-                <p className="mt-1.5 truncate font-[Space_Grotesk,Inter,sans-serif] text-[15px] font-semibold text-[#111111]">
+                <p className="mt-1.5 truncate font-[Space_Grotesk,Inter,sans-serif] text-[15px] font-semibold text-foreground">
                   The Stand — মায়ের নিষেধ আছে
                 </p>
-                <p className="mt-1 text-xs text-[#4B5563]">A preserved moment of conscience.</p>
+                <p className="mt-1 text-xs text-muted-foreground">A preserved moment of conscience.</p>
               </div>
-              <ArrowUpRight className="h-4 w-4 shrink-0 text-[#111111] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="h-4 w-4 shrink-0 text-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
             <Link
               to="/quiet-positions"
-              className="group flex items-center justify-between gap-4 rounded-xl border border-[#111111]/10 bg-white px-5 py-4 transition-all hover:border-[#111111]/40 hover:shadow-[0_12px_30px_-18px_rgba(0,0,0,0.4)]"
+              className="group flex items-center justify-between gap-4 rounded-xl border border-[#111111]/10 bg-background px-5 py-4 transition-all hover:border-[#111111]/40 hover:shadow-[0_12px_30px_-18px_rgba(0,0,0,0.4)]"
             >
               <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#4B5563]">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-muted-foreground">
                   Parallel Chapter · নীরব অবস্থান
                 </p>
-                <p className="mt-1.5 truncate font-[Space_Grotesk,Inter,sans-serif] text-[15px] font-semibold text-[#111111]">
+                <p className="mt-1.5 truncate font-[Space_Grotesk,Inter,sans-serif] text-[15px] font-semibold text-foreground">
                   Quiet Positions
                 </p>
-                <p className="mt-1 text-xs text-[#4B5563]">An emotional archive — restrained, civic.</p>
+                <p className="mt-1 text-xs text-muted-foreground">An emotional archive — restrained, civic.</p>
               </div>
-              <ArrowUpRight className="h-4 w-4 shrink-0 text-[#111111] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="h-4 w-4 shrink-0 text-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </div>
 
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
-              <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Proof Vault</span>
+              <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Proof Vault</span>
               <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Verified Proof Vault</h2>
-              <p className="mt-3 max-w-2xl text-[#4B5563]">Original documents & legal proof. Tap any card to view the original document — credentials, leadership and identity verified.</p>
+              <p className="mt-3 max-w-2xl text-muted-foreground">Original documents & legal proof. Tap any card to view the original document — credentials, leadership and identity verified.</p>
             </div>
             <div
               role="tablist"
@@ -917,13 +917,13 @@ export default function Portfolio() {
                     className={`shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC] ${
                       active
                         ? "bg-[#111111] text-white shadow-[0_8px_20px_-10px_rgba(0,0,0,0.4)]"
-                        : "border border-[#E5E7EB] bg-white text-[#4B5563] hover:text-[#111111] hover:border-[#111111]"
+                        : "border border-border bg-background text-muted-foreground hover:text-foreground hover:border-[#111111]"
                     }`}
                   >
                     {c}
                     <span
                       className={`inline-flex h-4 min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-semibold ${
-                        active ? "bg-white/15 text-white" : "bg-[#F8FAFC] text-[#4B5563]"
+                        active ? "bg-background/15 text-white" : "bg-muted text-muted-foreground"
                       }`}
                     >
                       {count}
@@ -939,14 +939,14 @@ export default function Portfolio() {
             className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 motion-safe:animate-[fadeIn_.25s_ease-out]"
           >
             {filteredProof.length === 0 ? (
-              <div className="sm:col-span-2 lg:col-span-3 rounded-2xl border border-dashed border-[#E5E7EB] bg-white p-10 text-center">
-                <ShieldCheck className="mx-auto h-6 w-6 text-[#4B5563]" />
-                <h3 className="mt-3 font-semibold text-[#111111]">No documents in this category yet</h3>
-                <p className="mt-1 text-sm text-[#4B5563]">Try another category — every credential here is independently verified.</p>
+              <div className="sm:col-span-2 lg:col-span-3 rounded-2xl border border-dashed border-border bg-background p-10 text-center">
+                <ShieldCheck className="mx-auto h-6 w-6 text-muted-foreground" />
+                <h3 className="mt-3 font-semibold text-foreground">No documents in this category yet</h3>
+                <p className="mt-1 text-sm text-muted-foreground">Try another category — every credential here is independently verified.</p>
                 <button
                   type="button"
                   onClick={() => setFilter("All")}
-                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-[#DC2626] hover:bg-[#B91C1C] text-white px-4 py-2 text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary hover:bg-primary text-white px-4 py-2 text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
                 >
                   Show all documents
                 </button>
@@ -959,17 +959,17 @@ export default function Portfolio() {
                   onClick={() => p.images && p.images.length > 0 && setLightbox({ title: p.title, cat: p.cat, images: p.images, index: 0, meta: p.meta })}
                   disabled={!p.images || p.images.length === 0}
                   aria-label={p.images && p.images.length > 0 ? `View original document: ${p.title}` : `${p.title} — original coming soon`}
-                  className="text-left group rounded-2xl border border-[#E5E7EB] bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#111111] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
+                  className="text-left group rounded-2xl border border-border bg-background p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#111111] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#DC2626] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8FAFC]"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF5] text-[#16A34A] text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-green/10 text-brand-green text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
                       <ShieldCheck className="h-3 w-3" /> Verified
                     </span>
-                    <span className="text-[10px] uppercase tracking-wider text-[#4B5563] font-semibold">{p.cat}</span>
+                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{p.cat}</span>
                   </div>
-                  <h3 className="mt-3 font-semibold tracking-tight text-[#111111]">{p.title}</h3>
-                  <p className="mt-1 text-sm text-[#4B5563]">{p.desc}</p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-[#DC2626] group-hover:gap-2 transition-all">
+                  <h3 className="mt-3 font-semibold tracking-tight text-foreground">{p.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-primary group-hover:gap-2 transition-all">
                     {p.images && p.images.length > 0 ? "Tap to view original" : "Original coming soon"} <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </button>
@@ -978,12 +978,12 @@ export default function Portfolio() {
           </div>
 
           {/* TRUST BLOCK */}
-          <div className="mt-14 rounded-3xl border border-[#E5E7EB] bg-white p-7 md:p-9">
+          <div className="mt-14 rounded-3xl border border-border bg-background p-7 md:p-9">
             <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-[#DC2626]" />
+              <Shield className="h-5 w-5 text-primary" />
               <h3 className="text-xl font-semibold tracking-tight">BASIS-Level Partnership Trust</h3>
             </div>
-            <p className="mt-2 text-sm text-[#4B5563]">Why partners choose working with me.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Why partners choose working with me.</p>
             <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { t: "B.Sc. IT — Jahangirnagar University", d: "Verified academic credentials" },
@@ -993,9 +993,9 @@ export default function Portfolio() {
                 { t: "7+ Professional Trainings", d: "10MS, Sochetan, NDBC, NDF-BD" },
                 { t: "Leadership at PZSWA, NDF-BD, PDS", d: "Public trust & accountability" },
               ].map((b) => (
-                <div key={b.t} className="rounded-xl border border-[#E5E7EB] p-4">
-                  <div className="text-sm font-semibold text-[#111111]">{b.t}</div>
-                  <div className="mt-1 text-xs text-[#4B5563]">{b.d}</div>
+                <div key={b.t} className="rounded-xl border border-border p-4">
+                  <div className="text-sm font-semibold text-foreground">{b.t}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{b.d}</div>
                 </div>
               ))}
             </div>
@@ -1007,28 +1007,28 @@ export default function Portfolio() {
       <section id="contact" className="py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-5 md:px-8">
           <div className="rounded-3xl bg-[#111111] text-white p-8 md:p-12 relative overflow-hidden">
-            <div aria-hidden className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#DC2626]/30 blur-3xl" />
-            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#F97316]">Contact</span>
+            <div aria-hidden className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/30 blur-3xl" />
+            <span className="inline-block text-xs font-semibold uppercase tracking-wider text-brand-orange">Contact</span>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">Start a strategic discussion</h2>
             <p className="mt-3 max-w-xl text-white/70">Open to retainer, performance-based and hybrid growth partnership structures across brands, organizations and creator ecosystems.</p>
 
             <div className="mt-8 grid sm:grid-cols-2 gap-4 text-sm">
-              <a href="mailto:zhemongrowth@gmail.com" className="flex items-center gap-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] px-4 py-3 transition">
-                <Mail className="h-4 w-4 text-[#DC2626]" /> zhemongrowth@gmail.com
+              <a href="mailto:zhemongrowth@gmail.com" className="flex items-center gap-3 rounded-xl bg-background/[0.06] hover:bg-background/[0.1] px-4 py-3 transition">
+                <Mail className="h-4 w-4 text-primary" /> zhemongrowth@gmail.com
               </a>
-              <a href="tel:+8801756004037" className="flex items-center gap-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] px-4 py-3 transition">
-                <Phone className="h-4 w-4 text-[#DC2626]" /> +880 1756-004037
+              <a href="tel:+8801756004037" className="flex items-center gap-3 rounded-xl bg-background/[0.06] hover:bg-background/[0.1] px-4 py-3 transition">
+                <Phone className="h-4 w-4 text-primary" /> +880 1756-004037
               </a>
-              <div className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-3">
-                <MapPin className="h-4 w-4 text-[#DC2626]" /> Dhaka, Bangladesh
+              <div className="flex items-center gap-3 rounded-xl bg-background/[0.06] px-4 py-3">
+                <MapPin className="h-4 w-4 text-primary" /> Dhaka, Bangladesh
               </div>
-              <a href="https://trendflux.digital" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] px-4 py-3 transition">
-                <Globe className="h-4 w-4 text-[#DC2626]" /> trendflux.digital
+              <a href="https://trendflux.digital" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-xl bg-background/[0.06] hover:bg-background/[0.1] px-4 py-3 transition">
+                <Globe className="h-4 w-4 text-primary" /> trendflux.digital
               </a>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="mailto:zhemongrowth@gmail.com" className="inline-flex items-center gap-2 rounded-full bg-[#DC2626] hover:bg-[#B91C1C] text-white px-5 py-3 text-sm font-medium transition">
+              <a href="mailto:zhemongrowth@gmail.com" className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary text-white px-5 py-3 text-sm font-medium transition">
                 Start Strategic Discussion <ArrowRight className="h-4 w-4" />
               </a>
               <a href="https://www.linkedin.com/in/zhemongrowth" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-white/20 hover:border-white text-white px-4 py-2.5 text-sm transition">
@@ -1044,10 +1044,10 @@ export default function Portfolio() {
 
       </main>
 
-      <footer className="border-t border-[#E5E7EB] py-8">
-        <div className="mx-auto max-w-7xl px-5 md:px-8 flex flex-wrap items-center justify-between gap-3 text-xs text-[#4B5563]">
+      <footer className="border-t border-border py-8">
+        <div className="mx-auto max-w-7xl px-5 md:px-8 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
           <span>© {new Date().getFullYear()} Zahid Hasan Emon · AI-Powered Growth Operator</span>
-          <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-[#DC2626]" /> Powered by TrendFlux Ecosystem</span>
+          <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> Powered by TrendFlux Ecosystem</span>
         </div>
       </footer>
 
@@ -1063,7 +1063,7 @@ export default function Portfolio() {
             type="button"
             aria-label="Close"
             onClick={(e) => { e.stopPropagation(); setLightbox(null); }}
-            className="absolute top-4 right-4 h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center text-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            className="absolute top-4 right-4 h-10 w-10 rounded-full bg-background/10 hover:bg-background/20 text-white grid place-items-center text-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             ×
           </button>
@@ -1073,7 +1073,7 @@ export default function Portfolio() {
                 type="button"
                 aria-label="Previous"
                 onClick={(e) => { e.stopPropagation(); setLightbox((l) => l ? { ...l, index: (l.index - 1 + l.images.length) % l.images.length } : l); }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="absolute left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-background/10 hover:bg-background/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 ‹
               </button>
@@ -1081,7 +1081,7 @@ export default function Portfolio() {
                 type="button"
                 aria-label="Next"
                 onClick={(e) => { e.stopPropagation(); setLightbox((l) => l ? { ...l, index: (l.index + 1) % l.images.length } : l); }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="absolute right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-background/10 hover:bg-background/20 text-white grid place-items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 ›
               </button>
@@ -1094,21 +1094,21 @@ export default function Portfolio() {
             <img
               src={lightbox.images[lightbox.index]}
               alt={`${lightbox.title} — original document`}
-              className="min-h-0 max-h-[60vh] lg:max-h-[88vh] max-w-full lg:max-w-[70vw] rounded-lg shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] bg-white object-contain mx-auto"
+              className="min-h-0 max-h-[60vh] lg:max-h-[88vh] max-w-full lg:max-w-[70vw] rounded-lg shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] bg-background object-contain mx-auto"
             />
             <aside
               aria-label="Verification metadata"
-              className="w-full lg:w-[320px] shrink-0 rounded-2xl bg-white p-5 md:p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] overflow-y-auto"
+              className="w-full lg:w-[320px] shrink-0 rounded-2xl bg-background p-5 md:p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.6)] overflow-y-auto"
             >
               <div className="flex items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-[#ECFDF5] text-[#16A34A] text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-green/10 text-brand-green text-[11px] font-semibold px-2.5 py-1 ring-1 ring-[#A7F3D0]">
                   <ShieldCheck className="h-3 w-3" /> Verified
                 </span>
-                <span className="text-[10px] uppercase tracking-wider text-[#4B5563] font-semibold">{lightbox.cat}</span>
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">{lightbox.cat}</span>
               </div>
-              <h3 className="mt-3 font-semibold tracking-tight text-[#111111] text-base leading-snug">{lightbox.title}</h3>
+              <h3 className="mt-3 font-semibold tracking-tight text-foreground text-base leading-snug">{lightbox.title}</h3>
               {lightbox.images.length > 1 && (
-                <p className="mt-1 text-[11px] uppercase tracking-wider text-[#4B5563] font-semibold">
+                <p className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
                   Page {lightbox.index + 1} of {lightbox.images.length}
                 </p>
               )}
@@ -1116,22 +1116,22 @@ export default function Portfolio() {
               {lightbox.meta && (
                 <dl className="mt-5 space-y-4 text-sm">
                   <div>
-                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Issuer</dt>
-                    <dd className="mt-1 text-[#111111] leading-snug">{lightbox.meta.issuer}</dd>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">Issuer</dt>
+                    <dd className="mt-1 text-foreground leading-snug">{lightbox.meta.issuer}</dd>
                   </div>
                   <div>
-                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Date</dt>
-                    <dd className="mt-1 text-[#111111]">{lightbox.meta.date}</dd>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">Date</dt>
+                    <dd className="mt-1 text-foreground">{lightbox.meta.date}</dd>
                   </div>
                   <div>
-                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-[#4B5563]">Document type</dt>
-                    <dd className="mt-1 text-[#111111]">{lightbox.meta.type}</dd>
+                    <dt className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground">Document type</dt>
+                    <dd className="mt-1 text-foreground">{lightbox.meta.type}</dd>
                   </div>
                 </dl>
               )}
 
-              <div className="mt-5 pt-4 border-t border-[#E5E7EB] flex items-center gap-2 text-[11px] text-[#4B5563]">
-                <Shield className="h-3.5 w-3.5 text-[#DC2626]" />
+              <div className="mt-5 pt-4 border-t border-border flex items-center gap-2 text-[11px] text-muted-foreground">
+                <Shield className="h-3.5 w-3.5 text-primary" />
                 <span>Original document — independently verifiable</span>
               </div>
             </aside>
