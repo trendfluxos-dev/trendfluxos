@@ -737,7 +737,7 @@ export default function Portfolio() {
           <div className="max-w-2xl">
             <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#DC2626]">Pages & Brands</span>
             <h2 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight font-[Space_Grotesk,Inter,sans-serif]">
-              Communities, brands & pages I operate
+              Communities, brands & pages operated by Zahid Hasan Emon
             </h2>
             <p className="mt-3 text-[15px] text-[#4B5563] leading-relaxed">
               Grouped by context — civic activism, full-time employer work, and independent client engagements.

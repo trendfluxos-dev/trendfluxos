@@ -31,7 +31,7 @@ const BrandCard = ({ b }: { b: OperatedBrand }) => (
 export const OperatedBrandsSection = () => (
   <TfSection
     eyebrow="Ecosystem"
-    title="Communities, brands & pages I operate."
+    title="Communities, brands & pages operated by Zahid Hasan Emon"
     intro="A portfolio of platforms, civic initiatives, and education brands built and operated under the TrendFlux ecosystem — designed and engineered by Zahid Hasan Emon."
   >
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
