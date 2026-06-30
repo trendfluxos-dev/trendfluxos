@@ -88,9 +88,10 @@ const Navbar = () => {
                   {BRAND.nameTrail}
                 </span>
               </span>
-              {/* WCAG AA: opaque, lightened red — ~5.0:1 on the dark glass bg
-                  (#2f2f34 effective). Old #e25a5a/70 measured ~2.5:1. */}
-              <span className="hidden sm:block mt-1 font-mono text-[9.5px] tracking-[0.3em] uppercase text-[#ff9a9a]">
+              {/* WCAG AA: own opaque dark chip so contrast is independent of
+                  the translucent navbar background. #ff7d7d on #0a0a10 ≈ 8.2:1. */}
+              <span className="hidden sm:inline-flex mt-1 items-center gap-1.5 rounded-full bg-[#0a0a10] border border-[#7a1e1e]/70 px-2 py-[3px] font-mono text-[9.5px] tracking-[0.3em] uppercase text-[#ff7d7d]">
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-[#ff7d7d] shadow-[0_0_6px_rgba(255,125,125,0.85)]" />
                 Status · Live
               </span>
             </span>
