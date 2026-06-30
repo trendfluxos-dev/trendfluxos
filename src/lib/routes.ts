@@ -40,6 +40,7 @@ export const routes = {
   "/admin/secrets-health": make(() => import("@/pages/SecretsHealthAdmin")),
   "/admin/telegram-tests": make(() => import("@/pages/TelegramTestLogsAdmin")),
   "/admin/security-audit": make(() => import("@/pages/SecurityAuditAdmin")),
+  "/admin/publish-gate": make(() => import("@/pages/PublishGateAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/the-stand/share": make(() => import("@/pages/TheStandShare")),

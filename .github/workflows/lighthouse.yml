@@ -68,6 +68,21 @@ jobs:
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
+      - name: Generate publish-gate summary
+        if: always()
+        run: node scripts/lighthouse-summary.mjs
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+
+      - name: Upload publish-gate summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-summary
+          path: public/lighthouse-summary.json
+          retention-days: 30
+
       - name: Upload LHCI mobile report
         if: always()
         uses: actions/upload-artifact@v4
