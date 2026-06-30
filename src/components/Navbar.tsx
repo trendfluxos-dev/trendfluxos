@@ -44,14 +44,20 @@ const Navbar = () => {
       <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 transition-all duration-300 ${scrolled ? "mt-2" : "mt-4"}`}>
         <nav
           aria-label="Primary"
-          className={`rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4 pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border bg-white text-neutral-900 transition-all duration-300 ${
-            scrolled ? "border-black/10 shadow-[0_10px_30px_-18px_rgba(0,0,0,0.25)]" : "border-black/10"
+          className={`rounded-full flex flex-nowrap items-center justify-between gap-2 lg:gap-4 pl-3 sm:pl-4 pr-2 sm:pr-3 py-2 sm:py-2.5 border bg-[#0b0b10]/85 backdrop-blur-xl text-[#f5d3d3] transition-all duration-300 ${
+            scrolled
+              ? "border-[#7a1e1e]/70 shadow-[0_0_0_1px_rgba(180,40,40,0.25),0_18px_40px_-22px_rgba(180,40,40,0.55)]"
+              : "border-[#7a1e1e]/55 shadow-[0_0_0_1px_rgba(180,40,40,0.15)]"
           }`}
         >
           <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-[14px] lg:text-[15px] whitespace-nowrap shrink-0 tracking-tight">
             <img src={logoAsset.url} alt={`${BRAND.name} logo`} className="h-7 w-7 rounded-md bg-white object-contain p-0.5" />
-            <span className="text-neutral-900">{BRAND.nameLead}</span>
-            <span className="text-neutral-500 font-normal">{BRAND.nameTrail}</span>
+            <span className="uppercase tracking-[0.22em] text-[#e25a5a] text-[12.5px] lg:text-[13px]">
+              {BRAND.nameLead}
+            </span>
+            <span className="uppercase tracking-[0.22em] text-[#e25a5a]/70 font-normal text-[12.5px] lg:text-[13px]">
+              {BRAND.nameTrail}
+            </span>
           </Link>
 
           {/* Center: 4-layer mega-menu (Company / Founder / Brands) */}
@@ -64,7 +70,7 @@ const Navbar = () => {
               onClick={() => openCommandPalette()}
               aria-label="Search pages"
               title="Search pages (⌘K)"
-              className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-black/15 bg-white text-neutral-700 hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-[#7a1e1e]/55 bg-[#1a0d10]/60 text-[#f0c9c9] hover:text-white hover:border-[#e25a5a] hover:bg-[#2a0f14]/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/60"
             >
               <Search className="h-3.5 w-3.5" />
             </button>
@@ -72,13 +78,13 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => openLuxeVeilGate({ source: "navbar" })}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-white px-3 py-1.5 text-[12px] text-neutral-700 whitespace-nowrap hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-[#7a1e1e]/55 bg-[#1a0d10]/60 px-3 py-1.5 text-[12px] uppercase tracking-[0.14em] text-[#f0c9c9] whitespace-nowrap hover:text-white hover:border-[#e25a5a] hover:bg-[#2a0f14]/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/60"
             >
               Apply Access
             </button>
             <Link
               to={signedIn ? "/admin" : "/auth"}
-              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-white px-3 py-1.5 text-[12px] text-neutral-700 whitespace-nowrap hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-[#7a1e1e]/55 bg-[#1a0d10]/60 px-3 py-1.5 text-[12px] uppercase tracking-[0.14em] text-[#f0c9c9] whitespace-nowrap hover:text-white hover:border-[#e25a5a] hover:bg-[#2a0f14]/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/60"
               title={signedIn ? "Dashboard" : "Login"}
             >
               {signedIn ? <LayoutDashboard className="h-3.5 w-3.5 shrink-0" /> : <LogIn className="h-3.5 w-3.5 shrink-0" />}
@@ -93,7 +99,7 @@ const Navbar = () => {
                   aria-label="Open navigation menu"
                   aria-haspopup="dialog"
                   aria-expanded={open}
-                  className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-full border border-black/15 bg-white text-neutral-700 hover:text-neutral-900 hover:border-neutral-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-full border border-[#7a1e1e]/55 bg-[#1a0d10]/60 text-[#f0c9c9] hover:text-white hover:border-[#e25a5a] hover:bg-[#2a0f14]/70 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/60"
                 >
                   <Menu className="h-4 w-4" />
                 </button>

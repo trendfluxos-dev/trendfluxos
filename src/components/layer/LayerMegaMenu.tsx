@@ -23,7 +23,7 @@ const LayerMegaMenu = () => {
           const items = nodesByLayer(layer, { includeAlsoIn: true });
           return (
             <NavigationMenuItem key={layer}>
-              <NavigationMenuTrigger className="bg-transparent text-foreground/65 hover:text-foreground hover:bg-transparent data-[state=open]:bg-transparent text-[12px] lg:text-[13px] font-normal h-9 px-3">
+              <NavigationMenuTrigger className="bg-transparent text-[#f0c9c9]/85 hover:text-white hover:bg-[#2a0f14]/60 data-[state=open]:bg-[#2a0f14]/60 data-[state=open]:text-white uppercase tracking-[0.16em] text-[11.5px] lg:text-[12px] font-medium h-9 px-3 rounded-full">
                 {meta.label}
               </NavigationMenuTrigger>
               <NavigationMenuContent>
