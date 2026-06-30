@@ -55,16 +55,13 @@ Deno.serve(async (req) => {
     _role: "admin",
   });
   if (!isAdmin) {
-    const { data: enrolled } = await userClient
-      .from("module_enrollments")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("status", "confirmed")
-      .limit(1)
-      .maybeSingle();
-    if (!enrolled) {
-      return json({ error: "Confirmed enrollment required" }, 403);
-    }
+    // Hardened: only admins may mint certificates. The previous non-admin
+    // branch let any enrolled user issue a certificate for any arbitrary
+    // student_name / course_slug, which would forge publicly-verifiable
+    // credentials. Ownership-bound self-issue can be re-introduced later
+    // once student_name is derived from the profile and course_slug is
+    // validated against the caller's own paid enrollment.
+    return json({ error: "Admin role required to issue certificates" }, 403);
   }
 
   let body: {
