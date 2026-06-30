@@ -9,7 +9,11 @@ export type LiveClassStatus = "scheduled" | "live" | "ended" | "cancelled";
  * to admins or RSVPed users.
  */
 const PUBLIC_COLUMNS =
-  "id,course_slug,title,description,host_name,starts_at,duration_min,status,created_by,created_at,updated_at,share_token,audience_mode";
+  "id,course_slug,title,description,host_name,starts_at,duration_min,status,created_by,created_at,updated_at,audience_mode";
+
+// Public-facing view that omits sensitive columns (meeting_url, share_token).
+// Anon + authenticated have SELECT on this view; the base table is owner/admin only.
+const PUBLIC_VIEW = "live_classes_public" as const;
 
 export interface LiveClass {
   id: string;
@@ -85,7 +89,7 @@ export const formatRelative = (iso: string) => {
 
 export const listLiveClasses = async (opts?: { courseSlug?: string; upcomingOnly?: boolean }) => {
   let q = supabase
-    .from("live_classes")
+    .from(PUBLIC_VIEW as never)
     .select(PUBLIC_COLUMNS)
     .order("starts_at", { ascending: true });
   if (opts?.courseSlug) q = q.eq("course_slug", opts.courseSlug);
@@ -156,7 +160,7 @@ export const updateLiveClass = async (id: string, patch: Partial<LiveClassInput>
 
 export const getLiveClass = async (id: string) => {
   const { data, error } = await supabase
-    .from("live_classes")
+    .from(PUBLIC_VIEW as never)
     .select(PUBLIC_COLUMNS)
     .eq("id", id)
     .maybeSingle();

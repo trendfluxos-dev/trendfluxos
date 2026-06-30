@@ -191,6 +191,13 @@ export type Database = {
             referencedRelation: "live_classes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "class_materials_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       class_recordings: {
@@ -261,6 +268,13 @@ export type Database = {
             columns: ["class_id"]
             isOneToOne: false
             referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_recordings_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes_public"
             referencedColumns: ["id"]
           },
         ]
@@ -540,6 +554,13 @@ export type Database = {
             referencedRelation: "live_classes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "live_class_rsvps_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       live_classes: {
@@ -633,6 +654,13 @@ export type Database = {
             columns: ["class_id"]
             isOneToOne: true
             referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "live_state_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: true
+            referencedRelation: "live_classes_public"
             referencedColumns: ["id"]
           },
         ]
@@ -887,6 +915,13 @@ export type Database = {
             columns: ["class_id"]
             isOneToOne: false
             referencedRelation: "live_classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_notes_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "live_classes_public"
             referencedColumns: ["id"]
           },
         ]
@@ -1491,6 +1526,51 @@ export type Database = {
       }
     }
     Views: {
+      live_classes_public: {
+        Row: {
+          audience_mode: string | null
+          course_slug: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          duration_min: number | null
+          host_name: string | null
+          id: string | null
+          starts_at: string | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          audience_mode?: string | null
+          course_slug?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          duration_min?: number | null
+          host_name?: string | null
+          id?: string | null
+          starts_at?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          audience_mode?: string | null
+          course_slug?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          duration_min?: number | null
+          host_name?: string | null
+          id?: string | null
+          starts_at?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       teacher_profiles_public: {
         Row: {
           avg_rating: number | null
