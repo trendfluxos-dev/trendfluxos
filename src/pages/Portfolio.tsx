@@ -67,7 +67,7 @@ const PAGE_GROUPS: { key: string; label: string; caption: string; items: PageIte
     caption: "Voluntary social & cultural activism — not client work.",
     items: [
       {
-        name: "Pabna Nagarik Committee",
+        name: "Pabna Nagorik Committee",
         role: "Brand & Campaign Strategist",
         desc: "নাগরিক ঐক্যেই বদলাবে পাবনা — civic campaign systems, 485K+ organic views.",
         href: "https://facebook.com/pncpabna",
@@ -163,7 +163,7 @@ const EXPERIENCE = [
   },
   {
     role: "Brand & Campaign Strategist",
-    org: "Pabna Nagarik Committee",
+    org: "Pabna Nagorik Committee",
     bullets: [
       "485K+ organic views",
       "154K+ audience reach",
