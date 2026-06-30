@@ -15,7 +15,7 @@ const STATIC_PATHS = [
   "/brand-open", "/trendflux-talent", "/luxe-veil", "/brandtoki",
   "/portfolio", "/enterprise", "/toolkit", "/course/trendflux",
   "/masterclass", "/justice-appeal", "/media-reports", "/share-kit",
-  "/stories/ai-expert-emon", "/trust", "/settings",
+  "/stories/ai-expert-emon", "/settings",
 ];
 
 // Sample dynamic routes — extend as needed.

@@ -74,7 +74,6 @@ const Footer = () => {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <Link to="/trust" className="hover:text-foreground transition-colors">Trust &amp; Privacy</Link>
           <Link to="/explore" className="hover:text-foreground transition-colors">Browse all pages</Link>
           <p>Built as a system, not a website.</p>
         </div>

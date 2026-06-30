@@ -36,14 +36,14 @@ export interface LayerNode {
 
 export const LAYER_META: Record<Layer, { label: string; tagline: string; hubPath: string }> = {
   company: { label: "Company",  tagline: "The brain — services + identity",      hubPath: "/ecosystem" },
-  founder: { label: "Founder",  tagline: "The trust — Zahid / Emon narrative",   hubPath: "/trust" },
+  founder: { label: "Founder",  tagline: "The trust — Zahid / Emon narrative",   hubPath: "/portfolio" },
   brand:   { label: "Brands",   tagline: "The revenue — product ecosystem",      hubPath: "/ecosystem" },
   system:  { label: "System",   tagline: "The control — admin + account",        hubPath: "/dashboard" },
 };
 
 // Ordered flow within each layer (used for prev/next).
 const COMPANY_FLOW = ["/", "/explore", "/ecosystem", "/services", "/enterprise", "/toolkit", "/contact"];
-const FOUNDER_FLOW = ["/project-lead", "/portfolio", "/the-stand", "/quiet-positions", "/justice-appeal", "/marriage", "/media-reports", "/stories/ai-expert-emon", "/trust"];
+const FOUNDER_FLOW = ["/project-lead", "/portfolio", "/the-stand", "/quiet-positions", "/justice-appeal", "/marriage", "/media-reports", "/stories/ai-expert-emon"];
 // Marriage profile gets its own flow so "Next" lands on the project showcase
 // (the founder's professional work) instead of the public media coverage list.
 const MARRIAGE_FLOW = ["/justice-appeal", "/marriage", "/showcase"];
@@ -51,7 +51,7 @@ const BRAND_FLOW   = ["/luxe-veil", "/brandtoki", "/trendflux-talent", "/portfol
 
 export const SITE_LAYERS: LayerNode[] = [
   // ---------- COMPANY ----------
-  { path: "/",           title: "Home",        layer: "company", blurb: "The Trendflux Digital hub",            siblings: COMPANY_FLOW, ctaNext: { path: "/trust", label: "Meet the founder" } },
+  { path: "/",           title: "Home",        layer: "company", blurb: "The Trendflux Digital hub",            siblings: COMPANY_FLOW, ctaNext: { path: "/portfolio", label: "Meet the founder" } },
   { path: "/explore",    title: "Explore",     layer: "company", blurb: "Browse every page in the system",      siblings: COMPANY_FLOW },
   { path: "/ecosystem",  title: "Ecosystem",   layer: "company", blurb: "How the four layers connect",          siblings: COMPANY_FLOW },
   { path: "/services",   title: "Services",    layer: "company", blurb: "AI automation, paid media, CRM, brand", siblings: COMPANY_FLOW },
@@ -67,8 +67,7 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/justice-appeal",          title: "Justice Appeal",  layer: "founder", blurb: "Belief system and ethical stance",        siblings: FOUNDER_FLOW },
   { path: "/marriage",                title: "Marriage Profile",layer: "founder", blurb: "Private biodata · family · references",   siblings: MARRIAGE_FLOW, ctaNext: { path: "/showcase", label: "See the project showcase" } },
   { path: "/media-reports",           title: "Media Reports",   layer: "founder", blurb: "Public perception coverage",              siblings: FOUNDER_FLOW },
-  { path: "/stories/ai-expert-emon",  title: "AI Expert Emon",  layer: "founder", blurb: "Identity evolution story",                siblings: FOUNDER_FLOW },
-  { path: "/trust",                   title: "Trust",           layer: "founder", blurb: "Credibility and validation layer",        siblings: FOUNDER_FLOW, ctaNext: { path: "/contact", label: "Work with us" } },
+  { path: "/stories/ai-expert-emon",  title: "AI Expert Emon",  layer: "founder", blurb: "Identity evolution story",                siblings: FOUNDER_FLOW, ctaNext: { path: "/contact", label: "Work with us" } },
 
   // ---------- BRAND ----------
   { path: "/luxe-veil",         title: "Luxe Veil",        layer: "brand", blurb: "Invite-only luxury weddings",          siblings: BRAND_FLOW },
