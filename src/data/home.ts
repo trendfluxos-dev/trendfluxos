@@ -23,6 +23,7 @@ import brandMarieElliot from "@/assets/brands/marie-j-elliot.jpeg";
 import brandPabnaDebate from "@/assets/brands/pabna-debate-society.jpeg";
 import brandStarpath from "@/assets/brands/starpath-tech.jpeg";
 import brandVerdafluxSpectrum from "@/assets/brands/verdaflux-spectrum.png";
+import brandFluxBeam from "@/assets/brand-fluxbeam.png";
 
 export type OperatedBrand = {
   name: string;
@@ -46,7 +47,7 @@ export const OPERATED_BRANDS: OperatedBrand[] = [
   {
     name: "TrendFlux Space",
     role: "Product · Live + on-demand EdTech",
-    logo: "/trendflux-logo.webp",
+    logo: brandFluxBeam,
     href: "https://trendflux.space",
     impact: "Verified teachers · Bangla + English",
     tagline: "Real-time whiteboard, slides & AI assistant — live classes plus on-demand courses",
