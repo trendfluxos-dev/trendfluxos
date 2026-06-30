@@ -63,7 +63,7 @@ export default function TheStand() {
         "@context": "https://schema.org",
         "@type": "Person",
         name: "Zahid Hasan Emon",
-        alternateName: "জাহিদ হাসান ইমন",
+        alternateName: "Zahid Hasan Emon",
         jobTitle: "Brand Architect · AI-era Ethical Technologist",
         description:
           "AI-era ethical youth leader and brand architect; whistleblower against extortion and torture-cell culture at Jahangirnagar University.",

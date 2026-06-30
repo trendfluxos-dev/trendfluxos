@@ -26,7 +26,7 @@ export default function TheStandShare() {
   useSeo({
     title: "Share The Stand — কোট-কার্ড জেনারেটর | TrendFlux",
     description:
-      "জাহিদ হাসান ইমনের আইকনিক বাণীগুলো এক ক্লিকে ছড়িয়ে দিন — Facebook, Instagram, Story-ready 1080px কোট কার্ড।",
+      "Zahid Hasan Emonের আইকনিক বাণীগুলো এক ক্লিকে ছড়িয়ে দিন — Facebook, Instagram, Story-ready 1080px কোট কার্ড।",
     type: "article",
     image: "/og-the-stand.jpg",
   });
@@ -278,7 +278,7 @@ export default function TheStandShare() {
                             fontSize: 14,
                           }}
                         >
-                          জাহিদ হাসান ইমন
+                          Zahid Hasan Emon
                         </p>
                         <p
                           style={{

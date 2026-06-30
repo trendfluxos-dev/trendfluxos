@@ -111,7 +111,7 @@ export const TheStandCoverSection = () => (
                   className="font-serif text-lg italic leading-snug text-amber-100 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] sm:text-2xl lg:text-3xl"
                 />
                 <footer className="mt-2 font-serif text-[10px] uppercase tracking-[0.3em] text-white/60 sm:text-[11px]">
-                  <EditableText id="attribution" defaultText="— জাহিদ হাসান ইমন · 2023" lang="bn" />
+                  <EditableText id="attribution" defaultText="— Zahid Hasan Emon · 2023" lang="bn" />
                 </footer>
               </blockquote>
               <EditableText

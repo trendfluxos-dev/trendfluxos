@@ -8,7 +8,7 @@ export type ProfileRow = { label: string; value: string };
 export const THE_STAND = {
   hero: {
     eyebrow: "একজন মানুষের অবস্থান, একটি জাতির বিবেক",
-    title: "জাহিদ হাসান ইমন",
+    title: "Zahid Hasan Emon",
     subtitle:
       "জাহাঙ্গীরনগর বিশ্ববিদ্যালয়ে টর্চার সেল ও চাঁদাবাজির বিরুদ্ধে এক অটুট নৈতিকতার সংগ্রাম।",
     keystone: "মায়ের নিষেধ আছে।",
