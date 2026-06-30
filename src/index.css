@@ -1254,9 +1254,9 @@
   --stand-silver: 40 6% 76%;          /* ~#C9C5BD */
   --stand-charcoal: 0 0% 10%;         /* #1A1A1A */
   --stand-ink: 0 0% 7%;
-  --stand-muted: 0 0% 32%;
-  --stand-red: 3 65% 47%;             /* #C8302A */
-  --stand-red-glow: 3 80% 55%;
+  --stand-muted: 0 0% 22%;            /* darker for AA on bone/bone-soft */
+  --stand-red: 3 78% 38%;             /* deeper red, AA on bone backgrounds */
+  --stand-red-glow: 3 90% 68%;        /* lighter glow, AA on dark surfaces */
   --stand-hairline: 40 10% 80%;
 
   background: hsl(var(--stand-bone));
