@@ -30,7 +30,7 @@ const NotFound = () => {
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
       <Navbar />
-      <main
+      <main id="main-content"
         role="main"
         className="flex flex-1 items-center justify-center px-6 py-24 sm:py-32"
       >
