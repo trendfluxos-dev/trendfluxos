@@ -160,6 +160,7 @@ const EXTRA_PAGES: NavigablePage[] = [
   { label: "Client Error Logs", path: "/admin/errors", type: "Admin", keywords: "errors runtime client logs sentry stack trace" },
   { label: "Web Vitals", path: "/admin/web-vitals", type: "Admin", keywords: "performance web vitals lcp inp cls fcp ttfb speed core" },
   { label: "Privacy Policy", path: "/privacy", type: "Main", keywords: "privacy policy data gdpr cookies retention rights legal" },
+  { label: "Growth OS — Premium tier", path: "/growth-os", type: "Main", keywords: "growth os premium meta ads crm n8n ai workflows lead prospecting outreach lifecycle creator studio flux beam trendflux digital" },
 ];
 
 // Default mapping from the 4-layer architecture to the legacy PageType
