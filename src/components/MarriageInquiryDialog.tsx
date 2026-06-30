@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { recordLeadAction, setInquirerId } from "@/lib/marriageAttribution";
 
 const COUNTRY_CODES = [
   { code: "+880", label: "🇧🇩 +880 Bangladesh" },
@@ -111,6 +112,16 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
     } catch {
       // ignore storage errors
     }
+
+    // Bind attribution chain to this real inquiry id, then emit a
+    // unified conversion event — attributed back to a recent WhatsApp
+    // click on /marriage when one exists.
+    setInquirerId(newId);
+    recordLeadAction("inquiry_form_submit", {
+      inquiry_id: newId,
+      country_code: parsed.data.country_code,
+      dress_colors: parsed.data.dress_colors.join(","),
+    });
 
     toast({
       title: "Thank you 💍",
