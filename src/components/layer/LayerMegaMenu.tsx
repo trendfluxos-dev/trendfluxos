@@ -27,10 +27,6 @@ const LayerMegaMenu = () => {
           const isActiveLayer =
             items.some((n) => pathname === n.path || (n.canonicalAlias && pathname === n.canonicalAlias)) ||
             pathname === meta.hubPath;
-          // If any sibling node owns the current pathname exactly, that
-          // exact-match wins — funnel siblings only highlight when no
-          // direct owner is present in the same dropdown.
-          const hasExactOwner = items.some((n) => pathname === n.path);
           const hasFunnelInDropdown = items.some((n) => !!n.canonicalAlias);
           return (
             <NavigationMenuItem key={layer}>
