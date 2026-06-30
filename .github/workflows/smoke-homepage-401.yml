@@ -1,0 +1,36 @@
+name: Smoke - Homepage 401 (PR)
+
+# Loads the homepage as a logged-out user on both the preview and production
+# domains and fails the PR if any network request returns HTTP 401.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      targets:
+        description: "Comma-separated URLs to probe"
+        required: false
+        default: "https://id-preview--ec1d2bd9-2410-431c-96d7-0959d7084992.lovable.app/,https://trendflux.digital/"
+
+concurrency:
+  group: smoke-401-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke-401:
+    name: Logged-out homepage 401 check
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install --frozen-lockfile
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+      - name: Run smoke test (preview + production)
+        env:
+          SMOKE_TARGETS: ${{ github.event.inputs.targets || 'https://id-preview--ec1d2bd9-2410-431c-96d7-0959d7084992.lovable.app/,https://trendflux.digital/' }}
+        run: node scripts/smoke-homepage-401.mjs
