@@ -10,7 +10,7 @@ export const SystemsHeBuiltSection = () => (
     title="The growth systems TrendFlux delivers, step by step."
     intro="Every engagement compounds into infrastructure. Here is the exact build order — five systems, deployed sequentially, owned by you on day 91."
   >
-    <ol className="mx-auto grid max-w-5xl grid-cols-1 gap-5 md:grid-cols-2">
+    <ol className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       {SYSTEMS_HE_BUILT.map((s) => (
         <li key={s.title} className="list-none">
           <TfCard>
