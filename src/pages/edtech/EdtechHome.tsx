@@ -16,6 +16,7 @@ import { BRAND } from "@/config/brand";
 import { LazySection } from "@/components/LazySection";
 import { SectionSkeleton } from "@/components/home/SectionSkeleton";
 import { useEdtechLang } from "@/lib/edtechLang";
+import TripleBridge from "@/components/ecosystem/TripleBridge";
 
 const EdtechHome = () => {
   useSeo({
