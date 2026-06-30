@@ -123,6 +123,9 @@ const Privacy = routes["/privacy"];
 const GrowthOs = routes["/growth-os"];
 const GrowthConsole = routes["/admin/growth-console"];
 const CreatorStudio = routes["/admin/creator-studio"];
+const GrowthOsHub = routes["/growth-os/hub"];
+const TaskQueue = routes["/admin/task-queue"];
+const ClassAnalytics = routes["/admin/class-analytics"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
@@ -221,6 +224,9 @@ const RoutedApp = () => {
         <Route path="/settings" element={<Settings />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/growth-os" element={<GrowthOs />} />
+        <Route path="/growth-os/hub" element={<RequireRole roles={["admin","teacher","tutor","editor"]}><GrowthOsHub /></RequireRole>} />
+        <Route path="/admin/task-queue" element={<RequireRole roles={["admin"]}><TaskQueue /></RequireRole>} />
+        <Route path="/admin/class-analytics" element={<RequireRole roles={["admin","teacher","tutor"]}><ClassAnalytics /></RequireRole>} />
         <Route path="/admin/growth-console" element={<RequireRole roles={["admin"]}><GrowthConsole /></RequireRole>} />
         <Route path="/admin/creator-studio" element={<RequireRole roles={["admin","editor","teacher","tutor"]}><CreatorStudio /></RequireRole>} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}

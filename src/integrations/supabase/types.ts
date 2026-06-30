@@ -684,6 +684,8 @@ export type Database = {
           course_slug: string
           created_at: string
           created_by: string | null
+          curriculum: Json | null
+          curriculum_generated_at: string | null
           description: string | null
           duration_min: number
           first_started_at: string | null
@@ -702,6 +704,8 @@ export type Database = {
           course_slug: string
           created_at?: string
           created_by?: string | null
+          curriculum?: Json | null
+          curriculum_generated_at?: string | null
           description?: string | null
           duration_min?: number
           first_started_at?: string | null
@@ -720,6 +724,8 @@ export type Database = {
           course_slug?: string
           created_at?: string
           created_by?: string | null
+          curriculum?: Json | null
+          curriculum_generated_at?: string | null
           description?: string | null
           duration_min?: number
           first_started_at?: string | null
@@ -1769,6 +1775,8 @@ export type Database = {
           course_slug: string
           created_at: string
           created_by: string | null
+          curriculum: Json | null
+          curriculum_generated_at: string | null
           description: string | null
           duration_min: number
           first_started_at: string | null
