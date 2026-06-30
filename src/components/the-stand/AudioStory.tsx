@@ -230,7 +230,7 @@ export function AudioStory() {
         <Reveal delay={220}>
           <div
             ref={playerCardRef}
-            className="mt-12 rounded-2xl border border-[hsl(var(--stand-hairline))] bg-[hsl(var(--stand-ink))]/[0.015] p-5 md:p-6"
+            className="mt-12 rounded-2xl border border-[hsl(var(--stand-hairline))] bg-[hsl(var(--stand-bone-soft))] p-5 md:p-6"
           >
             <audio
               ref={audioRef}
