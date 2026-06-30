@@ -6,7 +6,6 @@ import {
   Clock,
   ExternalLink,
   GraduationCap,
-  Layers,
   PlayCircle,
   Radio,
   Sparkles,
@@ -22,6 +21,7 @@ import { EDTECH } from "@/config/edtech";
 import { useSeo } from "@/hooks/useSeo";
 import { supabase } from "@/integrations/supabase/client";
 import { hasAny, useCurrentRoles } from "@/lib/edtechRoles";
+import TripleBridge from "@/components/ecosystem/TripleBridge";
 import { getCourseBySlug } from "@/data/edtechCourses";
 import {
   cancelRsvp,
@@ -170,7 +170,12 @@ const EdtechLive = () => {
 
       <section className="bg-background pb-2">
         <div className="mx-auto max-w-5xl px-6 lg:px-10">
-          <SpectrumBridge />
+          <TripleBridge
+            active="edtech"
+            bare
+            heading="Part of one connected ecosystem"
+            subheading="Live classes here are paired with TrendFlux Space (operations) and VerdaFlux Spectrum (analytics). Jump across at any time."
+          />
         </div>
       </section>
 
@@ -449,28 +454,4 @@ const TeacherQuickActions = () => (
       </div>
     </div>
   </section>
-);
-
-/* ------------------------------------------------------------------ */
-/* Spectrum cross-link — surfaces the ecosystem connection between    */
-/* edtech live classes and VerdaFlux Spectrum (operations layer).     */
-/* ------------------------------------------------------------------ */
-const SpectrumBridge = () => (
-  <a
-    href="https://spectrum.trendflux.space/"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="group flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/50 bg-card/30 px-4 py-3 text-[12px] text-foreground/70 transition-colors hover:border-primary/40 hover:text-foreground"
-  >
-    <span className="inline-flex items-center gap-2">
-      <Layers className="h-4 w-4 text-primary" aria-hidden />
-      <span>
-        <span className="font-semibold text-foreground">VerdaFlux Spectrum</span>
-        <span className="text-foreground/55"> · operations & analytics for live cohorts</span>
-      </span>
-    </span>
-    <span className="inline-flex items-center gap-1 text-primary opacity-80 transition-opacity group-hover:opacity-100">
-      Open <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-    </span>
-  </a>
 );
