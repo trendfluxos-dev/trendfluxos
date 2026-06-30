@@ -309,7 +309,7 @@ const EdtechLiveRecap = () => {
                         <span>{fmtDuration(r.duration_sec)}</span>
                         {r.public_token ? (
                           <Link
-                            to={`/edtech/recording/${r.public_token}`}
+                            to={`/class-recording/${r.public_token}`}
                             className="text-primary hover:underline"
                           >
                             Watch replay
