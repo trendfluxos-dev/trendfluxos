@@ -524,6 +524,63 @@ export type Database = {
         }
         Relationships: []
       }
+      growth_leads: {
+        Row: {
+          company: string | null
+          created_at: string
+          current_ad_spend: string | null
+          email: string
+          id: string
+          ip: string | null
+          message: string | null
+          monthly_revenue: string | null
+          n8n_forwarded: boolean
+          n8n_response: Json | null
+          name: string
+          services: string[]
+          source: string
+          updated_at: string
+          user_agent: string | null
+          website: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          current_ad_spend?: string | null
+          email: string
+          id?: string
+          ip?: string | null
+          message?: string | null
+          monthly_revenue?: string | null
+          n8n_forwarded?: boolean
+          n8n_response?: Json | null
+          name: string
+          services?: string[]
+          source?: string
+          updated_at?: string
+          user_agent?: string | null
+          website?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          current_ad_spend?: string | null
+          email?: string
+          id?: string
+          ip?: string | null
+          message?: string | null
+          monthly_revenue?: string | null
+          n8n_forwarded?: boolean
+          n8n_response?: Json | null
+          name?: string
+          services?: string[]
+          source?: string
+          updated_at?: string
+          user_agent?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       live_class_rsvps: {
         Row: {
           class_id: string
