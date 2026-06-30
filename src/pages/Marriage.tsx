@@ -648,9 +648,6 @@ const Marriage = () => {
           </div>
         </Card>
 
-        {/* Selective sharing notice */}
-        <p className="text-center mt-10 mb-4 text-sm text-white/60 italic px-4">
-        </p>
         {/* Verify Further — Founder Portfolio & Legal Documents */}
         <Card title={t("Verify Further", "আরও যাচাই করুন")}>
           <p className="text-sm text-white/60 mb-4">
