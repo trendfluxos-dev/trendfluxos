@@ -104,10 +104,7 @@ export function recordWhatsAppClick(
     inquirer_id,
     ts: Date.now(),
     ...ctx,
-    inquirer_id_override: undefined as never, // shut TS up
   };
-  // Strip helper key in case it slipped through.
-  delete (full as Record<string, unknown>).inquirer_id_override;
 
   try { writeLS(LAST_CLICK_KEY, JSON.stringify(full)); } catch { /* ignore */ }
   track("whatsapp_click_recorded", { ...full } as AnalyticsParams);
