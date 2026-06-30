@@ -93,6 +93,7 @@ export const routes = {
   "/share-kit": make(() => import("@/pages/ShareKit")),
   "/stories/ai-expert-emon": make(() => import("@/pages/StoryAiExpertEmon")),
   "/settings": make(() => import("@/pages/Settings")),
+  "/privacy": make(() => import("@/pages/Privacy")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
