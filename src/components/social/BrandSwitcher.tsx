@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { BRAND_CONTACTS, BrandKey, getBrandForRoute } from "@/config/socialConfig";
 import { useBrandPreview } from "@/context/BrandPreviewContext";
 
-const BRANDS: BrandKey[] = ["trendflux", "zahid", "luxeveil"];
+const BRANDS: BrandKey[] = ["trendflux", "luxeveil"];
 
 export const BrandSwitcher = () => {
   const { pathname } = useLocation();
