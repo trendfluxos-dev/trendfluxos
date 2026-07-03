@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, AlertTriangle, X } from "lucide-react";
-import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
