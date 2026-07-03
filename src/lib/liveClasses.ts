@@ -166,7 +166,26 @@ export const getLiveClass = async (id: string) => {
     .maybeSingle();
   if (error) throw error;
   if (!data) return null;
-  return { ...(data as unknown as Omit<LiveClass, "meeting_url">), meeting_url: null } as LiveClass;
+  // Owners/admins additionally have SELECT on the base table (RLS-gated),
+  // which exposes share_token. Non-privileged callers silently get null and
+  // never see the token. This keeps "Copy student link" working for teachers
+  // without forcing a destructive reset.
+  let shareToken: string | null = null;
+  try {
+    const { data: baseRow } = await supabase
+      .from("live_classes")
+      .select("share_token")
+      .eq("id", id)
+      .maybeSingle();
+    shareToken = (baseRow as { share_token: string | null } | null)?.share_token ?? null;
+  } catch {
+    shareToken = null;
+  }
+  return {
+    ...(data as unknown as Omit<LiveClass, "meeting_url">),
+    meeting_url: null,
+    share_token: shareToken,
+  } as LiveClass;
 };
 
 export const setLiveClassStatus = async (id: string, status: LiveClassStatus) => {
