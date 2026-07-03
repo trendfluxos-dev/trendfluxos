@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2, AlertTriangle, X } from "lucide-react";
-import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -101,7 +100,8 @@ export default function SiteStatusBanner() {
     setChecks(buildClient(null));
 
     let cancelled = false;
-    let toastShown = false;
+    let consecutiveFailures = 0;
+    const FAILURE_THRESHOLD = 3; // ~3 min at 60s interval before we bother the visitor
     const run = async () => {
       if (_isLocal || _isPreview) return; // skip server probe for local/preview hosts
       try {
@@ -112,18 +112,19 @@ export default function SiteStatusBanner() {
           { signal: ctrl.signal },
         ).finally(() => clearTimeout(t));
         if (!r.ok) {
-          const msg = `Status probe failed (HTTP ${r.status}).`;
-          if (!cancelled) {
-            setProbeError(msg);
-            if (!toastShown) {
-              toast.error("Site status check failed", { description: msg });
-              toastShown = true;
-            }
+          // Transient non-2xx from the probe endpoint says nothing about the
+          // site the visitor is actually looking at. Track it silently and
+          // only surface the banner after repeated consecutive failures — and
+          // never as a red toast.
+          consecutiveFailures += 1;
+          if (!cancelled && consecutiveFailures >= FAILURE_THRESHOLD) {
+            setProbeError(`Status probe failed (HTTP ${r.status}).`);
           }
           return;
         }
         const result = (await r.json()) as ServerStatus;
         if (!cancelled && result) {
+          consecutiveFailures = 0;
           setProbeError(null);
           setChecks(buildClient(result));
           setServer(result);
@@ -150,14 +151,16 @@ export default function SiteStatusBanner() {
         }
       } catch (err) {
         if (cancelled) return;
-        const aborted = (err as { name?: string })?.name === "AbortError";
-        const msg = aborted
-          ? "Status probe timed out. Check your connection."
-          : "Couldn't reach the status service. We'll retry shortly.";
-        setProbeError(msg);
-        if (!toastShown) {
-          toast.error("Site status check failed", { description: msg });
-          toastShown = true;
+        // Network hiccup / timeout / CORS blip — keep last known state and
+        // only warn after repeated failures.
+        consecutiveFailures += 1;
+        if (consecutiveFailures >= FAILURE_THRESHOLD) {
+          const aborted = (err as { name?: string })?.name === "AbortError";
+          setProbeError(
+            aborted
+              ? "Status probe timed out. Check your connection."
+              : "Couldn't reach the status service. We'll retry shortly.",
+          );
         }
       }
     };
