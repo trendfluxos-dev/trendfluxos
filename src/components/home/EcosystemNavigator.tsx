@@ -73,56 +73,60 @@ export default function EcosystemNavigator() {
           </div>
         </div>
 
-        {/* Card grid */}
-        <ul
-          role="list"
-          className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:mt-14 lg:grid-cols-3 lg:gap-6"
-        >
-          {ITEMS.map(({ label, to, eyebrow, desc, Icon }) => (
-            <li key={to} className="group">
-              <Link
-                to={to}
-                className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-7"
-                aria-label={`${label} — ${desc}`}
+        {/* Mobile: swipeable horizontal snap-stack. sm+: grid. */}
+        <div className="relative mt-10 lg:mt-14">
+          {/* Edge fade hint (mobile only) */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-background to-transparent sm:hidden" />
+
+          <ul
+            role="list"
+            className="
+              -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-4
+              [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
+              sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0
+              lg:grid-cols-3 lg:gap-6
+            "
+          >
+            {ITEMS.map(({ label, to, eyebrow, desc, Icon }) => (
+              <li
+                key={to}
+                className="group shrink-0 basis-[82%] snap-start sm:basis-auto sm:shrink"
               >
-                {/* Premium gradient wash on hover */}
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                />
-                {/* Corner mark */}
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute right-5 top-5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary"
+                <Link
+                  to={to}
+                  className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-7"
+                  aria-label={`${label} — ${desc}`}
                 >
-                  {eyebrow}
-                </span>
+                  <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  <span aria-hidden="true" className="pointer-events-none absolute right-5 top-5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary">
+                    {eyebrow}
+                  </span>
 
-                <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-border/70 bg-background transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-primary/[0.06]">
-                  <Icon
-                    className="h-5 w-5 text-foreground/70 transition-colors duration-300 group-hover:text-primary"
-                    aria-hidden="true"
-                  />
-                </div>
+                  <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-border/70 bg-background transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-primary/[0.06]">
+                    <Icon className="h-5 w-5 text-foreground/70 transition-colors duration-300 group-hover:text-primary" aria-hidden="true" />
+                  </div>
 
-                <h3 className="relative mt-6 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
-                  {label}
-                </h3>
-                <p className="relative mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
-                  {desc}
-                </p>
+                  <h3 className="relative mt-6 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
+                    {label}
+                  </h3>
+                  <p className="relative mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
+                    {desc}
+                  </p>
 
-                <span className="relative mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary">
-                  Enter
-                  <ArrowUpRight
-                    className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    aria-hidden="true"
-                  />
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+                  <span className="relative mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary">
+                    Enter
+                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Swipe hint (mobile only) */}
+          <p className="mt-3 px-1 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground sm:hidden">
+            Swipe → to explore all {ITEMS.length} surfaces
+          </p>
+        </div>
       </div>
     </section>
   );
