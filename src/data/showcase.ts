@@ -105,6 +105,15 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     external: true,
     size: "md",
     accent: "cyan",
+    narrative: [
+      "TrendFlux Space is the sister surface to TrendFlux Digital — a dedicated product hub where experimental micro-tools, launch pads and sub-brands live without cluttering the main portfolio site.",
+      "The domain acts as a namespace: every new SaaS-flavoured module (Spectrum, AgentAI SMM, Scheduler) mounts as a subdomain and inherits shared brand tokens, layout primitives and analytics wiring.",
+    ],
+    outcomes: [
+      "Independent surface for shipping product experiments without diluting the primary brand",
+      "Shared design system and Supabase auth across every trendflux.space subdomain",
+      "Home base for launch pages of AgentAI SMM, Spectrum and future TrendFlux products",
+    ],
   },
   {
     id: "verdaflux-spectrum",
@@ -121,6 +130,14 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     external: true,
     size: "md",
     accent: "emerald",
+    narrative: [
+      "VerdaFlux Spectrum is a focused surface for data-driven storytelling — dashboards, spectrum reports and briefings distilled into shareable narrative units.",
+      "Built as a sub-product on TrendFlux Space, it inherits the shared design system while keeping its own editorial voice and reporting cadence.",
+    ],
+    outcomes: [
+      "Live spectrum/reporting surface operating under the TrendFlux Space namespace",
+      "Editorial pipeline for turning raw data into shareable civic and market briefings",
+    ],
   },
   {
     id: "kormoshikkha",
@@ -148,6 +165,17 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
       result:
         "Live platform running 7+ AI masterclass modules with recurring cohorts and an automated enrolment-to-classroom flow.",
     },
+    narrative: [
+      "কর্মশিক্ষা TED Plus is TrendFlux's Bangla-first online classroom. Before it existed, cohorts were run over Messenger threads, Zoom links and manual bKash confirmations — enrolments leaked, recordings vanished and instructors had no single source of truth.",
+      "The platform now handles the full learner journey end-to-end: browse cohorts, pay via a gated enrolment flow, land in a personal classroom with lessons, live class links, teacher notes and recordings — all under one login.",
+      "Instructor-side, an admin console handles cohort scheduling, enrolment approvals, recording uploads and certificate issuance without leaving the app.",
+    ],
+    outcomes: [
+      "7+ live AI masterclass modules running on recurring cohorts",
+      "Payment-gated enrolment with automated learner provisioning",
+      "Recordings library, live class links and certificate issuance in one place",
+      "Bilingual (Bangla + English) UI tuned for Bangladesh learners",
+    ],
   },
   {
     id: "trendflux-ecosystem",
@@ -175,6 +203,17 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
       result:
         "12+ shipped modules and 45%+ engagement growth across operated brands, run by a single operator-led ecosystem.",
     },
+    narrative: [
+      "The TrendFlux Ecosystem is the founder-built growth operating system that ties every operated brand together — a single stack for automation, CRM, content engines, paid media, analytics and brand architecture.",
+      "Rather than stitching a dozen SaaS tools, each module is a first-party component: leads flow from ad to CRM to nurture to closed loop; content ideas flow from research to publish to recap; classes flow from enrolment to classroom to certificate.",
+      "The result is compounding leverage — every new brand plugged into the OS inherits automation, analytics and brand governance from day one.",
+    ],
+    outcomes: [
+      "12+ shipped modules across marketing, learning, enterprise and civic surfaces",
+      "45%+ engagement growth across operated brands",
+      "Single-operator delivery model — no agency layer, no black boxes",
+      "Shared design system, auth and analytics across the entire brand family",
+    ],
   },
   {
     id: "pabna-nagarik",
@@ -203,6 +242,17 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
       result:
         "4.85L+ organic views and 82% organic reach — built without paid amplification.",
     },
+    narrative: [
+      "Pabna Nagorik Committee arrived with strong civic intent and a fragmented voice — inconsistent visuals, ad-hoc posts and no distribution rhythm on social.",
+      "The engagement rebuilt the brand from the ground up: a narrative POV, a repeatable visual system, a weekly publishing cadence, and a live web presence at pncpabna.live that mirrors the social voice.",
+      "Content was structured as a compounding engine — 166 designs and 22 reels shipped over the cycle, all without paid amplification.",
+    ],
+    outcomes: [
+      "4.85L+ organic views across Facebook and Reels",
+      "82% organic reach — zero paid boost",
+      "166 designs and 22 reels shipped under one consistent brand voice",
+      "Live web presence at pncpabna.live mirroring the social identity",
+    ],
   },
   {
     id: "nagarikbarta24",
@@ -219,6 +269,15 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     external: true,
     size: "md",
     accent: "emerald",
+    narrative: [
+      "Nagorik Barta 24 is an independent civic news portal serving a Bangladesh audience with a mobile-first reading experience and a category-driven newsroom layout.",
+      "The engagement covered the full editorial stack — CMS setup, newsroom taxonomy, brand system, homepage architecture and reader-facing performance tuning.",
+    ],
+    outcomes: [
+      "Live news portal at nagarikbarta24.news",
+      "Editorial CMS with category-driven newsroom layout",
+      "Mobile-first reading experience tuned for Bangladesh network conditions",
+    ],
   },
   {
     id: "eish-live",
@@ -235,6 +294,15 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     external: true,
     size: "md",
     accent: "emerald",
+    narrative: [
+      "EISH — Enter Institute of Skill & Hospitality — is a training institute site built to convert prospective students into applicants.",
+      "The build covers the programme catalogue, admissions flow, faculty and campus story, and a coherent brand system that carries from web to print collateral.",
+    ],
+    outcomes: [
+      "Live institute site at eish.live with full programme catalogue",
+      "Structured admissions flow from browse → interest → apply",
+      "Cohesive brand identity from web to print",
+    ],
   },
   {
     id: "agentai-smm",
@@ -251,6 +319,17 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     external: true,
     size: "md",
     accent: "cyan",
+    narrative: [
+      "AgentAI SMM is TrendFlux's AI social-media agent — an automated ideation, scheduling and analytics layer built for growth operators who publish across multiple brands.",
+      "The agent consumes a brand brief, produces on-voice content variants, schedules them across channels and closes the loop with performance analytics that feed back into the next ideation cycle.",
+      "It runs on the TrendFlux Space subdomain and shares auth, design tokens and analytics with the rest of the ecosystem.",
+    ],
+    outcomes: [
+      "AI-driven content ideation trained on per-brand voice briefs",
+      "Multi-channel scheduling and publishing pipeline",
+      "Analytics loop that feeds performance data back into ideation",
+      "Runs on the shared TrendFlux Space namespace",
+    ],
   },
   {
     id: "the-stand",
