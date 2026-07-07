@@ -14,7 +14,8 @@ type Message =
   | { id: string; role: Role; content: string; kind?: "text" }
   | { id: string; role: "assistant"; content: string; kind: "lead-form" }
   | { id: string; role: "assistant"; content: string; kind: "lead-success" }
-  | { id: string; role: "assistant"; content: string; kind: "booking-cta" };
+  | { id: string; role: "assistant"; content: string; kind: "booking-cta" }
+  | { id: string; role: "assistant"; content: string; kind: "booking-success" };
 type Thread = { id: string; title: string; messages: Message[]; createdAt: number };
 
 const BOOKING_URL = "/project-lead";
@@ -551,7 +552,32 @@ export default function ChatAssistWidget() {
                     return <LeadSuccessCard key={m.id} content={m.content} />;
                   }
                   if (m.kind === "booking-cta") {
-                    return <BookingCtaCard key={m.id} content={m.content} />;
+                    return (
+                      <BookingSchedulerCard
+                        key={m.id}
+                        cardId={m.id}
+                        content={m.content}
+                        onBooked={(id, msg) => {
+                          setThreads((prev) =>
+                            prev.map((t) =>
+                              t.id === active?.id
+                                ? {
+                                    ...t,
+                                    messages: t.messages.map((x) =>
+                                      x.id === id
+                                        ? ({ ...x, kind: "booking-success", content: msg } as Message)
+                                        : x,
+                                    ),
+                                  }
+                                : t,
+                            ),
+                          );
+                        }}
+                      />
+                    );
+                  }
+                  if (m.kind === "booking-success") {
+                    return <LeadSuccessCard key={m.id} content={m.content} />;
                   }
                   return (
                     <MessageBubble
@@ -823,28 +849,192 @@ function LeadSuccessCard({ content }: { content: string }) {
   );
 }
 
-function BookingCtaCard({ content }: { content: string }) {
+// Generate the next 5 weekday dates (skip Sat/Sun) starting tomorrow.
+function nextWeekdays(count: number): Date[] {
+  const out: Date[] = [];
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + 1);
+  while (out.length < count) {
+    const day = d.getDay();
+    if (day !== 0 && day !== 6) out.push(new Date(d));
+    d.setDate(d.getDate() + 1);
+  }
+  return out;
+}
+
+const TIME_SLOTS = ["10:00", "12:00", "14:00", "16:00", "18:00"];
+
+function BookingSchedulerCard({
+  cardId,
+  content,
+  onBooked,
+}: {
+  cardId: string;
+  content: string;
+  onBooked: (id: string, successMessage: string) => void;
+}) {
+  const dates = useMemo(() => nextWeekdays(5), []);
+  const [dateIdx, setDateIdx] = useState(0);
+  const [slot, setSlot] = useState<string | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErr(null);
+    if (!slot) return setErr("Pick a time slot.");
+    if (name.trim().length < 1) return setErr("Enter your name.");
+    const emailOk = z.string().email().safeParse(email.trim()).success;
+    if (!emailOk) return setErr("Enter a valid email.");
+
+    const chosen = new Date(dates[dateIdx]);
+    const [hh, mm] = slot.split(":").map(Number);
+    chosen.setHours(hh, mm, 0, 0);
+    const iso = chosen.toISOString();
+    const pretty = chosen.toLocaleString(undefined, {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+
+    setSubmitting(true);
+    const { error: dbError } = await supabase.from("growth_leads").insert({
+      name: name.trim(),
+      email: email.trim(),
+      source: "chatbot-scheduler",
+      message: `[Chatbot Strategy Call] Requested slot: ${pretty} (${iso})`,
+    });
+    setSubmitting(false);
+    if (dbError) {
+      setErr(dbError.message);
+      return;
+    }
+    onBooked(
+      cardId,
+      `You're booked, ${name.trim()}! We'll email **${email.trim()}** to confirm your strategy call for **${pretty}**. Need to reschedule? [Manage it here](${BOOKING_URL}).`,
+    );
+  };
+
   return (
     <div className="flex gap-2 justify-start">
       <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
         <CalendarClock className="h-3.5 w-3.5" aria-hidden />
       </span>
-      <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 p-3.5 space-y-2.5">
+      <form
+        onSubmit={submit}
+        className="max-w-[92%] w-full rounded-2xl rounded-bl-sm border border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 p-3.5 space-y-3"
+        aria-label="Schedule a strategy call"
+      >
         <p className="text-sm text-foreground leading-relaxed">{renderInline(content)}</p>
         <ul className="text-[11px] text-muted-foreground space-y-0.5">
           <li>• 20 minutes, no obligation</li>
-          <li>• Get a tailored growth plan for your business</li>
-          <li>• Meet the TrendFlux operator team</li>
+          <li>• Tailored growth plan for your business</li>
         </ul>
-        <a
-          href={BOOKING_URL}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
-        >
-          <CalendarClock className="h-3.5 w-3.5" aria-hidden />
-          Book my strategy call
-          <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-        </a>
-      </div>
+
+        <div className="space-y-1.5">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Pick a date</p>
+          <div className="flex flex-wrap gap-1.5">
+            {dates.map((d, i) => {
+              const isSel = i === dateIdx;
+              return (
+                <button
+                  key={d.toISOString()}
+                  type="button"
+                  onClick={() => setDateIdx(i)}
+                  className={cn(
+                    "rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                    isSel
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-background/70 text-foreground/80 hover:border-primary/50",
+                  )}
+                >
+                  <div className="text-[9px] uppercase opacity-70">
+                    {d.toLocaleDateString(undefined, { weekday: "short" })}
+                  </div>
+                  <div>{d.toLocaleDateString(undefined, { month: "short", day: "numeric" })}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Pick a time</p>
+          <div className="flex flex-wrap gap-1.5">
+            {TIME_SLOTS.map((t) => {
+              const isSel = t === slot;
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setSlot(t)}
+                  className={cn(
+                    "rounded-md border px-2.5 py-1 text-xs font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                    isSel
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-background/70 text-foreground/80 hover:border-primary/50",
+                  )}
+                >
+                  {t}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <input
+            type="text"
+            required
+            maxLength={120}
+            placeholder="Your name"
+            autoComplete="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={submitting}
+            className="rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          />
+          <input
+            type="email"
+            required
+            maxLength={200}
+            placeholder="Email"
+            autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={submitting}
+            className="rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          />
+        </div>
+
+        {err && <p className="text-[11px] text-destructive" role="alert">{err}</p>}
+
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="submit"
+            disabled={submitting}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:brightness-110 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            {submitting ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+            ) : (
+              <CalendarClock className="h-3.5 w-3.5" aria-hidden />
+            )}
+            {submitting ? "Booking…" : "Confirm strategy call"}
+          </button>
+          <a
+            href={BOOKING_URL}
+            className="inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
+          >
+            Prefer a full form? <ArrowRight className="h-3 w-3" aria-hidden />
+          </a>
+        </div>
+      </form>
     </div>
   );
 }
