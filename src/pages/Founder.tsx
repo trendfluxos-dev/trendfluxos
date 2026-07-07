@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   ArrowUpRight, Download, Printer, Share2, ChevronRight, ExternalLink,
   Mail, Facebook, Linkedin, MessageCircle, Quote, FileCheck2, ShieldCheck,
+  X, Maximize2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -149,6 +150,24 @@ const Founder = () => {
 
   const { items: press } = usePressItems();
   const pressForBooklet = useMemo(() => press.slice(0, 12), [press]);
+
+  const [lightbox, setLightbox] = useState<
+    { src: string; alt: string; title: string; verifyUrl?: string } | null
+  >(null);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [lightbox]);
 
   const handlePrint = () => {
     // Native print → the user picks "Save as PDF" as the destination.
@@ -529,12 +548,18 @@ const Founder = () => {
                     <FileCheck2 className="h-5 w-5 shrink-0 text-primary" aria-hidden />
                   </div>
                   {d.previewImage && (
-                    <a
-                      href={d.verifyUrl ?? d.previewImage}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-4 block overflow-hidden rounded-lg border border-border bg-white"
-                      aria-label={`Open source document for ${d.title}`}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setLightbox({
+                          src: d.previewImage!,
+                          alt: d.previewAlt ?? `${d.title} — document preview`,
+                          title: d.title,
+                          verifyUrl: d.verifyUrl,
+                        })
+                      }
+                      className="group relative mt-4 block w-full overflow-hidden rounded-lg border border-border bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary"
+                      aria-label={`Open fullscreen preview of ${d.title}`}
                     >
                       <img
                         src={d.previewImage}
@@ -542,7 +567,10 @@ const Founder = () => {
                         loading="lazy"
                         className="mx-auto block max-h-[520px] w-full object-contain"
                       />
-                    </a>
+                      <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-white opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                        <Maximize2 className="h-3 w-3" /> View fullscreen
+                      </span>
+                    </button>
                   )}
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     {d.verifyUrl ? (
