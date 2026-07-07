@@ -116,6 +116,38 @@ export const FOUNDER_TESTIMONIALS = TESTIMONIALS;
 export const FOUNDER_COURSES = EDTECH_COURSES.slice(0, 6);
 export const FOUNDER_QUIET = QUIET_FRAGMENTS.slice(0, 6);
 
+/** Documents & proofs — verifiable public records tied to the founder. */
+export type FounderDocument = {
+  id: string;
+  title: string;
+  issuer: string;
+  category:
+    | "Education"
+    | "Identity"
+    | "Business"
+    | "Press"
+    | "Legal"
+    | "Certification";
+  date: string; // ISO-8601 (YYYY-MM-DD)
+  verifyUrl: string;
+  note?: string;
+};
+
+export const FOUNDER_DOCUMENTS: FounderDocument[] = [
+  {
+    id: "ju-iit-bsc-result",
+    title:
+      "BSc (Honours) Final Result — IIT, 4th Year 2nd Semester, 2021",
+    issuer:
+      "Office of the Controller of Examinations, Jahangirnagar University",
+    category: "Education",
+    date: "2026-04-13",
+    verifyUrl: "https://juniv.edu/discussion/18018/file/17564",
+    note:
+      "Official university notice publishing the final graduation result on the JU examination-controller portal.",
+  },
+];
+
 /** Chapter registry — drives the Table of Contents and the sticky nav. */
 export type ChapterMeta = {
   id: string;
@@ -139,9 +171,10 @@ export const FOUNDER_CHAPTERS: ChapterMeta[] = [
   { id: "courses", eyebrow: "Chapter 11", title: "Courses & Masterclass", source: { label: "/course/trendflux", href: "/course/trendflux" } },
   { id: "media", eyebrow: "Chapter 12", title: "Media Coverage", source: { label: "/media-reports", href: "/media-reports" } },
   { id: "public-interest", eyebrow: "Chapter 13", title: "Public Interest", source: { label: "/justice-appeal", href: "/justice-appeal" } },
-  { id: "stats", eyebrow: "Chapter 14", title: "Statistics" },
-  { id: "stack", eyebrow: "Chapter 15", title: "Technology Stack" },
-  { id: "testimonials", eyebrow: "Chapter 16", title: "Testimonials" },
-  { id: "contact", eyebrow: "Chapter 17", title: "Contact" },
-  { id: "back", eyebrow: "Chapter 18", title: "Colophon" },
+  { id: "documents", eyebrow: "Chapter 14", title: "Documents & Proofs" },
+  { id: "stats", eyebrow: "Chapter 15", title: "Statistics" },
+  { id: "stack", eyebrow: "Chapter 16", title: "Technology Stack" },
+  { id: "testimonials", eyebrow: "Chapter 17", title: "Testimonials" },
+  { id: "contact", eyebrow: "Chapter 18", title: "Contact" },
+  { id: "back", eyebrow: "Chapter 19", title: "Colophon" },
 ];
