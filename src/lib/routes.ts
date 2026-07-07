@@ -43,6 +43,7 @@ export const routes = {
   "/admin/security-audit": make(() => import("@/pages/SecurityAuditAdmin")),
   "/admin/publish-gate": make(() => import("@/pages/PublishGateAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
+  "/founder": make(() => import("@/pages/Founder")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/the-stand/share": make(() => import("@/pages/TheStandShare")),
   "/quiet-positions": make(() => import("@/pages/QuietPositions")),
