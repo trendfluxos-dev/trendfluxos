@@ -10,6 +10,7 @@ import ShowcaseFilters, {
   type FacetState,
 } from "@/components/showcase/ShowcaseFilters";
 import { Button } from "@/components/ui/button";
+import { QuoteDialog } from "@/components/QuoteDialog";
 import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
 import {
@@ -19,8 +20,9 @@ import {
   SHOWCASE_TECH,
   SHOWCASE_STAGES,
 } from "@/data/showcase";
+import type { ShowcaseItem } from "@/data/showcase";
 import { RESEARCH_ITEMS, IMPLEMENTATION_ITEMS } from "@/data/research";
-import { ArrowRight, Sparkles, Share2 } from "lucide-react";
+import { ArrowRight, Sparkles, Share2, CalendarClock } from "lucide-react";
 
 const SHARE_URL =
   typeof window !== "undefined"
@@ -38,6 +40,17 @@ const Showcase = () => {
     stage: new Set<string>(),
   });
   const [shareOpen, setShareOpen] = useState(false);
+  const [quoteOpen, setQuoteOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ShowcaseItem | null>(null);
+
+  const openStrategyCall = useCallback((item?: ShowcaseItem | null) => {
+    setSelectedProject(item ?? null);
+    setQuoteOpen(true);
+  }, []);
+  const closeQuote = useCallback((next: boolean) => {
+    setQuoteOpen(next);
+    if (!next) setSelectedProject(null);
+  }, []);
   const [searchParams, setSearchParams] = useSearchParams();
   type Tab = "projects" | "research" | "implementations";
   const initialTab = (searchParams.get("tab") as Tab) || "projects";
@@ -161,7 +174,11 @@ const Showcase = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button variant="hero" size="lg" onClick={() => setShareOpen(true)}>
+            <Button variant="hero" size="lg" onClick={() => openStrategyCall(null)}>
+              <CalendarClock />
+              Book Strategy Call
+            </Button>
+            <Button variant="outline" size="lg" onClick={() => setShareOpen(true)}>
               <Sparkles />
               AI Share Showcase
             </Button>
@@ -174,6 +191,20 @@ const Showcase = () => {
       </section>
 
       <ShareDialog open={shareOpen} onOpenChange={setShareOpen} payload={pageSharePayload} />
+      <QuoteDialog
+        open={quoteOpen}
+        onOpenChange={closeQuote}
+        context={{
+          source: "showcase",
+          project: selectedProject
+            ? {
+                id: selectedProject.id,
+                title: selectedProject.title,
+                href: selectedProject.href,
+              }
+            : undefined,
+        }}
+      />
 
       {/* TAB SWITCHER */}
       <section className="px-6 lg:px-10">
@@ -220,7 +251,7 @@ const Showcase = () => {
 
           <section className="px-6 lg:px-10 pt-6 pb-20">
             <div className="max-w-7xl mx-auto">
-              <ShowcaseMasonry items={filtered} />
+              <ShowcaseMasonry items={filtered} onBookCall={openStrategyCall} />
               {filtered.length === 0 && (
                 <div className="text-center py-20">
                   <p className="text-foreground/60 text-sm">
