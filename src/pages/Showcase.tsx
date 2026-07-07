@@ -285,9 +285,23 @@ const Showcase = () => {
                 resultCount={filtered.length}
                 totalCount={SHOWCASE_ITEMS.length}
               />
-              {/* View toggle: uniform grid vs storytelling masonry */}
-              <div className="mt-4 flex items-center justify-end gap-1 text-[11px] text-foreground/55">
-                <span className="mr-2 uppercase tracking-[0.2em]">View</span>
+              {/* Sort + View controls */}
+              <div className="mt-4 flex flex-wrap items-center justify-end gap-3 text-[11px] text-foreground/55">
+                <label className="inline-flex items-center gap-2">
+                  <span className="uppercase tracking-[0.2em]">Sort</span>
+                  <select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value as typeof sort)}
+                    className="rounded-full border border-border/50 bg-background/60 px-2.5 py-1 text-[11px] text-foreground/80 hover:border-primary/40 focus:border-primary/60 focus:outline-none"
+                  >
+                    <option value="featured">Featured</option>
+                    <option value="engagement">Highest engagement growth</option>
+                    <option value="views">Most views</option>
+                    <option value="newest">Newest</option>
+                    <option value="alpha">Alphabetical (A–Z)</option>
+                  </select>
+                </label>
+                <span className="mr-0 uppercase tracking-[0.2em]">View</span>
                 <button
                   type="button"
                   onClick={() => setView("grid")}
@@ -323,11 +337,11 @@ const Showcase = () => {
           <section className="px-6 lg:px-10 pt-6 pb-20">
             <div className="max-w-7xl mx-auto">
               {view === "grid" ? (
-                <ShowcaseGrid items={filtered} onBookCall={openStrategyCall} />
+                <ShowcaseGrid items={sorted} onBookCall={openStrategyCall} />
               ) : (
-                <ShowcaseMasonry items={filtered} onBookCall={openStrategyCall} />
+                <ShowcaseMasonry items={sorted} onBookCall={openStrategyCall} />
               )}
-              {filtered.length === 0 && (
+              {sorted.length === 0 && (
                 <div className="text-center py-20">
                   <p className="text-foreground/60 text-sm">
                     No projects match the selected filters.
