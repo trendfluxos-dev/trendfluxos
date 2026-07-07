@@ -1,0 +1,84 @@
+/**
+ * Print stylesheet for /founder — turns the on-screen eBook into a
+ * clean A4 corporate booklet when the user chooses "Save as PDF" or
+ * hits Print. Scoped via [data-founder-print-root] so it never leaks
+ * to other pages.
+ */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 18mm 14mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide app chrome that shouldn't appear in the booklet. */
+  [data-founder-print-hide],
+  nav[aria-label="Primary"],
+  header[data-app-nav],
+  footer[data-app-footer],
+  [data-nav-section],
+  .no-print {
+    display: none !important;
+  }
+
+  [data-founder-print-root] {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  [data-founder-print-root] * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    background-image: none !important;
+  }
+
+  [data-founder-print-root] .founder-chapter {
+    break-before: page;
+    page-break-before: always;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  [data-founder-print-root] .founder-chapter:first-of-type {
+    break-before: auto;
+    page-break-before: auto;
+  }
+
+  [data-founder-print-root] .founder-chapter :is(h1, h2, h3, h4) {
+    color: #0f172a !important;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  [data-founder-print-root] .founder-chapter :is(p, li) {
+    color: #1f2937 !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  [data-founder-print-root] .founder-card {
+    border: 1px solid #e5e7eb !important;
+    background: #ffffff !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  [data-founder-print-root] a {
+    color: #1d4ed8 !important;
+    text-decoration: none;
+  }
+
+  [data-founder-print-root] img {
+    max-width: 100% !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
