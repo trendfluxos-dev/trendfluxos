@@ -371,7 +371,7 @@ export default function ChatAssistWidget() {
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "fixed bottom-5 right-5 z-[70] inline-flex items-center gap-2 rounded-full px-4 py-3",
+          "fixed bottom-6 right-6 sm:right-8 z-[70] inline-flex items-center gap-2 rounded-full px-4 py-3",
           "bg-primary text-primary-foreground shadow-lg shadow-primary/30",
           "hover:brightness-110 active:scale-95 transition",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
