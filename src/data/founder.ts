@@ -141,48 +141,51 @@ export const FOUNDER_DOCUMENTS: FounderDocument[] = [
   {
     id: "ju-iit-bsc-result",
     title:
-      "BSc (Honours) Final Result — IIT, 4th Year 2nd Semester, 2021",
+      "BSc (Honours) in Information Technology — Final Result Notice, IIT, Jahangirnagar University (2021, 4th Year 2nd Semester)",
     issuer:
       "Office of the Controller of Examinations, Jahangirnagar University",
     category: "Education",
     date: "2026-04-13",
     verifyUrl: "https://juniv.edu/discussion/18018/file/17564",
     note:
-      "Official university notice publishing the final graduation result on the JU examination-controller portal.",
+      "Official Jahangirnagar University notice (Memo No. JU/Poni-A/565, dated 13 April 2026) publishing the final BSc (Honours) IIT 2021 graduation result on the JU examination-controller portal.",
     previewImage: juHonsDoc.url,
     previewAlt:
-      "Educational background summary — BSc in IT, Jahangirnagar University, with Jahangirnagar University crest.",
+      "Educational Background summary card for Zahid Hasan Emon showing Bachelor of Science in IT from Jahangirnagar University (graduation 2022), HSC Science from Govt. Shaheed Bulbul College Pabna, and SSC Science from Pabna Zilla School — with the Jahangirnagar University crest.",
   },
   {
     id: "ju-iit-university-certificates",
-    title: "University Certificates — IIT, Jahangirnagar University",
+    title:
+      "Official University Certificates — BSc (Honours) in Information Technology, IIT, Jahangirnagar University",
     issuer: "Institute of Information Technology, Jahangirnagar University",
     category: "Certification",
     date: "2024-05-22",
     verifyUrl: "https://juniv.edu/discussion/18018/file/17564",
     note:
-      "Official IIT letters (Apr 2022 & May 2024) certifying BSc (Hons) in Information Technology completion — programming, algorithms, databases and networks.",
+      "Two official IIT letters — Assured Certificate (Apr 2022) and To Whom It May Concern (May 2024) — signed by the Professor & Chairman of IIT, certifying completion of BSc (Honours) in Information Technology with coursework in programming, algorithms, databases and computer networks. Each letter carries a QR verification code.",
     previewImage: juUniversityCertificates.url,
     previewAlt:
-      "Two official IIT Jahangirnagar University certificate letters with signatures and QR verification codes.",
+      "University Overview card showing two official IIT Jahangirnagar University letters for Zahid Hasan Emon — an Assured Certificate dated 22 May 2024 and a To Whom It May Concern letter dated 17 April 2022 — both on IIT letterhead, signed by the Professor & Chairman and stamped with QR verification codes.",
   },
   {
     id: "hsc-science",
-    title: "HSC — Science, GPA 5.00",
-    issuer: "Higher Secondary Education Board, Bangladesh",
+    title:
+      "Higher Secondary Certificate (HSC) — Science, GPA 5.00, Govt. Shaheed Bulbul College, Pabna",
+    issuer: "Rajshahi Education Board, Bangladesh",
     category: "Education",
     date: "2016-07-01",
     note:
-      "Original transcript and board mark sheet available on request; board portal verification link will be published here once the archive URL is confirmed.",
+      "HSC Science stream completed at Govt. Shaheed Bulbul College, Pabna with GPA 5.00. Original board transcript and mark sheet available on request; the education-board verification link will be published here once the archive URL is confirmed.",
   },
   {
     id: "ssc-science",
-    title: "SSC — Science, GPA 5.00",
-    issuer: "Secondary Education Board, Bangladesh",
+    title:
+      "Secondary School Certificate (SSC) — Science, GPA 5.00, Pabna Zilla School",
+    issuer: "Rajshahi Education Board, Bangladesh",
     category: "Education",
     date: "2014-05-01",
     note:
-      "Original transcript and board mark sheet available on request; board portal verification link will be published here once the archive URL is confirmed.",
+      "SSC Science stream completed at Pabna Zilla School with GPA 5.00. Original board transcript and mark sheet available on request; the education-board verification link will be published here once the archive URL is confirmed.",
   },
 ];
 
