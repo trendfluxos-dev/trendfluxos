@@ -1,5 +1,5 @@
 import { ArrowUpRight, Share2, AlertCircle, Cog, Sparkles, FileText } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { ShowcaseItem } from "@/data/showcase";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
@@ -13,6 +13,7 @@ const accentRing: Record<NonNullable<ShowcaseItem["accent"]>, string> = {
 };
 
 const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload) => void }) => {
+  const navigate = useNavigate();
   const inner = (
     <article
       className={[
@@ -127,15 +128,19 @@ const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload
         )}
 
         <div className="mt-5 pt-4 border-t border-border/40">
-          <Link
-            to={`/showcase/${item.id}`}
-            onClick={(e) => e.stopPropagation()}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              navigate(`/showcase/${item.id}`);
+            }}
             className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary/90 hover:text-primary transition-colors"
           >
             <FileText className="h-3 w-3" />
             View case study
             <ArrowUpRight className="h-3 w-3" />
-          </Link>
+          </button>
         </div>
       </div>
     </article>
