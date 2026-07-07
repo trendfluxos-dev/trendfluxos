@@ -222,6 +222,19 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
               <DialogDescription className="text-foreground/60">
                 Tell us where you're headed. We reply within one business day.
               </DialogDescription>
+              {context?.project && (
+                <div className="mt-3 flex items-start gap-2 rounded-lg border border-gold/30 bg-gold/[0.06] px-3 py-2">
+                  <Rocket className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" aria-hidden />
+                  <div className="min-w-0 text-left">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gold/90">
+                      Related project
+                    </p>
+                    <p className="mt-0.5 truncate text-sm font-medium text-foreground">
+                      {context.project.title}
+                    </p>
+                  </div>
+                </div>
+              )}
             </DialogHeader>
 
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
