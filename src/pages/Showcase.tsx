@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
+import ShowcaseGrid from "@/components/showcase/ShowcaseGrid";
 import ResearchList from "@/components/showcase/ResearchList";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
 import ShowcaseFilters, {
@@ -22,7 +23,7 @@ import {
 } from "@/data/showcase";
 import type { ShowcaseItem } from "@/data/showcase";
 import { RESEARCH_ITEMS, IMPLEMENTATION_ITEMS } from "@/data/research";
-import { ArrowRight, Sparkles, Share2, CalendarClock } from "lucide-react";
+import { ArrowRight, Sparkles, Share2, CalendarClock, LayoutGrid, Rows3 } from "lucide-react";
 
 const SHARE_URL =
   typeof window !== "undefined"
@@ -57,6 +58,8 @@ const Showcase = () => {
   const [tab, setTab] = useState<Tab>(
     initialTab === "research" || initialTab === "implementations" ? initialTab : "projects",
   );
+  type View = "grid" | "masonry";
+  const [view, setView] = useState<View>("grid");
 
   useEffect(() => {
     const current = searchParams.get("tab");
@@ -246,12 +249,48 @@ const Showcase = () => {
                 resultCount={filtered.length}
                 totalCount={SHOWCASE_ITEMS.length}
               />
+              {/* View toggle: uniform grid vs storytelling masonry */}
+              <div className="mt-4 flex items-center justify-end gap-1 text-[11px] text-foreground/55">
+                <span className="mr-2 uppercase tracking-[0.2em]">View</span>
+                <button
+                  type="button"
+                  onClick={() => setView("grid")}
+                  aria-pressed={view === "grid"}
+                  className={[
+                    "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors",
+                    view === "grid"
+                      ? "border-primary/50 bg-primary/10 text-primary"
+                      : "border-border/50 hover:border-primary/40 hover:text-foreground",
+                  ].join(" ")}
+                >
+                  <LayoutGrid className="h-3 w-3" />
+                  Grid
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setView("masonry")}
+                  aria-pressed={view === "masonry"}
+                  className={[
+                    "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors",
+                    view === "masonry"
+                      ? "border-primary/50 bg-primary/10 text-primary"
+                      : "border-border/50 hover:border-primary/40 hover:text-foreground",
+                  ].join(" ")}
+                >
+                  <Rows3 className="h-3 w-3" />
+                  Masonry
+                </button>
+              </div>
             </div>
           </section>
 
           <section className="px-6 lg:px-10 pt-6 pb-20">
             <div className="max-w-7xl mx-auto">
-              <ShowcaseMasonry items={filtered} onBookCall={openStrategyCall} />
+              {view === "grid" ? (
+                <ShowcaseGrid items={filtered} onBookCall={openStrategyCall} />
+              ) : (
+                <ShowcaseMasonry items={filtered} onBookCall={openStrategyCall} />
+              )}
               {filtered.length === 0 && (
                 <div className="text-center py-20">
                   <p className="text-foreground/60 text-sm">
