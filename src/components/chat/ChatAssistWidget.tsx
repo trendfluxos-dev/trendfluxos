@@ -14,7 +14,8 @@ type Message =
   | { id: string; role: Role; content: string; kind?: "text" }
   | { id: string; role: "assistant"; content: string; kind: "lead-form" }
   | { id: string; role: "assistant"; content: string; kind: "lead-success" }
-  | { id: string; role: "assistant"; content: string; kind: "booking-cta" };
+  | { id: string; role: "assistant"; content: string; kind: "booking-cta" }
+  | { id: string; role: "assistant"; content: string; kind: "booking-success" };
 type Thread = { id: string; title: string; messages: Message[]; createdAt: number };
 
 const BOOKING_URL = "/project-lead";
@@ -551,7 +552,32 @@ export default function ChatAssistWidget() {
                     return <LeadSuccessCard key={m.id} content={m.content} />;
                   }
                   if (m.kind === "booking-cta") {
-                    return <BookingCtaCard key={m.id} content={m.content} />;
+                    return (
+                      <BookingSchedulerCard
+                        key={m.id}
+                        cardId={m.id}
+                        content={m.content}
+                        onBooked={(id, msg) => {
+                          setThreads((prev) =>
+                            prev.map((t) =>
+                              t.id === active?.id
+                                ? {
+                                    ...t,
+                                    messages: t.messages.map((x) =>
+                                      x.id === id
+                                        ? ({ ...x, kind: "booking-success", content: msg } as Message)
+                                        : x,
+                                    ),
+                                  }
+                                : t,
+                            ),
+                          );
+                        }}
+                      />
+                    );
+                  }
+                  if (m.kind === "booking-success") {
+                    return <LeadSuccessCard key={m.id} content={m.content} />;
                   }
                   return (
                     <MessageBubble
