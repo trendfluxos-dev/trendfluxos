@@ -92,7 +92,7 @@ const Index = () => {
         <EcosystemNavigator />
       </LazySection>
 
-      <div data-nav-section="growth-os">
+      <div id="systems-he-built" data-nav-section="growth-os" className="scroll-mt-[var(--nav-offset)]">
         <SectionOrnament chapter="Chapter I" label="Systems He Built · 90-day Build" />
         <LazySection label="algorithm-arch" skeleton={<SectionSkeleton variant="cards" />}>
           <SystemsHeBuiltSection />
