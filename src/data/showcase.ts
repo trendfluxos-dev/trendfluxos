@@ -77,6 +77,16 @@ export type ShowcaseItem = {
     system: string;
     result: string;
   };
+  /**
+   * Long-form narrative paragraphs shown on the dedicated project detail
+   * page (`/showcase/:id`). When omitted, the detail page falls back to
+   * `summary` + `caseStudy` copy.
+   */
+  narrative?: string[];
+  /** Bullet outcomes shown on the detail page under "Outcomes". */
+  outcomes?: string[];
+  /** Optional external live link label for the detail page CTA. */
+  liveLabel?: string;
 };
 
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
