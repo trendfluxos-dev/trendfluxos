@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, CalendarCheck } from "lucide-react";
+import portrait from "@/assets/zahid-hasan-emon.webp";
 
 /**
  * Architectural portfolio hero — replaces the multi-section top of the
@@ -146,6 +147,40 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
                 +4 more entities
               </Link>
             </div>
+
+            {/* Founder identity card — Zahid Hasan Emon */}
+            <Link
+              to="/about"
+              className="col-span-2 mt-2 flex items-center gap-4 p-4 rounded-lg border border-[#c11f1f]/25 bg-gradient-to-br from-[#1a0a0a] via-[#12060a] to-[#08080d] hover:border-[#c11f1f]/60 transition-all group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d]"
+            >
+              <div className="relative shrink-0">
+                <img
+                  src={portrait}
+                  alt="Zahid Hasan Emon — Founder & Brand Architect"
+                  width={64}
+                  height={64}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-16 w-16 rounded-full object-cover ring-2 ring-[#c11f1f]/50 group-hover:ring-[#e25a5a] transition"
+                />
+                <span
+                  aria-hidden
+                  className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-[#c11f1f] ring-2 ring-[#08080d] shadow-[0_0_10px_rgba(226,90,90,0.7)]"
+                />
+              </div>
+              <div className="min-w-0 flex-1">
+                <span className="font-mono text-[9px] uppercase tracking-widest text-[#e25a5a] block mb-1">
+                  Founder · Operator
+                </span>
+                <div className="font-semibold text-white text-sm leading-tight truncate group-hover:text-[#e25a5a]">
+                  Zahid Hasan Emon
+                </div>
+                <div className="text-[11px] text-[#f0c9c9]/60 leading-snug mt-0.5 truncate">
+                  Brand Architect · AI-era Technologist
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 shrink-0 text-[#e25a5a]/70 group-hover:translate-x-1 group-hover:text-[#e25a5a] transition-transform" aria-hidden />
+            </Link>
           </aside>
         </div>
 
