@@ -7,3 +7,5 @@ project_id = "dnodqhwwzdqfqlndwhsf"
     verify_jwt = true
   [functions.alert-postgres-error]
     verify_jwt = false
+  [functions.chat-assist]
+    verify_jwt = false
