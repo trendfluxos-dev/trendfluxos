@@ -15,6 +15,11 @@ import profile from "@/assets/marriage/profile.webp";
 import photo1 from "@/assets/marriage/photo1.webp";
 import photo2 from "@/assets/marriage/photo2.webp";
 import photo3 from "@/assets/marriage/photo3.webp";
+import extra1 from "@/assets/marriage/extra-1.jpeg.asset.json";
+import extra2 from "@/assets/marriage/extra-2.jpeg.asset.json";
+import extra3 from "@/assets/marriage/extra-3.jpeg.asset.json";
+import extra4 from "@/assets/marriage/extra-4.jpeg.asset.json";
+import extra5 from "@/assets/marriage/extra-5.jpeg.asset.json";
 import { caseStudies } from "@/data/caseStudies";
 import proofUniversity from "@/assets/proof/university-certificates.webp";
 import proofPzswa from "@/assets/proof/pzswa-presidential.webp";
@@ -557,13 +562,23 @@ const Marriage = () => {
 
         {/* Gallery */}
         <Card title={t("Photo Gallery", "ছবি")}>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[photo1, photo2, photo3].map((src, i) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            {[
+              { src: photo1, alt: "Zahid Hasan Emon portrait 1" },
+              { src: photo2, alt: "Zahid Hasan Emon portrait 2" },
+              { src: photo3, alt: "Zahid Hasan Emon portrait 3" },
+              { src: extra1.url, alt: "Zahid Hasan Emon speaking at podium" },
+              { src: extra2.url, alt: "Zahid Hasan Emon in black suit" },
+              { src: extra3.url, alt: "Zahid Hasan Emon speaking, maroon blazer" },
+              { src: extra4.url, alt: "Zahid Hasan Emon in maroon blazer, office" },
+              { src: extra5.url, alt: "Zahid Hasan Emon in maroon blazer, city skyline" },
+            ].map((p, i) => (
               <img
                 key={i}
-                src={src}
-                alt={`Zahid Hasan Emon photo ${i + 1}`}
-                className="w-full h-72 object-cover rounded-2xl border border-red-500/30 hover:border-red-500/70 transition"
+                src={p.src}
+                alt={p.alt}
+                loading="lazy"
+                className="w-full h-64 sm:h-72 object-cover rounded-2xl border border-red-500/30 hover:border-red-500/70 transition"
               />
             ))}
           </div>
