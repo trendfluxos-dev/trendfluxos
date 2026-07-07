@@ -205,9 +205,12 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
               type="button"
               onClick={() => setFounderOpen(true)}
               aria-haspopup="dialog"
-              aria-label="About Zahid Hasan Emon — open founder profile"
-              className="relative col-span-2 mt-3 flex w-full items-center gap-5 overflow-hidden rounded-xl border border-[#c11f1f]/40 bg-gradient-to-br from-[#1f0a0f] via-[#140609] to-[#08080d] p-5 text-left shadow-[0_20px_50px_-20px_rgba(226,90,90,0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e25a5a] hover:shadow-[0_28px_70px_-20px_rgba(226,90,90,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d] group sm:p-6"
+              aria-expanded={founderOpen}
+              aria-controls="founder-dialog"
+              aria-label="Open founder profile: Zahid Hasan Emon, Founder and Brand Architect. Includes brand philosophy, experience highlights, and portfolio links."
+              className="group relative col-span-2 mt-3 flex w-full items-center gap-5 overflow-hidden rounded-xl border border-[#c11f1f]/40 bg-gradient-to-br from-[#1f0a0f] via-[#140609] to-[#08080d] p-5 text-left shadow-[0_20px_50px_-20px_rgba(226,90,90,0.45)] outline-none transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e25a5a] hover:shadow-[0_28px_70px_-20px_rgba(226,90,90,0.6)] focus-visible:-translate-y-0.5 focus-visible:border-[#e25a5a] focus-visible:shadow-[0_28px_70px_-20px_rgba(226,90,90,0.75)] focus-visible:ring-2 focus-visible:ring-[#e25a5a]/80 focus-visible:ring-offset-4 focus-visible:ring-offset-[#08080d] sm:p-6"
             >
+              <span className="sr-only">Opens a dialog.</span>
               {/* Ambient glow */}
               <span
                 aria-hidden
@@ -233,12 +236,13 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
                 />
                 <img
                   src={portrait}
-                  alt="Zahid Hasan Emon — Founder & Brand Architect"
+                  alt=""
+                  aria-hidden="true"
                   width={88}
                   height={88}
                   loading="lazy"
                   decoding="async"
-                  className="relative h-20 w-20 sm:h-[88px] sm:w-[88px] rounded-full object-cover ring-2 ring-[#c11f1f]/60 group-hover:ring-[#e25a5a] transition"
+                  className="relative h-20 w-20 sm:h-[88px] sm:w-[88px] rounded-full object-cover ring-2 ring-[#c11f1f]/60 transition group-hover:ring-[#e25a5a] group-focus-visible:ring-[#e25a5a]"
                 />
                 <span
                   aria-hidden
@@ -246,26 +250,31 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
                 />
               </div>
 
-              <div className="relative min-w-0 flex-1">
+              <div className="relative min-w-0 flex-1" aria-hidden="true">
                 <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#e25a5a]">
                   Founder · Operator
                 </span>
-                <div className="font-display text-lg sm:text-xl font-bold leading-tight text-white transition-colors group-hover:text-[#ffd7d7]">
+                <div className="font-display text-lg sm:text-xl font-bold leading-tight text-white transition-colors group-hover:text-[#ffd7d7] group-focus-visible:text-[#ffd7d7]">
                   Zahid Hasan Emon
                 </div>
                 <div className="mt-1 text-[12px] sm:text-[13px] leading-snug text-[#f0c9c9]/75">
                   Brand Architect · AI-era Technologist
                 </div>
-                <span className="mt-2 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#e25a5a]/90 group-hover:text-[#e25a5a]">
+                <span className="mt-2 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#e25a5a]/90 group-hover:text-[#e25a5a] group-focus-visible:text-[#e25a5a]">
                   Open founder profile
-                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5" aria-hidden />
                 </span>
               </div>
             </button>
 
             {/* Founder dialog — philosophy · highlights · CTAs */}
             <Dialog open={founderOpen} onOpenChange={setFounderOpen}>
-              <DialogContent className="max-w-2xl overflow-hidden border-[#c11f1f]/40 bg-gradient-to-br from-[#1f0a0f] via-[#140609] to-[#08080d] p-0 text-white sm:rounded-2xl">
+              <DialogContent
+                id="founder-dialog"
+                aria-labelledby="founder-dialog-title"
+                aria-describedby="founder-dialog-desc"
+                className="max-w-2xl overflow-hidden border-[#c11f1f]/40 bg-gradient-to-br from-[#1f0a0f] via-[#140609] to-[#08080d] p-0 text-white sm:rounded-2xl"
+              >
                 {/* Hero band */}
                 <div className="relative overflow-hidden px-6 pt-8 pb-6 sm:px-8 sm:pt-10">
                   <span aria-hidden className="pointer-events-none absolute -top-24 -left-16 h-56 w-56 rounded-full bg-[#e25a5a]/25 blur-3xl" />
@@ -285,10 +294,16 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
                       <span className="inline-flex items-center gap-1.5 rounded-full border border-[#e25a5a]/40 bg-[#e25a5a]/10 px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.28em] text-[#e25a5a]">
                         <Sparkles className="h-3 w-3" aria-hidden /> Founder · Operator
                       </span>
-                      <DialogTitle className="mt-3 font-display text-2xl font-bold leading-tight text-white sm:text-[28px]">
+                      <DialogTitle
+                        id="founder-dialog-title"
+                        className="mt-3 font-display text-2xl font-bold leading-tight text-white sm:text-[28px]"
+                      >
                         Zahid Hasan Emon
                       </DialogTitle>
-                      <DialogDescription className="mt-1 text-[13px] leading-relaxed text-[#f0c9c9]/75 sm:text-sm">
+                      <DialogDescription
+                        id="founder-dialog-desc"
+                        className="mt-1 text-[13px] leading-relaxed text-[#f0c9c9]/75 sm:text-sm"
+                      >
                         Brand Architect · AI-era Technologist — building a vertically integrated network of eight brands from Bangladesh.
                       </DialogDescription>
                     </div>
