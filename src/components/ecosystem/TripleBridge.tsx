@@ -99,6 +99,112 @@ export default function TripleBridge({
           </p>
         </header>
 
+        {/* Three-pillar architectural diagram — visualises Learn → Operate → Measure data flow */}
+        <figure
+          aria-label="Learn to Operate to Measure — data flow diagram"
+          className="relative mb-8 hidden overflow-hidden rounded-2xl border border-border/60 bg-card/40 p-6 sm:block"
+        >
+          <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-4">
+            {NODES.map((n, idx) => (
+              <>
+                <div
+                  key={n.id}
+                  className="flex flex-col items-center text-center"
+                >
+                  <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-primary/40 bg-primary/[0.08] shadow-[0_0_40px_hsl(var(--primary)/0.15)]">
+                    <n.Icon className="h-8 w-8 text-primary" aria-hidden />
+                    <span className="absolute -top-2 -right-2 rounded-full border border-primary/40 bg-background px-1.5 py-0.5 font-mono text-[9px] font-semibold text-primary">
+                      0{idx + 1}
+                    </span>
+                  </div>
+                  <span className="mt-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-primary">
+                    {n.badge}
+                  </span>
+                  <span className="mt-1 text-[13px] font-semibold text-foreground">
+                    {n.title.split("·")[0].trim()}
+                  </span>
+                  <span className="text-[11px] text-muted-foreground">
+                    {n.role}
+                  </span>
+                </div>
+                {idx < NODES.length - 1 && (
+                  <svg
+                    key={`arrow-${idx}`}
+                    viewBox="0 0 80 24"
+                    className="h-6 w-full text-primary"
+                    fill="none"
+                    aria-hidden
+                  >
+                    <defs>
+                      <marker
+                        id={`arrowhead-${idx}`}
+                        markerWidth="8"
+                        markerHeight="8"
+                        refX="6"
+                        refY="4"
+                        orient="auto"
+                      >
+                        <path d="M0,0 L8,4 L0,8 z" fill="currentColor" />
+                      </marker>
+                    </defs>
+                    <line
+                      x1="0"
+                      y1="12"
+                      x2="72"
+                      y2="12"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeDasharray="4 3"
+                      markerEnd={`url(#arrowhead-${idx})`}
+                    >
+                      <animate
+                        attributeName="stroke-dashoffset"
+                        from="0"
+                        to="-14"
+                        dur="1.4s"
+                        repeatCount="indefinite"
+                      />
+                    </line>
+                  </svg>
+                )}
+              </>
+            ))}
+          </div>
+          {/* Feedback loop arc — Measure informs Learn */}
+          <svg
+            viewBox="0 0 600 60"
+            className="mt-4 h-10 w-full text-primary/50"
+            fill="none"
+            aria-hidden
+          >
+            <defs>
+              <marker id="loop-head" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 z" fill="currentColor" />
+              </marker>
+            </defs>
+            <path
+              d="M 560 10 C 560 55, 40 55, 40 15"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeDasharray="3 3"
+              markerEnd="url(#loop-head)"
+            />
+            <text
+              x="300"
+              y="52"
+              textAnchor="middle"
+              className="fill-current font-mono"
+              fontSize="9"
+              letterSpacing="3"
+            >
+              SIGNAL FEEDBACK · MEASURE → LEARN
+            </text>
+          </svg>
+          <figcaption className="sr-only">
+            Data flows left-to-right from Learn (কর্মশিক্ষা) into Operate (TrendFlux Space) into Measure (VerdaFlux Spectrum), then loops back as signal feedback informing the next learning cycle.
+          </figcaption>
+        </figure>
+
         <ol className="grid gap-3 sm:grid-cols-3">
           {NODES.map((n, idx) => {
             const isActive = active === n.id;
