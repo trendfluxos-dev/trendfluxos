@@ -790,49 +790,109 @@ const Founder = () => {
 
       <div data-founder-print-hide><Footer /></div>
 
-      {lightbox && (
+      {activeDoc && lightboxIdx !== null && (
         <div
+          ref={lightboxRef}
           data-founder-print-hide
           role="dialog"
           aria-modal="true"
-          aria-label={lightbox.title}
-          className="no-print fixed inset-0 z-[100] flex flex-col bg-black/90 backdrop-blur-sm"
-          onClick={() => setLightbox(null)}
+          aria-labelledby="lightbox-title"
+          aria-describedby="lightbox-caption"
+          className="no-print fixed inset-0 z-[100] flex flex-col bg-black/92 backdrop-blur-sm"
+          onClick={closeLightbox}
         >
-          <div className="flex items-center justify-between gap-3 px-4 py-3 text-white sm:px-6">
-            <p className="min-w-0 truncate text-sm font-semibold">{lightbox.title}</p>
-            <div className="flex items-center gap-2">
-              {lightbox.verifyUrl && (
+          {/* Header */}
+          <div className="flex items-start justify-between gap-3 px-4 py-3 text-white sm:px-6" onClick={(e) => e.stopPropagation()}>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-white/60">
+                {activeDoc.category} · Document {lightboxIdx + 1} of {docPreviews.length}
+              </p>
+              <h2 id="lightbox-title" className="mt-0.5 truncate text-sm font-semibold sm:text-base">
+                {activeDoc.title}
+              </h2>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              {activeDoc.verifyUrl && (
                 <a
-                  href={lightbox.verifyUrl}
+                  href={activeDoc.verifyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-white"
                 >
                   <ShieldCheck className="h-3.5 w-3.5" /> Verify
                   <ExternalLink className="h-3 w-3 opacity-80" />
                 </a>
               )}
               <button
+                ref={closeBtnRef}
                 type="button"
-                onClick={() => setLightbox(null)}
-                aria-label="Close preview"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+                onClick={closeLightbox}
+                aria-label="Close preview (Esc)"
+                className="inline-flex h-10 items-center gap-1.5 rounded-full bg-white/10 px-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" /> Close
               </button>
             </div>
           </div>
+
+          {/* Image stage with prev/next controls */}
           <div
-            className="flex flex-1 items-center justify-center overflow-auto px-4 pb-6 sm:px-8"
+            className="relative flex flex-1 items-center justify-center overflow-auto px-4 pb-6 sm:px-14"
             onClick={(e) => e.stopPropagation()}
           >
+            {docPreviews.length > 1 && (
+              <button
+                type="button"
+                onClick={() => stepLightbox(-1)}
+                aria-label="Previous document (Left arrow)"
+                className="absolute left-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-white/10 p-3 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white sm:inline-flex"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+            )}
             <img
-              src={lightbox.src}
-              alt={lightbox.alt}
+              key={activeDoc.id}
+              src={activeDoc.previewImage!}
+              alt={activeDoc.previewAlt ?? `${activeDoc.title} — document preview`}
               className="max-h-full max-w-full rounded-md bg-white object-contain shadow-2xl"
             />
+            {docPreviews.length > 1 && (
+              <button
+                type="button"
+                onClick={() => stepLightbox(1)}
+                aria-label="Next document (Right arrow)"
+                className="absolute right-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-white/10 p-3 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white sm:inline-flex"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            )}
+          </div>
+
+          {/* Footer / caption + mobile step controls */}
+          <div className="flex items-center justify-between gap-3 border-t border-white/10 px-4 py-3 text-white sm:px-6" onClick={(e) => e.stopPropagation()}>
+            <p id="lightbox-caption" className="min-w-0 flex-1 truncate text-[11px] text-white/70">
+              Issued by {activeDoc.issuer} · Use ← → to navigate, Esc to close
+            </p>
+            {docPreviews.length > 1 && (
+              <div className="flex gap-2 sm:hidden">
+                <button
+                  type="button"
+                  onClick={() => stepLightbox(-1)}
+                  aria-label="Previous document"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => stepLightbox(1)}
+                  aria-label="Next document"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
