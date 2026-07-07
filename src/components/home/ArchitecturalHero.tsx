@@ -176,10 +176,21 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
               </Link>
             </div>
 
-            {/* Founder identity card — Zahid Hasan Emon (featured) */}
-            <Link
-              to="/about"
-              aria-label="About Zahid Hasan Emon — Founder & Brand Architect"
+            {/* Founder identity card — jumps to the Systems He Built section
+                on the same page. Native anchor so the browser's smooth-scroll
+                + `scroll-padding-top: var(--nav-offset)` handles the offset. */}
+            <a
+              href="#systems-he-built"
+              onClick={(e) => {
+                const target = document.getElementById("systems-he-built");
+                if (target) {
+                  e.preventDefault();
+                  const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+                  target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+                  history.replaceState(null, "", "#systems-he-built");
+                }
+              }}
+              aria-label="Jump to Systems He Built — the 90-day build order by Zahid Hasan Emon"
               className="relative col-span-2 mt-3 flex items-center gap-5 overflow-hidden rounded-xl border border-[#c11f1f]/40 bg-gradient-to-br from-[#1f0a0f] via-[#140609] to-[#08080d] p-5 shadow-[0_20px_50px_-20px_rgba(226,90,90,0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e25a5a] hover:shadow-[0_28px_70px_-20px_rgba(226,90,90,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d] group sm:p-6"
             >
               {/* Ambient glow */}
@@ -231,11 +242,11 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
                   Brand Architect · AI-era Technologist
                 </div>
                 <span className="mt-2 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#e25a5a]/90 group-hover:text-[#e25a5a]">
-                  View portfolio
+                  See what he built
                   <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
                 </span>
               </div>
-            </Link>
+            </a>
           </aside>
         </div>
 
