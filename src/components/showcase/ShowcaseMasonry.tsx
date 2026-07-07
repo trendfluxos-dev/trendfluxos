@@ -1,4 +1,4 @@
-import { ArrowUpRight, Share2, AlertCircle, Cog, Sparkles } from "lucide-react";
+import { ArrowUpRight, Share2, AlertCircle, Cog, Sparkles, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import type { ShowcaseItem } from "@/data/showcase";
@@ -125,6 +125,18 @@ const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload
             ))}
           </div>
         )}
+
+        <div className="mt-5 pt-4 border-t border-border/40">
+          <Link
+            to={`/showcase/${item.id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary/90 hover:text-primary transition-colors"
+          >
+            <FileText className="h-3 w-3" />
+            View case study
+            <ArrowUpRight className="h-3 w-3" />
+          </Link>
+        </div>
       </div>
     </article>
   );
