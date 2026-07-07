@@ -18,7 +18,7 @@ const LayerBreadcrumb = () => {
     <nav
       aria-label="Breadcrumb"
       data-layer-chrome
-      className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-24 pb-2 text-[12px] text-foreground/55"
+      className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 pt-[calc(var(--nav-offset)+8px)] pb-2 text-[12px] text-foreground/55"
     >
       <ol className="flex flex-wrap items-center gap-1.5">
         <li>
