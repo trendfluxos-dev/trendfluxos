@@ -638,9 +638,9 @@ function LeadFormCard({
       return;
     }
     setSubmitting(true);
-    const res = await onSubmit(formId, parsed.data);
+    const res = await onSubmit(formId, parsed.data as LeadValues);
     setSubmitting(false);
-    if (!res.ok) setServerError(res.error || "Couldn't submit. Please try again.");
+    if (!res.ok) setServerError(("error" in res && res.error) || "Couldn't submit. Please try again.");
   };
 
   return (
