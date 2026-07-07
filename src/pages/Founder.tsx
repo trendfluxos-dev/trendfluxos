@@ -441,7 +441,7 @@ const Founder = () => {
             <Card key={c.slug}>
               <p className="text-[10px] uppercase tracking-[0.2em] text-primary">{c.level} · {c.format}</p>
               <p className="mt-1 font-display text-[15px] font-semibold">{c.title}</p>
-              <p className="mt-1 text-[13px] text-muted-foreground line-clamp-2">{c.description}</p>
+              <p className="mt-1 text-[13px] text-muted-foreground line-clamp-2">{c.summary}</p>
             </Card>
           ))}
         </div>
