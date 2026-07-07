@@ -489,8 +489,75 @@ const Founder = () => {
         </Link>
       </ChapterShell>
 
-      {/* 14 — Stats */}
+      {/* 14 — Documents & Proofs */}
       <ChapterShell meta={FOUNDER_CHAPTERS[14]}>
+        <p className="text-muted-foreground">
+          Verifiable public records referenced across this profile. Each entry links to the
+          original source so any reader — investor, partner, journalist, or institution — can
+          confirm authenticity independently.
+        </p>
+        <ol className="mt-6 space-y-4">
+          {FOUNDER_DOCUMENTS.map((d) => {
+            const dateLabel = new Date(d.date).toLocaleDateString("en-GB", {
+              day: "2-digit", month: "short", year: "numeric",
+            });
+            const host = (() => {
+              try { return new URL(d.verifyUrl).hostname.replace(/^www\./, ""); }
+              catch { return d.verifyUrl; }
+            })();
+            return (
+              <li key={d.id}>
+                <Card>
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-[10px] uppercase tracking-[0.25em] text-primary">
+                        {d.category} · {dateLabel}
+                      </p>
+                      <p className="mt-1 font-display text-[15px] font-semibold leading-snug">
+                        {d.title}
+                      </p>
+                      <p className="mt-1 text-[12px] text-muted-foreground">
+                        Issued by {d.issuer}
+                      </p>
+                      {d.note && (
+                        <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
+                          {d.note}
+                        </p>
+                      )}
+                    </div>
+                    <FileCheck2 className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+                  </div>
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <a
+                      href={d.verifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90"
+                    >
+                      <ShieldCheck className="h-3.5 w-3.5" /> Verify
+                      <ExternalLink className="h-3 w-3 opacity-80" />
+                    </a>
+                    <a
+                      href={d.verifyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="break-all text-[11px] text-muted-foreground hover:text-primary hover:underline"
+                    >
+                      {host}
+                    </a>
+                  </div>
+                </Card>
+              </li>
+            );
+          })}
+        </ol>
+        <p className="mt-6 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+          Additional records are added here as they are formally issued or published.
+        </p>
+      </ChapterShell>
+
+      {/* 15 — Stats */}
+      <ChapterShell meta={FOUNDER_CHAPTERS[15]}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {FOUNDER_STATS.map((s) => (
             <Card key={s.label} className="text-center">
@@ -501,8 +568,8 @@ const Founder = () => {
         </div>
       </ChapterShell>
 
-      {/* 15 — Tech stack */}
-      <ChapterShell meta={FOUNDER_CHAPTERS[15]} tone="muted">
+      {/* 16 — Tech stack */}
+      <ChapterShell meta={FOUNDER_CHAPTERS[16]} tone="muted">
         <div className="flex flex-wrap gap-2">
           {FOUNDER_TECH.map((t) => (
             <span key={t} className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] font-medium">
@@ -515,8 +582,8 @@ const Founder = () => {
         </p>
       </ChapterShell>
 
-      {/* 16 — Testimonials */}
-      <ChapterShell meta={FOUNDER_CHAPTERS[16]}>
+      {/* 17 — Testimonials */}
+      <ChapterShell meta={FOUNDER_CHAPTERS[17]}>
         <div className="grid gap-3 sm:grid-cols-2">
           {FOUNDER_TESTIMONIALS.map((t) => (
             <Card key={t.name + t.company}>
@@ -529,8 +596,8 @@ const Founder = () => {
         </div>
       </ChapterShell>
 
-      {/* 17 — Contact */}
-      <ChapterShell meta={FOUNDER_CHAPTERS[17]} tone="muted">
+      {/* 18 — Contact */}
+      <ChapterShell meta={FOUNDER_CHAPTERS[18]} tone="muted">
         <div className="grid gap-4 sm:grid-cols-2">
           <Card>
             <p className="text-[10px] uppercase tracking-[0.2em] text-primary">Founder</p>
@@ -576,8 +643,8 @@ const Founder = () => {
         </div>
       </ChapterShell>
 
-      {/* 18 — Back cover / colophon */}
-      <ChapterShell meta={FOUNDER_CHAPTERS[18]}>
+      {/* 19 — Back cover / colophon */}
+      <ChapterShell meta={FOUNDER_CHAPTERS[19]}>
         <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
           <div>
             <p className="font-display text-2xl font-semibold">{FOUNDER.name}</p>
