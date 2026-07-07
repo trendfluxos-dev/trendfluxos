@@ -6,6 +6,7 @@ import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
 import ArchitecturalHero from "@/components/home/ArchitecturalHero";
+import FounderSpotlightBanner from "@/components/home/FounderSpotlightBanner";
 import LayerBand from "@/components/layer/LayerBand";
 import { LazySection } from "@/components/LazySection";
 import { SectionSkeleton } from "@/components/home/SectionSkeleton";
@@ -85,6 +86,8 @@ const Index = () => {
       <Navbar />
 
       <ArchitecturalHero onOpenQuote={openQuote} />
+
+      <FounderSpotlightBanner />
 
       <SectionOrnament chapter="Navigator" label="Explore the Ecosystem" />
       {/* Sticky ecosystem navigator — 11 large jump cards to public routes. */}
