@@ -1,14 +1,5 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, CalendarCheck, Sparkles } from "lucide-react";
-import portrait from "@/assets/zahid-hasan-emon.webp";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { ArrowUpRight, CalendarCheck } from "lucide-react";
 
 /**
  * Architectural portfolio hero — replaces the multi-section top of the
@@ -49,15 +40,6 @@ const widthClass: Record<Brand["strength"], string> = {
 };
 
 export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => void }) {
-  const [founderOpen, setFounderOpen] = useState(false);
-
-  const jumpToSystems = () => {
-    setFounderOpen(false);
-    // Wait one frame so the dialog can start closing before we scroll,
-    // otherwise Radix restores focus mid-scroll and the jump is fought.
-    requestAnimationFrame(() => {
-      const target = document.getElementById("systems-he-built");
-      if (!target) return;
       const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
       target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
       history.replaceState(null, "", "#systems-he-built");
