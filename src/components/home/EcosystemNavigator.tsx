@@ -92,7 +92,10 @@ export default function EcosystemNavigator() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
         {/* Sticky header — pins while cards scroll past on desktop */}
-        <div className="lg:sticky lg:top-20 lg:z-10 lg:-mx-4 lg:px-4 lg:py-6 lg:backdrop-blur-md lg:bg-background/75 lg:border-b lg:border-border/60">
+        <div
+          data-sticky-header
+          className="lg:sticky lg:top-20 lg:z-10 lg:-mx-4 lg:px-4 lg:py-6 lg:backdrop-blur-md lg:bg-background/75 lg:border-b lg:border-border/60"
+        >
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
               <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.3em] text-primary">

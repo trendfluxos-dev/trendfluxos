@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
 import { Menu, LogIn, LayoutDashboard, Search } from "lucide-react";
 import { BRAND } from "@/config/brand";
@@ -17,12 +17,58 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Measure the navbar (+ any currently-pinned sticky headers marked with
+  // `data-sticky-header`) and publish the total to --nav-offset on <html>.
+  // Keeps in-page jumps aligned across screens, zoom levels, and states
+  // where the navbar's own height shrinks on scroll.
+  useEffect(() => {
+    const root = document.documentElement;
+    const COMFORT = 12; // small breathing room below the header
+
+    const measure = () => {
+      const navH = headerRef.current?.getBoundingClientRect().height ?? 64;
+      // Any sticky header currently sitting near the top of the viewport
+      // (its top is within [0, navH + 8]) is stacked under the navbar.
+      let stickyH = 0;
+      document.querySelectorAll<HTMLElement>("[data-sticky-header]").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top >= 0 && r.top <= navH + 8 && r.height > 0) {
+          stickyH = Math.max(stickyH, r.height);
+        }
+      });
+      root.style.setProperty("--nav-offset", `${Math.round(navH + stickyH + COMFORT)}px`);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (headerRef.current) ro.observe(headerRef.current);
+    document.querySelectorAll("[data-sticky-header]").forEach((el) => ro.observe(el));
+
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("resize", measure);
+
+    // Re-scan for late-mounted sticky headers (lazy-loaded sections).
+    const mo = new MutationObserver(() => {
+      document.querySelectorAll("[data-sticky-header]").forEach((el) => ro.observe(el));
+      measure();
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      ro.disconnect();
+      mo.disconnect();
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
+    };
   }, []);
 
   useEffect(() => {
@@ -40,7 +86,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 will-change-transform">
+    <header ref={headerRef} className="fixed top-0 inset-x-0 z-50 will-change-transform">
       {/* Skip-to-content link — visible only on keyboard focus, lets screen
           reader / keyboard users jump past the navbar straight into the
           page's primary <main>. Targets the first <main> regardless of id. */}
