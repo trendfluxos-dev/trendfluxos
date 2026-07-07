@@ -14,10 +14,10 @@ export const FinalCtaSection = ({ onOpenQuote }: { onOpenQuote: () => void }) =>
         <span className="h-1 w-1 rounded-full bg-primary" />
         Next chapter
       </p>
-      <h2 className="font-display text-4xl font-semibold tracking-[-0.025em] text-foreground sm:text-5xl md:text-[60px] md:leading-[1.02]">
+      <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[44px] md:leading-[1.05]">
         Scale Beyond <span className="tf-text-electric">Marketing</span>.
       </h2>
-      <p className="mx-auto mt-6 max-w-xl text-[15px] leading-[1.7] text-muted-foreground sm:text-[16.5px]">
+      <p className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.7] text-muted-foreground sm:text-[16.5px]">
         Stop renting agency hours. Own a growth system that compounds — wired for your P&L, auditable on day one.
       </p>
 

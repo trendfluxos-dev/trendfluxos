@@ -92,10 +92,10 @@ export default function TripleBridge({
           <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/[0.06] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-primary">
             <Layers className="h-3 w-3" aria-hidden /> Ecosystem
           </p>
-          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+          <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[44px] md:leading-[1.05]">
             {heading}
           </h2>
-          <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">
+          <p className="mt-4 text-[15px] leading-[1.7] text-muted-foreground sm:text-[16.5px]">
             {subheading}
           </p>
         </header>

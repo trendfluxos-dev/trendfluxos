@@ -50,13 +50,13 @@ export function LiveClassStudioSection() {
             </div>
             <h2
               id="live-studio-title"
-              className="mt-5 font-display text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight"
+              className="mt-5 font-display text-3xl font-semibold leading-tight tracking-[-0.02em] sm:text-4xl md:text-[44px] md:leading-[1.05]"
             >
               Broadcast a real classroom —{" "}
               <span className="text-shimmer">whiteboard, slides, voice</span> —
               from one screen.
             </h2>
-            <p className="mt-5 text-foreground/70 text-base sm:text-lg leading-relaxed max-w-xl">
+            <p className="mt-5 max-w-xl text-[15px] leading-[1.7] text-foreground/70 sm:text-[16.5px]">
               Schedule a class, share a join-link, and run live whiteboard +
               screen + slide sessions through the TrendFlux EdTech studio.
               Students join without an account; founders broadcast with full
