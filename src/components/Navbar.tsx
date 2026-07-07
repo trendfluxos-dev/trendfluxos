@@ -222,18 +222,38 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[86%] max-w-sm border-l border-[#c11f1f]/30 dark:border-[#7a1e1e]/55 bg-white/95 dark:bg-[#08080d]/95 backdrop-blur-2xl text-[#3a0d10] dark:text-[#f5d3d3] shadow-[0_0_60px_-10px_rgba(120,20,20,0.25)] dark:shadow-[0_0_60px_-10px_rgba(200,60,60,0.4)]"
+                className="w-[92%] max-w-sm border-l border-[#c11f1f]/30 dark:border-[#7a1e1e]/55 bg-white/95 dark:bg-[#08080d]/95 backdrop-blur-2xl text-[#3a0d10] dark:text-[#f5d3d3] shadow-[0_0_60px_-10px_rgba(120,20,20,0.25)] dark:shadow-[0_0_60px_-10px_rgba(200,60,60,0.4)] flex flex-col p-0 overflow-hidden"
               >
-                <SheetHeader>
+                <SheetHeader className="px-5 pt-5 pb-3 border-b border-[#c11f1f]/15 dark:border-[#7a1e1e]/35 shrink-0">
                   <SheetTitle className="text-left font-display tracking-[0.22em] uppercase text-[12.5px]">
                     <span className="text-[#1a0a0a] dark:text-[#f1c9c9] font-semibold">{BRAND.nameLead}</span>
                     <span className="text-[#9a1818] dark:text-[#e25a5a]/80 font-medium"> {BRAND.nameTrail}</span>
                   </SheetTitle>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      openCommandPalette();
+                    }}
+                    className="mt-3 flex w-full items-center gap-2 rounded-xl border border-[#c11f1f]/30 dark:border-[#7a1e1e]/55 bg-white/70 dark:bg-[#1a0d10]/60 px-3 py-2.5 text-left text-[13px] text-[#5a1818]/80 dark:text-[#f0c9c9]/70 hover:border-[#c11f1f] dark:hover:border-[#e25a5a] transition-colors"
+                  >
+                    <Search className="h-4 w-4 shrink-0" />
+                    <span>Search pages…</span>
+                  </button>
                 </SheetHeader>
-                <nav aria-label="Mobile" className="mt-6 flex flex-col gap-5">
-                  {(["company", "founder", "brand"] as Layer[]).map((layer) => {
+                <nav aria-label="Mobile" className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-5 py-5 flex flex-col gap-5">
+                  <Link
+                    to="/"
+                    onClick={() => setOpen(false)}
+                    aria-current={pathname === "/" ? "page" : undefined}
+                    className="rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-[#3a0d10] dark:text-[#f0c9c9]/90 hover:bg-[#fbeaea] dark:hover:bg-[#2a0f14]/60 transition-colors aria-[current=page]:bg-[#fbeaea] dark:aria-[current=page]:bg-[#3a1418]/70"
+                  >
+                    Home
+                  </Link>
+                  {(["company", "founder", "brand", "system"] as Layer[]).map((layer) => {
                     const meta = LAYER_META[layer];
                     const items = nodesByLayer(layer, { includeAlsoIn: true });
+                    if (items.length === 0) return null;
                     return (
                       <div key={layer} className="flex flex-col gap-0.5">
                         <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-[#9a1818] dark:text-[#e25a5a]/75 font-medium mb-1">
@@ -290,13 +310,10 @@ const Navbar = () => {
                     {signedIn ? "Dashboard" : "Login"}
                   </Link>
                   </div>
-                </nav>
-
-                <div className="mt-6 border-t border-[#c11f1f]/30 dark:border-[#7a1e1e]/45 pt-6">
-                  <div className="mt-5">
+                  <div className="pt-5 border-t border-[#c11f1f]/30 dark:border-[#7a1e1e]/45">
                     <SocialIcons variant="inline" size="sm" />
                   </div>
-                </div>
+                </nav>
               </SheetContent>
             </Sheet>
           </div>
