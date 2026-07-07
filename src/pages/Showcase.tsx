@@ -61,6 +61,25 @@ const Showcase = () => {
   type View = "grid" | "masonry";
   const [view, setView] = useState<View>("grid");
 
+  type SortKey = "featured" | "newest" | "alpha" | "views" | "engagement";
+  const [sort, setSort] = useState<SortKey>("featured");
+
+  // Extract a numeric value from a metric string like "1.2M", "45K", "300%", "+120".
+  const parseMetricNumber = (value: string): number => {
+    const m = value.replace(/,/g, "").match(/(-?\d+(?:\.\d+)?)\s*([kKmMbB%]?)/);
+    if (!m) return 0;
+    const n = parseFloat(m[1]);
+    const suffix = m[2].toLowerCase();
+    const mult = suffix === "k" ? 1_000 : suffix === "m" ? 1_000_000 : suffix === "b" ? 1_000_000_000 : 1;
+    return n * mult;
+  };
+
+  const metricScore = (item: ShowcaseItem, pattern: RegExp): number => {
+    const hits = (item.metrics ?? []).filter((m) => pattern.test(m.label));
+    if (hits.length === 0) return -Infinity;
+    return Math.max(...hits.map((m) => parseMetricNumber(m.value)));
+  };
+
   useEffect(() => {
     const current = searchParams.get("tab");
     const next = tab === "projects" ? null : tab;
@@ -110,6 +129,23 @@ const Showcase = () => {
       return true;
     });
   }, [facets]);
+
+  const sorted = useMemo(() => {
+    if (sort === "featured") return filtered;
+    const arr = [...filtered];
+    if (sort === "newest") {
+      arr.sort((a, b) => (b.year ?? "").localeCompare(a.year ?? ""));
+    } else if (sort === "alpha") {
+      arr.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sort === "views") {
+      const re = /view|reach|impress|watch|audience|traffic/i;
+      arr.sort((a, b) => metricScore(b, re) - metricScore(a, re));
+    } else if (sort === "engagement") {
+      const re = /engag|growth|ctr|conver|follow|signup|sign-up|lead|retention/i;
+      arr.sort((a, b) => metricScore(b, re) - metricScore(a, re));
+    }
+    return arr;
+  }, [filtered, sort]);
 
   const toggleFacet = useCallback((key: FacetKey, value: string) => {
     setFacets((prev) => {
