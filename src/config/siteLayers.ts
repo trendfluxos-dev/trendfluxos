@@ -61,6 +61,7 @@ export const SITE_LAYERS: LayerNode[] = [
 
   // ---------- FOUNDER ----------
   { path: "/project-lead",            title: "Project Lead",    layer: "founder", blurb: "Zahid as the operator behind the system", siblings: FOUNDER_FLOW },
+  { path: "/founder",                 title: "Founder eBook",   layer: "founder", blurb: "Premium founder profile · printable eBook", siblings: FOUNDER_FLOW },
   { path: "/portfolio",               title: "Portfolio",       layer: "founder", blurb: "Full professional identity",              siblings: FOUNDER_FLOW, alsoIn: ["brand"] },
   { path: "/the-stand",               title: "The Stand",       layer: "founder", blurb: "Philosophy and integrity stance",         siblings: FOUNDER_FLOW },
   { path: "/quiet-positions",         title: "Quiet Positions", layer: "founder", blurb: "Personal thoughts and reflections",       siblings: FOUNDER_FLOW },
