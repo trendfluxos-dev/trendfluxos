@@ -1677,3 +1677,45 @@
   .tf-stagger > * { opacity: 1; transform: none; transition: none; animation: none !important; }
 }
 
+
+/* ─── Compact-rhythm spacing tokens ──────────────────────────────────
+   Shared vertical/gap rhythm for The Stand and related sections.
+   Scale: 3 → 4 → 6 (mobile → sm → lg) for outer stacks and
+          2 → 3 → 4 for inner text stacks.
+   Use these utilities instead of ad-hoc `mt-*` / `gap-*` values so
+   every section stays visually aligned to the same beat. */
+@layer components {
+  /* Section-level padding: py-6 sm:py-12 lg:py-16 */
+  .rhythm-section { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  @media (min-width: 640px) {
+    .rhythm-section { padding-top: 3rem; padding-bottom: 3rem; }
+  }
+  @media (min-width: 1024px) {
+    .rhythm-section { padding-top: 4rem; padding-bottom: 4rem; }
+  }
+
+  /* Outer stack — separates eyebrow · media · CTA row · metrics row */
+  .rhythm-stack > * + * { margin-top: 0.75rem; }
+  @media (min-width: 640px) { .rhythm-stack > * + * { margin-top: 1rem; } }
+  @media (min-width: 1024px) { .rhythm-stack > * + * { margin-top: 1.5rem; } }
+
+  /* Inner stack — copy blocks inside a figcaption / card body */
+  .rhythm-stack-inner > * + * { margin-top: 0.5rem; }
+  @media (min-width: 640px) { .rhythm-stack-inner > * + * { margin-top: 0.75rem; } }
+  @media (min-width: 1024px) { .rhythm-stack-inner > * + * { margin-top: 1rem; } }
+
+  /* Flex/grid gaps — matches rhythm-stack step (3 → 4 → 6) */
+  .rhythm-gap { gap: 0.75rem; }
+  @media (min-width: 640px) { .rhythm-gap { gap: 1rem; } }
+  @media (min-width: 1024px) { .rhythm-gap { gap: 1.5rem; } }
+
+  /* Tight inner gap (2 → 3 → 4) — dt/dd, attribution offsets, etc. */
+  .rhythm-gap-inner { gap: 0.5rem; }
+  @media (min-width: 640px) { .rhythm-gap-inner { gap: 0.75rem; } }
+  @media (min-width: 1024px) { .rhythm-gap-inner { gap: 1rem; } }
+
+  /* Vertical offset used for dt→dd and small label→value pairs */
+  .rhythm-offset { margin-top: 0.5rem; }
+  @media (min-width: 640px) { .rhythm-offset { margin-top: 0.75rem; } }
+  @media (min-width: 1024px) { .rhythm-offset { margin-top: 1rem; } }
+}
