@@ -870,6 +870,11 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+  /* Kill smooth-scroll on the scroll containers themselves — the * rule
+     above targets descendants but html/body honour their own declaration. */
+  html, body {
+    scroll-behavior: auto !important;
+  }
   /* Specifically silence the map node ping + ambient pulses */
   .animate-ping,
   .animate-pulse,
@@ -879,10 +884,18 @@
   .animate-orbit-reverse {
     animation: none !important;
   }
-  /* Don't lift/scale cards on hover/highlight when motion is reduced */
+  /* Don't lift/scale/translate anything on hover, focus, or group-hover
+     when motion is reduced. Colour/border/shadow transitions still apply
+     instantly (via the 0.001ms transition-duration above), so users keep
+     the visual feedback without the movement. */
+  *:hover,
+  *:focus,
+  *:focus-visible,
+  .group:hover *,
+  .group:focus-within *,
   .glass-hover:hover,
-  [id^="case-card-"]:hover,
-  [id^="case-card-"] {
+  [id^="case-card-"],
+  [id^="case-card-"]:hover {
     transform: none !important;
   }
 }
