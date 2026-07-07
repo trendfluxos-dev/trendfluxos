@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 export const FinalCtaSection = ({ onOpenQuote }: { onOpenQuote: () => void }) => (
-  <section className="relative isolate overflow-hidden bg-background py-32" aria-label="Final call to action">
+  <section className="relative isolate overflow-hidden bg-background py-20 sm:py-24 lg:py-28" aria-label="Final call to action">
     <div aria-hidden className="pointer-events-none absolute inset-0 tf-grid-bg" />
     <div
       aria-hidden

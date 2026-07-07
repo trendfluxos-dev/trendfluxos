@@ -5,7 +5,7 @@ import { useTfReveal } from "@/components/tf/useTfReveal";
 export const JusticeAppealSection = () => {
   const ref = useTfReveal<HTMLDivElement>();
   return (
-  <section className="relative overflow-hidden bg-[hsl(220,45%,8%)] py-16 sm:py-20 lg:py-24" aria-label="Pabna Accountability Project">
+  <section className="relative overflow-hidden bg-[hsl(220,45%,8%)] py-20 sm:py-24 lg:py-28" aria-label="Pabna Accountability Project">
     {/* drifting crimson glow */}
     <div
       aria-hidden

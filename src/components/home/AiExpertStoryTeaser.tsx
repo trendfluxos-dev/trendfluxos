@@ -5,7 +5,7 @@ import { AI_EXPERT_EMON_STORY } from "@/data/aiExpertEmonStory";
 export default function AiExpertStoryTeaser() {
   const bn = AI_EXPERT_EMON_STORY.bn;
   return (
-    <section aria-labelledby="ai-expert-story-teaser" className="relative isolate bg-muted/30 py-20 sm:py-24">
+    <section aria-labelledby="ai-expert-story-teaser" className="relative isolate bg-muted/30 py-20 sm:py-24 lg:py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="mb-10 flex items-center justify-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.3em] text-primary">

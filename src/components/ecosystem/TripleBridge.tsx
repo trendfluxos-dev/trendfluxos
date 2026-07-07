@@ -83,7 +83,7 @@ export default function TripleBridge({
     <section
       aria-label="Connected TrendFlux systems"
       className={[
-        bare ? "" : "bg-background py-12 sm:py-16",
+        bare ? "" : "bg-background py-20 sm:py-24 lg:py-28",
         className ?? "",
       ].join(" ")}
     >
