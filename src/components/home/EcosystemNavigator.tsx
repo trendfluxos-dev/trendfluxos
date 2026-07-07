@@ -1,4 +1,4 @@
-import { useRef, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -26,23 +26,61 @@ type Item = {
   eyebrow: string;
   desc: string;
   Icon: typeof Megaphone;
+  /** Optional homepage section id (matches `[data-nav-section="…"]`)
+   *  used to light this card up while that section is in view. */
+  sectionId?: string;
 };
 
 const ITEMS: Item[] = [
-  { label: "Marketing",   to: "/services",      eyebrow: "01",  desc: "Growth, brand & performance services.",     Icon: Megaphone },
-  { label: "EdTech",      to: "/edtech",        eyebrow: "02",  desc: "Kormoshikkha — courses, live, certificates.", Icon: GraduationCap },
-  { label: "Enterprise",  to: "/enterprise",    eyebrow: "03",  desc: "Growth OS deployments for scaling teams.",  Icon: Building2 },
-  { label: "Brands",      to: "/brands",        eyebrow: "04",  desc: "Sub-brands under the TrendFlux umbrella.",  Icon: Layers },
-  { label: "Case Studies",to: "/showcase",      eyebrow: "05",  desc: "Deployed outcomes with audit trail.",       Icon: BookOpenCheck },
-  { label: "Portfolio",   to: "/portfolio",     eyebrow: "06",  desc: "Operator work across eight brands.",        Icon: Images },
-  { label: "The Stand",   to: "/the-stand",     eyebrow: "07",  desc: "জাতীয় দলিল — civic accountability record.",  Icon: Flag },
-  { label: "Masterclass", to: "/masterclass",   eyebrow: "08",  desc: "Founder-led operator masterclasses.",       Icon: Presentation },
-  { label: "Toolkit",     to: "/toolkit",       eyebrow: "09",  desc: "Playbooks, templates & operator tools.",    Icon: Wrench },
-  { label: "Growth OS",   to: "/course/trendflux", eyebrow: "10", desc: "The TrendFlux Growth OS course.",         Icon: Cpu },
-  { label: "Contact",     to: "/contact",       eyebrow: "11",  desc: "Book a strategy call or send a brief.",     Icon: Mail },
+  { label: "Marketing",   to: "/services",         eyebrow: "01", desc: "Growth, brand & performance services.",       Icon: Megaphone },
+  { label: "EdTech",      to: "/edtech",           eyebrow: "02", desc: "Kormoshikkha — courses, live, certificates.", Icon: GraduationCap, sectionId: "edtech" },
+  { label: "Enterprise",  to: "/enterprise",       eyebrow: "03", desc: "Growth OS deployments for scaling teams.",    Icon: Building2 },
+  { label: "Brands",      to: "/brands",           eyebrow: "04", desc: "Sub-brands under the TrendFlux umbrella.",    Icon: Layers },
+  { label: "Case Studies",to: "/showcase",         eyebrow: "05", desc: "Deployed outcomes with audit trail.",         Icon: BookOpenCheck, sectionId: "case-studies" },
+  { label: "Portfolio",   to: "/portfolio",        eyebrow: "06", desc: "Operator work across eight brands.",          Icon: Images },
+  { label: "The Stand",   to: "/the-stand",        eyebrow: "07", desc: "জাতীয় দলিল — civic accountability record.",    Icon: Flag,       sectionId: "the-stand" },
+  { label: "Masterclass", to: "/masterclass",      eyebrow: "08", desc: "Founder-led operator masterclasses.",         Icon: Presentation },
+  { label: "Toolkit",     to: "/toolkit",          eyebrow: "09", desc: "Playbooks, templates & operator tools.",      Icon: Wrench },
+  { label: "Growth OS",   to: "/course/trendflux", eyebrow: "10", desc: "The TrendFlux Growth OS course.",             Icon: Cpu,        sectionId: "growth-os" },
+  { label: "Contact",     to: "/contact",          eyebrow: "11", desc: "Book a strategy call or send a brief.",       Icon: Mail,       sectionId: "contact" },
 ];
 
 export default function EcosystemNavigator() {
+  // Which mapped homepage section is currently in view — used to light up
+  // the corresponding card. `null` when nothing tracked is visible.
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const targets = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-nav-section]")
+    );
+    if (targets.length === 0) return;
+
+    // Track visible ratio per section; pick the largest at each tick.
+    const ratios = new Map<string, number>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          const id = (e.target as HTMLElement).dataset.navSection ?? "";
+          ratios.set(id, e.isIntersecting ? e.intersectionRatio : 0);
+        });
+        let best: { id: string | null; r: number } = { id: null, r: 0 };
+        ratios.forEach((r, id) => {
+          if (r > best.r) best = { id, r };
+        });
+        setActiveId(best.r > 0.15 ? best.id : null);
+      },
+      {
+        // Bias toward the middle of the viewport, and step through several
+        // ratios so we get updates during long sections too.
+        rootMargin: "-25% 0px -45% 0px",
+        threshold: [0, 0.15, 0.35, 0.6, 0.85, 1],
+      }
+    );
+    targets.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   // Roving keyboard navigation across the card grid/stack.
   // Arrow keys move focus between cards; Home/End jump to the ends.
   const listRef = useRef<HTMLUListElement>(null);
@@ -139,8 +177,9 @@ export default function EcosystemNavigator() {
               lg:grid-cols-3 lg:gap-6
             "
           >
-            {ITEMS.map(({ label, to, eyebrow, desc, Icon }, i) => {
+            {ITEMS.map(({ label, to, eyebrow, desc, Icon, sectionId }, i) => {
               const descId = `eco-card-desc-${i}`;
+              const isActive = !!sectionId && sectionId === activeId;
               return (
               <li
                 key={to}
@@ -149,17 +188,27 @@ export default function EcosystemNavigator() {
                 <Link
                   to={to}
                   data-nav-card
+                  data-active={isActive || undefined}
+                  aria-current={isActive ? "true" : undefined}
                   aria-label={`${label}, card ${i + 1} of ${ITEMS.length}`}
                   aria-describedby={descId}
-                  className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 outline-none transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.35)] focus-visible:-translate-y-1 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-background focus-visible:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.5)] sm:p-7"
+                  className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 outline-none transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.35)] focus-visible:-translate-y-1 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-background focus-visible:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.5)] data-[active]:border-primary data-[active]:bg-primary/[0.04] data-[active]:shadow-[0_18px_45px_-22px_hsl(var(--primary)/0.45)] sm:p-7"
                 >
-                  <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <span aria-hidden="true" className="pointer-events-none absolute right-5 top-5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary group-focus-within:text-primary">
+                  {/* Active-state left accent bar */}
+                  <span aria-hidden="true" className="pointer-events-none absolute inset-y-4 left-0 w-[3px] rounded-full bg-primary opacity-0 transition-opacity duration-300 data-[on=true]:opacity-100" data-on={isActive} />
+                  <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 data-[on=true]:opacity-100" data-on={isActive} />
+                  <span aria-hidden="true" className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary group-focus-within:text-primary data-[on=true]:text-primary" data-on={isActive}>
+                    {isActive && (
+                      <span className="relative inline-flex h-2 w-2">
+                        <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-60 animate-ping motion-reduce:animate-none" />
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.7)]" />
+                      </span>
+                    )}
                     {eyebrow}
                   </span>
 
-                  <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-border/70 bg-background transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-primary/[0.06] group-focus-within:border-primary/40 group-focus-within:bg-primary/[0.06]">
-                    <Icon className="h-5 w-5 text-foreground/70 transition-colors duration-300 group-hover:text-primary" aria-hidden="true" />
+                  <div className={"relative flex h-11 w-11 items-center justify-center rounded-xl border border-border/70 bg-background transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-primary/[0.06] group-focus-within:border-primary/40 group-focus-within:bg-primary/[0.06]" + (isActive ? " border-primary/50 bg-primary/[0.08]" : "")}>
+                    <Icon className={"h-5 w-5 transition-colors duration-300 group-hover:text-primary " + (isActive ? "text-primary" : "text-foreground/70")} aria-hidden="true" />
                   </div>
 
                   <h3 className="relative mt-6 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
@@ -170,7 +219,7 @@ export default function EcosystemNavigator() {
                   </p>
 
                   <span className="relative mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary">
-                    Enter
+                    {isActive ? "In view" : "Enter"}
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
                   </span>
                 </Link>
