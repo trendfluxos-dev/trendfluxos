@@ -11,7 +11,7 @@ import theStandCover from "@/assets/the-stand-cover.jpg";
 export const TheStandCoverSection = () => (
   <section
     aria-labelledby="the-stand-cover-heading"
-    className="relative isolate overflow-hidden bg-black py-20 sm:py-24 lg:py-28"
+    className="relative isolate overflow-hidden bg-black py-10 sm:py-14 lg:py-16"
   >
     <InlineEditProvider scope="the-stand-cover">
       <div
@@ -24,7 +24,7 @@ export const TheStandCoverSection = () => (
       />
 
       <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10">
-        <div className="mb-6 flex items-center gap-3 sm:mb-8 sm:gap-4">
+        <div className="mb-4 flex items-center gap-3 sm:mb-5 sm:gap-4">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" />
           <span className="font-serif text-[10px] uppercase tracking-[0.38em] text-amber-400/90 sm:text-[11px] sm:tracking-[0.42em]">
             <EditableText id="eyebrow" defaultText="Featured · The Stand · জাতীয় দলিল" />
@@ -70,7 +70,7 @@ export const TheStandCoverSection = () => (
           <span aria-hidden className="absolute bottom-3 left-3 h-3.5 w-3.5 border-b border-l border-amber-400/70 sm:bottom-5 sm:left-5 sm:h-4 sm:w-4" />
           <span aria-hidden className="absolute bottom-3 right-3 h-3.5 w-3.5 border-b border-r border-amber-400/70 sm:bottom-5 sm:right-5 sm:h-4 sm:w-4" />
 
-          <figcaption className="absolute inset-0 flex flex-col justify-between p-5 sm:p-10 lg:p-16">
+          <figcaption className="absolute inset-0 flex flex-col justify-between p-4 sm:p-7 lg:p-10">
             <div className="flex items-center justify-between gap-3 text-[9px] uppercase tracking-[0.4em] text-amber-300/80 sm:text-[10px]">
               <EditableText id="top-volume" defaultText="Volume I" />
               <EditableText id="top-meta-lg" defaultText="জাতীয় দলিল · ২০২৩–২০২৪" lang="bn" className="hidden sm:inline" />
@@ -123,7 +123,7 @@ export const TheStandCoverSection = () => (
           </figcaption>
         </figure>
 
-        <div className="mt-10 grid grid-cols-1 items-center gap-8 sm:mt-12 lg:grid-cols-[auto_1fr_auto] lg:gap-12">
+        <div className="mt-6 grid grid-cols-1 items-center gap-5 sm:mt-8 lg:grid-cols-[auto_1fr_auto] lg:gap-10">
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/the-stand"
