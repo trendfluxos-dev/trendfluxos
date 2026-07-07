@@ -68,7 +68,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
         className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full bg-[#e25a5a]/10 blur-[100px]"
       />
 
-      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 pt-10 pb-16 lg:pt-16 lg:pb-24 overflow-hidden">
+      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 pt-[calc(var(--nav-offset)+16px)] pb-16 lg:pb-24 overflow-hidden">
         {/* Corner ticks */}
         <span aria-hidden className="absolute left-4 top-4 h-3 w-3 border-l border-t border-[#c11f1f]/40" />
         <span aria-hidden className="absolute right-4 top-4 h-3 w-3 border-r border-t border-[#c11f1f]/40" />
