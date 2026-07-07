@@ -194,13 +194,23 @@
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    /* Global offset so smooth-scroll (anchor jumps, scrollIntoView,
+       roving keyboard nav) never lands beneath the fixed navbar or
+       any sticky section header. Bumps on lg where the Ecosystem
+       Navigator pins its own header (top-20 → 80px). */
+    --nav-offset: 88px;
+    scroll-padding-top: var(--nav-offset);
+  }
+  @media (min-width: 1024px) {
+    html { --nav-offset: 168px; }
   }
 
-  /* Anchor sections clear the fixed navbar so in-page jumps land
-     with breathing room instead of slipping under the nav. */
+  /* Belt-and-braces: give anchored blocks the same offset so
+     legacy `scrollIntoView()` calls that ignore scroll-padding
+     still clear the header. */
   section[id],
   [id]:where(section, article, main > div) {
-    scroll-margin-top: 96px;
+    scroll-margin-top: var(--nav-offset);
   }
 
   body {
