@@ -44,9 +44,37 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
   return (
     <section
       aria-labelledby="home-hero-heading"
-      className="bg-[#08080d] text-[#f0c9c9] selection:bg-[#c11f1f] selection:text-white"
+      className="relative isolate bg-[#08080d] text-[#f0c9c9] selection:bg-[#c11f1f] selection:text-white overflow-hidden"
     >
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 pt-10 pb-16 lg:pt-16 lg:pb-24 overflow-hidden">
+      {/* Ambient decoration — grid, radial glow, corner marks */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, #c11f1f 1px, transparent 1px), linear-gradient(to bottom, #c11f1f 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+          maskImage:
+            "radial-gradient(ellipse at 30% 20%, black 40%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at 30% 20%, black 40%, transparent 75%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 -right-40 h-[560px] w-[560px] rounded-full bg-[#c11f1f]/15 blur-[120px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full bg-[#e25a5a]/10 blur-[100px]"
+      />
+
+      <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 pt-10 pb-16 lg:pt-16 lg:pb-24 overflow-hidden">
+        {/* Corner ticks */}
+        <span aria-hidden className="absolute left-4 top-4 h-3 w-3 border-l border-t border-[#c11f1f]/40" />
+        <span aria-hidden className="absolute right-4 top-4 h-3 w-3 border-r border-t border-[#c11f1f]/40" />
+        <span aria-hidden className="absolute left-4 bottom-4 h-3 w-3 border-l border-b border-[#c11f1f]/40" />
+        <span aria-hidden className="absolute right-4 bottom-4 h-3 w-3 border-r border-b border-[#c11f1f]/40" />
         <div className="grid grid-cols-12 gap-6 md:gap-10 lg:gap-12 items-start">
           {/* Hero column */}
           <div className="col-span-12 lg:col-span-7">
