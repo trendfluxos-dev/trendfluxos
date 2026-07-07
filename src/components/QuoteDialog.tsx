@@ -75,6 +75,16 @@ type Props = {
     source?: string;
     module?: string;
     category?: string;
+    /**
+     * When launched from a showcase card / detail page, pre-fills the
+     * "related project" chip and includes the reference in the intake email
+     * + analytics so the intake team knows which case study prompted the call.
+     */
+    project?: {
+      id: string;
+      title: string;
+      href?: string;
+    };
   } | null;
 };
 
@@ -117,13 +127,18 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
     setSubmitting(true);
     try {
       const subject = encodeURIComponent(
-        `New Quote Request — ${parsed.data.objective}`,
+        context?.project
+          ? `Strategy Call — ${parsed.data.objective} · ${context.project.title}`
+          : `New Quote Request — ${parsed.data.objective}`,
       );
       const body = encodeURIComponent(
         `Name: ${parsed.data.name}\n` +
           `Email: ${parsed.data.email}\n` +
           `Company: ${parsed.data.companyUrl}\n` +
-          `Objective: ${parsed.data.objective}\n`,
+          `Objective: ${parsed.data.objective}\n` +
+          (context?.project
+            ? `Related project: ${context.project.title}${context.project.href ? ` (${context.project.href})` : ""}\n`
+            : ""),
       );
       // Open mail client as the lightweight handoff for now.
       window.location.href = `mailto:zhemongrowth@gmail.com?subject=${subject}&body=${body}`;
@@ -134,6 +149,7 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
         source: context?.source ?? "default",
         module: context?.module ?? null,
         category: context?.category ?? null,
+        project: context?.project?.id ?? null,
       });
       if (context?.source === "services_grid" && context.module) {
         track("service_module_submit", {
