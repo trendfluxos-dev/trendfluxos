@@ -619,14 +619,10 @@ const Founder = () => {
                     <figure className="mt-4 space-y-1.5">
                     <button
                       type="button"
-                      onClick={() =>
-                        setLightbox({
-                          src: d.previewImage!,
-                          alt: d.previewAlt ?? `${d.title} — document preview`,
-                          title: d.title,
-                          verifyUrl: d.verifyUrl,
-                        })
-                      }
+                      onClick={() => {
+                        const idx = docPreviews.findIndex((x) => x.id === d.id);
+                        if (idx >= 0) openLightbox(idx);
+                      }}
                       className="group relative block w-full overflow-hidden rounded-lg border border-border bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary"
                       aria-label={`Open fullscreen preview of ${d.title}`}
                     >
