@@ -50,8 +50,14 @@ const family: Bi[] = [
   { en: "Family is well-educated, culturally grounded, and socially respected.", bn: "পরিবার শিক্ষিত, সংস্কৃতিমনা এবং সামাজিকভাবে সম্মানিত।" },
 ];
 
-const education: Bi[] = [
-  { en: "BSc in Information Technology — Jahangirnagar University", bn: "বি.এসসি ইন ইনফরমেশন টেকনোলজি — জাহাঙ্গীরনগর বিশ্ববিদ্যালয়" },
+type EduItem = Bi & { verifyUrl?: string; verifyLabel?: Bi };
+const education: EduItem[] = [
+  {
+    en: "BSc in Information Technology — Jahangirnagar University",
+    bn: "বি.এসসি ইন ইনফরমেশন টেকনোলজি — জাহাঙ্গীরনগর বিশ্ববিদ্যালয়",
+    verifyUrl: "https://juniv.edu/discussion/18018/file/17564",
+    verifyLabel: { en: "Verify (official result)", bn: "যাচাই করুন (অফিসিয়াল ফলাফল)" },
+  },
   { en: "HSC — Science, GPA 5.00", bn: "এইচএসসি — বিজ্ঞান বিভাগ, জিপিএ ৫.০০" },
   { en: "SSC — Science, GPA 5.00", bn: "এসএসসি — বিজ্ঞান বিভাগ, জিপিএ ৫.০০" },
 ];
@@ -526,6 +532,22 @@ const Marriage = () => {
             {education.map((e, i) => (
               <li key={i} className="text-white/85">
                 <T en={e.en} bn={e.bn} bangla={bangla} />
+                {e.verifyUrl && (
+                  <a
+                    href={e.verifyUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-2 inline-flex items-center gap-1 rounded-full border border-red-500/40 bg-red-500/10 px-2 py-0.5 text-xs font-medium text-red-200 hover:bg-red-500/20 hover:text-white transition align-middle"
+                    aria-label={bangla ? e.verifyLabel?.bn : e.verifyLabel?.en}
+                  >
+                    <span aria-hidden>✓</span>
+                    <T
+                      en={e.verifyLabel?.en ?? "Verify"}
+                      bn={e.verifyLabel?.bn ?? "যাচাই"}
+                      bangla={bangla}
+                    />
+                  </a>
+                )}
               </li>
             ))}
           </ul>
