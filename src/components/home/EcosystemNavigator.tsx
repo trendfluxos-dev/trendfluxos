@@ -50,6 +50,10 @@ export default function EcosystemNavigator() {
   // Which mapped homepage section is currently in view — used to light up
   // the corresponding card. `null` when nothing tracked is visible.
   const [activeId, setActiveId] = useState<string | null>(null);
+  // Human-readable label of the active section, used by the polite
+  // live region so screen-reader users hear which surface is in view.
+  const activeLabel =
+    ITEMS.find((it) => it.sectionId && it.sectionId === activeId)?.label ?? null;
   // Deep-link "grace window" — after a hash change we lock the active id
   // to the destination for ~900ms so the smooth-scroll can't flip the
   // highlight to intermediate sections in transit.
@@ -280,11 +284,17 @@ export default function EcosystemNavigator() {
                   to={to}
                   data-nav-card
                   data-active={isActive || undefined}
-                  aria-current={isActive ? "true" : undefined}
-                  aria-label={`${label}, card ${i + 1} of ${ITEMS.length}`}
+                  aria-current={isActive ? "location" : undefined}
+                  aria-label={
+                    `${label}, card ${i + 1} of ${ITEMS.length}` +
+                    (isActive ? ", current section in view" : "")
+                  }
                   aria-describedby={descId}
                   className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 outline-none transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.35)] focus-visible:-translate-y-1 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-background focus-visible:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.5)] data-[active]:border-primary data-[active]:bg-primary/[0.04] data-[active]:shadow-[0_18px_45px_-22px_hsl(var(--primary)/0.45)] sm:p-7"
                 >
+                  {isActive && (
+                    <span className="sr-only">Current section in view. </span>
+                  )}
                   {/* Active-state left accent bar */}
                   <span aria-hidden="true" className="pointer-events-none absolute inset-y-4 left-0 w-[3px] rounded-full bg-primary opacity-0 transition-opacity duration-300 data-[on=true]:opacity-100" data-on={isActive} />
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 data-[on=true]:opacity-100" data-on={isActive} />
@@ -327,6 +337,19 @@ export default function EcosystemNavigator() {
             <span className="sm:hidden">Swipe → to explore all {ITEMS.length} surfaces. </span>
             <span>Use arrow keys, Home or End to move between cards.</span>
           </p>
+
+          {/* Polite live region — announces the current in-view surface
+              to screen readers whenever the active card changes. */}
+          <div
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="sr-only"
+          >
+            {activeLabel
+              ? `${activeLabel} section is now in view.`
+              : "No tracked section is currently in view."}
+          </div>
         </nav>
       </div>
     </section>
