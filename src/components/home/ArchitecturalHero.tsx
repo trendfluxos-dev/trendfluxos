@@ -51,7 +51,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
           <div className="col-span-12 lg:col-span-7">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c11f1f]/10 border border-[#c11f1f]/20 mb-6">
               <span className="font-mono text-[10px] uppercase tracking-tighter text-[#e25a5a]">
-                Operator &amp; Founder Portfolio
+                Brand Architect · Founder Portfolio
               </span>
             </div>
             <h1
