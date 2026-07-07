@@ -99,7 +99,7 @@ export type ShowcaseItem = {
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   {
     id: "trendflux-space",
-    title: "TrendFlux Space",
+    stage: "Live", "TrendFlux Space",
     category: "Website",
     year: "2025 — Present",
     summary:
@@ -124,7 +124,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "verdaflux-spectrum",
-    title: "VerdaFlux Spectrum",
+    stage: "Pilot", "VerdaFlux Spectrum",
     category: "Website",
     year: "2025 — Present",
     summary:
@@ -148,7 +148,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "kormoshikkha",
-    title: "কর্মশিক্ষা TED Plus — Online Edtech Platform",
+    stage: "Scaling", "কর্মশিক্ষা TED Plus — Online Edtech Platform",
     category: "Enterprise System",
     year: "2025 — Present",
     summary:
@@ -186,7 +186,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "trendflux-ecosystem",
-    title: "TrendFlux Ecosystem",
+    stage: "Scaling", "TrendFlux Ecosystem",
     category: "Enterprise System",
     year: "2024 — Present",
     summary:
@@ -224,7 +224,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "pabna-nagarik",
-    title: "Pabna Nagorik Committee",
+    stage: "Scaling", "Pabna Nagorik Committee",
     category: "Client Project",
     year: "2024 — 2025",
     summary:
@@ -263,7 +263,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "nagarikbarta24",
-    title: "Nagorik Barta 24",
+    stage: "Live", "Nagorik Barta 24",
     category: "Client Project",
     year: "2025 — Present",
     summary:
@@ -288,7 +288,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "eish-live",
-    title: "EISH — Enter Institute of Skill & Hospitality",
+    stage: "Live", "EISH — Enter Institute of Skill & Hospitality",
     category: "Client Project",
     year: "2025 — Present",
     summary:
@@ -313,7 +313,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "agentai-smm",
-    title: "AgentAI SMM",
+    stage: "Pilot", "AgentAI SMM",
     category: "Enterprise System",
     year: "2025 — Present",
     summary:
@@ -340,7 +340,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "the-stand",
-    title: "The Stand",
+    stage: "Ongoing", "The Stand",
     category: "Personal Initiative",
     year: "2025",
     summary:
@@ -355,7 +355,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "luxe-veil",
-    title: "Luxe Veil",
+    stage: "Live", "Luxe Veil",
     category: "Website",
     year: "2025",
     summary:
@@ -370,7 +370,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "brandtoki",
-    title: "Studio BrandToki",
+    stage: "Live", "Studio BrandToki",
     category: "Website",
     year: "2025",
     summary:
@@ -385,7 +385,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "trendflux-talent",
-    title: "TrendFlux Talent",
+    stage: "Pilot", "TrendFlux Talent",
     category: "Website",
     year: "2025",
     summary:
@@ -400,7 +400,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "enterprise-control",
-    title: "Enterprise Control Portal",
+    stage: "Pilot", "Enterprise Control Portal",
     category: "Enterprise System",
     year: "2025",
     summary:
@@ -415,7 +415,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "masterclass",
-    title: "Advanced AI Masterclass",
+    stage: "Live", "Advanced AI Masterclass",
     category: "Personal Initiative",
     year: "2025",
     summary:
@@ -430,7 +430,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "debate-emon",
-    title: "Debate Emon",
+    stage: "Scaling", "Debate Emon",
     category: "Social Platform",
     year: "2023 — Present",
     summary:
@@ -458,7 +458,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "zhemongrowth-linkedin",
-    title: "@zhemongrowth — LinkedIn",
+    stage: "Ongoing", "@zhemongrowth — LinkedIn",
     category: "Social Platform",
     year: "Ongoing",
     summary:
@@ -474,7 +474,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "justice-appeal",
-    title: "Justice Appeal",
+    stage: "Ongoing", "Justice Appeal",
     category: "Personal Initiative",
     year: "2025",
     summary:
@@ -489,7 +489,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "media-reports",
-    title: "Media Coverage Archive",
+    stage: "Ongoing", "Media Coverage Archive",
     category: "Media Coverage",
     year: "2024 — 2025",
     summary:
