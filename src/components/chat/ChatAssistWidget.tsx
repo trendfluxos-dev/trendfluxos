@@ -416,6 +416,14 @@ export default function ChatAssistWidget() {
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
+                    onClick={showLeadForm}
+                    className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold bg-primary/15 text-primary hover:bg-primary/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  >
+                    <CalendarCheck className="h-3.5 w-3.5" aria-hidden />
+                    Talk to us
+                  </button>
+                  <button
+                    type="button"
                     onClick={createThread}
                     className="sm:hidden inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs bg-accent/60 hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
                     aria-label="New chat"
