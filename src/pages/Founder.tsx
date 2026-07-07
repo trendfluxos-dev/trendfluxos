@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight, Download, Printer, Share2, ChevronRight, ExternalLink,
   Mail, Facebook, Linkedin, MessageCircle, Quote, FileCheck2, ShieldCheck,
-  X, Maximize2,
+  X, Maximize2, ChevronLeft,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
