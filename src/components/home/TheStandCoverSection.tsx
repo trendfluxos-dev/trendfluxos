@@ -23,8 +23,8 @@ export const TheStandCoverSection = () => (
         }}
       />
 
-      <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10">
-        <div className="mb-3 flex items-center gap-2 sm:mb-5 sm:gap-4">
+      <div className="relative mx-auto max-w-[1400px] space-y-3 px-4 sm:space-y-4 sm:px-6 lg:space-y-6 lg:px-10">
+        <div className="flex items-center gap-2 sm:gap-4">
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400" />
           <span className="font-serif text-[10px] uppercase tracking-[0.38em] text-amber-400/90 sm:text-[11px] sm:tracking-[0.42em]">
             <EditableText id="eyebrow" defaultText="Featured · The Stand · জাতীয় দলিল" />
@@ -70,14 +70,14 @@ export const TheStandCoverSection = () => (
           <span aria-hidden className="absolute bottom-3 left-3 h-3.5 w-3.5 border-b border-l border-amber-400/70 sm:bottom-5 sm:left-5 sm:h-4 sm:w-4" />
           <span aria-hidden className="absolute bottom-3 right-3 h-3.5 w-3.5 border-b border-r border-amber-400/70 sm:bottom-5 sm:right-5 sm:h-4 sm:w-4" />
 
-          <figcaption className="absolute inset-0 flex flex-col justify-between p-2.5 sm:p-5 lg:p-8">
+          <figcaption className="absolute inset-0 flex flex-col justify-between gap-3 p-2.5 sm:gap-4 sm:p-5 lg:gap-6 lg:p-8">
             <div className="flex items-center justify-between gap-3 text-[9px] uppercase tracking-[0.4em] text-amber-300/80 sm:text-[10px]">
               <EditableText id="top-volume" defaultText="Volume I" />
               <EditableText id="top-meta-lg" defaultText="জাতীয় দলিল · ২০২৩–২০২৪" lang="bn" className="hidden sm:inline" />
               <EditableText id="top-meta-sm" defaultText="২০২৩–২০২৪" lang="bn" className="sm:hidden" />
             </div>
 
-            <div className="max-w-2xl">
+            <div className="max-w-2xl space-y-2 sm:space-y-3 lg:space-y-4">
               <EditableText
                 as="h2"
                 id="title"
@@ -90,14 +90,14 @@ export const TheStandCoverSection = () => (
                 id="subtitle"
                 lang="bn"
                 defaultText="একজন তরুণ একা দাঁড়িয়ে — নৈতিক অবস্থানের সিনেমাটিক রূপায়ণ"
-                className="mt-1.5 font-serif text-sm font-medium text-amber-200/95 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] sm:mt-2.5 sm:text-xl lg:text-2xl"
+                className="font-serif text-sm font-medium text-amber-200/95 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] sm:text-xl lg:text-2xl"
               />
               <EditableText
                 as="p"
                 id="standfirst"
                 multiline
                 defaultText="Zahid Hasan Emon · Jahangirnagar University · a preserved moment of conscience against extortion and torture-cell culture."
-                className="mt-1.5 max-w-md text-[12px] leading-snug text-white/75 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:mt-3 sm:text-sm sm:leading-relaxed lg:text-base"
+                className="max-w-md text-[12px] leading-snug text-white/75 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:text-sm sm:leading-relaxed lg:text-base"
               />
             </div>
 
@@ -110,7 +110,7 @@ export const TheStandCoverSection = () => (
                   defaultText="“মায়ের নিষেধ আছে।”"
                   className="font-serif text-lg italic leading-snug text-amber-100 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] sm:text-2xl lg:text-3xl"
                 />
-                <footer className="mt-2 font-serif text-[10px] uppercase tracking-[0.3em] text-white/60 sm:text-[11px]">
+                <footer className="mt-2 font-serif text-[10px] uppercase tracking-[0.3em] text-white/60 sm:mt-3 sm:text-[11px] lg:mt-4">
                   <EditableText id="attribution" defaultText="— Zahid Hasan Emon · 2023" lang="bn" />
                 </footer>
               </blockquote>
@@ -123,8 +123,8 @@ export const TheStandCoverSection = () => (
           </figcaption>
         </figure>
 
-        <div className="mt-3 grid grid-cols-1 items-center gap-2 sm:mt-5 sm:gap-4 lg:grid-cols-[auto_1fr_auto] lg:gap-8">
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="grid grid-cols-1 items-center gap-3 sm:gap-4 lg:grid-cols-[auto_1fr_auto] lg:gap-6">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <Link
               to="/the-stand"
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-sm bg-amber-400 px-5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-black shadow-[0_10px_30px_-10px_rgba(251,191,36,0.55)] transition-all hover:bg-amber-300 hover:shadow-[0_14px_40px_-10px_rgba(251,191,36,0.7)] sm:px-6 sm:py-2.5 sm:text-sm sm:tracking-[0.18em]"
@@ -144,18 +144,18 @@ export const TheStandCoverSection = () => (
 
           <span aria-hidden className="hidden h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent lg:block" />
 
-          <dl className="grid grid-cols-3 gap-2 sm:gap-6">
+          <dl className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
             <div>
               <dt className="font-serif text-[9px] uppercase tracking-[0.24em] text-amber-400/70 sm:text-[10px] sm:tracking-[0.28em]">Chapter</dt>
-              <dd className="mt-0.5 font-serif text-[12px] text-white/90 sm:mt-1 sm:text-sm">I — The Stand</dd>
+              <dd className="mt-2 font-serif text-[12px] text-white/90 sm:mt-3 sm:text-sm lg:mt-4">I — The Stand</dd>
             </div>
             <div>
               <dt className="font-serif text-[9px] uppercase tracking-[0.24em] text-amber-400/70 sm:text-[10px] sm:tracking-[0.28em]">Year</dt>
-              <dd className="mt-0.5 font-serif text-[12px] text-white/90 sm:mt-1 sm:text-sm">2023–2024</dd>
+              <dd className="mt-2 font-serif text-[12px] text-white/90 sm:mt-3 sm:text-sm lg:mt-4">2023–2024</dd>
             </div>
             <div>
               <dt className="font-serif text-[9px] uppercase tracking-[0.24em] text-amber-400/70 sm:text-[10px] sm:tracking-[0.28em]">Status</dt>
-              <dd className="mt-0.5 inline-flex items-center gap-1.5 font-serif text-[12px] text-white/90 sm:mt-1 sm:text-sm">
+              <dd className="mt-2 inline-flex items-center gap-1.5 font-serif text-[12px] text-white/90 sm:mt-3 sm:text-sm lg:mt-4">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.7)]" />
                 Verified
               </dd>
