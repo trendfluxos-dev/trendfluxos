@@ -131,6 +131,8 @@ export type FounderDocument = {
   date: string; // ISO-8601 (YYYY-MM-DD)
   verifyUrl?: string;
   note?: string;
+  previewImage?: string; // Public asset URL for a document preview thumbnail
+  previewAlt?: string;
 };
 
 export const FOUNDER_DOCUMENTS: FounderDocument[] = [
