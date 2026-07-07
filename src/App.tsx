@@ -14,6 +14,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import ScrollProgress from "./components/ScrollProgress";
 import CommandPalette from "./components/CommandPalette";
 import FloatingContact from "./components/social/FloatingContact";
+import ChatAssistWidget from "./components/chat/ChatAssistWidget";
 import BrandSwitcher from "./components/social/BrandSwitcher";
 import LuxeVeilGate from "./components/LuxeVeilGate";
 import TelegramGroupPopup from "./components/TelegramGroupPopup";
@@ -296,6 +297,7 @@ const App = () => (
           <ScrollProgress />
           <CommandPalette />
           <FloatingContact />
+          <ChatAssistWidget />
           <BrandSwitcher />
           <LuxeVeilGate />
           <TelegramGroupPopup />
