@@ -176,38 +176,65 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
               </Link>
             </div>
 
-            {/* Founder identity card — Zahid Hasan Emon */}
+            {/* Founder identity card — Zahid Hasan Emon (featured) */}
             <Link
               to="/about"
-              className="col-span-2 mt-2 flex items-center gap-4 p-4 rounded-lg border border-[#c11f1f]/25 bg-gradient-to-br from-[#1a0a0a] via-[#12060a] to-[#08080d] hover:border-[#c11f1f]/60 transition-all group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d]"
+              aria-label="About Zahid Hasan Emon — Founder & Brand Architect"
+              className="relative col-span-2 mt-3 flex items-center gap-5 overflow-hidden rounded-xl border border-[#c11f1f]/40 bg-gradient-to-br from-[#1f0a0f] via-[#140609] to-[#08080d] p-5 shadow-[0_20px_50px_-20px_rgba(226,90,90,0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e25a5a] hover:shadow-[0_28px_70px_-20px_rgba(226,90,90,0.6)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d] group sm:p-6"
             >
+              {/* Ambient glow */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -top-16 -left-10 h-40 w-40 rounded-full bg-[#e25a5a]/25 blur-3xl transition-opacity duration-500 opacity-70 group-hover:opacity-100"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#e25a5a]/60 to-transparent"
+              />
+              {/* Corner "Featured" chip */}
+              <span
+                aria-hidden
+                className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full border border-[#e25a5a]/40 bg-[#e25a5a]/10 px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.25em] text-[#e25a5a]"
+              >
+                <span className="h-1 w-1 rounded-full bg-[#e25a5a] shadow-[0_0_6px_rgba(226,90,90,0.9)]" />
+                Founder
+              </span>
+
               <div className="relative shrink-0">
+                <span
+                  aria-hidden
+                  className="absolute -inset-1 rounded-full bg-[#e25a5a]/30 blur-md opacity-70 group-hover:opacity-100 transition-opacity"
+                />
                 <img
                   src={portrait}
                   alt="Zahid Hasan Emon — Founder & Brand Architect"
-                  width={64}
-                  height={64}
+                  width={88}
+                  height={88}
                   loading="lazy"
                   decoding="async"
-                  className="h-16 w-16 rounded-full object-cover ring-2 ring-[#c11f1f]/50 group-hover:ring-[#e25a5a] transition"
+                  className="relative h-20 w-20 sm:h-[88px] sm:w-[88px] rounded-full object-cover ring-2 ring-[#c11f1f]/60 group-hover:ring-[#e25a5a] transition"
                 />
                 <span
                   aria-hidden
-                  className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-[#c11f1f] ring-2 ring-[#08080d] shadow-[0_0_10px_rgba(226,90,90,0.7)]"
+                  className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-[#c11f1f] ring-2 ring-[#08080d] shadow-[0_0_12px_rgba(226,90,90,0.8)]"
                 />
               </div>
-              <div className="min-w-0 flex-1">
-                <span className="font-mono text-[9px] uppercase tracking-widest text-[#e25a5a] block mb-1">
+
+              <div className="relative min-w-0 flex-1">
+                <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.28em] text-[#e25a5a]">
                   Founder · Operator
                 </span>
-                <div className="font-semibold text-white text-sm leading-tight truncate group-hover:text-[#e25a5a]">
+                <div className="font-display text-lg sm:text-xl font-bold leading-tight text-white transition-colors group-hover:text-[#ffd7d7]">
                   Zahid Hasan Emon
                 </div>
-                <div className="text-[11px] text-[#f0c9c9]/60 leading-snug mt-0.5 truncate">
+                <div className="mt-1 text-[12px] sm:text-[13px] leading-snug text-[#f0c9c9]/75">
                   Brand Architect · AI-era Technologist
                 </div>
+                <span className="mt-2 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[#e25a5a]/90 group-hover:text-[#e25a5a]">
+                  View portfolio
+                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                </span>
               </div>
-              <ArrowRight className="w-4 h-4 shrink-0 text-[#e25a5a]/70 group-hover:translate-x-1 group-hover:text-[#e25a5a] transition-transform" aria-hidden />
             </Link>
           </aside>
         </div>
