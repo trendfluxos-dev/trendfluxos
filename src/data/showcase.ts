@@ -51,6 +51,12 @@ export type ShowcaseTech =
   | "Wix"
   | "GHL";
 
+/**
+ * Business stage of a project — used by the Showcase filter to help
+ * visitors quickly find work at a comparable maturity level.
+ */
+export type ShowcaseStage = "Pilot" | "Live" | "Scaling" | "Ongoing";
+
 export type ShowcaseItem = {
   id: string;
   title: string;
@@ -62,6 +68,7 @@ export type ShowcaseItem = {
   industry?: ShowcaseIndustry;
   services?: ShowcaseService[];
   tech?: ShowcaseTech[];
+  stage?: ShowcaseStage;
   href?: string; // internal route or external URL
   external?: boolean;
   size?: ShowcaseSize; // controls visual prominence
