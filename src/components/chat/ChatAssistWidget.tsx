@@ -604,3 +604,160 @@ function renderInline(text: string) {
   if (last < text.length) nodes.push(text.slice(last));
   return <>{nodes}</>;
 }
+
+type LeadValues = { name: string; email: string; growthSystem: string; notes?: string };
+
+function LeadFormCard({
+  formId,
+  onSubmit,
+}: {
+  formId: string;
+  onSubmit: (id: string, v: LeadValues) => Promise<{ ok: true } | { ok: false; error: string }>;
+}) {
+  const [values, setValues] = useState<LeadValues>({ name: "", email: "", growthSystem: "", notes: "" });
+  const [errors, setErrors] = useState<Partial<Record<keyof LeadValues, string>>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const set = (k: keyof LeadValues) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setValues((v) => ({ ...v, [k]: e.target.value }));
+    setErrors((prev) => ({ ...prev, [k]: undefined }));
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setServerError(null);
+    const parsed = leadSchema.safeParse(values);
+    if (!parsed.success) {
+      const fe: Partial<Record<keyof LeadValues, string>> = {};
+      for (const issue of parsed.error.issues) {
+        const k = issue.path[0] as keyof LeadValues;
+        if (!fe[k]) fe[k] = issue.message;
+      }
+      setErrors(fe);
+      return;
+    }
+    setSubmitting(true);
+    const res = await onSubmit(formId, parsed.data);
+    setSubmitting(false);
+    if (!res.ok) setServerError(res.error || "Couldn't submit. Please try again.");
+  };
+
+  return (
+    <div className="flex gap-2 justify-start">
+      <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+        <Bot className="h-3.5 w-3.5" aria-hidden />
+      </span>
+      <form
+        onSubmit={submit}
+        className="max-w-[85%] w-full rounded-2xl rounded-bl-sm border border-primary/25 bg-muted/60 p-3.5 space-y-3"
+        aria-label="Lead capture form"
+      >
+        <div className="space-y-1">
+          <label htmlFor={`${formId}-name`} className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Your name
+          </label>
+          <input
+            id={`${formId}-name`}
+            type="text"
+            required
+            maxLength={120}
+            autoComplete="name"
+            value={values.name}
+            onChange={set("name")}
+            className="w-full rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            placeholder="Jane Doe"
+            disabled={submitting}
+          />
+          {errors.name && <p className="text-[11px] text-destructive">{errors.name}</p>}
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor={`${formId}-email`} className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Email
+          </label>
+          <input
+            id={`${formId}-email`}
+            type="email"
+            required
+            maxLength={200}
+            autoComplete="email"
+            value={values.email}
+            onChange={set("email")}
+            className="w-full rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            placeholder="jane@company.com"
+            disabled={submitting}
+          />
+          {errors.email && <p className="text-[11px] text-destructive">{errors.email}</p>}
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor={`${formId}-system`} className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            What growth system do you need?
+          </label>
+          <select
+            id={`${formId}-system`}
+            required
+            value={values.growthSystem}
+            onChange={set("growthSystem")}
+            className="w-full rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            disabled={submitting}
+          >
+            <option value="">Select an option…</option>
+            {GROWTH_SYSTEMS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+          {errors.growthSystem && <p className="text-[11px] text-destructive">{errors.growthSystem}</p>}
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor={`${formId}-notes`} className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Anything else? <span className="text-muted-foreground/60 normal-case">(optional)</span>
+          </label>
+          <textarea
+            id={`${formId}-notes`}
+            rows={2}
+            maxLength={1000}
+            value={values.notes}
+            onChange={set("notes")}
+            className="w-full resize-none rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            placeholder="Context, timeline, monthly revenue…"
+            disabled={submitting}
+          />
+        </div>
+
+        {serverError && (
+          <p className="text-[11px] text-destructive" role="alert">{serverError}</p>
+        )}
+
+        <button
+          type="submit"
+          disabled={submitting}
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:brightness-110 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+        >
+          {submitting ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <CalendarCheck className="h-3.5 w-3.5" aria-hidden />}
+          {submitting ? "Sending…" : "Send to the team"}
+        </button>
+        <p className="text-[10px] text-muted-foreground/70">
+          We'll only use your email to reply about your inquiry.
+        </p>
+      </form>
+    </div>
+  );
+}
+
+function LeadSuccessCard({ content }: { content: string }) {
+  return (
+    <div className="flex gap-2 justify-start">
+      <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-500">
+        <CheckCircle2 className="h-3.5 w-3.5" aria-hidden />
+      </span>
+      <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-sm leading-relaxed text-foreground">
+        {renderInline(content)}
+      </div>
+    </div>
+  );
+}
