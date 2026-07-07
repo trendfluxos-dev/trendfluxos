@@ -23,6 +23,7 @@ const ProofSection          = lazy(() => import("@/components/home/ProofSection"
 const TestimonialsSection   = lazy(() => import("@/components/home/TestimonialsSection").then(m => ({ default: m.TestimonialsSection })));
 const FinalCtaSection       = lazy(() => import("@/components/home/FinalCtaSection").then(m => ({ default: m.FinalCtaSection })));
 const TripleBridge          = lazy(() => import("@/components/ecosystem/TripleBridge"));
+const EcosystemNavigator    = lazy(() => import("@/components/home/EcosystemNavigator"));
 
 /**
  * Home page (TrendFlux Growth OS). Composition-only: each section is a
@@ -84,6 +85,12 @@ const Index = () => {
       <Navbar />
 
       <ArchitecturalHero onOpenQuote={openQuote} />
+
+      <SectionOrnament chapter="Navigator" label="Explore the Ecosystem" />
+      {/* Sticky ecosystem navigator — 11 large jump cards to public routes. */}
+      <LazySection label="ecosystem-navigator" skeleton={<SectionSkeleton variant="cards" />}>
+        <EcosystemNavigator />
+      </LazySection>
 
       <SectionOrnament chapter="Chapter I" label="Systems He Built · 90-day Build" />
       {/* Growth Systems — the 6-stage 90-day build order (per spec §3). */}
