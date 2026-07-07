@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight, Download, Printer, Share2, ChevronRight, ExternalLink,
-  Mail, Facebook, Linkedin, MessageCircle, Quote,
+  Mail, Facebook, Linkedin, MessageCircle, Quote, FileCheck2, ShieldCheck,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
