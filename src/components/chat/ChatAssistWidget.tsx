@@ -472,12 +472,33 @@ export default function ChatAssistWidget() {
                         </button>
                       ))}
                     </div>
+                    <button
+                      type="button"
+                      onClick={showLeadForm}
+                      className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold bg-primary text-primary-foreground hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                    >
+                      <CalendarCheck className="h-3.5 w-3.5" aria-hidden />
+                      Talk to the team
+                    </button>
                   </div>
                 )}
 
-                {active?.messages.map((m) => (
-                  <MessageBubble key={m.id} role={m.role} content={m.content} pending={status === "streaming" && m.role === "assistant" && m.content === ""} />
-                ))}
+                {active?.messages.map((m) => {
+                  if (m.kind === "lead-form") {
+                    return <LeadFormCard key={m.id} formId={m.id} onSubmit={submitLead} />;
+                  }
+                  if (m.kind === "lead-success") {
+                    return <LeadSuccessCard key={m.id} content={m.content} />;
+                  }
+                  return (
+                    <MessageBubble
+                      key={m.id}
+                      role={m.role}
+                      content={m.content}
+                      pending={status === "streaming" && m.role === "assistant" && m.content === ""}
+                    />
+                  );
+                })}
 
                 {status === "sending" && (
                   <p className="text-xs text-muted-foreground italic">Thinking…</p>
