@@ -75,6 +75,16 @@ type Props = {
     source?: string;
     module?: string;
     category?: string;
+    /**
+     * When launched from a showcase card / detail page, pre-fills the
+     * "related project" chip and includes the reference in the intake email
+     * + analytics so the intake team knows which case study prompted the call.
+     */
+    project?: {
+      id: string;
+      title: string;
+      href?: string;
+    };
   } | null;
 };
 
@@ -117,13 +127,18 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
     setSubmitting(true);
     try {
       const subject = encodeURIComponent(
-        `New Quote Request — ${parsed.data.objective}`,
+        context?.project
+          ? `Strategy Call — ${parsed.data.objective} · ${context.project.title}`
+          : `New Quote Request — ${parsed.data.objective}`,
       );
       const body = encodeURIComponent(
         `Name: ${parsed.data.name}\n` +
           `Email: ${parsed.data.email}\n` +
           `Company: ${parsed.data.companyUrl}\n` +
-          `Objective: ${parsed.data.objective}\n`,
+          `Objective: ${parsed.data.objective}\n` +
+          (context?.project
+            ? `Related project: ${context.project.title}${context.project.href ? ` (${context.project.href})` : ""}\n`
+            : ""),
       );
       // Open mail client as the lightweight handoff for now.
       window.location.href = `mailto:zhemongrowth@gmail.com?subject=${subject}&body=${body}`;
@@ -134,6 +149,7 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
         source: context?.source ?? "default",
         module: context?.module ?? null,
         category: context?.category ?? null,
+        project: context?.project?.id ?? null,
       });
       if (context?.source === "services_grid" && context.module) {
         track("service_module_submit", {
@@ -206,6 +222,19 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
               <DialogDescription className="text-foreground/60">
                 Tell us where you're headed. We reply within one business day.
               </DialogDescription>
+              {context?.project && (
+                <div className="mt-3 flex items-start gap-2 rounded-lg border border-gold/30 bg-gold/[0.06] px-3 py-2">
+                  <Rocket className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" aria-hidden />
+                  <div className="min-w-0 text-left">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-gold/90">
+                      Related project
+                    </p>
+                    <p className="mt-0.5 truncate text-sm font-medium text-foreground">
+                      {context.project.title}
+                    </p>
+                  </div>
+                </div>
+              )}
             </DialogHeader>
 
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>

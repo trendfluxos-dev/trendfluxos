@@ -1,10 +1,11 @@
 import { useMemo, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowUpRight, CheckCircle2, Share2, Sparkles, AlertCircle, Cog } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, CheckCircle2, Share2, Sparkles, AlertCircle, Cog, CalendarClock } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
+import { QuoteDialog } from "@/components/QuoteDialog";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
@@ -14,6 +15,7 @@ const ShowcaseDetail = () => {
   const { id } = useParams<{ id: string }>();
   const item = useMemo(() => SHOWCASE_ITEMS.find((i) => i.id === id), [id]);
   const [shareOpen, setShareOpen] = useState(false);
+  const [quoteOpen, setQuoteOpen] = useState(false);
 
   useSeo({
     title: item ? `${item.title} — Case Study | ${BRAND.name}` : `Project — ${BRAND.name}`,
@@ -100,8 +102,12 @@ const ShowcaseDetail = () => {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
+            <Button variant="hero" size="lg" onClick={() => setQuoteOpen(true)}>
+              <CalendarClock />
+              Book Strategy Call
+            </Button>
             {item.href && (
-              <Button variant="hero" size="lg" asChild>
+              <Button variant="outline" size="lg" asChild>
                 {item.external ? (
                   <a href={item.href} target="_blank" rel="noreferrer">
                     {item.liveLabel ?? "Visit live site"}
@@ -124,6 +130,14 @@ const ShowcaseDetail = () => {
       </section>
 
       <ShareDialog open={shareOpen} onOpenChange={setShareOpen} payload={sharePayload} />
+      <QuoteDialog
+        open={quoteOpen}
+        onOpenChange={setQuoteOpen}
+        context={{
+          source: "showcase_detail",
+          project: { id: item.id, title: item.title, href: item.href },
+        }}
+      />
 
       {/* METRICS */}
       {item.metrics && item.metrics.length > 0 && (

@@ -1,4 +1,4 @@
-import { ArrowUpRight, Share2, AlertCircle, Cog, Sparkles, FileText } from "lucide-react";
+import { ArrowUpRight, Share2, AlertCircle, Cog, Sparkles, FileText, CalendarClock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { ShowcaseItem } from "@/data/showcase";
@@ -12,7 +12,15 @@ const accentRing: Record<NonNullable<ShowcaseItem["accent"]>, string> = {
   emerald: "before:bg-gradient-to-br before:from-emerald-400/20 before:to-transparent",
 };
 
-const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload) => void }) => {
+const Card = ({
+  item,
+  onShare,
+  onBookCall,
+}: {
+  item: ShowcaseItem;
+  onShare: (p: SharePayload) => void;
+  onBookCall?: (item: ShowcaseItem) => void;
+}) => {
   const navigate = useNavigate();
   const inner = (
     <article
@@ -127,7 +135,7 @@ const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload
           </div>
         )}
 
-        <div className="mt-5 pt-4 border-t border-border/40">
+        <div className="mt-5 pt-4 border-t border-border/40 flex flex-wrap items-center gap-x-4 gap-y-2">
           <button
             type="button"
             onClick={(e) => {
@@ -141,6 +149,20 @@ const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload
             View case study
             <ArrowUpRight className="h-3 w-3" />
           </button>
+          {onBookCall && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onBookCall(item);
+              }}
+              className="inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-400/90 hover:text-amber-300 transition-colors"
+            >
+              <CalendarClock className="h-3 w-3" />
+              Book strategy call
+            </button>
+          )}
         </div>
       </div>
     </article>
@@ -163,9 +185,10 @@ const Card = ({ item, onShare }: { item: ShowcaseItem; onShare: (p: SharePayload
 
 type Props = {
   items: ShowcaseItem[];
+  onBookCall?: (item: ShowcaseItem) => void;
 };
 
-const ShowcaseMasonry = ({ items }: Props) => {
+const ShowcaseMasonry = ({ items, onBookCall }: Props) => {
   const [shareOpen, setShareOpen] = useState(false);
   const [sharePayload, setSharePayload] = useState<SharePayload | null>(null);
 
@@ -179,7 +202,7 @@ const ShowcaseMasonry = ({ items }: Props) => {
       <div className="columns-1 md:columns-2 lg:columns-3 gap-5 lg:gap-6 [column-fill:_balance]">
         {items.map((item) => (
           <div key={item.id} id={item.id} className="mb-5 lg:mb-6 break-inside-avoid">
-            <Card item={item} onShare={onShare} />
+            <Card item={item} onShare={onShare} onBookCall={onBookCall} />
           </div>
         ))}
       </div>
