@@ -20,6 +20,7 @@ import extra2 from "@/assets/marriage/extra-2.jpeg.asset.json";
 import extra3 from "@/assets/marriage/extra-3.jpeg.asset.json";
 import extra4 from "@/assets/marriage/extra-4.jpeg.asset.json";
 import extra5 from "@/assets/marriage/extra-5.jpeg.asset.json";
+import { PhotoLightbox, type LightboxPhoto } from "@/components/marriage/PhotoLightbox";
 import { caseStudies } from "@/data/caseStudies";
 import proofUniversity from "@/assets/proof/university-certificates.webp";
 import proofPzswa from "@/assets/proof/pzswa-presidential.webp";
@@ -162,6 +163,7 @@ const trackReferenceEvent = (
 
 const Marriage = () => {
   const [bangla, setBangla] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   useSeo({
     title: "Marriage Profile — Zahid Hasan Emon | Pabna, Bangladesh",
     description:
@@ -562,8 +564,8 @@ const Marriage = () => {
 
         {/* Gallery */}
         <Card title={t("Photo Gallery", "ছবি")}>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {[
+          {(() => {
+            const galleryPhotos: LightboxPhoto[] = [
               { src: photo1, alt: "Zahid Hasan Emon portrait 1" },
               { src: photo2, alt: "Zahid Hasan Emon portrait 2" },
               { src: photo3, alt: "Zahid Hasan Emon portrait 3" },
@@ -572,16 +574,38 @@ const Marriage = () => {
               { src: extra3.url, alt: "Zahid Hasan Emon speaking, maroon blazer" },
               { src: extra4.url, alt: "Zahid Hasan Emon in maroon blazer, office" },
               { src: extra5.url, alt: "Zahid Hasan Emon in maroon blazer, city skyline" },
-            ].map((p, i) => (
-              <img
-                key={i}
-                src={p.src}
-                alt={p.alt}
-                loading="lazy"
-                className="w-full h-64 sm:h-72 object-cover rounded-2xl border border-red-500/30 hover:border-red-500/70 transition"
-              />
-            ))}
-          </div>
+            ];
+            return (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {galleryPhotos.map((p, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setLightboxIndex(i)}
+                      aria-label={`Open ${p.alt}`}
+                      className="group relative w-full h-64 sm:h-72 overflow-hidden rounded-2xl border border-red-500/30 hover:border-red-500/70 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                    >
+                      <img
+                        src={p.src}
+                        alt={p.alt}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                    </button>
+                  ))}
+                </div>
+                {lightboxIndex !== null && (
+                  <PhotoLightbox
+                    photos={galleryPhotos}
+                    index={lightboxIndex}
+                    onIndexChange={setLightboxIndex}
+                    onClose={() => setLightboxIndex(null)}
+                  />
+                )}
+              </>
+            );
+          })()}
         </Card>
 
         {/* Contact */}
