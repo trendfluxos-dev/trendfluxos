@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { MessageCircle, X, Send, Plus, Trash2, Bot, User } from "lucide-react";
+import { MessageCircle, X, Send, Plus, Trash2, Bot, User, CalendarCheck, Loader2, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
 
 // TrendFlux visitor chat assistant.
 // - Threaded conversations (in-memory only — resets on refresh)
@@ -8,11 +10,32 @@ import { cn } from "@/lib/utils";
 // - Floating launcher, expandable panel with sidebar of threads
 
 type Role = "user" | "assistant";
-type Message = { id: string; role: Role; content: string };
+type Message =
+  | { id: string; role: Role; content: string; kind?: "text" }
+  | { id: string; role: "assistant"; content: string; kind: "lead-form" }
+  | { id: string; role: "assistant"; content: string; kind: "lead-success" };
 type Thread = { id: string; title: string; messages: Message[]; createdAt: number };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assist`;
 const AUTH = `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`;
+
+const GROWTH_SYSTEMS = [
+  "AI Business Automation",
+  "Meta Ads & Lead Generation",
+  "Funnel & Landing Page Design",
+  "CRM & WhatsApp Automation",
+  "Content Strategy & Brand Storytelling",
+  "Website & Digital Ecosystem Design",
+  "Growth Analytics & Reporting",
+  "Not sure yet — help me choose",
+] as const;
+
+const leadSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(120, "Name is too long"),
+  email: z.string().trim().email("Enter a valid email").max(200),
+  growthSystem: z.string().min(1, "Pick what you need help with").max(200),
+  notes: z.string().trim().max(1000).optional().or(z.literal("")),
+});
 
 const uid = () =>
   (globalThis.crypto?.randomUUID?.() ?? `id-${Math.random().toString(36).slice(2)}-${Date.now()}`);
@@ -78,6 +101,70 @@ export default function ChatAssistWidget() {
     setStatus("idle");
   };
 
+  const showLeadForm = useCallback(() => {
+    if (!active) return;
+    // Avoid stacking multiple open forms
+    if (active.messages.some((m) => m.kind === "lead-form")) return;
+    const intro: Message = {
+      id: uid(),
+      role: "assistant",
+      kind: "text",
+      content:
+        "Great — share a few details and the TrendFlux team will reach out. This takes ~30 seconds.",
+    };
+    const form: Message = {
+      id: uid(),
+      role: "assistant",
+      kind: "lead-form",
+      content: "",
+    };
+    setThreads((prev) =>
+      prev.map((t) =>
+        t.id === active.id ? { ...t, messages: [...t.messages, intro, form] } : t,
+      ),
+    );
+  }, [active]);
+
+  const submitLead = useCallback(
+    async (
+      formId: string,
+      values: { name: string; email: string; growthSystem: string; notes?: string },
+    ) => {
+      if (!active) return { ok: false as const, error: "No active chat." };
+      const { error: dbError } = await supabase.from("growth_leads").insert({
+        name: values.name,
+        email: values.email,
+        source: "trendflux-contact",
+        message: `[Chatbot] Needs: ${values.growthSystem}${values.notes ? `\n\nNotes: ${values.notes}` : ""}`,
+      });
+      if (dbError) return { ok: false as const, error: dbError.message };
+
+      // Replace form with a success card + a follow-up assistant note
+      setThreads((prev) =>
+        prev.map((t) =>
+          t.id === active.id
+            ? {
+                ...t,
+                messages: [
+                  ...t.messages.map((m) =>
+                    m.id === formId
+                      ? ({
+                          ...m,
+                          kind: "lead-success",
+                          content: `Thanks, ${values.name}! The TrendFlux team will reach out to ${values.email} shortly about **${values.growthSystem}**. In the meantime you can [book a strategy call](/project-lead) directly.`,
+                        } as Message)
+                      : m,
+                  ),
+                ],
+              }
+            : t,
+        ),
+      );
+      return { ok: true as const };
+    },
+    [active],
+  );
+
   const deleteThread = (id: string) => {
     setThreads((prev) => {
       const next = prev.filter((t) => t.id !== id);
@@ -114,7 +201,9 @@ export default function ChatAssistWidget() {
     setInput("");
     setStatus("sending");
 
-    const historyForApi = [...active.messages, userMsg].map(({ role, content }) => ({ role, content }));
+    const historyForApi = [...active.messages, userMsg]
+      .filter((m) => !m.kind || m.kind === "text")
+      .map(({ role, content }) => ({ role, content }));
 
     const ctrl = new AbortController();
     abortRef.current = ctrl;
@@ -329,6 +418,14 @@ export default function ChatAssistWidget() {
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
+                    onClick={showLeadForm}
+                    className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold bg-primary/15 text-primary hover:bg-primary/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  >
+                    <CalendarCheck className="h-3.5 w-3.5" aria-hidden />
+                    Talk to us
+                  </button>
+                  <button
+                    type="button"
                     onClick={createThread}
                     className="sm:hidden inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs bg-accent/60 hover:bg-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
                     aria-label="New chat"
@@ -377,12 +474,33 @@ export default function ChatAssistWidget() {
                         </button>
                       ))}
                     </div>
+                    <button
+                      type="button"
+                      onClick={showLeadForm}
+                      className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold bg-primary text-primary-foreground hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                    >
+                      <CalendarCheck className="h-3.5 w-3.5" aria-hidden />
+                      Talk to the team
+                    </button>
                   </div>
                 )}
 
-                {active?.messages.map((m) => (
-                  <MessageBubble key={m.id} role={m.role} content={m.content} pending={status === "streaming" && m.role === "assistant" && m.content === ""} />
-                ))}
+                {active?.messages.map((m) => {
+                  if (m.kind === "lead-form") {
+                    return <LeadFormCard key={m.id} formId={m.id} onSubmit={submitLead} />;
+                  }
+                  if (m.kind === "lead-success") {
+                    return <LeadSuccessCard key={m.id} content={m.content} />;
+                  }
+                  return (
+                    <MessageBubble
+                      key={m.id}
+                      role={m.role}
+                      content={m.content}
+                      pending={status === "streaming" && m.role === "assistant" && m.content === ""}
+                    />
+                  );
+                })}
 
                 {status === "sending" && (
                   <p className="text-xs text-muted-foreground italic">Thinking…</p>
@@ -485,4 +603,161 @@ function renderInline(text: string) {
   }
   if (last < text.length) nodes.push(text.slice(last));
   return <>{nodes}</>;
+}
+
+type LeadValues = { name: string; email: string; growthSystem: string; notes?: string };
+
+function LeadFormCard({
+  formId,
+  onSubmit,
+}: {
+  formId: string;
+  onSubmit: (id: string, v: LeadValues) => Promise<{ ok: true } | { ok: false; error: string }>;
+}) {
+  const [values, setValues] = useState<LeadValues>({ name: "", email: "", growthSystem: "", notes: "" });
+  const [errors, setErrors] = useState<Partial<Record<keyof LeadValues, string>>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const set = (k: keyof LeadValues) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setValues((v) => ({ ...v, [k]: e.target.value }));
+    setErrors((prev) => ({ ...prev, [k]: undefined }));
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setServerError(null);
+    const parsed = leadSchema.safeParse(values);
+    if (!parsed.success) {
+      const fe: Partial<Record<keyof LeadValues, string>> = {};
+      for (const issue of parsed.error.issues) {
+        const k = issue.path[0] as keyof LeadValues;
+        if (!fe[k]) fe[k] = issue.message;
+      }
+      setErrors(fe);
+      return;
+    }
+    setSubmitting(true);
+    const res = await onSubmit(formId, parsed.data as LeadValues);
+    setSubmitting(false);
+    if (!res.ok) setServerError(("error" in res && res.error) || "Couldn't submit. Please try again.");
+  };
+
+  return (
+    <div className="flex gap-2 justify-start">
+      <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+        <Bot className="h-3.5 w-3.5" aria-hidden />
+      </span>
+      <form
+        onSubmit={submit}
+        className="max-w-[85%] w-full rounded-2xl rounded-bl-sm border border-primary/25 bg-muted/60 p-3.5 space-y-3"
+        aria-label="Lead capture form"
+      >
+        <div className="space-y-1">
+          <label htmlFor={`${formId}-name`} className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Your name
+          </label>
+          <input
+            id={`${formId}-name`}
+            type="text"
+            required
+            maxLength={120}
+            autoComplete="name"
+            value={values.name}
+            onChange={set("name")}
+            className="w-full rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            placeholder="Jane Doe"
+            disabled={submitting}
+          />
+          {errors.name && <p className="text-[11px] text-destructive">{errors.name}</p>}
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor={`${formId}-email`} className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Email
+          </label>
+          <input
+            id={`${formId}-email`}
+            type="email"
+            required
+            maxLength={200}
+            autoComplete="email"
+            value={values.email}
+            onChange={set("email")}
+            className="w-full rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            placeholder="jane@company.com"
+            disabled={submitting}
+          />
+          {errors.email && <p className="text-[11px] text-destructive">{errors.email}</p>}
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor={`${formId}-system`} className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            What growth system do you need?
+          </label>
+          <select
+            id={`${formId}-system`}
+            required
+            value={values.growthSystem}
+            onChange={set("growthSystem")}
+            className="w-full rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            disabled={submitting}
+          >
+            <option value="">Select an option…</option>
+            {GROWTH_SYSTEMS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+          {errors.growthSystem && <p className="text-[11px] text-destructive">{errors.growthSystem}</p>}
+        </div>
+
+        <div className="space-y-1">
+          <label htmlFor={`${formId}-notes`} className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Anything else? <span className="text-muted-foreground/60 normal-case">(optional)</span>
+          </label>
+          <textarea
+            id={`${formId}-notes`}
+            rows={2}
+            maxLength={1000}
+            value={values.notes}
+            onChange={set("notes")}
+            className="w-full resize-none rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            placeholder="Context, timeline, monthly revenue…"
+            disabled={submitting}
+          />
+        </div>
+
+        {serverError && (
+          <p className="text-[11px] text-destructive" role="alert">{serverError}</p>
+        )}
+
+        <button
+          type="submit"
+          disabled={submitting}
+          className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:brightness-110 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+        >
+          {submitting ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <CalendarCheck className="h-3.5 w-3.5" aria-hidden />}
+          {submitting ? "Sending…" : "Send to the team"}
+        </button>
+        <p className="text-[10px] text-muted-foreground/70">
+          We'll only use your email to reply about your inquiry.
+        </p>
+      </form>
+    </div>
+  );
+}
+
+function LeadSuccessCard({ content }: { content: string }) {
+  return (
+    <div className="flex gap-2 justify-start">
+      <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-500">
+        <CheckCircle2 className="h-3.5 w-3.5" aria-hidden />
+      </span>
+      <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-sm leading-relaxed text-foreground">
+        {renderInline(content)}
+      </div>
+    </div>
+  );
 }
