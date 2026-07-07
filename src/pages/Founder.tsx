@@ -160,23 +160,78 @@ const Founder = () => {
   const { items: press } = usePressItems();
   const pressForBooklet = useMemo(() => press.slice(0, 12), [press]);
 
-  const [lightbox, setLightbox] = useState<
-    { src: string; alt: string; title: string; verifyUrl?: string } | null
-  >(null);
+  // Collect only documents with a preview image so prev/next steps between real slides.
+  const docPreviews = useMemo(
+    () => FOUNDER_DOCUMENTS.filter((d) => !!d.previewImage),
+    [],
+  );
+  const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const lightboxRef = useRef<HTMLDivElement | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement | null>(null);
+  const lastFocusRef = useRef<HTMLElement | null>(null);
+
+  const openLightbox = useCallback((idx: number) => {
+    lastFocusRef.current = document.activeElement as HTMLElement | null;
+    setLightboxIdx(idx);
+  }, []);
+  const closeLightbox = useCallback(() => setLightboxIdx(null), []);
+  const stepLightbox = useCallback(
+    (dir: 1 | -1) => {
+      setLightboxIdx((cur) => {
+        if (cur === null || docPreviews.length === 0) return cur;
+        return (cur + dir + docPreviews.length) % docPreviews.length;
+      });
+    },
+    [docPreviews.length],
+  );
 
   useEffect(() => {
-    if (!lightbox) return;
-    const prev = document.body.style.overflow;
+    if (lightboxIdx === null) {
+      // Restore focus to the element that opened the modal.
+      lastFocusRef.current?.focus?.();
+      return;
+    }
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // Focus the close button on open.
+    requestAnimationFrame(() => closeBtnRef.current?.focus());
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightbox(null);
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox();
+        return;
+      }
+      if (e.key === "ArrowRight") { e.preventDefault(); stepLightbox(1); return; }
+      if (e.key === "ArrowLeft")  { e.preventDefault(); stepLightbox(-1); return; }
+      if (e.key === "Home")       { e.preventDefault(); setLightboxIdx(0); return; }
+      if (e.key === "End")        { e.preventDefault(); setLightboxIdx(docPreviews.length - 1); return; }
+      // Focus trap on Tab.
+      if (e.key === "Tab" && lightboxRef.current) {
+        const focusables = lightboxRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        if (e.shiftKey && (active === first || !lightboxRef.current.contains(active))) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [lightbox]);
+  }, [lightboxIdx, closeLightbox, stepLightbox, docPreviews.length]);
+
+  const activeDoc = lightboxIdx !== null ? docPreviews[lightboxIdx] : null;
 
   const handlePrint = () => {
     // Native print → the user picks "Save as PDF" as the destination.
