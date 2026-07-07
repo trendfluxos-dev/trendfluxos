@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   ArrowUpRight,
   Megaphone,
@@ -46,18 +46,45 @@ const ITEMS: Item[] = [
 ];
 
 export default function EcosystemNavigator() {
+  const { hash } = useLocation();
   // Which mapped homepage section is currently in view — used to light up
   // the corresponding card. `null` when nothing tracked is visible.
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const targets = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-nav-section]")
-    );
-    if (targets.length === 0) return;
+  // ── Active-state tracking ────────────────────────────────────────────────
+  // Hash → sectionId map (hash may be either the wrapper's id or the
+  // sectionId itself). Extend as new anchors are added.
+  const HASH_TO_SECTION: Record<string, string> = {
+    "systems-he-built": "growth-os",
+    "growth-os": "growth-os",
+    "the-stand": "the-stand",
+    "case-studies": "case-studies",
+    "edtech": "edtech",
+    "contact": "contact",
+  };
 
-    // Track visible ratio per section; pick the largest at each tick.
+  // 1) Hash-driven active state — instant, no scroll wait. Runs on mount,
+  //    on every react-router `hash` change, and on browser `hashchange`.
+  useEffect(() => {
+    const applyFromHash = () => {
+      const raw = (hash || window.location.hash || "").replace(/^#/, "");
+      if (raw && HASH_TO_SECTION[raw]) {
+        setActiveId(HASH_TO_SECTION[raw]);
+      }
+    };
+    applyFromHash();
+    window.addEventListener("hashchange", applyFromHash);
+    return () => window.removeEventListener("hashchange", applyFromHash);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hash]);
+
+  // 2) Scroll-driven active state via IntersectionObserver. Re-observes
+  //    lazy-mounted sections through a MutationObserver so late arrivals
+  //    (skeleton → real component) still light up the right card.
+  useEffect(() => {
     const ratios = new Map<string, number>();
+    const seen = new WeakSet<Element>();
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -68,17 +95,28 @@ export default function EcosystemNavigator() {
         ratios.forEach((r, id) => {
           if (r > best.r) best = { id, r };
         });
-        setActiveId(best.r > 0.15 ? best.id : null);
+        if (best.r > 0.15) setActiveId(best.id);
       },
-      {
-        // Bias toward the middle of the viewport, and step through several
-        // ratios so we get updates during long sections too.
-        rootMargin: "-25% 0px -45% 0px",
-        threshold: [0, 0.15, 0.35, 0.6, 0.85, 1],
-      }
+      { rootMargin: "-25% 0px -45% 0px", threshold: [0, 0.15, 0.35, 0.6, 0.85, 1] }
     );
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    const attach = () => {
+      document.querySelectorAll<HTMLElement>("[data-nav-section]").forEach((el) => {
+        if (!seen.has(el)) {
+          seen.add(el);
+          io.observe(el);
+        }
+      });
+    };
+    attach();
+
+    const mo = new MutationObserver(attach);
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
   }, []);
 
   // Roving keyboard navigation across the card grid/stack.
