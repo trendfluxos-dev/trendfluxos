@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { MessageCircle, X, Send, Plus, Trash2, Bot, User, CalendarCheck, Loader2, CheckCircle2 } from "lucide-react";
+import { MessageCircle, X, Send, Plus, Trash2, Bot, User, CalendarCheck, Loader2, CheckCircle2, CalendarClock, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
@@ -13,8 +13,11 @@ type Role = "user" | "assistant";
 type Message =
   | { id: string; role: Role; content: string; kind?: "text" }
   | { id: string; role: "assistant"; content: string; kind: "lead-form" }
-  | { id: string; role: "assistant"; content: string; kind: "lead-success" };
+  | { id: string; role: "assistant"; content: string; kind: "lead-success" }
+  | { id: string; role: "assistant"; content: string; kind: "booking-cta" };
 type Thread = { id: string; title: string; messages: Message[]; createdAt: number };
+
+const BOOKING_URL = "/project-lead";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assist`;
 const AUTH = `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`;
@@ -124,6 +127,49 @@ export default function ChatAssistWidget() {
       ),
     );
   }, [active]);
+
+  const showBookingCta = useCallback(
+    (opts?: { intro?: string }) => {
+      if (!active) return;
+      if (active.messages.some((m) => m.kind === "booking-cta")) return;
+      const intro: Message | null = opts?.intro
+        ? { id: uid(), role: "assistant", kind: "text", content: opts.intro }
+        : null;
+      const cta: Message = {
+        id: uid(),
+        role: "assistant",
+        kind: "booking-cta",
+        content: "Book a free 20-min strategy call with the TrendFlux team.",
+      };
+      setThreads((prev) =>
+        prev.map((t) =>
+          t.id === active.id
+            ? { ...t, messages: [...t.messages, ...(intro ? [intro] : []), cta] }
+            : t,
+        ),
+      );
+    },
+    [active],
+  );
+
+  // After the assistant finishes replying, auto-offer a strategy call once
+  // the conversation has warmed up (2+ user turns) and no CTA/form is present.
+  useEffect(() => {
+    if (!active || status !== "idle") return;
+    const userTurns = active.messages.filter((m) => m.role === "user").length;
+    const lastMsg = active.messages[active.messages.length - 1];
+    if (
+      userTurns >= 2 &&
+      lastMsg?.role === "assistant" &&
+      (!lastMsg.kind || lastMsg.kind === "text") &&
+      lastMsg.content.trim().length > 0 &&
+      !active.messages.some((m) => m.kind === "booking-cta" || m.kind === "lead-form" || m.kind === "lead-success")
+    ) {
+      showBookingCta({
+        intro: "If it'd help, you can book a free strategy call to go deeper 👇",
+      });
+    }
+  }, [active, status, showBookingCta]);
 
   const submitLead = useCallback(
     async (
@@ -418,6 +464,14 @@ export default function ChatAssistWidget() {
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
+                    onClick={() => showBookingCta()}
+                    className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold bg-primary text-primary-foreground hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  >
+                    <CalendarClock className="h-3.5 w-3.5" aria-hidden />
+                    Book a call
+                  </button>
+                  <button
+                    type="button"
                     onClick={showLeadForm}
                     className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold bg-primary/15 text-primary hover:bg-primary/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
                   >
@@ -457,7 +511,7 @@ export default function ChatAssistWidget() {
                     <div className="flex flex-wrap gap-2">
                       {[
                         "What brands are in the TrendFlux ecosystem?",
-                        "How do I book a strategy call?",
+                        "Book a strategy call",
                         "Tell me about Kormoshikkha",
                         "Do you work with enterprise clients?",
                       ].map((s) => (
@@ -465,8 +519,12 @@ export default function ChatAssistWidget() {
                           key={s}
                           type="button"
                           onClick={() => {
-                            setInput(s);
-                            requestAnimationFrame(() => inputRef.current?.focus());
+                            if (s === "Book a strategy call") {
+                              showBookingCta();
+                            } else {
+                              setInput(s);
+                              requestAnimationFrame(() => inputRef.current?.focus());
+                            }
                           }}
                           className="text-xs px-2.5 py-1.5 rounded-full border border-border bg-muted/50 hover:bg-accent text-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
                         >
@@ -491,6 +549,9 @@ export default function ChatAssistWidget() {
                   }
                   if (m.kind === "lead-success") {
                     return <LeadSuccessCard key={m.id} content={m.content} />;
+                  }
+                  if (m.kind === "booking-cta") {
+                    return <BookingCtaCard key={m.id} content={m.content} />;
                   }
                   return (
                     <MessageBubble
