@@ -19,6 +19,7 @@ import { AI_EXPERT_EMON_SUMMARY, AI_EXPERT_EMON_THEMES } from "@/data/aiExpertEm
 import { THE_STAND } from "@/content/theStand";
 import { fragments as QUIET_FRAGMENTS } from "@/content/quietPositions";
 import juHonsDoc from "@/assets/proof/ju-hons-educational-background.png.asset.json";
+import juUniversityCertificates from "@/assets/proof/ju-university-certificates.png.asset.json";
 
 export const FOUNDER = {
   name: "Zahid Hasan Emon",
@@ -151,6 +152,19 @@ export const FOUNDER_DOCUMENTS: FounderDocument[] = [
     previewImage: juHonsDoc.url,
     previewAlt:
       "Educational background summary — BSc in IT, Jahangirnagar University, with Jahangirnagar University crest.",
+  },
+  {
+    id: "ju-iit-university-certificates",
+    title: "University Certificates — IIT, Jahangirnagar University",
+    issuer: "Institute of Information Technology, Jahangirnagar University",
+    category: "Certification",
+    date: "2024-05-22",
+    verifyUrl: "https://juniv.edu/discussion/18018/file/17564",
+    note:
+      "Official IIT letters (Apr 2022 & May 2024) certifying BSc (Hons) in Information Technology completion — programming, algorithms, databases and networks.",
+    previewImage: juUniversityCertificates.url,
+    previewAlt:
+      "Two official IIT Jahangirnagar University certificate letters with signatures and QR verification codes.",
   },
   {
     id: "hsc-science",
