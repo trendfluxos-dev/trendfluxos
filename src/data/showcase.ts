@@ -22,7 +22,9 @@ export type ShowcaseIndustry =
   | "Enterprise / B2B"
   | "Personal Brand"
   | "Advocacy"
-  | "Press";
+  | "Press"
+  | "News & Journalism"
+  | "Hospitality & Skills";
 
 export type ShowcaseService =
   | "Web Development"
@@ -179,6 +181,8 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
     industry: "Civic / Non-profit",
     services: ["Brand Architecture", "Content Engine", "Community Ops"],
     tech: ["Facebook", "WordPress"],
+    href: "https://pncpabna.live",
+    external: true,
     size: "lg",
     accent: "gold",
     caseStudy: {
@@ -189,6 +193,54 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
       result:
         "4.85L+ organic views and 82% organic reach — built without paid amplification.",
     },
+  },
+  {
+    id: "nagarikbarta24",
+    title: "Nagorik Barta 24",
+    category: "Client Project",
+    year: "2025 — Present",
+    summary:
+      "Independent civic news portal — editorial CMS, category-driven newsroom layout and mobile-first reading experience for a Bangladesh audience.",
+    tags: ["News", "Newsroom", "Bangladesh"],
+    industry: "News & Journalism",
+    services: ["Web Development", "Brand Architecture", "Content Engine"],
+    tech: ["WordPress"],
+    href: "https://nagarikbarta24.news",
+    external: true,
+    size: "md",
+    accent: "emerald",
+  },
+  {
+    id: "eish-live",
+    title: "EISH — Enter Institute of Skill & Hospitality",
+    category: "Client Project",
+    year: "2025 — Present",
+    summary:
+      "Skill & hospitality institute site — programme catalogue, admissions flow and brand system for a training institute in Bangladesh.",
+    tags: ["Institute", "Hospitality", "Admissions"],
+    industry: "Hospitality & Skills",
+    services: ["Web Development", "Brand Architecture"],
+    tech: ["React", "TypeScript", "Tailwind"],
+    href: "https://www.eish.live",
+    external: true,
+    size: "md",
+    accent: "emerald",
+  },
+  {
+    id: "agentai-smm",
+    title: "AgentAI SMM",
+    category: "Enterprise System",
+    year: "2025 — Present",
+    summary:
+      "AI social-media agent — automated content ideation, scheduling and analytics for growth operators, running on the TrendFlux Space subdomain.",
+    tags: ["AI Agent", "SMM", "Automation"],
+    industry: "Enterprise / B2B",
+    services: ["AI Automation", "Content Engine", "Web Development"],
+    tech: ["React", "TypeScript", "Tailwind", "Supabase", "OpenAI", "n8n"],
+    href: "https://agentai-smm.trendflux.space",
+    external: true,
+    size: "md",
+    accent: "cyan",
   },
   {
     id: "the-stand",
