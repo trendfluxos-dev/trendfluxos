@@ -74,8 +74,15 @@ export default function EcosystemNavigator() {
         return;
     }
     e.preventDefault();
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     links[next]?.focus();
-    links[next]?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+    links[next]?.scrollIntoView({
+      block: "nearest",
+      inline: "center",
+      behavior: reduce ? "auto" : "smooth",
+    });
   };
 
   return (
