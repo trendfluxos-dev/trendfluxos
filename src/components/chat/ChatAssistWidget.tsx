@@ -822,3 +822,29 @@ function LeadSuccessCard({ content }: { content: string }) {
     </div>
   );
 }
+
+function BookingCtaCard({ content }: { content: string }) {
+  return (
+    <div className="flex gap-2 justify-start">
+      <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+        <CalendarClock className="h-3.5 w-3.5" aria-hidden />
+      </span>
+      <div className="max-w-[85%] rounded-2xl rounded-bl-sm border border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 p-3.5 space-y-2.5">
+        <p className="text-sm text-foreground leading-relaxed">{renderInline(content)}</p>
+        <ul className="text-[11px] text-muted-foreground space-y-0.5">
+          <li>• 20 minutes, no obligation</li>
+          <li>• Get a tailored growth plan for your business</li>
+          <li>• Meet the TrendFlux operator team</li>
+        </ul>
+        <a
+          href={BOOKING_URL}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+        >
+          <CalendarClock className="h-3.5 w-3.5" aria-hidden />
+          Book my strategy call
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+        </a>
+      </div>
+    </div>
+  );
+}
