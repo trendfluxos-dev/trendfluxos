@@ -85,20 +85,20 @@ const Index = () => {
 
       <ArchitecturalHero onOpenQuote={openQuote} />
 
-      <SectionOrnament chapter="Chapter I" label="The Stand · জাতীয় দলিল" accent="amber" />
-      {/* The Stand — full-width manifesto. Never paired side-by-side. */}
-      <LazySection label="stand-cover" skeleton={<SectionSkeleton variant="media" />}>
-        <TheStandCoverSection />
-      </LazySection>
-
-      <SectionOrnament chapter="Chapter II" label="Systems He Built" />
-      {/* Systems He Built — full-width, five sequential systems need horizontal room. */}
+      <SectionOrnament chapter="Chapter I" label="Systems He Built · 90-day Build" />
+      {/* Growth Systems — the 6-stage 90-day build order (per spec §3). */}
       <LazySection label="algorithm-arch" skeleton={<SectionSkeleton variant="cards" />}>
         <SystemsHeBuiltSection />
       </LazySection>
 
-      <SectionOrnament chapter="Chapter III" label="Justice Appeal · আইনি লড়াই" accent="amber" />
-      {/* Justice Appeal — আইন ও জাহিদ হাসানের মনের গল্প. */}
+      <SectionOrnament chapter="Chapter II" label="The Stand · জাতীয় দলিল" accent="amber" />
+      {/* The Stand — cinematic + audio story (spec §4). */}
+      <LazySection label="stand-cover" skeleton={<SectionSkeleton variant="media" />}>
+        <TheStandCoverSection />
+      </LazySection>
+
+      <SectionOrnament chapter="Chapter III" label="Pabna Accountability Project" accent="amber" />
+      {/* Documentation & Accountability (spec §5). */}
       <LazySection label="justice" skeleton={<SectionSkeleton variant="split" />}>
         <JusticeAppealSection />
       </LazySection>
@@ -112,18 +112,18 @@ const Index = () => {
         <LayerBand layer="brand" />
       </LazySection>
 
-      <SectionOrnament chapter="Chapter V" label="Proof · Testimonials" />
+      <SectionOrnament chapter="Chapter V" label="Proof · Operating Metrics" />
       {/* Credibility */}
       <LazySection label="proof" skeleton={<SectionSkeleton variant="cards" />}><ProofSection /></LazySection>
       <LazySection label="testimonials" skeleton={<SectionSkeleton variant="cards" />}><TestimonialsSection /></LazySection>
 
-      <SectionOrnament chapter="Chapter VI" label="Ecosystem Bridge" accent="amber" />
+      <SectionOrnament chapter="Chapter VI" label="Learn → Operate → Measure" accent="amber" />
       {/* Ecosystem bridge — Kormoshikkha · Space · Spectrum */}
       <LazySection label="ecosystem-bridge" skeleton={<SectionSkeleton variant="cards" />}>
         <TripleBridge />
       </LazySection>
 
-      <SectionOrnament chapter="Chapter VII" label="Engage · Book Direct" />
+      <SectionOrnament chapter="Chapter VII" label="Scale Beyond Marketing" />
       {/* Engage */}
       <LazySection label="final-cta" skeleton={<SectionSkeleton variant="band" />}><FinalCtaSection onOpenQuote={openQuote} /></LazySection>
 
