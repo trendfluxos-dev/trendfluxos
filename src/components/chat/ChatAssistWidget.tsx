@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { MessageCircle, X, Send, Plus, Trash2, Bot, User } from "lucide-react";
+import { MessageCircle, X, Send, Plus, Trash2, Bot, User, CalendarCheck, Loader2, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
 
 // TrendFlux visitor chat assistant.
 // - Threaded conversations (in-memory only — resets on refresh)
@@ -8,11 +10,32 @@ import { cn } from "@/lib/utils";
 // - Floating launcher, expandable panel with sidebar of threads
 
 type Role = "user" | "assistant";
-type Message = { id: string; role: Role; content: string };
+type Message =
+  | { id: string; role: Role; content: string; kind?: "text" }
+  | { id: string; role: "assistant"; content: string; kind: "lead-form" }
+  | { id: string; role: "assistant"; content: string; kind: "lead-success" };
 type Thread = { id: string; title: string; messages: Message[]; createdAt: number };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assist`;
 const AUTH = `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`;
+
+const GROWTH_SYSTEMS = [
+  "AI Business Automation",
+  "Meta Ads & Lead Generation",
+  "Funnel & Landing Page Design",
+  "CRM & WhatsApp Automation",
+  "Content Strategy & Brand Storytelling",
+  "Website & Digital Ecosystem Design",
+  "Growth Analytics & Reporting",
+  "Not sure yet — help me choose",
+] as const;
+
+const leadSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(120, "Name is too long"),
+  email: z.string().trim().email("Enter a valid email").max(200),
+  growthSystem: z.string().min(1, "Pick what you need help with").max(200),
+  notes: z.string().trim().max(1000).optional().or(z.literal("")),
+});
 
 const uid = () =>
   (globalThis.crypto?.randomUUID?.() ?? `id-${Math.random().toString(36).slice(2)}-${Date.now()}`);
