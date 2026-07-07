@@ -18,7 +18,7 @@ import { SYSTEMS_HE_BUILT, TESTIMONIALS, SERVICES } from "@/data/home";
 import { AI_EXPERT_EMON_SUMMARY, AI_EXPERT_EMON_THEMES } from "@/data/aiExpertEmonStory";
 import { THE_STAND } from "@/content/theStand";
 import { fragments as QUIET_FRAGMENTS } from "@/content/quietPositions";
-import juIitBscNotice from "@/assets/proof/ju-iit-bsc-result-notice.jpeg.asset.json";
+import juHonsDoc from "@/assets/proof/ju-hons-educational-background.png.asset.json";
 
 export const FOUNDER = {
   name: "Zahid Hasan Emon",
@@ -148,9 +148,9 @@ export const FOUNDER_DOCUMENTS: FounderDocument[] = [
     verifyUrl: "https://juniv.edu/discussion/18018/file/17564",
     note:
       "Official university notice publishing the final graduation result on the JU examination-controller portal.",
-    previewImage: juIitBscNotice.url,
+    previewImage: juHonsDoc.url,
     previewAlt:
-      "Jahangirnagar University Office of the Controller of Examinations official notice publishing the IIT 2021 4th-year 2nd-semester final BSc (Honours) result for Zahid Hasan Emon, roll 172491, CGPA 2.63.",
+      "Educational background summary — BSc in IT, Jahangirnagar University, with Jahangirnagar University crest.",
   },
   {
     id: "hsc-science",
