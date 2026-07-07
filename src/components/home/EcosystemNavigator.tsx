@@ -274,33 +274,39 @@ export default function EcosystemNavigator() {
           >
             {ITEMS.map(({ label, to, eyebrow, desc, Icon, sectionId }, i) => {
               const descId = `eco-card-desc-${i}`;
+              const titleId = `eco-card-title-${i}`;
+              const eyebrowId = `eco-card-eyebrow-${i}`;
+              const statusId = `eco-card-status-${i}`;
               const isActive = !!sectionId && sectionId === activeId;
               return (
               <li
                 key={to}
+                role="listitem"
                 className="group shrink-0 basis-[82%] snap-start sm:basis-auto sm:shrink"
               >
                 <Link
                   to={to}
+                  role="link"
                   data-nav-card
                   data-active={isActive || undefined}
                   aria-current={isActive ? "location" : undefined}
+                  aria-labelledby={`${titleId} ${eyebrowId}${isActive ? ` ${statusId}` : ""}`}
                   aria-label={
                     `${label}, card ${i + 1} of ${ITEMS.length}` +
                     (isActive ? ", current section in view" : "")
                   }
-                  aria-describedby={descId}
+                  aria-describedby={`${descId} ecosystem-navigator-help`}
                   className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 outline-none transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.35)] focus-visible:-translate-y-1 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-background focus-visible:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.5)] data-[active]:border-primary data-[active]:bg-primary/[0.04] data-[active]:shadow-[0_18px_45px_-22px_hsl(var(--primary)/0.45)] sm:p-7"
                 >
                   {isActive && (
-                    <span className="sr-only">Current section in view. </span>
+                    <span id={statusId} className="sr-only">Current section in view. </span>
                   )}
                   {/* Active-state left accent bar */}
                   <span aria-hidden="true" className="pointer-events-none absolute inset-y-4 left-0 w-[3px] rounded-full bg-primary opacity-0 transition-opacity duration-300 data-[on=true]:opacity-100" data-on={isActive} />
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 data-[on=true]:opacity-100" data-on={isActive} />
-                  <span aria-hidden="true" className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary group-focus-within:text-primary data-[on=true]:text-primary" data-on={isActive}>
+                  <span id={eyebrowId} aria-label={`Route ${eyebrow} of ${ITEMS.length.toString().padStart(2, "0")}`} className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary group-focus-within:text-primary data-[on=true]:text-primary" data-on={isActive}>
                     {isActive && (
-                      <span className="relative inline-flex h-2 w-2">
+                      <span aria-hidden="true" className="relative inline-flex h-2 w-2">
                         <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-60 animate-ping motion-reduce:animate-none" />
                         <span className="relative inline-flex h-2 w-2 rounded-full bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.7)]" />
                       </span>
@@ -312,14 +318,14 @@ export default function EcosystemNavigator() {
                     <Icon className={"h-5 w-5 transition-colors duration-300 group-hover:text-primary " + (isActive ? "text-primary" : "text-foreground/70")} aria-hidden="true" />
                   </div>
 
-                  <h3 className="relative mt-6 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
+                  <h3 id={titleId} className="relative mt-6 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
                     {label}
                   </h3>
                   <p id={descId} className="relative mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
                     {desc}
                   </p>
 
-                  <span className="relative mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary">
+                  <span aria-hidden="true" className="relative mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary">
                     {isActive ? "In view" : "Enter"}
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
                   </span>
