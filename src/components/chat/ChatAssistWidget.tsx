@@ -101,6 +101,70 @@ export default function ChatAssistWidget() {
     setStatus("idle");
   };
 
+  const showLeadForm = useCallback(() => {
+    if (!active) return;
+    // Avoid stacking multiple open forms
+    if (active.messages.some((m) => m.kind === "lead-form")) return;
+    const intro: Message = {
+      id: uid(),
+      role: "assistant",
+      kind: "text",
+      content:
+        "Great — share a few details and the TrendFlux team will reach out. This takes ~30 seconds.",
+    };
+    const form: Message = {
+      id: uid(),
+      role: "assistant",
+      kind: "lead-form",
+      content: "",
+    };
+    setThreads((prev) =>
+      prev.map((t) =>
+        t.id === active.id ? { ...t, messages: [...t.messages, intro, form] } : t,
+      ),
+    );
+  }, [active]);
+
+  const submitLead = useCallback(
+    async (
+      formId: string,
+      values: { name: string; email: string; growthSystem: string; notes?: string },
+    ) => {
+      if (!active) return { ok: false as const, error: "No active chat." };
+      const { error: dbError } = await supabase.from("growth_leads").insert({
+        name: values.name,
+        email: values.email,
+        source: "trendflux-contact",
+        message: `[Chatbot] Needs: ${values.growthSystem}${values.notes ? `\n\nNotes: ${values.notes}` : ""}`,
+      });
+      if (dbError) return { ok: false as const, error: dbError.message };
+
+      // Replace form with a success card + a follow-up assistant note
+      setThreads((prev) =>
+        prev.map((t) =>
+          t.id === active.id
+            ? {
+                ...t,
+                messages: [
+                  ...t.messages.map((m) =>
+                    m.id === formId
+                      ? ({
+                          ...m,
+                          kind: "lead-success",
+                          content: `Thanks, ${values.name}! The TrendFlux team will reach out to ${values.email} shortly about **${values.growthSystem}**. In the meantime you can [book a strategy call](/project-lead) directly.`,
+                        } as Message)
+                      : m,
+                  ),
+                ],
+              }
+            : t,
+        ),
+      );
+      return { ok: true as const };
+    },
+    [active],
+  );
+
   const deleteThread = (id: string) => {
     setThreads((prev) => {
       const next = prev.filter((t) => t.id !== id);
