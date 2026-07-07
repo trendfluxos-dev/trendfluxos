@@ -105,16 +105,16 @@ const Card = ({
         )}
 
         {item.metrics && item.metrics.length > 0 && (
-          <div className="grid grid-cols-2 gap-3 mt-5">
-            {item.metrics.map((m) => (
+          <div className="grid grid-cols-2 gap-2.5 mt-5">
+            {item.metrics.slice(0, 2).map((m) => (
               <div
                 key={m.label}
-                className="rounded-xl border border-border/40 bg-background/40 px-3 py-2.5"
+                className="rounded-lg border border-border/40 bg-background/40 px-2.5 py-2"
               >
-                <div className="font-display text-lg font-bold text-gradient">
+                <div className="font-display text-base font-bold text-gradient leading-tight">
                   {m.value}
                 </div>
-                <div className="text-[10px] uppercase tracking-wider text-foreground/50 mt-0.5">
+                <div className="text-[10px] uppercase tracking-wider text-foreground/50 mt-0.5 line-clamp-1">
                   {m.label}
                 </div>
               </div>
@@ -124,10 +124,10 @@ const Card = ({
 
         {item.tags && item.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-5">
-            {item.tags.map((t) => (
+            {item.tags.slice(0, 4).map((t) => (
               <span
                 key={t}
-                className="text-[10px] px-2.5 py-1 rounded-full border border-border/40 bg-background/30 text-foreground/60"
+                className="text-[10px] px-2 py-0.5 rounded-full border border-border/40 bg-background/30 text-foreground/60"
               >
                 {t}
               </span>
@@ -146,7 +146,7 @@ const Card = ({
             className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary/90 hover:text-primary transition-colors"
           >
             <FileText className="h-3 w-3" />
-            View case study
+            Case study
             <ArrowUpRight className="h-3 w-3" />
           </button>
           {onBookCall && (
@@ -160,7 +160,7 @@ const Card = ({
               className="inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-400/90 hover:text-amber-300 transition-colors"
             >
               <CalendarClock className="h-3 w-3" />
-              Book strategy call
+              Book call
             </button>
           )}
         </div>
