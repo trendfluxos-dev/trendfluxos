@@ -201,7 +201,9 @@ export default function ChatAssistWidget() {
     setInput("");
     setStatus("sending");
 
-    const historyForApi = [...active.messages, userMsg].map(({ role, content }) => ({ role, content }));
+    const historyForApi = [...active.messages, userMsg]
+      .filter((m) => !m.kind || m.kind === "text")
+      .map(({ role, content }) => ({ role, content }));
 
     const ctrl = new AbortController();
     abortRef.current = ctrl;
