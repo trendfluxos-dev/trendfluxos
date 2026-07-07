@@ -502,6 +502,7 @@ const Founder = () => {
               day: "2-digit", month: "short", year: "numeric",
             });
             const host = (() => {
+              if (!d.verifyUrl) return null;
               try { return new URL(d.verifyUrl).hostname.replace(/^www\./, ""); }
               catch { return d.verifyUrl; }
             })();
@@ -528,23 +529,31 @@ const Founder = () => {
                     <FileCheck2 className="h-5 w-5 shrink-0 text-primary" aria-hidden />
                   </div>
                   <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <a
-                      href={d.verifyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90"
-                    >
-                      <ShieldCheck className="h-3.5 w-3.5" /> Verify
-                      <ExternalLink className="h-3 w-3 opacity-80" />
-                    </a>
-                    <a
-                      href={d.verifyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="break-all text-[11px] text-muted-foreground hover:text-primary hover:underline"
-                    >
-                      {host}
-                    </a>
+                    {d.verifyUrl ? (
+                      <>
+                        <a
+                          href={d.verifyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90"
+                        >
+                          <ShieldCheck className="h-3.5 w-3.5" /> Verify
+                          <ExternalLink className="h-3 w-3 opacity-80" />
+                        </a>
+                        <a
+                          href={d.verifyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="break-all text-[11px] text-muted-foreground hover:text-primary hover:underline"
+                        >
+                          {host}
+                        </a>
+                      </>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                        <ShieldCheck className="h-3.5 w-3.5" /> Verification on request
+                      </span>
+                    )}
                   </div>
                 </Card>
               </li>

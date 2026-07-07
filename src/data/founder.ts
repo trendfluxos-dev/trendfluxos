@@ -129,7 +129,7 @@ export type FounderDocument = {
     | "Legal"
     | "Certification";
   date: string; // ISO-8601 (YYYY-MM-DD)
-  verifyUrl: string;
+  verifyUrl?: string;
   note?: string;
 };
 
@@ -145,6 +145,24 @@ export const FOUNDER_DOCUMENTS: FounderDocument[] = [
     verifyUrl: "https://juniv.edu/discussion/18018/file/17564",
     note:
       "Official university notice publishing the final graduation result on the JU examination-controller portal.",
+  },
+  {
+    id: "hsc-science",
+    title: "HSC — Science, GPA 5.00",
+    issuer: "Higher Secondary Education Board, Bangladesh",
+    category: "Education",
+    date: "2016-07-01",
+    note:
+      "Original transcript and board mark sheet available on request; board portal verification link will be published here once the archive URL is confirmed.",
+  },
+  {
+    id: "ssc-science",
+    title: "SSC — Science, GPA 5.00",
+    issuer: "Secondary Education Board, Bangladesh",
+    category: "Education",
+    date: "2014-05-01",
+    note:
+      "Original transcript and board mark sheet available on request; board portal verification link will be published here once the archive URL is confirmed.",
   },
 ];
 
