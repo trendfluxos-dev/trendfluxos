@@ -11,7 +11,7 @@ import theStandCover from "@/assets/the-stand-cover.jpg";
 export const TheStandCoverSection = () => (
   <section
     aria-labelledby="the-stand-cover-heading"
-    className="relative isolate overflow-hidden bg-black py-16 sm:py-24"
+    className="relative isolate overflow-hidden bg-black py-20 sm:py-24 lg:py-28"
   >
     <InlineEditProvider scope="the-stand-cover">
       <div
