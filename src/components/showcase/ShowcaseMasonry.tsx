@@ -1,6 +1,6 @@
 import { ArrowUpRight, Share2, AlertCircle, Cog, Sparkles, FileText, CalendarClock } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { ShowcaseItem } from "@/data/showcase";
 import ShareDialog, { type SharePayload } from "@/components/showcase/ShareDialog";
 
@@ -12,6 +12,9 @@ const accentRing: Record<NonNullable<ShowcaseItem["accent"]>, string> = {
   emerald: "before:bg-gradient-to-br before:from-emerald-400/20 before:to-transparent",
 };
 
+const focusRing =
+  "focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-md";
+
 const Card = ({
   item,
   onShare,
@@ -22,11 +25,27 @@ const Card = ({
   onBookCall?: (item: ShowcaseItem) => void;
 }) => {
   const navigate = useNavigate();
-  const inner = (
+  const headingId = useId();
+
+  const titleContent = (
+    <>
+      <span className="flex-1">{item.title}</span>
+      {item.href && (
+        <ArrowUpRight
+          aria-hidden="true"
+          className="h-4 w-4 mt-1 text-foreground/40 transition-all group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        />
+      )}
+    </>
+  );
+
+  return (
     <article
+      aria-labelledby={headingId}
       className={[
         "group relative overflow-hidden rounded-3xl border border-border/50 bg-card/40 backdrop-blur-sm",
         "p-6 lg:p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_60px_-25px_hsl(var(--primary)/0.35)]",
+        "focus-within:-translate-y-1 focus-within:border-primary/40 focus-within:shadow-[0_20px_60px_-25px_hsl(var(--primary)/0.35)]",
         "before:absolute before:inset-0 before:opacity-60 before:pointer-events-none",
         accentRing[item.accent ?? "cyan"],
       ].join(" ")}
@@ -53,9 +72,15 @@ const Card = ({
         }}
         aria-label={`Share ${item.title}`}
         title="AI Share"
-        className="absolute top-3 right-3 z-20 inline-flex items-center justify-center h-11 w-11 rounded-full border border-border/50 bg-background/70 backdrop-blur-sm text-foreground/60 opacity-0 group-hover:opacity-100 hover:text-primary hover:border-primary/50 transition-all"
+        className={[
+          "absolute top-3 right-3 z-20 inline-flex items-center justify-center h-11 w-11",
+          "rounded-full border border-border/50 bg-background/70 backdrop-blur-sm text-foreground/60",
+          "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-visible:opacity-100",
+          "hover:text-primary hover:border-primary/50 transition-all",
+          focusRing,
+        ].join(" ")}
       >
-        <Share2 className="h-3.5 w-3.5" />
+        <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
       </button>
 
       <div className="relative z-10">
@@ -68,10 +93,31 @@ const Card = ({
           </span>
         </div>
 
-        <h3 className="font-display text-xl lg:text-2xl font-bold leading-tight flex items-start gap-2">
-          <span className="flex-1">{item.title}</span>
-          {item.href && (
-            <ArrowUpRight className="h-4 w-4 mt-1 text-foreground/40 transition-all group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        <h3
+          id={headingId}
+          className="font-display text-xl lg:text-2xl font-bold leading-tight"
+        >
+          {item.href ? (
+            item.external ? (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${item.title} (opens in a new tab)`}
+                className={`flex items-start gap-2 hover:text-primary transition-colors ${focusRing}`}
+              >
+                {titleContent}
+              </a>
+            ) : (
+              <Link
+                to={item.href}
+                className={`flex items-start gap-2 hover:text-primary transition-colors ${focusRing}`}
+              >
+                {titleContent}
+              </Link>
+            )
+          ) : (
+            <span className="flex items-start gap-2">{titleContent}</span>
           )}
         </h3>
 
@@ -90,7 +136,7 @@ const Card = ({
                 key={label}
                 className="flex gap-3 rounded-xl border border-border/40 bg-background/40 px-3 py-2.5"
               >
-                <Icon className={`h-3.5 w-3.5 mt-0.5 shrink-0 ${tone}`} aria-hidden />
+                <Icon className={`h-3.5 w-3.5 mt-0.5 shrink-0 ${tone}`} aria-hidden="true" />
                 <div className="min-w-0">
                   <div className="text-[10px] uppercase tracking-[0.18em] text-foreground/55 font-medium">
                     {label}
@@ -105,81 +151,61 @@ const Card = ({
         )}
 
         {item.metrics && item.metrics.length > 0 && (
-          <div className="grid grid-cols-2 gap-2.5 mt-5">
+          <dl className="grid grid-cols-2 gap-2.5 mt-5" aria-label="Key metrics">
             {item.metrics.slice(0, 2).map((m) => (
               <div
                 key={m.label}
                 className="rounded-lg border border-border/40 bg-background/40 px-2.5 py-2"
               >
-                <div className="font-display text-base font-bold text-gradient leading-tight">
+                <dd className="font-display text-base font-bold text-gradient leading-tight">
                   {m.value}
-                </div>
-                <div className="text-[10px] uppercase tracking-wider text-foreground/50 mt-0.5 line-clamp-1">
+                </dd>
+                <dt className="text-[10px] uppercase tracking-wider text-foreground/50 mt-0.5 line-clamp-1">
                   {m.label}
-                </div>
+                </dt>
               </div>
             ))}
-          </div>
+          </dl>
         )}
 
         {item.tags && item.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-5">
+          <ul aria-label="Tags" className="flex flex-wrap gap-1.5 mt-5 list-none p-0">
             {item.tags.slice(0, 4).map((t) => (
-              <span
+              <li
                 key={t}
                 className="text-[10px] px-2 py-0.5 rounded-full border border-border/40 bg-background/30 text-foreground/60"
               >
                 {t}
-              </span>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
         <div className="mt-5 pt-4 border-t border-border/40 flex flex-wrap items-center gap-x-4 gap-y-2">
           <button
             type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              navigate(`/showcase/${item.id}`);
-            }}
-            className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary/90 hover:text-primary transition-colors"
+            onClick={() => navigate(`/showcase/${item.id}`)}
+            aria-label={`View case study for ${item.title}`}
+            className={`inline-flex items-center gap-1.5 min-h-11 py-2 text-[11px] font-medium text-primary/90 hover:text-primary transition-colors ${focusRing}`}
           >
-            <FileText className="h-3 w-3" />
+            <FileText className="h-3 w-3" aria-hidden="true" />
             Case study
-            <ArrowUpRight className="h-3 w-3" />
+            <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
           </button>
           {onBookCall && (
             <button
               type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onBookCall(item);
-              }}
-              className="inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-400/90 hover:text-amber-300 transition-colors"
+              onClick={() => onBookCall(item)}
+              aria-label={`Book strategy call about ${item.title}`}
+              className={`inline-flex items-center gap-1.5 min-h-11 py-2 text-[11px] font-medium text-amber-400/90 hover:text-amber-300 transition-colors ${focusRing}`}
             >
-              <CalendarClock className="h-3 w-3" />
+              <CalendarClock className="h-3 w-3" aria-hidden="true" />
               Book call
             </button>
           )}
         </div>
       </div>
     </article>
-  );
-
-  if (!item.href) return inner;
-  if (item.external) {
-    return (
-      <a href={item.href} target="_blank" rel="noreferrer" className="block">
-        {inner}
-      </a>
-    );
-  }
-  return (
-    <Link to={item.href} className="block">
-      {inner}
-    </Link>
   );
 };
 
@@ -199,9 +225,18 @@ const ShowcaseMasonry = ({ items, onBookCall }: Props) => {
 
   return (
     <>
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-5 lg:gap-6 [column-fill:_balance]">
+      <div
+        role="list"
+        aria-label="Showcase projects"
+        className="columns-1 md:columns-2 lg:columns-3 gap-5 lg:gap-6 [column-fill:_balance]"
+      >
         {items.map((item) => (
-          <div key={item.id} id={item.id} className="mb-5 lg:mb-6 break-inside-avoid">
+          <div
+            key={item.id}
+            id={item.id}
+            role="listitem"
+            className="mb-5 lg:mb-6 break-inside-avoid"
+          >
             <Card item={item} onShare={onShare} onBookCall={onBookCall} />
           </div>
         ))}
