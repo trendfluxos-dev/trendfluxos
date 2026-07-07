@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 
-export type FacetKey = "industry" | "service" | "tech";
+export type FacetKey = "industry" | "service" | "tech" | "stage";
 
 export type FacetState = Record<FacetKey, Set<string>>;
 
@@ -28,7 +28,7 @@ const ShowcaseFilters = ({
   totalCount,
 }: Props) => {
   const activeCount =
-    state.industry.size + state.service.size + state.tech.size;
+    state.industry.size + state.service.size + state.tech.size + state.stage.size;
 
   return (
     <section

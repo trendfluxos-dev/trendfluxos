@@ -51,6 +51,12 @@ export type ShowcaseTech =
   | "Wix"
   | "GHL";
 
+/**
+ * Business stage of a project — used by the Showcase filter to help
+ * visitors quickly find work at a comparable maturity level.
+ */
+export type ShowcaseStage = "Pilot" | "Live" | "Scaling" | "Ongoing";
+
 export type ShowcaseItem = {
   id: string;
   title: string;
@@ -62,6 +68,7 @@ export type ShowcaseItem = {
   industry?: ShowcaseIndustry;
   services?: ShowcaseService[];
   tech?: ShowcaseTech[];
+  stage?: ShowcaseStage;
   href?: string; // internal route or external URL
   external?: boolean;
   size?: ShowcaseSize; // controls visual prominence
@@ -92,6 +99,7 @@ export type ShowcaseItem = {
 export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   {
     id: "trendflux-space",
+    stage: "Live",
     title: "TrendFlux Space",
     category: "Website",
     year: "2025 — Present",
@@ -117,6 +125,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "verdaflux-spectrum",
+    stage: "Pilot",
     title: "VerdaFlux Spectrum",
     category: "Website",
     year: "2025 — Present",
@@ -141,6 +150,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "kormoshikkha",
+    stage: "Scaling",
     title: "কর্মশিক্ষা TED Plus — Online Edtech Platform",
     category: "Enterprise System",
     year: "2025 — Present",
@@ -179,6 +189,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "trendflux-ecosystem",
+    stage: "Scaling",
     title: "TrendFlux Ecosystem",
     category: "Enterprise System",
     year: "2024 — Present",
@@ -217,6 +228,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "pabna-nagarik",
+    stage: "Scaling",
     title: "Pabna Nagorik Committee",
     category: "Client Project",
     year: "2024 — 2025",
@@ -256,6 +268,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "nagarikbarta24",
+    stage: "Live",
     title: "Nagorik Barta 24",
     category: "Client Project",
     year: "2025 — Present",
@@ -281,6 +294,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "eish-live",
+    stage: "Live",
     title: "EISH — Enter Institute of Skill & Hospitality",
     category: "Client Project",
     year: "2025 — Present",
@@ -306,6 +320,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "agentai-smm",
+    stage: "Pilot",
     title: "AgentAI SMM",
     category: "Enterprise System",
     year: "2025 — Present",
@@ -333,6 +348,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "the-stand",
+    stage: "Ongoing",
     title: "The Stand",
     category: "Personal Initiative",
     year: "2025",
@@ -348,6 +364,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "luxe-veil",
+    stage: "Live",
     title: "Luxe Veil",
     category: "Website",
     year: "2025",
@@ -363,6 +380,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "brandtoki",
+    stage: "Live",
     title: "Studio BrandToki",
     category: "Website",
     year: "2025",
@@ -378,6 +396,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "trendflux-talent",
+    stage: "Pilot",
     title: "TrendFlux Talent",
     category: "Website",
     year: "2025",
@@ -393,6 +412,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "enterprise-control",
+    stage: "Pilot",
     title: "Enterprise Control Portal",
     category: "Enterprise System",
     year: "2025",
@@ -408,6 +428,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "masterclass",
+    stage: "Live",
     title: "Advanced AI Masterclass",
     category: "Personal Initiative",
     year: "2025",
@@ -423,6 +444,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "debate-emon",
+    stage: "Scaling",
     title: "Debate Emon",
     category: "Social Platform",
     year: "2023 — Present",
@@ -451,6 +473,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "zhemongrowth-linkedin",
+    stage: "Ongoing",
     title: "@zhemongrowth — LinkedIn",
     category: "Social Platform",
     year: "Ongoing",
@@ -467,6 +490,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "justice-appeal",
+    stage: "Ongoing",
     title: "Justice Appeal",
     category: "Personal Initiative",
     year: "2025",
@@ -482,6 +506,7 @@ export const SHOWCASE_ITEMS: ShowcaseItem[] = [
   },
   {
     id: "media-reports",
+    stage: "Ongoing",
     title: "Media Coverage Archive",
     category: "Media Coverage",
     year: "2024 — 2025",
@@ -518,3 +543,11 @@ export const SHOWCASE_SERVICES = Array.from(
 export const SHOWCASE_TECH = Array.from(
   new Set(SHOWCASE_ITEMS.flatMap((i) => i.tech ?? [])),
 ).sort() as ShowcaseTech[];
+
+/** Business stage — kept in a stable order (early → mature → ongoing). */
+export const SHOWCASE_STAGES: ShowcaseStage[] = [
+  "Pilot",
+  "Live",
+  "Scaling",
+  "Ongoing",
+];

@@ -17,6 +17,7 @@ import {
   SHOWCASE_INDUSTRIES,
   SHOWCASE_SERVICES,
   SHOWCASE_TECH,
+  SHOWCASE_STAGES,
 } from "@/data/showcase";
 import { RESEARCH_ITEMS, IMPLEMENTATION_ITEMS } from "@/data/research";
 import { ArrowRight, Sparkles, Share2 } from "lucide-react";
@@ -34,6 +35,7 @@ const Showcase = () => {
     industry: new Set<string>(),
     service: new Set<string>(),
     tech: new Set<string>(),
+    stage: new Set<string>(),
   });
   const [shareOpen, setShareOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,8 +66,13 @@ const Showcase = () => {
   });
 
   const filtered = useMemo(() => {
-    const { industry, service, tech } = facets;
-    if (industry.size === 0 && service.size === 0 && tech.size === 0) {
+    const { industry, service, tech, stage } = facets;
+    if (
+      industry.size === 0 &&
+      service.size === 0 &&
+      tech.size === 0 &&
+      stage.size === 0
+    ) {
       return SHOWCASE_ITEMS;
     }
     return SHOWCASE_ITEMS.filter((item) => {
@@ -79,6 +86,9 @@ const Showcase = () => {
         return false;
       }
       if (tech.size && !(item.tech ?? []).some((t) => tech.has(t))) {
+        return false;
+      }
+      if (stage.size && !(item.stage && stage.has(item.stage))) {
         return false;
       }
       return true;
@@ -99,14 +109,16 @@ const Showcase = () => {
       industry: new Set<string>(),
       service: new Set<string>(),
       tech: new Set<string>(),
+      stage: new Set<string>(),
     });
   }, []);
 
   const filterGroups = useMemo(
     () => [
       { key: "industry" as const, label: "Industry", options: SHOWCASE_INDUSTRIES },
-      { key: "service" as const, label: "Service", options: SHOWCASE_SERVICES },
       { key: "tech" as const, label: "Tech Stack", options: SHOWCASE_TECH },
+      { key: "stage" as const, label: "Business Stage", options: SHOWCASE_STAGES },
+      { key: "service" as const, label: "Service", options: SHOWCASE_SERVICES },
     ],
     [],
   );
