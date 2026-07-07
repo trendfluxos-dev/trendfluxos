@@ -1,3 +1,4 @@
+import { useRef, type KeyboardEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -42,6 +43,41 @@ const ITEMS: Item[] = [
 ];
 
 export default function EcosystemNavigator() {
+  // Roving keyboard navigation across the card grid/stack.
+  // Arrow keys move focus between cards; Home/End jump to the ends.
+  const listRef = useRef<HTMLUListElement>(null);
+  const onListKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
+    const links = Array.from(
+      listRef.current?.querySelectorAll<HTMLAnchorElement>("a[data-nav-card]") ?? []
+    );
+    const current = document.activeElement as HTMLElement | null;
+    const index = links.findIndex((el) => el === current);
+    if (index === -1) return;
+
+    let next = -1;
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        next = (index + 1) % links.length;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        next = (index - 1 + links.length) % links.length;
+        break;
+      case "Home":
+        next = 0;
+        break;
+      case "End":
+        next = links.length - 1;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    links[next]?.focus();
+    links[next]?.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+  };
+
   return (
     <section
       aria-labelledby="ecosystem-navigator-title"
@@ -74,12 +110,18 @@ export default function EcosystemNavigator() {
         </div>
 
         {/* Mobile: swipeable horizontal snap-stack. sm+: grid. */}
-        <div className="relative mt-10 lg:mt-14">
+        <nav
+          aria-label="Ecosystem sections"
+          className="relative mt-10 lg:mt-14"
+        >
           {/* Edge fade hint (mobile only) */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-background to-transparent sm:hidden" />
 
           <ul
+            ref={listRef}
             role="list"
+            onKeyDown={onListKeyDown}
+            aria-describedby="ecosystem-navigator-help"
             className="
               -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-4
               [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
@@ -87,29 +129,33 @@ export default function EcosystemNavigator() {
               lg:grid-cols-3 lg:gap-6
             "
           >
-            {ITEMS.map(({ label, to, eyebrow, desc, Icon }) => (
+            {ITEMS.map(({ label, to, eyebrow, desc, Icon }, i) => {
+              const descId = `eco-card-desc-${i}`;
+              return (
               <li
                 key={to}
                 className="group shrink-0 basis-[82%] snap-start sm:basis-auto sm:shrink"
               >
                 <Link
                   to={to}
-                  className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.35)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-7"
-                  aria-label={`${label} — ${desc}`}
+                  data-nav-card
+                  aria-label={`${label}, card ${i + 1} of ${ITEMS.length}`}
+                  aria-describedby={descId}
+                  className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card p-6 outline-none transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.35)] focus-visible:-translate-y-1 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-background focus-visible:shadow-[0_20px_50px_-20px_hsl(var(--primary)/0.5)] sm:p-7"
                 >
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <span aria-hidden="true" className="pointer-events-none absolute right-5 top-5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary">
+                  <span aria-hidden="true" className="pointer-events-none absolute right-5 top-5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary group-focus-within:text-primary">
                     {eyebrow}
                   </span>
 
-                  <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-border/70 bg-background transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-primary/[0.06]">
+                  <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-border/70 bg-background transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-primary/[0.06] group-focus-within:border-primary/40 group-focus-within:bg-primary/[0.06]">
                     <Icon className="h-5 w-5 text-foreground/70 transition-colors duration-300 group-hover:text-primary" aria-hidden="true" />
                   </div>
 
                   <h3 className="relative mt-6 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
                     {label}
                   </h3>
-                  <p className="relative mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
+                  <p id={descId} className="relative mt-2 text-[14.5px] leading-relaxed text-muted-foreground">
                     {desc}
                   </p>
 
@@ -119,14 +165,19 @@ export default function EcosystemNavigator() {
                   </span>
                 </Link>
               </li>
-            ))}
+              );
+            })}
           </ul>
 
-          {/* Swipe hint (mobile only) */}
-          <p className="mt-3 px-1 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground sm:hidden">
-            Swipe → to explore all {ITEMS.length} surfaces
+          {/* Combined help text — visible on mobile, screen-reader-only on desktop */}
+          <p
+            id="ecosystem-navigator-help"
+            className="mt-3 px-1 text-[11px] font-medium uppercase tracking-[0.25em] text-muted-foreground sm:sr-only"
+          >
+            <span className="sm:hidden">Swipe → to explore all {ITEMS.length} surfaces. </span>
+            <span>Use arrow keys, Home or End to move between cards.</span>
           </p>
-        </div>
+        </nav>
       </div>
     </section>
   );
