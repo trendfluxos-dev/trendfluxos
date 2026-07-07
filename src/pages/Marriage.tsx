@@ -548,6 +548,15 @@ const Marriage = () => {
                     />
                   </a>
                 )}
+                {!e.verifyUrl && (
+                  <span
+                    className="ml-2 inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-xs font-medium text-white/60 align-middle"
+                    title={bangla ? "যাচাই অনুরোধে পাওয়া যাবে" : "Verification available on request"}
+                  >
+                    <span aria-hidden>◔</span>
+                    <T en="Verify on request" bn="যাচাই অনুরোধে" bangla={bangla} />
+                  </span>
+                )}
               </li>
             ))}
           </ul>
