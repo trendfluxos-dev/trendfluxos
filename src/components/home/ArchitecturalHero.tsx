@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CalendarCheck } from "lucide-react";
 
 /**
  * Architectural portfolio hero — replaces the multi-section top of the
@@ -77,6 +77,17 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
               >
                 View Architecture
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden />
+              </Link>
+              <Link
+                to="/project-lead"
+                className="relative px-8 py-4 bg-white text-[#08080d] font-semibold rounded hover:bg-[#f0c9c9] transition-all inline-flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d] shadow-[0_10px_30px_-10px_rgba(255,255,255,0.35)]"
+              >
+                <span aria-hidden className="absolute -top-2 -right-2 inline-flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-[#e25a5a] opacity-75 animate-ping" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#c11f1f]" />
+                </span>
+                <CalendarCheck className="w-4 h-4" aria-hidden />
+                Book Direct with Project Lead
               </Link>
               <button
                 type="button"
