@@ -143,6 +143,15 @@ const Founder = () => {
           FOUNDER.contact.linkedin,
           FOUNDER.contact.whatsapp,
         ].filter(Boolean) as string[],
+        hasCredential: FOUNDER_DOCUMENTS.map((d) => ({
+          "@type": "EducationalOccupationalCredential",
+          name: d.title,
+          credentialCategory: d.category,
+          dateCreated: d.date,
+          recognizedBy: { "@type": "Organization", name: d.issuer },
+          ...(d.verifyUrl ? { url: d.verifyUrl } : {}),
+          ...(d.note ? { description: d.note } : {}),
+        })),
       },
     },
     "ld-founder-profile",
@@ -528,14 +537,18 @@ const Founder = () => {
             return (
               <li key={d.id}>
                 <Card>
+                  <article aria-labelledby={`doc-${d.id}-title`}>
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-[10px] uppercase tracking-[0.25em] text-primary">
                         {d.category} · {dateLabel}
                       </p>
-                      <p className="mt-1 font-display text-[15px] font-semibold leading-snug">
+                      <h3
+                        id={`doc-${d.id}-title`}
+                        className="mt-1 font-display text-[15px] font-semibold leading-snug"
+                      >
                         {d.title}
-                      </p>
+                      </h3>
                       <p className="mt-1 text-[12px] text-muted-foreground">
                         Issued by {d.issuer}
                       </p>
@@ -548,6 +561,7 @@ const Founder = () => {
                     <FileCheck2 className="h-5 w-5 shrink-0 text-primary" aria-hidden />
                   </div>
                   {d.previewImage && (
+                    <figure className="mt-4 space-y-1.5">
                     <button
                       type="button"
                       onClick={() =>
@@ -558,19 +572,24 @@ const Founder = () => {
                           verifyUrl: d.verifyUrl,
                         })
                       }
-                      className="group relative mt-4 block w-full overflow-hidden rounded-lg border border-border bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="group relative block w-full overflow-hidden rounded-lg border border-border bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary"
                       aria-label={`Open fullscreen preview of ${d.title}`}
                     >
                       <img
                         src={d.previewImage}
                         alt={d.previewAlt ?? `${d.title} — document preview`}
                         loading="lazy"
+                        decoding="async"
                         className="mx-auto block max-h-[520px] w-full object-contain"
                       />
                       <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-white opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
                         <Maximize2 className="h-3 w-3" /> View fullscreen
                       </span>
                     </button>
+                    <figcaption className="text-[11px] text-muted-foreground">
+                      Reference image — {d.title}. Tap to view fullscreen.
+                    </figcaption>
+                    </figure>
                   )}
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     {d.verifyUrl ? (
@@ -579,6 +598,7 @@ const Founder = () => {
                           href={d.verifyUrl}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label={`Verify ${d.title} on the official source (opens in a new tab)`}
                           className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90"
                         >
                           <ShieldCheck className="h-3.5 w-3.5" /> Verify
@@ -588,6 +608,7 @@ const Founder = () => {
                           href={d.verifyUrl}
                           target="_blank"
                           rel="noopener noreferrer"
+                          aria-label={`Open source ${host} in a new tab`}
                           className="break-all text-[11px] text-muted-foreground hover:text-primary hover:underline"
                         >
                           {host}
@@ -599,6 +620,7 @@ const Founder = () => {
                       </span>
                     )}
                   </div>
+                  </article>
                 </Card>
               </li>
             );
