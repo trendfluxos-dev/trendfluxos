@@ -716,6 +716,53 @@ const Founder = () => {
       </ChapterShell>
 
       <div data-founder-print-hide><Footer /></div>
+
+      {lightbox && (
+        <div
+          data-founder-print-hide
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.title}
+          className="no-print fixed inset-0 z-[100] flex flex-col bg-black/90 backdrop-blur-sm"
+          onClick={() => setLightbox(null)}
+        >
+          <div className="flex items-center justify-between gap-3 px-4 py-3 text-white sm:px-6">
+            <p className="min-w-0 truncate text-sm font-semibold">{lightbox.title}</p>
+            <div className="flex items-center gap-2">
+              {lightbox.verifyUrl && (
+                <a
+                  href={lightbox.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90"
+                >
+                  <ShieldCheck className="h-3.5 w-3.5" /> Verify
+                  <ExternalLink className="h-3 w-3 opacity-80" />
+                </a>
+              )}
+              <button
+                type="button"
+                onClick={() => setLightbox(null)}
+                aria-label="Close preview"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+          <div
+            className="flex flex-1 items-center justify-center overflow-auto px-4 pb-6 sm:px-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={lightbox.src}
+              alt={lightbox.alt}
+              className="max-h-full max-w-full rounded-md bg-white object-contain shadow-2xl"
+            />
+          </div>
+        </div>
+      )}
     </main>
   );
 };
