@@ -528,6 +528,22 @@ const Founder = () => {
                     </div>
                     <FileCheck2 className="h-5 w-5 shrink-0 text-primary" aria-hidden />
                   </div>
+                  {d.previewImage && (
+                    <a
+                      href={d.verifyUrl ?? d.previewImage}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 block overflow-hidden rounded-lg border border-border bg-white"
+                      aria-label={`Open source document for ${d.title}`}
+                    >
+                      <img
+                        src={d.previewImage}
+                        alt={d.previewAlt ?? `${d.title} — document preview`}
+                        loading="lazy"
+                        className="mx-auto block max-h-[520px] w-full object-contain"
+                      />
+                    </a>
+                  )}
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     {d.verifyUrl ? (
                       <>
