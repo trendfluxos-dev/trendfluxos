@@ -50,6 +50,10 @@ export default function EcosystemNavigator() {
   // Which mapped homepage section is currently in view — used to light up
   // the corresponding card. `null` when nothing tracked is visible.
   const [activeId, setActiveId] = useState<string | null>(null);
+  // Deep-link "grace window" — after a hash change we lock the active id
+  // to the destination for ~900ms so the smooth-scroll can't flip the
+  // highlight to intermediate sections in transit.
+  const hashLockUntilRef = useRef(0);
 
   // ── Active-state tracking ────────────────────────────────────────────────
   // Hash → sectionId map (hash may be either the wrapper's id or the
@@ -65,10 +69,12 @@ export default function EcosystemNavigator() {
 
   // 1) Hash-driven active state — instant, no scroll wait. Runs on mount,
   //    on every react-router `hash` change, and on browser `hashchange`.
+  //    Also arms the grace window so the scrollspy below defers to us.
   useEffect(() => {
     const applyFromHash = () => {
       const raw = (hash || window.location.hash || "").replace(/^#/, "");
       if (raw && HASH_TO_SECTION[raw]) {
+        hashLockUntilRef.current = Date.now() + 900;
         setActiveId(HASH_TO_SECTION[raw]);
       }
     };
@@ -78,28 +84,68 @@ export default function EcosystemNavigator() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hash]);
 
-  // 2) Scroll-driven active state via IntersectionObserver. Re-observes
-  //    lazy-mounted sections through a MutationObserver so late arrivals
-  //    (skeleton → real component) still light up the right card.
+  // 2) Scroll-driven active state. Uses a geometry-based scrollspy so the
+  //    highlight doesn't flap between adjacent sections during a scroll:
+  //    the active section is the one whose top is closest to the current
+  //    header offset (largest non-positive `rect.top - navOffset`). If we
+  //    are scrolled above every tracked section, activeId clears to null.
+  //    An IntersectionObserver + MutationObserver are used only as cheap
+  //    "recompute triggers" (initial + lazy-mount + entering/leaving vp).
   useEffect(() => {
-    const ratios = new Map<string, number>();
+    let raf = 0;
     const seen = new WeakSet<Element>();
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          const id = (e.target as HTMLElement).dataset.navSection ?? "";
-          ratios.set(id, e.isIntersecting ? e.intersectionRatio : 0);
-        });
-        let best: { id: string | null; r: number } = { id: null, r: 0 };
-        ratios.forEach((r, id) => {
-          if (r > best.r) best = { id, r };
-        });
-        if (best.r > 0.15) setActiveId(best.id);
-      },
-      { rootMargin: "-25% 0px -45% 0px", threshold: [0, 0.15, 0.35, 0.6, 0.85, 1] }
-    );
+    const readNavOffset = () => {
+      const v = getComputedStyle(document.documentElement).getPropertyValue("--nav-offset").trim();
+      const n = parseFloat(v);
+      return Number.isFinite(n) ? n : 96;
+    };
 
+    const recompute = () => {
+      // Honour the hash grace window — leave activeId alone.
+      if (Date.now() < hashLockUntilRef.current) return;
+
+      const targets = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-nav-section]")
+      );
+      if (targets.length === 0) return;
+
+      const anchor = readNavOffset() + 8; // just below the sticky headers
+      let best: { id: string | null; delta: number } = { id: null, delta: -Infinity };
+      let anyAbove = false;
+
+      for (const el of targets) {
+        const rect = el.getBoundingClientRect();
+        if (rect.bottom <= 0 || rect.top >= window.innerHeight) {
+          // Fully out of viewport — treat as "already passed" if above,
+          // otherwise "not yet".
+          if (rect.bottom <= anchor) anyAbove = true;
+          continue;
+        }
+        const delta = rect.top - anchor; // negative once section is under the header
+        if (delta <= 0 && delta > best.delta) {
+          best = { id: el.dataset.navSection ?? null, delta };
+          anyAbove = true;
+        }
+      }
+
+      setActiveId((prev) => {
+        const next = best.id ?? (anyAbove ? prev : null);
+        return next === prev ? prev : next;
+      });
+    };
+
+    const schedule = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        recompute();
+      });
+    };
+
+    // IO fires whenever *any* tracked section crosses in/out of the viewport;
+    // used purely to trigger a recompute (plus first-observation warm-up).
+    const io = new IntersectionObserver(schedule, { threshold: [0, 1] });
     const attach = () => {
       document.querySelectorAll<HTMLElement>("[data-nav-section]").forEach((el) => {
         if (!seen.has(el)) {
@@ -107,15 +153,22 @@ export default function EcosystemNavigator() {
           io.observe(el);
         }
       });
+      schedule();
     };
     attach();
 
     const mo = new MutationObserver(attach);
     mo.observe(document.body, { childList: true, subtree: true });
 
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+
     return () => {
       io.disconnect();
       mo.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 
