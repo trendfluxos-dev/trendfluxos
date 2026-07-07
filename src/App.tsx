@@ -54,6 +54,7 @@ const ContactPage = routes["/contact"];
 const Explore = routes["/explore"];
 const ProjectLead = routes["/project-lead"];
 const Showcase = routes["/showcase"];
+const ShowcaseDetail = routes["/showcase/:id"];
 const ResearchDetail = routes["/research/:slug"];
 const ImplementationDetail = routes["/implementations/:slug"];
 const Auth = routes["/auth"];
@@ -150,6 +151,7 @@ const RoutedApp = () => {
         <Route path="/explore" element={<Explore />} />
         <Route path="/project-lead" element={<ProjectLead />} />
         <Route path="/showcase" element={<Showcase />} />
+        <Route path="/showcase/:id" element={<ShowcaseDetail />} />
         <Route path="/research/:slug" element={<ResearchDetail />} />
         <Route path="/implementations/:slug" element={<ImplementationDetail />} />
         <Route path="/auth" element={<Auth />} />

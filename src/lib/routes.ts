@@ -24,6 +24,7 @@ export const routes = {
   "/explore": make(() => import("@/pages/Explore")),
   "/project-lead": make(() => import("@/pages/ProjectLead")),
   "/showcase": make(() => import("@/pages/Showcase")),
+  "/showcase/:id": make(() => import("@/pages/ShowcaseDetail")),
   "/research/:slug": make(() => import("@/pages/ResearchDetail")),
   "/implementations/:slug": make(() => import("@/pages/ResearchDetail")),
   "/auth": make(() => import("@/pages/Auth")),
