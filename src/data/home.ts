@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   CheckCircle2,
   GraduationCap,
+  PenLine,
   type LucideIcon,
 } from "lucide-react";
 import brandPabnaNagorik from "@/assets/brands/pabna-nagorik-committee.jpeg";
@@ -174,8 +175,16 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     outputs: ["Ads account build", "Creative testing matrix", "CAC dashboard"],
   },
   {
-    icon: Database,
+    icon: PenLine,
     step: "Step 03",
+    title: "Content Engine System",
+    window: "Days 20–50",
+    desc: "A production pipeline for hook-led short-form, long-form authority, and always-on creative refresh — briefs, editors, and publishing cadence in one loop.",
+    outputs: ["Editorial calendar", "Hook & script library", "Short-form production pipeline"],
+  },
+  {
+    icon: Database,
+    step: "Step 04",
     title: "CRM & Lifecycle System",
     window: "Days 30–55",
     desc: "One source of truth for every lead. Scoring, routing, and lifecycle automations replace spreadsheets and Slack handoffs.",
@@ -183,7 +192,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
   },
   {
     icon: Bot,
-    step: "Step 04",
+    step: "Step 05",
     title: "AI Automation System",
     window: "Days 45–75",
     desc: "Agents and workflows that replace 20+ manual hours weekly — qualification, follow-up, reporting, and content ops.",
@@ -191,7 +200,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
   },
   {
     icon: Sparkles,
-    step: "Step 05",
+    step: "Step 06",
     title: "Analytics & Ownership System",
     window: "Days 70–90",
     desc: "Observable dashboards, governance, and handover. You exit the engagement owning the OS — not renting it.",
@@ -202,7 +211,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     step: "Outcome",
     title: "Your Growth OS",
     window: "Day 91+",
-    desc: "Five systems, one operating layer. Audited, documented, and built to run without an agency on retainer.",
+    desc: "Six systems, one operating layer. Audited, documented, and built to run without an agency on retainer.",
     outputs: ["Audit-ready OS", "Founder ownership", "Compounding leverage"],
   },
 ];

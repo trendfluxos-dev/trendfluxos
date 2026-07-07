@@ -62,7 +62,7 @@ export const SystemsHeBuiltSection = () => {
             className="absolute top-[22px] h-3 w-3 -translate-x-1/2 rounded-full bg-primary transition-[left] duration-700 ease-out"
             style={{ left: `calc(3% + ${progress}% * 0.94)`, boxShadow: "0 0 18px 4px hsl(var(--primary) / 0.55)" }}
           />
-          <ul className="relative grid grid-cols-6 gap-2">
+          <ul className="relative grid grid-cols-7 gap-2">
             {SYSTEMS_HE_BUILT.map((s, i) => {
               const isActive = i === active;
               const isPast = i < active;
