@@ -525,3 +525,11 @@ export const SHOWCASE_SERVICES = Array.from(
 export const SHOWCASE_TECH = Array.from(
   new Set(SHOWCASE_ITEMS.flatMap((i) => i.tech ?? [])),
 ).sort() as ShowcaseTech[];
+
+/** Business stage — kept in a stable order (early → mature → ongoing). */
+export const SHOWCASE_STAGES: ShowcaseStage[] = [
+  "Pilot",
+  "Live",
+  "Scaling",
+  "Ongoing",
+];
