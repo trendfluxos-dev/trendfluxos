@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ExternalLink, GraduationCap, Layers, Network } from "lucide-react";
 
@@ -106,11 +107,8 @@ export default function TripleBridge({
         >
           <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-4">
             {NODES.map((n, idx) => (
-              <>
-                <div
-                  key={n.id}
-                  className="flex flex-col items-center text-center"
-                >
+              <Fragment key={n.id}>
+                <div className="flex flex-col items-center text-center">
                   <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-primary/40 bg-primary/[0.08] shadow-[0_0_40px_hsl(var(--primary)/0.15)]">
                     <n.Icon className="h-8 w-8 text-primary" aria-hidden />
                     <span className="absolute -top-2 -right-2 rounded-full border border-primary/40 bg-background px-1.5 py-0.5 font-mono text-[9px] font-semibold text-primary">
@@ -129,7 +127,6 @@ export default function TripleBridge({
                 </div>
                 {idx < NODES.length - 1 && (
                   <svg
-                    key={`arrow-${idx}`}
                     viewBox="0 0 80 24"
                     className="h-6 w-full text-primary"
                     fill="none"
@@ -167,7 +164,7 @@ export default function TripleBridge({
                     </line>
                   </svg>
                 )}
-              </>
+              </Fragment>
             ))}
           </div>
           {/* Feedback loop arc — Measure informs Learn */}
