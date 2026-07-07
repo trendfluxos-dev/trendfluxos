@@ -577,14 +577,14 @@ const Marriage = () => {
             ];
             return (
               <>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-4">
                   {galleryPhotos.map((p, i) => (
                     <button
                       key={i}
                       type="button"
                       onClick={() => setLightboxIndex(i)}
                       aria-label={`Open ${p.alt}`}
-                      className="group relative w-full h-64 sm:h-72 overflow-hidden rounded-2xl border border-red-500/30 hover:border-red-500/70 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                      className="group relative w-full aspect-[3/4] sm:h-72 sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl border border-red-500/30 hover:border-red-500/70 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 active:scale-[0.98]"
                     >
                       <img
                         src={p.src}

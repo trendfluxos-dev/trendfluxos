@@ -68,12 +68,19 @@ export function PhotoLightbox({ photos, index, onClose, onIndexChange }: Props) 
       aria-label="Photo viewer"
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
       onClick={onClose}
+      style={{
+        paddingTop: "env(safe-area-inset-top)",
+        paddingBottom: "env(safe-area-inset-bottom)",
+        paddingLeft: "env(safe-area-inset-left)",
+        paddingRight: "env(safe-area-inset-right)",
+      }}
     >
       <button
         type="button"
         aria-label="Close"
         onClick={onClose}
-        className="absolute top-4 right-4 h-11 w-11 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center transition"
+        className="absolute top-3 right-3 sm:top-4 sm:right-4 h-11 w-11 rounded-full bg-white/15 text-white hover:bg-white/25 active:scale-95 flex items-center justify-center transition z-10"
+        style={{ top: "max(0.75rem, env(safe-area-inset-top))", right: "max(0.75rem, env(safe-area-inset-right))" }}
       >
         <X className="h-5 w-5" />
       </button>
@@ -84,7 +91,7 @@ export function PhotoLightbox({ photos, index, onClose, onIndexChange }: Props) 
             type="button"
             aria-label="Previous photo"
             onClick={(e) => { e.stopPropagation(); go(-1); }}
-            className="absolute left-2 sm:left-4 h-12 w-12 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center transition"
+            className="hidden sm:flex absolute left-4 h-12 w-12 rounded-full bg-white/10 text-white hover:bg-white/20 items-center justify-center transition"
           >
             <ChevronLeft className="h-6 w-6" />
           </button>
@@ -92,7 +99,7 @@ export function PhotoLightbox({ photos, index, onClose, onIndexChange }: Props) 
             type="button"
             aria-label="Next photo"
             onClick={(e) => { e.stopPropagation(); go(1); }}
-            className="absolute right-2 sm:right-4 h-12 w-12 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center transition"
+            className="hidden sm:flex absolute right-4 h-12 w-12 rounded-full bg-white/10 text-white hover:bg-white/20 items-center justify-center transition"
           >
             <ChevronRight className="h-6 w-6" />
           </button>
@@ -100,7 +107,7 @@ export function PhotoLightbox({ photos, index, onClose, onIndexChange }: Props) 
       )}
 
       <figure
-        className="relative max-w-[95vw] max-h-[90vh] flex flex-col items-center"
+        className="relative w-full max-w-[100vw] sm:max-w-[95vw] max-h-[90vh] flex flex-col items-center px-2 sm:px-0 touch-pan-y"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
@@ -110,12 +117,22 @@ export function PhotoLightbox({ photos, index, onClose, onIndexChange }: Props) 
         <img
           src={current.src}
           alt={current.alt}
-          className="max-w-[95vw] max-h-[85vh] object-contain rounded-xl shadow-2xl select-none"
+          className="max-w-full max-h-[78vh] sm:max-h-[85vh] object-contain rounded-lg sm:rounded-xl shadow-2xl select-none"
           draggable={false}
         />
-        <figcaption className="mt-3 text-xs sm:text-sm text-white/70 text-center">
+        <figcaption className="mt-3 px-4 text-[11px] sm:text-sm text-white/70 text-center">
           {current.alt} · {index + 1} / {count}
         </figcaption>
+        {count > 1 && (
+          <div className="mt-2 flex gap-1.5 sm:hidden" aria-hidden>
+            {photos.map((_, i) => (
+              <span
+                key={i}
+                className={`h-1.5 rounded-full transition-all ${i === index ? "w-5 bg-white" : "w-1.5 bg-white/40"}`}
+              />
+            ))}
+          </div>
+        )}
       </figure>
     </div>,
     document.body,
