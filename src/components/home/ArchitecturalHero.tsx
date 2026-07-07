@@ -40,12 +40,6 @@ const widthClass: Record<Brand["strength"], string> = {
 };
 
 export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => void }) {
-      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-      history.replaceState(null, "", "#systems-he-built");
-    });
-  };
-
   return (
     <section
       aria-labelledby="home-hero-heading"
