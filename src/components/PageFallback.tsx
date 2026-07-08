@@ -3,14 +3,44 @@
  * while any registered route-data loaders (see `useRouteDataLoading`)
  * are still pending. Kept visually identical to the previous inline
  * PageFallback so nothing shifts when routes swap.
+ *
+ * Screen-reader semantics:
+ *   - `role="status"` + `aria-live="polite"` + `aria-atomic="true"`
+ *     ensures the announcement is queued once, not letter-by-letter as
+ *     skeleton blocks mount.
+ *   - `aria-busy="true"` on the container tells AT that this region is
+ *     currently updating, so decorative skeleton nodes aren't announced
+ *     as content.
+ *   - Decorative pulse blocks are `aria-hidden` and `role="presentation"`
+ *     so JAWS/NVDA/VoiceOver skip them entirely.
+ *   - A single visually-hidden `<p>` carries the human-readable label
+ *     ("Loading page content, please wait…") which is what actually
+ *     gets announced during navigation.
  */
-export const PageFallback = () => (
+type PageFallbackProps = {
+  /** Optional context appended to the announcement, e.g. "dashboard". */
+  label?: string;
+};
+
+export const PageFallback = ({ label }: PageFallbackProps = {}) => {
+  const message = label
+    ? `Loading ${label}, please wait…`
+    : "Loading page content, please wait…";
+  return (
   <div
     role="status"
     aria-live="polite"
-    aria-label="Loading page"
+    aria-atomic="true"
+    aria-busy="true"
+    aria-label={message}
+    data-testid="page-fallback"
     className="min-h-dvh bg-background"
   >
+    {/* The only text node actually announced by AT. Everything visual
+        below is decorative and hidden from the accessibility tree. */}
+    <p className="sr-only">{message}</p>
+
+    <div aria-hidden="true" role="presentation">
     <div className="border-b border-border/50">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
         <div className="h-6 w-40 animate-pulse rounded-md bg-muted" />
@@ -50,14 +80,15 @@ export const PageFallback = () => (
       </div>
       <div className="mt-10 flex items-center justify-center gap-3 text-xs text-muted-foreground">
         <div
-          aria-hidden
+          aria-hidden="true"
           className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"
         />
-        <span>Loading…</span>
+        <span aria-hidden="true">Loading…</span>
       </div>
     </div>
-    <span className="sr-only">Loading page content…</span>
+    </div>
   </div>
-);
+  );
+};
 
 export default PageFallback;
