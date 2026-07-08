@@ -37,10 +37,14 @@ Deno.serve(async (req) => {
       status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-  const { data: isAdmin } = await userClient.rpc("current_user_has_role", {
-    _role: "admin",
-  });
-  if (!isAdmin) {
+  const { data: isAdmin, error: roleErr } = await userClient.rpc(
+    "current_user_has_role",
+    { _role: "admin" },
+  );
+  if (roleErr || !isAdmin) {
+    if (roleErr) {
+      await notifyRoleFailure("lead-outreach-start", roleErr.message, userData.user.id);
+    }
     return new Response(JSON.stringify({ error: "forbidden" }), {
       status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
