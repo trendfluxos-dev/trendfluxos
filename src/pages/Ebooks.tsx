@@ -385,9 +385,12 @@ const Ebooks = () => {
                 Pick the format that fits your device
               </h2>
               <p className="mt-2 text-sm text-muted-foreground md:text-base">
-                The PDF keeps the print-ready layout. The EPUB reflows text and
-                scales fonts smoothly on phones — best for reading on Apple
-                Books, Google Play Books or any e-reader app.
+                The <strong>PDF</strong> keeps the print-ready layout.
+                The <strong>EPUB (Standard)</strong> reflows on any e-reader.
+                The <strong>EPUB (Phone Edition)</strong> is tuned for small
+                screens — bigger type, tap-friendly links, no hyphenation
+                gymnastics. Same title, author, language and cover across all
+                three.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 md:min-w-[26rem] lg:grid-cols-3 lg:min-w-[34rem]">
