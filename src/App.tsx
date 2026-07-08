@@ -301,6 +301,7 @@ const RoutedApp = () => {
         <Route path="/admin/class-analytics" element={<RequireRole roles={["admin","teacher","tutor"]}><ClassAnalytics /></RequireRole>} />
         <Route path="/admin/growth-console" element={<RequireRole roles={["admin"]}><GrowthConsole /></RequireRole>} />
         <Route path="/admin/lead-lifecycle" element={<RequireRole roles={["admin"]}><LeadLifecycle /></RequireRole>} />
+        <Route path="/admin/outreach-logs" element={<RequireRole roles={["admin"]}><OutreachLogsAdmin /></RequireRole>} />
         <Route path="/admin/creator-studio" element={<RequireRole roles={["admin","editor","teacher","tutor"]}><CreatorStudio /></RequireRole>} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
         {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}
