@@ -27,7 +27,6 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import portrait from "@/assets/zahid-hasan-emon.webp";
-import { SystemsBentoSection } from "@/components/systems/SystemsBentoSection";
 import { FilteredSystemsBentoSection } from "@/components/systems/FilteredSystemsBentoSection";
 import proofEducation from "@/assets/proof/educational-background.webp";
 import proofUniversity from "@/assets/proof/university-certificates.webp";
