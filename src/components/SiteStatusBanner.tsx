@@ -69,6 +69,12 @@ export default function SiteStatusBanner() {
     const { protocol, hostname, origin } = window.location;
     const _isLocal = hostname === "localhost" || hostname === "127.0.0.1";
     const _isPreview = /lovable\.(app|dev)|lovableproject\.com/.test(hostname);
+    // Banner is a production visitor-facing signal. On local dev and Lovable
+    // preview hosts, silence it entirely to avoid stealing hero space.
+    if (_isLocal || _isPreview) {
+      setDismissed(true);
+      return;
+    }
     const isCustom = !_isLocal && !_isPreview;
     const _isSsl = protocol === "https:";
     setHost(hostname);
