@@ -10,7 +10,7 @@ import bdjobsHtml from "@/data/bdjobs-profile.html?raw";
 
 // Last export timestamp is baked at build time from the uploaded file's mtime
 // (see: user re-uploads the Bdjobs CV export → this string refreshes on rebuild).
-const LAST_UPDATED_ISO = "2026-07-08T13:39:07Z";
+const LAST_UPDATED_ISO = "2026-07-08T15:00:00Z";
 
 const BdjobsProfile = () => {
   useSeo({
