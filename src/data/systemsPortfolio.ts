@@ -10,6 +10,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { SystemSlug } from "./systemsLinkMap";
+import { assertValidSystemsPortfolio } from "./systemsPortfolioSchema";
 
 export type SystemCase = {
   slug: SystemSlug;
@@ -35,7 +36,7 @@ export type SystemCase = {
  * Navigation (route + section + link label) is configured centrally in
  * `systemsLinkMap.ts` and resolved via `getSystemLink(slug)`.
  */
-export const SYSTEMS_PORTFOLIO: SystemCase[] = [
+const SYSTEMS_PORTFOLIO_RAW: SystemCase[] = [
   {
     slug: "growth-os",
     title: "Growth-OS",
@@ -183,3 +184,12 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     ],
   },
 ];
+
+/**
+ * Validated at import time. If any tile is missing `summary` or `built[]`
+ * (or any other required field), this throws in dev/test and drops the bad
+ * row in prod — so the narrative grid can never render an empty card.
+ */
+export const SYSTEMS_PORTFOLIO: SystemCase[] = assertValidSystemsPortfolio(
+  SYSTEMS_PORTFOLIO_RAW,
+);
