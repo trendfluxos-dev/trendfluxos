@@ -4,6 +4,7 @@
 // Logs every access to access_audit_logs.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { isAdmin as checkIsAdmin } from "../_shared/adminCheck.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -75,8 +76,7 @@ Deno.serve(async (req) => {
   let reason = "";
   if (row.teacher_id === u.id) { allowed = true; reason = "owner"; }
   if (!allowed) {
-    const { data: isAdmin } = await admin.rpc("has_role", { _user_id: u.id, _role: "admin" });
-    if (isAdmin) { allowed = true; reason = "admin"; }
+    if (await checkIsAdmin(user, u.id)) { allowed = true; reason = "admin"; }
   }
   if (!allowed && row.visibility !== "private" && row.class_id) {
     const { data: rsvp } = await admin
