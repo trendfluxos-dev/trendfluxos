@@ -16,6 +16,16 @@ const PATTERNS: Array<{ key: string; regex: RegExp; label: string }> = [
     regex: /permission denied for (?:table|relation) "?live_classes"?/i,
     label: "🚨 Postgres permission denied: live_classes",
   },
+  {
+    key: "permission_denied_has_role",
+    regex: /permission denied for function has_role/i,
+    label: "🚨 Postgres permission denied: has_role()",
+  },
+  {
+    key: "role_check_failed_outreach",
+    regex: /role_check_failed:(lead-outreach-start|lead-followup-sweeper)/i,
+    label: "🚨 Admin role check failed in lead outreach flow",
+  },
 ];
 
 const DEDUPE_MINUTES = 15;
@@ -54,10 +64,20 @@ Deno.serve(async (req) => {
   });
 
   const since = new Date(Date.now() - DEDUPE_MINUTES * 60_000).toISOString();
+  // Dedupe by the same regex pattern in recent client_errors so we alert once
+  // per DEDUPE_MINUTES window per pattern, regardless of the exact message.
+  const dedupeNeedle =
+    matched.key === "permission_denied_live_classes"
+      ? "%permission denied%live_classes%"
+      : matched.key === "permission_denied_has_role"
+        ? "%permission denied for function has_role%"
+        : matched.key === "role_check_failed_outreach"
+          ? "%role_check_failed:%"
+          : `%${matched.key}%`;
   const { count } = await supabase
     .from("client_errors")
     .select("id", { count: "exact", head: true })
-    .ilike("message", `%${matched.key === "permission_denied_live_classes" ? "permission denied for" : ""}%live_classes%`)
+    .ilike("message", dedupeNeedle)
     .gte("created_at", since);
 
   // The just-inserted row counts as 1. Only alert on the first occurrence
