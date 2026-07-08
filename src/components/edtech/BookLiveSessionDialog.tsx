@@ -62,6 +62,7 @@ const BookLiveSessionDialog = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
     if (!classId) {
       toast.error("Please pick a session.");
       return;
@@ -117,7 +118,7 @@ const BookLiveSessionDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} aria-busy={submitting} className="space-y-4">
           <div className="space-y-1.5">
             <Label htmlFor="book-session">Session</Label>
             <Select value={classId} onValueChange={setClassId}>
