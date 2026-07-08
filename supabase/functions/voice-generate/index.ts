@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 /**
  * voice-generate
@@ -106,9 +107,7 @@ Deno.serve(async (req: Request) => {
     if (!user) return j({ error: "unauthorized" }, 401);
 
     // Founder/admin gate — voice cloning is locked to the brand architect.
-    const { data: isAdmin } = await userClient.rpc("current_user_has_role", {
-      _role: "admin",
-    });
+    const isAdmin = await userHasRole(userClient, user.id, "admin");
     if (!isAdmin) return j({ error: "forbidden_founder_only" }, 403);
 
     const body = await req.json().catch(() => ({}));
