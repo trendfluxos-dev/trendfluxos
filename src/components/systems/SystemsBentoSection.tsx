@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Lock, Check } from "lucide-react";
 import { TfSection } from "@/components/tf/Section";
 import { SYSTEMS_PORTFOLIO, type SystemCase } from "@/data/systemsPortfolio";
+import { getSystemLink } from "@/data/systemsLinkMap";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -118,7 +119,7 @@ const SIZE_CLASSES: Record<SystemCase["size"], string> = {
 const BentoTile = ({ system }: { system: SystemCase }) => {
   const Icon = system.icon;
   const isHero = system.size === "hero";
-  const isInternal = system.href === null;
+  const { href, linkLabel, internal: isInternal } = getSystemLink(system.slug);
 
   const body = (
     <>
@@ -210,11 +211,11 @@ const BentoTile = ({ system }: { system: SystemCase }) => {
             {isInternal ? (
               <>
                 <Lock className="h-3.5 w-3.5" aria-hidden />
-                {system.linkLabel}
+                {linkLabel}
               </>
             ) : (
               <>
-                {system.linkLabel}
+                {linkLabel}
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
               </>
             )}
@@ -232,7 +233,7 @@ const BentoTile = ({ system }: { system: SystemCase }) => {
 
   return (
     <li className={cn("flex", SIZE_CLASSES[system.size])}>
-      {isInternal ? (
+      {isInternal || !href ? (
         <div
           className={cn(surfaceClass, "w-full")}
           aria-label={`${system.title} — internal system`}
@@ -241,8 +242,8 @@ const BentoTile = ({ system }: { system: SystemCase }) => {
         </div>
       ) : (
         <Link
-          to={system.href!}
-          aria-label={`${system.title} — ${system.linkLabel}`}
+          to={href}
+          aria-label={`${system.title} — ${linkLabel}`}
           className={cn(surfaceClass, "w-full")}
         >
           {body}
