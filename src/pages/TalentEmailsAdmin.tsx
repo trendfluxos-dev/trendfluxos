@@ -15,6 +15,17 @@ import {
 import { toast } from "sonner";
 import { Loader2, Mail, Send, CheckCircle2, XCircle, Ban } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export type TemplateKey = "approve" | "reject" | "hold";
 export type TalentStatus =
@@ -123,6 +134,7 @@ export default function TalentEmailsAdmin() {
   const [cancelRequestedAt, setCancelRequestedAt] = useState<number | null>(null);
   const cancelBulkRef = useRef(false);
   const [cancelling, setCancelling] = useState(false);
+  const [confirmCancelOpen, setConfirmCancelOpen] = useState(false);
 
   const sleep = (ms: number) =>
     new Promise<void>((r) => setTimeout(r, Math.max(0, ms)));
@@ -561,15 +573,60 @@ export default function TalentEmailsAdmin() {
                   Test all status mappings
                 </Button>
                 {sendingAll ? (
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="destructive"
-                    disabled={cancelling}
-                    onClick={cancelBulk}
+                  <AlertDialog
+                    open={confirmCancelOpen}
+                    onOpenChange={setConfirmCancelOpen}
                   >
-                    {cancelling ? "Cancelling…" : "Cancel"}
-                  </Button>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="destructive"
+                        disabled={cancelling}
+                      >
+                        {cancelling ? "Cancelling…" : "Cancel"}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Stop the bulk send?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {bulkProgress ? (
+                            <>
+                              Progress so far:{" "}
+                              <strong>
+                                {bulkProgress.done}/{bulkProgress.total}
+                              </strong>{" "}
+                              · sent{" "}
+                              <strong className="text-emerald-600">
+                                {bulkProgress.ok}
+                              </strong>{" "}
+                              · failed{" "}
+                              <strong className="text-destructive">
+                                {bulkProgress.failed}
+                              </strong>
+                              .<br />
+                            </>
+                          ) : null}
+                          The email currently in flight will finish sending —
+                          any remaining emails in the queue will be skipped and
+                          logged under "After cancel".
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Keep sending</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => {
+                            setConfirmCancelOpen(false);
+                            cancelBulk();
+                          }}
+                          className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                          Yes, cancel
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 ) : null}
               </div>
 
