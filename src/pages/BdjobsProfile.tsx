@@ -17,7 +17,7 @@ const BdjobsProfile = () => {
     title: "BD Jobs Profile · ZAHID HASAN EMON | Trendflux",
     description:
       "Live BD Jobs (Bdjobs.com) professional profile for ZAHID HASAN EMON — synced from the latest Bdjobs CV export.",
-    canonicalPath: "/bdjobs-profile",
+    canonical: `${BRAND.url}/bdjobs-profile`,
   });
 
   const updatedLabel = useMemo(
