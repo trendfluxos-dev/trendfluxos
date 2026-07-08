@@ -32,6 +32,7 @@ const BdjobsProfile = () => {
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [pdfBusy, setPdfBusy] = useState(false);
+  const [validationError, setValidationError] = useState<string[] | null>(null);
   const viewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,6 +41,10 @@ const BdjobsProfile = () => {
       if (cancelled) return;
       setProfile(res.data);
       setUpdatedAt(res.updatedAt);
+      setValidationError(res.validationError ?? null);
+      if (res.validationError?.length) {
+        toast.error("Bdjobs profile data is invalid — showing defaults.");
+      }
     });
     return () => {
       cancelled = true;
