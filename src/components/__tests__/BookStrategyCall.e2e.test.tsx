@@ -22,19 +22,8 @@ beforeAll(() => {
   }
 });
 
-// The dialog navigates to `mailto:` via window.location.href — swallow it so
-// jsdom doesn't emit its "Not implemented: navigation" noise.
-const originalHref = Object.getOwnPropertyDescriptor(window.location, "href");
-function stubHref() {
-  Object.defineProperty(window.location, "href", {
-    configurable: true,
-    set: vi.fn(),
-    get: () => "http://localhost/",
-  });
-  return () => {
-    if (originalHref) Object.defineProperty(window.location, "href", originalHref);
-  };
-}
+// The dialog navigates to `mailto:` via window.location.href. jsdom logs a
+// "Not implemented: navigation" warning but does not throw, so we let it be.
 
 // Toast hook renders through a portal; not needed for these assertions.
 vi.mock("@/hooks/use-toast", () => ({
@@ -57,10 +46,8 @@ function HomeCtaHarness() {
 
 describe("Book Strategy Call → booking flow → success state (e2e)", () => {
   it("opens the booking form when the hero CTA is clicked, then shows the success state on submit", async () => {
-    const restoreHref = stubHref();
     const user = userEvent.setup();
-    try {
-      render(<HomeCtaHarness />);
+    render(<HomeCtaHarness />);
 
       // 1. Hero CTA visible.
       const cta = screen.getByRole("button", { name: /Book a Free Strategy Call/i });
@@ -114,19 +101,14 @@ describe("Book Strategy Call → booking flow → success state (e2e)", () => {
 
       // Closing the success state dismisses the dialog and returns to the page.
       await user.click(within(success).getByRole("button", { name: /^Close/i }));
-      await waitFor(() =>
-        expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
-      );
-    } finally {
-      restoreHref();
-    }
+    await waitFor(() =>
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+    );
   });
 
   it("blocks submission and surfaces field errors when the form is empty", async () => {
-    const restoreHref = stubHref();
     const user = userEvent.setup();
-    try {
-      render(<HomeCtaHarness />);
+    render(<HomeCtaHarness />);
       await user.click(
         screen.getByRole("button", { name: /Book a Free Strategy Call/i }),
       );
@@ -143,8 +125,5 @@ describe("Book Strategy Call → booking flow → success state (e2e)", () => {
       expect(
         within(dialog).queryByText(/Operations initiated/i),
       ).not.toBeInTheDocument();
-    } finally {
-      restoreHref();
-    }
   });
 });
