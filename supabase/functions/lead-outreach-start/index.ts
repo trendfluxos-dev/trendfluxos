@@ -187,6 +187,16 @@ Deno.serve(async (req) => {
     }
   }
 
+  await logRun(admin, "success", {
+    http_status: 200,
+    metadata: {
+      sequence_name: sequenceName,
+      channel,
+      next_followup_at: nextAt,
+      n8n_forwarded: forwarded,
+    },
+  });
+
   return new Response(JSON.stringify({ ok: true, forwarded, response, next_followup_at: nextAt }), {
     status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
