@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Download, Eye, BookOpen, ArrowLeft, CalendarCheck, MessageCircle } from "lucide-react";
+import { Download, Eye, BookOpen, ArrowLeft, CalendarCheck, MessageCircle, Smartphone, FileText } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
 import jobApplyPdf from "@/assets/ebooks/job-apply-v2.pdf.asset.json";
 import jobApplyCover from "@/assets/ebooks/job-apply-v2-cover.jpg.asset.json";
+import jobApplyEpub from "@/assets/ebooks/job-apply-v2.epub.asset.json";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
 import clientHuntingCover from "@/assets/ebooks/client-hunting-v2-cover.jpg.asset.json";
 import marriagePdf from "@/assets/ebooks/marriage-v2.pdf.asset.json";
@@ -269,6 +270,80 @@ const Ebooks = () => {
           {EBOOKS.map((book) => (
             <EbookCard key={book.slug} book={book} />
           ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-6 pb-4">
+        <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="max-w-xl">
+              <Badge variant="secondary" className="uppercase tracking-wider">
+                Downloads · Job-Apply Playbook v2
+              </Badge>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
+                Pick the format that fits your device
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground md:text-base">
+                The PDF keeps the print-ready layout. The EPUB reflows text and
+                scales fonts smoothly on phones — best for reading on Apple
+                Books, Google Play Books or any e-reader app.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 md:min-w-[22rem]">
+              <a
+                href={jobApplyPdf.url}
+                download="JobApply_Playbook_v2.pdf"
+                className="group flex items-start gap-3 rounded-xl border border-border bg-background p-4 transition-colors hover:border-primary/50 hover:bg-primary/5"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <FileText className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    PDF
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                      Print layout
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Desktop &amp; tablet · fixed pages
+                  </p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
+                    <Download className="h-3.5 w-3.5" />
+                    Download .pdf
+                  </span>
+                </div>
+              </a>
+              <a
+                href={jobApplyEpub.url}
+                download="JobApply_Playbook_v2.epub"
+                className="group flex items-start gap-3 rounded-xl border border-primary/40 bg-primary/5 p-4 transition-colors hover:border-primary hover:bg-primary/10"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                  <Smartphone className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    EPUB
+                    <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] uppercase tracking-wider text-primary">
+                      Mobile
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Reflows text · scales fonts
+                  </p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
+                    <Download className="h-3.5 w-3.5" />
+                    Download .epub
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            Tip · on iPhone, tap the EPUB link and choose <em>Open in Books</em>.
+            On Android, install <em>Google Play Books</em> or <em>Moon+ Reader</em>.
+          </p>
         </div>
       </section>
 
