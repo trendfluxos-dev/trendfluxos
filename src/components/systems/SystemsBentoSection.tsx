@@ -188,7 +188,13 @@ const SIZE_CLASSES: Record<SystemCase["size"], string> = {
   half: "lg:col-span-6 lg:row-span-1",
 };
 
-const BentoTile = ({ system }: { system: SystemCase }) => {
+const BentoTile = ({
+  system,
+  state = "neutral",
+}: {
+  system: SystemCase;
+  state?: HighlightState;
+}) => {
   const Icon = system.icon;
   const isHero = system.size === "hero";
   const { href, linkLabel, internal: isInternal } = getSystemLink(system.slug);
@@ -301,10 +307,18 @@ const BentoTile = ({ system }: { system: SystemCase }) => {
     "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all sm:p-6",
     !isInternal &&
       "hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+    state === "match" &&
+      "border-primary/60 shadow-[0_18px_45px_-24px_hsl(var(--primary)/0.6)] ring-1 ring-primary/50",
+    state === "dim" && "opacity-45 saturate-75",
   );
 
   return (
-    <li className={cn("flex", SIZE_CLASSES[system.size])}>
+    <li
+      id={bentoTileId(system.slug)}
+      className={cn("flex scroll-mt-28", SIZE_CLASSES[system.size])}
+      data-highlight={state}
+      aria-current={state === "match" ? "true" : undefined}
+    >
       {isInternal || !href ? (
         <div
           className={cn(surfaceClass, "w-full")}
