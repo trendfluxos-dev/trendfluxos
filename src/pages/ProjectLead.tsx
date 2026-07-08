@@ -118,6 +118,7 @@ const socials = [
 
 const ProjectLead = () => {
   const [marriageOpen, setMarriageOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
   useSeo({
     title: "Project Lead — Zahid Hasan Emon | Founder, TrendFlux Ecosystem",
     description:
@@ -128,6 +129,7 @@ const ProjectLead = () => {
   return (
     <main className="min-h-dvh bg-background text-foreground overflow-x-hidden">
       <MarriageInquiryDialog open={marriageOpen} onOpenChange={setMarriageOpen} />
+      <ProjectLeadBookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
       <Navbar />
 
       {/* HERO / ABOUT */}
