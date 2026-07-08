@@ -31,6 +31,35 @@ type Body = {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const startedAt = Date.now();
+  let actorId: string | null = null;
+  let leadId: string | null = null;
+
+  const logRun = async (
+    admin: ReturnType<typeof createClient> | null,
+    status: "success" | "failure",
+    extras: Record<string, unknown>,
+  ) => {
+    try {
+      const client = admin ?? createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      );
+      await client.from("outreach_execution_logs").insert({
+        function_name: "lead-outreach-start",
+        status,
+        triggered_by: "admin",
+        actor_id: actorId,
+        lead_id: leadId,
+        processed_count: status === "success" ? 1 : 0,
+        success_count: status === "success" ? 1 : 0,
+        failure_count: status === "failure" ? 1 : 0,
+        duration_ms: Date.now() - startedAt,
+        ...extras,
+      });
+    } catch (_) { /* best-effort */ }
+  };
+
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "method_not_allowed" }), {
       status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -51,10 +80,12 @@ Deno.serve(async (req) => {
   );
   const { data: userData } = await userClient.auth.getUser();
   if (!userData?.user) {
+    await logRun(null, "failure", { http_status: 401, error: "unauthorized" });
     return new Response(JSON.stringify({ error: "unauthorized" }), {
       status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
+  actorId = userData.user.id;
   const { data: isAdmin, error: roleErr } = await userClient.rpc(
     "current_user_has_role",
     { _role: "admin" },
@@ -63,6 +94,7 @@ Deno.serve(async (req) => {
     if (roleErr) {
       await notifyRoleFailure("lead-outreach-start", roleErr.message, userData.user.id);
     }
+    await logRun(null, "failure", { http_status: 403, error: roleErr?.message ?? "forbidden" });
     return new Response(JSON.stringify({ error: "forbidden" }), {
       status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -70,15 +102,18 @@ Deno.serve(async (req) => {
 
   let body: Body;
   try { body = await req.json(); } catch {
+    await logRun(null, "failure", { http_status: 400, error: "invalid_json" });
     return new Response(JSON.stringify({ error: "invalid_json" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
   if (!body.lead_id) {
+    await logRun(null, "failure", { http_status: 400, error: "lead_id_required" });
     return new Response(JSON.stringify({ error: "lead_id_required" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
+  leadId = body.lead_id;
 
   const admin = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -88,6 +123,7 @@ Deno.serve(async (req) => {
   const { data: lead, error } = await admin
     .from("growth_leads").select("*").eq("id", body.lead_id).maybeSingle();
   if (error || !lead) {
+    await logRun(admin, "failure", { http_status: 404, error: "lead_not_found" });
     return new Response(JSON.stringify({ error: "lead_not_found" }), {
       status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
