@@ -61,6 +61,7 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
     const parsed = schema.safeParse({
       name,
       country_code: countryCode,
@@ -169,7 +170,7 @@ const MarriageInquiryDialog = ({ open, onOpenChange }: Props) => {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+          <form onSubmit={handleSubmit} aria-busy={submitting} className="mt-5 space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="m-name" className="text-white/85">Your Name</Label>
               <Input
