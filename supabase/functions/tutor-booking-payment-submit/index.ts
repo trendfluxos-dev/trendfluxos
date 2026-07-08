@@ -14,6 +14,7 @@ const corsHeaders = {
 
 const BodySchema = z.object({
   booking_id: z.string().uuid(),
+  method: z.enum(["bkash", "nagad", "rocket"]).default("bkash"),
   trx_id: z.string().trim().min(4).max(40),
   sender_number: z.string().trim().min(6).max(20),
   amount: z.number().positive().max(1_000_000).optional(),
@@ -85,6 +86,8 @@ Deno.serve(async (req) => {
 
   const amount = body.amount ?? Number(booking.price ?? 0);
   const trxId = body.trx_id.trim().toUpperCase();
+  const method = body.method;
+  const methodLabel = method === "nagad" ? "Nagad" : method === "rocket" ? "Rocket" : "bKash";
 
   // Insert payment row
   const { data: payment, error: payErr } = await admin
@@ -92,7 +95,7 @@ Deno.serve(async (req) => {
     .insert({
       booking_id: body.booking_id,
       student_id: userId,
-      method: "bkash",
+      method,
       trx_id: trxId,
       sender_number: body.sender_number.trim(),
       amount,
@@ -142,7 +145,7 @@ Deno.serve(async (req) => {
         `  • Name: ${esc(studentProfile?.full_name || "—")}`,
         `  • Email: ${esc(studentProfile?.email || "—")}`,
         ``,
-        `💳 <b>bKash</b>`,
+        `💳 <b>${methodLabel}</b>`,
         `  • TrxID: <code>${esc(trxId)}</code>`,
         `  • Sender: <code>${esc(body.sender_number)}</code>`,
         `  • Amount: ৳${amount.toLocaleString()}`,

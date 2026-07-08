@@ -20,7 +20,17 @@ type Booking = {
   student_id: string;
 };
 
-const BKASH_RECEIVE_NUMBER = "01756004037";
+type PayMethod = "bkash" | "nagad" | "rocket";
+const RECEIVE_NUMBERS: Record<PayMethod, string> = {
+  bkash: "01756004037",
+  nagad: "01756004037",
+  rocket: "01756004037",
+};
+const METHOD_LABEL: Record<PayMethod, string> = {
+  bkash: "bKash",
+  nagad: "Nagad",
+  rocket: "Rocket",
+};
 const PAYABLE_STATES = new Set(["accepted", "awaiting_payment", "payment_rejected"]);
 
 /**
@@ -35,6 +45,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [payingId, setPayingId] = useState<string | null>(null);
+  const [method, setMethod] = useState<PayMethod>("bkash");
   const [trxId, setTrxId] = useState("");
   const [senderNumber, setSenderNumber] = useState("");
   const [submittingPayment, setSubmittingPayment] = useState(false);
@@ -77,6 +88,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
 
   const openPayment = (id: string) => {
     setPayingId(id);
+    setMethod("bkash");
     setTrxId("");
     setSenderNumber("");
   };
@@ -93,6 +105,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
       {
         body: {
           booking_id: booking.id,
+          method,
           trx_id: trxId.trim(),
           sender_number: senderNumber.trim(),
           amount: Number(booking.price),
@@ -109,6 +122,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
       booking_id: booking.id,
       amount: Number(booking.price),
       currency: booking.currency,
+      method,
     });
     setPayingId(null);
     void reload();
@@ -181,24 +195,40 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
                     {payingId === b.id ? (
                       <div className="space-y-3">
                         <div className="text-[12px] text-foreground/70 leading-relaxed">
-                          bKash <b>Send Money</b> to{" "}
-                          <code className="rounded bg-card px-1.5 py-0.5">{BKASH_RECEIVE_NUMBER}</code>{" "}
+                          {METHOD_LABEL[method]} <b>Send Money</b> to{" "}
+                          <code className="rounded bg-card px-1.5 py-0.5">{RECEIVE_NUMBERS[method]}</code>{" "}
                           — amount <b>৳{Number(b.price).toLocaleString()}</b>, then paste your TrxID below.
+                        </div>
+                        <div className="flex gap-2">
+                          {(["bkash", "nagad", "rocket"] as PayMethod[]).map((m) => (
+                            <button
+                              key={m}
+                              type="button"
+                              onClick={() => setMethod(m)}
+                              className={`rounded-full border px-3 py-1 text-[11px] font-semibold ${
+                                method === m
+                                  ? "border-primary bg-primary/15 text-primary"
+                                  : "border-border text-foreground/70"
+                              }`}
+                            >
+                              {METHOD_LABEL[m]}
+                            </button>
+                          ))}
                         </div>
                         <div className="grid gap-2 sm:grid-cols-2">
                           <input
                             value={trxId}
                             onChange={(e) => setTrxId(e.target.value)}
-                            placeholder="bKash TrxID"
+                            placeholder={`${METHOD_LABEL[method]} TrxID`}
                             className="rounded-lg border border-border bg-card px-3 py-2 text-[13px]"
-                            aria-label="bKash transaction ID"
+                            aria-label={`${METHOD_LABEL[method]} transaction ID`}
                           />
                           <input
                             value={senderNumber}
                             onChange={(e) => setSenderNumber(e.target.value)}
-                            placeholder="Sender bKash number"
+                            placeholder={`Sender ${METHOD_LABEL[method]} number`}
                             className="rounded-lg border border-border bg-card px-3 py-2 text-[13px]"
-                            aria-label="Sender bKash number"
+                            aria-label={`Sender ${METHOD_LABEL[method]} number`}
                           />
                         </div>
                         <div className="flex gap-2">
@@ -225,7 +255,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
                         onClick={() => openPayment(b.id)}
                         className="rounded-full bg-primary px-4 py-1.5 text-[12px] font-semibold text-primary-foreground"
                       >
-                        {b.status === "payment_rejected" ? "Resubmit payment" : "Pay with bKash"}
+                        {b.status === "payment_rejected" ? "Resubmit payment" : "Pay now"}
                       </button>
                     )}
                   </div>
