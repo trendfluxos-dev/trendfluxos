@@ -1,4 +1,4 @@
-name: E2E - Mobile Safari Overflow
+name: E2E - Cross-browser + low-end mobile
 
 on:
   pull_request:
@@ -11,8 +11,34 @@ concurrency:
 
 jobs:
   e2e:
-    name: Mobile Safari overflow test
+    name: ${{ matrix.project }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Cross-engine desktop smoke — Chromium / Firefox / WebKit parity.
+          - project: chromium-desktop
+            browser: chromium
+          - project: firefox-desktop
+            browser: firefox
+          - project: webkit-desktop
+            browser: webkit
+          # Real mobile device descriptors (all use WebKit or Chromium engine).
+          - project: iphone-se
+            browser: webkit
+          - project: iphone-13
+            browser: webkit
+          - project: pixel-5
+            browser: chromium
+          - project: galaxy-s9plus
+            browser: chromium
+          # Low-RAM / Slow-3G Android emulation.
+          - project: low-ram-mobile
+            browser: chromium
+          # Visual regression pins to Chromium for stable pixel diffs.
+          - project: visual-desktop
+            browser: chromium
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,17 +51,19 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Install Playwright browsers
-        run: bunx playwright install --with-deps webkit
+      - name: Install Playwright browser (${{ matrix.browser }})
+        run: bunx playwright install --with-deps ${{ matrix.browser }}
 
-      - name: Run E2E tests
-        run: bun run test:e2e
+      - name: Run E2E tests (${{ matrix.project }})
+        env:
+          PW_PROJECT: ${{ matrix.project }}
+        run: bunx playwright test --project ${{ matrix.project }}
 
       - name: Upload Playwright HTML report (screenshots · DOM · trace)
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.project }}
           path: playwright-report
           retention-days: 14
 
@@ -43,7 +71,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-test-results
+          name: playwright-test-results-${{ matrix.project }}
           path: test-results
           retention-days: 14
 
