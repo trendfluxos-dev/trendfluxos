@@ -9,6 +9,7 @@ import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBooki
 import jobApplyPdf from "@/assets/ebooks/job-apply-v2.pdf.asset.json";
 import jobApplyCover from "@/assets/ebooks/job-apply-v2-cover.jpg.asset.json";
 import jobApplyEpub from "@/assets/ebooks/job-apply-v2.epub.asset.json";
+import jobApplyEpubPhone from "@/assets/ebooks/job-apply-v2-phone.epub.asset.json";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
 import clientHuntingCover from "@/assets/ebooks/client-hunting-v2-cover.jpg.asset.json";
 import marriagePdf from "@/assets/ebooks/marriage-v2.pdf.asset.json";
@@ -279,7 +280,13 @@ const Ebooks = () => {
           "@type": "MediaObject",
           contentUrl: jobApplyEpub.url,
           encodingFormat: "application/epub+zip",
-          name: `${book.title} (EPUB, mobile)`,
+          name: `${book.title} (EPUB)`,
+        });
+        encodings.push({
+          "@type": "MediaObject",
+          contentUrl: jobApplyEpubPhone.url,
+          encodingFormat: "application/epub+zip",
+          name: `${book.title} (EPUB · Phone Edition)`,
         });
       }
       return {
