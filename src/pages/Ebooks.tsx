@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Download, Eye, BookOpen, ArrowLeft } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
@@ -13,68 +14,216 @@ import marriageCover from "@/assets/ebooks/marriage-v2-cover.jpg.asset.json";
 import profilePdf from "@/assets/ebooks/profile-v2.pdf.asset.json";
 import profileCover from "@/assets/ebooks/profile-v2-cover.jpg.asset.json";
 
+type VersionKey = "v1" | "v2";
+
+type EbookVersion = {
+  pages: number;
+  sizeLabel: string;
+  cover: string | null;
+  pdf: string | null;
+  filename: string;
+};
+
 type Ebook = {
   slug: string;
   title: string;
   tagline: string;
-  version: string;
-  pages: number;
-  sizeLabel: string;
-  cover: string;
-  pdf: string;
-  filename: string;
+  versions: Record<VersionKey, EbookVersion | null>;
+  defaultVersion: VersionKey;
 };
 
+// v1 pointers will be dropped in as they're uploaded. Until then, set to null
+// and the selector will show the v1 tab as disabled ("Coming soon").
 const EBOOKS: Ebook[] = [
   {
     slug: "job-apply-playbook",
     title: "Job-Apply Playbook",
     tagline:
       "Operator-grade CV, cover-letter and outreach system for landing interviews without spraying applications.",
-    version: "v2",
-    pages: 10,
-    sizeLabel: "PDF",
-    cover: jobApplyCover.url,
-    pdf: jobApplyPdf.url,
-    filename: "JobApply_Playbook_v2.pdf",
+    defaultVersion: "v2",
+    versions: {
+      v1: null,
+      v2: {
+        pages: 10,
+        sizeLabel: "PDF",
+        cover: jobApplyCover.url,
+        pdf: jobApplyPdf.url,
+        filename: "JobApply_Playbook_v2.pdf",
+      },
+    },
   },
   {
     slug: "client-hunting-playbook",
     title: "Client-Hunting Playbook",
     tagline:
       "The full inbound + outbound stack for freelancers and agencies to book qualified clients on repeat.",
-    version: "v2",
-    pages: 9,
-    sizeLabel: "PDF",
-    cover: clientHuntingCover.url,
-    pdf: clientHuntingPdf.url,
-    filename: "ClientHunting_Playbook_v2.pdf",
+    defaultVersion: "v2",
+    versions: {
+      v1: null,
+      v2: {
+        pages: 9,
+        sizeLabel: "PDF",
+        cover: clientHuntingCover.url,
+        pdf: clientHuntingPdf.url,
+        filename: "ClientHunting_Playbook_v2.pdf",
+      },
+    },
   },
   {
     slug: "marriage-based-playbook",
     title: "Marriage-Based Playbook",
     tagline:
       "A calm, values-first guide to choosing a life partner with clarity — filters, conversations and the 30-day decision protocol.",
-    version: "v2",
-    pages: 9,
-    sizeLabel: "PDF",
-    cover: marriageCover.url,
-    pdf: marriagePdf.url,
-    filename: "Marriage_Playbook_v2.pdf",
+    defaultVersion: "v2",
+    versions: {
+      v1: null,
+      v2: {
+        pages: 9,
+        sizeLabel: "PDF",
+        cover: marriageCover.url,
+        pdf: marriagePdf.url,
+        filename: "Marriage_Playbook_v2.pdf",
+      },
+    },
   },
   {
     slug: "profile-based-playbook",
     title: "Profile-Based Playbook",
     tagline:
       "Build a founder profile that opens doors: positioning, pitch, LinkedIn, proof stack and the referral loop.",
-    version: "v2",
-    pages: 9,
-    sizeLabel: "PDF",
-    cover: profileCover.url,
-    pdf: profilePdf.url,
-    filename: "Profile_Playbook_v2.pdf",
+    defaultVersion: "v2",
+    versions: {
+      v1: null,
+      v2: {
+        pages: 9,
+        sizeLabel: "PDF",
+        cover: profileCover.url,
+        pdf: profilePdf.url,
+        filename: "Profile_Playbook_v2.pdf",
+      },
+    },
   },
 ];
+
+const VERSION_ORDER: VersionKey[] = ["v1", "v2"];
+
+const EbookCard = ({ book }: { book: Ebook }) => {
+  const [active, setActive] = useState<VersionKey>(book.defaultVersion);
+  const current = book.versions[active];
+
+  return (
+    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-lg">
+      <div className="relative block aspect-[3/4] overflow-hidden bg-muted">
+        {current?.cover ? (
+          <a
+            href={current.pdf ?? "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Preview ${book.title} ${active}`}
+            className="block h-full w-full"
+          >
+            <img
+              src={current.cover}
+              alt={`${book.title} ${active} cover`}
+              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            />
+          </a>
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-muted p-6 text-center text-sm text-muted-foreground">
+            {active.toUpperCase()} cover coming soon
+          </div>
+        )}
+        <span className="absolute left-4 top-4 rounded-md bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground shadow-md">
+          {active.toUpperCase()}
+        </span>
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <div
+          role="tablist"
+          aria-label={`${book.title} version`}
+          className="mb-4 inline-flex self-start rounded-lg border border-border bg-muted/50 p-1"
+        >
+          {VERSION_ORDER.map((v) => {
+            const available = Boolean(book.versions[v]?.pdf);
+            const isActive = active === v;
+            return (
+              <button
+                key={v}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`${book.slug}-panel`}
+                disabled={!available}
+                onClick={() => available && setActive(v)}
+                className={
+                  "rounded-md px-3 py-1 text-xs font-medium uppercase tracking-wider transition-colors " +
+                  (isActive
+                    ? "bg-background text-foreground shadow-sm"
+                    : available
+                      ? "text-muted-foreground hover:text-foreground"
+                      : "cursor-not-allowed text-muted-foreground/50")
+                }
+                title={available ? `Show ${v.toUpperCase()}` : `${v.toUpperCase()} — coming soon`}
+              >
+                {v.toUpperCase()}
+                {!available && <span className="ml-1 opacity-70">·soon</span>}
+              </button>
+            );
+          })}
+        </div>
+
+        <div id={`${book.slug}-panel`} role="tabpanel">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>{current?.pages ?? "—"} pages</span>
+            <span aria-hidden>•</span>
+            <span>{current?.sizeLabel ?? "PDF"}</span>
+          </div>
+          <h2 className="mt-2 text-xl font-semibold tracking-tight">
+            {book.title}{" "}
+            <span className="text-muted-foreground">{active}</span>
+          </h2>
+          <p className="mt-2 flex-1 text-sm text-muted-foreground">{book.tagline}</p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button asChild={Boolean(current?.pdf)} disabled={!current?.pdf} className="gap-2">
+              {current?.pdf ? (
+                <a href={current.pdf} download={current.filename}>
+                  <Download className="h-4 w-4" />
+                  Download PDF
+                </a>
+              ) : (
+                <span>
+                  <Download className="h-4 w-4" />
+                  Download PDF
+                </span>
+              )}
+            </Button>
+            <Button
+              asChild={Boolean(current?.pdf)}
+              disabled={!current?.pdf}
+              variant="outline"
+              className="gap-2"
+            >
+              {current?.pdf ? (
+                <a href={current.pdf} target="_blank" rel="noopener noreferrer">
+                  <Eye className="h-4 w-4" />
+                  Preview
+                </a>
+              ) : (
+                <span>
+                  <Eye className="h-4 w-4" />
+                  Preview
+                </span>
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
 
 const Ebooks = () => {
   useSeo({
@@ -116,62 +265,7 @@ const Ebooks = () => {
       <section className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-8 md:grid-cols-2">
           {EBOOKS.map((book) => (
-            <article
-              key={book.slug}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-lg"
-            >
-              <a
-                href={book.pdf}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Preview ${book.title} ${book.version}`}
-                className="relative block aspect-[3/4] overflow-hidden bg-muted"
-              >
-                <img
-                  src={book.cover}
-                  alt={`${book.title} ${book.version} cover`}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                />
-                <span className="absolute left-4 top-4 rounded-md bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground shadow-md">
-                  {book.version.toUpperCase()}
-                </span>
-              </a>
-
-              <div className="flex flex-1 flex-col p-6">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <span>{book.pages} pages</span>
-                  <span aria-hidden>•</span>
-                  <span>{book.sizeLabel}</span>
-                </div>
-                <h2 className="mt-2 text-xl font-semibold tracking-tight">
-                  {book.title}{" "}
-                  <span className="text-muted-foreground">{book.version}</span>
-                </h2>
-                <p className="mt-2 flex-1 text-sm text-muted-foreground">
-                  {book.tagline}
-                </p>
-
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Button asChild className="gap-2">
-                    <a href={book.pdf} download={book.filename}>
-                      <Download className="h-4 w-4" />
-                      Download PDF
-                    </a>
-                  </Button>
-                  <Button asChild variant="outline" className="gap-2">
-                    <a
-                      href={book.pdf}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Eye className="h-4 w-4" />
-                      Preview
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </article>
+            <EbookCard key={book.slug} book={book} />
           ))}
         </div>
       </section>
