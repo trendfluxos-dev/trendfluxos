@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -195,9 +195,18 @@ const PageFallback = () => (
 );
 
 const RoutedApp = () => {
+  const location = useLocation();
   return (
     <RouteErrorBoundary>
-      <Routes>
+      {/*
+        Per-route Suspense keyed on pathname. React Router runs navigation
+        inside `startTransition` (v7 flag), which by default keeps the old
+        page visible while the next lazy chunk loads. Keying Suspense on the
+        pathname resets the boundary on every route change so PageFallback's
+        skeleton is shown for the transition, not just the initial mount.
+      */}
+      <Suspense key={location.pathname} fallback={<PageFallback />}>
+      <Routes location={location}>
         <Route path="/" element={<Index />} />
         <Route path="/ecosystem" element={<Ecosystem />} />
         <Route path="/brands" element={<Brands />} />
@@ -299,6 +308,7 @@ const RoutedApp = () => {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </Suspense>
     </RouteErrorBoundary>
   );
 };
