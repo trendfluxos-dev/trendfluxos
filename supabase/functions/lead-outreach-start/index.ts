@@ -3,9 +3,9 @@
 // the lead + sequence metadata to n8n.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
-import { userHasRole } from "../_shared/adminCheck.ts";
+import { userHasRoleDetailed } from "../_shared/adminCheck.ts";
 
-async function notifyRoleFailure(fn: string, detail: string, userId?: string) {
+async function notifyRoleFailure(fn: string, detail: string, userId?: string, extra?: Record<string, unknown>) {
   try {
     await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/alert-postgres-error`, {
       method: "POST",
@@ -18,6 +18,7 @@ async function notifyRoleFailure(fn: string, detail: string, userId?: string) {
         pathname: `/functions/v1/${fn}`,
         user_id: userId ?? null,
         release: "edge",
+        metadata: extra ?? null,
       }),
     });
   } catch (_) { /* best-effort */ }
@@ -69,6 +70,9 @@ Deno.serve(async (req) => {
 
   const authHeader = req.headers.get("Authorization");
   if (!authHeader) {
+    console.warn("[lead-outreach-start] rejected: missing Authorization header", {
+      user_agent: req.headers.get("user-agent") ?? null,
+    });
     return new Response(JSON.stringify({ error: "unauthorized" }), {
       status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -79,17 +83,64 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_ANON_KEY")!,
     { global: { headers: { Authorization: authHeader } } },
   );
-  const { data: userData } = await userClient.auth.getUser();
+  const { data: userData, error: userErr } = await userClient.auth.getUser();
   if (!userData?.user) {
+    console.warn("[lead-outreach-start] rejected: getUser returned no user", {
+      error: userErr?.message ?? null,
+      auth_prefix: authHeader.slice(0, 12), // safe: just "Bearer eyJ..."
+    });
     await logRun(null, "failure", { http_status: 401, error: "unauthorized" });
     return new Response(JSON.stringify({ error: "unauthorized" }), {
       status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
   actorId = userData.user.id;
-  const isAdmin = await userHasRole(userClient, userData.user.id, "admin");
-  if (!isAdmin) {
-    await logRun(null, "failure", { http_status: 403, error: "forbidden" });
+  const roleCheck = await userHasRoleDetailed(userClient, userData.user.id, "admin", "lead-outreach-start");
+  const sessionCtx = {
+    user_id: userData.user.id,
+    email: userData.user.email ?? null,
+    aud: userData.user.aud ?? null,
+    role_claim: (userData.user as { role?: string }).role ?? null,
+    last_sign_in_at: userData.user.last_sign_in_at ?? null,
+  };
+  console.log("[lead-outreach-start] role_check", { ...sessionCtx, result: roleCheck });
+  if (!roleCheck.allowed) {
+    console.warn("[lead-outreach-start] forbidden — role check denied caller", {
+      ...sessionCtx,
+      source: roleCheck.source,
+      used_fallback: roleCheck.used_fallback,
+      rpc_error: roleCheck.rpc_error ?? null,
+      fallback_error: roleCheck.fallback_error ?? null,
+      duration_ms: roleCheck.duration_ms,
+    });
+    // Surface RPC-permission regressions to the alerting pipeline so we
+    // notice them even if the client swallows the 403.
+    if (roleCheck.source === "rpc_error" || roleCheck.source === "no_fallback") {
+      await notifyRoleFailure(
+        "lead-outreach-start",
+        `${roleCheck.source}: ${roleCheck.rpc_error?.message ?? "unknown"}`,
+        userData.user.id,
+        {
+          rpc_error: roleCheck.rpc_error ?? null,
+          fallback_error: roleCheck.fallback_error ?? null,
+          used_fallback: roleCheck.used_fallback,
+        },
+      );
+    }
+    await logRun(null, "failure", {
+      http_status: 403,
+      error: "forbidden",
+      metadata: {
+        role_check: {
+          source: roleCheck.source,
+          used_fallback: roleCheck.used_fallback,
+          rpc_error: roleCheck.rpc_error ?? null,
+          fallback_error: roleCheck.fallback_error ?? null,
+          duration_ms: roleCheck.duration_ms,
+        },
+        session: sessionCtx,
+      },
+    });
     return new Response(JSON.stringify({ error: "forbidden" }), {
       status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
