@@ -9,6 +9,21 @@ import CaseStudyPage from "@/pages/CaseStudyPage";
 import { caseStudies } from "@/data/caseStudies";
 import { useCaseFilters } from "@/hooks/useCaseFilters";
 
+// jsdom polyfills for browser APIs the narrative page depends on.
+class MockIntersectionObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return [];
+  }
+}
+// @ts-expect-error — test-only shim
+globalThis.IntersectionObserver ??= MockIntersectionObserver;
+if (typeof window !== "undefined" && !("scrollTo" in window && window.scrollTo.toString().includes("[native"))) {
+  window.scrollTo = () => {};
+}
+
 /**
  * Deep-link + back-restore E2E for the "View Narrative" flow.
  *
