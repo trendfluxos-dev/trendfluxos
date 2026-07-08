@@ -153,34 +153,34 @@ All tables have RLS enabled. Public read only where the domain requires it (e.g.
 - Telegram ops alerts wired
 - E-book downloads (EPUB Standard, EPUB Phone with QR, Kindle AZW3, Print Grayscale PDF), email lead-gate, reading progress bar
 - 3 critical security errors fixed on 2026-07-08 (email relay auth, curriculum auth, security-definer view)
+- **8 security warnings hardened on 2026-07-08** (see §9.2)
 
 ---
 
 ## 9. Remaining gaps (non-blocking, publish-safe)
 
 ### 9.1 Product gaps
-- **Contact page needs live business phone + BrandPlug email** — currently form-only. User to provide.
-- **Payment gateway not enabled** — course & masterclass enrollment is manual submit. Stripe/Paddle/bKash to be added when the user decides on a provider.
-- **Per-page OG images** — hosting auto-generates; per-page custom images can be added for higher CTR.
-- **WhatsApp CTA button** — `PROJECT_LEAD_WHATSAPP_TO` secret set but not consistently exposed on public pages.
+- **Contact page needs live business phone + BrandPlug email** — currently form-only. ⏳ Awaiting user-provided values.
+- **Payment gateway not enabled** — course & masterclass enrollment is manual submit. ⏳ Awaiting provider choice (Stripe / Paddle / bKash).
+- **Per-page OG images** — hosting auto-generates; per-page custom images can be added later for higher CTR.
+- **Public WhatsApp CTA button** — `PROJECT_LEAD_WHATSAPP_TO` is server-side only. ⏳ Awaiting a public-facing WhatsApp number to expose in header/footer.
 
-### 9.2 Security warnings (fix in next round — none block publish)
-| # | Finding | File | Recommended fix |
-|---|---|---|---|
-| 1 | `get-signed-url` doesn't check module_index | `supabase/functions/get-signed-url/index.ts` | Match enrollment.module_index to first path segment |
-| 2 | `booking-reminder-tick` unauthenticated | `supabase/functions/booking-reminder-tick/index.ts` | Require `x-cron-secret` header |
-| 3 | `alert-postgres-error` unauthenticated | `supabase/functions/alert-postgres-error/index.ts` | Require `x-alert-secret` header |
-| 4 | Raw DB errors leaked in `growth-os-lead`, `strategy-booking-submit` | those files | Strip `detail` fields, log server-side |
-| 5 | `lesson-pdfs` storage: no student SELECT policy | Supabase policy | Not required (signed-URL flow works) |
-| 6 | Supabase linter: `SECURITY DEFINER` fns callable by anon/authenticated | Multiple RPCs | Review per-function EXECUTE grants |
-| 7 | Function search_path mutable warnings | Multiple RPCs | Add `SET search_path = public` |
-| 8 | RLS policy `USING (true)` on some tables | Review each | Tighten where appropriate |
+### 9.2 Security warnings — ✅ all fixed 2026-07-08
+| # | Finding | Fix shipped |
+|---|---|---|
+| 1 | `get-signed-url` didn't check module_index | Path must start `module-<N>/` and match `module_enrollments.module_index` for the caller |
+| 2 | `booking-reminder-tick` unauthenticated | Requires service-role bearer OR admin JWT; response returns only aggregate counts |
+| 3 | `alert-postgres-error` unauthenticated | Requires service-role bearer OR admin JWT (401 otherwise) |
+| 4 | Raw DB errors leaked in `growth-os-lead`, `strategy-booking-submit` | `detail` / `calendar_error` replaced with generic strings; full errors logged server-side only |
+| 5 | `lesson-pdfs` storage: no student SELECT policy | Not needed — signed-URL edge flow enforces per-module authz |
+| 6 | `SECURITY DEFINER` fns callable by anon/authenticated | Revoked EXECUTE from anon+authenticated on all internal-only definer fns (email queue, pgmq wrappers, autogen curriculum, share-token lookups) |
+| 7 | Function search_path mutable | `SET search_path = public, pgmq` on the four pgmq wrappers |
+| 8 | RLS policies `USING (true)` / `WITH CHECK (true)` | Dropped redundant service-role policy on `outreach_execution_logs`; tightened `talent_applications` INSERT to require non-empty name/email/role; `tutor_availability` SELECT now authenticated-only |
 
 ---
 
 ## 10. Next actions
 
-1. **Publish → Update** (green now — no critical blockers).
-2. Provide business **phone + BrandPlug email** → will land in `/contact` + footer + JSON-LD.
-3. Choose a **payment provider** to unlock course purchases.
-4. Batch-fix the 8 warnings above in a dedicated hardening pass.
+1. **Publish → Update** (green — critical + warning tiers clean).
+2. Provide business **phone + BrandPlug email + public WhatsApp number** → will land in `/contact` + footer + JSON-LD + WhatsApp CTA.
+3. Choose a **payment provider** (Stripe / Paddle / bKash) to unlock course purchases.
