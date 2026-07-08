@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 const ALLOWED_BUCKETS = new Set(["voice-lectures", "lesson-pdfs", "class-materials"]);
 const MAX_EXPIRES = 60 * 60; // 1 hour cap
@@ -77,9 +78,7 @@ Deno.serve(async (req) => {
     }
 
     // Authorization
-    const { data: isAdmin } = await userClient.rpc("current_user_has_role", {
-      _role: "admin",
-    });
+    const isAdmin = await userHasRole(userClient, userId, "admin");
 
     if (!isAdmin) {
       if (bucket === "voice-lectures") {

@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 /**
  * Teacher-only AI helper for the live studio side panel.
@@ -46,9 +47,7 @@ Deno.serve(async (req: Request) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const { data: isAdmin } = await userClient.rpc("current_user_has_role", {
-      _role: "admin",
-    });
+    const isAdmin = await userHasRole(userClient, userData.user.id, "admin");
     if (!isAdmin) {
       return new Response(JSON.stringify({ error: "forbidden" }), {
         status: 403,

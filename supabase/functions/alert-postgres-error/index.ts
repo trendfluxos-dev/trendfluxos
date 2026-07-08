@@ -4,6 +4,7 @@
 // dedupe window keyed by the matched pattern so we do not spam Telegram.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN");
 const TELEGRAM_CHAT_ID = Deno.env.get("TELEGRAM_CHAT_ID");
@@ -56,10 +57,8 @@ Deno.serve(async (req) => {
         global: { headers: { Authorization: `Bearer ${bearer}` } },
       });
       const { data: claims } = await userClient.auth.getClaims(bearer);
-      if (claims?.claims?.sub) {
-        const { data: isAdmin } = await userClient.rpc("current_user_has_role", { _role: "admin" });
-        if (isAdmin) authorized = true;
-      }
+      const uid = claims?.claims?.sub as string | undefined;
+      if (uid && (await userHasRole(userClient, uid, "admin"))) authorized = true;
     } catch {
       // fall through
     }

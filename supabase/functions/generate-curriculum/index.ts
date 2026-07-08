@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 type Body = { class_id?: string; auto?: boolean };
 
@@ -35,8 +36,8 @@ Deno.serve(async (req) => {
     if (claimsErr || !claimsData?.claims?.sub) {
       return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
-    const { data: isAdmin, error: roleErr } = await authClient.rpc("current_user_has_role", { _role: "admin" });
-    if (roleErr || !isAdmin) {
+    const isAdmin = await userHasRole(authClient, claimsData.claims.sub as string, "admin");
+    if (!isAdmin) {
       return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
   }

@@ -3,6 +3,7 @@
 // x-n8n-secret header so internal schedulers can call it without a session.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 async function notifyRoleFailure(detail: string, userId?: string) {
   try {
@@ -77,13 +78,9 @@ Deno.serve(async (req) => {
     }
     actorId = userData.user.id;
     triggeredBy = "admin";
-    const { data: isAdmin, error: roleErr } = await client.rpc(
-      "current_user_has_role",
-      { _role: "admin" },
-    );
-    if (roleErr || !isAdmin) {
-      if (roleErr) await notifyRoleFailure(roleErr.message, userData.user.id);
-      await logRun(null, "failure", { http_status: 403, error: roleErr?.message ?? "forbidden" });
+    const isAdmin = await userHasRole(client, userData.user.id, "admin");
+    if (!isAdmin) {
+      await logRun(null, "failure", { http_status: 403, error: "forbidden" });
       return new Response(JSON.stringify({ error: "forbidden" }), {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
