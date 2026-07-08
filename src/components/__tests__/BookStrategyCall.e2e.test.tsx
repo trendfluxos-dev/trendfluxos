@@ -72,8 +72,10 @@ describe("Book Strategy Call → booking flow → success state (e2e)", () => {
       );
 
       // Radix Select — open trigger, pick an option.
+      // Label isn't wired via htmlFor; find the Radix Select trigger by its
+      // placeholder text instead.
       await user.click(
-        within(dialog).getByRole("combobox", { name: /Growth Objective/i }),
+        within(dialog).getByRole("combobox", { name: /Choose a primary objective/i }),
       );
       const listbox = await screen.findByRole("listbox");
       await user.click(within(listbox).getByRole("option", { name: /Lead Generation/i }));
