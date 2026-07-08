@@ -148,6 +148,8 @@ export const FIT: string[] = [
   "Values operating leverage over vanity reporting",
 ];
 
+export type OutcomeType = "CAC" | "Engagement" | "Lead Capture" | "Content Cadence";
+
 export type SystemStep = {
   icon: LucideIcon;
   step: string;
@@ -158,6 +160,8 @@ export type SystemStep = {
   outcome: { metric: string; label: string };
   /** Slug of the matching case study on /case-studies/:slug. */
   caseSlug?: string;
+  /** Outcome-type tags for the filter UI on Systems He Built. */
+  outcomeTypes: OutcomeType[];
 };
 
 export const SYSTEMS_HE_BUILT: SystemStep[] = [
