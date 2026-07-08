@@ -90,6 +90,7 @@ const Portfolio = routes["/portfolio"];
 const Founder = routes["/founder"];
 const Enterprise = routes["/enterprise"];
 const Toolkit = routes["/toolkit"];
+const Ebooks = routes["/ebooks"];
 const CourseTrendflux = routes["/course/trendflux"];
 const Masterclass = routes["/masterclass"];
 const EdtechHome = routes["/edtech"];
@@ -202,6 +203,7 @@ const RoutedApp = () => {
         <Route path="/founder" element={<Founder />} />
         <Route path="/enterprise" element={<Enterprise />} />
         <Route path="/toolkit" element={<Toolkit />} />
+        <Route path="/ebooks" element={<Ebooks />} />
         <Route path="/course/trendflux" element={<CourseTrendflux />} />
         <Route path="/masterclass" element={<Masterclass />} />
         <Route path="/edtech" element={<EdtechHome />} />
