@@ -107,6 +107,7 @@ const NarrativeCard = ({
   state?: HighlightState;
 }) => {
   const Icon = system.icon;
+  const { href, linkLabel, internal: isInternal } = getSystemLink(system.slug);
   return (
     <li
       id={narrativeCardId(system.slug)}
@@ -176,6 +177,30 @@ const NarrativeCard = ({
             </li>
           ))}
         </ul>
+
+        {/* "View case" CTA — routes to the correct sub-brand/detail page via
+            the central systemsLinkMap. Internal systems render a non-clickable
+            locked chip so the surface still communicates status. */}
+        <div className="mt-5 pt-4 border-t border-border/70">
+          {isInternal || !href ? (
+            <span
+              className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground"
+              aria-label={`${system.title} — internal system`}
+            >
+              <Lock className="h-3.5 w-3.5" aria-hidden />
+              {linkLabel}
+            </span>
+          ) : (
+            <Link
+              to={href}
+              aria-label={`View case — ${system.title}`}
+              className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+            >
+              View case
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
+            </Link>
+          )}
+        </div>
       </div>
     </li>
   );
