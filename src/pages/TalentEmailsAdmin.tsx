@@ -75,9 +75,9 @@ export function renderTemplate(
 ): TalentTemplate {
   const replace = (s: string) =>
     s
-      .replaceAll("{{name}}", vars.name)
-      .replaceAll("{{role}}", vars.role)
-      .replaceAll("{{email}}", vars.email);
+      .split("{{name}}").join(vars.name)
+      .split("{{role}}").join(vars.role)
+      .split("{{email}}").join(vars.email);
   return { subject: replace(tpl.subject), html: replace(tpl.html) };
 }
 
