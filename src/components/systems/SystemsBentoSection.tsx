@@ -112,7 +112,7 @@ const NarrativeCard = ({
       id={narrativeCardId(system.slug)}
       className={cn(
         // Stretch to fill the grid row so every card in a row is equal height.
-        "group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl",
+        "group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl scroll-mt-28",
         "border border-border bg-card shadow-sm transition-colors hover:border-primary/40",
         // Uniform, consistent padding across breakpoints.
         "p-6",
