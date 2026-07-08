@@ -19,6 +19,7 @@ import {
   FOUNDER_ROUTES, FOUNDER_DOCUMENTS, type ChapterMeta,
 } from "@/data/founder";
 import "@/styles/founder-print.css";
+import { SystemsBentoSection } from "@/components/systems/SystemsBentoSection";
 
 // ---------- Small primitives (kept local — used only on this page) ----------
 
