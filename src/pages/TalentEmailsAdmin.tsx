@@ -212,7 +212,19 @@ export default function TalentEmailsAdmin() {
     setCancelling(false);
     cancelBulkRef.current = false;
     if (wasCancelled) {
-      toast.warning(`Cancelled — sent ${ok}, failed ${failed}`);
+      const done = ok + failed;
+      const total = mapped.length;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      const remaining = Math.max(total - done, 0);
+      toast.warning("Bulk send cancelled", {
+        id: "talent-bulk-send",
+        duration: 8000,
+        description: [
+          `Progress: ${pct}% (${done}/${total})`,
+          `Sent: ${ok} · Failed: ${failed} · Skipped: ${remaining}`,
+          `Status: stopped after current send · recipient ${testEmail}`,
+        ].join("\n"),
+      });
     } else if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
     else toast.error(`Sent ${ok}, failed ${failed}`);
   };
@@ -221,7 +233,16 @@ export default function TalentEmailsAdmin() {
     if (!sendingAll) return;
     cancelBulkRef.current = true;
     setCancelling(true);
-    toast.info("Cancelling after current send…");
+    const { done, total, ok, failed } = bulkProgress;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    toast.loading("Cancelling after current send…", {
+      id: "talent-bulk-send",
+      description: [
+        `Progress so far: ${pct}% (${done}/${total})`,
+        `Sent: ${ok} · Failed: ${failed}`,
+        `Waiting for the in-flight email to finish before stopping…`,
+      ].join("\n"),
+    });
   };
 
   useEffect(() => {
