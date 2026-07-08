@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import { Loader2, Mail, Send, CheckCircle2, XCircle, Ban } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
+import { Progress } from "@/components/ui/progress";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -629,6 +630,36 @@ export default function TalentEmailsAdmin() {
                   </AlertDialog>
                 ) : null}
               </div>
+
+              {bulkProgress && bulkProgress.total > 0 && (
+                <div className="mt-4 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-medium text-foreground/70">
+                    <span className="inline-flex items-center gap-2">
+                      {sendingAll && !cancelling && (
+                        <Loader2 className="h-3 w-3 animate-spin text-primary" />
+                      )}
+                      {cancelling
+                        ? "Cancelling — finishing current send…"
+                        : sendingAll
+                          ? "Sending…"
+                          : bulkProgress.done < bulkProgress.total
+                            ? "Stopped"
+                            : "Complete"}
+                    </span>
+                    <span className="tabular-nums text-foreground/80">
+                      {Math.round((bulkProgress.done / bulkProgress.total) * 100)}%
+                      <span className="ml-2 text-foreground/50">
+                        ({bulkProgress.done}/{bulkProgress.total})
+                      </span>
+                    </span>
+                  </div>
+                  <Progress
+                    value={(bulkProgress.done / bulkProgress.total) * 100}
+                    className={cancelling ? "[&>div]:bg-amber-500" : ""}
+                    aria-label="Bulk email send progress"
+                  />
+                </div>
+              )}
 
               {bulkResults.length > 0 && (
                 <div className="mt-5 space-y-3">
