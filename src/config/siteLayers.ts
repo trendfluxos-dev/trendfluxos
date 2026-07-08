@@ -68,6 +68,7 @@ export const SITE_LAYERS: LayerNode[] = [
   { path: "/justice-appeal",          title: "Justice Appeal",  layer: "founder", blurb: "Belief system and ethical stance",        siblings: FOUNDER_FLOW },
   { path: "/marriage",                title: "Marriage Profile",layer: "founder", blurb: "Private biodata · family · references",   siblings: MARRIAGE_FLOW, ctaNext: { path: "/showcase", label: "See the project showcase" } },
   { path: "/media-reports",           title: "Media Reports",   layer: "founder", blurb: "Public perception coverage",              siblings: FOUNDER_FLOW },
+  { path: "/bdjobs-profile",          title: "BD Jobs Profile", layer: "founder", blurb: "Live Bdjobs.com CV mirror",                siblings: FOUNDER_FLOW },
   { path: "/stories/ai-expert-emon",  title: "AI Expert Emon",  layer: "founder", blurb: "Identity evolution story",                siblings: FOUNDER_FLOW, ctaNext: { path: "/contact", label: "Work with us" } },
 
   // ---------- BRAND ----------

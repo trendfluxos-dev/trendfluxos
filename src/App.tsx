@@ -88,6 +88,7 @@ const LuxeVeil = routes["/luxe-veil"];
 const BrandToki = routes["/brandtoki"];
 const Portfolio = routes["/portfolio"];
 const Founder = routes["/founder"];
+const BdjobsProfile = routes["/bdjobs-profile"];
 const Enterprise = routes["/enterprise"];
 const Toolkit = routes["/toolkit"];
 const Ebooks = routes["/ebooks"];
@@ -201,6 +202,7 @@ const RoutedApp = () => {
         <Route path="/brandtoki" element={<BrandToki />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/founder" element={<Founder />} />
+        <Route path="/bdjobs-profile" element={<BdjobsProfile />} />
         <Route path="/enterprise" element={<Enterprise />} />
         <Route path="/toolkit" element={<Toolkit />} />
         <Route path="/ebooks" element={<Ebooks />} />
