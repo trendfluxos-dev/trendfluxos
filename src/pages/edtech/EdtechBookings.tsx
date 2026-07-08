@@ -20,7 +20,17 @@ type Booking = {
   student_id: string;
 };
 
-const BKASH_RECEIVE_NUMBER = "01756004037";
+type PayMethod = "bkash" | "nagad" | "rocket";
+const RECEIVE_NUMBERS: Record<PayMethod, string> = {
+  bkash: "01756004037",
+  nagad: "01756004037",
+  rocket: "01756004037",
+};
+const METHOD_LABEL: Record<PayMethod, string> = {
+  bkash: "bKash",
+  nagad: "Nagad",
+  rocket: "Rocket",
+};
 const PAYABLE_STATES = new Set(["accepted", "awaiting_payment", "payment_rejected"]);
 
 /**
@@ -35,6 +45,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [payingId, setPayingId] = useState<string | null>(null);
+  const [method, setMethod] = useState<PayMethod>("bkash");
   const [trxId, setTrxId] = useState("");
   const [senderNumber, setSenderNumber] = useState("");
   const [submittingPayment, setSubmittingPayment] = useState(false);
@@ -77,6 +88,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
 
   const openPayment = (id: string) => {
     setPayingId(id);
+    setMethod("bkash");
     setTrxId("");
     setSenderNumber("");
   };
@@ -93,6 +105,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
       {
         body: {
           booking_id: booking.id,
+          method,
           trx_id: trxId.trim(),
           sender_number: senderNumber.trim(),
           amount: Number(booking.price),
@@ -109,6 +122,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
       booking_id: booking.id,
       amount: Number(booking.price),
       currency: booking.currency,
+      method,
     });
     setPayingId(null);
     void reload();
