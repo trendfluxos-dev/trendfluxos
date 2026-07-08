@@ -28,6 +28,8 @@ import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import RequireRole from "@/components/auth/RequireRole";
 import { AppBoomTrigger, RouteBoom } from "@/components/dev/BoomTrigger";
 import LayerShell from "@/components/layer/LayerShell";
+import { RouteLoadingProvider } from "@/lib/routeLoading";
+import { PageFallback } from "@/components/PageFallback";
 
 // Dev-only diagnostic panels. They are heavy and only ever rendered when
 // `?perf` is in the URL during development, so we code-split them out of the
@@ -137,64 +139,6 @@ const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
 
-const PageFallback = () => (
-  <div
-    role="status"
-    aria-live="polite"
-    aria-label="Loading page"
-    className="min-h-dvh bg-background"
-  >
-    {/* Nav placeholder */}
-    <div className="border-b border-border/50">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <div className="h-6 w-40 animate-pulse rounded-md bg-muted" />
-        <div className="hidden gap-4 sm:flex">
-          <div className="h-4 w-16 animate-pulse rounded bg-muted" />
-          <div className="h-4 w-16 animate-pulse rounded bg-muted" />
-          <div className="h-4 w-16 animate-pulse rounded bg-muted" />
-        </div>
-        <div className="h-8 w-24 animate-pulse rounded-full bg-muted" />
-      </div>
-    </div>
-    {/* Hero placeholder */}
-    <div className="mx-auto max-w-6xl px-5 py-16">
-      <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
-        <div className="space-y-5">
-          <div className="h-4 w-40 animate-pulse rounded bg-muted" />
-          <div className="h-12 w-11/12 animate-pulse rounded-lg bg-muted" />
-          <div className="h-12 w-9/12 animate-pulse rounded-lg bg-muted" />
-          <div className="h-12 w-6/12 animate-pulse rounded-lg bg-muted" />
-          <div className="space-y-2 pt-3">
-            <div className="h-3 w-full animate-pulse rounded bg-muted/70" />
-            <div className="h-3 w-11/12 animate-pulse rounded bg-muted/70" />
-            <div className="h-3 w-8/12 animate-pulse rounded bg-muted/70" />
-          </div>
-          <div className="flex gap-3 pt-4">
-            <div className="h-11 w-44 animate-pulse rounded-full bg-muted" />
-            <div className="h-11 w-56 animate-pulse rounded-full bg-muted/70" />
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-28 animate-pulse rounded-2xl border border-border/50 bg-muted/60"
-            />
-          ))}
-        </div>
-      </div>
-      <div className="mt-10 flex items-center justify-center gap-3 text-xs text-muted-foreground">
-        <div
-          aria-hidden
-          className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"
-        />
-        <span>Loading…</span>
-      </div>
-    </div>
-    <span className="sr-only">Loading page content…</span>
-  </div>
-);
-
 const RoutedApp = () => {
   const location = useLocation();
   return (
@@ -205,8 +149,16 @@ const RoutedApp = () => {
         page visible while the next lazy chunk loads. Keying Suspense on the
         pathname resets the boundary on every route change so PageFallback's
         skeleton is shown for the transition, not just the initial mount.
+
+        The RouteLoadingProvider extends that skeleton across the route's
+        *data* fetching — pages call `useRouteDataLoading(isLoading)` to
+        keep the fallback visible until their initial queries settle,
+        then the content is revealed atomically. Pages without any data
+        fetching don't need to opt in; the gate auto-disarms after one
+        paint frame.
       */}
       <Suspense key={location.pathname} fallback={<PageFallback />}>
+      <RouteLoadingProvider>
       <Routes location={location}>
         <Route path="/" element={<Index />} />
         <Route path="/ecosystem" element={<Ecosystem />} />
@@ -310,6 +262,7 @@ const RoutedApp = () => {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </RouteLoadingProvider>
       </Suspense>
     </RouteErrorBoundary>
   );
