@@ -23,6 +23,7 @@ import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import { useSeo } from "@/hooks/useSeo";
 import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
 import { SHOWCASE_ITEMS } from "@/data/showcase";
+import { SystemsHeBuiltSection } from "@/components/home/SystemsHeBuiltSection";
 
 const metrics = [
   { value: "4.85L+", label: "Organic Views" },
@@ -330,6 +331,21 @@ const ProjectLead = () => {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* SYSTEMS HE BUILT — 90-day build order timeline */}
+      <section className="px-6 lg:px-10 py-24 border-t border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
+              Systems He Built · 90-day Build
+            </p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold max-w-3xl mx-auto">
+              The operating systems <span className="text-gradient">behind the portfolio</span>
+            </h2>
+          </div>
+          <SystemsHeBuiltSection />
         </div>
       </section>
 
