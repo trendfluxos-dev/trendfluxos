@@ -18,6 +18,12 @@ type Props = {
    * filter is active" and every tile renders at full strength.
    */
   highlightSlugs?: ReadonlySet<string> | null;
+  /**
+   * When true, both the bento grid and the narrative grid render pixel-stable
+   * skeleton placeholders that match the real cards' dimensions — preventing
+   * layout shift while systems data is being fetched.
+   */
+  loading?: boolean;
 };
 
 /**
@@ -32,6 +38,7 @@ export const SystemsBentoSection = ({
   intro = "Six sub-brands plus two internal ops layers — each shipped, in production, and instrumented. Tap any tile to enter that system.",
   tone = "light",
   highlightSlugs = null,
+  loading = false,
 }: Props) => (
   <TfSection
     id={id}
@@ -53,14 +60,19 @@ export const SystemsBentoSection = ({
           "auto-rows-[minmax(180px,auto)] lg:auto-rows-[minmax(200px,1fr)]",
         )}
         aria-label="Systems portfolio"
+        aria-busy={loading || undefined}
       >
-        {SYSTEMS_PORTFOLIO.map((s) => (
-          <BentoTile
-            key={s.slug}
-            system={s}
-            state={resolveHighlight(s.slug, highlightSlugs)}
-          />
-        ))}
+        {loading
+          ? SYSTEMS_PORTFOLIO.map((s) => (
+              <BentoTileSkeleton key={`${s.slug}-tile-skeleton`} size={s.size} />
+            ))
+          : SYSTEMS_PORTFOLIO.map((s) => (
+              <BentoTile
+                key={s.slug}
+                system={s}
+                state={resolveHighlight(s.slug, highlightSlugs)}
+              />
+            ))}
       </ul>
 
       {/* Narrative cards: 1–2 line case summary + What we built bullets.
@@ -75,14 +87,19 @@ export const SystemsBentoSection = ({
             "mt-5 grid items-stretch gap-4 sm:gap-5",
             "grid-cols-1 md:grid-cols-2 xl:grid-cols-3",
           )}
+          aria-busy={loading || undefined}
         >
-          {SYSTEMS_PORTFOLIO.map((s) => (
-            <NarrativeCard
-              key={`${s.slug}-narrative`}
-              system={s}
-              state={resolveHighlight(s.slug, highlightSlugs)}
-            />
-          ))}
+          {loading
+            ? SYSTEMS_PORTFOLIO.map((s) => (
+                <NarrativeCardSkeleton key={`${s.slug}-narrative-skeleton`} />
+              ))
+            : SYSTEMS_PORTFOLIO.map((s) => (
+                <NarrativeCard
+                  key={`${s.slug}-narrative`}
+                  system={s}
+                  state={resolveHighlight(s.slug, highlightSlugs)}
+                />
+              ))}
         </ul>
       </div>
     </div>
