@@ -33,11 +33,6 @@ const metrics = [
   { value: "45%+", label: "Engagement Growth" },
 ];
 
-const transformations = [
-];
-
-const _placeholder_ = null;
-
 const educationRecords = [
   {
     degree: "BSc (Honours) in Information Technology",
@@ -77,7 +72,7 @@ const certifications = [
   },
 ];
 
-const _transformations_real = [
+const transformations = [
   {
     client: "Kormoshikkha (EdTech)",
     stage: "0 → 1 launch",
