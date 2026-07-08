@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Mail, Send } from "lucide-react";
+import { Loader2, Mail, Send, CheckCircle2, XCircle, Ban } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 
 export type TemplateKey = "approve" | "reject" | "hold";
@@ -109,6 +109,18 @@ export default function TalentEmailsAdmin() {
     ok: number;
     failed: number;
   } | null>(null);
+  type BulkResult = {
+    index: number;
+    status: TalentStatus;
+    template: TemplateKey;
+    ok: boolean;
+    error?: string;
+    attempts?: number;
+    at: number;
+    phase: "before-cancel" | "after-cancel";
+  };
+  const [bulkResults, setBulkResults] = useState<BulkResult[]>([]);
+  const [cancelRequestedAt, setCancelRequestedAt] = useState<number | null>(null);
   const cancelBulkRef = useRef(false);
   const [cancelling, setCancelling] = useState(false);
 
@@ -180,9 +192,12 @@ export default function TalentEmailsAdmin() {
     setSendingAll(true);
     cancelBulkRef.current = false;
     setCancelling(false);
+    setCancelRequestedAt(null);
+    setBulkResults([]);
     setBulkProgress({ done: 0, total: mapped.length, ok: 0, failed: 0 });
     let ok = 0;
     let failed = 0;
+    const startedAt = Date.now();
     for (let i = 0; i < mapped.length; i++) {
       if (cancelBulkRef.current) break;
       const status = mapped[i];
@@ -191,6 +206,18 @@ export default function TalentEmailsAdmin() {
       if (!tpl) {
         failed++;
         setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
+        setBulkResults((prev) => [
+          ...prev,
+          {
+            index: i + 1,
+            status,
+            template: key,
+            ok: false,
+            error: "Template missing",
+            at: Date.now(),
+            phase: cancelBulkRef.current ? "after-cancel" : "before-cancel",
+          },
+        ]);
         continue;
       }
       const rendered = renderTemplate(tpl, {
@@ -198,6 +225,7 @@ export default function TalentEmailsAdmin() {
         role: testRole || "Role",
         email: testEmail,
       });
+      const cancelAtStart = cancelBulkRef.current;
       const result = await invokeWithRetry(
         `[TEST · ${status}] ${rendered.subject}`,
         `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b></div>${rendered.html}`,
@@ -205,6 +233,22 @@ export default function TalentEmailsAdmin() {
       if (result.ok) ok++;
       else failed++;
       setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
+      setBulkResults((prev) => [
+        ...prev,
+        {
+          index: i + 1,
+          status,
+          template: key,
+          ok: result.ok,
+          error: result.ok ? undefined : (result as { error: string }).error,
+          attempts: result.ok ? (result as { attempts: number }).attempts : undefined,
+          at: Date.now(),
+          // A send is "after-cancel" when the user clicked Cancel while it
+          // was in flight (or between retries). Anything before that is the
+          // clean pre-cancel batch.
+          phase: cancelAtStart || cancelBulkRef.current ? "after-cancel" : "before-cancel",
+        },
+      ]);
       if (i < mapped.length - 1 && !cancelBulkRef.current) await sleep(rateDelayMs);
     }
     const wasCancelled = cancelBulkRef.current;
@@ -227,12 +271,15 @@ export default function TalentEmailsAdmin() {
       });
     } else if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
     else toast.error(`Sent ${ok}, failed ${failed}`);
+    // Keep startedAt reference for potential future logging.
+    void startedAt;
   };
 
   const cancelBulk = () => {
     if (!sendingAll) return;
     cancelBulkRef.current = true;
     setCancelling(true);
+    setCancelRequestedAt(Date.now());
     const { done, total, ok, failed } = bulkProgress;
     const pct = total > 0 ? Math.round((done / total) * 100) : 0;
     toast.loading("Cancelling after current send…", {
