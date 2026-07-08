@@ -1,5 +1,6 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { userHasRole } from '../_shared/adminCheck.ts';
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/resend';
 
@@ -42,10 +43,8 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
-  const { data: isAdmin, error: roleErr } = await userClient.rpc('current_user_has_role', {
-    _role: 'admin',
-  });
-  if (roleErr || !isAdmin) {
+  const isAdmin = await userHasRole(userClient, claimsData.claims.sub as string, 'admin');
+  if (!isAdmin) {
     return new Response(JSON.stringify({ error: 'forbidden' }), {
       status: 403,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
