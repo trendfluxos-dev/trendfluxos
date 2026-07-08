@@ -101,7 +101,10 @@ Deno.serve(async (req) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
+      // Upgraded to Gemini 3.5 Flash — latest-generation high-efficiency
+      // model with stronger reasoning + instruction following than 2.5,
+      // while keeping streaming latency low enough for a visitor concierge.
+      model: "google/gemini-3.5-flash",
       stream: true,
       messages: [{ role: "system", content: SYSTEM_PROMPT }, ...cleaned],
     }),
