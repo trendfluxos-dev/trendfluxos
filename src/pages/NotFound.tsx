@@ -1,6 +1,18 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Compass, Home, LayoutDashboard, Mail, Search } from "lucide-react";
+import {
+  ArrowLeft,
+  Briefcase,
+  Compass,
+  Home,
+  LayoutDashboard,
+  Mail,
+  Search,
+  Sparkles,
+  Star,
+  UserRound,
+  Users,
+} from "lucide-react";
 import { resolveRoute } from "@/lib/routeSearch";
 import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
@@ -12,6 +24,15 @@ const SUGGESTED = [
   { to: "/ecosystem", label: "Ecosystem", icon: Compass },
   { to: "/explore", label: "Explore", icon: Search },
   { to: "/contact", label: "Contact", icon: Mail },
+];
+
+const POPULAR = [
+  { to: "/project-lead", label: "Project Lead", desc: "Book Zahid Hasan Emon directly", icon: UserRound },
+  { to: "/services", label: "Services", desc: "Growth, automation & consultancy", icon: Briefcase },
+  { to: "/brands", label: "Brands", desc: "Sub-brands under TrendFlux", icon: Sparkles },
+  { to: "/showcase", label: "Showcase", desc: "Case files & outcomes", icon: Star },
+  { to: "/trendflux-talent", label: "TrendFlux Talent", desc: "Apply to join the team", icon: Users },
+  { to: "/dashboard", label: "Dashboard", desc: "Your account & tools", icon: LayoutDashboard },
 ];
 
 const NotFound = () => {
