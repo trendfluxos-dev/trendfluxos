@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Portfolio Highlights — visual regression fingerprint > layout + spacing fingerprint is stable 1`] = `
+"div
+  section.px-6.py-24.relative [labelledby=portfolio-highlights-heading]
+    div.absolute.bg-gradient-hero.opacity-50
+    div.max-w-7xl.mx-auto.relative
+      div.flex.flex-col.gap-4.justify-between.mb-14
+        div
+          p.mb-3.text-primary.text-xs.tracking-[0.3em].uppercase :: Portfolio Highlights
+          h2.font-bold.font-display.max-w-2xl.text-3xl :: Brands & systems
+            span.text-gradient :: built end-to-end
+        p.max-w-md.text-foreground/60.text-sm :: Selected engagements where strategy, content and automation came together as a single growth machine.
+      div.gap-6.grid
+        article.glass.glass-hover.rounded-3xl
+          span.text-[10px].text-primary.tracking-[0.3em].uppercase :: Civic Brand · Bangladesh
+          h3.font-bold.font-display.mt-3.text-2xl :: Pabna Nagorik Committee
+          p.font-semibold.mt-2.text-gold :: 4.85L+ Views
+          p.leading-relaxed.mt-4.text-foreground/70.text-sm :: 4.85 Lakh+ views, 82% organic reach, 166 designs and 22 reels published as a structured content engine.
+        article.glass.glass-hover.rounded-3xl
+          span.text-[10px].text-primary.tracking-[0.3em].uppercase :: Founder · Growth Studio
+          h3.font-bold.font-display.mt-3.text-2xl :: TrendFlux Ecosystem
+          p.font-semibold.mt-2.text-gold :: 45%+ Growth
+          p.leading-relaxed.mt-4.text-foreground/70.text-sm :: AI-driven growth systems delivering 45%+ engagement growth across founder-led brands and consultancies.
+        article.glass.glass-hover.rounded-3xl
+          span.text-[10px].text-primary.tracking-[0.3em].uppercase :: Personal Brand · Education
+          h3.font-bold.font-display.mt-3.text-2xl :: Debate Emon
+          p.font-semibold.mt-2.text-gold :: 65% Interaction
+          p.leading-relaxed.mt-4.text-foreground/70.text-sm :: 50,000+ youth engagement with 65% interaction growth via reels, long-form content and authority funnels."
+`;
