@@ -2,8 +2,15 @@ import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, CheckCircle2, CalendarCheck, TrendingUp } from "lucide-react";
 import { TfSection } from "@/components/tf/Section";
-import { SYSTEMS_HE_BUILT } from "@/data/home";
+import { SYSTEMS_HE_BUILT, type OutcomeType } from "@/data/home";
 import { cn } from "@/lib/utils";
+
+const OUTCOME_FILTERS: OutcomeType[] = [
+  "CAC",
+  "Engagement",
+  "Lead Capture",
+  "Content Cadence",
+];
 
 /**
  * Interactive build-order timeline. The six systems sit on a single
@@ -14,6 +21,7 @@ import { cn } from "@/lib/utils";
 export const SystemsHeBuiltSection = () => {
   const [active, setActive] = useState(0);
   const [auto, setAuto] = useState(true);
+  const [outcomeFilter, setOutcomeFilter] = useState<OutcomeType | "All">("All");
   const count = SYSTEMS_HE_BUILT.length;
 
   // Gentle auto-advance until the user interacts.
@@ -30,6 +38,11 @@ export const SystemsHeBuiltSection = () => {
 
   const current = SYSTEMS_HE_BUILT[active];
   const progress = count > 1 ? (active / (count - 1)) * 100 : 0;
+
+  const filteredSystems =
+    outcomeFilter === "All"
+      ? SYSTEMS_HE_BUILT
+      : SYSTEMS_HE_BUILT.filter((s) => s.outcomeTypes.includes(outcomeFilter));
 
   return (
   <TfSection
@@ -204,8 +217,49 @@ export const SystemsHeBuiltSection = () => {
         </p>
       </div>
 
+      <div
+        role="tablist"
+        aria-label="Filter systems by outcome type"
+        className="mb-6 flex flex-wrap items-center gap-2 sm:mb-8"
+      >
+        <span className="mr-1 text-[10px] font-medium uppercase tracking-[0.24em] text-muted-foreground">
+          Filter · Outcome
+        </span>
+        {(["All", ...OUTCOME_FILTERS] as const).map((label) => {
+          const isActive = outcomeFilter === label;
+          return (
+            <button
+              key={label}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => setOutcomeFilter(label)}
+              className={cn(
+                "rounded-full border px-3 py-1.5 text-xs font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                isActive
+                  ? "border-primary bg-primary text-primary-foreground shadow-sm"
+                  : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-primary",
+              )}
+            >
+              {label}
+            </button>
+          );
+        })}
+        <span
+          aria-live="polite"
+          className="ml-auto text-[11px] uppercase tracking-[0.18em] text-muted-foreground"
+        >
+          {filteredSystems.length} / {SYSTEMS_HE_BUILT.length} systems
+        </span>
+      </div>
+
+      {filteredSystems.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-border bg-card/40 p-8 text-center text-sm text-muted-foreground">
+          No systems match this outcome yet. Try a different filter.
+        </div>
+      ) : (
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {SYSTEMS_HE_BUILT.map((s) => (
+        {filteredSystems.map((s) => (
           <li
             key={`card-${s.title}`}
             className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md sm:p-6"
@@ -264,6 +318,7 @@ export const SystemsHeBuiltSection = () => {
           </li>
         ))}
       </ul>
+      )}
     </div>
 
     <div className="mt-10 flex flex-col items-center gap-3 px-2 text-center sm:mt-12">
