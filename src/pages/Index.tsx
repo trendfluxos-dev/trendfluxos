@@ -16,6 +16,7 @@ import SectionOrnament from "@/components/home/SectionOrnament";
 // hero + brand grid replaces the multi-section top stack. Everything
 // below stays lazy-loaded for fast LCP on low-RAM/slow-network devices.
 const SystemsHeBuiltSection = lazy(() => import("@/components/home/SystemsHeBuiltSection").then(m => ({ default: m.SystemsHeBuiltSection })));
+const SystemsBentoSection   = lazy(() => import("@/components/systems/SystemsBentoSection").then(m => ({ default: m.SystemsBentoSection })));
 const TheStandCoverSection  = lazy(() => import("@/components/home/TheStandCoverSection").then(m => ({ default: m.TheStandCoverSection })));
 const AudioStoryTeaser      = lazy(() => import("@/components/tf/AudioStoryTeaser"));
 const AiExpertStoryTeaser   = lazy(() => import("@/components/home/AiExpertStoryTeaser"));
@@ -101,6 +102,17 @@ const Index = () => {
         <SectionOrnament chapter="Chapter I" label="Systems He Built · 90-day Build" />
         <LazySection label="algorithm-arch" skeleton={<SectionSkeleton variant="cards" />}>
           <SystemsHeBuiltSection />
+        </LazySection>
+      </div>
+
+      <div id="systems-portfolio" data-nav-section="portfolio" className="scroll-mt-[var(--nav-offset)]">
+        <SectionOrnament chapter="Chapter I·b" label="Systems He Built · Sub-brand Portfolio" />
+        <LazySection label="systems-bento" skeleton={<SectionSkeleton variant="cards" />}>
+          <SystemsBentoSection
+            eyebrow="Sub-brand Portfolio"
+            title="Eight production systems, one operating stack."
+            intro="Six sub-brands plus two internal ops layers — each shipped, in production, and instrumented. Tap any tile to enter that system."
+          />
         </LazySection>
       </div>
 
