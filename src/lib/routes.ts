@@ -56,6 +56,7 @@ export const routes = {
   "/portfolio": make(() => import("@/pages/Portfolio")),
   "/enterprise": make(() => import("@/pages/Enterprise")),
   "/toolkit": make(() => import("@/pages/Toolkit")),
+  "/ebooks": make(() => import("@/pages/Ebooks")),
   "/course/trendflux": make(() => import("@/pages/CourseTrendflux")),
   "/masterclass": make(() => import("@/pages/Masterclass")),
   "/edtech": make(() => import("@/pages/edtech/EdtechHome")),
