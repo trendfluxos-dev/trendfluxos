@@ -160,10 +160,10 @@ All tables have RLS enabled. Public read only where the domain requires it (e.g.
 ## 9. Remaining gaps (non-blocking, publish-safe)
 
 ### 9.1 Product gaps
-- **Contact page needs live business phone + BrandPlug email** — currently form-only. ⏳ Awaiting user-provided values.
+- **Public WhatsApp CTA button** — ✅ shipped 2026-07-08. Company line **+8801353991954** (`wa.me/8801353991954`) wired into navbar (desktop + mobile) and footer via `BRAND_CONTACTS.trendflux.whatsapp`. Founder/personal-arc line **+8801410004037** (`wa.me/8801410004037`) wired into `BRAND_CONTACTS.zahid.whatsapp` for founder pages.
+- **Contact page needs live business phone + BrandPlug email** — currently form-only. ⏳ Awaiting BrandPlug email + landline; WhatsApp lines now live (see above).
 - **Payment gateway not enabled** — course & masterclass enrollment is manual submit. ⏳ Awaiting provider choice (Stripe / Paddle / bKash).
 - **Per-page OG images** — hosting auto-generates; per-page custom images can be added later for higher CTR.
-- **Public WhatsApp CTA button** — `PROJECT_LEAD_WHATSAPP_TO` is server-side only. ⏳ Awaiting a public-facing WhatsApp number to expose in header/footer.
 
 ### 9.2 Security warnings — ✅ all fixed 2026-07-08
 | # | Finding | Fix shipped |
@@ -182,5 +182,5 @@ All tables have RLS enabled. Public read only where the domain requires it (e.g.
 ## 10. Next actions
 
 1. **Publish → Update** (green — critical + warning tiers clean).
-2. Provide business **phone + BrandPlug email + public WhatsApp number** → will land in `/contact` + footer + JSON-LD + WhatsApp CTA.
+2. Provide business **landline + BrandPlug email** → will land in `/contact` + footer + JSON-LD. (WhatsApp numbers live: company +8801353991954, founder +8801410004037.)
 3. Choose a **payment provider** (Stripe / Paddle / bKash) to unlock course purchases.
