@@ -65,6 +65,7 @@ const LuxeVeilAdmin = routes["/admin/luxe-veil"];
 const ConversionDashboard = routes["/admin/conversions"];
 const EnterpriseDemos = routes["/admin/enterprise-demos"];
 const TalentApplicationsAdmin = routes["/admin/talent"];
+const TalentEmailsAdmin = routes["/admin/talent/emails"];
 const CourseEnrollmentsAdmin = routes["/admin/course-enrollments"];
 const UptimeAdmin = routes["/admin/uptime"];
 const ErrorLogsAdmin = routes["/admin/errors"];
