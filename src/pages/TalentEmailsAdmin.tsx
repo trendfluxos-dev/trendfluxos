@@ -109,6 +109,8 @@ export default function TalentEmailsAdmin() {
     ok: number;
     failed: number;
   } | null>(null);
+  const cancelBulkRef = useRef(false);
+  const [cancelling, setCancelling] = useState(false);
 
   const sleep = (ms: number) =>
     new Promise<void>((r) => setTimeout(r, Math.max(0, ms)));
@@ -173,10 +175,13 @@ export default function TalentEmailsAdmin() {
       return;
     }
     setSendingAll(true);
+    cancelBulkRef.current = false;
+    setCancelling(false);
     setBulkProgress({ done: 0, total: mapped.length, ok: 0, failed: 0 });
     let ok = 0;
     let failed = 0;
     for (let i = 0; i < mapped.length; i++) {
+      if (cancelBulkRef.current) break;
       const status = mapped[i];
       const key = statusMap[status] as TemplateKey;
       const tpl = templates[key];
@@ -197,11 +202,23 @@ export default function TalentEmailsAdmin() {
       if (result.ok) ok++;
       else failed++;
       setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
-      if (i < mapped.length - 1) await sleep(rateDelayMs);
+      if (i < mapped.length - 1 && !cancelBulkRef.current) await sleep(rateDelayMs);
     }
+    const wasCancelled = cancelBulkRef.current;
     setSendingAll(false);
-    if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
+    setCancelling(false);
+    cancelBulkRef.current = false;
+    if (wasCancelled) {
+      toast.warning(`Cancelled — sent ${ok}, failed ${failed}`);
+    } else if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
     else toast.error(`Sent ${ok}, failed ${failed}`);
+  };
+
+  const cancelBulk = () => {
+    if (!sendingAll) return;
+    cancelBulkRef.current = true;
+    setCancelling(true);
+    toast.info("Cancelling after current send…");
   };
 
   useEffect(() => {
