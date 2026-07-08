@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Mail } from "lucide-react";
+import { Loader2, Mail, Send } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 
 export type TemplateKey = "approve" | "reject" | "hold";
@@ -95,6 +95,42 @@ export default function TalentEmailsAdmin() {
   const [templates, setTemplates] = useState<TalentTemplates>(DEFAULT_TEMPLATES);
   const [statusMap, setStatusMap] =
     useState<TalentStatusMap>(DEFAULT_STATUS_MAP);
+  const [testEmail, setTestEmail] = useState("");
+  const [testName, setTestName] = useState("Test User");
+  const [testRole, setTestRole] = useState("Content Creator");
+  const [sendingKey, setSendingKey] = useState<string | null>(null);
+
+  const sendTest = async (
+    key: TemplateKey | "none",
+    label: string,
+  ) => {
+    if (key === "none") {
+      toast.error("This status has no template assigned");
+      return;
+    }
+    if (!testEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail)) {
+      toast.error("Enter a valid recipient email above");
+      return;
+    }
+    const tpl = templates[key];
+    if (!tpl) return;
+    const rendered = renderTemplate(tpl, {
+      name: testName || "Test User",
+      role: testRole || "Role",
+      email: testEmail,
+    });
+    setSendingKey(label);
+    const { error } = await supabase.functions.invoke("send-resend-email", {
+      body: {
+        to: testEmail,
+        subject: `[TEST] ${rendered.subject}`,
+        html: `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — ${key} template</div>${rendered.html}`,
+      },
+    });
+    setSendingKey(null);
+    if (error) toast.error(`Test failed: ${error.message}`);
+    else toast.success(`Test ${key} email sent to ${testEmail}`);
+  };
 
   useEffect(() => {
     let mounted = true;
@@ -188,13 +224,51 @@ export default function TalentEmailsAdmin() {
       ) : (
         <div className="space-y-8">
           <section className="rounded-2xl border border-border bg-card p-5">
+            <h2 className="mb-3 font-display text-lg">Test email preview</h2>
+            <p className="mb-3 text-xs text-foreground/60">
+              Send any template to a recipient with sample placeholder values.
+            </p>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div>
+                <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                  Recipient
+                </Label>
+                <Input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={testEmail}
+                  onChange={(e) => setTestEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                  Sample name
+                </Label>
+                <Input
+                  value={testName}
+                  onChange={(e) => setTestName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                  Sample role
+                </Label>
+                <Input
+                  value={testRole}
+                  onChange={(e) => setTestRole(e.target.value)}
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-2xl border border-border bg-card p-5">
             <h2 className="mb-3 font-display text-lg">
               Status → template mapping
             </h2>
             <div className="grid gap-3 sm:grid-cols-2">
               {TALENT_STATUSES.map((status) => (
-                <div key={status} className="flex items-center gap-3">
-                  <Label className="w-28 text-sm capitalize">{status}</Label>
+                <div key={status} className="flex items-center gap-2">
+                  <Label className="w-24 text-sm capitalize">{status}</Label>
                   <Select
                     value={statusMap[status]}
                     onValueChange={(v) =>
@@ -216,6 +290,25 @@ export default function TalentEmailsAdmin() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    disabled={
+                      statusMap[status] === "none" ||
+                      sendingKey === `map-${status}`
+                    }
+                    onClick={() =>
+                      sendTest(statusMap[status], `map-${status}`)
+                    }
+                    title="Send test email using the template mapped to this status"
+                  >
+                    {sendingKey === `map-${status}` ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Send className="h-3.5 w-3.5" />
+                    )}
+                  </Button>
                 </div>
               ))}
             </div>
@@ -226,9 +319,25 @@ export default function TalentEmailsAdmin() {
               key={key}
               className="rounded-2xl border border-border bg-card p-5"
             >
-              <h2 className="mb-3 font-display text-lg capitalize">
-                {key} template
-              </h2>
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <h2 className="font-display text-lg capitalize">
+                  {key} template
+                </h2>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  disabled={sendingKey === `tpl-${key}`}
+                  onClick={() => sendTest(key, `tpl-${key}`)}
+                >
+                  {sendingKey === `tpl-${key}` ? (
+                    <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Send className="mr-2 h-3.5 w-3.5" />
+                  )}
+                  Test send
+                </Button>
+              </div>
               <div className="space-y-3">
                 <div>
                   <Label className="text-xs uppercase tracking-wider text-foreground/60">
