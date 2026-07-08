@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, CalendarCheck } from "lucide-react";
+import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
 
 /**
  * Architectural portfolio hero — replaces the multi-section top of the
@@ -40,7 +42,9 @@ const widthClass: Record<Brand["strength"], string> = {
 };
 
 export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => void }) {
+  const [bookingOpen, setBookingOpen] = useState(false);
   return (
+    <>
     <section
       aria-labelledby="home-hero-heading"
       className="relative isolate bg-[#08080d] text-[#f0c9c9] selection:bg-[#c11f1f] selection:text-white overflow-hidden"
@@ -108,6 +112,13 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
               </Link>
               <Link
                 to="/project-lead"
+                onClick={(e) => {
+                  // Only intercept plain left-clicks; allow modifier / middle-click to open the page.
+                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+                  e.preventDefault();
+                  setBookingOpen(true);
+                }}
+                aria-haspopup="dialog"
                 className="relative px-8 py-4 bg-white text-[#08080d] font-semibold rounded hover:bg-[#f0c9c9] transition-all inline-flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d] shadow-[0_10px_30px_-10px_rgba(255,255,255,0.35)]"
               >
                 <span aria-hidden className="absolute -top-2 -right-2 inline-flex h-2.5 w-2.5">
@@ -193,5 +204,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
         </div>
       </div>
     </section>
+    <ProjectLeadBookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
+    </>
   );
 }
