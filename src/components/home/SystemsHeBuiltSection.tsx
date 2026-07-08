@@ -4,6 +4,7 @@ import { ArrowUpRight, CheckCircle2, CalendarCheck, TrendingUp } from "lucide-re
 import { TfSection } from "@/components/tf/Section";
 import { SYSTEMS_HE_BUILT, type OutcomeType } from "@/data/home";
 import { cn } from "@/lib/utils";
+import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
 
 const OUTCOME_FILTERS: OutcomeType[] = [
   "CAC",
@@ -22,6 +23,7 @@ export const SystemsHeBuiltSection = () => {
   const [active, setActive] = useState(0);
   const [auto, setAuto] = useState(true);
   const [outcomeFilter, setOutcomeFilter] = useState<OutcomeType | "All">("All");
+  const [bookingOpen, setBookingOpen] = useState(false);
   const count = SYSTEMS_HE_BUILT.length;
 
   // Gentle auto-advance until the user interacts.
@@ -324,6 +326,12 @@ export const SystemsHeBuiltSection = () => {
     <div className="mt-10 flex flex-col items-center gap-3 px-2 text-center sm:mt-12">
       <Link
         to="/project-lead#book"
+        onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+          e.preventDefault();
+          setBookingOpen(true);
+        }}
+        aria-haspopup="dialog"
         className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
       >
         <CalendarCheck className="h-4 w-4" aria-hidden="true" />
@@ -335,6 +343,7 @@ export const SystemsHeBuiltSection = () => {
       </Link>
       <p className="text-xs text-muted-foreground">90-day engagement · Founder-led · You own the stack</p>
     </div>
+    <ProjectLeadBookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
   </TfSection>
   );
 };
