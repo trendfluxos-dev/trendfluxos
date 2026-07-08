@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Download, Eye, BookOpen, ArrowLeft, CalendarCheck, MessageCircle, Smartphone, FileText, Printer } from "lucide-react";
+import { Download, Eye, BookOpen, ArrowLeft, CalendarCheck, MessageCircle, Smartphone, FileText, Printer, Tablet } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import jobApplyCover from "@/assets/ebooks/job-apply-v2-cover.jpg.asset.json";
 import jobApplyEpub from "@/assets/ebooks/job-apply-v2.epub.asset.json";
 import jobApplyEpubPhone from "@/assets/ebooks/job-apply-v2-phone.epub.asset.json";
 import jobApplyPdfPrint from "@/assets/ebooks/job-apply-v2-print.pdf.asset.json";
+import jobApplyAzw3 from "@/assets/ebooks/job-apply-v2.azw3.asset.json";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
 import clientHuntingCover from "@/assets/ebooks/client-hunting-v2-cover.jpg.asset.json";
 import marriagePdf from "@/assets/ebooks/marriage-v2.pdf.asset.json";
@@ -296,6 +297,12 @@ const Ebooks = () => {
           encodingFormat: "application/pdf",
           name: `${book.title} (PDF · Print Edition, grayscale)`,
         });
+        encodings.push({
+          "@type": "MediaObject",
+          contentUrl: jobApplyAzw3.url,
+          encodingFormat: "application/vnd.amazon.ebook",
+          name: `${book.title} (Kindle · AZW3)`,
+        });
       }
       return {
         "@type": "ListItem",
@@ -398,8 +405,9 @@ const Ebooks = () => {
                 The <strong>EPUB (Standard)</strong> reflows on any e-reader.
                 The <strong>EPUB (Phone Edition)</strong> is tuned for small
                 screens — bigger type, tap-friendly links, no hyphenation
-                gymnastics. Same title, author, language and cover across all
-                three.
+                gymnastics. The <strong>Kindle (AZW3)</strong> file side-loads
+                directly onto any Kindle device or app. Same title, author,
+                language and cover across every format.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 md:min-w-[26rem] lg:grid-cols-2 lg:min-w-[34rem]">
@@ -499,11 +507,37 @@ const Ebooks = () => {
                   </span>
                 </div>
               </a>
+              <a
+                href={jobApplyAzw3.url}
+                download="JobApply_Playbook_v2.azw3"
+                className="group flex items-start gap-3 rounded-xl border border-primary/40 bg-primary/5 p-4 transition-colors hover:border-primary hover:bg-primary/10"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                  <Tablet className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    Kindle
+                    <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] uppercase tracking-wider text-primary">
+                      AZW3
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Side-load to Kindle · Send-to-Kindle ready
+                  </p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
+                    <Download className="h-3.5 w-3.5" />
+                    Download .azw3
+                  </span>
+                </div>
+              </a>
             </div>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
             Tip · on iPhone, tap the EPUB link and choose <em>Open in Books</em>.
             On Android, install <em>Google Play Books</em> or <em>Moon+ Reader</em>.
+            For Kindle, email the .azw3 to your <em>Send to Kindle</em> address
+            or copy it to the <code>documents/</code> folder over USB.
           </p>
         </div>
       </section>
