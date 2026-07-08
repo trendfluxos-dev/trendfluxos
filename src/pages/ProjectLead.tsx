@@ -212,6 +212,7 @@ const socials = [
 const ProjectLead = () => {
   const [marriageOpen, setMarriageOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [activeCert, setActiveCert] = useState<Certification | null>(null);
   useSeo({
     title: "Project Lead — Zahid Hasan Emon | Founder, TrendFlux Ecosystem",
     description:
