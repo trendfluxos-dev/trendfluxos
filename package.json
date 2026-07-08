@@ -24,8 +24,7 @@
     "audit:a11y": "npm run audit:bn-contrast && npm run audit:contrast",
     "verify:redirects": "node scripts/verify-redirects.mjs",
     "validate:seo": "node scripts/validate-seo-files.mjs",
-    "test:navbar": "node scripts/test-navbar-clicks.mjs"
-    ,
+    "test:navbar": "node scripts/test-navbar-clicks.mjs",
     "smoke:homepage": "node scripts/smoke-homepage-401.mjs"
   },
   "dependencies": {
@@ -96,6 +95,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/jest-dom": "^6.6.0",
     "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
