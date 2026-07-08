@@ -18,6 +18,12 @@ type Props = {
    * filter is active" and every tile renders at full strength.
    */
   highlightSlugs?: ReadonlySet<string> | null;
+  /**
+   * When true, both the bento grid and the narrative grid render pixel-stable
+   * skeleton placeholders that match the real cards' dimensions — preventing
+   * layout shift while systems data is being fetched.
+   */
+  loading?: boolean;
 };
 
 /**
@@ -32,6 +38,7 @@ export const SystemsBentoSection = ({
   intro = "Six sub-brands plus two internal ops layers — each shipped, in production, and instrumented. Tap any tile to enter that system.",
   tone = "light",
   highlightSlugs = null,
+  loading = false,
 }: Props) => (
   <TfSection
     id={id}
@@ -53,14 +60,19 @@ export const SystemsBentoSection = ({
           "auto-rows-[minmax(180px,auto)] lg:auto-rows-[minmax(200px,1fr)]",
         )}
         aria-label="Systems portfolio"
+        aria-busy={loading || undefined}
       >
-        {SYSTEMS_PORTFOLIO.map((s) => (
-          <BentoTile
-            key={s.slug}
-            system={s}
-            state={resolveHighlight(s.slug, highlightSlugs)}
-          />
-        ))}
+        {loading
+          ? SYSTEMS_PORTFOLIO.map((s) => (
+              <BentoTileSkeleton key={`${s.slug}-tile-skeleton`} size={s.size} />
+            ))
+          : SYSTEMS_PORTFOLIO.map((s) => (
+              <BentoTile
+                key={s.slug}
+                system={s}
+                state={resolveHighlight(s.slug, highlightSlugs)}
+              />
+            ))}
       </ul>
 
       {/* Narrative cards: 1–2 line case summary + What we built bullets.
@@ -75,14 +87,19 @@ export const SystemsBentoSection = ({
             "mt-5 grid items-stretch gap-4 sm:gap-5",
             "grid-cols-1 md:grid-cols-2 xl:grid-cols-3",
           )}
+          aria-busy={loading || undefined}
         >
-          {SYSTEMS_PORTFOLIO.map((s) => (
-            <NarrativeCard
-              key={`${s.slug}-narrative`}
-              system={s}
-              state={resolveHighlight(s.slug, highlightSlugs)}
-            />
-          ))}
+          {loading
+            ? SYSTEMS_PORTFOLIO.map((s) => (
+                <NarrativeCardSkeleton key={`${s.slug}-narrative-skeleton`} />
+              ))
+            : SYSTEMS_PORTFOLIO.map((s) => (
+                <NarrativeCard
+                  key={`${s.slug}-narrative`}
+                  system={s}
+                  state={resolveHighlight(s.slug, highlightSlugs)}
+                />
+              ))}
         </ul>
       </div>
     </div>
@@ -212,6 +229,128 @@ const SIZE_CLASSES: Record<SystemCase["size"], string> = {
   square: "lg:col-span-4 lg:row-span-1",
   half: "lg:col-span-6 lg:row-span-1",
 };
+
+/**
+ * Bento tile placeholder. Matches the real tile's outer wrapper exactly
+ * (`SIZE_CLASSES[size]`, `scroll-mt-28`, rounded 2xl surface, same padding)
+ * so switching `loading` on/off produces zero layout shift.
+ */
+const BentoTileSkeleton = ({ size }: { size: SystemCase["size"] }) => {
+  const isHero = size === "hero";
+  return (
+    <li
+      className={cn("flex scroll-mt-28", SIZE_CLASSES[size])}
+      aria-hidden
+    >
+      <div
+        className={cn(
+          "relative flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6",
+        )}
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div
+            className={cn(
+              "shrink-0 animate-pulse rounded-xl bg-muted",
+              isHero ? "h-12 w-12" : "h-10 w-10",
+            )}
+          />
+          <div className="h-3 w-24 animate-pulse rounded bg-muted" />
+        </div>
+        <div className="mt-5 flex flex-1 flex-col">
+          <div
+            className={cn(
+              "animate-pulse rounded bg-muted",
+              isHero ? "h-8 w-3/4" : "h-6 w-2/3",
+            )}
+          />
+          <div className="mt-3 space-y-2">
+            <div className="h-3 w-full animate-pulse rounded bg-muted/70" />
+            <div className="h-3 w-5/6 animate-pulse rounded bg-muted/70" />
+            {isHero && (
+              <div className="h-3 w-4/6 animate-pulse rounded bg-muted/70" />
+            )}
+          </div>
+          {isHero && (
+            <div className="mt-4 flex flex-wrap gap-1.5">
+              {[64, 80, 56, 72].map((w) => (
+                <div
+                  key={w}
+                  className="h-6 animate-pulse rounded-full bg-muted"
+                  style={{ width: w }}
+                />
+              ))}
+            </div>
+          )}
+          <div
+            className={cn(
+              "mt-auto flex items-end justify-between gap-3 border-t border-border/70",
+              isHero ? "pt-5" : "pt-4",
+            )}
+            style={{ marginTop: isHero ? "1.5rem" : "1rem" }}
+          >
+            <div>
+              <div
+                className={cn(
+                  "animate-pulse rounded bg-muted",
+                  isHero ? "h-9 w-20" : "h-7 w-14",
+                )}
+              />
+              <div className="mt-1.5 h-3 w-28 animate-pulse rounded bg-muted/70" />
+            </div>
+            <div className="h-3 w-20 animate-pulse rounded bg-muted" />
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+};
+
+/**
+ * Narrative card placeholder. Matches NarrativeCard's padding, header layout,
+ * 3-line clamped summary height, and bullet stack so the grid keeps its
+ * equal-row-height stretch behavior while data is loading.
+ */
+const NarrativeCardSkeleton = () => (
+  <li
+    className={cn(
+      "relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm",
+    )}
+    aria-hidden
+  >
+    <div className="flex items-start gap-3">
+      <div className="h-9 w-9 shrink-0 animate-pulse rounded-lg bg-muted" />
+      <div className="min-w-0 flex-1 space-y-2">
+        <div className="h-2.5 w-24 animate-pulse rounded bg-muted/70" />
+        <div className="h-4 w-3/5 animate-pulse rounded bg-muted" />
+      </div>
+    </div>
+
+    {/* Reserve exactly 3 lines of summary height — same as NarrativeCard. */}
+    <div className="mt-5 min-h-[calc(1.55em*3)] space-y-2">
+      <div className="h-3 w-full animate-pulse rounded bg-muted/70" />
+      <div className="h-3 w-11/12 animate-pulse rounded bg-muted/70" />
+      <div className="h-3 w-4/6 animate-pulse rounded bg-muted/70" />
+    </div>
+
+    <div className="mt-5 flex flex-1 flex-col">
+      <div className="h-2.5 w-24 animate-pulse rounded bg-muted/70" />
+      <ul className="mt-3 space-y-2">
+        {[0, 1, 2, 3].map((i) => (
+          <li key={i} className="flex items-start gap-2">
+            <div className="mt-[3px] h-3.5 w-3.5 shrink-0 animate-pulse rounded-sm bg-muted" />
+            <div
+              className="h-3 animate-pulse rounded bg-muted/70"
+              style={{ width: `${88 - i * 6}%` }}
+            />
+          </li>
+        ))}
+      </ul>
+      <div className="mt-5 border-t border-border/70 pt-4">
+        <div className="h-3 w-24 animate-pulse rounded bg-muted" />
+      </div>
+    </div>
+  </li>
+);
 
 const BentoTile = ({
   system,
