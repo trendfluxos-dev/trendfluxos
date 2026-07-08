@@ -4,6 +4,24 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
+async function notifyRoleFailure(fn: string, detail: string, userId?: string) {
+  try {
+    await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/alert-postgres-error`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+      },
+      body: JSON.stringify({
+        message: `role_check_failed:${fn} — ${detail}`,
+        pathname: `/functions/v1/${fn}`,
+        user_id: userId ?? null,
+        release: "edge",
+      }),
+    });
+  } catch (_) { /* best-effort */ }
+}
+
 type Body = {
   lead_id: string;
   sequence_name?: string;       // e.g. "cold-email-v1"
