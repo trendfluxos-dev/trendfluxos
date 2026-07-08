@@ -4,6 +4,14 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import MarriageInquiryDialog from "@/components/MarriageInquiryDialog";
 import {
   ArrowRight,
@@ -18,6 +26,10 @@ import {
   GraduationCap,
   Briefcase,
   Heart,
+  ExternalLink,
+  FileText,
+  ShieldCheck,
+  CalendarDays,
 } from "lucide-react";
 import emonPortrait from "@/assets/zahid-hasan-emon.webp";
 import { useSeo } from "@/hooks/useSeo";
@@ -60,19 +72,59 @@ const educationRecords = [
 
 const certifications = [
   {
+    id: "ju-bsc",
     title: "Official University Certificate — BSc (Honours) in IT",
     issuer: "IIT, Jahangirnagar University · Controller of Examinations",
     date: "22 May 2024",
     note:
       "Class Roll 2484 · Exam Roll 172491 · Result published in JU notice (juniv.edu/discussion/18018).",
+    details: {
+      credential: "BSc (Honours) in Information Technology",
+      awardedTo: "ZAHID HASAN EMON",
+      classRoll: "2484",
+      examRoll: "172491",
+      session: "2018 — 2019",
+      resultPublished: "22 May 2024",
+      verification: "QR verification code on official letterhead",
+      notice: {
+        title: "JU Notice — Result Publication (BSc Hons. in IT, 2018-19 Session)",
+        reference: "juniv.edu/discussion/18018",
+        summary:
+          "Jahangirnagar University's official notice board published the final result for BSc (Honours) in Information Technology, Session 2018-19. The notice was signed by the Controller of Examinations and released via IIT, JU.",
+        url: "https://juniv.edu/discussion/18018",
+      },
+      documents: [
+        "Assured Certificate (dated 22 May 2024) — signed by Professor & Chairman, IIT",
+        "To Whom It May Concern letter (dated 17 April 2022) — on IIT letterhead",
+      ],
+    },
   },
   {
+    id: "digital-growth",
     title: "Digital Marketing & Growth Systems",
     issuer: "Industry programs · self-attested portfolio",
     date: "2022 — 2025",
     note: "Applied on live D2C, EdTech and creator brands (see Case Files).",
+    details: {
+      credential: "Applied Growth Systems (self-attested portfolio)",
+      awardedTo: "ZAHID HASAN EMON",
+      session: "2022 — 2025",
+      verification: "Case files & live client outcomes available on request",
+      notice: {
+        title: "Portfolio Notice",
+        reference: "Case Files section",
+        summary:
+          "Skills validated through live campaigns for D2C, EdTech and creator brands — including funnel builds, Meta Ads management, and GHL/Make automation. Verifiable case files are available in the Case Files section.",
+      },
+      documents: [
+        "Client outcome briefs (LuxeVeil, Kormoshikkha, BrandToki)",
+        "Automation blueprints — GoHighLevel + Make.com",
+      ],
+    },
   },
 ];
+
+type Certification = (typeof certifications)[number];
 
 const transformations = [
   {
