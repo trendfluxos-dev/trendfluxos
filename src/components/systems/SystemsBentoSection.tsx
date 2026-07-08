@@ -3,6 +3,7 @@ import { ArrowUpRight, Lock, Check } from "lucide-react";
 import { TfSection } from "@/components/tf/Section";
 import { SYSTEMS_PORTFOLIO, type SystemCase } from "@/data/systemsPortfolio";
 import { getSystemLink } from "@/data/systemsLinkMap";
+import { bentoTileId, narrativeCardId } from "@/data/systemsFilter";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -11,6 +12,12 @@ type Props = {
   title?: React.ReactNode;
   intro?: React.ReactNode;
   tone?: "light" | "muted";
+  /**
+   * Optional set of slugs that should be visually highlighted (and non-members
+   * dimmed) — driven by an external FilterBar. `null`/omitted means "no
+   * filter is active" and every tile renders at full strength.
+   */
+  highlightSlugs?: ReadonlySet<string> | null;
 };
 
 /**
@@ -24,6 +31,7 @@ export const SystemsBentoSection = ({
   title = "Eight production systems, one operating stack.",
   intro = "Six sub-brands plus two internal ops layers — each shipped, in production, and instrumented. Tap any tile to enter that system.",
   tone = "light",
+  highlightSlugs = null,
 }: Props) => (
   <TfSection
     id={id}
@@ -34,6 +42,10 @@ export const SystemsBentoSection = ({
     align="left"
   >
     <div className="mx-auto w-full max-w-7xl">
+      {/*
+        highlightSlugs is threaded down so tiles/cards can render dimmed when
+        an external filter is active. `null` = no filter, all tiles bright.
+      */}
       <ul
         className={cn(
           "grid gap-4 sm:gap-5",
@@ -43,7 +55,11 @@ export const SystemsBentoSection = ({
         aria-label="Systems portfolio"
       >
         {SYSTEMS_PORTFOLIO.map((s) => (
-          <BentoTile key={s.slug} system={s} />
+          <BentoTile
+            key={s.slug}
+            system={s}
+            state={resolveHighlight(s.slug, highlightSlugs)}
+          />
         ))}
       </ul>
 
@@ -61,7 +77,11 @@ export const SystemsBentoSection = ({
           )}
         >
           {SYSTEMS_PORTFOLIO.map((s) => (
-            <NarrativeCard key={`${s.slug}-narrative`} system={s} />
+            <NarrativeCard
+              key={`${s.slug}-narrative`}
+              system={s}
+              state={resolveHighlight(s.slug, highlightSlugs)}
+            />
           ))}
         </ul>
       </div>
@@ -69,17 +89,39 @@ export const SystemsBentoSection = ({
   </TfSection>
 );
 
-const NarrativeCard = ({ system }: { system: SystemCase }) => {
+type HighlightState = "match" | "dim" | "neutral";
+
+const resolveHighlight = (
+  slug: string,
+  highlightSlugs: ReadonlySet<string> | null,
+): HighlightState => {
+  if (!highlightSlugs) return "neutral";
+  return highlightSlugs.has(slug) ? "match" : "dim";
+};
+
+const NarrativeCard = ({
+  system,
+  state = "neutral",
+}: {
+  system: SystemCase;
+  state?: HighlightState;
+}) => {
   const Icon = system.icon;
   return (
     <li
+      id={narrativeCardId(system.slug)}
       className={cn(
         // Stretch to fill the grid row so every card in a row is equal height.
         "group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl",
         "border border-border bg-card shadow-sm transition-colors hover:border-primary/40",
         // Uniform, consistent padding across breakpoints.
         "p-6",
+        state === "match" &&
+          "border-primary/60 shadow-[0_10px_30px_-18px_hsl(var(--primary)/0.55)] ring-1 ring-primary/40",
+        state === "dim" && "opacity-45 saturate-75",
       )}
+      data-highlight={state}
+      aria-current={state === "match" ? "true" : undefined}
     >
       {/* top accent hairline */}
       <span
