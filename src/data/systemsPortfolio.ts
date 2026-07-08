@@ -98,13 +98,13 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
   {
     slug: "voice-ai",
     title: "Voice AI · XTTS",
-    eyebrow: "System 06",
+    eyebrow: "System 06 · Internal",
     tagline:
       "Voice cloning + TTS lecture generation on a signed-URL pipeline, powering course narration and voice notes.",
     outcome: { metric: "5", label: "storage buckets, all signed" },
     stack: ["XTTS Deploy", "Voice Profiles", "Signed URLs"],
-    href: "/edtech/voice-notes",
-    linkLabel: "Hear voice notes",
+    href: null,
+    linkLabel: "Internal system",
     icon: Mic,
     size: "wide",
   },
