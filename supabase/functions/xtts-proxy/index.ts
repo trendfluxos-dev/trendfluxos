@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 /**
  * xtts-proxy
@@ -40,10 +41,7 @@ Deno.serve(async (req: Request) => {
     });
     const { data: userData } = await userClient.auth.getUser();
     if (!userData.user) return j({ error: "unauthorized" }, 401);
-
-    const { data: isAdmin } = await userClient.rpc("current_user_has_role", {
-      _role: "admin",
-    });
+    const isAdmin = await userHasRole(userClient, userData.user.id, "admin");
     if (!isAdmin) return j({ error: "forbidden_founder_only" }, 403);
 
     const endpoint = Deno.env.get("XTTS_ENDPOINT_URL");
