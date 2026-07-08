@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, CheckCircle2, CalendarCheck } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, CalendarCheck, TrendingUp } from "lucide-react";
 import { TfSection } from "@/components/tf/Section";
 import { SYSTEMS_HE_BUILT } from "@/data/home";
 import { cn } from "@/lib/utils";
@@ -178,6 +178,71 @@ export const SystemsHeBuiltSection = () => {
           </div>
         </div>
       </div>
+    </div>
+
+    {/* CARD GRID — every system + headline outcome, always visible */}
+    <div className="mx-auto mt-12 w-full max-w-7xl sm:mt-16">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3 sm:mb-8">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-primary">All Systems · At a glance</p>
+          <h3 className="mt-2 font-display text-xl font-semibold text-foreground sm:text-2xl">
+            Every system, every outcome.
+          </h3>
+        </div>
+        <p className="max-w-sm text-sm text-muted-foreground">
+          Six operating systems plus the composite result. Metrics reflect the typical 90-day engagement baseline.
+        </p>
+      </div>
+
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {SYSTEMS_HE_BUILT.map((s) => (
+          <li
+            key={`card-${s.title}`}
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md sm:p-6"
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100"
+            />
+            <div className="flex items-start justify-between gap-3">
+              <span className="inline-grid h-10 w-10 place-items-center rounded-xl border border-primary/25 bg-primary/[0.06] text-primary">
+                <s.icon className="h-5 w-5" aria-hidden />
+              </span>
+              <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                {s.step} · {s.window}
+              </span>
+            </div>
+
+            <h4 className="mt-4 font-display text-lg font-semibold text-foreground">
+              {s.title}
+            </h4>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              {s.desc}
+            </p>
+
+            <ul className="mt-4 space-y-1.5">
+              {s.outputs.map((o) => (
+                <li key={o} className="flex items-start gap-2 text-[13px] text-foreground/85">
+                  <CheckCircle2 className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                  <span>{o}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-5 flex items-end justify-between gap-3 border-t border-border/70 pt-4">
+              <div>
+                <p className="font-display text-2xl font-semibold leading-none text-primary">
+                  {s.outcome.metric}
+                </p>
+                <p className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                  {s.outcome.label}
+                </p>
+              </div>
+              <TrendingUp className="h-4 w-4 text-primary/60" aria-hidden />
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
 
     <div className="mt-10 flex flex-col items-center gap-3 px-2 text-center sm:mt-12">
