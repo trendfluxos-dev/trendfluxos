@@ -79,7 +79,7 @@ export function assertValidSystemsPortfolio<T extends { slug: string }>(
   rows: readonly T[],
 ): T[] {
   const result = validateSystemsPortfolio(rows);
-  if (!result.ok) {
+  if (result.ok === false) {
     const msg =
       "[systemsPortfolio] invalid data:\n  " + result.issues.join("\n  ");
     if (import.meta.env.DEV || import.meta.env.MODE === "test") {
