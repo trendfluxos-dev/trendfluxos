@@ -128,6 +128,9 @@ const Founder = () => {
       "Corporate founder profile of Zahid Hasan Emon — biography, philosophy, portfolio, leadership, media coverage and public-interest work. Read online or download as a premium A4 PDF booklet.",
     canonical: "/founder",
     type: "profile",
+    image: `${BRAND.url}${portrait}`,
+    imageAlt: `${FOUNDER.name} — ${FOUNDER.role}`,
+    imageType: "image/png",
   });
   useJsonLd(
     {
