@@ -44,6 +44,7 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
     const trimmedName = name.trim();
     const trimmedEmail = email.trim().toLowerCase();
     if (trimmedName.length < 2) {
@@ -105,7 +106,7 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} aria-busy={submitting} className="space-y-4">
           <div className="grid gap-2">
             <Label htmlFor="pl-name">Your name</Label>
             <Input
