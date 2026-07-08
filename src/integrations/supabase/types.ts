@@ -1117,6 +1117,66 @@ export type Database = {
         }
         Relationships: []
       }
+      strategy_bookings: {
+        Row: {
+          company: string | null
+          confirm_token: string
+          confirmed_slot_iso: string | null
+          created_at: string
+          email: string
+          gcal_event_id: string | null
+          goal: string | null
+          id: string
+          ip: string | null
+          meet_url: string | null
+          name: string
+          phone: string | null
+          requested_slot_iso: string
+          session_type: string
+          status: string
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          company?: string | null
+          confirm_token?: string
+          confirmed_slot_iso?: string | null
+          created_at?: string
+          email: string
+          gcal_event_id?: string | null
+          goal?: string | null
+          id?: string
+          ip?: string | null
+          meet_url?: string | null
+          name: string
+          phone?: string | null
+          requested_slot_iso: string
+          session_type: string
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          company?: string | null
+          confirm_token?: string
+          confirmed_slot_iso?: string | null
+          created_at?: string
+          email?: string
+          gcal_event_id?: string | null
+          goal?: string | null
+          id?: string
+          ip?: string | null
+          meet_url?: string | null
+          name?: string
+          phone?: string | null
+          requested_slot_iso?: string
+          session_type?: string
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string

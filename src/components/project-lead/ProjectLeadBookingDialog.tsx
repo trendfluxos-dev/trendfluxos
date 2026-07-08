@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Loader2, CalendarCheck } from "lucide-react";
+import { Loader2, CalendarCheck, Video, Phone } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -21,26 +21,34 @@ type Props = {
   onOpenChange: (v: boolean) => void;
 };
 
+type SessionType = "video" | "audio";
+
 /**
  * "Book Direct with Project Lead" flow. Captures a short brief, stores it
- * through the existing `growth-os-lead` edge function (source tagged so it
- * routes to the founder inbox) and offers WhatsApp as an instant fallback.
+ * through `strategy-booking-submit`, which writes to `strategy_bookings`,
+ * creates a HOLD Google Calendar event with a Meet link, and emails the
+ * Brand Architect a one-click confirm URL. On confirm the client is added
+ * as an attendee (invite auto-sent) and reminders fire 1 day + 15 min prior.
  */
 const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
   const { toast } = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [company, setCompany] = useState("");
   const [slot, setSlot] = useState<Timeslot | null>(null);
   const [goal, setGoal] = useState("");
+  const [sessionType, setSessionType] = useState<SessionType>("video");
 
   const reset = () => {
     setName("");
     setEmail("");
+    setPhone("");
     setCompany("");
     setSlot(null);
     setGoal("");
+    setSessionType("video");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,26 +70,16 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
     }
 
     setSubmitting(true);
-    const message = [
-      `Preferred slot: ${slot.label} (${slot.iso})`,
-      goal && `Goal: ${goal}`,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    const { error } = await supabase.functions.invoke("growth-os-lead", {
+    const { error } = await supabase.functions.invoke("strategy-booking-submit", {
       body: {
         name: trimmedName,
         email: trimmedEmail,
+        phone: phone.trim() || undefined,
         company: company.trim() || undefined,
-        message: message || "Book Direct with Project Lead",
-        source: "project-lead-booking",
-        slot: {
-          date: slot.date,
-          time: slot.time,
-          iso: slot.iso,
-          label: slot.label,
-        },
+        goal: goal.trim() || undefined,
+        session_type: sessionType,
+        requested_slot_iso: slot.iso,
+        duration_minutes: 30,
       },
     });
     setSubmitting(false);
@@ -97,7 +95,8 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
 
     toast({
       title: "Request received",
-      description: "The Project Lead will follow up within one business day.",
+      description:
+        "Zahid will confirm your slot shortly. You'll receive a Google Meet invite by email as soon as it's locked in.",
     });
     reset();
     onOpenChange(false);
@@ -119,6 +118,37 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
 
         <form onSubmit={handleSubmit} aria-busy={submitting} className="space-y-4">
           <div className="grid gap-2">
+            <Label>Session type</Label>
+            <div className="grid grid-cols-2 gap-2">
+              {(
+                [
+                  { v: "video", label: "Video call", Icon: Video },
+                  { v: "audio", label: "Audio call", Icon: Phone },
+                ] as const
+              ).map(({ v, label, Icon }) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setSessionType(v)}
+                  aria-pressed={sessionType === v}
+                  className={
+                    "flex items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm transition " +
+                    (sessionType === v
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border hover:bg-muted")
+                  }
+                >
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Both options run on Google Meet — audio-only just means we skip video.
+            </p>
+          </div>
+
+          <div className="grid gap-2">
             <Label htmlFor="pl-name">Your name</Label>
             <Input
               id="pl-name"
@@ -137,6 +167,18 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
               required
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="pl-phone">WhatsApp number (optional)</Label>
+            <Input
+              id="pl-phone"
+              type="tel"
+              inputMode="tel"
+              placeholder="+8801XXXXXXXXX"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              autoComplete="tel"
             />
           </div>
           <div className="grid gap-2">
