@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Lock } from "lucide-react";
+import { ArrowUpRight, Lock, Check } from "lucide-react";
 import { TfSection } from "@/components/tf/Section";
 import { SYSTEMS_PORTFOLIO, type SystemCase } from "@/data/systemsPortfolio";
 import { cn } from "@/lib/utils";
@@ -45,9 +45,68 @@ export const SystemsBentoSection = ({
           <BentoTile key={s.slug} system={s} />
         ))}
       </ul>
+
+      {/* Narrative cards: 1–2 line case summary + What we built bullets */}
+      <div className="mt-10 sm:mt-12">
+        <h3 className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+          Case notes · What we built
+        </h3>
+        <ul className="mt-5 grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+          {SYSTEMS_PORTFOLIO.map((s) => (
+            <NarrativeCard key={`${s.slug}-narrative`} system={s} />
+          ))}
+        </ul>
+      </div>
     </div>
   </TfSection>
 );
+
+const NarrativeCard = ({ system }: { system: SystemCase }) => {
+  const Icon = system.icon;
+  return (
+    <li className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-colors hover:border-primary/40 sm:p-6">
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-60"
+      />
+      <div className="flex items-center gap-3">
+        <span className="inline-grid h-9 w-9 place-items-center rounded-lg border border-primary/25 bg-primary/[0.06] text-primary">
+          <Icon className="h-4 w-4" aria-hidden />
+        </span>
+        <div className="min-w-0">
+          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            {system.eyebrow}
+          </p>
+          <p className="font-display text-[15px] font-semibold leading-tight tracking-tight text-foreground">
+            {system.title}
+          </p>
+        </div>
+      </div>
+      <p className="mt-4 text-[13.5px] leading-relaxed text-muted-foreground">
+        {system.summary}
+      </p>
+      <div className="mt-4">
+        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-foreground/70">
+          What we built
+        </p>
+        <ul className="mt-2.5 space-y-1.5">
+          {system.built.map((item) => (
+            <li
+              key={item}
+              className="flex items-start gap-2 text-[13px] leading-relaxed text-foreground/85"
+            >
+              <Check
+                className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary"
+                aria-hidden
+              />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  );
+};
 
 const SIZE_CLASSES: Record<SystemCase["size"], string> = {
   hero: "lg:col-span-8 lg:row-span-2",
