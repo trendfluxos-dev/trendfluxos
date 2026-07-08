@@ -78,7 +78,8 @@ Deno.serve(async (req) => {
     .select()
     .single();
   if (insertErr || !booking) {
-    return new Response(JSON.stringify({ error: "storage_failed", detail: insertErr?.message }), {
+    console.error("strategy-booking-submit insert failed", insertErr);
+    return new Response(JSON.stringify({ error: "storage_failed" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
@@ -169,7 +170,7 @@ Deno.serve(async (req) => {
     const evBody = await evRes.text();
     if (!evRes.ok) {
       console.error("gcal event create failed", evRes.status, evBody);
-      return new Response(JSON.stringify({ ok: true, booking_id: booking.id, calendar_error: evBody.slice(0, 500) }), {
+      return new Response(JSON.stringify({ ok: true, booking_id: booking.id, calendar_error: "calendar_create_failed" }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

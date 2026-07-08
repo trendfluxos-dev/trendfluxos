@@ -75,7 +75,8 @@ Deno.serve(async (req) => {
     .single();
 
   if (error) {
-    return new Response(JSON.stringify({ error: "storage_failed", detail: error.message }), {
+    console.error("growth-os-lead insert failed", error);
+    return new Response(JSON.stringify({ error: "storage_failed" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
