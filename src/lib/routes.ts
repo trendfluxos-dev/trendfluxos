@@ -34,6 +34,7 @@ export const routes = {
   "/admin/conversions": make(() => import("@/pages/ConversionDashboard")),
   "/admin/enterprise-demos": make(() => import("@/pages/EnterpriseDemos")),
   "/admin/talent": make(() => import("@/pages/TalentApplicationsAdmin")),
+  "/admin/talent/emails": make(() => import("@/pages/TalentEmailsAdmin")),
   "/admin/course-enrollments": make(() => import("@/pages/CourseEnrollmentsAdmin")),
   "/admin/uptime": make(() => import("@/pages/UptimeAdmin")),
   "/admin/errors": make(() => import("@/pages/ErrorLogsAdmin")),
