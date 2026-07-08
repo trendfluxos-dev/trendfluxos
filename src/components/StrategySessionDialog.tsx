@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, Copy, Loader2, Send } from "lucide-react";
 import { track } from "@/lib/analytics";
+import TimeslotPicker, { type Timeslot } from "@/components/booking/TimeslotPicker";
 
 const SERVICES = [
   "AI Automation",
@@ -56,6 +57,7 @@ type Confirmation = {
   interests: string[];
   bookedAt: Date;
   caseSlug: string | null;
+  slot: Timeslot;
 };
 
 /** Short, human-friendly reference id, e.g. TFX-7K3F-2A91 */
@@ -78,6 +80,7 @@ export const StrategySessionDialog = ({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [interests, setInterests] = useState<string[]>([]);
+  const [slot, setSlot] = useState<Timeslot | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [confirmation, setConfirmation] = useState<Confirmation | null>(null);
 
@@ -88,6 +91,7 @@ export const StrategySessionDialog = ({
     setName("");
     setEmail("");
     setInterests([]);
+    setSlot(null);
   };
 
   const handleOpenChange = (o: boolean) => {
@@ -107,6 +111,10 @@ export const StrategySessionDialog = ({
       toast.error(parsed.error.issues[0]?.message ?? "Please check your details");
       return;
     }
+    if (!slot) {
+      toast.error("Pick a preferred date and time slot");
+      return;
+    }
     setSubmitting(true);
     try {
       // Funnel: request submitted (pre-confirmation).
@@ -116,6 +124,8 @@ export const StrategySessionDialog = ({
         interests: parsed.data.interests.join(","),
         case_slug: sourceCaseSlug ?? undefined,
         source: source ?? undefined,
+        slot_iso: slot.iso,
+        slot_label: slot.label,
       });
       await new Promise((r) => setTimeout(r, 600));
 
@@ -131,6 +141,8 @@ export const StrategySessionDialog = ({
         case_slug: sourceCaseSlug ?? undefined,
         source: source ?? undefined,
         booked_at: bookedAt.toISOString(),
+        slot_iso: slot.iso,
+        slot_label: slot.label,
       });
 
       setConfirmation({
@@ -140,6 +152,7 @@ export const StrategySessionDialog = ({
         interests: parsed.data.interests,
         bookedAt,
         caseSlug: sourceCaseSlug,
+        slot,
       });
     } catch {
       toast.error("Something went wrong. Please try again.");
