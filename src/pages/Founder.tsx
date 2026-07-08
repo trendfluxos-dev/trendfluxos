@@ -562,6 +562,121 @@ const Founder = () => {
         />
       </div>
 
+      {/* 07·c — Portfolio Highlights (metric-first summary) */}
+      <section
+        id="portfolio-highlights"
+        className="scroll-mt-24 border-t border-border bg-muted"
+      >
+        <div className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+          <div className="mb-8 flex items-baseline justify-between gap-4 border-b border-border/60 pb-4">
+            <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-primary">
+              Chapter 07·c · Portfolio Highlights
+            </p>
+            <p className="hidden sm:block text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+              Top projects · headline metrics
+            </p>
+          </div>
+          <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
+            Signature outcomes, at a glance.
+          </h2>
+          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
+            A curated slice of the portfolio — projects picked for the strength of their
+            measurable outcome, not just their category. Full case studies live in
+            <Link to="/case-studies" className="ml-1 text-primary underline-offset-4 hover:underline">
+              /case-studies
+            </Link>.
+          </p>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                metric: "4.85L+",
+                unit: "views",
+                title: "PNC Digital Campaign",
+                category: "Civic · Youth Leadership",
+                proof: "82% organic reach with zero paid boost — end-to-end campaign systems, creative and analytics.",
+                href: "/portfolio",
+              },
+              {
+                metric: "20+ hrs",
+                unit: "reclaimed / week",
+                title: "TrendFlux Growth OS",
+                category: "AI-Native SaaS",
+                proof: "Composable modules for automation, CRM, paid media, creative & analytics — one connected system.",
+                href: "/",
+              },
+              {
+                metric: "8",
+                unit: "sub-brands live",
+                title: "TrendFlux Ecosystem",
+                category: "Brand Systems",
+                proof: "Six public sub-brands plus two internal ops layers, all shipped under one design system.",
+                href: "/#systems-he-built",
+              },
+              {
+                metric: "40+",
+                unit: "founder engagements",
+                title: "Founder Advisory",
+                category: "Fractional CGO",
+                proof: "Operator-seat engagements with SMBs, founders and institutional clients since 2019.",
+                href: "/services",
+              },
+              {
+                metric: "100%",
+                unit: "verified credentials",
+                title: "Academic Dossier",
+                category: "Trust & Compliance",
+                proof: "IIT, Jahangirnagar University — official notice, letters and QR-verified certificates.",
+                href: "/founder#credentials",
+              },
+              {
+                metric: "6+",
+                unit: "years operating",
+                title: "Public Voice",
+                category: "Keynotes · Panels · Press",
+                proof: "Podium-tested speaker on AI-native growth, ethical brand systems and youth leadership.",
+                href: "/press",
+              },
+            ].map((h) => {
+              const isExternal = h.href.startsWith("http");
+              const inner = (
+                <div className="group relative flex h-full flex-col rounded-xl border border-border bg-background p-5 transition hover:border-primary/40 hover:shadow-sm dark:bg-card">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <p className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-[2.75rem]">
+                      {h.metric}
+                    </p>
+                    <ArrowUpRight className="h-4 w-4 text-muted-foreground transition group-hover:text-primary" aria-hidden />
+                  </div>
+                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/90">
+                    {h.unit}
+                  </p>
+                  <div className="mt-5 border-t border-border/60 pt-4">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      {h.category}
+                    </p>
+                    <p className="mt-1 font-display text-[15px] font-semibold text-foreground">
+                      {h.title}
+                    </p>
+                    <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
+                      {h.proof}
+                    </p>
+                  </div>
+                </div>
+              );
+              return isExternal ? (
+                <a key={h.title} href={h.href} target="_blank" rel="noreferrer" className="block h-full">
+                  {inner}
+                </a>
+              ) : (
+                <Link key={h.title} to={h.href} className="block h-full">
+                  {inner}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* 08 — Leadership */}
       <ChapterShell meta={FOUNDER_CHAPTERS[8]}>
         <p>
