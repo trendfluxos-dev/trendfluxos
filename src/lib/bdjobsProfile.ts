@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 import {
   BDJOBS_PROFILE_SLUG,
   DEFAULT_BDJOBS_PROFILE,
@@ -54,8 +55,8 @@ export async function saveBdjobsProfile(payload: BdjobsProfileData): Promise<str
     .upsert(
       {
         slug: BDJOBS_PROFILE_SLUG,
-        // `data` is stored as JSONB; cast for the generated Insert type.
-        data: payload as unknown as Record<string, unknown>,
+        // `data` is stored as JSONB; cast to the generated Json type.
+        data: payload as unknown as Json,
       },
       { onConflict: "slug" },
     )
