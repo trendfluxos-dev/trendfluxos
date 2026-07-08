@@ -47,6 +47,8 @@ const NotFound = () => {
       suggested_score: match?.score ?? null,
       will_redirect: willRedirect,
     });
+    // Fire once per broken path — match/willRedirect derive from pathname.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   // Instant smart redirect when we have a confident match.
