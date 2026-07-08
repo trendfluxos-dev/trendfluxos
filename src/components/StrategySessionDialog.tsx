@@ -101,6 +101,7 @@ export const StrategySessionDialog = ({
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
     const parsed = schema.safeParse({ name, email, interests });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? "Please check your details");
@@ -266,7 +267,7 @@ export const StrategySessionDialog = ({
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={onSubmit} className="space-y-4">
+            <form onSubmit={onSubmit} aria-busy={submitting} className="space-y-4">
               <div className="space-y-1.5">
                 <Label htmlFor="ss-name">Full name</Label>
                 <Input

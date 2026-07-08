@@ -113,6 +113,7 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
     const parsed = quoteSchema.safeParse(form);
     if (!parsed.success) {
       const fieldErrors: Partial<Record<keyof FormState, string>> = {};
@@ -237,7 +238,7 @@ export const QuoteDialog = ({ open, onOpenChange, context }: Props) => {
               )}
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <form onSubmit={handleSubmit} aria-busy={submitting} className="space-y-4" noValidate>
               <div className="space-y-1.5">
                 <Label htmlFor="quote-name" className="text-xs uppercase tracking-wider text-foreground/60">
                   Name
