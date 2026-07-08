@@ -133,6 +133,7 @@ export default function TalentEmailsAdmin() {
   };
   const [bulkResults, setBulkResults] = useState<BulkResult[]>([]);
   const [cancelRequestedAt, setCancelRequestedAt] = useState<number | null>(null);
+  const [lastMappedList, setLastMappedList] = useState<TalentStatus[]>([]);
   const cancelBulkRef = useRef(false);
   const [cancelling, setCancelling] = useState(false);
   const [confirmCancelOpen, setConfirmCancelOpen] = useState(false);
@@ -190,23 +191,34 @@ export default function TalentEmailsAdmin() {
     else toast.success(`Test ${key} email sent to ${testEmail}`);
   };
 
-  const sendAllMapped = async () => {
+  const runSendBatch = async (
+    targets: TalentStatus[],
+    mode: "fresh" | "retry" | "resume",
+  ) => {
     if (!testEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail)) {
       toast.error("Enter a valid recipient email above");
       return;
     }
-    const mapped = TALENT_STATUSES.filter(
-      (s) => statusMap[s] && statusMap[s] !== "none",
-    );
-    if (mapped.length === 0) {
-      toast.error("No statuses have a template mapped");
+    if (targets.length === 0) {
+      toast.error(
+        mode === "retry"
+          ? "No failed emails to retry"
+          : mode === "resume"
+            ? "No remaining emails to resume"
+            : "No statuses have a template mapped",
+      );
       return;
     }
+    const mapped = targets;
+    const baseIndex = mode === "fresh" ? 0 : bulkResults.length;
     setSendingAll(true);
     cancelBulkRef.current = false;
     setCancelling(false);
     setCancelRequestedAt(null);
-    setBulkResults([]);
+    if (mode === "fresh") {
+      setBulkResults([]);
+      setLastMappedList(mapped);
+    }
     setBulkProgress({ done: 0, total: mapped.length, ok: 0, failed: 0 });
     let ok = 0;
     let failed = 0;
@@ -222,7 +234,7 @@ export default function TalentEmailsAdmin() {
         setBulkResults((prev) => [
           ...prev,
           {
-            index: i + 1,
+            index: baseIndex + i + 1,
             status,
             template: key,
             ok: false,
@@ -239,9 +251,11 @@ export default function TalentEmailsAdmin() {
         email: testEmail,
       });
       const cancelAtStart = cancelBulkRef.current;
+      const subjectPrefix =
+        mode === "retry" ? "RETRY" : mode === "resume" ? "RESUME" : "TEST";
       const result = await invokeWithRetry(
-        `[TEST · ${status}] ${rendered.subject}`,
-        `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b></div>${rendered.html}`,
+        `[${subjectPrefix} · ${status}] ${rendered.subject}`,
+        `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b> · <b>${subjectPrefix}</b></div>${rendered.html}`,
       );
       if (result.ok) ok++;
       else failed++;
@@ -249,16 +263,13 @@ export default function TalentEmailsAdmin() {
       setBulkResults((prev) => [
         ...prev,
         {
-          index: i + 1,
+          index: baseIndex + i + 1,
           status,
           template: key,
           ok: result.ok,
           error: result.ok ? undefined : (result as { error: string }).error,
           attempts: result.ok ? (result as { attempts: number }).attempts : undefined,
           at: Date.now(),
-          // A send is "after-cancel" when the user clicked Cancel while it
-          // was in flight (or between retries). Anything before that is the
-          // clean pre-cancel batch.
           phase: cancelAtStart || cancelBulkRef.current ? "after-cancel" : "before-cancel",
         },
       ]);
@@ -268,12 +279,14 @@ export default function TalentEmailsAdmin() {
     setSendingAll(false);
     setCancelling(false);
     cancelBulkRef.current = false;
+    const label =
+      mode === "retry" ? "Retry" : mode === "resume" ? "Resume" : "Bulk send";
     if (wasCancelled) {
       const done = ok + failed;
       const total = mapped.length;
       const pct = total > 0 ? Math.round((done / total) * 100) : 0;
       const remaining = Math.max(total - done, 0);
-      toast.warning("Bulk send cancelled", {
+      toast.warning(`${label} cancelled`, {
         id: "talent-bulk-send",
         duration: 8000,
         description: [
@@ -282,11 +295,33 @@ export default function TalentEmailsAdmin() {
           `Status: stopped after current send · recipient ${testEmail}`,
         ].join("\n"),
       });
-    } else if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
-    else toast.error(`Sent ${ok}, failed ${failed}`);
-    // Keep startedAt reference for potential future logging.
+    } else if (failed === 0) toast.success(`${label}: sent ${ok} to ${testEmail}`);
+    else toast.error(`${label}: sent ${ok}, failed ${failed}`);
     void startedAt;
   };
+
+  const sendAllMapped = () => {
+    const mapped = TALENT_STATUSES.filter(
+      (s) => statusMap[s] && statusMap[s] !== "none",
+    );
+    return runSendBatch(mapped, "fresh");
+  };
+
+  // Unique statuses whose latest entry failed (excludes ones later retried OK).
+  const failedStatuses = (() => {
+    const latest = new Map<TalentStatus, boolean>();
+    for (const r of bulkResults) latest.set(r.status, r.ok);
+    return Array.from(latest.entries())
+      .filter(([, ok]) => !ok)
+      .map(([s]) => s);
+  })();
+  // Statuses that were in the original list but never attempted (skipped by cancel).
+  const skippedStatuses = lastMappedList.filter(
+    (s) => !bulkResults.some((r) => r.status === s),
+  );
+
+  const retryFailed = () => runSendBatch(failedStatuses, "retry");
+  const resumeSkipped = () => runSendBatch(skippedStatuses, "resume");
 
   const cancelBulk = () => {
     if (!sendingAll) return;
@@ -667,7 +702,7 @@ export default function TalentEmailsAdmin() {
                     <h4 className="text-sm font-semibold">
                       Per-email delivery log
                     </h4>
-                    <div className="flex items-center gap-3 text-[11px] text-foreground/60">
+                    <div className="flex flex-wrap items-center gap-3 text-[11px] text-foreground/60">
                       <span className="inline-flex items-center gap-1">
                         <CheckCircle2 className="h-3 w-3 text-emerald-600" /> success
                       </span>
@@ -677,6 +712,52 @@ export default function TalentEmailsAdmin() {
                       <span className="inline-flex items-center gap-1">
                         <Ban className="h-3 w-3 text-amber-600" /> post-cancel
                       </span>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-[11px]"
+                        disabled={sendingAll || failedStatuses.length === 0}
+                        onClick={retryFailed}
+                        title={
+                          failedStatuses.length === 0
+                            ? "No failed emails to retry"
+                            : `Retry ${failedStatuses.length} failed email${
+                                failedStatuses.length === 1 ? "" : "s"
+                              }`
+                        }
+                      >
+                        <Send className="mr-1 h-3 w-3" />
+                        Retry failed
+                        {failedStatuses.length > 0 && (
+                          <span className="ml-1 rounded-full bg-destructive/15 px-1.5 text-destructive">
+                            {failedStatuses.length}
+                          </span>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-[11px]"
+                        disabled={sendingAll || skippedStatuses.length === 0}
+                        onClick={resumeSkipped}
+                        title={
+                          skippedStatuses.length === 0
+                            ? "Nothing to resume"
+                            : `Resume ${skippedStatuses.length} remaining email${
+                                skippedStatuses.length === 1 ? "" : "s"
+                              }`
+                        }
+                      >
+                        <Send className="mr-1 h-3 w-3" />
+                        Resume remaining
+                        {skippedStatuses.length > 0 && (
+                          <span className="ml-1 rounded-full bg-amber-500/15 px-1.5 text-amber-700 dark:text-amber-400">
+                            {skippedStatuses.length}
+                          </span>
+                        )}
+                      </Button>
                       <button
                         type="button"
                         className="text-primary underline-offset-2 hover:underline"
@@ -684,6 +765,7 @@ export default function TalentEmailsAdmin() {
                           setBulkResults([]);
                           setBulkProgress(null);
                           setCancelRequestedAt(null);
+                          setLastMappedList([]);
                         }}
                       >
                         Clear
