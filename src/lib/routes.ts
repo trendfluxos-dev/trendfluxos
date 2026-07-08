@@ -47,6 +47,7 @@ export const routes = {
   "/marriage": make(() => import("@/pages/Marriage")),
   "/founder": make(() => import("@/pages/Founder")),
   "/bdjobs-profile": make(() => import("@/pages/BdjobsProfile")),
+  "/bdjobs-profile/edit": make(() => import("@/pages/BdjobsProfileEdit")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/the-stand/share": make(() => import("@/pages/TheStandShare")),
   "/quiet-positions": make(() => import("@/pages/QuietPositions")),
