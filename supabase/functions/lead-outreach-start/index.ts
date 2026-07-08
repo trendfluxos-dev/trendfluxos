@@ -3,6 +3,7 @@
 // the lead + sequence metadata to n8n.
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 async function notifyRoleFailure(fn: string, detail: string, userId?: string) {
   try {
@@ -86,15 +87,9 @@ Deno.serve(async (req) => {
     });
   }
   actorId = userData.user.id;
-  const { data: isAdmin, error: roleErr } = await userClient.rpc(
-    "current_user_has_role",
-    { _role: "admin" },
-  );
-  if (roleErr || !isAdmin) {
-    if (roleErr) {
-      await notifyRoleFailure("lead-outreach-start", roleErr.message, userData.user.id);
-    }
-    await logRun(null, "failure", { http_status: 403, error: roleErr?.message ?? "forbidden" });
+  const isAdmin = await userHasRole(userClient, userData.user.id, "admin");
+  if (!isAdmin) {
+    await logRun(null, "failure", { http_status: 403, error: "forbidden" });
     return new Response(JSON.stringify({ error: "forbidden" }), {
       status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
