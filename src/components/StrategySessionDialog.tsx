@@ -250,6 +250,12 @@ export const StrategySessionDialog = ({
                   })}
                 </dd>
               </div>
+              <div>
+                <dt className="text-[10px] font-semibold uppercase tracking-[0.25em] text-foreground/50">
+                  Session slot
+                </dt>
+                <dd className="mt-1 text-foreground/80">{confirmation.slot.label}</dd>
+              </div>
               {confirmation.caseSlug && (
                 <div>
                   <dt className="text-[10px] font-semibold uppercase tracking-[0.25em] text-foreground/50">
@@ -325,6 +331,13 @@ export const StrategySessionDialog = ({
                   })}
                 </div>
               </div>
+              <TimeslotPicker
+                idPrefix="ss-slot"
+                value={slot}
+                onChange={setSlot}
+                disabled={submitting}
+                required
+              />
 
               <DialogFooter className="gap-2 sm:gap-3">
                 <Button type="button" variant="ghost" onClick={() => handleOpenChange(false)}>
