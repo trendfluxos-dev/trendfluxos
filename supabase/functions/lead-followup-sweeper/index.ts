@@ -4,6 +4,24 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
+async function notifyRoleFailure(detail: string, userId?: string) {
+  try {
+    await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/alert-postgres-error`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+      },
+      body: JSON.stringify({
+        message: `role_check_failed:lead-followup-sweeper — ${detail}`,
+        pathname: "/functions/v1/lead-followup-sweeper",
+        user_id: userId ?? null,
+        release: "edge",
+      }),
+    });
+  } catch (_) { /* best-effort */ }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -30,10 +48,12 @@ Deno.serve(async (req) => {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const { data: isAdmin } = await client.rpc("current_user_has_role", {
-      _role: "admin",
-    });
-    if (!isAdmin) {
+    const { data: isAdmin, error: roleErr } = await client.rpc(
+      "current_user_has_role",
+      { _role: "admin" },
+    );
+    if (roleErr || !isAdmin) {
+      if (roleErr) await notifyRoleFailure(roleErr.message, userData.user.id);
       return new Response(JSON.stringify({ error: "forbidden" }), {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
