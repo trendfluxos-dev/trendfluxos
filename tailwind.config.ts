@@ -98,10 +98,27 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        // Subtle left→right sheen that sweeps across skeleton blocks.
+        // Uses translateX on a gradient overlay (100% wide) inside an
+        // overflow-hidden parent, so the sheen enters from the left and
+        // exits on the right without repainting the block itself.
+        "skeleton-shimmer": {
+          "0%":   { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)"  },
+        },
+        // Slow ambient float for the background glow orbs behind the
+        // glass surface. Keeps the premium dark look alive without
+        // becoming distracting.
+        "glow-drift": {
+          "0%, 100%": { transform: "translate3d(0, 0, 0) scale(1)" },
+          "50%":      { transform: "translate3d(2%, -3%, 0) scale(1.05)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "skeleton-shimmer": "skeleton-shimmer 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite",
+        "glow-drift":      "glow-drift 14s ease-in-out infinite",
       },
     },
   },
