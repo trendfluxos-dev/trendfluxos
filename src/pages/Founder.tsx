@@ -352,6 +352,50 @@ const Founder = () => {
             ))}
           </div>
         </div>
+        <div className="mx-auto max-w-5xl px-5 pb-20 sm:px-8">
+          <div className="rounded-2xl border border-border bg-gradient-to-br from-primary/[0.04] via-background to-background p-6 sm:p-8 dark:from-primary/10 dark:via-card dark:to-card">
+            <div className="flex items-baseline justify-between gap-4 border-b border-border/60 pb-4">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">Credibility · At a glance</p>
+              <p className="hidden sm:block text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Verified outcomes</p>
+            </div>
+            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { n: "6+", k: "Years operating", d: "Digital growth, brand systems & AI ops since 2019" },
+                { n: "40+", k: "Founder engagements", d: "Advised founders, SMBs & institutional clients" },
+                { n: "4.85L+", k: "Campaign reach", d: "PNC digital campaign — 82% organic, zero paid boost" },
+                { n: "20+ hrs", k: "Reclaimed weekly", d: "Average operator time saved per TrendFlux deployment" },
+              ].map((s) => (
+                <div key={s.k} className="relative">
+                  <p className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl">
+                    {s.n}
+                  </p>
+                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/90">
+                    {s.k}
+                  </p>
+                  <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted-foreground">{s.d}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 grid gap-3 border-t border-border/60 pt-6 sm:grid-cols-2">
+              {[
+                { i: ShieldCheck, t: "Audit-ready systems", d: "Every deployment ships with dashboards, docs & handover." },
+                { i: FileCheck2, t: "Verified credentials", d: "IIT, Jahangirnagar University — official records on file." },
+                { i: Quote, t: "Podium-tested voice", d: "Keynotes, panels & press coverage across BD outlets." },
+                { i: ArrowUpRight, t: "Compounding outcomes", d: "Growth as infrastructure — not rented attention." },
+              ].map(({ i: Icon, t, d }) => (
+                <div key={t} className="flex gap-3 rounded-xl border border-border/60 bg-background/60 p-3.5 dark:bg-background/30">
+                  <span className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Icon className="h-4 w-4" aria-hidden />
+                  </span>
+                  <div>
+                    <p className="text-[13px] font-semibold text-foreground">{t}</p>
+                    <p className="mt-0.5 text-[12px] leading-relaxed text-muted-foreground">{d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* 01 — Table of contents */}
