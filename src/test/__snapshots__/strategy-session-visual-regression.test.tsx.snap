@@ -1,0 +1,124 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Strategy Session dialog — visual regression fingerprint > empty booking form state is stable 1`] = `
+"div.bg-background.border.fixed.gap-4.grid.max-w-[640px].rounded-2xl.shadow-[0_20px_60px_rgba(0,0,0,0.18)].w-[92%].z-50 [role=dialog]
+  div.flex.flex-col.space-y-1.5.text-center
+    h2.font-display.font-semibold.text-2xl.tracking-tight :: Book a Growth Strategy Session
+    p.text-muted-foreground.text-sm :: One 30-minute call. Walk away with a clear roadmap built for your business.
+  form.space-y-4
+    div.space-y-1.5
+      label.font-medium.leading-none.text-sm :: Full name
+      input.bg-background.border.border-input.flex.h-10.px-3.py-2.ring-offset-background.rounded-md.text-base.w-full
+    div.space-y-1.5
+      label.font-medium.leading-none.text-sm :: Work email
+      input.bg-background.border.border-input.flex.h-10.px-3.py-2.ring-offset-background.rounded-md.text-base.w-full
+    div.space-y-2
+      label.font-medium.leading-none.text-sm :: Service interests
+      div.gap-2.grid.grid-cols-1
+        label.bg-foreground/[0.02].border.border-foreground/10.flex.gap-2.items-center.px-3.py-2.rounded-lg.text-sm
+          button.border.border-primary.h-4.ring-offset-background.rounded-sm.w-4 [role=checkbox,aria=AI Automation]
+          input
+          span :: AI Automation
+        label.bg-foreground/[0.02].border.border-foreground/10.flex.gap-2.items-center.px-3.py-2.rounded-lg.text-sm
+          button.border.border-primary.h-4.ring-offset-background.rounded-sm.w-4 [role=checkbox,aria=Performance Media]
+          input
+          span :: Performance Media
+        label.bg-foreground/[0.02].border.border-foreground/10.flex.gap-2.items-center.px-3.py-2.rounded-lg.text-sm
+          button.border.border-primary.h-4.ring-offset-background.rounded-sm.w-4 [role=checkbox,aria=Ecosystem Design]
+          input
+          span :: Ecosystem Design
+        label.bg-foreground/[0.02].border.border-foreground/10.flex.gap-2.items-center.px-3.py-2.rounded-lg.text-sm
+          button.border.border-primary.h-4.ring-offset-background.rounded-sm.w-4 [role=checkbox,aria=Brand Architecture]
+          input
+          span :: Brand Architecture
+        label.bg-foreground/[0.02].border.border-foreground/10.flex.gap-2.items-center.px-3.py-2.rounded-lg.text-sm
+          button.border.border-primary.h-4.ring-offset-background.rounded-sm.w-4 [role=checkbox,aria=Content Engine]
+          input
+          span :: Content Engine
+    div.gap-3.grid
+      div.gap-2.grid
+        label.font-medium.leading-none.text-sm :: Preferred date *
+        button.bg-transparent.border.border-foreground/15.font-normal.gap-2.h-11.inline-flex.items-center.justify-start.px-6.py-2.ring-offset-background.rounded-full.text-left.text-muted-foreground.text-sm.tracking-tight.w-full.whitespace-nowrap :: Pick a date
+          svg.h-4.mr-2.w-4
+            path
+            path
+            rect
+            path
+      div.gap-2.grid
+        label.font-medium.leading-none.text-sm
+          span.gap-1.5.inline-flex.items-center :: Preferred time (BDT) *
+            svg.h-3.5.w-3.5
+              circle
+              polyline
+        div.gap-2.grid.grid-cols-3 [role=radiogroup,aria=Preferred time]
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 10:00
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 11:00
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 12:00
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 14:00
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 15:00
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 16:00
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 17:00
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 18:00
+          button.border.border-foreground/15.opacity-50.px-2.py-1.5.rounded-md.text-foreground/80.text-sm [role=radio] :: 19:00
+        p.text-muted-foreground.text-xs :: Pick a date to unlock time slots.
+    div.flex.flex-col-reverse.gap-2
+      button.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.text-foreground/80.text-sm.tracking-tight.whitespace-nowrap :: Cancel
+      button.bg-gradient-gold.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.shadow-sm.text-gold-foreground.text-sm.tracking-tight.whitespace-nowrap :: Request Session
+        svg.h-4.w-4
+          path
+          path
+  button.absolute.opacity-70.ring-offset-background.rounded-sm
+    svg.h-4.w-4
+      path
+      path
+    span :: Close"
+`;
+
+exports[`Strategy Session dialog — visual regression fingerprint > success confirmation state is stable 1`] = `
+"div.bg-background.border.fixed.gap-4.grid.max-w-[640px].rounded-2xl.shadow-[0_20px_60px_rgba(0,0,0,0.18)].w-[92%].z-50 [role=dialog]
+  div.flex.flex-col.space-y-1.5.text-center
+    div.bg-gold/15.flex.h-14.items-center.justify-center.mb-2.mx-auto.ring-1.ring-gold/40.rounded-full.w-14
+      svg.h-7.text-gold.w-7
+        circle
+        path
+    h2.font-display.font-semibold.text-2xl.text-center.tracking-tight :: Booking confirmed
+    p.text-center.text-muted-foreground.text-sm :: We've received your request and will reach out within 1 business day to lock in your session.
+  div.bg-gold/[0.04].border.border-gold/30.mt-2.rounded-2xl.text-center
+    p.font-semibold.text-[10px].text-gold.tracking-[0.3em].uppercase :: Reference ID
+    div.flex.gap-2.items-center.justify-center.mt-2
+      code.bg-foreground/5.font-mono.font-semibold.px-3.py-1.5.rounded-lg.text-base.text-foreground.tracking-wider :: TFX-ABCD-EFGH
+      button.border.border-foreground/15.h-11.inline-flex.items-center.justify-center.rounded-md.text-foreground/70.w-11 [aria=Copy reference ID]
+        svg.h-3.5.w-3.5
+          rect
+          path
+    p.mt-2.text-[11px].text-foreground/55 :: Quote this reference in any reply or follow-up email.
+  dl.bg-foreground/[0.02].border.border-foreground/10.gap-3.grid.mt-2.rounded-2xl.text-sm
+    div
+      dt.font-semibold.text-[10px].text-foreground/50.tracking-[0.25em].uppercase :: Name
+      dd.mt-1.text-foreground :: Test Operator
+    div
+      dt.font-semibold.text-[10px].text-foreground/50.tracking-[0.25em].uppercase :: Email
+      dd.mt-1.text-foreground :: operator@example.com
+    div
+      dt.font-semibold.text-[10px].text-foreground/50.tracking-[0.25em].uppercase :: Interests
+      dd.flex.flex-wrap.gap-1.5.mt-1
+        span.bg-gold/5.border.border-gold/30.font-medium.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-[11px].text-gold :: AI Automation
+        span.bg-gold/5.border.border-gold/30.font-medium.inline-flex.items-center.px-2.5.py-0.5.rounded-full.text-[11px].text-gold :: Performance Media
+    div
+      dt.font-semibold.text-[10px].text-foreground/50.tracking-[0.25em].uppercase :: Booked
+      dd.mt-1.text-foreground/80 :: Jul 15, 2026, 9:30 AM
+    div
+      dt.font-semibold.text-[10px].text-foreground/50.tracking-[0.25em].uppercase :: Session slot
+      dd.mt-1.text-foreground/80 :: Mon, 20 Jul 2026 · 15:00 BDT
+    div
+      dt.font-semibold.text-[10px].text-foreground/50.tracking-[0.25em].uppercase :: Originating case
+      dd.font-mono.mt-1.text-foreground/80.text-xs :: case-example
+  div.flex.flex-col-reverse.gap-2
+    button.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.text-foreground/80.text-sm.tracking-tight.whitespace-nowrap :: Close
+    button.bg-gradient-gold.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.shadow-sm.text-gold-foreground.text-sm.tracking-tight.whitespace-nowrap :: Done
+  button.absolute.opacity-70.ring-offset-background.rounded-sm
+    svg.h-4.w-4
+      path
+      path
+    span :: Close"
+`;
