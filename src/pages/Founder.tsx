@@ -19,6 +19,7 @@ import {
   FOUNDER_ROUTES, FOUNDER_DOCUMENTS, type ChapterMeta,
 } from "@/data/founder";
 import "@/styles/founder-print.css";
+import { SystemsBentoSection } from "@/components/systems/SystemsBentoSection";
 
 // ---------- Small primitives (kept local — used only on this page) ----------
 
@@ -469,6 +470,15 @@ const Founder = () => {
           })}
         </div>
       </ChapterShell>
+
+      {/* 07·b — Systems He Built (bento portfolio) */}
+      <div id="systems-he-built" className="scroll-mt-24 border-t border-border bg-background">
+        <SystemsBentoSection
+          eyebrow="Chapter 07·b · Systems He Built"
+          title="Eight production systems shipped by ZAHID HASAN EMON."
+          intro="Six sub-brands plus two internal ops layers — every tile links into the live system."
+        />
+      </div>
 
       {/* 08 — Leadership */}
       <ChapterShell meta={FOUNDER_CHAPTERS[8]}>
