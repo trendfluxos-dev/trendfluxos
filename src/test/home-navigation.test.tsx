@@ -13,8 +13,7 @@ beforeAll(() => {
       unobserve() {}
       disconnect() {}
     }
-    // @ts-expect-error test-only polyfill
-    globalThis.ResizeObserver = RO;
+    (globalThis as unknown as { ResizeObserver: unknown }).ResizeObserver = RO;
   }
   if (!("IntersectionObserver" in globalThis)) {
     class IO {
@@ -24,8 +23,7 @@ beforeAll(() => {
       takeRecords() { return []; }
       root = null; rootMargin = ""; thresholds = [];
     }
-    // @ts-expect-error test-only polyfill
-    globalThis.IntersectionObserver = IO;
+    (globalThis as unknown as { IntersectionObserver: unknown }).IntersectionObserver = IO;
   }
 });
 
