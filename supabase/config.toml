@@ -9,3 +9,5 @@ project_id = "dnodqhwwzdqfqlndwhsf"
     verify_jwt = false
   [functions.chat-assist]
     verify_jwt = false
+  [functions.booking-reminder-tick]
+    verify_jwt = true

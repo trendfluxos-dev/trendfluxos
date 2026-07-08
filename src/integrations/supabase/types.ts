@@ -1131,6 +1131,8 @@ export type Database = {
           meet_url: string | null
           name: string
           phone: string | null
+          reminder_15min_sent_at: string | null
+          reminder_morning_sent_at: string | null
           requested_slot_iso: string
           session_type: string
           status: string
@@ -1150,6 +1152,8 @@ export type Database = {
           meet_url?: string | null
           name: string
           phone?: string | null
+          reminder_15min_sent_at?: string | null
+          reminder_morning_sent_at?: string | null
           requested_slot_iso: string
           session_type: string
           status?: string
@@ -1169,6 +1173,8 @@ export type Database = {
           meet_url?: string | null
           name?: string
           phone?: string | null
+          reminder_15min_sent_at?: string | null
+          reminder_morning_sent_at?: string | null
           requested_slot_iso?: string
           session_type?: string
           status?: string
