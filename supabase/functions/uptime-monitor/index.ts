@@ -4,6 +4,7 @@
 // Triggered by pg_cron every 5 minutes. Also callable manually (returns JSON).
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { isAdmin as checkIsAdmin } from "../_shared/adminCheck.ts";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -109,15 +110,7 @@ Deno.serve(async (req) => {
       const { data: claimsData } = await userClient.auth.getClaims(provided);
       const userId = claimsData?.claims?.sub;
       if (userId) {
-        const adminProbe = createClient(
-          Deno.env.get("SUPABASE_URL")!,
-          serviceKey,
-        );
-        const { data: isAdmin } = await adminProbe.rpc("has_role", {
-          _user_id: userId,
-          _role: "admin",
-        });
-        if (isAdmin === true) authOk = true;
+        if (await checkIsAdmin(userClient, userId)) authOk = true;
       }
     } catch (err) {
       console.error("Admin auth check failed", err);
