@@ -16,7 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, EVENTS } from "@/lib/analytics";
+import { supabase } from "@/integrations/supabase/client";
 
 const FB_GROUP_URL = "https://www.facebook.com/groups/trendfluxtalent/";
 const TALENT_WHATSAPP_NUMBER = "8801972813761";
@@ -44,12 +45,37 @@ const joinSchema = z.object({
   role: z.enum(ROLE_OPTIONS, {
     errorMap: () => ({ message: "Please select a role" }),
   }),
+  email: z
+    .string()
+    .trim()
+    .email({ message: "Please enter a valid email" })
+    .max(255),
+  phone: z.string().trim().max(40).optional().or(z.literal("")),
+  portfolio_url: z
+    .string()
+    .trim()
+    .url({ message: "Please enter a valid URL (include https://)" })
+    .max(500)
+    .optional()
+    .or(z.literal("")),
 });
+
+type JoinErrors = {
+  name?: string;
+  role?: string;
+  email?: string;
+  phone?: string;
+  portfolio_url?: string;
+};
 
 const JoinNetworkForm = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState<string>("");
-  const [errors, setErrors] = useState<{ name?: string; role?: string }>({});
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [portfolioUrl, setPortfolioUrl] = useState("");
+  const [errors, setErrors] = useState<JoinErrors>({});
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState<{
     name: string;
     role: string;
@@ -58,26 +84,56 @@ const JoinNetworkForm = () => {
   } | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = joinSchema.safeParse({ name, role });
+    if (submitting) return;
+    const result = joinSchema.safeParse({
+      name,
+      role,
+      email,
+      phone,
+      portfolio_url: portfolioUrl,
+    });
     if (!result.success) {
-      const fieldErrors: { name?: string; role?: string } = {};
+      const fieldErrors: JoinErrors = {};
       result.error.issues.forEach((issue) => {
-        const key = issue.path[0] as "name" | "role";
+        const key = issue.path[0] as keyof JoinErrors;
         if (!fieldErrors[key]) fieldErrors[key] = issue.message;
       });
       setErrors(fieldErrors);
       return;
     }
     setErrors({});
-    const message = `Hi TrendFlux Talent! I'd like to join the network.\n\nName: ${result.data.name}\nRole: ${result.data.role}`;
+    setSubmitting(true);
+
+    // Persist to backend (best-effort; do not block WhatsApp handoff on failure).
+    try {
+      const { error: fnErr } = await supabase.functions.invoke("talent-apply", {
+        body: {
+          name: result.data.name,
+          role: result.data.role,
+          email: result.data.email,
+          phone: result.data.phone || undefined,
+          portfolio_url: result.data.portfolio_url || undefined,
+          source: "trendflux_talent_page",
+        },
+      });
+      if (fnErr) console.error("talent-apply invoke error", fnErr);
+    } catch (err) {
+      console.error("talent-apply invoke threw", err);
+    }
+
+    const message = `Hi TrendFlux Talent! I'd like to join the network.\n\nName: ${result.data.name}\nRole: ${result.data.role}\nEmail: ${result.data.email}${result.data.phone ? `\nPhone: ${result.data.phone}` : ""}${result.data.portfolio_url ? `\nPortfolio: ${result.data.portfolio_url}` : ""}`;
     const url = `https://wa.me/${TALENT_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     trackEvent("lead_submit", {
       brand: "trendflux_talent",
       form: "join_network",
       role: result.data.role,
       destination: "whatsapp",
+    });
+    trackEvent(EVENTS.TALENT_APPLY, {
+      brand: "trendflux_talent",
+      role: result.data.role,
     });
     trackEvent("whatsapp_open", {
       brand: "trendflux_talent",
@@ -86,11 +142,12 @@ const JoinNetworkForm = () => {
     });
     window.open(url, "_blank", "noopener,noreferrer");
     toast({
-      title: "Opening WhatsApp",
-      description: `Thanks ${result.data.name} — continue the conversation in WhatsApp.`,
+      title: "Application received",
+      description: `Thanks ${result.data.name} — your details are saved and WhatsApp is opening.`,
     });
     setSubmitted({ name: result.data.name, role: result.data.role, message, url });
     setCopied(false);
+    setSubmitting(false);
   };
 
   const handleCopy = async () => {
@@ -118,6 +175,9 @@ const JoinNetworkForm = () => {
     setSubmitted(null);
     setName("");
     setRole("");
+    setEmail("");
+    setPhone("");
+    setPortfolioUrl("");
     setErrors({});
     setCopied(false);
   };
@@ -129,13 +189,13 @@ const JoinNetworkForm = () => {
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-gold/15">
             <Check className="h-5 w-5" />
           </span>
-          <p className="text-xs uppercase tracking-[0.3em]">Submission ready</p>
+          <p className="text-xs uppercase tracking-[0.3em]">Submission received</p>
         </div>
         <h3 className="text-center font-display text-xl text-[#111111]">
-          Thanks, {submitted.name} — your WhatsApp message is prepared.
+          Thanks, {submitted.name} — your application is in.
         </h3>
         <p className="text-center text-sm text-[#4B5563]">
-          If WhatsApp didn't open, copy the message below and send it to us directly.
+          Our team will review your details shortly. If WhatsApp didn't open, copy the message below and send it to us directly.
         </p>
 
         <div className="rounded-2xl border border-[#E5E7EB] bg-[#F8FAFC] p-4">
@@ -216,9 +276,7 @@ const JoinNetworkForm = () => {
           autoComplete="name"
           aria-invalid={!!errors.name}
         />
-        {errors.name && (
-          <p className="text-xs text-destructive">{errors.name}</p>
-        )}
+        {errors.name && <p className="text-xs text-destructive">{errors.name}</p>}
       </div>
 
       <div className="grid gap-2">
@@ -237,20 +295,75 @@ const JoinNetworkForm = () => {
             ))}
           </SelectContent>
         </Select>
-        {errors.role && (
-          <p className="text-xs text-destructive">{errors.role}</p>
-        )}
+        {errors.role && <p className="text-xs text-destructive">{errors.role}</p>}
+      </div>
+
+      <div className="grid gap-2">
+        <Label htmlFor="tt-email" className="text-xs uppercase tracking-[0.25em] text-[#4B5563]">
+          Email
+        </Label>
+        <Input
+          id="tt-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          maxLength={255}
+          autoComplete="email"
+          aria-invalid={!!errors.email}
+        />
+        {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
+      </div>
+
+      <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid gap-2">
+          <Label htmlFor="tt-phone" className="text-xs uppercase tracking-[0.25em] text-[#4B5563]">
+            Phone / WhatsApp <span className="opacity-60">(optional)</span>
+          </Label>
+          <Input
+            id="tt-phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="+8801XXXXXXXXX"
+            maxLength={40}
+            autoComplete="tel"
+            aria-invalid={!!errors.phone}
+          />
+          {errors.phone && <p className="text-xs text-destructive">{errors.phone}</p>}
+        </div>
+        <div className="grid gap-2">
+          <Label
+            htmlFor="tt-portfolio"
+            className="text-xs uppercase tracking-[0.25em] text-[#4B5563]"
+          >
+            Portfolio URL <span className="opacity-60">(optional)</span>
+          </Label>
+          <Input
+            id="tt-portfolio"
+            type="url"
+            value={portfolioUrl}
+            onChange={(e) => setPortfolioUrl(e.target.value)}
+            placeholder="https://your-portfolio.com"
+            maxLength={500}
+            aria-invalid={!!errors.portfolio_url}
+          />
+          {errors.portfolio_url && (
+            <p className="text-xs text-destructive">{errors.portfolio_url}</p>
+          )}
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
         <button
           type="submit"
-          className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground transition hover:bg-[hsl(var(--primary-glow))]"
+          disabled={submitting}
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground transition hover:bg-[hsl(var(--primary-glow))] disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
             <path d="M20.52 3.48A11.86 11.86 0 0 0 12.04 0C5.5 0 .2 5.3.2 11.84c0 2.09.55 4.13 1.6 5.93L0 24l6.4-1.68a11.83 11.83 0 0 0 5.64 1.43h.01c6.54 0 11.84-5.3 11.84-11.84 0-3.16-1.23-6.13-3.37-8.43Z" />
           </svg>
-          Continue on WhatsApp
+          {submitting ? "Submitting…" : "Submit & Continue on WhatsApp"}
           <ArrowUpRight className="w-4 h-4" />
         </button>
         <a
@@ -263,7 +376,7 @@ const JoinNetworkForm = () => {
         </a>
       </div>
       <p className="text-center text-[11px] text-muted-foreground">
-        We'll never share your details. WhatsApp opens in a new tab with your message ready to send.
+        Your details are saved securely. WhatsApp opens in a new tab so you can continue the conversation.
       </p>
     </form>
   );
@@ -281,7 +394,8 @@ const TrendfluxTalent = () => {
     name: "TrendFlux Talent",
     alternateName: "Brand Promoters & Creator Community BD",
     url: typeof window !== "undefined" ? window.location.href.split("#")[0] : undefined,
-    description: "AI-powered creator-led growth platform connecting Bangladeshi brands with curated promoters, models, and digital storytellers.",
+    description:
+      "AI-powered creator-led growth platform connecting Bangladeshi brands with curated promoters, models, and digital storytellers.",
     areaServed: "Bangladesh",
     parentOrganization: { "@type": "Organization", name: "TrendFlux" },
   });
@@ -292,7 +406,6 @@ const TrendfluxTalent = () => {
           <Users className="w-3 h-3" /> Platform · Creator Network
         </div>
 
-        {/* Brand logo */}
         <div className="mt-12 flex justify-center">
           <img
             src={trendfluxTalentLogo}
@@ -348,7 +461,6 @@ const TrendfluxTalent = () => {
       </section>
 
       <section id="join" className="relative mt-12 rounded-3xl border border-[#E5E7EB] bg-white p-8 text-center">
-        {/* Corner brackets */}
         <span aria-hidden className="absolute top-3 left-3 w-5 h-5 border-t border-l border-[#E5E7EB]" />
         <span aria-hidden className="absolute top-3 right-3 w-5 h-5 border-t border-r border-[#E5E7EB]" />
         <span aria-hidden className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-[#E5E7EB]" />
@@ -365,19 +477,22 @@ const TrendfluxTalent = () => {
         title="Creators & Brands Already Inside"
         items={[
           {
-            quote: "Onboarding to TrendFlux Talent connected us with three creators who actually understood our brand voice.",
+            quote:
+              "Onboarding to TrendFlux Talent connected us with three creators who actually understood our brand voice.",
             name: "Nazia Rahman",
             role: "Co-founder, Banani Skincare Studio",
             outcome: "12 UGC pieces in 3 weeks",
           },
           {
-            quote: "The AI matching saved us months of manual scouting. We launched in Dhaka and ranked top 5 in our niche.",
+            quote:
+              "The AI matching saved us months of manual scouting. We launched in Dhaka and ranked top 5 in our niche.",
             name: "Imran Chowdhury",
             role: "Growth Lead, Uttara D2C Brand",
             outcome: "5× ROAS on first campaign",
           },
           {
-            quote: "As a creator, this is the first platform that treated me like a partner, not a freelancer.",
+            quote:
+              "As a creator, this is the first platform that treated me like a partner, not a freelancer.",
             name: "Mehzabin Akter",
             role: "Lifestyle Creator, 180k followers · Dhaka",
             outcome: "4 long-term brand deals signed",

@@ -33,6 +33,7 @@ export const routes = {
   "/admin/luxe-veil": make(() => import("@/pages/LuxeVeilAdmin")),
   "/admin/conversions": make(() => import("@/pages/ConversionDashboard")),
   "/admin/enterprise-demos": make(() => import("@/pages/EnterpriseDemos")),
+  "/admin/talent": make(() => import("@/pages/TalentApplicationsAdmin")),
   "/admin/course-enrollments": make(() => import("@/pages/CourseEnrollmentsAdmin")),
   "/admin/uptime": make(() => import("@/pages/UptimeAdmin")),
   "/admin/errors": make(() => import("@/pages/ErrorLogsAdmin")),

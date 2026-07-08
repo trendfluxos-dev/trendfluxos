@@ -104,6 +104,65 @@ export type Database = {
         }
         Relationships: []
       }
+      booking_payments: {
+        Row: {
+          amount: number
+          booking_id: string
+          created_at: string
+          currency: string
+          id: string
+          method: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sender_number: string
+          status: Database["public"]["Enums"]["booking_payment_status"]
+          student_id: string
+          trx_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          booking_id: string
+          created_at?: string
+          currency?: string
+          id?: string
+          method?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sender_number: string
+          status?: Database["public"]["Enums"]["booking_payment_status"]
+          student_id: string
+          trx_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          booking_id?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          method?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sender_number?: string
+          status?: Database["public"]["Enums"]["booking_payment_status"]
+          student_id?: string
+          trx_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_payments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "tutor_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       certificates: {
         Row: {
           course_slug: string
@@ -1031,6 +1090,69 @@ export type Database = {
         }
         Relationships: []
       }
+      talent_applications: {
+        Row: {
+          cover_letter: string | null
+          created_at: string
+          email: string
+          experience_years: number | null
+          id: string
+          linkedin_url: string | null
+          metadata: Json
+          name: string
+          phone: string | null
+          portfolio_url: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          role: string
+          skills: string[]
+          source: string
+          status: Database["public"]["Enums"]["talent_application_status"]
+          updated_at: string
+        }
+        Insert: {
+          cover_letter?: string | null
+          created_at?: string
+          email: string
+          experience_years?: number | null
+          id?: string
+          linkedin_url?: string | null
+          metadata?: Json
+          name: string
+          phone?: string | null
+          portfolio_url?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          role: string
+          skills?: string[]
+          source?: string
+          status?: Database["public"]["Enums"]["talent_application_status"]
+          updated_at?: string
+        }
+        Update: {
+          cover_letter?: string | null
+          created_at?: string
+          email?: string
+          experience_years?: number | null
+          id?: string
+          linkedin_url?: string | null
+          metadata?: Json
+          name?: string
+          phone?: string | null
+          portfolio_url?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          role?: string
+          skills?: string[]
+          source?: string
+          status?: Database["public"]["Enums"]["talent_application_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       teacher_notes: {
         Row: {
           class_id: string
@@ -1926,6 +2048,13 @@ export type Database = {
         | "finance"
         | "teacher"
         | "student"
+      booking_payment_status: "submitted" | "approved" | "rejected" | "refunded"
+      talent_application_status:
+        | "new"
+        | "reviewing"
+        | "shortlisted"
+        | "rejected"
+        | "hired"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2061,6 +2190,14 @@ export const Constants = {
         "finance",
         "teacher",
         "student",
+      ],
+      booking_payment_status: ["submitted", "approved", "rejected", "refunded"],
+      talent_application_status: [
+        "new",
+        "reviewing",
+        "shortlisted",
+        "rejected",
+        "hired",
       ],
     },
   },

@@ -1,82 +1,86 @@
-# Founder eBook — `/founder`
+# Implementation Plan — 4 Ecosystem Backend Features
 
-A single, premium, investor-grade page that reads like a corporate annual report and exports to A4 PDF. All content is pulled from data that already exists in the codebase — no invented copy.
+## 1. Auto-Assign Role on Signup — ✅ Already Done
+Previous migration extended `handle_new_user()` trigger to map `raw_user_meta_data.role` / `intended_role` into `user_roles` for `student`, `teacher`, `tutor`, `editor`, `user`. Admin/finance excluded (privilege escalation guard). No further work.
 
-## Scope of this build
+**Verify only:** sign up test user with `?role=teacher` and confirm row appears in `user_roles`.
 
-- One new public route: `/founder` (SEO-indexed, mobile-first, dark/light).
-- One new print stylesheet + one client-side PDF export path.
-- Zero duplication: reuse `src/data/*`, `src/content/*`, existing page copy and existing hero portrait.
-- Link back to the source page from every chapter ("Read the full section →").
+---
 
-Out of scope for v1 (call out explicitly so we don't over-promise):
-- Bookmarks panel, in-page search, "automatic technology detection" from arbitrary pages, dark mode toggle wired to full theme. If wanted, these ship in a follow-up.
+## 2. TrendFlux Talent Backend
 
-## Chapters (rendered as a paginated eBook)
+**New table `talent_applications`**
+- Columns: name, email, phone, portfolio_url, linkedin_url, skills (text[]), experience_years (int), cover_letter, status (`new | reviewing | shortlisted | rejected | hired`), source, metadata (jsonb), reviewed_by, reviewed_at
+- RLS: anon can INSERT; only admin/editor can SELECT/UPDATE; audit-logged
+- GRANT: `INSERT` to anon, full CRUD to authenticated (policy-gated), `ALL` to service_role
 
-Each chapter is one screen-height section on web, one A4 page in print. Order matches the spec:
+**New edge function `talent-apply`** (`verify_jwt = false`)
+- Zod-validated body, IP rate-limit (5/hour per IP), inserts row via service role, fires Telegram alert with Approve/Reject-style buttons routed through existing `telegram-webhook` → new callback path
+- Reuses `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID`
 
-1. **Cover** — portrait (`zahid-hasan-emon.webp`), name, role, brand, tagline from `BRAND`.
-2. **Table of Contents** — auto-generated from chapter registry, page numbers computed for print.
-3. **About** — pulled from `src/pages/About.tsx` copy + `PRINCIPLES` array.
-4. **Founder Story** — summary block from `src/data/aiExpertEmonStory.ts` + link to `/stories/ai-expert-emon`.
-5. **Philosophy & The Stand** — excerpts from `src/content/theStand.ts` + iconic quote via existing `IconicQuote`.
-6. **Quiet Positions** — from `src/content/quietPositions.ts`.
-7. **Expertise Grid** — icon cards derived from `src/config/siteLayers.ts` + `src/data/home.ts` (Systems He Built).
-8. **Portfolio & Major Projects** — from `src/data/showcase.ts`, `src/data/caseStudies.ts`, `src/config/brandRoutes.json`. Card grid with role/status/link.
-9. **Leadership & Operator Model** — from `src/pages/ProjectLead.tsx`.
-10. **Open Initiatives** — from `src/pages/BrandOpen.tsx`.
-11. **Talent** — from `src/pages/TrendfluxTalent.tsx`.
-12. **Courses** — from `src/data/edtechCourses.ts`, `src/pages/CourseTrendflux.tsx`, `src/pages/Masterclass.tsx`.
-13. **Media Coverage** — from `usePressItems` hook / press data; timeline of cards.
-14. **Public Interest** — from `src/pages/JusticeAppeal.tsx` + `src/data/research.ts`.
-15. **Statistics** — counters computed from the arrays above (project count, brand count, press count, course count) — real numbers only.
-16. **Technology Stack** — badges derived from a `TECH_STACK` constant we extract from existing project metadata (no fabrication; only tech already named in `showcase.ts`/`caseStudies.ts`).
-17. **Gallery** — reuses portraits from `/marriage` gallery + hero portrait + press photos already imported.
-18. **Contact** — from `src/config/brand.ts` and `src/config/socialConfig.ts`.
-19. **Back cover** — QR code to `https://trendflux.digital/founder` + colophon.
+**Frontend `src/pages/TrendfluxTalent.tsx`**
+- Wire existing form to `supabase.functions.invoke("talent-apply", …)` with success/error toasts
+- Client-side Zod validation mirrors server schema
 
-Testimonials & Awards: included **only if** we find existing arrays in the codebase. If not present, chapter is skipped rather than faked.
+**Admin page `src/pages/TalentApplicationsAdmin.tsx`** (`/admin/talent`)
+- List/filter by status, view detail, status transition buttons, exposes portfolio/LinkedIn links
+- Add nav entry in `Admin.tsx`
 
-## PDF export
+---
 
-- Client-side, print-based. Button in the sticky chapter nav calls `window.print()`.
-- Dedicated `@media print` stylesheet: A4, 15mm margins, forces light theme, page-breaks between chapters, running header (name • Founder Profile) and footer (page N / total, `trendflux.digital`).
-- All internal `<a>` tags stay clickable in the printed PDF (browsers preserve href on print).
-- QR code rendered inline via `qrcode` (already in-repo if present; otherwise add as a tiny dependency — confirm before install).
-- "Save as PDF" instruction hint shown in the print dialog helper toast.
+## 3. Tutor Booking Payment (reuse course-payment pattern)
 
-No server-side PDF generation, no Puppeteer, no external service — keeps the app static and free.
+**Schema changes**
+- `tutor_bookings.status` enum widened: add `payment_submitted`, `approved`, `rejected` (keep existing `pending`, `confirmed`, `completed`, `cancelled`, `no_show`)
+- New table `booking_payments`: booking_id (FK → tutor_bookings), trx_id, sender_number, amount, currency, method (`bkash` default), status (`submitted | approved | rejected`), reviewed_by, reviewed_at, notes
+- RLS: student sees own; tutor sees for their bookings; admin sees all; service_role full
+- Trigger to enforce booking status transitions server-side (extend `enforce_tutor_booking_update()`)
 
-## File plan (technical section)
+**Edge function `tutor-booking-payment-submit`**
+- Student submits TrxID + phone; flips booking to `payment_submitted`; Telegram alert to admin with inline Approve/Reject
+- Mirrors `course-payment-submit`
 
-New:
-- `src/pages/Founder.tsx` — page shell, chapter registry, TOC, sticky chapter nav, print button, SEO/JSON-LD.
-- `src/components/founder/Chapter.tsx` — chapter wrapper (title, eyebrow, source link, page-break-before in print).
-- `src/components/founder/CoverPage.tsx`, `BackCover.tsx`, `TableOfContents.tsx`.
-- `src/components/founder/StatsCounters.tsx`, `TechStack.tsx`, `MediaTimeline.tsx`, `ProjectGrid.tsx`, `ExpertiseGrid.tsx`.
-- `src/data/founder.ts` — pure aggregator: imports the existing data modules and re-exports typed chapter payloads. No new copy.
-- `src/styles/founder-print.css` — A4 print rules, imported by `Founder.tsx`.
+**Edge function `tutor-booking-payment-decision`**
+- Admin (or Telegram callback) approves → booking `approved` → notifies student + tutor via Telegram/email
+- Reject → status `rejected`, notifies student with reason
 
-Edited:
-- `src/App.tsx` — add `<Route path="/founder" element={<Founder />} />`.
-- `public/sitemap-pages.xml` — add `/founder`.
-- `src/lib/routeSearch.ts` / command palette entry — add "Founder Profile".
+**Frontend**
+- `EdtechTutorBook.tsx`: on booking-created success, route to a new `BookingPayment` step showing bKash payment number, amount, TrxID form
+- `EdtechMyBookings.tsx`: show payment status badge + resubmit if rejected
+- `EdtechTeachBookings.tsx`: show payment state so tutor knows before class
 
-Not touched: existing founder pages, brand tokens, backend, auth.
+---
 
-## Layout & aesthetic
+## 4. GA4 Verification & Wiring
 
-- Corporate annual-report feel: generous whitespace, thin rules, hairline dividers, single accent (existing `--primary`). No purple gradients.
-- Typography: existing `font-display` for chapter titles, `font-sans` for body. Numeric stats set in tabular-nums.
-- Web: single column max-w-3xl reading measure, chapter nav sticky on right (desktop) / top drawer (mobile).
-- Print: same content, forced 1-column, 11pt body, 22pt chapter titles.
+**Env + init**
+- Add `VITE_GA4_ID` env (documented; user supplies `G-XXXXXXXXXX` via secret UI equivalent)
+- Inject GA4 snippet in `src/main.tsx` conditionally (`if (import.meta.env.VITE_GA4_ID)`) — no `<script>` edit to `index.html`
+- Extend `src/lib/analytics.ts` with typed helpers: `trackPageView`, `trackLead`, `trackBookDemo`, `trackEnroll`, `trackBooking`, `trackPurchase`, `trackCertVerify`, `trackMarriageInquiry`, `trackTalentApp`
 
-## Open questions before I build
+**Instrument key funnels**
+- Auth signup, GrowthOS lead submit, Enterprise demo, Course enroll, Tutor booking, Certificate verify, Marriage inquiry, Talent application
 
-1. **QR code library** — okay to add `qrcode` (~15kb)? Alternative: pre-render a static SVG QR to `/founder` and skip the dep.
-2. **Testimonials** — do you already have a testimonials source I should use, or leave that chapter out for v1?
-3. **Include `/marriage` content?** Spec marks it "private section if allowed" — default is to **exclude** it from the public eBook (page is `noindex`); confirm.
-4. **PDF strategy** — okay with browser print-to-PDF (zero dependencies, perfect fidelity) versus adding `html2pdf.js`/`jsPDF` (larger bundle, more brittle)?
+**Admin verification page `/admin/ga4-check`** (already exists — enhance)
+- Show configured Measurement ID, presence of `window.gtag`, ping test event, display last-seen event via existing `ga4-checker` fn
 
-Once these four are answered I'll ship the full page + print stylesheet + PDF button in one pass.
+---
+
+## Order of Work
+
+1. Confirm #1 works (quick test).
+2. Feature #2 Talent (migration → fn → frontend → admin).
+3. Feature #3 Tutor payment (migration → fns → frontend flows).
+4. Feature #4 GA4 (env + init + instrumentation + admin enhance).
+
+Each feature ships end-to-end (DB → fn → UI → admin visibility) before starting the next, so we don't leave partial state.
+
+## Technical Notes
+
+- All new tables follow: `CREATE TABLE → GRANT → ALTER … ENABLE RLS → CREATE POLICY` in one migration.
+- Telegram notifications reuse existing `telegram-webhook` inline keyboard pattern used by `access-decision`.
+- No new secrets required (Telegram + Lovable AI already configured). GA4 ID is a public value; safe in `.env` as `VITE_GA4_ID`.
+- Zod validation on every new edge function; `corsHeaders` on every response including errors.
+- Booking status transitions enforced by trigger, not client — prevents privilege bypass.
+
+Estimated: ~1 migration + 3 edge functions + 4 frontend files + 1 admin page per major feature. Total 3 migrations, ~5 edge functions, ~10 new/edited frontend files.
