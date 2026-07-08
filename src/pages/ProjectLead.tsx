@@ -34,6 +34,50 @@ const metrics = [
 ];
 
 const transformations = [
+];
+
+const _placeholder_ = null;
+
+const educationRecords = [
+  {
+    degree: "BSc (Honours) in Information Technology",
+    institution: "Institute of Information Technology (IIT), Jahangirnagar University",
+    period: "2020 — 2024",
+    status: "Completed",
+    focus: "Software Engineering · Data Systems · Digital Product Strategy",
+  },
+  {
+    degree: "Higher Secondary Certificate (HSC) — Science",
+    institution: "Motijheel Model College, Dhaka",
+    period: "2017 — 2019",
+    status: "Passed",
+    focus: "Physics · Mathematics · ICT",
+  },
+  {
+    degree: "Secondary School Certificate (SSC) — Science",
+    institution: "Motijheel Government Boys' High School, Dhaka",
+    period: "2015 — 2017",
+    status: "Passed",
+    focus: "Science group · ICT foundation",
+  },
+];
+
+const certifications = [
+  {
+    title: "Official University Certificates — BSc (Honours) in IT",
+    issuer: "IIT, Jahangirnagar University",
+    date: "22 May 2024",
+    note: "Verified academic transcript & provisional certificate on file.",
+  },
+  {
+    title: "Digital Marketing & Growth Systems",
+    issuer: "Industry programs · self-attested portfolio",
+    date: "2022 — 2025",
+    note: "Applied on live D2C, EdTech and creator brands (see Case Files).",
+  },
+];
+
+const _transformations_real = [
   {
     client: "Kormoshikkha (EdTech)",
     stage: "0 → 1 launch",
