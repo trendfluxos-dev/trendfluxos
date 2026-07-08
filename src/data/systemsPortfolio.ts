@@ -22,6 +22,10 @@ export type SystemCase = {
   icon: LucideIcon;
   /** Bento tile size on lg+ (12-col grid). */
   size: "hero" | "wide" | "square" | "half";
+  /** 1–2 line case summary rendered in the narrative card below the tile. */
+  summary: string;
+  /** 3–4 bullets describing what was actually shipped. */
+  built: string[];
 };
 
 /**
@@ -42,6 +46,14 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     linkLabel: "Enter Growth-OS",
     icon: TrendingUp,
     size: "hero",
+    summary:
+      "A lead never sits idle. Growth-OS captures, enriches and paces every conversation until it becomes a booked call.",
+    built: [
+      "Lead capture forms + enrichment pipeline (n8n)",
+      "Automated outreach sweeper with retry + throttle",
+      "Admin console: pipeline, notes, disposition",
+      "Audit trail on every action for compliance",
+    ],
   },
   {
     slug: "edtech",
@@ -55,6 +67,14 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     linkLabel: "See Masterclass",
     icon: GraduationCap,
     size: "wide",
+    summary:
+      "One LMS running courses, live classes, voice lectures, certificates and a tutor marketplace under one roof.",
+    built: [
+      "Module enrollment + gated lesson PDFs (signed URLs)",
+      "Live class studio with RSVPs + recordings",
+      "Voice-note lectures with AI transcripts + flashcards",
+      "Certificates + tutor booking marketplace",
+    ],
   },
   {
     slug: "luxe-veil",
@@ -68,6 +88,13 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     linkLabel: "Visit Luxe Veil",
     icon: Sparkles,
     size: "square",
+    summary:
+      "A private wedding concierge that opens only after an invite code — the funnel itself is the filter.",
+    built: [
+      "Invite-code gate before any intake",
+      "Private RSVP + inquiry form",
+      "Admin review flow with status transitions",
+    ],
   },
   {
     slug: "brandtoki",
@@ -81,6 +108,13 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     linkLabel: "Visit BrandToki",
     icon: Palette,
     size: "square",
+    summary:
+      "A creator studio pipeline from script to publish, with a queue an operator can actually see and steer.",
+    built: [
+      "Creator Studio admin (draft, review, schedule)",
+      "Content library with status + owner",
+      "Publish queue wired to social channels",
+    ],
   },
   {
     slug: "enterprise",
@@ -94,6 +128,13 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     linkLabel: "Enterprise portal",
     icon: Building2,
     size: "square",
+    summary:
+      "A private portal for enterprise teams — everything role-gated, everything audit-logged.",
+    built: [
+      "Demo request intake with server-side validation",
+      "Role-gated admin panels (admin / editor / viewer)",
+      "Access audit logs with retention policy",
+    ],
   },
   {
     slug: "voice-ai",
@@ -107,6 +148,13 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     linkLabel: "Internal system",
     icon: Mic,
     size: "wide",
+    summary:
+      "The internal voice layer: cloned voices generate lecture audio on demand, delivered through signed URLs only.",
+    built: [
+      "XTTS deployment + voice profile store",
+      "Signed-URL pipeline across 5 storage buckets",
+      "Voice cache for cost + latency",
+    ],
   },
   {
     slug: "email-telegram-ops",
@@ -120,6 +168,13 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     linkLabel: "Internal system",
     icon: Send,
     size: "half",
+    summary:
+      "The nervous system: every email queued through pgmq, every alert routed through Telegram, 24/7.",
+    built: [
+      "pgmq queue → Resend delivery with retry + DLQ",
+      "Telegram bot for support sessions + admin alerts",
+      "Uptime + Postgres error monitor with Telegram push",
+    ],
   },
   {
     slug: "justice-appeal",
@@ -133,5 +188,12 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
     linkLabel: "Read the appeal",
     icon: Scale,
     size: "half",
+    summary:
+      "A public accountability record built as a real product — press archive, share kit, and story signal.",
+    built: [
+      "Press items archive with public read policies",
+      "Share kit for reporters + supporters",
+      "Story signal page linked from founder + brand layers",
+    ],
   },
 ];
