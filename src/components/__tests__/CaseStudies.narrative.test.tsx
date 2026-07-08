@@ -36,8 +36,10 @@ describe("CaseStudies narrative flow (e2e-style)", () => {
     // The trigger reflects its expanded state.
     expect(openBtn).toHaveAttribute("aria-expanded", "true");
 
-    // 3. Close returns us to the card list.
-    fireEvent.click(within(dialog).getByRole("button", { name: /^Close$/i }));
+    // 3. Close returns us to the card list. Radix renders both an
+    // icon-only 'X Close' and our footer 'Close' — click the footer one.
+    const closeButtons = within(dialog).getAllByRole("button", { name: /^Close$/i });
+    fireEvent.click(closeButtons[closeButtons.length - 1]);
     expect(
       screen.queryByRole("dialog", {
         name: /Education Brand Growth System/i,
@@ -62,7 +64,8 @@ describe("CaseStudies narrative flow (e2e-style)", () => {
       fireEvent.click(trigger);
       const dialog = await screen.findByRole("dialog");
       expect(dialog).toBeInTheDocument();
-      fireEvent.click(within(dialog).getByRole("button", { name: /^Close$/i }));
+      const closes = within(dialog).getAllByRole("button", { name: /^Close$/i });
+      fireEvent.click(closes[closes.length - 1]);
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     }
   });
