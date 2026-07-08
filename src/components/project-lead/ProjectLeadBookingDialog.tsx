@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import TimeslotPicker, { type Timeslot } from "@/components/booking/TimeslotPicker";
 
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
@@ -31,14 +32,14 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
-  const [preferredTime, setPreferredTime] = useState("");
+  const [slot, setSlot] = useState<Timeslot | null>(null);
   const [goal, setGoal] = useState("");
 
   const reset = () => {
     setName("");
     setEmail("");
     setCompany("");
-    setPreferredTime("");
+    setSlot(null);
     setGoal("");
   };
 
@@ -55,10 +56,14 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
       toast({ title: "Enter a valid email", variant: "destructive" });
       return;
     }
+    if (!slot) {
+      toast({ title: "Pick a preferred date and time", variant: "destructive" });
+      return;
+    }
 
     setSubmitting(true);
     const message = [
-      preferredTime && `Preferred time: ${preferredTime}`,
+      `Preferred slot: ${slot.label} (${slot.iso})`,
       goal && `Goal: ${goal}`,
     ]
       .filter(Boolean)
@@ -71,6 +76,12 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
         company: company.trim() || undefined,
         message: message || "Book Direct with Project Lead",
         source: "project-lead-booking",
+        slot: {
+          date: slot.date,
+          time: slot.time,
+          iso: slot.iso,
+          label: slot.label,
+        },
       },
     });
     setSubmitting(false);
@@ -137,15 +148,13 @@ const ProjectLeadBookingDialog = ({ open, onOpenChange }: Props) => {
               autoComplete="organization"
             />
           </div>
-          <div className="grid gap-2">
-            <Label htmlFor="pl-time">Preferred time</Label>
-            <Input
-              id="pl-time"
-              placeholder="e.g. Weekdays 4–7 PM BDT"
-              value={preferredTime}
-              onChange={(e) => setPreferredTime(e.target.value)}
-            />
-          </div>
+          <TimeslotPicker
+            idPrefix="pl-slot"
+            value={slot}
+            onChange={setSlot}
+            disabled={submitting}
+            required
+          />
           <div className="grid gap-2">
             <Label htmlFor="pl-goal">What do you want to solve?</Label>
             <Input
