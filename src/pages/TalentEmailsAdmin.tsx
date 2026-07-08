@@ -702,7 +702,7 @@ export default function TalentEmailsAdmin() {
                     <h4 className="text-sm font-semibold">
                       Per-email delivery log
                     </h4>
-                    <div className="flex items-center gap-3 text-[11px] text-foreground/60">
+                    <div className="flex flex-wrap items-center gap-3 text-[11px] text-foreground/60">
                       <span className="inline-flex items-center gap-1">
                         <CheckCircle2 className="h-3 w-3 text-emerald-600" /> success
                       </span>
@@ -712,6 +712,52 @@ export default function TalentEmailsAdmin() {
                       <span className="inline-flex items-center gap-1">
                         <Ban className="h-3 w-3 text-amber-600" /> post-cancel
                       </span>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-[11px]"
+                        disabled={sendingAll || failedStatuses.length === 0}
+                        onClick={retryFailed}
+                        title={
+                          failedStatuses.length === 0
+                            ? "No failed emails to retry"
+                            : `Retry ${failedStatuses.length} failed email${
+                                failedStatuses.length === 1 ? "" : "s"
+                              }`
+                        }
+                      >
+                        <Send className="mr-1 h-3 w-3" />
+                        Retry failed
+                        {failedStatuses.length > 0 && (
+                          <span className="ml-1 rounded-full bg-destructive/15 px-1.5 text-destructive">
+                            {failedStatuses.length}
+                          </span>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="h-7 px-2 text-[11px]"
+                        disabled={sendingAll || skippedStatuses.length === 0}
+                        onClick={resumeSkipped}
+                        title={
+                          skippedStatuses.length === 0
+                            ? "Nothing to resume"
+                            : `Resume ${skippedStatuses.length} remaining email${
+                                skippedStatuses.length === 1 ? "" : "s"
+                              }`
+                        }
+                      >
+                        <Send className="mr-1 h-3 w-3" />
+                        Resume remaining
+                        {skippedStatuses.length > 0 && (
+                          <span className="ml-1 rounded-full bg-amber-500/15 px-1.5 text-amber-700 dark:text-amber-400">
+                            {skippedStatuses.length}
+                          </span>
+                        )}
+                      </Button>
                       <button
                         type="button"
                         className="text-primary underline-offset-2 hover:underline"
@@ -719,6 +765,7 @@ export default function TalentEmailsAdmin() {
                           setBulkResults([]);
                           setBulkProgress(null);
                           setCancelRequestedAt(null);
+                          setLastMappedList([]);
                         }}
                       >
                         Clear
