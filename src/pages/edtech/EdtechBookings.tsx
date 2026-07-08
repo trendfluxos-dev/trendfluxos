@@ -21,12 +21,12 @@ type Booking = {
 };
 
 type PayMethod = "bkash" | "nagad" | "rocket";
-const DEFAULT_RECEIVE_NUMBERS: Record<PayMethod, string> = {
+export const DEFAULT_RECEIVE_NUMBERS: Record<PayMethod, string> = {
   bkash: "01756004037",
   nagad: "01756004037",
   rocket: "01756004037",
 };
-const RECEIVE_SETTING_KEYS: Record<PayMethod, string> = {
+export const RECEIVE_SETTING_KEYS: Record<PayMethod, string> = {
   bkash: "receive_number_bkash",
   nagad: "receive_number_nagad",
   rocket: "receive_number_rocket",
