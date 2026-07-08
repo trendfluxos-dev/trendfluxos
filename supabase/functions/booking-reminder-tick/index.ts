@@ -147,9 +147,40 @@ function plainText(html: string) {
 }
 
 Deno.serve(async (req) => {
+  const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+  const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+
+  // Auth gate: allow cron/service-role bearer OR authenticated admin JWT.
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const bearer = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  let authorized = false;
+  if (bearer && bearer === SERVICE_ROLE) {
+    authorized = true;
+  } else if (bearer) {
+    try {
+      const userClient = createClient(SUPABASE_URL, ANON_KEY, {
+        global: { headers: { Authorization: `Bearer ${bearer}` } },
+      });
+      const { data: claims } = await userClient.auth.getClaims(bearer);
+      if (claims?.claims?.sub) {
+        const { data: isAdmin } = await userClient.rpc("current_user_has_role", { _role: "admin" });
+        if (isAdmin) authorized = true;
+      }
+    } catch {
+      // fall through
+    }
+  }
+  if (!authorized) {
+    return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const supabase = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    SUPABASE_URL,
+    SERVICE_ROLE,
   );
 
   const now = new Date();
@@ -169,7 +200,7 @@ Deno.serve(async (req) => {
 
   if (error) {
     console.error("booking-reminder-tick query failed", error);
-    return new Response(JSON.stringify({ ok: false, error: error.message }), { status: 500 });
+    return new Response(JSON.stringify({ ok: false, error: "query_failed" }), { status: 500 });
   }
 
   const bookings = (rows ?? []) as Booking[];
@@ -247,8 +278,13 @@ Deno.serve(async (req) => {
     }
   }
 
+  // Return aggregate counts only — do not leak booking UUIDs to caller.
   return new Response(
-    JSON.stringify({ ok: true, scanned: bookings.length, dispatched }),
+    JSON.stringify({
+      ok: true,
+      scanned: bookings.length,
+      dispatched_count: dispatched.length,
+    }),
     { headers: { "Content-Type": "application/json" } },
   );
 });

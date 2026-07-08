@@ -88,16 +88,25 @@ Deno.serve(async (req) => {
           return json({ error: "forbidden" }, 403);
         }
       } else if (bucket === "lesson-pdfs") {
+        // Enforce per-module authorization. Path must start with `module-<N>/...`
+        // and the caller must have a confirmed enrollment for that module_index.
+        const moduleMatch = path.match(/^module-(\d+)\//);
+        if (!moduleMatch) {
+          await audit("denied", "invalid_module_path");
+          return json({ error: "path must be prefixed with module-<N>/" }, 400);
+        }
+        const moduleIndex = parseInt(moduleMatch[1], 10);
         const { data: enrolled, error: enrErr } = await userClient
           .from("module_enrollments")
           .select("id")
           .eq("user_id", userId)
           .eq("status", "confirmed")
+          .eq("module_index", moduleIndex)
           .limit(1)
           .maybeSingle();
         if (enrErr || !enrolled) {
-          await audit("denied", "no_enrollment");
-          return json({ error: "enrollment required" }, 403);
+          await audit("denied", `no_enrollment_module_${moduleIndex}`);
+          return json({ error: "enrollment required for this module" }, 403);
         }
       } else if (bucket === "class-materials") {
         if (!path.startsWith(`${userId}/`)) {
