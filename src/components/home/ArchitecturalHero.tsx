@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, CalendarCheck } from "lucide-react";
+import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
 
 /**
  * Architectural portfolio hero — replaces the multi-section top of the
@@ -40,6 +42,7 @@ const widthClass: Record<Brand["strength"], string> = {
 };
 
 export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => void }) {
+  const [bookingOpen, setBookingOpen] = useState(false);
   return (
     <section
       aria-labelledby="home-hero-heading"
