@@ -47,12 +47,19 @@ export const SystemsBentoSection = ({
         ))}
       </ul>
 
-      {/* Narrative cards: 1–2 line case summary + What we built bullets */}
+      {/* Narrative cards: 1–2 line case summary + What we built bullets.
+          Grid: 1-col mobile → 2-col md → 3-col xl. `items-stretch` + h-full
+          on each card keeps rows equal-height so nothing shifts as fonts load. */}
       <div className="mt-10 sm:mt-12">
         <h3 className="text-[11px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
           Case notes · What we built
         </h3>
-        <ul className="mt-5 grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        <ul
+          className={cn(
+            "mt-5 grid items-stretch gap-4 sm:gap-5",
+            "grid-cols-1 md:grid-cols-2 xl:grid-cols-3",
+          )}
+        >
           {SYSTEMS_PORTFOLIO.map((s) => (
             <NarrativeCard key={`${s.slug}-narrative`} system={s} />
           ))}
@@ -65,42 +72,65 @@ export const SystemsBentoSection = ({
 const NarrativeCard = ({ system }: { system: SystemCase }) => {
   const Icon = system.icon;
   return (
-    <li className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-colors hover:border-primary/40 sm:p-6">
+    <li
+      className={cn(
+        // Stretch to fill the grid row so every card in a row is equal height.
+        "group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl",
+        "border border-border bg-card shadow-sm transition-colors hover:border-primary/40",
+        // Uniform, consistent padding across breakpoints.
+        "p-6",
+      )}
+    >
+      {/* top accent hairline */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-60"
       />
-      <div className="flex items-center gap-3">
-        <span className="inline-grid h-9 w-9 place-items-center rounded-lg border border-primary/25 bg-primary/[0.06] text-primary">
-          <Icon className="h-4 w-4" aria-hidden />
+
+      {/* Header — icon + eyebrow + title. Fixed icon box prevents CLS. */}
+      <header className="flex items-start gap-3">
+        <span
+          aria-hidden
+          className="inline-grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-primary/25 bg-primary/[0.06] text-primary"
+        >
+          <Icon className="h-4 w-4" />
         </span>
-        <div className="min-w-0">
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-medium uppercase leading-[1.4] tracking-[0.22em] text-muted-foreground">
             {system.eyebrow}
           </p>
-          <p className="font-display text-[15px] font-semibold leading-tight tracking-tight text-foreground">
+          <h4 className="mt-1 font-display text-[15px] font-semibold leading-snug tracking-tight text-foreground">
             {system.title}
-          </p>
+          </h4>
         </div>
-      </div>
-      <p className="mt-4 text-[13.5px] leading-relaxed text-muted-foreground">
+      </header>
+
+      {/* Summary — clamped to keep the header row and bullets aligned across
+          cards. Reserves 3 lines of height so cards never jump as fonts load. */}
+      <p
+        className="mt-5 line-clamp-3 min-h-[calc(1.55em*3)] text-[13.5px] leading-[1.55] text-muted-foreground"
+        title={system.summary}
+      >
         {system.summary}
       </p>
-      <div className="mt-4">
-        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-foreground/70">
+
+      {/* Bullets pinned to the bottom so the "What we built" label sits at
+          the same y across cards regardless of summary length. */}
+      <div className="mt-5 flex flex-1 flex-col">
+        <p className="text-[10px] font-medium uppercase leading-[1.4] tracking-[0.22em] text-foreground/70">
           What we built
         </p>
-        <ul className="mt-2.5 space-y-1.5">
+        <ul className="mt-3 space-y-2">
           {system.built.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-2 text-[13px] leading-relaxed text-foreground/85"
+              className="flex items-start gap-2 text-[13px] leading-[1.55] text-foreground/85"
             >
               <Check
-                className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary"
                 aria-hidden
+                className="mt-[3px] h-3.5 w-3.5 shrink-0 text-primary"
               />
-              <span>{item}</span>
+              <span className="min-w-0">{item}</span>
             </li>
           ))}
         </ul>
