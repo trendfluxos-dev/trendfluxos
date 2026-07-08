@@ -14,6 +14,17 @@ import {
 import { toast } from "sonner";
 import { Loader2, ExternalLink, Mail, Phone, Users } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
+import {
+  DEFAULT_STATUS_MAP,
+  DEFAULT_TEMPLATES,
+  STATUS_MAP_KEY,
+  TEMPLATES_KEY,
+  renderTemplate,
+  type TalentStatusMap,
+  type TalentTemplates,
+  type TemplateKey,
+} from "./TalentEmailsAdmin";
+import { Link } from "react-router-dom";
 
 type Status = "new" | "reviewing" | "shortlisted" | "rejected" | "hired";
 const STATUSES: readonly Status[] = [
@@ -65,6 +76,8 @@ export default function TalentApplicationsAdmin() {
   const [filter, setFilter] = useState<Status | "all">("all");
   const [savingId, setSavingId] = useState<string | null>(null);
   const [notesDraft, setNotesDraft] = useState<Record<string, string>>({});
+  const [templates, setTemplates] = useState<TalentTemplates>(DEFAULT_TEMPLATES);
+  const [statusMap, setStatusMap] = useState<TalentStatusMap>(DEFAULT_STATUS_MAP);
 
   useEffect(() => {
     let mounted = true;
@@ -112,6 +125,21 @@ export default function TalentApplicationsAdmin() {
     if (hasAccess) load();
   }, [hasAccess, load]);
 
+  useEffect(() => {
+    if (!hasAccess) return;
+    (async () => {
+      const { data } = await supabase
+        .from("site_settings")
+        .select("key,value")
+        .in("key", [TEMPLATES_KEY, STATUS_MAP_KEY]);
+      const byKey = new Map((data ?? []).map((r) => [r.key, r.value]));
+      const t = byKey.get(TEMPLATES_KEY) as Partial<TalentTemplates> | undefined;
+      if (t) setTemplates({ ...DEFAULT_TEMPLATES, ...t });
+      const m = byKey.get(STATUS_MAP_KEY) as Partial<TalentStatusMap> | undefined;
+      if (m) setStatusMap({ ...DEFAULT_STATUS_MAP, ...m });
+    })();
+  }, [hasAccess]);
+
   const filtered = useMemo(
     () => (filter === "all" ? rows : rows.filter((r) => r.status === filter)),
     [rows, filter],
@@ -146,6 +174,29 @@ export default function TalentApplicationsAdmin() {
       return;
     }
     toast.success(`Marked as ${status}`);
+    const templateKey = statusMap[status];
+    if (templateKey && templateKey !== "none" && row.email) {
+      const tpl = templates[templateKey as TemplateKey];
+      if (tpl) {
+        const rendered = renderTemplate(tpl, {
+          name: row.name,
+          role: row.role,
+          email: row.email,
+        });
+        supabase.functions
+          .invoke("send-resend-email", {
+            body: {
+              to: row.email,
+              subject: rendered.subject,
+              html: rendered.html,
+            },
+          })
+          .then(({ error: emailErr }) => {
+            if (emailErr) toast.error(`Email failed: ${emailErr.message}`);
+            else toast.success(`Email sent (${templateKey})`);
+          });
+      }
+    }
     load();
   };
 
@@ -180,6 +231,11 @@ export default function TalentApplicationsAdmin() {
         <Button variant="outline" onClick={load} disabled={loading}>
           {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
           Refresh
+        </Button>
+        <Button asChild variant="outline">
+          <Link to="/admin/talent/emails">
+            <Mail className="mr-2 h-4 w-4" /> Email templates
+          </Link>
         </Button>
       </header>
 
