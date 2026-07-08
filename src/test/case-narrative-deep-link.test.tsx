@@ -74,7 +74,13 @@ const NARRATIVE_URL = `/case-studies/${NARRATIVE_SLUG}`;
 
 function renderAtNarrative() {
   return render(
-    <MemoryRouter initialEntries={[LIST_URL, NARRATIVE_URL]} initialIndex={1}>
+    <MemoryRouter
+      initialEntries={[
+        LIST_URL,
+        { pathname: `/case-studies/${NARRATIVE_SLUG}`, state: { from: LIST_URL } },
+      ]}
+      initialIndex={1}
+    >
       <Routes>
         <Route path="/cases" element={<CasesListRoute />} />
         <Route path="/case-studies/:slug" element={<CaseStudyPage />} />
