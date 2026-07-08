@@ -489,6 +489,17 @@ export default function TalentEmailsAdmin() {
                   )}
                   Test all status mappings
                 </Button>
+                {sendingAll ? (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="destructive"
+                    disabled={cancelling}
+                    onClick={cancelBulk}
+                  >
+                    {cancelling ? "Cancelling…" : "Cancel"}
+                  </Button>
+                ) : null}
               </div>
             </div>
           </section>
