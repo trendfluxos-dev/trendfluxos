@@ -979,6 +979,57 @@ export type Database = {
         }
         Relationships: []
       }
+      outreach_execution_logs: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          duration_ms: number | null
+          error: string | null
+          failure_count: number
+          function_name: string
+          http_status: number | null
+          id: string
+          lead_id: string | null
+          metadata: Json
+          processed_count: number
+          status: string
+          success_count: number
+          triggered_by: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error?: string | null
+          failure_count?: number
+          function_name: string
+          http_status?: number | null
+          id?: string
+          lead_id?: string | null
+          metadata?: Json
+          processed_count?: number
+          status: string
+          success_count?: number
+          triggered_by?: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error?: string | null
+          failure_count?: number
+          function_name?: string
+          http_status?: number | null
+          id?: string
+          lead_id?: string | null
+          metadata?: Json
+          processed_count?: number
+          status?: string
+          success_count?: number
+          triggered_by?: string
+        }
+        Relationships: []
+      }
       press_items: {
         Row: {
           context: string
