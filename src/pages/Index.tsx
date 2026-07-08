@@ -22,6 +22,7 @@ const AiExpertStoryTeaser   = lazy(() => import("@/components/home/AiExpertStory
 const JusticeAppealSection  = lazy(() => import("@/components/home/JusticeAppealSection").then(m => ({ default: m.JusticeAppealSection })));
 const ProofSection          = lazy(() => import("@/components/home/ProofSection").then(m => ({ default: m.ProofSection })));
 const TestimonialsSection   = lazy(() => import("@/components/home/TestimonialsSection").then(m => ({ default: m.TestimonialsSection })));
+const TransformationStoriesSection = lazy(() => import("@/components/home/TransformationStoriesSection").then(m => ({ default: m.TransformationStoriesSection })));
 const ValuesSection         = lazy(() => import("@/components/home/ValuesSection").then(m => ({ default: m.ValuesSection })));
 const FinalCtaSection       = lazy(() => import("@/components/home/FinalCtaSection").then(m => ({ default: m.FinalCtaSection })));
 const TripleBridge          = lazy(() => import("@/components/ecosystem/TripleBridge"));
@@ -128,6 +129,10 @@ const Index = () => {
       <div data-nav-section="case-studies">
         <SectionOrnament chapter="Chapter V" label="Proof · Operating Metrics" />
         <LazySection label="proof" skeleton={<SectionSkeleton variant="cards" />}><ProofSection /></LazySection>
+        <SectionOrnament chapter="Chapter V·b" label="Client Transformation Stories" />
+        <LazySection label="transformation-stories" skeleton={<SectionSkeleton variant="cards" />}>
+          <TransformationStoriesSection />
+        </LazySection>
         <LazySection label="testimonials" skeleton={<SectionSkeleton variant="cards" />}><TestimonialsSection /></LazySection>
       </div>
 
