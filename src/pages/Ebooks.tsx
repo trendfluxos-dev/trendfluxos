@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Download, Eye, BookOpen, ArrowLeft } from "lucide-react";
+import { Download, Eye, BookOpen, ArrowLeft, CalendarCheck, MessageCircle } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
 import jobApplyPdf from "@/assets/ebooks/job-apply-v2.pdf.asset.json";
 import jobApplyCover from "@/assets/ebooks/job-apply-v2-cover.jpg.asset.json";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
@@ -226,6 +227,7 @@ const EbookCard = ({ book }: { book: Ebook }) => {
 };
 
 const Ebooks = () => {
+  const [bookingOpen, setBookingOpen] = useState(false);
   useSeo({
     title: "eBooks — Operator Playbooks (v2) | TrendFlux",
     description:
