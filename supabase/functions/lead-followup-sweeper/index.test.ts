@@ -2,7 +2,8 @@
 // The function accepts either (a) an admin user session OR (b) an internal
 // x-n8n-secret header. We assert every unauthenticated path is rejected so
 // the has_role/current_user_has_role gate cannot silently regress.
-import "https://deno.land/std@0.224.0/dotenv/load.ts";
+import { loadSync } from "https://deno.land/std@0.224.0/dotenv/mod.ts";
+loadSync({ export: true, allowEmptyValues: true, examplePath: null, defaultsPath: null });
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
 
 const SUPABASE_URL = Deno.env.get("VITE_SUPABASE_URL")!;
