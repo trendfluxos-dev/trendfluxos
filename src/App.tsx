@@ -128,6 +128,7 @@ const Privacy = routes["/privacy"];
 const GrowthOs = routes["/growth-os"];
 const GrowthConsole = routes["/admin/growth-console"];
 const LeadLifecycle = routes["/admin/lead-lifecycle"];
+const OutreachLogsAdmin = routes["/admin/outreach-logs"];
 const CreatorStudio = routes["/admin/creator-studio"];
 const GrowthOsHub = routes["/growth-os/hub"];
 const TaskQueue = routes["/admin/task-queue"];
