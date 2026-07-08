@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Compass, Home, Mail, Search } from "lucide-react";
+import { ArrowLeft, Compass, Home, LayoutDashboard, Mail, Search } from "lucide-react";
 import { resolveRoute } from "@/lib/routeSearch";
 import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
@@ -123,6 +123,13 @@ const NotFound = () => {
             >
               <Home className="h-4 w-4" />
               Return home
+            </Link>
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-2 rounded-md border border-primary/40 bg-card px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              Go to dashboard
             </Link>
           </div>
 
