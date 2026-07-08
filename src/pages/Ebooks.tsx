@@ -8,6 +8,10 @@ import jobApplyPdf from "@/assets/ebooks/job-apply-v2.pdf.asset.json";
 import jobApplyCover from "@/assets/ebooks/job-apply-v2-cover.jpg.asset.json";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
 import clientHuntingCover from "@/assets/ebooks/client-hunting-v2-cover.jpg.asset.json";
+import marriagePdf from "@/assets/ebooks/marriage-v2.pdf.asset.json";
+import marriageCover from "@/assets/ebooks/marriage-v2-cover.jpg.asset.json";
+import profilePdf from "@/assets/ebooks/profile-v2.pdf.asset.json";
+import profileCover from "@/assets/ebooks/profile-v2-cover.jpg.asset.json";
 
 type Ebook = {
   slug: string;
@@ -45,6 +49,30 @@ const EBOOKS: Ebook[] = [
     cover: clientHuntingCover.url,
     pdf: clientHuntingPdf.url,
     filename: "ClientHunting_Playbook_v2.pdf",
+  },
+  {
+    slug: "marriage-based-playbook",
+    title: "Marriage-Based Playbook",
+    tagline:
+      "A calm, values-first guide to choosing a life partner with clarity — filters, conversations and the 30-day decision protocol.",
+    version: "v2",
+    pages: 9,
+    sizeLabel: "PDF",
+    cover: marriageCover.url,
+    pdf: marriagePdf.url,
+    filename: "Marriage_Playbook_v2.pdf",
+  },
+  {
+    slug: "profile-based-playbook",
+    title: "Profile-Based Playbook",
+    tagline:
+      "Build a founder profile that opens doors: positioning, pitch, LinkedIn, proof stack and the referral loop.",
+    version: "v2",
+    pages: 9,
+    sizeLabel: "PDF",
+    cover: profileCover.url,
+    pdf: profilePdf.url,
+    filename: "Profile_Playbook_v2.pdf",
   },
 ];
 
