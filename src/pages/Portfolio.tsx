@@ -41,6 +41,7 @@ import proofTrainingOverview from "@/assets/proof/training-overview.webp";
 import proofTrainingCerts from "@/assets/proof/training-certificates.webp";
 import proofParticipation from "@/assets/proof/participation-achievement.webp";
 import proofIdentification from "@/assets/proof/official-identification.webp";
+import proofUndpSpeaking from "@/assets/proof/undp-speaking.png";
 
 const NAV = [
   { label: "About", href: "#about" },
