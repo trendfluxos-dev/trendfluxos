@@ -271,6 +271,66 @@ const Ebooks = () => {
           ))}
         </div>
       </section>
+
+      <section className="mx-auto max-w-6xl px-6 pb-20">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/10 via-card to-card p-8 md:p-12">
+          <div
+            aria-hidden
+            className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-primary/15 blur-3xl"
+          />
+          <div className="relative grid gap-8 md:grid-cols-[1.4fr,1fr] md:items-center">
+            <div>
+              <Badge variant="secondary" className="uppercase tracking-wider">
+                Ready to apply this?
+              </Badge>
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+                Book a strategy call with the Project Lead
+              </h2>
+              <p className="mt-3 max-w-xl text-base text-muted-foreground md:text-lg">
+                30 minutes with Zahid Hasan Emon to map the playbook to your
+                exact situation — CV, offer, funnel or partner search. You leave
+                with a written next-step plan.
+              </p>
+              <ul className="mt-5 grid gap-2 text-sm text-muted-foreground sm:grid-cols-2">
+                <li className="flex items-start gap-2">
+                  <CalendarCheck className="mt-0.5 h-4 w-4 text-primary" />
+                  Google Meet, auto-scheduled
+                </li>
+                <li className="flex items-start gap-2">
+                  <MessageCircle className="mt-0.5 h-4 w-4 text-primary" />
+                  WhatsApp fallback if you prefer chat first
+                </li>
+              </ul>
+            </div>
+            <div className="flex flex-col gap-3 md:items-end">
+              <Button
+                size="lg"
+                variant="hero"
+                className="gap-2"
+                onClick={() => setBookingOpen(true)}
+              >
+                <CalendarCheck className="h-4 w-4" />
+                Book a strategy call
+              </Button>
+              <Button asChild size="lg" variant="outline" className="gap-2">
+                <a
+                  href="https://wa.me/message/5GSNUYK6CSDCN1"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Chat on WhatsApp
+                </a>
+              </Button>
+              <p className="text-xs text-muted-foreground md:text-right">
+                Usually confirmed within one business day.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ProjectLeadBookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
     </main>
   );
 };
