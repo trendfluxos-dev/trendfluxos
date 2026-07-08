@@ -612,14 +612,17 @@ const ProjectLead = () => {
 
           <div className="grid md:grid-cols-2 gap-6">
             {certifications.map((c) => (
-              <div
-                key={c.title}
-                className="rounded-2xl border border-border bg-card/60 p-6 flex gap-4"
+              <button
+                type="button"
+                key={c.id}
+                onClick={() => setActiveCert(c)}
+                aria-label={`View details for ${c.title}`}
+                className="group text-left rounded-2xl border border-border bg-card/60 p-6 flex gap-4 transition hover:border-primary/60 hover:bg-card focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary/20">
                   <Award className="w-5 h-5" />
                 </div>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 flex-1">
                   <h3 className="font-display text-base font-semibold leading-snug">
                     {c.title}
                   </h3>
@@ -629,12 +632,132 @@ const ProjectLead = () => {
                   <p className="text-sm text-muted-foreground mt-1">
                     {c.note}
                   </p>
+                  <span className="text-xs text-primary mt-2 inline-flex items-center gap-1 opacity-80 group-hover:opacity-100">
+                    View notice details <ArrowRight className="w-3 h-3" />
+                  </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
       </section>
+
+      {/* CERTIFICATION DRILLDOWN MODAL */}
+      <Dialog open={!!activeCert} onOpenChange={(o) => !o && setActiveCert(null)}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          {activeCert && (
+            <>
+              <DialogHeader>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <span className="text-[10px] uppercase tracking-[0.3em] text-primary">
+                    Certification
+                  </span>
+                </div>
+                <DialogTitle className="font-display text-xl md:text-2xl leading-snug">
+                  {activeCert.title}
+                </DialogTitle>
+                <DialogDescription>
+                  {activeCert.issuer} · {activeCert.date}
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="grid sm:grid-cols-2 gap-3 mt-4">
+                <div className="rounded-xl border border-border p-3">
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">
+                    Awarded to
+                  </p>
+                  <p className="text-sm font-semibold">
+                    {activeCert.details.awardedTo}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-border p-3">
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">
+                    Credential
+                  </p>
+                  <p className="text-sm">{activeCert.details.credential}</p>
+                </div>
+                {"classRoll" in activeCert.details && activeCert.details.classRoll && (
+                  <div className="rounded-xl border border-border p-3">
+                    <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1">
+                      Class / Exam Roll
+                    </p>
+                    <p className="text-sm">
+                      {activeCert.details.classRoll} · {activeCert.details.examRoll}
+                    </p>
+                  </div>
+                )}
+                {activeCert.details.session && (
+                  <div className="rounded-xl border border-border p-3">
+                    <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground mb-1 flex items-center gap-1">
+                      <CalendarDays className="w-3 h-3" /> Session
+                    </p>
+                    <p className="text-sm">{activeCert.details.session}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 mt-4">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-primary mb-2 flex items-center gap-1">
+                  <FileText className="w-3 h-3" /> Notice details
+                </p>
+                <p className="font-display text-sm font-semibold leading-snug mb-2">
+                  {activeCert.details.notice.title}
+                </p>
+                <p className="text-sm text-foreground/80 leading-relaxed mb-3">
+                  {activeCert.details.notice.summary}
+                </p>
+                <div className="text-xs text-muted-foreground flex flex-wrap items-center gap-2">
+                  <span className="uppercase tracking-[0.2em]">Reference:</span>
+                  <span>{activeCert.details.notice.reference}</span>
+                  {"url" in activeCert.details.notice && activeCert.details.notice.url && (
+                    <a
+                      href={activeCert.details.notice.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-primary hover:underline"
+                    >
+                      Open notice <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-2">
+                  Documents on file
+                </p>
+                <ul className="space-y-2">
+                  {activeCert.details.documents.map((d) => (
+                    <li
+                      key={d}
+                      className="text-sm text-foreground/85 flex gap-2 rounded-lg border border-border/60 p-3"
+                    >
+                      <FileText className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                      <span>{d}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-border p-3 flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                <p className="text-xs text-muted-foreground">
+                  {activeCert.details.verification}
+                </p>
+              </div>
+
+              <DialogFooter className="mt-4">
+                <Button variant="outline" onClick={() => setActiveCert(null)}>
+                  Close
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* DIRECT CTA */}
       <section id="book" className="px-6 lg:px-10 py-24 scroll-mt-24">
