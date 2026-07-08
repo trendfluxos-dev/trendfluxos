@@ -13,6 +13,7 @@ import jobApplyEpub from "@/assets/ebooks/job-apply-v2.epub.asset.json";
 import jobApplyEpubPhone from "@/assets/ebooks/job-apply-v2-phone.epub.asset.json";
 import jobApplyPdfPrint from "@/assets/ebooks/job-apply-v2-print.pdf.asset.json";
 import jobApplyAzw3 from "@/assets/ebooks/job-apply-v2.azw3.asset.json";
+import { QRCodeSVG } from "qrcode.react";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
 import clientHuntingCover from "@/assets/ebooks/client-hunting-v2-cover.jpg.asset.json";
 import marriagePdf from "@/assets/ebooks/marriage-v2.pdf.asset.json";
@@ -467,7 +468,7 @@ const Ebooks = () => {
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
                   <Smartphone className="h-5 w-5" />
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     EPUB
                     <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] uppercase tracking-wider text-primary">
@@ -480,6 +481,24 @@ const Ebooks = () => {
                   <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
                     <Download className="h-3.5 w-3.5" />
                     Download .epub
+                  </span>
+                </div>
+                <div
+                  className="ml-auto hidden shrink-0 flex-col items-center gap-1 rounded-md bg-white p-1.5 sm:flex"
+                  onClick={(e) => e.preventDefault()}
+                  aria-hidden="true"
+                  title="Scan to open on your phone"
+                >
+                  <QRCodeSVG
+                    value={`${BRAND.url}${jobApplyEpubPhone.url}`}
+                    size={64}
+                    level="M"
+                    marginSize={0}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                  />
+                  <span className="text-[9px] font-medium uppercase tracking-wider text-neutral-600">
+                    Scan
                   </span>
                 </div>
               </a>
