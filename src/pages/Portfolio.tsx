@@ -27,6 +27,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import portrait from "@/assets/zahid-hasan-emon.webp";
+import { SystemsBentoSection } from "@/components/systems/SystemsBentoSection";
 import proofEducation from "@/assets/proof/educational-background.webp";
 import proofUniversity from "@/assets/proof/university-certificates.webp";
 import proofHsc from "@/assets/proof/hsc-credentials.webp";
@@ -558,6 +559,14 @@ export default function Portfolio() {
       </section>
 
       {/* SYSTEMS */}
+      <div id="systems-he-built" className="border-t border-border bg-background">
+        <SystemsBentoSection
+          eyebrow="Systems He Built · Portfolio"
+          title="Eight production systems, one operating stack."
+          intro="Six sub-brands plus two internal ops layers — each shipped, in production, and instrumented."
+        />
+      </div>
+
       <section id="systems" className="py-20 md:py-24">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary">Casebook</span>
