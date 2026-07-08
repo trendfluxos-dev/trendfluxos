@@ -220,7 +220,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
                       <div className="space-y-3">
                         <div className="text-[12px] text-foreground/70 leading-relaxed">
                           {METHOD_LABEL[method]} <b>Send Money</b> to{" "}
-                          <code className="rounded bg-card px-1.5 py-0.5">{RECEIVE_NUMBERS[method]}</code>{" "}
+                          <code className="rounded bg-card px-1.5 py-0.5">{receiveNumbers[method]}</code>{" "}
                           — amount <b>৳{Number(b.price).toLocaleString()}</b>, then paste your TrxID below.
                         </div>
                         <div className="flex gap-2">
