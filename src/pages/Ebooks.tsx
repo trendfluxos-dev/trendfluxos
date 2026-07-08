@@ -6,6 +6,7 @@ import { BRAND } from "@/config/brand";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
+import EbookLeadGate from "@/components/ebooks/EbookLeadGate";
 import jobApplyPdf from "@/assets/ebooks/job-apply-v2.pdf.asset.json";
 import jobApplyCover from "@/assets/ebooks/job-apply-v2-cover.jpg.asset.json";
 import jobApplyEpub from "@/assets/ebooks/job-apply-v2.epub.asset.json";
@@ -376,6 +377,7 @@ const Ebooks = () => {
 
       <section className="mx-auto max-w-6xl px-6 pb-4">
         <div className="rounded-2xl border border-border bg-card p-6 md:p-8">
+          <EbookLeadGate />
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
               <Badge variant="secondary" className="uppercase tracking-wider">
