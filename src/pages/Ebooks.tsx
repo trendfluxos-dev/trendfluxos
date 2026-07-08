@@ -9,6 +9,7 @@ import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBooki
 import jobApplyPdf from "@/assets/ebooks/job-apply-v2.pdf.asset.json";
 import jobApplyCover from "@/assets/ebooks/job-apply-v2-cover.jpg.asset.json";
 import jobApplyEpub from "@/assets/ebooks/job-apply-v2.epub.asset.json";
+import jobApplyEpubPhone from "@/assets/ebooks/job-apply-v2-phone.epub.asset.json";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
 import clientHuntingCover from "@/assets/ebooks/client-hunting-v2-cover.jpg.asset.json";
 import marriagePdf from "@/assets/ebooks/marriage-v2.pdf.asset.json";
@@ -279,7 +280,13 @@ const Ebooks = () => {
           "@type": "MediaObject",
           contentUrl: jobApplyEpub.url,
           encodingFormat: "application/epub+zip",
-          name: `${book.title} (EPUB, mobile)`,
+          name: `${book.title} (EPUB)`,
+        });
+        encodings.push({
+          "@type": "MediaObject",
+          contentUrl: jobApplyEpubPhone.url,
+          encodingFormat: "application/epub+zip",
+          name: `${book.title} (EPUB · Phone Edition)`,
         });
       }
       return {
@@ -378,12 +385,15 @@ const Ebooks = () => {
                 Pick the format that fits your device
               </h2>
               <p className="mt-2 text-sm text-muted-foreground md:text-base">
-                The PDF keeps the print-ready layout. The EPUB reflows text and
-                scales fonts smoothly on phones — best for reading on Apple
-                Books, Google Play Books or any e-reader app.
+                The <strong>PDF</strong> keeps the print-ready layout.
+                The <strong>EPUB (Standard)</strong> reflows on any e-reader.
+                The <strong>EPUB (Phone Edition)</strong> is tuned for small
+                screens — bigger type, tap-friendly links, no hyphenation
+                gymnastics. Same title, author, language and cover across all
+                three.
               </p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 md:min-w-[22rem]">
+            <div className="grid gap-3 sm:grid-cols-2 md:min-w-[26rem] lg:grid-cols-3 lg:min-w-[34rem]">
               <a
                 href={jobApplyPdf.url}
                 download="JobApply_Playbook_v2.pdf"
@@ -414,17 +424,41 @@ const Ebooks = () => {
                 className="group flex items-start gap-3 rounded-xl border border-primary/40 bg-primary/5 p-4 transition-colors hover:border-primary hover:bg-primary/10"
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                  <BookOpen className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    EPUB
+                    <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] uppercase tracking-wider text-primary">
+                      Standard
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Reflows text · scales fonts
+                  </p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
+                    <Download className="h-3.5 w-3.5" />
+                    Download .epub
+                  </span>
+                </div>
+              </a>
+              <a
+                href={jobApplyEpubPhone.url}
+                download="JobApply_Playbook_v2_phone.epub"
+                className="group flex items-start gap-3 rounded-xl border border-primary/40 bg-primary/5 p-4 transition-colors hover:border-primary hover:bg-primary/10"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
                   <Smartphone className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 text-sm font-medium">
                     EPUB
                     <span className="rounded-full bg-primary/20 px-2 py-0.5 text-[10px] uppercase tracking-wider text-primary">
-                      Mobile
+                      Phone
                     </span>
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Reflows text · scales fonts
+                    Bigger type · tap-friendly · 320–480px tuned
                   </p>
                   <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
                     <Download className="h-3.5 w-3.5" />
