@@ -310,8 +310,9 @@ const PROOF: ProofItem[] = [
   { cat: "Training", title: "Professional Training Programs", desc: "10 Minute School, Sochetan Foundation, NDBC", images: [proofTrainingCerts, proofTrainingOverview], meta: { issuer: "10 Minute School · Sochetan Foundation · NDBC", date: "2018 – 2024", type: "Course Completion Certificates" } },
   { cat: "Training", title: "Participation & Achievement", desc: "Debate, leadership & academic certificates", images: [proofParticipation], meta: { issuer: "BDF, Debate Bangladesh, Bangladesh Shishu Academy & others", date: "2010 – 2021", type: "Participation & Achievement Certificates" } },
   { cat: "Identity", title: "Official Identification", desc: "University ID · National ID · Birth Certificate", images: [proofIdentification], meta: { issuer: "Government of Bangladesh & Jahangirnagar University", date: "1999 – 2023", type: "Government & Institutional ID" } },
+  { cat: "Speaking", title: "UNDP Podium Address", desc: "Public address at a United Nations Development Programme event", images: [proofUndpSpeaking], meta: { issuer: "United Nations Development Programme (UNDP)", date: "2025", type: "Speaking Engagement — Reference Photo" } },
 ];
-const PROOF_CATS = ["All", "Education", "Leadership", "Volunteer", "Training", "Identity"] as const;
+const PROOF_CATS = ["All", "Education", "Leadership", "Speaking", "Volunteer", "Training", "Identity"] as const;
 
 const PRESETS = {
   "Strategic Starter": { base: 60, perf: 10, avg: 35, scope: 4 },
