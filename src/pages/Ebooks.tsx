@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Download, Eye, BookOpen, ArrowLeft, CalendarCheck, MessageCircle, Smartphone, FileText } from "lucide-react";
+import { Download, Eye, BookOpen, ArrowLeft, CalendarCheck, MessageCircle, Smartphone, FileText, Printer } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 import { BRAND } from "@/config/brand";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import jobApplyPdf from "@/assets/ebooks/job-apply-v2.pdf.asset.json";
 import jobApplyCover from "@/assets/ebooks/job-apply-v2-cover.jpg.asset.json";
 import jobApplyEpub from "@/assets/ebooks/job-apply-v2.epub.asset.json";
 import jobApplyEpubPhone from "@/assets/ebooks/job-apply-v2-phone.epub.asset.json";
+import jobApplyPdfPrint from "@/assets/ebooks/job-apply-v2-print.pdf.asset.json";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
 import clientHuntingCover from "@/assets/ebooks/client-hunting-v2-cover.jpg.asset.json";
 import marriagePdf from "@/assets/ebooks/marriage-v2.pdf.asset.json";
@@ -289,6 +290,12 @@ const Ebooks = () => {
           encodingFormat: "application/epub+zip",
           name: `${book.title} (EPUB · Phone Edition)`,
         });
+        encodings.push({
+          "@type": "MediaObject",
+          contentUrl: jobApplyPdfPrint.url,
+          encodingFormat: "application/pdf",
+          name: `${book.title} (PDF · Print Edition, grayscale)`,
+        });
       }
       return {
         "@type": "ListItem",
@@ -395,7 +402,7 @@ const Ebooks = () => {
                 three.
               </p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 md:min-w-[26rem] lg:grid-cols-3 lg:min-w-[34rem]">
+            <div className="grid gap-3 sm:grid-cols-2 md:min-w-[26rem] lg:grid-cols-2 lg:min-w-[34rem]">
               <a
                 href={jobApplyPdf.url}
                 download="JobApply_Playbook_v2.pdf"
@@ -465,6 +472,30 @@ const Ebooks = () => {
                   <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
                     <Download className="h-3.5 w-3.5" />
                     Download .epub
+                  </span>
+                </div>
+              </a>
+              <a
+                href={jobApplyPdfPrint.url}
+                download="JobApply_Playbook_v2_print.pdf"
+                className="group flex items-start gap-3 rounded-xl border border-border bg-background p-4 transition-colors hover:border-primary/50 hover:bg-primary/5"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <Printer className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    PDF
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                      Print
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Grayscale · ink-saver · home-printer ready
+                  </p>
+                  <span className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:underline">
+                    <Download className="h-3.5 w-3.5" />
+                    Download .pdf
                   </span>
                 </div>
               </a>
