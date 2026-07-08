@@ -384,21 +384,95 @@ export default function TalentEmailsAdmin() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 flex justify-end">
-              <Button
-                type="button"
-                size="sm"
-                variant="secondary"
-                disabled={sendingAll}
-                onClick={sendAllMapped}
-              >
-                {sendingAll ? (
-                  <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+            <div className="mt-5 rounded-xl border border-dashed border-border/70 p-4">
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold">Bulk test controls</h3>
+                <span className="text-[10px] uppercase tracking-wider text-foreground/50">
+                  Client-side retry & pacing
+                </span>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div>
+                  <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                    Max retries per email
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    max={5}
+                    value={maxRetries}
+                    onChange={(e) =>
+                      setMaxRetries(
+                        Math.max(0, Math.min(5, Number(e.target.value) || 0)),
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                    Retry base delay (ms)
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    step={100}
+                    value={retryDelayMs}
+                    onChange={(e) =>
+                      setRetryDelayMs(Math.max(0, Number(e.target.value) || 0))
+                    }
+                  />
+                  <p className="mt-1 text-[10px] text-foreground/50">
+                    Exponential backoff: delay × 2^attempt
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                    Between-emails delay (ms)
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    step={100}
+                    value={rateDelayMs}
+                    onChange={(e) =>
+                      setRateDelayMs(Math.max(0, Number(e.target.value) || 0))
+                    }
+                  />
+                  <p className="mt-1 text-[10px] text-foreground/50">
+                    Rate limit: pause between sends
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                {bulkProgress ? (
+                  <div className="text-xs text-foreground/70">
+                    Progress: {bulkProgress.done}/{bulkProgress.total} · ok{" "}
+                    <span className="text-emerald-600">{bulkProgress.ok}</span> ·
+                    failed{" "}
+                    <span className="text-destructive">
+                      {bulkProgress.failed}
+                    </span>
+                  </div>
                 ) : (
-                  <Send className="mr-2 h-3.5 w-3.5" />
+                  <span className="text-xs text-foreground/50">
+                    Applies to "Test all status mappings"
+                  </span>
                 )}
-                Test all status mappings
-              </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  disabled={sendingAll}
+                  onClick={sendAllMapped}
+                >
+                  {sendingAll ? (
+                    <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Send className="mr-2 h-3.5 w-3.5" />
+                  )}
+                  Test all status mappings
+                </Button>
+              </div>
             </div>
           </section>
 
