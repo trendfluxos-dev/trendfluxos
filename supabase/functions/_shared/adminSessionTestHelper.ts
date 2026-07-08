@@ -70,9 +70,9 @@ export async function createAdminSession(label = "outreach-test"): Promise<Admin
     accessToken: session.session.access_token,
     admin,
     cleanup: async () => {
-      await admin.from("outreach_execution_logs").delete().eq("actor_id", userId).catch(() => {});
-      await admin.from("user_roles").delete().eq("user_id", userId).catch(() => {});
-      await admin.auth.admin.deleteUser(userId).catch(() => {});
+      try { await admin.from("outreach_execution_logs").delete().eq("actor_id", userId); } catch { /* ignore */ }
+      try { await admin.from("user_roles").delete().eq("user_id", userId); } catch { /* ignore */ }
+      try { await admin.auth.admin.deleteUser(userId); } catch { /* ignore */ }
     },
   };
 }
