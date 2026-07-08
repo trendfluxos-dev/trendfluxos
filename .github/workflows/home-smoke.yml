@@ -1,0 +1,58 @@
+name: Smoke - Home '/' renders
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Daily 06:00 UTC canary against main so a regression in a dependency,
+    # asset pipeline, or hosting layer is caught even without new commits.
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: home-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  home-smoke:
+    name: Playwright smoke — '/' hero + content
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: bunx playwright install --with-deps webkit
+
+      - name: Run home '/' smoke spec
+        # Runs only the home-hero smoke spec against the built preview server
+        # configured in playwright.config.ts. Uses the iphone-13 project so
+        # the spec exercises the same viewport a mobile visitor would hit.
+        run: bunx playwright test home-hero.spec.ts --project=iphone-13
+
+      - name: Upload Playwright HTML report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: home-smoke-report
+          path: playwright-report
+          retention-days: 14
+
+      - name: Upload raw test results on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: home-smoke-test-results
+          path: test-results
+          retention-days: 14
