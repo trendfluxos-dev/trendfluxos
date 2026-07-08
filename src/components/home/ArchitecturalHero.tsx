@@ -203,5 +203,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
         </div>
       </div>
     </section>
+    <ProjectLeadBookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
+    </>
   );
 }
