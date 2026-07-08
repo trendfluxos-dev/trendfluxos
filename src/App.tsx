@@ -88,6 +88,7 @@ const LuxeVeil = routes["/luxe-veil"];
 const BrandToki = routes["/brandtoki"];
 const Portfolio = routes["/portfolio"];
 const Founder = routes["/founder"];
+const BdjobsProfile = routes["/bdjobs-profile"];
 const Enterprise = routes["/enterprise"];
 const Toolkit = routes["/toolkit"];
 const Ebooks = routes["/ebooks"];

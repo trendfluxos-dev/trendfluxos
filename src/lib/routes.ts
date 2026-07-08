@@ -46,6 +46,7 @@ export const routes = {
   "/admin/publish-gate": make(() => import("@/pages/PublishGateAdmin")),
   "/marriage": make(() => import("@/pages/Marriage")),
   "/founder": make(() => import("@/pages/Founder")),
+  "/bdjobs-profile": make(() => import("@/pages/BdjobsProfile")),
   "/the-stand": make(() => import("@/pages/TheStand")),
   "/the-stand/share": make(() => import("@/pages/TheStandShare")),
   "/quiet-positions": make(() => import("@/pages/QuietPositions")),
