@@ -290,6 +290,12 @@ const Ebooks = () => {
           encodingFormat: "application/epub+zip",
           name: `${book.title} (EPUB · Phone Edition)`,
         });
+        encodings.push({
+          "@type": "MediaObject",
+          contentUrl: jobApplyPdfPrint.url,
+          encodingFormat: "application/pdf",
+          name: `${book.title} (PDF · Print Edition, grayscale)`,
+        });
       }
       return {
         "@type": "ListItem",
