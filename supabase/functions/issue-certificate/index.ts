@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -51,9 +52,7 @@ Deno.serve(async (req) => {
   if (userErr || !user) {
     return json({ error: "Unauthorized" }, 401);
   }
-  const { data: isAdmin } = await userClient.rpc("current_user_has_role", {
-    _role: "admin",
-  });
+  const isAdmin = await userHasRole(userClient, user.id, "admin");
   if (!isAdmin) {
     // Hardened: only admins may mint certificates. The previous non-admin
     // branch let any enrolled user issue a certificate for any arbitrary
