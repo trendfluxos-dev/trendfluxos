@@ -23,6 +23,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { useRouteDataLoading } from "@/lib/routeLoading";
 import { toast } from "sonner";
 import trendfluxLogo from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
+import { track } from "@/lib/analytics";
 
 type Role = "admin" | "editor" | null;
 
@@ -320,9 +321,9 @@ export default function Dashboard() {
             <h2 className="font-display text-[18px] font-semibold tracking-tight">Explore TrendFlux</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <QuickLink to="/toolkit" icon={Briefcase} title="Toolkit Hub" desc="Premium templates & growth systems" />
-            <QuickLink to="/enterprise" icon={Users} title="Enterprise" desc="Strategy sessions & demos" />
-            <QuickLink to="/portfolio" icon={CheckCircle2} title="Portfolio" desc="Proof, systems & case studies" />
+            <QuickLink id="toolkit" to="/toolkit" icon={Briefcase} title="Toolkit Hub" desc="Premium templates & growth systems" />
+            <QuickLink id="enterprise" to="/enterprise" icon={Users} title="Enterprise" desc="Strategy sessions & demos" />
+            <QuickLink id="portfolio" to="/portfolio" icon={CheckCircle2} title="Portfolio" desc="Proof, systems & case studies" />
           </div>
         </section>
       </main>
@@ -429,9 +430,34 @@ function EmptyCta({
   );
 }
 
-function QuickLink({ to, icon: Icon, title, desc }: { to: string; icon: any; title: string; desc: string }) {
+function QuickLink({
+  id,
+  to,
+  icon: Icon,
+  title,
+  desc,
+}: {
+  id: string;
+  to: string;
+  icon: any;
+  title: string;
+  desc: string;
+}) {
+  const handleClick = () => {
+    track("dashboard_quick_link_click", {
+      quick_link_id: id,
+      quick_link_title: title,
+      quick_link_to: to,
+      source: "dashboard",
+    });
+  };
   return (
-    <Link to={to} className="group rounded-2xl border border-[#E5E7EB] bg-white p-5 hover:border-[#111] transition">
+    <Link
+      to={to}
+      onClick={handleClick}
+      data-analytics-id={`dashboard-quick-link-${id}`}
+      className="group rounded-2xl border border-[#E5E7EB] bg-white p-5 hover:border-[#111] transition"
+    >
       <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#F8FAFC] text-[#4B5563] group-hover:bg-[#FEF2F2] group-hover:text-[#B11226] transition">
         <Icon className="h-4 w-4" />
       </span>
