@@ -100,7 +100,9 @@ describe("Book Strategy Call → booking flow → success state (e2e)", () => {
       expect(within(success).getByText(/Discovery call/i)).toBeInTheDocument();
 
       // Closing the success state dismisses the dialog and returns to the page.
-      await user.click(within(success).getByRole("button", { name: /^Close/i }));
+      // Radix also renders an icon-only 'X Close' — click the footer one (last).
+      const closes = within(success).getAllByRole("button", { name: /^Close/i });
+      await user.click(closes[closes.length - 1]);
     await waitFor(() =>
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
     );
