@@ -14,6 +14,7 @@
 // roll the timestamp back to NULL and the next tick retries.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { userHasRole } from "../_shared/adminCheck.ts";
 
 const TZ = Deno.env.get("BOOKING_REMINDER_TZ") ?? "Asia/Dhaka";
 const MORNING_HOUR = Number(Deno.env.get("BOOKING_REMINDER_MORNING_HOUR") ?? "9"); // 24h, local
@@ -162,11 +163,9 @@ Deno.serve(async (req) => {
       const userClient = createClient(SUPABASE_URL, ANON_KEY, {
         global: { headers: { Authorization: `Bearer ${bearer}` } },
       });
-      const { data: claims } = await userClient.auth.getClaims(bearer);
-      if (claims?.claims?.sub) {
-        const { data: isAdmin } = await userClient.rpc("current_user_has_role", { _role: "admin" });
-        if (isAdmin) authorized = true;
-      }
+        const { data: claims } = await userClient.auth.getClaims(bearer);
+        const uid = claims?.claims?.sub as string | undefined;
+        if (uid && (await userHasRole(userClient, uid, "admin"))) authorized = true;
     } catch {
       // fall through
     }
