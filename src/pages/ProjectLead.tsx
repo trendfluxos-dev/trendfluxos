@@ -429,6 +429,52 @@ const ProjectLead = () => {
         </div>
       </section>
 
+      {/* CLIENT TRANSFORMATION STORIES */}
+      <section className="px-6 lg:px-10 py-24 border-t border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
+              Client Transformation Stories
+            </p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold max-w-3xl mx-auto">
+              Real founders, <span className="text-gradient">measurable lifts</span>
+            </h2>
+            <p className="text-foreground/60 max-w-xl mx-auto mt-4 text-sm">
+              Short before-and-after snapshots from engagements where the Project
+              Lead ran strategy, systems and delivery end-to-end.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {transformations.map((t) => (
+              <article
+                key={t.client}
+                className="glass glass-hover rounded-3xl p-7 flex flex-col"
+              >
+                <div className="flex items-center gap-2 text-primary">
+                  <TrendingUp className="w-4 h-4" />
+                  <span className="text-[10px] uppercase tracking-[0.3em]">
+                    {t.stage}
+                  </span>
+                </div>
+                <h3 className="font-display text-xl font-bold mt-3">{t.client}</h3>
+                <p className="text-gold font-semibold mt-2">{t.lift}</p>
+                <p className="text-foreground/70 mt-4 leading-relaxed text-sm">
+                  {t.outcome}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button variant="hero" size="lg" onClick={() => setBookingOpen(true)}>
+              Start your transformation
+              <ArrowRight />
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* DIRECT CTA */}
       <section id="book" className="px-6 lg:px-10 py-24 scroll-mt-24">
         <div className="max-w-5xl mx-auto relative rounded-[2rem] glass-strong overflow-hidden p-10 md:p-16">
@@ -451,10 +497,21 @@ const ProjectLead = () => {
               </p>
             </div>
             <div className="flex flex-col gap-3">
-              <Button variant="hero" size="lg" asChild>
-                <a href="https://wa.me/message/5GSNUYK6CSDCN1" target="_blank" rel="noreferrer">
-                  Book Direct
-                  <ArrowRight />
+              <Button
+                variant="hero"
+                size="lg"
+                onClick={() => setBookingOpen(true)}
+              >
+                Book Direct
+                <ArrowRight />
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <a
+                  href="https://wa.me/message/5GSNUYK6CSDCN1"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  WhatsApp instead
                 </a>
               </Button>
               <Button variant="outline" size="lg" asChild>
