@@ -229,11 +229,91 @@ const EbookCard = ({ book }: { book: Ebook }) => {
 
 const Ebooks = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
+  const canonicalPath = "/ebooks";
+  const canonicalUrl = `${BRAND.url}${canonicalPath}`;
+  const seoTitle =
+    "Operator Playbooks — Free PDF & EPUB Downloads | TrendFlux";
+  const seoDescription =
+    "Download TrendFlux's operator playbooks: Job-Apply, Client-Hunting, Profile-Based and Marriage-Based (v2). Free PDF for desktop, EPUB for mobile — preview in-browser or grab the file.";
+  const ogImage = jobApplyCover.url;
+
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "TrendFlux Operator Playbooks",
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    numberOfItems: EBOOKS.length,
+    itemListElement: EBOOKS.map((book, i) => {
+      const v = book.versions[book.defaultVersion];
+      const isJobApply = book.slug === "job-apply-playbook";
+      const encodings: Array<{
+        "@type": "MediaObject";
+        contentUrl: string;
+        encodingFormat: string;
+        name: string;
+      }> = [];
+      if (v?.pdf) {
+        encodings.push({
+          "@type": "MediaObject",
+          contentUrl: v.pdf,
+          encodingFormat: "application/pdf",
+          name: `${book.title} (PDF)`,
+        });
+      }
+      if (isJobApply) {
+        encodings.push({
+          "@type": "MediaObject",
+          contentUrl: jobApplyEpub.url,
+          encodingFormat: "application/epub+zip",
+          name: `${book.title} (EPUB, mobile)`,
+        });
+      }
+      return {
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "Book",
+          name: `${book.title} v2`,
+          description: book.tagline,
+          author: { "@type": "Person", name: "ZAHID HASAN EMON" },
+          publisher: { "@type": "Organization", name: BRAND.name },
+          inLanguage: "en",
+          numberOfPages: v?.pages,
+          image: v?.cover,
+          url: `${canonicalUrl}#${book.slug}`,
+          bookFormat: "https://schema.org/EBook",
+          isAccessibleForFree: true,
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+            url: v?.pdf ?? canonicalUrl,
+          },
+          encoding: encodings,
+        },
+      };
+    }),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BRAND.url },
+      { "@type": "ListItem", position: 2, name: "eBooks", item: canonicalUrl },
+    ],
+  };
+
   useSeo({
-    title: "eBooks — Operator Playbooks (v2) | TrendFlux",
-    description:
-      "Download the latest TrendFlux operator playbooks: Job-Apply v2 and Client-Hunting v2. Preview in-browser or grab the PDF.",
-    canonical: `${BRAND.url}/ebooks`,
+    title: seoTitle,
+    description: seoDescription,
+    canonical: canonicalPath,
+    type: "website",
+    image: ogImage,
+    imageAlt: "TrendFlux Operator Playbooks — Job-Apply v2 cover",
+    imageType: "image/jpeg",
+    jsonLd: [itemListJsonLd, breadcrumbJsonLd],
   });
 
   return (
