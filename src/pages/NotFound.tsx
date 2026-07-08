@@ -13,7 +13,7 @@ import {
   UserRound,
   Users,
 } from "lucide-react";
-import { resolveRoute } from "@/lib/routeSearch";
+import { resolveRoute, KNOWN_ROUTES } from "@/lib/routeSearch";
 import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
 import Navbar from "@/components/Navbar";
@@ -38,6 +38,21 @@ const POPULAR = [
 const NotFound = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+  const searchMatch = useMemo(() => (query.trim() ? resolveRoute(query) : null), [query]);
+  const searchSuggestions = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return [] as string[];
+    return KNOWN_ROUTES.filter((r) => r.toLowerCase().includes(q.replace(/^\//, ""))).slice(0, 6);
+  }, [query]);
+  const onSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const target = searchMatch?.path || searchSuggestions[0];
+    if (target) {
+      track("not_found_search_submit", { query, target, matched: !!searchMatch });
+      navigate(target);
+    }
+  };
   const match = useMemo(
     () => resolveRoute(location.pathname + location.search),
     [location.pathname, location.search],
