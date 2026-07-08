@@ -20,8 +20,8 @@ class MockIntersectionObserver {
 }
 // @ts-expect-error — test-only shim
 globalThis.IntersectionObserver ??= MockIntersectionObserver;
-if (typeof window !== "undefined" && !("scrollTo" in window && window.scrollTo.toString().includes("[native"))) {
-  window.scrollTo = () => {};
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "scrollTo", { value: () => {}, writable: true });
 }
 
 /**
