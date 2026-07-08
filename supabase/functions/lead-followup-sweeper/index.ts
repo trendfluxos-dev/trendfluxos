@@ -24,15 +24,41 @@ async function notifyRoleFailure(detail: string, userId?: string) {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const startedAt = Date.now();
+  let actorId: string | null = null;
+  let triggeredBy: "cron" | "admin" | "unknown" = "unknown";
+
+  const logRun = async (
+    client: ReturnType<typeof createClient> | null,
+    status: "success" | "failure" | "partial",
+    extras: Record<string, unknown>,
+  ) => {
+    try {
+      const db = client ?? createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      );
+      await db.from("outreach_execution_logs").insert({
+        function_name: "lead-followup-sweeper",
+        status,
+        triggered_by: triggeredBy,
+        actor_id: actorId,
+        duration_ms: Date.now() - startedAt,
+        ...extras,
+      });
+    } catch (_) { /* best-effort */ }
+  };
 
   const secret = Deno.env.get("N8N_CALLBACK_SECRET");
   const got = req.headers.get("x-n8n-secret");
   const authorized = secret && got && got === secret;
+  if (authorized) triggeredBy = "cron";
 
   if (!authorized) {
     // Fall back to admin session check
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
+      await logRun(null, "failure", { http_status: 401, error: "unauthorized" });
       return new Response(JSON.stringify({ error: "unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -44,16 +70,20 @@ Deno.serve(async (req) => {
     );
     const { data: userData } = await client.auth.getUser();
     if (!userData?.user) {
+      await logRun(null, "failure", { http_status: 401, error: "unauthorized" });
       return new Response(JSON.stringify({ error: "unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    actorId = userData.user.id;
+    triggeredBy = "admin";
     const { data: isAdmin, error: roleErr } = await client.rpc(
       "current_user_has_role",
       { _role: "admin" },
     );
     if (roleErr || !isAdmin) {
       if (roleErr) await notifyRoleFailure(roleErr.message, userData.user.id);
+      await logRun(null, "failure", { http_status: 403, error: roleErr?.message ?? "forbidden" });
       return new Response(JSON.stringify({ error: "forbidden" }), {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -75,6 +105,7 @@ Deno.serve(async (req) => {
     .limit(50);
 
   if (error) {
+    await logRun(supabase, "failure", { http_status: 500, error: `query_failed: ${error.message}` });
     return new Response(JSON.stringify({ error: "query_failed", detail: error.message }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
