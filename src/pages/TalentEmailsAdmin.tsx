@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Mail, Send } from "lucide-react";
+import { Loader2, Mail, Send, CheckCircle2, XCircle, Ban } from "lucide-react";
 import { useSeo } from "@/hooks/useSeo";
 
 export type TemplateKey = "approve" | "reject" | "hold";
@@ -109,6 +109,18 @@ export default function TalentEmailsAdmin() {
     ok: number;
     failed: number;
   } | null>(null);
+  type BulkResult = {
+    index: number;
+    status: TalentStatus;
+    template: TemplateKey;
+    ok: boolean;
+    error?: string;
+    attempts?: number;
+    at: number;
+    phase: "before-cancel" | "after-cancel";
+  };
+  const [bulkResults, setBulkResults] = useState<BulkResult[]>([]);
+  const [cancelRequestedAt, setCancelRequestedAt] = useState<number | null>(null);
   const cancelBulkRef = useRef(false);
   const [cancelling, setCancelling] = useState(false);
 
@@ -180,9 +192,12 @@ export default function TalentEmailsAdmin() {
     setSendingAll(true);
     cancelBulkRef.current = false;
     setCancelling(false);
+    setCancelRequestedAt(null);
+    setBulkResults([]);
     setBulkProgress({ done: 0, total: mapped.length, ok: 0, failed: 0 });
     let ok = 0;
     let failed = 0;
+    const startedAt = Date.now();
     for (let i = 0; i < mapped.length; i++) {
       if (cancelBulkRef.current) break;
       const status = mapped[i];
@@ -191,6 +206,18 @@ export default function TalentEmailsAdmin() {
       if (!tpl) {
         failed++;
         setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
+        setBulkResults((prev) => [
+          ...prev,
+          {
+            index: i + 1,
+            status,
+            template: key,
+            ok: false,
+            error: "Template missing",
+            at: Date.now(),
+            phase: cancelBulkRef.current ? "after-cancel" : "before-cancel",
+          },
+        ]);
         continue;
       }
       const rendered = renderTemplate(tpl, {
@@ -198,6 +225,7 @@ export default function TalentEmailsAdmin() {
         role: testRole || "Role",
         email: testEmail,
       });
+      const cancelAtStart = cancelBulkRef.current;
       const result = await invokeWithRetry(
         `[TEST · ${status}] ${rendered.subject}`,
         `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b></div>${rendered.html}`,
@@ -205,6 +233,22 @@ export default function TalentEmailsAdmin() {
       if (result.ok) ok++;
       else failed++;
       setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
+      setBulkResults((prev) => [
+        ...prev,
+        {
+          index: i + 1,
+          status,
+          template: key,
+          ok: result.ok,
+          error: result.ok ? undefined : (result as { error: string }).error,
+          attempts: result.ok ? (result as { attempts: number }).attempts : undefined,
+          at: Date.now(),
+          // A send is "after-cancel" when the user clicked Cancel while it
+          // was in flight (or between retries). Anything before that is the
+          // clean pre-cancel batch.
+          phase: cancelAtStart || cancelBulkRef.current ? "after-cancel" : "before-cancel",
+        },
+      ]);
       if (i < mapped.length - 1 && !cancelBulkRef.current) await sleep(rateDelayMs);
     }
     const wasCancelled = cancelBulkRef.current;
@@ -227,12 +271,15 @@ export default function TalentEmailsAdmin() {
       });
     } else if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
     else toast.error(`Sent ${ok}, failed ${failed}`);
+    // Keep startedAt reference for potential future logging.
+    void startedAt;
   };
 
   const cancelBulk = () => {
     if (!sendingAll) return;
     cancelBulkRef.current = true;
     setCancelling(true);
+    setCancelRequestedAt(Date.now());
     const { done, total, ok, failed } = bulkProgress;
     const pct = total > 0 ? Math.round((done / total) * 100) : 0;
     toast.loading("Cancelling after current send…", {
@@ -525,6 +572,148 @@ export default function TalentEmailsAdmin() {
                   </Button>
                 ) : null}
               </div>
+
+              {bulkResults.length > 0 && (
+                <div className="mt-5 space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h4 className="text-sm font-semibold">
+                      Per-email delivery log
+                    </h4>
+                    <div className="flex items-center gap-3 text-[11px] text-foreground/60">
+                      <span className="inline-flex items-center gap-1">
+                        <CheckCircle2 className="h-3 w-3 text-emerald-600" /> success
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <XCircle className="h-3 w-3 text-destructive" /> failed
+                      </span>
+                      <span className="inline-flex items-center gap-1">
+                        <Ban className="h-3 w-3 text-amber-600" /> post-cancel
+                      </span>
+                      <button
+                        type="button"
+                        className="text-primary underline-offset-2 hover:underline"
+                        onClick={() => {
+                          setBulkResults([]);
+                          setBulkProgress(null);
+                          setCancelRequestedAt(null);
+                        }}
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+
+                  {(["before-cancel", "after-cancel"] as const).map((phase) => {
+                    const rows = bulkResults.filter((r) => r.phase === phase);
+                    if (rows.length === 0) return null;
+                    const okCount = rows.filter((r) => r.ok).length;
+                    const failCount = rows.length - okCount;
+                    return (
+                      <div
+                        key={phase}
+                        className={`overflow-hidden rounded-xl border ${
+                          phase === "after-cancel"
+                            ? "border-amber-500/40 bg-amber-500/[0.04]"
+                            : "border-border bg-background/40"
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/60 px-3 py-2 text-[11px] uppercase tracking-wider">
+                          <span className="flex items-center gap-2 font-semibold text-foreground/80">
+                            {phase === "after-cancel" ? (
+                              <>
+                                <Ban className="h-3.5 w-3.5 text-amber-600" />
+                                After cancel
+                              </>
+                            ) : (
+                              "Before cancel"
+                            )}
+                          </span>
+                          <span className="text-foreground/60">
+                            {rows.length} email{rows.length === 1 ? "" : "s"} ·{" "}
+                            <span className="text-emerald-600">{okCount} ok</span>{" "}
+                            ·{" "}
+                            <span className="text-destructive">
+                              {failCount} failed
+                            </span>
+                          </span>
+                        </div>
+                        <div className="max-h-64 overflow-auto">
+                          <table className="w-full text-left text-xs">
+                            <thead className="sticky top-0 bg-card/95 text-[10px] uppercase tracking-wider text-foreground/50 backdrop-blur">
+                              <tr>
+                                <th className="px-3 py-2 font-medium">#</th>
+                                <th className="px-3 py-2 font-medium">Status → Template</th>
+                                <th className="px-3 py-2 font-medium">Result</th>
+                                <th className="px-3 py-2 font-medium">Attempts</th>
+                                <th className="px-3 py-2 font-medium">Time</th>
+                                <th className="px-3 py-2 font-medium">Error</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {rows.map((r) => (
+                                <tr
+                                  key={`${r.index}-${r.at}`}
+                                  className="border-t border-border/40 align-top"
+                                >
+                                  <td className="px-3 py-2 font-mono text-foreground/60">
+                                    {String(r.index).padStart(2, "0")}
+                                  </td>
+                                  <td className="px-3 py-2">
+                                    <span className="capitalize">{r.status}</span>
+                                    <span className="mx-1 text-foreground/40">→</span>
+                                    <span className="capitalize font-medium">
+                                      {r.template}
+                                    </span>
+                                  </td>
+                                  <td className="px-3 py-2">
+                                    {r.ok ? (
+                                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+                                        <CheckCircle2 className="h-3 w-3" />
+                                        Sent
+                                      </span>
+                                    ) : (
+                                      <span className="inline-flex items-center gap-1 rounded-full bg-destructive/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-destructive">
+                                        <XCircle className="h-3 w-3" />
+                                        Failed
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td className="px-3 py-2 text-foreground/70">
+                                    {r.attempts ?? "—"}
+                                  </td>
+                                  <td className="px-3 py-2 text-foreground/60 tabular-nums">
+                                    {new Date(r.at).toLocaleTimeString()}
+                                  </td>
+                                  <td className="px-3 py-2 text-destructive/90">
+                                    {r.error ? (
+                                      <span title={r.error} className="line-clamp-2">
+                                        {r.error}
+                                      </span>
+                                    ) : (
+                                      <span className="text-foreground/40">—</span>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {cancelRequestedAt && (
+                    <p className="text-[11px] text-foreground/50">
+                      Cancel requested at{" "}
+                      <span className="tabular-nums">
+                        {new Date(cancelRequestedAt).toLocaleTimeString()}
+                      </span>
+                      . Any send already in flight at that moment is listed under
+                      "After cancel".
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </section>
 
