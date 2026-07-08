@@ -19,6 +19,9 @@ type Booking = {
   student_id: string;
 };
 
+const BKASH_RECEIVE_NUMBER = "01756004037";
+const PAYABLE_STATES = new Set(["accepted", "awaiting_payment", "payment_rejected"]);
+
 /**
  * Unified bookings view. Pass `as="student"` to show /me/bookings,
  * `as="tutor"` to show /teach/bookings with accept/decline actions.
@@ -30,6 +33,10 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
   });
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [payingId, setPayingId] = useState<string | null>(null);
+  const [trxId, setTrxId] = useState("");
+  const [senderNumber, setSenderNumber] = useState("");
+  const [submittingPayment, setSubmittingPayment] = useState(false);
 
   const reload = async () => {
     const { data: s } = await supabase.auth.getSession();
@@ -64,6 +71,40 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
       return;
     }
     toast.success(`Booking ${status}.`);
+    void reload();
+  };
+
+  const openPayment = (id: string) => {
+    setPayingId(id);
+    setTrxId("");
+    setSenderNumber("");
+  };
+
+  const submitPayment = async (booking: Booking) => {
+    if (submittingPayment) return;
+    if (trxId.trim().length < 4 || senderNumber.trim().length < 6) {
+      toast.error("Please enter a valid TrxID and sender number.");
+      return;
+    }
+    setSubmittingPayment(true);
+    const { data, error } = await supabase.functions.invoke<{ ok: boolean; error?: string }>(
+      "tutor-booking-payment-submit",
+      {
+        body: {
+          booking_id: booking.id,
+          trx_id: trxId.trim(),
+          sender_number: senderNumber.trim(),
+          amount: Number(booking.price),
+        },
+      },
+    );
+    setSubmittingPayment(false);
+    if (error || !data?.ok) {
+      toast.error(data?.error || "Could not submit payment. Please try again.");
+      return;
+    }
+    toast.success("Payment submitted. Awaiting admin approval.");
+    setPayingId(null);
     void reload();
   };
 
@@ -129,6 +170,70 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
                     </button>
                   </div>
                 )}
+                {as === "student" && PAYABLE_STATES.has(b.status) && (
+                  <div className="mt-4 rounded-xl border border-border/60 bg-background/60 p-4">
+                    {payingId === b.id ? (
+                      <div className="space-y-3">
+                        <div className="text-[12px] text-foreground/70 leading-relaxed">
+                          bKash <b>Send Money</b> to{" "}
+                          <code className="rounded bg-card px-1.5 py-0.5">{BKASH_RECEIVE_NUMBER}</code>{" "}
+                          — amount <b>৳{Number(b.price).toLocaleString()}</b>, then paste your TrxID below.
+                        </div>
+                        <div className="grid gap-2 sm:grid-cols-2">
+                          <input
+                            value={trxId}
+                            onChange={(e) => setTrxId(e.target.value)}
+                            placeholder="bKash TrxID"
+                            className="rounded-lg border border-border bg-card px-3 py-2 text-[13px]"
+                            aria-label="bKash transaction ID"
+                          />
+                          <input
+                            value={senderNumber}
+                            onChange={(e) => setSenderNumber(e.target.value)}
+                            placeholder="Sender bKash number"
+                            className="rounded-lg border border-border bg-card px-3 py-2 text-[13px]"
+                            aria-label="Sender bKash number"
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => submitPayment(b)}
+                            disabled={submittingPayment}
+                            className="rounded-full bg-primary px-4 py-1.5 text-[12px] font-semibold text-primary-foreground disabled:opacity-60"
+                          >
+                            {submittingPayment ? "Submitting…" : "Submit payment"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setPayingId(null)}
+                            className="rounded-full border border-border px-4 py-1.5 text-[12px] font-semibold"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => openPayment(b.id)}
+                        className="rounded-full bg-primary px-4 py-1.5 text-[12px] font-semibold text-primary-foreground"
+                      >
+                        {b.status === "payment_rejected" ? "Resubmit payment" : "Pay with bKash"}
+                      </button>
+                    )}
+                  </div>
+                )}
+                {as === "student" && b.status === "payment_submitted" && (
+                  <p className="mt-3 text-[12px] text-amber-500">
+                    Payment submitted — awaiting admin approval.
+                  </p>
+                )}
+                {as === "tutor" && b.status === "payment_submitted" && (
+                  <p className="mt-3 text-[12px] text-amber-500">
+                    Student has submitted payment — awaiting admin verification.
+                  </p>
+                )}
               </li>
             ))}
           </ul>
@@ -142,14 +247,14 @@ const StatusPill = ({ status }: { status: string }) => {
   const tone =
     status === "accepted" || status === "confirmed" || status === "completed"
       ? "bg-primary/15 text-primary"
-      : status === "declined" || status === "cancelled"
+      : status === "declined" || status === "cancelled" || status === "payment_rejected"
       ? "bg-rose-500/15 text-rose-400"
       : "bg-amber-400/15 text-amber-500";
   return (
     <span
       className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] ${tone}`}
     >
-      {status}
+      {status.replace(/_/g, " ")}
     </span>
   );
 };

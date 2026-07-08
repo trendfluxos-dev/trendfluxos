@@ -225,6 +225,7 @@ export default function Dashboard() {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <AdminCard to="/admin/conversions" icon={BarChart3} label="Conversions" muted />
+              <AdminCard to="/admin/talent" icon={Users} label="Talent Applications" muted />
               <AdminCard to="/admin/uptime" icon={Activity} label="Uptime Monitor" muted />
               <AdminCard to="/admin/errors" icon={AlertTriangle} label="Error Logs" muted />
               <AdminCard to="/admin/web-vitals" icon={BarChart3} label="Web Vitals" muted />

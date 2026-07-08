@@ -64,6 +64,7 @@ const Admin = routes["/admin"];
 const LuxeVeilAdmin = routes["/admin/luxe-veil"];
 const ConversionDashboard = routes["/admin/conversions"];
 const EnterpriseDemos = routes["/admin/enterprise-demos"];
+const TalentApplicationsAdmin = routes["/admin/talent"];
 const CourseEnrollmentsAdmin = routes["/admin/course-enrollments"];
 const UptimeAdmin = routes["/admin/uptime"];
 const ErrorLogsAdmin = routes["/admin/errors"];
@@ -162,6 +163,7 @@ const RoutedApp = () => {
         <Route path="/admin/luxe-veil" element={<RequireRole roles={["admin"]}><LuxeVeilAdmin /></RequireRole>} />
         <Route path="/admin/conversions" element={<RequireRole roles={["admin"]}><ConversionDashboard /></RequireRole>} />
         <Route path="/admin/enterprise-demos" element={<RequireRole roles={["admin"]}><EnterpriseDemos /></RequireRole>} />
+        <Route path="/admin/talent" element={<RequireRole roles={["admin", "editor"]}><TalentApplicationsAdmin /></RequireRole>} />
         <Route path="/admin/course-enrollments" element={<RequireRole roles={["admin"]}><CourseEnrollmentsAdmin /></RequireRole>} />
         <Route path="/admin/uptime" element={<RequireRole roles={["admin"]}><UptimeAdmin /></RequireRole>} />
         <Route path="/admin/errors" element={<RequireRole roles={["admin"]}><ErrorLogsAdmin /></RequireRole>} />
