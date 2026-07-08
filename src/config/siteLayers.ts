@@ -1,7 +1,7 @@
 /**
  * Single source of truth for the 4-layer site architecture:
  *   company  -> business identity, services, discovery
- *   founder  -> Zahid / Emon narrative, trust, authority
+ *   founder  -> Zahid Hasan Emon narrative, trust, authority
  *   brand    -> revenue-generating product ecosystem
  *   system   -> backend / account (noindex)
  *
@@ -36,7 +36,7 @@ export interface LayerNode {
 
 export const LAYER_META: Record<Layer, { label: string; tagline: string; hubPath: string }> = {
   company: { label: "Company",  tagline: "The brain — services + identity",      hubPath: "/ecosystem" },
-  founder: { label: "Founder",  tagline: "The trust — Zahid / Emon narrative",   hubPath: "/portfolio" },
+  founder: { label: "Founder",  tagline: "The trust — Zahid Hasan Emon narrative",   hubPath: "/portfolio" },
   brand:   { label: "Brands",   tagline: "The revenue — product ecosystem",      hubPath: "/ecosystem" },
   system:  { label: "System",   tagline: "The control — admin + account",        hubPath: "/dashboard" },
 };
