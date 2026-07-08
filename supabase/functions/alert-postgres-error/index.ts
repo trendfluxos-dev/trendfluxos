@@ -9,6 +9,7 @@ const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN");
 const TELEGRAM_CHAT_ID = Deno.env.get("TELEGRAM_CHAT_ID");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 
 const PATTERNS: Array<{ key: string; regex: RegExp; label: string }> = [
   {
@@ -41,6 +42,31 @@ interface AlertPayload {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // Auth gate: allow (a) service-role bearer, or (b) authenticated admin JWT.
+  // Prevents unauthenticated callers from flooding Telegram alerts.
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const bearer = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  let authorized = false;
+  if (bearer && bearer === SERVICE_ROLE) {
+    authorized = true;
+  } else if (bearer) {
+    try {
+      const userClient = createClient(SUPABASE_URL, ANON_KEY, {
+        global: { headers: { Authorization: `Bearer ${bearer}` } },
+      });
+      const { data: claims } = await userClient.auth.getClaims(bearer);
+      if (claims?.claims?.sub) {
+        const { data: isAdmin } = await userClient.rpc("current_user_has_role", { _role: "admin" });
+        if (isAdmin) authorized = true;
+      }
+    } catch {
+      // fall through
+    }
+  }
+  if (!authorized) {
+    return json({ ok: false, error: "unauthorized" }, 401);
+  }
 
   let body: AlertPayload;
   try {
