@@ -1,6 +1,18 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Compass, Home, LayoutDashboard, Mail, Search } from "lucide-react";
+import {
+  ArrowLeft,
+  Briefcase,
+  Compass,
+  Home,
+  LayoutDashboard,
+  Mail,
+  Search,
+  Sparkles,
+  Star,
+  UserRound,
+  Users,
+} from "lucide-react";
 import { resolveRoute } from "@/lib/routeSearch";
 import { useSeo } from "@/hooks/useSeo";
 import { track } from "@/lib/analytics";
@@ -12,6 +24,15 @@ const SUGGESTED = [
   { to: "/ecosystem", label: "Ecosystem", icon: Compass },
   { to: "/explore", label: "Explore", icon: Search },
   { to: "/contact", label: "Contact", icon: Mail },
+];
+
+const POPULAR = [
+  { to: "/project-lead", label: "Project Lead", desc: "Book Zahid Hasan Emon directly", icon: UserRound },
+  { to: "/services", label: "Services", desc: "Growth, automation & consultancy", icon: Briefcase },
+  { to: "/brands", label: "Brands", desc: "Sub-brands under TrendFlux", icon: Sparkles },
+  { to: "/showcase", label: "Showcase", desc: "Case files & outcomes", icon: Star },
+  { to: "/trendflux-talent", label: "TrendFlux Talent", desc: "Apply to join the team", icon: Users },
+  { to: "/dashboard", label: "Dashboard", desc: "Your account & tools", icon: LayoutDashboard },
 ];
 
 const NotFound = () => {
@@ -146,6 +167,32 @@ const NotFound = () => {
                   >
                     <Icon className="h-3.5 w-3.5 text-muted-foreground transition-colors group-hover:text-primary" />
                     {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="mt-12 text-left">
+            <p className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground text-center">
+              Popular pages
+            </p>
+            <ul className="mt-5 grid gap-2 sm:grid-cols-2">
+              {POPULAR.map(({ to, label, desc, icon: Icon }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className="group flex items-start gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-primary/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  >
+                    <span className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="text-sm font-medium text-foreground group-hover:text-primary">
+                        {label}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{desc}</span>
+                    </span>
                   </Link>
                 </li>
               ))}
