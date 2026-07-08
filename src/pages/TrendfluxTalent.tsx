@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, EVENTS } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
 
 const FB_GROUP_URL = "https://www.facebook.com/groups/trendfluxtalent/";
@@ -130,6 +130,10 @@ const JoinNetworkForm = () => {
       form: "join_network",
       role: result.data.role,
       destination: "whatsapp",
+    });
+    trackEvent(EVENTS.TALENT_APPLY, {
+      brand: "trendflux_talent",
+      role: result.data.role,
     });
     trackEvent("whatsapp_open", {
       brand: "trendflux_talent",

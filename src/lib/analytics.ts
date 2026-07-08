@@ -87,6 +87,25 @@ export function track(event: string, params: AnalyticsParams = {}) {
 // Backwards-compatible alias used by some call sites.
 export const trackEvent = track;
 
+/**
+ * Canonical funnel event names — use these constants to keep GA4 reports
+ * consistent across the ecosystem (auth, growth, edtech, marriage, talent).
+ */
+export const EVENTS = {
+  SIGN_UP: "sign_up",
+  PAGE_VIEW: "page_view",
+  LEAD_SUBMIT: "lead_submit",
+  BOOK_DEMO: "book_demo",
+  ENROLL_START: "enroll_start",
+  ENROLL_COMPLETE: "enroll_complete",
+  TUTOR_BOOKING_CREATE: "tutor_booking_create",
+  TUTOR_BOOKING_PAYMENT_SUBMIT: "tutor_booking_payment_submit",
+  PURCHASE: "purchase",
+  CERTIFICATE_VERIFY: "certificate_verify",
+  MARRIAGE_INQUIRY: "marriage_inquiry",
+  TALENT_APPLY: "talent_apply",
+} as const;
+
 export function readStoredEvents(): StoredEvent[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);

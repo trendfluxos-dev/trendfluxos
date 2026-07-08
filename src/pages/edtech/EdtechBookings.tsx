@@ -5,6 +5,7 @@ import EdtechHeader from "@/components/edtech/EdtechHeader";
 import EdtechPageHeader from "@/components/edtech/EdtechPageHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
+import { track, EVENTS } from "@/lib/analytics";
 
 type Booking = {
   id: string;
@@ -104,6 +105,11 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
       return;
     }
     toast.success("Payment submitted. Awaiting admin approval.");
+    track(EVENTS.TUTOR_BOOKING_PAYMENT_SUBMIT, {
+      booking_id: booking.id,
+      amount: Number(booking.price),
+      currency: booking.currency,
+    });
     setPayingId(null);
     void reload();
   };
