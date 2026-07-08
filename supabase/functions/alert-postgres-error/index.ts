@@ -16,6 +16,16 @@ const PATTERNS: Array<{ key: string; regex: RegExp; label: string }> = [
     regex: /permission denied for (?:table|relation) "?live_classes"?/i,
     label: "🚨 Postgres permission denied: live_classes",
   },
+  {
+    key: "permission_denied_has_role",
+    regex: /permission denied for function has_role/i,
+    label: "🚨 Postgres permission denied: has_role()",
+  },
+  {
+    key: "role_check_failed_outreach",
+    regex: /role_check_failed:(lead-outreach-start|lead-followup-sweeper)/i,
+    label: "🚨 Admin role check failed in lead outreach flow",
+  },
 ];
 
 const DEDUPE_MINUTES = 15;
