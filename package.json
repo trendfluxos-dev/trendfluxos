@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:smoke": "vitest run --config vitest.smoke.config.ts",
+    "test:visual:fingerprint": "vitest run src/test/home-visual-regression.test.tsx src/test/portfolio-highlights-visual-regression.test.tsx",
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install webkit",
     "audit:bn-contrast": "node scripts/contrast-bn-runtime.mjs",
