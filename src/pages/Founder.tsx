@@ -11,7 +11,8 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { usePressItems } from "@/hooks/usePressItems";
 import { BRAND } from "@/config/brand";
-import portrait from "@/assets/zahid-hasan-emon.webp";
+import portraitAsset from "@/assets/zahid-hasan-emon-podium.png.asset.json";
+const portrait = portraitAsset.url;
 import {
   FOUNDER, FOUNDER_CHAPTERS, FOUNDER_PROJECTS, FOUNDER_TECH, FOUNDER_STATS,
   FOUNDER_EXPERTISE, FOUNDER_STORY_SUMMARY, FOUNDER_STORY_THEMES,
