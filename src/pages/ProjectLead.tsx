@@ -515,11 +515,74 @@ const ProjectLead = () => {
       </section>
 
       {/* DIRECT CTA */}
-      <section id="book" className="px-6 lg:px-10 py-24 scroll-mt-24">
+      <section id="education" className="px-6 lg:px-10 py-24 border-t border-border">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-3xl mb-14">
+            <p className="text-primary uppercase tracking-[0.3em] text-xs mb-4">
+              Education & Certifications
+            </p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
+              Verified academic record
+            </h2>
+            <p className="text-muted-foreground mt-4 max-w-xl">
+              Formal degrees, university transcripts and program certificates —
+              on file and available on request for hiring, matrimonial or
+              collaboration verification.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            {educationRecords.map((e) => (
+              <div
+                key={e.degree}
+                className="rounded-2xl border border-border bg-card p-6 flex flex-col gap-3"
+              >
+                <div className="flex items-center gap-2 text-primary">
+                  <GraduationCap className="w-5 h-5" />
+                  <span className="text-xs uppercase tracking-[0.25em]">
+                    {e.status}
+                  </span>
+                </div>
+                <h3 className="font-display text-lg font-semibold leading-snug">
+                  {e.degree}
+                </h3>
+                <p className="text-sm text-foreground/80">{e.institution}</p>
+                <p className="text-xs text-muted-foreground">{e.period}</p>
+                <p className="text-sm text-muted-foreground border-t border-border pt-3 mt-auto">
+                  {e.focus}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {certifications.map((c) => (
+              <div
+                key={c.title}
+                className="rounded-2xl border border-border bg-card/60 p-6 flex gap-4"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <Award className="w-5 h-5" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="font-display text-base font-semibold leading-snug">
+                    {c.title}
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    {c.issuer} · {c.date}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {c.note}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* EDUCATION & CERTIFICATIONS placeholder — replaced below */}
-      <section id="book-real" className="hidden" />
+      {/* DIRECT CTA */}
+      <section id="book" className="px-6 lg:px-10 py-24 scroll-mt-24">
         <div className="max-w-5xl mx-auto relative rounded-[2rem] glass-strong overflow-hidden p-10 md:p-16">
           <div className="absolute inset-0 bg-gradient-hero" aria-hidden />
           <div className="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
