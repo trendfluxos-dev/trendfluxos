@@ -155,6 +155,7 @@ export type SystemStep = {
   window: string;
   desc: string;
   outputs: string[];
+  outcome: { metric: string; label: string };
 };
 
 export const SYSTEMS_HE_BUILT: SystemStep[] = [
@@ -165,6 +166,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     window: "Days 1–14",
     desc: "Audit the funnel, isolate the highest-leverage offer, and rewrite category positioning so every downstream asset compounds.",
     outputs: ["Positioning brief", "ICP scorecard", "Offer architecture"],
+    outcome: { metric: "2.3×", label: "avg. lift in qualified reply rate" },
   },
   {
     icon: Megaphone,
@@ -173,6 +175,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     window: "Days 15–35",
     desc: "Stand up Meta Advantage+ funnels with creative testing cadence, hook-rate tracking, and CAC ceilings wired to spend controls.",
     outputs: ["Ads account build", "Creative testing matrix", "CAC dashboard"],
+    outcome: { metric: "−38%", label: "median CAC after 30 days" },
   },
   {
     icon: PenLine,
@@ -181,6 +184,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     window: "Days 20–50",
     desc: "A production pipeline for hook-led short-form, long-form authority, and always-on creative refresh — briefs, editors, and publishing cadence in one loop.",
     outputs: ["Editorial calendar", "Hook & script library", "Short-form production pipeline"],
+    outcome: { metric: "12×", label: "publish cadence vs. baseline" },
   },
   {
     icon: Database,
@@ -189,6 +193,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     window: "Days 30–55",
     desc: "One source of truth for every lead. Scoring, routing, and lifecycle automations replace spreadsheets and Slack handoffs.",
     outputs: ["CRM schema", "Lead-scoring model", "Lifecycle automations"],
+    outcome: { metric: "100%", label: "leads scored & routed automatically" },
   },
   {
     icon: Bot,
@@ -197,6 +202,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     window: "Days 45–75",
     desc: "Agents and workflows that replace 20+ manual hours weekly — qualification, follow-up, reporting, and content ops.",
     outputs: ["Agent stack", "Workflow library", "SOP playbooks"],
+    outcome: { metric: "20+ hrs", label: "manual ops removed per week" },
   },
   {
     icon: Sparkles,
@@ -205,6 +211,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     window: "Days 70–90",
     desc: "Observable dashboards, governance, and handover. You exit the engagement owning the OS — not renting it.",
     outputs: ["Exec dashboard", "Governance doc", "Team training"],
+    outcome: { metric: "1", label: "exec dashboard, full-team trained" },
   },
   {
     icon: ShieldCheck,
@@ -213,6 +220,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     window: "Day 91+",
     desc: "Six systems, one operating layer. Audited, documented, and built to run without an agency on retainer.",
     outputs: ["Audit-ready OS", "Founder ownership", "Compounding leverage"],
+    outcome: { metric: "0", label: "agency retainer required to operate" },
   },
 ];
 
