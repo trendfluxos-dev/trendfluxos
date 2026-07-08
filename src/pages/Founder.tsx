@@ -137,7 +137,7 @@ const Founder = () => {
         "@type": "Person",
         name: FOUNDER.name,
         jobTitle: FOUNDER.role,
-        image: `${BRAND.url}${portrait}`,
+        image: `${BRAND.url}${portrait}`.replace(`${BRAND.url}/__l5e`, portrait.startsWith("http") ? portrait : `${BRAND.url}${portrait}`),
         url: FOUNDER.bookletUrl,
         worksFor: { "@type": "Organization", name: BRAND.name, url: BRAND.url },
         sameAs: [
