@@ -156,6 +156,8 @@ export type SystemStep = {
   desc: string;
   outputs: string[];
   outcome: { metric: string; label: string };
+  /** Slug of the matching case study on /case-studies/:slug. */
+  caseSlug?: string;
 };
 
 export const SYSTEMS_HE_BUILT: SystemStep[] = [
@@ -167,6 +169,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     desc: "Audit the funnel, isolate the highest-leverage offer, and rewrite category positioning so every downstream asset compounds.",
     outputs: ["Positioning brief", "ICP scorecard", "Offer architecture"],
     outcome: { metric: "2.3×", label: "avg. lift in qualified reply rate" },
+    caseSlug: "personal-brand-authority",
   },
   {
     icon: Megaphone,
@@ -176,6 +179,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     desc: "Stand up Meta Advantage+ funnels with creative testing cadence, hook-rate tracking, and CAC ceilings wired to spend controls.",
     outputs: ["Ads account build", "Creative testing matrix", "CAC dashboard"],
     outcome: { metric: "−38%", label: "median CAC after 30 days" },
+    caseSlug: "global-strategy-us-uk",
   },
   {
     icon: PenLine,
@@ -185,6 +189,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     desc: "A production pipeline for hook-led short-form, long-form authority, and always-on creative refresh — briefs, editors, and publishing cadence in one loop.",
     outputs: ["Editorial calendar", "Hook & script library", "Short-form production pipeline"],
     outcome: { metric: "12×", label: "publish cadence vs. baseline" },
+    caseSlug: "content-engine-200",
   },
   {
     icon: Database,
@@ -194,6 +199,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     desc: "One source of truth for every lead. Scoring, routing, and lifecycle automations replace spreadsheets and Slack handoffs.",
     outputs: ["CRM schema", "Lead-scoring model", "Lifecycle automations"],
     outcome: { metric: "100%", label: "leads scored & routed automatically" },
+    caseSlug: "whatsapp-lead-conversion",
   },
   {
     icon: Bot,
@@ -203,6 +209,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     desc: "Agents and workflows that replace 20+ manual hours weekly — qualification, follow-up, reporting, and content ops.",
     outputs: ["Agent stack", "Workflow library", "SOP playbooks"],
     outcome: { metric: "20+ hrs", label: "manual ops removed per week" },
+    caseSlug: "kormoshikkha-edtech-platform",
   },
   {
     icon: Sparkles,
@@ -212,6 +219,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     desc: "Observable dashboards, governance, and handover. You exit the engagement owning the OS — not renting it.",
     outputs: ["Exec dashboard", "Governance doc", "Team training"],
     outcome: { metric: "1", label: "exec dashboard, full-team trained" },
+    caseSlug: "sme-growth-architecture",
   },
   {
     icon: ShieldCheck,
@@ -221,6 +229,7 @@ export const SYSTEMS_HE_BUILT: SystemStep[] = [
     desc: "Six systems, one operating layer. Audited, documented, and built to run without an agency on retainer.",
     outputs: ["Audit-ready OS", "Founder ownership", "Compounding leverage"],
     outcome: { metric: "0", label: "agency retainer required to operate" },
+    caseSlug: "organic-reach-485k",
   },
 ];
 

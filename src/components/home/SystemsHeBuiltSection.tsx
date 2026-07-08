@@ -164,6 +164,16 @@ export const SystemsHeBuiltSection = () => {
             <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground sm:text-base">
               {current.desc}
             </p>
+            {current.caseSlug && (
+              <Link
+                to={`/case-studies/${current.caseSlug}`}
+                aria-label={`Read the case study behind ${current.title}`}
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+              >
+                See the case study
+                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            )}
           </div>
           <div className="rounded-xl border border-border bg-background/60 p-5">
             <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-muted-foreground">Deliverables</p>
@@ -240,6 +250,17 @@ export const SystemsHeBuiltSection = () => {
               </div>
               <TrendingUp className="h-4 w-4 text-primary/60" aria-hidden />
             </div>
+
+            {s.caseSlug && (
+              <Link
+                to={`/case-studies/${s.caseSlug}`}
+                aria-label={`Read the case study behind ${s.title}`}
+                className="mt-4 inline-flex items-center gap-1.5 self-start text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+              >
+                See the case study
+                <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            )}
           </li>
         ))}
       </ul>
