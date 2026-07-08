@@ -165,33 +165,30 @@ const BentoTile = ({ system }: { system: SystemCase }) => {
     </>
   );
 
-  const tileClass = cn(
+  const surfaceClass = cn(
     "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all sm:p-6",
-    SIZE_CLASSES[system.size],
     !isInternal &&
       "hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
   );
 
-  if (isInternal) {
-    return (
-      <li
-        className={tileClass}
-        aria-label={`${system.title} — internal system`}
-      >
-        {body}
-      </li>
-    );
-  }
-
   return (
-    <li className={cn("contents", SIZE_CLASSES[system.size])}>
-      <Link
-        to={system.href!}
-        aria-label={`${system.title} — ${system.linkLabel}`}
-        className={tileClass}
-      >
-        {body}
-      </Link>
+    <li className={cn("flex", SIZE_CLASSES[system.size])}>
+      {isInternal ? (
+        <div
+          className={cn(surfaceClass, "w-full")}
+          aria-label={`${system.title} — internal system`}
+        >
+          {body}
+        </div>
+      ) : (
+        <Link
+          to={system.href!}
+          aria-label={`${system.title} — ${system.linkLabel}`}
+          className={cn(surfaceClass, "w-full")}
+        >
+          {body}
+        </Link>
+      )}
     </li>
   );
 };
