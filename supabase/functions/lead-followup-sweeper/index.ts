@@ -144,6 +144,25 @@ Deno.serve(async (req) => {
     }
   }
 
+  const successCount = results.filter(r => r.ok).length;
+  const failureCount = results.length - successCount;
+  const overall: "success" | "failure" | "partial" =
+    results.length === 0
+      ? "success"
+      : failureCount === 0
+        ? "success"
+        : successCount === 0
+          ? "failure"
+          : "partial";
+  await logRun(supabase, overall, {
+    http_status: 200,
+    processed_count: results.length,
+    success_count: successCount,
+    failure_count: failureCount,
+    metadata: { results: results.slice(0, 25) },
+    error: failureCount > 0 ? results.find(r => !r.ok)?.error ?? null : null,
+  });
+
   return new Response(JSON.stringify({ ok: true, processed: results.length, results }), {
     status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
