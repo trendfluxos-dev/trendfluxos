@@ -238,6 +238,19 @@ const CaseStudyPage = () => {
 
       <QuoteDialog open={quoteOpen} onOpenChange={setQuoteOpen} />
 
+      <div className="relative px-6 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-4xl border-t border-border/50 pt-8">
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.25em] text-foreground/70 hover:text-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded"
+            aria-label="Back to case studies table of contents"
+          >
+            <ArrowLeft className="h-4 w-4" /> Back to Contents
+          </button>
+        </div>
+      </div>
+
       <section className="relative px-6 pb-20 md:px-12 lg:px-20">
         <div className="mx-auto max-w-5xl">
           <TestimonialsSection
