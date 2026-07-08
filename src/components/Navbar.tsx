@@ -305,6 +305,18 @@ const Navbar = () => {
                   })}
 
                   <div className="flex flex-col gap-0.5 pt-3 border-t border-[#c11f1f]/30 dark:border-[#7a1e1e]/45">
+                    {BRAND_CONTACTS.trendflux.whatsapp && (
+                      <a
+                        href={BRAND_CONTACTS.trendflux.whatsapp}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setOpen(false)}
+                        className="flex items-center gap-2.5 rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-[#0f6b34] dark:text-[#7ce3a5] hover:bg-[#25D366]/10 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]/60"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        Chat on WhatsApp
+                      </a>
+                    )}
                     <button
                     type="button"
                     onClick={() => {
