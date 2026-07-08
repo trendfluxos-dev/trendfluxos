@@ -26,17 +26,17 @@ const allProjects = [
   // ── Cross-engine desktop smoke ────────────────────────────────────────
   {
     name: "chromium-desktop",
-    testMatch: /(home-hero|error-boundary|security-baseline)\.spec\.ts/,
+    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback)\.spec\.ts/,
     use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 } },
   },
   {
     name: "firefox-desktop",
-    testMatch: /(home-hero|error-boundary|security-baseline)\.spec\.ts/,
+    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback)\.spec\.ts/,
     use: { ...devices["Desktop Firefox"], viewport: { width: 1280, height: 800 } },
   },
   {
     name: "webkit-desktop",
-    testMatch: /(home-hero|error-boundary|security-baseline)\.spec\.ts/,
+    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback)\.spec\.ts/,
     use: { ...devices["Desktop Safari"], viewport: { width: 1280, height: 800 } },
   },
 
