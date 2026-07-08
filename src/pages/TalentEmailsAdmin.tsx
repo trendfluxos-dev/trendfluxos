@@ -100,6 +100,33 @@ export default function TalentEmailsAdmin() {
   const [testRole, setTestRole] = useState("Content Creator");
   const [sendingKey, setSendingKey] = useState<string | null>(null);
   const [sendingAll, setSendingAll] = useState(false);
+  const [maxRetries, setMaxRetries] = useState(2);
+  const [retryDelayMs, setRetryDelayMs] = useState(1500);
+  const [rateDelayMs, setRateDelayMs] = useState(500);
+  const [bulkProgress, setBulkProgress] = useState<{
+    done: number;
+    total: number;
+    ok: number;
+    failed: number;
+  } | null>(null);
+
+  const sleep = (ms: number) =>
+    new Promise<void>((r) => setTimeout(r, Math.max(0, ms)));
+
+  const invokeWithRetry = async (subject: string, html: string) => {
+    let lastErr: string | null = null;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      const { error } = await supabase.functions.invoke("send-resend-email", {
+        body: { to: testEmail, subject, html },
+      });
+      if (!error) return { ok: true as const, attempts: attempt + 1 };
+      lastErr = error.message;
+      if (attempt < maxRetries) {
+        await sleep(retryDelayMs * Math.pow(2, attempt));
+      }
+    }
+    return { ok: false as const, error: lastErr ?? "unknown" };
+  };
 
   const sendTest = async (
     key: TemplateKey | "none",
@@ -146,13 +173,16 @@ export default function TalentEmailsAdmin() {
       return;
     }
     setSendingAll(true);
+    setBulkProgress({ done: 0, total: mapped.length, ok: 0, failed: 0 });
     let ok = 0;
     let failed = 0;
-    for (const status of mapped) {
+    for (let i = 0; i < mapped.length; i++) {
+      const status = mapped[i];
       const key = statusMap[status] as TemplateKey;
       const tpl = templates[key];
       if (!tpl) {
         failed++;
+        setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
         continue;
       }
       const rendered = renderTemplate(tpl, {
@@ -160,15 +190,14 @@ export default function TalentEmailsAdmin() {
         role: testRole || "Role",
         email: testEmail,
       });
-      const { error } = await supabase.functions.invoke("send-resend-email", {
-        body: {
-          to: testEmail,
-          subject: `[TEST · ${status}] ${rendered.subject}`,
-          html: `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b></div>${rendered.html}`,
-        },
-      });
-      if (error) failed++;
-      else ok++;
+      const result = await invokeWithRetry(
+        `[TEST · ${status}] ${rendered.subject}`,
+        `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b></div>${rendered.html}`,
+      );
+      if (result.ok) ok++;
+      else failed++;
+      setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
+      if (i < mapped.length - 1) await sleep(rateDelayMs);
     }
     setSendingAll(false);
     if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
