@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Compass, Home, Mail, Search } from "lucide-react";
 import { resolveRoute } from "@/lib/routeSearch";
 import { useSeo } from "@/hooks/useSeo";
+import { track } from "@/lib/analytics";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -37,6 +38,15 @@ const NotFound = () => {
   useEffect(() => {
     // eslint-disable-next-line no-console
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    track("page_not_found", {
+      path: location.pathname,
+      search: location.search || null,
+      full_path: location.pathname + location.search,
+      referrer: typeof document !== "undefined" ? document.referrer || null : null,
+      suggested_path: match?.path ?? null,
+      suggested_score: match?.score ?? null,
+      will_redirect: willRedirect,
+    });
   }, [location.pathname]);
 
   // Instant smart redirect when we have a confident match.
