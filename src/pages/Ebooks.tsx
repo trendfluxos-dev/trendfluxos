@@ -114,7 +114,10 @@ const EbookCard = ({ book }: { book: Ebook }) => {
   const current = book.versions[active];
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-lg">
+    <article
+      id={book.slug}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-shadow hover:shadow-lg"
+    >
       <div className="relative block aspect-[3/4] overflow-hidden bg-muted">
         {current?.cover ? (
           <a
@@ -191,7 +194,12 @@ const EbookCard = ({ book }: { book: Ebook }) => {
           <div className="mt-6 flex flex-wrap gap-3">
             <Button asChild={Boolean(current?.pdf)} disabled={!current?.pdf} className="gap-2">
               {current?.pdf ? (
-                <a href={current.pdf} download={current.filename}>
+                <a
+                  href={current.pdf}
+                  download={current.filename}
+                  title={`Download ${book.title} ${active.toUpperCase()} (PDF)`}
+                  aria-label={`Download ${book.title} ${active.toUpperCase()} as PDF`}
+                >
                   <Download className="h-4 w-4" />
                   Download PDF
                 </a>
@@ -209,7 +217,13 @@ const EbookCard = ({ book }: { book: Ebook }) => {
               className="gap-2"
             >
               {current?.pdf ? (
-                <a href={current.pdf} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={current.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={`Preview ${book.title} ${active.toUpperCase()} in browser`}
+                  aria-label={`Preview ${book.title} ${active.toUpperCase()} in browser`}
+                >
                   <Eye className="h-4 w-4" />
                   Preview
                 </a>
