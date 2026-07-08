@@ -37,9 +37,10 @@ const educationRecords = [
   {
     degree: "BSc (Honours) in Information Technology",
     institution: "Institute of Information Technology (IIT), Jahangirnagar University",
-    period: "2020 — 2024",
-    status: "Completed",
-    focus: "Software Engineering · Data Systems · Digital Product Strategy",
+    period: "2018 — 2024 · Batch 2018-19",
+    status: "Completed · CGPA 2.63",
+    focus:
+      "Software Engineering · Data Systems · Digital Product Strategy · Hall: Shaheed Rafiq-Jabbar",
   },
   {
     degree: "Higher Secondary Certificate (HSC) — Science",
@@ -59,10 +60,11 @@ const educationRecords = [
 
 const certifications = [
   {
-    title: "Official University Certificates — BSc (Honours) in IT",
-    issuer: "IIT, Jahangirnagar University",
+    title: "Official University Certificate — BSc (Honours) in IT",
+    issuer: "IIT, Jahangirnagar University · Controller of Examinations",
     date: "22 May 2024",
-    note: "Verified academic transcript & provisional certificate on file.",
+    note:
+      "Class Roll 2484 · Exam Roll 172491 · Result published in JU notice (juniv.edu/discussion/18018).",
   },
   {
     title: "Digital Marketing & Growth Systems",
