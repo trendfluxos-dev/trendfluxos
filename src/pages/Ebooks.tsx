@@ -13,6 +13,7 @@ import jobApplyEpub from "@/assets/ebooks/job-apply-v2.epub.asset.json";
 import jobApplyEpubPhone from "@/assets/ebooks/job-apply-v2-phone.epub.asset.json";
 import jobApplyPdfPrint from "@/assets/ebooks/job-apply-v2-print.pdf.asset.json";
 import jobApplyAzw3 from "@/assets/ebooks/job-apply-v2.azw3.asset.json";
+import { QRCodeSVG } from "qrcode.react";
 import clientHuntingPdf from "@/assets/ebooks/client-hunting-v2.pdf.asset.json";
 import clientHuntingCover from "@/assets/ebooks/client-hunting-v2-cover.jpg.asset.json";
 import marriagePdf from "@/assets/ebooks/marriage-v2.pdf.asset.json";
