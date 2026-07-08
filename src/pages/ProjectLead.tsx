@@ -24,11 +24,34 @@ import { useSeo } from "@/hooks/useSeo";
 import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
 import { SHOWCASE_ITEMS } from "@/data/showcase";
 import { SystemsHeBuiltSection } from "@/components/home/SystemsHeBuiltSection";
+import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
+import { TrendingUp } from "lucide-react";
 
 const metrics = [
   { value: "4.85L+", label: "Organic Views" },
   { value: "82%", label: "Organic Reach" },
   { value: "45%+", label: "Engagement Growth" },
+];
+
+const transformations = [
+  {
+    client: "Kormoshikkha (EdTech)",
+    stage: "0 → 1 launch",
+    outcome: "Live-cohort model went from concept to 300+ enrolled students in the first 90 days.",
+    lift: "+300 enrolled",
+  },
+  {
+    client: "LuxeVeil (D2C · Bridal)",
+    stage: "Positioning + funnel",
+    outcome: "Rebuilt inquiry funnel + attribution — qualified inquiries 4×, sales-call rate up 68%.",
+    lift: "4× inquiries",
+  },
+  {
+    client: "BrandToki (Creative studio)",
+    stage: "Ops + retention",
+    outcome: "Systematized delivery pipeline, cut turnaround 40% while retainer retention held above 90%.",
+    lift: "−40% turnaround",
+  },
 ];
 
 const expertise = [
@@ -95,6 +118,7 @@ const socials = [
 
 const ProjectLead = () => {
   const [marriageOpen, setMarriageOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
   useSeo({
     title: "Project Lead — Zahid Hasan Emon | Founder, TrendFlux Ecosystem",
     description:
@@ -105,6 +129,7 @@ const ProjectLead = () => {
   return (
     <main className="min-h-dvh bg-background text-foreground overflow-x-hidden">
       <MarriageInquiryDialog open={marriageOpen} onOpenChange={setMarriageOpen} />
+      <ProjectLeadBookingDialog open={bookingOpen} onOpenChange={setBookingOpen} />
       <Navbar />
 
       {/* HERO / ABOUT */}
@@ -404,6 +429,52 @@ const ProjectLead = () => {
         </div>
       </section>
 
+      {/* CLIENT TRANSFORMATION STORIES */}
+      <section className="px-6 lg:px-10 py-24 border-t border-border">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-primary uppercase tracking-[0.3em] text-xs mb-3">
+              Client Transformation Stories
+            </p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold max-w-3xl mx-auto">
+              Real founders, <span className="text-gradient">measurable lifts</span>
+            </h2>
+            <p className="text-foreground/60 max-w-xl mx-auto mt-4 text-sm">
+              Short before-and-after snapshots from engagements where the Project
+              Lead ran strategy, systems and delivery end-to-end.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {transformations.map((t) => (
+              <article
+                key={t.client}
+                className="glass glass-hover rounded-3xl p-7 flex flex-col"
+              >
+                <div className="flex items-center gap-2 text-primary">
+                  <TrendingUp className="w-4 h-4" />
+                  <span className="text-[10px] uppercase tracking-[0.3em]">
+                    {t.stage}
+                  </span>
+                </div>
+                <h3 className="font-display text-xl font-bold mt-3">{t.client}</h3>
+                <p className="text-gold font-semibold mt-2">{t.lift}</p>
+                <p className="text-foreground/70 mt-4 leading-relaxed text-sm">
+                  {t.outcome}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button variant="hero" size="lg" onClick={() => setBookingOpen(true)}>
+              Start your transformation
+              <ArrowRight />
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* DIRECT CTA */}
       <section id="book" className="px-6 lg:px-10 py-24 scroll-mt-24">
         <div className="max-w-5xl mx-auto relative rounded-[2rem] glass-strong overflow-hidden p-10 md:p-16">
@@ -426,10 +497,21 @@ const ProjectLead = () => {
               </p>
             </div>
             <div className="flex flex-col gap-3">
-              <Button variant="hero" size="lg" asChild>
-                <a href="https://wa.me/message/5GSNUYK6CSDCN1" target="_blank" rel="noreferrer">
-                  Book Direct
-                  <ArrowRight />
+              <Button
+                variant="hero"
+                size="lg"
+                onClick={() => setBookingOpen(true)}
+              >
+                Book Direct
+                <ArrowRight />
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <a
+                  href="https://wa.me/message/5GSNUYK6CSDCN1"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  WhatsApp instead
                 </a>
               </Button>
               <Button variant="outline" size="lg" asChild>
