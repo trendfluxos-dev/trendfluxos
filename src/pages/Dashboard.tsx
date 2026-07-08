@@ -56,6 +56,9 @@ export default function Dashboard() {
   });
 
   const [loading, setLoading] = useState(true);
+  // Hold the route-level skeleton until the dashboard's initial fetch
+  // (profile + role + counts) has settled, then swap to real content.
+  useRouteDataLoading(loading);
   const [email, setEmail] = useState<string>("");
   const [fullName, setFullName] = useState<string>("");
   const [role, setRole] = useState<Role>(null);
