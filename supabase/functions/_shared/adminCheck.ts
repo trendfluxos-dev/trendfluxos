@@ -20,7 +20,7 @@
 // - We only *read* one row; we never write with the elevated client here.
 // - Any unexpected error is logged and returns `false` (fail-closed).
 
-import { createClient, type SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2";
 
 export type AppRole = "admin" | "moderator" | "user" | "student" | "teacher" | "tutor" | "editor";
 
