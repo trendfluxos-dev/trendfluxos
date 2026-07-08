@@ -202,6 +202,7 @@ const RoutedApp = () => {
         <Route path="/brandtoki" element={<BrandToki />} />
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/founder" element={<Founder />} />
+        <Route path="/bdjobs-profile" element={<BdjobsProfile />} />
         <Route path="/enterprise" element={<Enterprise />} />
         <Route path="/toolkit" element={<Toolkit />} />
         <Route path="/ebooks" element={<Ebooks />} />
