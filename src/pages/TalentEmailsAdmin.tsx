@@ -116,18 +116,21 @@ export default function TalentEmailsAdmin() {
     new Promise<void>((r) => setTimeout(r, Math.max(0, ms)));
 
   const invokeWithRetry = async (subject: string, html: string) => {
-    let lastErr: string | null = null;
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      const { error } = await supabase.functions.invoke("send-resend-email", {
-        body: { to: testEmail, subject, html },
-      });
-      if (!error) return { ok: true as const, attempts: attempt + 1 };
-      lastErr = error.message;
-      if (attempt < maxRetries) {
-        await sleep(retryDelayMs * Math.pow(2, attempt));
-      }
-    }
-    return { ok: false as const, error: lastErr ?? "unknown" };
+    // Retries + exponential base delay are executed server-side by the
+    // send-resend-email edge function so the same policy applies whether
+    // this is triggered from the UI or from a scheduled backend job.
+    const { data, error } = await supabase.functions.invoke("send-resend-email", {
+      body: {
+        to: testEmail,
+        subject,
+        html,
+        maxRetries,
+        retryBaseDelayMs: retryDelayMs,
+      },
+    });
+    if (error) return { ok: false as const, error: error.message };
+    const attempts = (data as { attempts?: number } | null)?.attempts ?? 1;
+    return { ok: true as const, attempts };
   };
 
   const sendTest = async (
