@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { Menu, LogIn, LayoutDashboard, Search } from "lucide-react";
+import { Menu, LogIn, LayoutDashboard, Search, MessageCircle } from "lucide-react";
 import { BRAND } from "@/config/brand";
+import { BRAND_CONTACTS } from "@/config/socialConfig";
 import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
 import { openCommandPalette } from "@/lib/commandPalette";
 import SocialIcons from "@/components/social/SocialIcons";
@@ -186,6 +187,19 @@ const Navbar = () => {
               <Search className="h-3.5 w-3.5" />
             </button>
             <ThemeToggle />
+            {BRAND_CONTACTS.trendflux.whatsapp && (
+              <a
+                href={BRAND_CONTACTS.trendflux.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Chat with TrendFlux on WhatsApp"
+                title="Chat on WhatsApp"
+                className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[#25D366]/40 bg-[#25D366]/10 dark:bg-[#25D366]/15 px-3 py-1.5 text-[11.5px] font-medium uppercase tracking-[0.16em] text-[#0f6b34] dark:text-[#7ce3a5] whitespace-nowrap hover:bg-[#25D366]/20 hover:border-[#25D366] hover:shadow-[0_0_18px_-4px_rgba(37,211,102,0.55)] active:scale-[0.97] transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]/60"
+              >
+                <MessageCircle className="h-3.5 w-3.5" />
+                <span className="hidden lg:inline">WhatsApp</span>
+              </a>
+            )}
             <button
               type="button"
               onClick={() => openLuxeVeilGate({ source: "navbar" })}
