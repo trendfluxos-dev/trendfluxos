@@ -62,7 +62,7 @@ const DeleteBtn = ({ onClick }: { onClick: () => void }) => (
 
 // Compact reusable row editor for object arrays. `fields` is a list of
 // [key, label, "input" | "textarea"] tuples.
-type FieldSpec<T> = [keyof T, string, "input" | "textarea"?];
+type FieldSpec<T> = [keyof T, string, ("input" | "textarea")?];
 function RowsEditor<T extends Record<string, unknown>>({
   rows,
   fields,
