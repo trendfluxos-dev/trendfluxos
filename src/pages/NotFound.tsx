@@ -172,6 +172,32 @@ const NotFound = () => {
               ))}
             </ul>
           </div>
+
+          <div className="mt-12 text-left">
+            <p className="text-[11px] uppercase tracking-[0.28em] text-muted-foreground text-center">
+              Popular pages
+            </p>
+            <ul className="mt-5 grid gap-2 sm:grid-cols-2">
+              {POPULAR.map(({ to, label, desc, icon: Icon }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className="group flex items-start gap-3 rounded-lg border border-border bg-card px-4 py-3 transition-colors hover:border-primary/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  >
+                    <span className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-md bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="flex flex-col">
+                      <span className="text-sm font-medium text-foreground group-hover:text-primary">
+                        {label}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{desc}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </main>
       <Footer />
