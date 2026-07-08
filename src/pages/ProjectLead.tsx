@@ -24,11 +24,34 @@ import { useSeo } from "@/hooks/useSeo";
 import ShowcaseMasonry from "@/components/showcase/ShowcaseMasonry";
 import { SHOWCASE_ITEMS } from "@/data/showcase";
 import { SystemsHeBuiltSection } from "@/components/home/SystemsHeBuiltSection";
+import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
+import { TrendingUp } from "lucide-react";
 
 const metrics = [
   { value: "4.85L+", label: "Organic Views" },
   { value: "82%", label: "Organic Reach" },
   { value: "45%+", label: "Engagement Growth" },
+];
+
+const transformations = [
+  {
+    client: "Kormoshikkha (EdTech)",
+    stage: "0 → 1 launch",
+    outcome: "Live-cohort model went from concept to 300+ enrolled students in the first 90 days.",
+    lift: "+300 enrolled",
+  },
+  {
+    client: "LuxeVeil (D2C · Bridal)",
+    stage: "Positioning + funnel",
+    outcome: "Rebuilt inquiry funnel + attribution — qualified inquiries 4×, sales-call rate up 68%.",
+    lift: "4× inquiries",
+  },
+  {
+    client: "BrandToki (Creative studio)",
+    stage: "Ops + retention",
+    outcome: "Systematized delivery pipeline, cut turnaround 40% while retainer retention held above 90%.",
+    lift: "−40% turnaround",
+  },
 ];
 
 const expertise = [
