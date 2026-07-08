@@ -99,6 +99,7 @@ export default function TalentEmailsAdmin() {
   const [testName, setTestName] = useState("Test User");
   const [testRole, setTestRole] = useState("Content Creator");
   const [sendingKey, setSendingKey] = useState<string | null>(null);
+  const [sendingAll, setSendingAll] = useState(false);
 
   const sendTest = async (
     key: TemplateKey | "none",
@@ -130,6 +131,48 @@ export default function TalentEmailsAdmin() {
     setSendingKey(null);
     if (error) toast.error(`Test failed: ${error.message}`);
     else toast.success(`Test ${key} email sent to ${testEmail}`);
+  };
+
+  const sendAllMapped = async () => {
+    if (!testEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail)) {
+      toast.error("Enter a valid recipient email above");
+      return;
+    }
+    const mapped = TALENT_STATUSES.filter(
+      (s) => statusMap[s] && statusMap[s] !== "none",
+    );
+    if (mapped.length === 0) {
+      toast.error("No statuses have a template mapped");
+      return;
+    }
+    setSendingAll(true);
+    let ok = 0;
+    let failed = 0;
+    for (const status of mapped) {
+      const key = statusMap[status] as TemplateKey;
+      const tpl = templates[key];
+      if (!tpl) {
+        failed++;
+        continue;
+      }
+      const rendered = renderTemplate(tpl, {
+        name: testName || "Test User",
+        role: testRole || "Role",
+        email: testEmail,
+      });
+      const { error } = await supabase.functions.invoke("send-resend-email", {
+        body: {
+          to: testEmail,
+          subject: `[TEST · ${status}] ${rendered.subject}`,
+          html: `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b></div>${rendered.html}`,
+        },
+      });
+      if (error) failed++;
+      else ok++;
+    }
+    setSendingAll(false);
+    if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
+    else toast.error(`Sent ${ok}, failed ${failed}`);
   };
 
   useEffect(() => {
@@ -311,6 +354,22 @@ export default function TalentEmailsAdmin() {
                   </Button>
                 </div>
               ))}
+            </div>
+            <div className="mt-4 flex justify-end">
+              <Button
+                type="button"
+                size="sm"
+                variant="secondary"
+                disabled={sendingAll}
+                onClick={sendAllMapped}
+              >
+                {sendingAll ? (
+                  <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Send className="mr-2 h-3.5 w-3.5" />
+                )}
+                Test all status mappings
+              </Button>
             </div>
           </section>
 
