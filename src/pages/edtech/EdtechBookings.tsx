@@ -21,10 +21,15 @@ type Booking = {
 };
 
 type PayMethod = "bkash" | "nagad" | "rocket";
-const RECEIVE_NUMBERS: Record<PayMethod, string> = {
+const DEFAULT_RECEIVE_NUMBERS: Record<PayMethod, string> = {
   bkash: "01756004037",
   nagad: "01756004037",
   rocket: "01756004037",
+};
+const RECEIVE_SETTING_KEYS: Record<PayMethod, string> = {
+  bkash: "receive_number_bkash",
+  nagad: "receive_number_nagad",
+  rocket: "receive_number_rocket",
 };
 const METHOD_LABEL: Record<PayMethod, string> = {
   bkash: "bKash",
@@ -49,6 +54,25 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
   const [trxId, setTrxId] = useState("");
   const [senderNumber, setSenderNumber] = useState("");
   const [submittingPayment, setSubmittingPayment] = useState(false);
+  const [receiveNumbers, setReceiveNumbers] = useState<Record<PayMethod, string>>(DEFAULT_RECEIVE_NUMBERS);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from("site_settings")
+        .select("key, value")
+        .in("key", Object.values(RECEIVE_SETTING_KEYS));
+      if (!data) return;
+      const next = { ...DEFAULT_RECEIVE_NUMBERS };
+      for (const row of data) {
+        const entry = (Object.entries(RECEIVE_SETTING_KEYS) as [PayMethod, string][]).find(
+          ([, k]) => k === row.key,
+        );
+        if (entry && typeof row.value === "string" && row.value) next[entry[0]] = row.value;
+      }
+      setReceiveNumbers(next);
+    })();
+  }, []);
 
   const reload = async () => {
     const { data: s } = await supabase.auth.getSession();
@@ -196,7 +220,7 @@ const EdtechBookings = ({ as }: { as: "student" | "tutor" }) => {
                       <div className="space-y-3">
                         <div className="text-[12px] text-foreground/70 leading-relaxed">
                           {METHOD_LABEL[method]} <b>Send Money</b> to{" "}
-                          <code className="rounded bg-card px-1.5 py-0.5">{RECEIVE_NUMBERS[method]}</code>{" "}
+                          <code className="rounded bg-card px-1.5 py-0.5">{receiveNumbers[method]}</code>{" "}
                           — amount <b>৳{Number(b.price).toLocaleString()}</b>, then paste your TrxID below.
                         </div>
                         <div className="flex gap-2">
