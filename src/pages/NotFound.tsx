@@ -144,6 +144,86 @@ const NotFound = () => {
             </p>
           )}
 
+          <form
+            onSubmit={onSearchSubmit}
+            role="search"
+            className="mx-auto mt-8 max-w-lg text-left"
+          >
+            <label htmlFor="notfound-search" className="sr-only">
+              Search the site
+            </label>
+            <div className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 focus-within:border-primary/60">
+              <Search className="h-4 w-4 text-muted-foreground" />
+              <input
+                id="notfound-search"
+                type="search"
+                autoComplete="off"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search pages — try 'marriage', 'talent', 'showcase'…"
+                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+              />
+              <button
+                type="submit"
+                disabled={!searchMatch && searchSuggestions.length === 0}
+                className="rounded-md bg-primary px-3 py-1 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary-glow disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Go
+              </button>
+            </div>
+
+            {query.trim() && (
+              <div className="mt-2 rounded-lg border border-border bg-card p-2">
+                {searchSuggestions.length === 0 && !searchMatch ? (
+                  <p className="px-2 py-1.5 text-xs text-muted-foreground">
+                    No matching pages. Try a different keyword.
+                  </p>
+                ) : (
+                  <ul className="text-sm">
+                    {searchMatch &&
+                      !searchSuggestions.includes(searchMatch.path) && (
+                        <li>
+                          <Link
+                            to={searchMatch.path}
+                            onClick={() =>
+                              track("not_found_search_result_click", {
+                                query,
+                                target: searchMatch.path,
+                                reason: searchMatch.reason,
+                              })
+                            }
+                            className="flex items-center justify-between rounded-md px-2 py-1.5 text-foreground hover:bg-muted"
+                          >
+                            <span>{searchMatch.path}</span>
+                            <span className="text-[10px] uppercase tracking-[0.2em] text-primary">
+                              Best match
+                            </span>
+                          </Link>
+                        </li>
+                      )}
+                    {searchSuggestions.map((path) => (
+                      <li key={path}>
+                        <Link
+                          to={path}
+                          onClick={() =>
+                            track("not_found_search_result_click", {
+                              query,
+                              target: path,
+                              reason: "suggestion",
+                            })
+                          }
+                          className="block rounded-md px-2 py-1.5 text-foreground hover:bg-muted"
+                        >
+                          {path}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </form>
+
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <button
               type="button"
