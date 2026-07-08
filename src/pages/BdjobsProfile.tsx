@@ -32,6 +32,7 @@ const BdjobsProfile = () => {
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [pdfBusy, setPdfBusy] = useState(false);
+  const [validationError, setValidationError] = useState<string[] | null>(null);
   const viewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,6 +41,10 @@ const BdjobsProfile = () => {
       if (cancelled) return;
       setProfile(res.data);
       setUpdatedAt(res.updatedAt);
+      setValidationError(res.validationError ?? null);
+      if (res.validationError?.length) {
+        toast.error("Bdjobs profile data is invalid — showing defaults.");
+      }
     });
     return () => {
       cancelled = true;
@@ -185,6 +190,19 @@ const BdjobsProfile = () => {
         <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
           <BdjobsProfileView ref={viewRef} data={profile} />
         </div>
+
+        {validationError && validationError.length > 0 && (
+          <div className="mt-4 rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-sm">
+            <p className="font-semibold text-destructive">
+              Live profile failed validation — showing bundled defaults.
+            </p>
+            <ul className="mt-2 list-disc space-y-0.5 pl-5 text-destructive/90">
+              {validationError.map((issue) => (
+                <li key={issue}>{issue}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
           Source of truth:{" "}

@@ -5,6 +5,7 @@ import {
   DEFAULT_BDJOBS_PROFILE,
   type BdjobsProfileData,
 } from "@/data/bdjobsProfileDefault";
+import { assertValidBdjobsProfile } from "@/lib/bdjobsProfileSchema";
 
 /**
  * Load the live Bdjobs profile from `site_profile_data`. Falls back to the
@@ -15,7 +16,10 @@ export async function fetchBdjobsProfile(): Promise<{
   data: BdjobsProfileData;
   updatedAt: string | null;
   isRemote: boolean;
+  validationError?: string[];
 }> {
+  // The bundled default MUST always be valid — fail loudly in dev if not.
+  const validatedDefault = assertValidBdjobsProfile(DEFAULT_BDJOBS_PROFILE);
   try {
     const { data, error } = await supabase
       .from("site_profile_data")
@@ -25,20 +29,35 @@ export async function fetchBdjobsProfile(): Promise<{
 
     if (error || !data) {
       return {
-        data: DEFAULT_BDJOBS_PROFILE,
+        data: validatedDefault,
         updatedAt: null,
         isRemote: false,
       };
     }
 
-    return {
-      data: data.data as unknown as BdjobsProfileData,
-      updatedAt: data.updated_at,
-      isRemote: true,
-    };
+    try {
+      const validated = assertValidBdjobsProfile(data.data);
+      return {
+        data: validated,
+        updatedAt: data.updated_at,
+        isRemote: true,
+      };
+    } catch (e) {
+      const issues =
+        e && typeof e === "object" && "issues" in e
+          ? ((e as { issues: string[] }).issues ?? [])
+          : [String(e)];
+      // Fail fast: return the safe default and the issues so the UI can flag it.
+      return {
+        data: validatedDefault,
+        updatedAt: data.updated_at,
+        isRemote: false,
+        validationError: issues,
+      };
+    }
   } catch {
     return {
-      data: DEFAULT_BDJOBS_PROFILE,
+      data: validatedDefault,
       updatedAt: null,
       isRemote: false,
     };
@@ -50,6 +69,8 @@ export async function fetchBdjobsProfile(): Promise<{
  * will error for non-admin sessions. Returns the new `updated_at`.
  */
 export async function saveBdjobsProfile(payload: BdjobsProfileData): Promise<string> {
+  // Fail fast BEFORE writing so admins can't publish an invalid profile.
+  assertValidBdjobsProfile(payload);
   const { data, error } = await supabase
     .from("site_profile_data")
     .upsert(
