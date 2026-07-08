@@ -1,4 +1,5 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/resend';
 
@@ -14,6 +15,39 @@ Deno.serve(async (req) => {
   if (!LOVABLE_API_KEY || !RESEND_API_KEY) {
     return new Response(JSON.stringify({ error: 'Email service not configured' }), {
       status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Require an authenticated admin caller. This function is an internal
+  // relay used by admin dashboards; it must never be callable anonymously.
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader?.startsWith('Bearer ')) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+  const userClient = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_ANON_KEY')!,
+    { global: { headers: { Authorization: authHeader } } },
+  );
+  const { data: claimsData, error: claimsErr } = await userClient.auth.getClaims(
+    authHeader.replace('Bearer ', ''),
+  );
+  if (claimsErr || !claimsData?.claims?.sub) {
+    return new Response(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+  const { data: isAdmin, error: roleErr } = await userClient.rpc('current_user_has_role', {
+    _role: 'admin',
+  });
+  if (roleErr || !isAdmin) {
+    return new Response(JSON.stringify({ error: 'forbidden' }), {
+      status: 403,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
