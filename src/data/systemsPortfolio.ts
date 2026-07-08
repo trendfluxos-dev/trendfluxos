@@ -22,6 +22,10 @@ export type SystemCase = {
   icon: LucideIcon;
   /** Bento tile size on lg+ (12-col grid). */
   size: "hero" | "wide" | "square" | "half";
+  /** 1–2 line case summary rendered in the narrative card below the tile. */
+  summary: string;
+  /** 3–4 bullets describing what was actually shipped. */
+  built: string[];
 };
 
 /**
