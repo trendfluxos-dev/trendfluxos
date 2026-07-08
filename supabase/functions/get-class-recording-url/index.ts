@@ -75,7 +75,8 @@ Deno.serve(async (req) => {
   let reason = "";
   if (row.teacher_id === u.id) { allowed = true; reason = "owner"; }
   if (!allowed) {
-    const { data: isAdmin } = await admin.rpc("has_role", { _user_id: u.id, _role: "admin" });
+    const { isAdmin: adminHelper } = await import("../_shared/adminCheck.ts");
+    const isAdmin = await adminHelper(user, u.id);
     if (isAdmin) { allowed = true; reason = "admin"; }
   }
   if (!allowed && row.visibility !== "private" && row.class_id) {
