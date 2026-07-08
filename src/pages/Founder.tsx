@@ -294,11 +294,28 @@ const Founder = () => {
             </div>
           </div>
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-primary">Corporate Founder Profile · 2026</p>
+            <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-primary">Keynote Speaker · Founder Profile · 2026</p>
             <h1 className="mt-6 font-display text-5xl font-semibold tracking-[-0.03em] sm:text-6xl">{FOUNDER.name}</h1>
             <p className="mt-3 text-lg text-muted-foreground">{FOUNDER.role}</p>
             <p className="mt-1 text-[15px] font-medium text-foreground">{FOUNDER.org}</p>
-            <p className="mt-6 max-w-md text-[15px] leading-relaxed text-muted-foreground">{BRAND.description}</p>
+            <p className="mt-6 max-w-md text-[15px] leading-relaxed text-muted-foreground">
+              Founder-operator turned public voice on AI-native growth, ethical systems, and
+              youth leadership. Speaks from the podium on how brands, universities, and civic
+              institutions can turn attention into audited infrastructure — without dark patterns,
+              vanity metrics, or vendor lock-in.
+            </p>
+            <ul className="mt-6 grid max-w-md gap-2 text-[13px] text-foreground/85">
+              {[
+                "Keynote & panel speaker on AI-powered growth, brand systems and youth leadership",
+                "Founder of TrendFlux Digital — the AI-native Growth OS for founders and institutions",
+                "Architect of end-to-end digital campaigns reaching 4.85 Lakh+ views at 82% organic",
+              ].map((h) => (
+                <li key={h} className="flex gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" aria-hidden />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
             <div className="no-print mt-10 flex flex-wrap gap-3">
               <button onClick={handlePrint} className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow hover:bg-primary/90">
                 <Download className="h-4 w-4" /> Download PDF
@@ -313,6 +330,23 @@ const Founder = () => {
             <p className="mt-10 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
               {FOUNDER.bookletUrl.replace(/^https?:\/\//, "")}
             </p>
+          </div>
+        </div>
+        <div className="mx-auto max-w-5xl px-5 pb-16 sm:px-8">
+          <div className="grid gap-4 rounded-2xl border border-border bg-muted/30 p-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { k: "Speaking Focus", v: "AI-native growth, ethical brand systems, youth leadership" },
+              { k: "Education", v: "BSc (Hons) Information Technology — IIT, Jahangirnagar University" },
+              { k: "Prior Leadership", v: "President, PZSWA (JU 2021) · Advisor, Pabna Debate Society" },
+              { k: "Signature Result", v: "4.85 Lakh+ views · 82% organic reach — PNC digital campaign" },
+            ].map((row) => (
+              <div key={row.k}>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/80">
+                  {row.k}
+                </p>
+                <p className="mt-2 text-[13px] leading-relaxed text-foreground/85">{row.v}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
