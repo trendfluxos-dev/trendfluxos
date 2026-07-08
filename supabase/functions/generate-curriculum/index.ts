@@ -15,6 +15,32 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: "method_not_allowed" }), { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 
+  // Require authentication. Two accepted callers:
+  //   1. Admin user (JWT with admin role) — manual regeneration from admin UI.
+  //   2. Internal DB trigger — sends the service-role bearer from vault.
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  }
+  const token = authHeader.replace("Bearer ", "");
+  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const isServiceRoleCaller = token === serviceRoleKey;
+  if (!isServiceRoleCaller) {
+    const authClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } },
+    );
+    const { data: claimsData, error: claimsErr } = await authClient.auth.getClaims(token);
+    if (claimsErr || !claimsData?.claims?.sub) {
+      return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    const { data: isAdmin, error: roleErr } = await authClient.rpc("current_user_has_role", { _role: "admin" });
+    if (roleErr || !isAdmin) {
+      return new Response(JSON.stringify({ error: "forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+  }
+
   let body: Body;
   try { body = await req.json(); } catch {
     return new Response(JSON.stringify({ error: "invalid_json" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -57,7 +83,8 @@ Deno.serve(async (req) => {
   });
   if (!aiRes.ok) {
     const txt = await aiRes.text();
-    return new Response(JSON.stringify({ error: "ai_failed", status: aiRes.status, detail: txt.slice(0, 500) }), { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    console.error(`generate-curriculum ai_failed [${aiRes.status}]: ${txt.slice(0, 500)}`);
+    return new Response(JSON.stringify({ error: "ai_failed" }), { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
   const aiJson = await aiRes.json();
   let curriculum: unknown = null;
@@ -72,7 +99,8 @@ Deno.serve(async (req) => {
     .update({ curriculum, curriculum_generated_at: new Date().toISOString() })
     .eq("id", classId);
   if (upErr) {
-    return new Response(JSON.stringify({ error: "save_failed", detail: upErr.message }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    console.error(`generate-curriculum save_failed: ${upErr.message}`);
+    return new Response(JSON.stringify({ error: "save_failed" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 
   // Best-effort n8n forward
