@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
+import { useRouteDataLoading } from "@/lib/routeLoading";
 import { toast } from "sonner";
 import trendfluxLogo from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 
