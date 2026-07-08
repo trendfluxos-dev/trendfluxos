@@ -100,6 +100,33 @@ export default function TalentEmailsAdmin() {
   const [testRole, setTestRole] = useState("Content Creator");
   const [sendingKey, setSendingKey] = useState<string | null>(null);
   const [sendingAll, setSendingAll] = useState(false);
+  const [maxRetries, setMaxRetries] = useState(2);
+  const [retryDelayMs, setRetryDelayMs] = useState(1500);
+  const [rateDelayMs, setRateDelayMs] = useState(500);
+  const [bulkProgress, setBulkProgress] = useState<{
+    done: number;
+    total: number;
+    ok: number;
+    failed: number;
+  } | null>(null);
+
+  const sleep = (ms: number) =>
+    new Promise<void>((r) => setTimeout(r, Math.max(0, ms)));
+
+  const invokeWithRetry = async (subject: string, html: string) => {
+    let lastErr: string | null = null;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      const { error } = await supabase.functions.invoke("send-resend-email", {
+        body: { to: testEmail, subject, html },
+      });
+      if (!error) return { ok: true as const, attempts: attempt + 1 };
+      lastErr = error.message;
+      if (attempt < maxRetries) {
+        await sleep(retryDelayMs * Math.pow(2, attempt));
+      }
+    }
+    return { ok: false as const, error: lastErr ?? "unknown" };
+  };
 
   const sendTest = async (
     key: TemplateKey | "none",
@@ -146,13 +173,16 @@ export default function TalentEmailsAdmin() {
       return;
     }
     setSendingAll(true);
+    setBulkProgress({ done: 0, total: mapped.length, ok: 0, failed: 0 });
     let ok = 0;
     let failed = 0;
-    for (const status of mapped) {
+    for (let i = 0; i < mapped.length; i++) {
+      const status = mapped[i];
       const key = statusMap[status] as TemplateKey;
       const tpl = templates[key];
       if (!tpl) {
         failed++;
+        setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
         continue;
       }
       const rendered = renderTemplate(tpl, {
@@ -160,15 +190,14 @@ export default function TalentEmailsAdmin() {
         role: testRole || "Role",
         email: testEmail,
       });
-      const { error } = await supabase.functions.invoke("send-resend-email", {
-        body: {
-          to: testEmail,
-          subject: `[TEST · ${status}] ${rendered.subject}`,
-          html: `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b></div>${rendered.html}`,
-        },
-      });
-      if (error) failed++;
-      else ok++;
+      const result = await invokeWithRetry(
+        `[TEST · ${status}] ${rendered.subject}`,
+        `<div style="background:#fff3cd;border:1px solid #ffe69c;padding:8px 12px;margin-bottom:12px;font-family:sans-serif;font-size:12px;color:#664d03;">Preview / test email — status <b>${status}</b> → template <b>${key}</b></div>${rendered.html}`,
+      );
+      if (result.ok) ok++;
+      else failed++;
+      setBulkProgress({ done: i + 1, total: mapped.length, ok, failed });
+      if (i < mapped.length - 1) await sleep(rateDelayMs);
     }
     setSendingAll(false);
     if (failed === 0) toast.success(`Sent ${ok} test emails to ${testEmail}`);
@@ -355,21 +384,95 @@ export default function TalentEmailsAdmin() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 flex justify-end">
-              <Button
-                type="button"
-                size="sm"
-                variant="secondary"
-                disabled={sendingAll}
-                onClick={sendAllMapped}
-              >
-                {sendingAll ? (
-                  <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+            <div className="mt-5 rounded-xl border border-dashed border-border/70 p-4">
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold">Bulk test controls</h3>
+                <span className="text-[10px] uppercase tracking-wider text-foreground/50">
+                  Client-side retry & pacing
+                </span>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div>
+                  <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                    Max retries per email
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    max={5}
+                    value={maxRetries}
+                    onChange={(e) =>
+                      setMaxRetries(
+                        Math.max(0, Math.min(5, Number(e.target.value) || 0)),
+                      )
+                    }
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                    Retry base delay (ms)
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    step={100}
+                    value={retryDelayMs}
+                    onChange={(e) =>
+                      setRetryDelayMs(Math.max(0, Number(e.target.value) || 0))
+                    }
+                  />
+                  <p className="mt-1 text-[10px] text-foreground/50">
+                    Exponential backoff: delay × 2^attempt
+                  </p>
+                </div>
+                <div>
+                  <Label className="text-xs uppercase tracking-wider text-foreground/60">
+                    Between-emails delay (ms)
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    step={100}
+                    value={rateDelayMs}
+                    onChange={(e) =>
+                      setRateDelayMs(Math.max(0, Number(e.target.value) || 0))
+                    }
+                  />
+                  <p className="mt-1 text-[10px] text-foreground/50">
+                    Rate limit: pause between sends
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                {bulkProgress ? (
+                  <div className="text-xs text-foreground/70">
+                    Progress: {bulkProgress.done}/{bulkProgress.total} · ok{" "}
+                    <span className="text-emerald-600">{bulkProgress.ok}</span> ·
+                    failed{" "}
+                    <span className="text-destructive">
+                      {bulkProgress.failed}
+                    </span>
+                  </div>
                 ) : (
-                  <Send className="mr-2 h-3.5 w-3.5" />
+                  <span className="text-xs text-foreground/50">
+                    Applies to "Test all status mappings"
+                  </span>
                 )}
-                Test all status mappings
-              </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  disabled={sendingAll}
+                  onClick={sendAllMapped}
+                >
+                  {sendingAll ? (
+                    <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Send className="mr-2 h-3.5 w-3.5" />
+                  )}
+                  Test all status mappings
+                </Button>
+              </div>
             </div>
           </section>
 
