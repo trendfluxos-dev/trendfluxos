@@ -27,7 +27,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import portrait from "@/assets/zahid-hasan-emon.webp";
-import { SystemsBentoSection } from "@/components/systems/SystemsBentoSection";
+import { FilteredSystemsBentoSection } from "@/components/systems/FilteredSystemsBentoSection";
 import proofEducation from "@/assets/proof/educational-background.webp";
 import proofUniversity from "@/assets/proof/university-certificates.webp";
 import proofHsc from "@/assets/proof/hsc-credentials.webp";
@@ -560,7 +560,7 @@ export default function Portfolio() {
 
       {/* SYSTEMS */}
       <div id="systems-he-built" className="border-t border-border bg-background">
-        <SystemsBentoSection
+        <FilteredSystemsBentoSection
           eyebrow="Systems He Built · Portfolio"
           title="Eight production systems, one operating stack."
           intro="Six sub-brands plus two internal ops layers — each shipped, in production, and instrumented."
