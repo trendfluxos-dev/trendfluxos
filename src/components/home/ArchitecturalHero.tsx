@@ -44,6 +44,7 @@ const widthClass: Record<Brand["strength"], string> = {
 export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => void }) {
   const [bookingOpen, setBookingOpen] = useState(false);
   return (
+    <>
     <section
       aria-labelledby="home-hero-heading"
       className="relative isolate bg-[#08080d] text-[#f0c9c9] selection:bg-[#c11f1f] selection:text-white overflow-hidden"
