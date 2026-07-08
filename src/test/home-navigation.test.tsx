@@ -1,8 +1,33 @@
-import { describe, it, expect } from "vitest";
+import { beforeAll, describe, it, expect } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import ArchitecturalHero from "@/components/home/ArchitecturalHero";
+
+beforeAll(() => {
+  // jsdom doesn't ship ResizeObserver / IntersectionObserver; the Navbar
+  // relies on them for its sticky-offset measurement effect.
+  if (!("ResizeObserver" in globalThis)) {
+    class RO {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    }
+    // @ts-expect-error test-only polyfill
+    globalThis.ResizeObserver = RO;
+  }
+  if (!("IntersectionObserver" in globalThis)) {
+    class IO {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+      takeRecords() { return []; }
+      root = null; rootMargin = ""; thresholds = [];
+    }
+    // @ts-expect-error test-only polyfill
+    globalThis.IntersectionObserver = IO;
+  }
+});
 
 /**
  * "E2E-lite" contract test for the home experience. jsdom cannot boot the
