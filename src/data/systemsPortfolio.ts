@@ -9,16 +9,15 @@ import {
   Scale,
   type LucideIcon,
 } from "lucide-react";
+import type { SystemSlug } from "./systemsLinkMap";
 
 export type SystemCase = {
-  slug: string;
+  slug: SystemSlug;
   title: string;
   eyebrow: string;
   tagline: string;
   outcome: { metric: string; label: string };
   stack: string[];
-  href: string | null;
-  linkLabel: string;
   icon: LucideIcon;
   /** Bento tile size on lg+ (12-col grid). */
   size: "hero" | "wide" | "square" | "half";
@@ -32,6 +31,9 @@ export type SystemCase = {
  * The eight production systems ZAHID HASAN EMON has built and operates
  * across the Trendflux ecosystem. Rendered as a bento portfolio on the
  * homepage, Founder page, and Portfolio page via <SystemsBentoSection />.
+ *
+ * Navigation (route + section + link label) is configured centrally in
+ * `systemsLinkMap.ts` and resolved via `getSystemLink(slug)`.
  */
 export const SYSTEMS_PORTFOLIO: SystemCase[] = [
   {
@@ -42,8 +44,6 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
       "End-to-end lead lifecycle: capture → enrich → outreach → follow-up sweep, wired into n8n and admin console.",
     outcome: { metric: "38%", label: "faster lead → booked call" },
     stack: ["Lead Lifecycle", "n8n", "Outreach Sweeper", "Admin Console"],
-    href: "/growth-os",
-    linkLabel: "Enter Growth-OS",
     icon: TrendingUp,
     size: "hero",
     summary:
@@ -63,8 +63,6 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
       "Kormoshikkha TED Plus — courses, live classes, voice notes, certificates and tutor marketplace.",
     outcome: { metric: "26", label: "student flows" },
     stack: ["Courses", "Live Studio", "Certificates", "Tutors"],
-    href: "/masterclass",
-    linkLabel: "See Masterclass",
     icon: GraduationCap,
     size: "wide",
     summary:
@@ -84,8 +82,6 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
       "Invite-only wedding & marriage inquiry system with gated access, private RSVPs, and admin review flow.",
     outcome: { metric: "100%", label: "invite-gated intake" },
     stack: ["Invite Gate", "Private Intake", "Admin Review"],
-    href: "/luxe-veil",
-    linkLabel: "Visit Luxe Veil",
     icon: Sparkles,
     size: "square",
     summary:
@@ -104,8 +100,6 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
       "Creator content pipeline — from script to publish, with a Creator Studio admin for review and scheduling.",
     outcome: { metric: "3×", label: "content cadence" },
     stack: ["Creator Studio", "Content Ops", "Publish Queue"],
-    href: "/brandtoki",
-    linkLabel: "Visit BrandToki",
     icon: Palette,
     size: "square",
     summary:
@@ -124,8 +118,6 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
       "Demo request + private enterprise portal with role-gated admin panels and audit-logged access.",
     outcome: { metric: "22", label: "admin control panels" },
     stack: ["Demo Intake", "Role Gates", "Access Audit"],
-    href: "/enterprise",
-    linkLabel: "Enterprise portal",
     icon: Building2,
     size: "square",
     summary:
@@ -144,8 +136,6 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
       "Voice cloning + TTS lecture generation on a signed-URL pipeline, powering course narration and voice notes.",
     outcome: { metric: "5", label: "storage buckets, all signed" },
     stack: ["XTTS Deploy", "Voice Profiles", "Signed URLs"],
-    href: null,
-    linkLabel: "Internal system",
     icon: Mic,
     size: "wide",
     summary:
@@ -164,8 +154,6 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
       "pgmq queue → Resend delivery, plus a Telegram bot for support sessions, alerts, and uptime monitoring.",
     outcome: { metric: "24/7", label: "queue + alert coverage" },
     stack: ["pgmq", "Resend", "Telegram Bot", "Uptime Monitor"],
-    href: null,
-    linkLabel: "Internal system",
     icon: Send,
     size: "half",
     summary:
@@ -184,8 +172,6 @@ export const SYSTEMS_PORTFOLIO: SystemCase[] = [
       "Whistleblower + accountability ecosystem: press archive, share kit, media reports, and integrity story.",
     outcome: { metric: "9", label: "documented press items" },
     stack: ["Press Archive", "Share Kit", "Story Signal"],
-    href: "/justice-appeal",
-    linkLabel: "Read the appeal",
     icon: Scale,
     size: "half",
     summary:
