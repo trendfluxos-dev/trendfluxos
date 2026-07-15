@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterEach } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
@@ -19,18 +19,14 @@ beforeAll(() => {
   }
 });
 
-afterEach(() => {
-  document.documentElement.removeAttribute("data-brand");
-  document.documentElement.classList.remove("dark");
-});
-
 /**
- * Visual regression fingerprint for /design-system across themes and
- * sub-brand scopes. jsdom can't diff pixels, so this captures a
- * normalised structural fingerprint (tag + layout classes + text) per
- * (theme × brand) combination. The Playwright pixel-diff project covers
- * breakpoints and pixel-level rendering — this file catches accidental
- * structural / token-composition changes fast in unit CI.
+ * Structural fingerprint for /design-system.
+ *
+ * jsdom can't evaluate CSS variables or media queries, so themes and
+ * breakpoints are covered by the Playwright pixel-diff project in
+ * `e2e/visual-regression.spec.ts` (design-system × light|dark ×
+ * mobile|tablet|desktop). This unit-level fingerprint catches accidental
+ * structural / token-composition changes to the page itself.
  */
 
 const LAYOUT_CLASS = /^(grid|flex|block|inline|hidden|absolute|relative|fixed|sticky|container|mx-|my-|mt-|mb-|ml-|mr-|px-|py-|pt-|pb-|pl-|pr-|gap-|col-|row-|w-|h-|min-|max-|aspect-|order-|items-|justify-|content-|self-|place-|space-|border|rounded|text-|font-|leading-|tracking-|uppercase|lowercase|capitalize|bg-|from-|via-|to-|shadow|ring|opacity-|z-|overflow-|whitespace-|truncate|underline)/;
@@ -60,29 +56,15 @@ function fingerprint(root: HTMLElement): string {
   return lines.join("\n");
 }
 
-const THEMES = ["light", "dark"] as const;
-const BRANDS = ["default", "justice", "marriage", "brandtoki", "edtech"] as const;
-
-const renderAt = (theme: "light" | "dark", brand: (typeof BRANDS)[number]) => {
-  document.documentElement.classList.toggle("dark", theme === "dark");
-  if (brand === "default") document.documentElement.removeAttribute("data-brand");
-  else document.documentElement.setAttribute("data-brand", brand);
-  return render(
-    <HelmetProvider>
-      <MemoryRouter initialEntries={["/design-system"]}>
-        <DesignSystem />
-      </MemoryRouter>
-    </HelmetProvider>,
-  );
-};
-
 describe("design-system page — visual regression fingerprint", () => {
-  for (const theme of THEMES) {
-    for (const brand of BRANDS) {
-      it(`design-system fingerprint is stable (${theme} · ${brand})`, () => {
-        const { container } = renderAt(theme, brand);
-        expect(fingerprint(container)).toMatchSnapshot();
-      });
-    }
-  }
+  it("design-system structural fingerprint is stable", () => {
+    const { container } = render(
+      <HelmetProvider>
+        <MemoryRouter initialEntries={["/design-system"]}>
+          <DesignSystem />
+        </MemoryRouter>
+      </HelmetProvider>,
+    );
+    expect(fingerprint(container)).toMatchSnapshot();
+  });
 });
