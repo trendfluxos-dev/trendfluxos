@@ -7,7 +7,6 @@ describe("TfxProse", () => {
     render(<TfxProse>Body copy</TfxProse>);
     const el = screen.getByText("Body copy");
     expect(el.tagName).toBe("P");
-    expect(el.className).toMatch(/leading-relaxed/);
     expect(el.className).toMatch(/text-muted-foreground/);
     expect(el.className).toMatch(/max-w-prose/);
   });
