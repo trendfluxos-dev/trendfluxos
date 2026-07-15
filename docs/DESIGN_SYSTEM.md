@@ -33,11 +33,36 @@ import { TfxSection, TfxCard, TfxButton, TfxHeading, TfxProse, TfxEyebrow } from
 
 ## Auditing hardcoded colors
 
+Three modes:
+
 ```
-node scripts/audit-tokens.mjs
+npm run audit:tokens                # report every hardcoded color in src/
+npm run audit:tokens:check          # CI gate: fail on regressions
+npm run audit:tokens:baseline       # refresh the committed baseline
 ```
 
-Reports any `#hex`, `bg-white`, `bg-black`, or `bg-gray-*` occurrence under `src/pages` and `src/components`. Report-only; not wired into CI.
+Reports any `#hex`, `bg-white`, `bg-black`, or `bg-gray-*/slate-*/zinc-*`
+occurrence under `src/pages` and `src/components`.
+
+### CI enforcement (ratchet)
+
+The `.github/workflows/audit-tokens.yml` workflow runs `--check` on every
+PR that touches `src/`, Tailwind config, the audit script, or the baseline
+file. The check compares per-file counts against
+`.audit-tokens-baseline.json`:
+
+- A file whose count **goes up** → PR fails.
+- A **new file** with any hardcoded color → PR fails.
+- A file whose count **goes down** → PR passes (no baseline bump needed).
+
+### When you must add a hardcoded color intentionally
+
+You almost never should — add a semantic token to `src/index.css` and
+register it in `tailwind.config.ts` instead. If you truly must (e.g. a
+third-party brand color used in one place), run
+`npm run audit:tokens:baseline` and commit the refreshed
+`.audit-tokens-baseline.json` in the same PR so the ratchet reflects the
+new floor.
 
 ## Migration checklist for existing pages
 

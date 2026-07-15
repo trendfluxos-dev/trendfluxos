@@ -1,54 +1,53 @@
 ## লক্ষ্য
-Audit report-এর top offenders থেকে **brand-neutral, user-facing** ফাইলগুলোর হার্ডকোডেড রঙ (`bg-white`, `text-white`, `bg-black`, hex, rgba) design tokens-এ মাইগ্রেট। কোনো UI/behavior পরিবর্তন নয় — শুধু color source-of-truth ঠিক করা।
+Hardcoded রঙের regression রোধ করতে `scripts/audit-tokens.mjs` কে **fail-fast CI check** হিসেবে যুক্ত। বর্তমানে ৮০১ pre-existing findings আছে — তাই "any finding = fail" ভাঙা রাস্তা। **ratchet-baseline** পদ্ধতি: per-file baseline সংরক্ষিত থাকবে, কোনো file-এ count বাড়লে বা নতুন file যোগ হলে fail।
 
-## Target ফাইল (এই sprint)
-Highest-count এবং brand-neutral (sub-brand data-brand pages আলাদা রাখা হবে, কারণ সেগুলোর scoped tokens লাগে):
+## পরিবর্তন
 
-| # | File | Findings |
-|---|------|----------|
-| 1 | `src/components/Navbar.tsx` | 173 |
-| 2 | `src/components/home/FounderSpotlightBanner.tsx` | 59 |
-| 3 | `src/components/home/ArchitecturalHero.tsx` | 52 |
-| 4 | `src/components/SelectedExecution.tsx` | 48 |
-| 5 | `src/pages/Founder.tsx` | 25 |
+1. **`scripts/audit-tokens.mjs` upgrade**
+   - নতুন CLI flags:
+     - `--baseline` — বর্তমান findings-এর snapshot লিখবে `.audit-tokens-baseline.json`-এ (JSON: `{ [file]: count }`)।
+     - `--check` — findings-কে baseline-এর সাথে তুলনা:
+       - কোনো file-এ count > baseline → fail (regression)
+       - baseline-এ নেই এমন file-এ finding > 0 → fail (new offender)
+       - কোনো file-এর count কমেছে বা baseline-এ = 0 → OK
+     - flag ছাড়া chalak → বর্তমান behavior (report-only, exit 0)
+   - `--check` mode-এ exit code 1 on violations; clear diff output (file, old, new, delta)।
+   - baseline update-এর guide message: "Run `npm run audit:tokens:baseline` after intentional cleanup"।
 
-মোট ~357 findings — লক্ষ্য এই ৫টি ফাইলে ~90%+ কমানো।
+2. **`.audit-tokens-baseline.json` তৈরি**
+   - প্রথম run-এর সময় বর্তমান state capture (৫৪টি file, ৮০১ findings)।
+   - git-tracked, কারণ CI-তে দরকার।
 
-## Deferred (এই sprint-এ নয়)
-- **Sub-brand pages** — `Marriage`, `LuxeVeil`, `BrandToki`, `JusticeAppeal`, `MediaReports`, `TheStandCoverSection` (per project memory এগুলো `[data-brand="..."]` scoped tokens ব্যবহার করে; আলাদা sprint দরকার)
-- **Admin/internal** — `Dashboard`, `ShareKit`, `Auth` (user-facing polish return কম)
-- **Ephemeral pages** — sub-brand dossiers, edtech admin
+3. **`package.json` scripts যোগ**
+   ```json
+   "audit:tokens": "node scripts/audit-tokens.mjs",
+   "audit:tokens:check": "node scripts/audit-tokens.mjs --check",
+   "audit:tokens:baseline": "node scripts/audit-tokens.mjs --baseline"
+   ```
 
-## মাইগ্রেশন rules
-প্রতিটি hardcoded রঙের জন্য mapping:
+4. **`.github/workflows/audit-tokens.yml` নতুন workflow**
+   - Trigger: `pull_request` (paths: `src/**/*.{ts,tsx,css}`, `tailwind.config.ts`, `scripts/audit-tokens.mjs`, `.audit-tokens-baseline.json`) + `push` to `main`
+   - Steps: checkout → setup-node (v20) → `npm ci` (or bun) → `node scripts/audit-tokens.mjs --check`
+   - Concise output; non-zero exit fails the check।
 
-| Hardcoded | Token |
-|-----------|-------|
-| `bg-white` | `bg-background` বা `bg-card` (context) |
-| `text-white` on colored surface | `text-primary-foreground` / `text-background` |
-| `bg-black` / `bg-black/60` overlay | `bg-foreground/60` |
-| `text-black` | `text-foreground` |
-| Neutral grays `#f5f5f5` `#111` etc. | Nearest `bg-muted`, `bg-card`, `text-muted-foreground` |
-| Brand red `#B11226`, `#DC2626` etc. | `bg-primary` / `text-primary` (existing HSL token) |
-| Gradient hex stops | `bg-[image:var(--gradient-*)]` অথবা existing token gradient |
-| Rare one-off hex not covered by tokens | নতুন semantic token add করবো `src/index.css` global scope-এ, তারপর ব্যবহার |
-
-শর্ত:
-- inline `style={{ color: '#...' }}` → equivalent Tailwind token class-এ move; unavoidable হলে `style={{ color: 'hsl(var(--token))' }}`।
-- rgba() overlays → `bg-foreground/X` opacity utility।
-- কোনো contrast regression যেন না হয় — দৃশ্যত সমান দেখাবে (light/dark উভয়ে)।
+5. **`docs/DESIGN_SYSTEM.md` update**
+   - Section যোগ: "Token audit — CI enforcement"
+   - Baseline কীভাবে update হয়, PR-এ কী দেখতে পাবে, intentional additions-এর workflow।
 
 ## Verification
-প্রতিটি ফাইলের পর:
-1. `node scripts/audit-tokens.mjs` — এই ৫টি ফাইলের counts আগে/পরে।
-2. `bunx vitest run src/test/theme-tokens.test.ts src/test/no-rogue-colors.test.ts src/test/contrast-audit.test.ts` — regression pass।
-3. `bun run build` — zero warnings বজায়।
-4. `/` route এবং `/founder` route-এ preview visually unchanged।
+- Local: `npm run audit:tokens:baseline` → baseline file তৈরি → `npm run audit:tokens:check` → pass (0)।
+- Simulate regression: ফাইলে ১টি `bg-white` যোগ → `--check` fail with clear diff → revert → pass।
+- Simulate new file with findings → fail।
+- Simulate improvement (finding কমানো) → pass (baseline unchanged but count < baseline, OK; new baseline লাগবে না — শুধু ratchet নিশ্চিত)।
 
-শেষে একটি before/after summary table দেব।
+## Technical notes
+- Baseline format: pretty-printed JSON, key-sorted (deterministic diff)।
+- Path-relative to repo root (POSIX separator) — Windows-safe।
+- Existing report format অক্ষত (--check ছাড়া)।
+- Bun ব্যবহার করে workflow-এ (project standard); node.js-ই enough কারণ script pure node।
 
 ## Out of scope
-- Sub-brand token migration
-- নতুন design tokens বৃহৎ পরিমাণে (শুধু genuine gaps হলে)
-- Layout / typography / spacing পরিবর্তন
-- Component API পরিবর্তন
+- 801 pre-existing findings কমানো (আলাদা sprint)
+- Pre-commit hook (`.husky` নেই — যোগ করব না এখন)
+- Delta ratchet auto-update (manual baseline update ইচ্ছাকৃত রাখা হচ্ছে)
+- Per-hex allow-list (`no-rogue-colors.test.ts` ইতিমধ্যে করে)
