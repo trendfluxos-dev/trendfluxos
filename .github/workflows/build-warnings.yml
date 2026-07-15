@@ -1,0 +1,69 @@
+name: Build (warnings = failure)
+
+# Runs `vite build` and fails the pipeline if the production build emits
+# any warnings. Vite/Rollup warnings often mask real problems (circular
+# deps, unresolved imports, sourcemap misses, dynamic-vs-static import
+# conflicts) that don't break the build but degrade the shipped bundle.
+#
+# Strategy: capture combined stdout+stderr, exit non-zero if the build
+# itself fails, then grep for warning markers and fail if any are found.
+
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "public/**"
+      - "index.html"
+      - "vite.config.*"
+      - "tailwind.config.*"
+      - "postcss.config.*"
+      - "tsconfig*.json"
+      - "package.json"
+      - "bun.lockb"
+      - ".github/workflows/build-warnings.yml"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: build-warnings-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Production build must be warning-free
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run production build
+        run: |
+          set -o pipefail
+          # Capture combined stdout + stderr for warning scanning while
+          # still streaming to the log.
+          bun run build 2>&1 | tee build.log
+
+      - name: Fail on build-time warnings
+        run: |
+          # Match common Vite / Rollup / TypeScript warning markers.
+          if grep -En -i \
+              -e '(^|[[:space:]])warning:' \
+              -e '(^|[[:space:]])warn(ing)?[[:space:]]*-' \
+              -e '\[plugin[^]]*\][[:space:]]+warning' \
+              -e 'rollup .*warning' \
+              -e '\(!\)' \
+              -e 'Circular dependency' \
+              -e 'is dynamically imported by .* but also statically imported' \
+              build.log; then
+            echo "::error::Production build emitted warnings — see matches above."
+            exit 1
+          fi
+          echo "Build completed with zero warnings."
