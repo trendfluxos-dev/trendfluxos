@@ -38,6 +38,12 @@ export default defineConfig(({ mode }) => ({
     ? { drop: ["console", "debugger"] }
     : undefined,
   build: {
+    // The isolated lazy chunks below (tldraw ~1.7MB, html2pdf ~1MB, recharts
+    // ~640kB) are large upstream libraries that are already code-split onto
+    // their own routes/dynamic imports — users only pay the cost when they
+    // hit those features. Raising the warning threshold silences the noisy
+    // notice without hiding regressions on the shared/main chunk.
+    chunkSizeWarningLimit: 2000,
     // Manual vendor splitting keeps the initial JS payload small. The biggest
     // libraries (recharts ~4.6MB, Radix ~3.5MB, lucide ~29MB on disk) are
     // each isolated so that pages which don't import them never pay the
