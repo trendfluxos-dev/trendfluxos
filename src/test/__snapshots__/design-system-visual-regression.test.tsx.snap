@@ -258,5 +258,20 @@ exports[`design-system page — visual regression fingerprint > design-system st
           div.bg-primary/10.mt-3.rounded-md.text-foreground.text-sm :: Hover me
         div.bg-card.border.border-border.flex.flex-col.relative.rounded-xl.text-card-foreground
           p.font-mono.text-[11px].text-muted-foreground :: story-link
-          a.inline-block.mt-3.text-foreground.text-sm :: Underline sweep"
+          a.inline-block.mt-3.text-foreground.text-sm :: Underline sweep
+  section.bg-background.border-border.border-t.py-14.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: 08 · Interactive primitives
+      h2.font-display.font-semibold.mt-2.text-3xl.text-foreground.tracking-[-0.02em] :: Dialog · Popover · Dropdown
+      p.mt-1.text-muted-foreground.text-sm :: Keyboard-driven wrappers around Radix primitives. Each shows the expected focus-trap / escape-to-close contract our design system promises.
+      div.gap-4.grid.mt-6
+        div.bg-card.border.border-border.flex.flex-col.relative.rounded-xl.text-card-foreground
+          p.font-mono.text-[11px].text-muted-foreground :: Dialog
+          button.bg-primary.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.mt-3.px-6.py-2.ring-offset-background.rounded-full.shadow-sm.text-primary-foreground.text-sm.tracking-tight.whitespace-nowrap :: Open dialog
+        div.bg-card.border.border-border.flex.flex-col.relative.rounded-xl.text-card-foreground
+          p.font-mono.text-[11px].text-muted-foreground :: Popover
+          button.bg-transparent.border.border-foreground/15.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.mt-3.px-6.py-2.ring-offset-background.rounded-full.text-foreground.text-sm.tracking-tight.whitespace-nowrap :: Open popover
+        div.bg-card.border.border-border.flex.flex-col.relative.rounded-xl.text-card-foreground
+          p.font-mono.text-[11px].text-muted-foreground :: DropdownMenu
+          button.bg-transparent.border.border-foreground/15.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.mt-3.px-6.py-2.ring-offset-background.rounded-full.text-foreground.text-sm.tracking-tight.whitespace-nowrap :: Open menu"
 `;
