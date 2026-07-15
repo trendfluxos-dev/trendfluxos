@@ -47,7 +47,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
     <>
     <section
       aria-labelledby="home-hero-heading"
-      className="relative isolate bg-[#08080d] text-[#f0c9c9] selection:bg-[#c11f1f] selection:text-white overflow-hidden"
+      className="relative isolate bg-noir text-crimson-mist selection:bg-primary selection:text-scrim-foreground overflow-hidden"
     >
       {/* Ambient decoration — grid, radial glow, corner marks */}
       <div
@@ -65,39 +65,39 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -top-40 -right-40 h-[560px] w-[560px] rounded-full bg-[#c11f1f]/15 blur-[120px]"
+        className="pointer-events-none absolute -top-40 -right-40 h-[560px] w-[560px] rounded-full bg-primary/15 blur-[120px]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full bg-[#e25a5a]/10 blur-[100px]"
+        className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full bg-crimson-glow/10 blur-[100px]"
       />
 
       <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6 pt-[calc(var(--nav-offset)+16px)] pb-16 lg:pb-24 overflow-hidden">
         {/* Corner ticks */}
-        <span aria-hidden className="absolute left-4 top-4 h-3 w-3 border-l border-t border-[#c11f1f]/40" />
-        <span aria-hidden className="absolute right-4 top-4 h-3 w-3 border-r border-t border-[#c11f1f]/40" />
-        <span aria-hidden className="absolute left-4 bottom-4 h-3 w-3 border-l border-b border-[#c11f1f]/40" />
-        <span aria-hidden className="absolute right-4 bottom-4 h-3 w-3 border-r border-b border-[#c11f1f]/40" />
+        <span aria-hidden className="absolute left-4 top-4 h-3 w-3 border-l border-t border-primary/40" />
+        <span aria-hidden className="absolute right-4 top-4 h-3 w-3 border-r border-t border-primary/40" />
+        <span aria-hidden className="absolute left-4 bottom-4 h-3 w-3 border-l border-b border-primary/40" />
+        <span aria-hidden className="absolute right-4 bottom-4 h-3 w-3 border-r border-b border-primary/40" />
         <div className="grid grid-cols-12 gap-6 md:gap-10 lg:gap-12 items-start">
           {/* Hero column */}
           <div className="col-span-12 lg:col-span-7">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c11f1f]/10 border border-[#c11f1f]/20 mb-6">
-              <span className="font-mono text-[10px] uppercase tracking-tighter text-[#e25a5a]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 mb-6">
+              <span className="font-mono text-[10px] uppercase tracking-tighter text-crimson-glow">
                 Brand Architect · Founder Portfolio
               </span>
             </div>
             <h1
               id="home-hero-heading"
-              className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-white leading-[1.1] mb-8 break-words"
+              className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-scrim-foreground leading-[1.1] mb-8 break-words"
             >
               Building the <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c11f1f] to-[#e25a5a]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-crimson-glow">
                 Next-Gen Operator
               </span>
               <br />
               Ecosystem.
             </h1>
-            <p className="text-lg text-[#f0c9c9]/70 max-w-xl mb-10 leading-relaxed">
+            <p className="text-lg text-crimson-mist/70 max-w-xl mb-10 leading-relaxed">
               Zahid Hasan Emon orchestrates a vertically integrated network of brands across
               EdTech, Creative, Commerce and Legal sectors. One vision, eight entities,
               unified execution.
@@ -105,7 +105,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
             <div className="flex flex-wrap gap-4">
               <Link
                 to="/ecosystem"
-                className="px-8 py-4 bg-[#c11f1f] text-white font-semibold rounded hover:bg-[#a01a1a] transition-all inline-flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d]"
+                className="px-8 py-4 bg-primary text-scrim-foreground font-semibold rounded hover:bg-primary transition-all inline-flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/70 focus-visible:ring-offset-2 focus-visible:ring-offset-noir"
               >
                 View Architecture
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden />
@@ -119,11 +119,11 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
                   setBookingOpen(true);
                 }}
                 aria-haspopup="dialog"
-                className="relative px-8 py-4 bg-white text-[#08080d] font-semibold rounded hover:bg-[#f0c9c9] transition-all inline-flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d] shadow-[0_10px_30px_-10px_rgba(255,255,255,0.35)]"
+                className="relative px-8 py-4 bg-paper text-noir font-semibold rounded hover:bg-crimson-mist transition-all inline-flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/70 focus-visible:ring-offset-2 focus-visible:ring-offset-noir shadow-[0_10px_30px_-10px_rgba(255,255,255,0.35)]"
               >
                 <span aria-hidden className="absolute -top-2 -right-2 inline-flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-[#e25a5a] opacity-75 animate-ping" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#c11f1f]" />
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-crimson-glow opacity-75 animate-ping" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary" />
                 </span>
                 <CalendarCheck className="w-4 h-4" aria-hidden />
                 Book Direct with Project Lead
@@ -131,7 +131,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
               <button
                 type="button"
                 onClick={onOpenQuote}
-                className="px-8 py-4 border border-white/10 text-white font-semibold rounded hover:bg-white/5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d]"
+                className="px-8 py-4 border border-scrim-foreground/10 text-scrim-foreground font-semibold rounded hover:bg-scrim-foreground/5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/70 focus-visible:ring-offset-2 focus-visible:ring-offset-noir"
               >
                 Partnership
               </button>
@@ -143,11 +143,11 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
             aria-labelledby="home-brand-grid-heading"
             className="col-span-12 lg:col-span-5 grid grid-cols-2 gap-4"
           >
-            <div className="col-span-2 p-4 border border-white/5 bg-[#1a0a0a] rounded-lg">
-              <span className="font-mono text-[10px] uppercase text-[#e25a5a] block mb-1">
+            <div className="col-span-2 p-4 border border-scrim-foreground/5 bg-noir rounded-lg">
+              <span className="font-mono text-[10px] uppercase text-crimson-glow block mb-1">
                 Active Deployment
               </span>
-              <h2 id="home-brand-grid-heading" className="text-2xl font-bold text-white">
+              <h2 id="home-brand-grid-heading" className="text-2xl font-bold text-scrim-foreground">
                 8 Brands Managed
               </h2>
             </div>
@@ -161,17 +161,17 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
                 <Tag
                   key={b.name}
                   {...props}
-                  className="p-4 border border-white/5 bg-[#1a0a0a]/40 hover:border-[#c11f1f]/30 transition-colors rounded-lg group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#08080d]"
+                  className="p-4 border border-scrim-foreground/5 bg-noir/40 hover:border-primary/30 transition-colors rounded-lg group focus:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/70 focus-visible:ring-offset-2 focus-visible:ring-offset-noir"
                 >
-                  <span className="font-mono text-[9px] text-[#f0c9c9]/40 block mb-2">
+                  <span className="font-mono text-[9px] text-crimson-mist/40 block mb-2">
                     {b.category}
-                    {b.external && <span className="ml-1 text-[#e25a5a]/70">↗</span>}
+                    {b.external && <span className="ml-1 text-crimson-glow/70">↗</span>}
                   </span>
-                  <div className="font-semibold text-white text-sm mb-1 group-hover:text-[#e25a5a]">
+                  <div className="font-semibold text-scrim-foreground text-sm mb-1 group-hover:text-crimson-glow">
                     {b.name}
                   </div>
-                  <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                    <div className={`${widthClass[b.strength]} h-full bg-[#c11f1f]`} />
+                  <div className="w-full h-1 bg-scrim-foreground/5 rounded-full overflow-hidden">
+                    <div className={`${widthClass[b.strength]} h-full bg-primary`} />
                   </div>
                 </Tag>
               );
@@ -180,7 +180,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
             <div className="col-span-2 mt-2 text-right">
               <Link
                 to="/brands"
-                className="font-mono text-[10px] text-[#e25a5a] uppercase tracking-widest hover:underline focus:outline-none focus-visible:underline"
+                className="font-mono text-[10px] text-crimson-glow uppercase tracking-widest hover:underline focus:outline-none focus-visible:underline"
               >
                 +4 more entities
               </Link>
@@ -190,13 +190,13 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
         </div>
 
         {/* Metrics footer strip */}
-        <div className="mt-16 lg:mt-20 pt-10 border-t border-white/5 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+        <div className="mt-16 lg:mt-20 pt-10 border-t border-scrim-foreground/5 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {METRICS.map((m) => (
             <div key={m.label}>
-              <div className="font-mono text-[10px] text-[#f0c9c9]/40 uppercase mb-2 tracking-widest">
+              <div className="font-mono text-[10px] text-crimson-mist/40 uppercase mb-2 tracking-widest">
                 {m.label}
               </div>
-              <div className={`text-2xl font-bold tracking-tight ${m.accent ? "text-[#e25a5a]" : "text-white"}`}>
+              <div className={`text-2xl font-bold tracking-tight ${m.accent ? "text-crimson-glow" : "text-scrim-foreground"}`}>
                 {m.value}
               </div>
             </div>
