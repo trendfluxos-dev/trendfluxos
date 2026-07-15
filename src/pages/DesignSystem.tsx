@@ -8,6 +8,7 @@ import {
   TfxProse,
   TfxEyebrow,
 } from "@/components/design-system";
+import InteractivePrimitives from "@/components/design-system/InteractivePrimitives";
 
 type Brand = "default" | "justice" | "marriage" | "brandtoki" | "edtech";
 
@@ -309,6 +310,8 @@ export default function DesignSystem() {
           </TfxCard>
         </div>
       </TfxSection>
+
+      <InteractivePrimitives />
     </>
   );
 }

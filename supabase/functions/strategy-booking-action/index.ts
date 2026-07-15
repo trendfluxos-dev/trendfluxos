@@ -66,22 +66,39 @@ Deno.serve(async (req) => {
 
   // Merge existing attendees with the client to preserve the admin.
   let existingAttendees: Array<{ email: string; responseStatus?: string }> = [];
+  let eventStartTz: string | undefined;
+  let eventStartIso: string | undefined;
   try {
     const getRes = await fetch(`${GATEWAY}/calendars/primary/events/${booking.gcal_event_id}`, { headers: gheaders });
     if (getRes.ok) {
       const ev = await getRes.json();
       if (Array.isArray(ev.attendees)) existingAttendees = ev.attendees;
+      eventStartTz = ev?.start?.timeZone;
+      eventStartIso = ev?.start?.dateTime;
     }
   } catch (_e) { /* ignore */ }
 
   const attendees = [
     ...existingAttendees.filter((a) => a.email?.toLowerCase() !== booking.email.toLowerCase()),
-    { email: booking.email },
+    // Adding the client as an attendee with sendUpdates=all is what triggers
+    // Google Calendar's built-in confirmation email + 24h / 15m reminders to
+    // the client. The reminder overrides were set when the event was created.
+    { email: booking.email, responseStatus: "needsAction" },
   ];
 
   const patchBody = {
     summary: `Strategy call — ${booking.name}${booking.company ? ` (${booking.company})` : ""}`,
     attendees,
+    // Re-apply reminder overrides in case anyone edited the event manually.
+    reminders: {
+      useDefault: false,
+      overrides: [
+        { method: "email", minutes: 24 * 60 },
+        { method: "email", minutes: 60 },
+        { method: "email", minutes: 15 },
+        { method: "popup", minutes: 15 },
+      ],
+    },
   };
   const patchRes = await fetch(patchUrl.toString(), {
     method: "PATCH", headers: gheaders, body: JSON.stringify(patchBody),
@@ -96,5 +113,23 @@ Deno.serve(async (req) => {
     .update({ status: "confirmed", confirmed_slot_iso: booking.requested_slot_iso })
     .eq("id", booking.id);
 
-  return html(200, "Confirmed", `Meet invite sent to <b>${booking.email}</b>. Reminders will fire 1 day and 15 minutes before the call.`);
+  const fmt = (tz: string) => {
+    const iso = eventStartIso ?? booking.requested_slot_iso;
+    try {
+      return new Intl.DateTimeFormat("en-GB", {
+        timeZone: tz, weekday: "short", day: "2-digit", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit", hour12: false,
+      }).format(new Date(iso));
+    } catch { return new Date(iso).toUTCString(); }
+  };
+  const orgTz = eventStartTz ?? booking.organizer_timezone ?? "Asia/Dhaka";
+  const cliTz = booking.client_timezone ?? orgTz;
+  const tzLine = cliTz !== orgTz
+    ? `<br/><b>Organizer:</b> ${fmt(orgTz)} (${orgTz})<br/><b>Client:</b> ${fmt(cliTz)} (${cliTz})`
+    : `<br/><b>When:</b> ${fmt(orgTz)} (${orgTz})`;
+  return html(
+    200,
+    "Confirmed",
+    `Meet invite sent to <b>${booking.email}</b>. Google Calendar will email a confirmation now and reminders 24h, 1h and 15m before the call.${tzLine}`,
+  );
 });

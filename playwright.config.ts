@@ -26,18 +26,35 @@ const allProjects = [
   // ── Cross-engine desktop smoke ────────────────────────────────────────
   {
     name: "chromium-desktop",
-    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback|design-system-keyboard)\.spec\.ts/,
+    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback|design-system-keyboard|design-system-dialogs)\.spec\.ts/,
     use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 } },
   },
   {
     name: "firefox-desktop",
-    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback|design-system-keyboard)\.spec\.ts/,
+    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback|design-system-keyboard|design-system-dialogs)\.spec\.ts/,
     use: { ...devices["Desktop Firefox"], viewport: { width: 1280, height: 800 } },
   },
   {
     name: "webkit-desktop",
-    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback|design-system-keyboard)\.spec\.ts/,
+    testMatch: /(home-hero|error-boundary|security-baseline|page-fallback|design-system-keyboard|design-system-dialogs)\.spec\.ts/,
     use: { ...devices["Desktop Safari"], viewport: { width: 1280, height: 800 } },
+  },
+
+  // ── Keyboard/a11y coverage at tablet + mobile breakpoints ─────────────
+  // The desktop projects above verify chrome/firefox/webkit engines. These
+  // extra projects re-run the same keyboard-nav + dialog specs at real
+  // tablet and mobile viewports so responsive focus-order regressions
+  // (e.g. off-canvas nav trapping Tab, focus ring clipped by a sticky
+  // header) are caught in CI alongside desktop.
+  {
+    name: "keyboard-tablet",
+    testMatch: /(design-system-keyboard|design-system-dialogs)\.spec\.ts/,
+    use: { ...devices["iPad (gen 7)"] },
+  },
+  {
+    name: "keyboard-mobile",
+    testMatch: /(design-system-keyboard|design-system-dialogs)\.spec\.ts/,
+    use: { ...devices["iPhone 13"] },
   },
 
   // ── Visual regression pins to Chromium for stable pixel diffs ────────

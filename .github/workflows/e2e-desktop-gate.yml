@@ -1,0 +1,78 @@
+name: E2E gate - Chromium / Firefox / WebKit
+
+# Dedicated required-status workflow: runs the three desktop Playwright
+# projects (chromium-desktop, firefox-desktop, webkit-desktop) on every PR
+# and fails the build on any regression. The aggregate `gate` job at the
+# bottom is what you add as a required check in branch protection — it
+# succeeds only when all three browser jobs succeed.
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-desktop-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  desktop:
+    name: ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: chromium-desktop
+            browser: chromium
+          - project: firefox-desktop
+            browser: firefox
+          - project: webkit-desktop
+            browser: webkit
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browser (${{ matrix.browser }})
+        run: bunx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run Playwright project ${{ matrix.project }}
+        env:
+          PW_PROJECT: ${{ matrix.project }}
+        run: bunx playwright test --project ${{ matrix.project }}
+
+      - name: Upload HTML report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-desktop-report-${{ matrix.project }}
+          path: playwright-report
+          retention-days: 14
+
+      - name: Upload raw results on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-desktop-results-${{ matrix.project }}
+          path: test-results
+          retention-days: 14
+
+  gate:
+    name: E2E desktop gate
+    needs: desktop
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Fail if any desktop project failed
+        run: |
+          if [ "${{ needs.desktop.result }}" != "success" ]; then
+            echo "One or more desktop Playwright projects failed: ${{ needs.desktop.result }}"
+            exit 1
+          fi
+          echo "All desktop Playwright projects passed."

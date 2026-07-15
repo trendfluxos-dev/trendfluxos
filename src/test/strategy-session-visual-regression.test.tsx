@@ -100,6 +100,10 @@ describe("Strategy Session dialog — visual regression fingerprint", () => {
         time: "15:00",
         iso: "2026-07-20T09:00:00.000Z",
         label: "Mon, 20 Jul 2026 · 15:00 BDT",
+        organizerTz: "Asia/Dhaka",
+        userTz: "Asia/Dhaka",
+        organizerLabel: "Mon, 20 Jul 2026 · 15:00 (Asia/Dhaka, BDT)",
+        userLabel: "Mon, 20 Jul 2026 · 15:00 (Asia/Dhaka)",
       },
     };
 
