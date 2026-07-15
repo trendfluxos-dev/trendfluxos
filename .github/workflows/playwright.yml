@@ -36,6 +36,11 @@ jobs:
           # Low-RAM / Slow-3G Android emulation.
           - project: low-ram-mobile
             browser: chromium
+          # Keyboard/a11y coverage at tablet and mobile breakpoints.
+          - project: keyboard-tablet
+            browser: webkit
+          - project: keyboard-mobile
+            browser: webkit
           # Visual regression pins to Chromium for stable pixel diffs.
           - project: visual-desktop
             browser: chromium
