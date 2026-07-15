@@ -12,6 +12,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:design-system": "vitest run src/components/design-system src/test/design-system-visual-regression.test.tsx src/test/theme-tokens.test.ts",
     "test:smoke": "vitest run --config vitest.smoke.config.ts",
     "test:visual:fingerprint": "vitest run src/test/home-visual-regression.test.tsx src/test/portfolio-highlights-visual-regression.test.tsx src/test/strategy-session-visual-regression.test.tsx src/test/design-system-visual-regression.test.tsx",
     "test:e2e": "playwright test",
