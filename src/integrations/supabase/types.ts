@@ -1140,6 +1140,7 @@ export type Database = {
       }
       strategy_bookings: {
         Row: {
+          client_timezone: string | null
           company: string | null
           confirm_token: string
           confirmed_slot_iso: string | null
@@ -1151,6 +1152,7 @@ export type Database = {
           ip: string | null
           meet_url: string | null
           name: string
+          organizer_timezone: string
           phone: string | null
           reminder_15min_sent_at: string | null
           reminder_morning_sent_at: string | null
@@ -1161,6 +1163,7 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
+          client_timezone?: string | null
           company?: string | null
           confirm_token?: string
           confirmed_slot_iso?: string | null
@@ -1172,6 +1175,7 @@ export type Database = {
           ip?: string | null
           meet_url?: string | null
           name: string
+          organizer_timezone?: string
           phone?: string | null
           reminder_15min_sent_at?: string | null
           reminder_morning_sent_at?: string | null
@@ -1182,6 +1186,7 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
+          client_timezone?: string | null
           company?: string | null
           confirm_token?: string
           confirmed_slot_iso?: string | null
@@ -1193,6 +1198,7 @@ export type Database = {
           ip?: string | null
           meet_url?: string | null
           name?: string
+          organizer_timezone?: string
           phone?: string | null
           reminder_15min_sent_at?: string | null
           reminder_morning_sent_at?: string | null
