@@ -1,86 +1,69 @@
-# Implementation Plan — 4 Ecosystem Backend Features
+# Unified Design System — 1-Week Focused Sprint
 
-## 1. Auto-Assign Role on Signup — ✅ Already Done
-Previous migration extended `handle_new_user()` trigger to map `raw_user_meta_data.role` / `intended_role` into `user_roles` for `student`, `teacher`, `tutor`, `editor`, `user`. Admin/finance excluded (privilege escalation guard). No further work.
+Scope: শুধু এই project (`trendflux.digital`)-এর ভেতরে। বাকি ecosystem projects পরবর্তী phase-এর জন্য রাখা হচ্ছে — তবে tokens এমনভাবে structure করা হবে যাতে পরে অন্য Lovable projects-এ copy-paste করা সহজ হয়।
 
-**Verify only:** sign up test user with `?role=teacher` and confirm row appears in `user_roles`.
+## Current state (audit)
 
----
+- `src/index.css` — ১৭২১ লাইন। Master token layer (`:root`, `.dark`) + সাব-ব্র্যান্ড scopes (`[data-brand="justice|marriage|brandtoki|edtech"]`)।
+- `tailwind.config.ts` — ১২৬ লাইন। semantic HSL tokens wired ঠিকমতো।
+- shadcn/ui components পূর্ণ set উপস্থিত।
+- Gap: (a) কোনো central documentation page নেই, (b) tokens duplicated/legacy aliases (`--gold` → red), (c) button/card variants scattered, (d) কোথায় কোন token ব্যবহার করতে হবে সেই rule enforce করার guardrail নেই।
 
-## 2. TrendFlux Talent Backend
+## Deliverables
 
-**New table `talent_applications`**
-- Columns: name, email, phone, portfolio_url, linkedin_url, skills (text[]), experience_years (int), cover_letter, status (`new | reviewing | shortlisted | rejected | hired`), source, metadata (jsonb), reviewed_by, reviewed_at
-- RLS: anon can INSERT; only admin/editor can SELECT/UPDATE; audit-logged
-- GRANT: `INSERT` to anon, full CRUD to authenticated (policy-gated), `ALL` to service_role
+### 1. Token consolidation (Day 1–2)
+- `src/index.css` refactor: master tokens কে ৪টি স্পষ্ট block-এ ভাগ — **Core surfaces**, **Semantic (primary/accent/destructive)**, **Elevation (shadow/glass)**, **Motion (transition/easing)**।
+- Legacy alias (`--gold`, `--gradient-cyan` ইত্যাদি) কে deprecation-comment দিয়ে চিহ্নিত — remove করা হবে না (breaking risk), শুধু "prefer X" note।
+- Sub-brand scopes (`justice`, `marriage`, `brandtoki`, `edtech`, luxe-veil) unchanged থাকবে — memory rule অনুযায়ী।
+- একটি নতুন optional token layer: `--space-*` (4/8/12/16/24/32/48/64), `--radius-sm/md/lg/xl`, `--z-*` — একই semantic pattern-এ।
 
-**New edge function `talent-apply`** (`verify_jwt = false`)
-- Zod-validated body, IP rate-limit (5/hour per IP), inserts row via service role, fires Telegram alert with Approve/Reject-style buttons routed through existing `telegram-webhook` → new callback path
-- Reuses `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID`
+### 2. Component variant library (Day 2–3)
+নতুন file: `src/components/design-system/` folder —
+- `TfxButton` — CVA-based wrapper on shadcn Button: variants `primary | secondary | ghost | outline | destructive | premium (gradient)`, sizes `sm | md | lg | xl`।
+- `TfxCard` — variants `default | elevated | glass | outlined | gradient-border`।
+- `TfxSection` — page section wrapper: `container | padding | background band` props।
+- `TfxHeading` / `TfxProse` — typography scale ব্যবহার enforce করতে।
+- সব wrapper শুধু existing shadcn primitives + tokens use করবে — কোনো hardcoded color নয়।
 
-**Frontend `src/pages/TrendfluxTalent.tsx`**
-- Wire existing form to `supabase.functions.invoke("talent-apply", …)` with success/error toasts
-- Client-side Zod validation mirrors server schema
+### 3. Design System documentation page (Day 3–4)
+নতুন route: `/design-system` (admin-only or unlisted — sitemap-এ থাকবে না, robots meta noindex)।
+Sections:
+- **Colors** — সব semantic tokens live swatch, HSL value, "use for" note।
+- **Typography** — Heading scale (h1–h6), body, caption, mono; Bangla + English sample।
+- **Spacing & Radius** — visual scale।
+- **Elevation** — shadow tokens preview।
+- **Buttons** — সব variant × size grid।
+- **Cards** — variants side-by-side।
+- **Icons** — lucide subset যা project জুড়ে বেশি use হয়।
+- **Animation** — `animate-fade-in`, `hover-scale`, `story-link` demo।
+- **Sub-brand preview** — চারটে scope switch করে দেখানো।
 
-**Admin page `src/pages/TalentApplicationsAdmin.tsx`** (`/admin/talent`)
-- List/filter by status, view detail, status transition buttons, exposes portfolio/LinkedIn links
-- Add nav entry in `Admin.tsx`
+### 4. Guardrails & lint (Day 4–5)
+- README-style `docs/DESIGN_SYSTEM.md` — "always use tokens, never hex; always use `TfxButton` for new CTAs" rule সহ short guide।
+- একটি simple `scripts/audit-tokens.mjs` — `src/pages` ও `src/components` scan করে `#[0-9a-f]{3,8}` বা `bg-white/black/gray-*` occurrences report করবে (fail-only report, no CI wiring)।
 
----
+### 5. High-impact refactor sample (Day 5)
+- Founder page-এর "Portfolio Highlights" section (গত turn-এ যোগ হয়েছে) কে নতুন `TfxCard` + `TfxSection` দিয়ে rewrite — নতুন wrapper কেমন feel দেয় সেটার reference হিসেবে।
+- বাকি pages এক এক করে migrate করা এই sprint-এর বাইরে; migration checklist docs-এ থাকবে।
 
-## 3. Tutor Booking Payment (reuse course-payment pattern)
+## What's explicitly out of scope
 
-**Schema changes**
-- `tutor_bookings.status` enum widened: add `payment_submitted`, `approved`, `rejected` (keep existing `pending`, `confirmed`, `completed`, `cancelled`, `no_show`)
-- New table `booking_payments`: booking_id (FK → tutor_bookings), trx_id, sender_number, amount, currency, method (`bkash` default), status (`submitted | approved | rejected`), reviewed_by, reviewed_at, notes
-- RLS: student sees own; tutor sees for their bookings; admin sees all; service_role full
-- Trigger to enforce booking status transitions server-side (extend `enforce_tutor_booking_update()`)
+- SSO / unified auth, Central CRM, Analytics dashboard, AI Core, Global Search, Notification Hub, Monitoring — এগুলো পরের phases।
+- Cross-project shared package (npm workspace / git submodule) — এখনো না; আগে এই project-এ pattern stable হোক।
+- Full page-by-page refactor — শুধু একটা sample; বাকি gradually।
+- Sub-brand token পরিবর্তন — memory rule অনুযায়ী `[data-brand="..."]` scopes অক্ষত।
 
-**Edge function `tutor-booking-payment-submit`**
-- Student submits TrxID + phone; flips booking to `payment_submitted`; Telegram alert to admin with inline Approve/Reject
-- Mirrors `course-payment-submit`
+## Technical notes
 
-**Edge function `tutor-booking-payment-decision`**
-- Admin (or Telegram callback) approves → booking `approved` → notifies student + tutor via Telegram/email
-- Reject → status `rejected`, notifies student with reason
+- সব color HSL-এই থাকবে (existing convention)।
+- `TfxButton` shadcn `Button`-কে replace করবে না — coexist করবে; নতুন CTA-এর জন্য preferred।
+- `/design-system` route lazy-loaded, main bundle-এ যাবে না।
+- Documentation page `data-brand` attribute-এর মাধ্যমে সব sub-brand preview toggle করবে (একই page-এ, no separate routes)।
 
-**Frontend**
-- `EdtechTutorBook.tsx`: on booking-created success, route to a new `BookingPayment` step showing bKash payment number, amount, TrxID form
-- `EdtechMyBookings.tsx`: show payment status badge + resubmit if rejected
-- `EdtechTeachBookings.tsx`: show payment state so tutor knows before class
+## Success criteria
 
----
+- এক জায়গা থেকে সব design tokens visible ও copy-able।
+- নতুন page/section লিখতে গেলে developer শুধু `TfxSection > TfxCard > TfxButton` compose করবে — hex/`text-white` লিখতে হবে না।
+- Audit script run করলে `src/pages/Founder.tsx`-এ zero hardcoded color findings।
 
-## 4. GA4 Verification & Wiring
-
-**Env + init**
-- Add `VITE_GA4_ID` env (documented; user supplies `G-XXXXXXXXXX` via secret UI equivalent)
-- Inject GA4 snippet in `src/main.tsx` conditionally (`if (import.meta.env.VITE_GA4_ID)`) — no `<script>` edit to `index.html`
-- Extend `src/lib/analytics.ts` with typed helpers: `trackPageView`, `trackLead`, `trackBookDemo`, `trackEnroll`, `trackBooking`, `trackPurchase`, `trackCertVerify`, `trackMarriageInquiry`, `trackTalentApp`
-
-**Instrument key funnels**
-- Auth signup, GrowthOS lead submit, Enterprise demo, Course enroll, Tutor booking, Certificate verify, Marriage inquiry, Talent application
-
-**Admin verification page `/admin/ga4-check`** (already exists — enhance)
-- Show configured Measurement ID, presence of `window.gtag`, ping test event, display last-seen event via existing `ga4-checker` fn
-
----
-
-## Order of Work
-
-1. Confirm #1 works (quick test).
-2. Feature #2 Talent (migration → fn → frontend → admin).
-3. Feature #3 Tutor payment (migration → fns → frontend flows).
-4. Feature #4 GA4 (env + init + instrumentation + admin enhance).
-
-Each feature ships end-to-end (DB → fn → UI → admin visibility) before starting the next, so we don't leave partial state.
-
-## Technical Notes
-
-- All new tables follow: `CREATE TABLE → GRANT → ALTER … ENABLE RLS → CREATE POLICY` in one migration.
-- Telegram notifications reuse existing `telegram-webhook` inline keyboard pattern used by `access-decision`.
-- No new secrets required (Telegram + Lovable AI already configured). GA4 ID is a public value; safe in `.env` as `VITE_GA4_ID`.
-- Zod validation on every new edge function; `corsHeaders` on every response including errors.
-- Booking status transitions enforced by trigger, not client — prevents privilege bypass.
-
-Estimated: ~1 migration + 3 edge functions + 4 frontend files + 1 admin page per major feature. Total 3 migrations, ~5 edge functions, ~10 new/edited frontend files.
+Approve করলে আমি Day-1 (token consolidation + wrapper components) দিয়ে শুরু করব।
