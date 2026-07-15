@@ -138,6 +138,7 @@ const CreatorStudio = routes["/admin/creator-studio"];
 const GrowthOsHub = routes["/growth-os/hub"];
 const TaskQueue = routes["/admin/task-queue"];
 const ClassAnalytics = routes["/admin/class-analytics"];
+const DesignSystem = routes["/design-system"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
