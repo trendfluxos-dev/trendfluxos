@@ -13,6 +13,10 @@ const BodySchema = z.object({
   session_type: z.enum(["video", "audio"]),
   requested_slot_iso: z.string().datetime(),
   duration_minutes: z.number().int().min(15).max(120).default(30),
+  /** IANA TZ name for the visitor. Used for calendar event display and emails. */
+  client_timezone: z.string().trim().min(2).max(80).optional(),
+  /** IANA TZ name the slot is anchored to (defaults to organizer). */
+  organizer_timezone: z.string().trim().min(2).max(80).default("Asia/Dhaka"),
 });
 
 function siteOrigin(req: Request) {
@@ -60,6 +64,24 @@ Deno.serve(async (req) => {
 
   const start = new Date(body.requested_slot_iso);
   const end = new Date(start.getTime() + body.duration_minutes * 60_000);
+  const clientTz = (body.client_timezone && body.client_timezone.length > 1)
+    ? body.client_timezone
+    : body.organizer_timezone;
+  const organizerTz = body.organizer_timezone;
+
+  const fmtInTz = (d: Date, tz: string) => {
+    try {
+      return new Intl.DateTimeFormat("en-GB", {
+        timeZone: tz,
+        weekday: "short", day: "2-digit", month: "short", year: "numeric",
+        hour: "2-digit", minute: "2-digit", hour12: false,
+      }).format(d);
+    } catch {
+      return d.toUTCString();
+    }
+  };
+  const organizerWhen = `${fmtInTz(start, organizerTz)} (${organizerTz})`;
+  const clientWhen = `${fmtInTz(start, clientTz)} (${clientTz})`;
 
   // Insert pending row first — we always want the lead captured.
   const { data: booking, error: insertErr } = await supabase
@@ -72,6 +94,8 @@ Deno.serve(async (req) => {
       goal: body.goal || null,
       session_type: body.session_type,
       requested_slot_iso: start.toISOString(),
+      client_timezone: clientTz,
+      organizer_timezone: organizerTz,
       ip: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null,
       user_agent: req.headers.get("user-agent")?.slice(0, 500) ?? null,
     })
@@ -123,6 +147,9 @@ Deno.serve(async (req) => {
     body.goal ? `Goal: ${body.goal}` : null,
     `Session type: ${body.session_type}`,
     ``,
+    `When (organizer): ${organizerWhen}`,
+    `When (client):    ${clientWhen}`,
+    ``,
     `>>> CONFIRM this slot (sends Meet invite to client):`,
     confirmUrl,
     ``,
@@ -139,8 +166,11 @@ Deno.serve(async (req) => {
   const eventPayload: Record<string, unknown> = {
     summary: `[HOLD] Strategy call — ${body.name}${body.company ? ` (${body.company})` : ""}`,
     description,
-    start: { dateTime: start.toISOString() },
-    end: { dateTime: end.toISOString() },
+    // Pin the calendar event to the organizer timezone so Google Calendar
+    // renders it consistently regardless of who's viewing. Attendees still
+    // see it converted into their own timezone by Google.
+    start: { dateTime: start.toISOString(), timeZone: organizerTz },
+    end: { dateTime: end.toISOString(), timeZone: organizerTz },
     attendees: adminEmail ? [{ email: adminEmail, responseStatus: "accepted" }] : [],
     conferenceData: {
       createRequest: {
