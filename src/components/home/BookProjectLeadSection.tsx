@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MessageCircle, Mail, Linkedin, ShieldCheck, Clock, ArrowRight } from "lucide-react";
-import { n } from "@/config/socialConfig";
+import { BRAND_CONTACTS } from "@/config/socialConfig";
 import portraitAsset from "@/assets/zahid-hasan-emon-podium.png.asset.json";
 
 const portrait = portraitAsset.url;
@@ -12,7 +12,7 @@ const portrait = portraitAsset.url;
  * Transformation Stories and Values sections on the home page.
  */
 export const BookProjectLeadSection = ({ onOpenQuote }: { onOpenQuote: () => void }) => {
-  const zahid = n.zahid;
+  const zahid = BRAND_CONTACTS.zahid;
   return (
     <section
       aria-labelledby="book-project-lead-heading"
