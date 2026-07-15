@@ -77,12 +77,19 @@ export default {
         noir: {
           DEFAULT: "hsl(var(--noir))",
           elevated: "hsl(var(--noir-elevated))",
+          rim: "hsl(var(--noir-rim))",
         },
         crimson: {
           glow: "hsl(var(--crimson-glow))",
           "glow-strong": "hsl(var(--crimson-glow-strong))",
           rim: "hsl(var(--crimson-rim))",
           mist: "hsl(var(--crimson-mist))",
+          blush: "hsl(var(--crimson-blush))",
+        },
+        wa: {
+          green: "hsl(var(--wa-green))",
+          "green-glow": "hsl(var(--wa-green-glow))",
+          "green-deep": "hsl(var(--wa-green-deep))",
         },
       },
       fontFamily: {
