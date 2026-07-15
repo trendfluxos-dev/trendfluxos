@@ -220,10 +220,15 @@
     --scrim-foreground: 0 0% 100%;
     --noir: 240 20% 4%;
     --noir-elevated: 0 0% 7%;
+    --noir-rim: 349 45% 11%;
     --crimson-glow: 0 68% 62%;
     --crimson-glow-strong: 0 100% 71%;
     --crimson-rim: 0 60% 30%;
     --crimson-mist: 0 60% 87%;
+    --crimson-blush: 0 60% 95%;
+    --wa-green: 141 71% 49%;
+    --wa-green-glow: 141 63% 69%;
+    --wa-green-deep: 141 76% 24%;
   }
 }
 
