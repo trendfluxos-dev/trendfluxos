@@ -68,6 +68,29 @@ export default {
           orange: "hsl(var(--accent-orange))",
           green: "hsl(var(--accent-green))",
         },
+        // Fixed-semantic tokens — do not invert in dark mode by design.
+        paper: "hsl(var(--paper))",
+        scrim: {
+          DEFAULT: "hsl(var(--scrim))",
+          foreground: "hsl(var(--scrim-foreground))",
+        },
+        noir: {
+          DEFAULT: "hsl(var(--noir))",
+          elevated: "hsl(var(--noir-elevated))",
+          rim: "hsl(var(--noir-rim))",
+        },
+        crimson: {
+          glow: "hsl(var(--crimson-glow))",
+          "glow-strong": "hsl(var(--crimson-glow-strong))",
+          rim: "hsl(var(--crimson-rim))",
+          mist: "hsl(var(--crimson-mist))",
+          blush: "hsl(var(--crimson-blush))",
+        },
+        wa: {
+          green: "hsl(var(--wa-green))",
+          "green-glow": "hsl(var(--wa-green-glow))",
+          "green-deep": "hsl(var(--wa-green-deep))",
+        },
       },
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],

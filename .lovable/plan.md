@@ -1,50 +1,54 @@
 ## লক্ষ্য
-`src/components/design-system/`-এর ৫টি wrapper কম্পোনেন্টের জন্য basic unit tests যোগ — কোনো নতুন test infra লাগবে না (vitest + RTL ইতিমধ্যে configured)।
+Audit report-এর top offenders থেকে **brand-neutral, user-facing** ফাইলগুলোর হার্ডকোডেড রঙ (`bg-white`, `text-white`, `bg-black`, hex, rgba) design tokens-এ মাইগ্রেট। কোনো UI/behavior পরিবর্তন নয় — শুধু color source-of-truth ঠিক করা।
 
-## Test files (একটি করে, co-located)
-`src/components/design-system/__tests__/`
+## Target ফাইল (এই sprint)
+Highest-count এবং brand-neutral (sub-brand data-brand pages আলাদা রাখা হবে, কারণ সেগুলোর scoped tokens লাগে):
 
-1. **TfxButton.test.tsx**
-   - default render — text visible, `<button>` element
-   - variant prop → applies expected class token (e.g. `primary` → contains primary bg token class)
-   - size prop → applies size class
-   - `asChild` → renders as `<a>` when child is anchor
-   - `disabled` → button disabled + aria
-   - custom `className` merged (not overridden)
+| # | File | Findings |
+|---|------|----------|
+| 1 | `src/components/Navbar.tsx` | 173 |
+| 2 | `src/components/home/FounderSpotlightBanner.tsx` | 59 |
+| 3 | `src/components/home/ArchitecturalHero.tsx` | 52 |
+| 4 | `src/components/SelectedExecution.tsx` | 48 |
+| 5 | `src/pages/Founder.tsx` | 25 |
 
-2. **TfxCard.test.tsx**
-   - default render + children
-   - variant prop → correct class
-   - `as` polymorphism (if supported) OR renders `<div>` with role
-   - custom className merged
+মোট ~357 findings — লক্ষ্য এই ৫টি ফাইলে ~90%+ কমানো।
 
-3. **TfxSection.test.tsx**
-   - renders `<section>` with children
-   - `container` + `padding` + `background` variants apply classes
-   - custom className merged
+## Deferred (এই sprint-এ নয়)
+- **Sub-brand pages** — `Marriage`, `LuxeVeil`, `BrandToki`, `JusticeAppeal`, `MediaReports`, `TheStandCoverSection` (per project memory এগুলো `[data-brand="..."]` scoped tokens ব্যবহার করে; আলাদা sprint দরকার)
+- **Admin/internal** — `Dashboard`, `ShareKit`, `Auth` (user-facing polish return কম)
+- **Ephemeral pages** — sub-brand dossiers, edtech admin
 
-4. **TfxHeading.test.tsx**
-   - default `<h2>`; `as="h1"` → renders `<h1>`
-   - `level`/variant → typography class present
-   - children rendered
-   - custom className merged
+## মাইগ্রেশন rules
+প্রতিটি hardcoded রঙের জন্য mapping:
 
-5. **TfxProse.test.tsx**
-   - `TfxProse` renders children with prose class
-   - `TfxEyebrow` renders with eyebrow class + children
-   - custom className merged
+| Hardcoded | Token |
+|-----------|-------|
+| `bg-white` | `bg-background` বা `bg-card` (context) |
+| `text-white` on colored surface | `text-primary-foreground` / `text-background` |
+| `bg-black` / `bg-black/60` overlay | `bg-foreground/60` |
+| `text-black` | `text-foreground` |
+| Neutral grays `#f5f5f5` `#111` etc. | Nearest `bg-muted`, `bg-card`, `text-muted-foreground` |
+| Brand red `#B11226`, `#DC2626` etc. | `bg-primary` / `text-primary` (existing HSL token) |
+| Gradient hex stops | `bg-[image:var(--gradient-*)]` অথবা existing token gradient |
+| Rare one-off hex not covered by tokens | নতুন semantic token add করবো `src/index.css` global scope-এ, তারপর ব্যবহার |
 
-## Test strategy
-- RTL `render` + `screen.getByRole`/`getByText` for structural assertions।
-- Class assertions use `toHaveClass` on token/utility strings actually present in CVA definitions (test reads variant output, not brittle full class list) — check one distinctive class per variant।
-- কোনো visual/snapshot নয় (আলাদা visual regression suite আছে)।
-- Test file পড়ে actual API (props, elements) confirm করে assertion লিখব — assume নয়।
+শর্ত:
+- inline `style={{ color: '#...' }}` → equivalent Tailwind token class-এ move; unavoidable হলে `style={{ color: 'hsl(var(--token))' }}`।
+- rgba() overlays → `bg-foreground/X` opacity utility।
+- কোনো contrast regression যেন না হয় — দৃশ্যত সমান দেখাবে (light/dark উভয়ে)।
 
 ## Verification
-`bun run test src/components/design-system` — সব pass, existing suite অক্ষত।
+প্রতিটি ফাইলের পর:
+1. `node scripts/audit-tokens.mjs` — এই ৫টি ফাইলের counts আগে/পরে।
+2. `bunx vitest run src/test/theme-tokens.test.ts src/test/no-rogue-colors.test.ts src/test/contrast-audit.test.ts` — regression pass।
+3. `bun run build` — zero warnings বজায়।
+4. `/` route এবং `/founder` route-এ preview visually unchanged।
+
+শেষে একটি before/after summary table দেব।
 
 ## Out of scope
-- Storybook / visual regression
-- Full CVA matrix (variant × size combinatorial)
-- Integration tests with routing/theme provider
-- Sub-brand token switching tests
+- Sub-brand token migration
+- নতুন design tokens বৃহৎ পরিমাণে (শুধু genuine gaps হলে)
+- Layout / typography / spacing পরিবর্তন
+- Component API পরিবর্তন

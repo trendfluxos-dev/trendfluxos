@@ -834,7 +834,7 @@ const Founder = () => {
                         const idx = docPreviews.findIndex((x) => x.id === d.id);
                         if (idx >= 0) openLightbox(idx);
                       }}
-                      className="group relative block w-full overflow-hidden rounded-lg border border-border bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="group relative block w-full overflow-hidden rounded-lg border border-border bg-paper text-left focus:outline-none focus:ring-2 focus:ring-primary"
                       aria-label={`Open fullscreen preview of ${d.title}`}
                     >
                       <img
@@ -844,7 +844,7 @@ const Founder = () => {
                         decoding="async"
                         className="mx-auto block max-h-[520px] w-full object-contain"
                       />
-                      <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-white opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                      <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-scrim/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.15em] text-scrim-foreground opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
                         <Maximize2 className="h-3 w-3" /> View fullscreen
                       </span>
                     </button>
@@ -993,7 +993,7 @@ const Founder = () => {
             <p className="mt-6 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">© {new Date().getFullYear()} {BRAND.legalName}</p>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <img src={qrSrc} alt={`QR code to ${FOUNDER.bookletUrl}`} className="h-40 w-40 rounded-md border border-border bg-white p-2" loading="lazy" />
+            <img src={qrSrc} alt={`QR code to ${FOUNDER.bookletUrl}`} className="h-40 w-40 rounded-md border border-border bg-paper p-2" loading="lazy" />
             <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Scan to open online</p>
           </div>
         </div>
@@ -1009,13 +1009,13 @@ const Founder = () => {
           aria-modal="true"
           aria-labelledby="lightbox-title"
           aria-describedby="lightbox-caption"
-          className="no-print fixed inset-0 z-[100] flex flex-col bg-black/92 backdrop-blur-sm"
+          className="no-print fixed inset-0 z-[100] flex flex-col bg-scrim/90 backdrop-blur-sm"
           onClick={closeLightbox}
         >
           {/* Header */}
-          <div className="flex items-start justify-between gap-3 px-4 py-3 text-white sm:px-6" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-start justify-between gap-3 px-4 py-3 text-scrim-foreground sm:px-6" onClick={(e) => e.stopPropagation()}>
             <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-[0.25em] text-white/60">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-scrim-foreground/60">
                 {activeDoc.category} · Document {lightboxIdx + 1} of {docPreviews.length}
               </p>
               <h2 id="lightbox-title" className="mt-0.5 truncate text-sm font-semibold sm:text-base">
@@ -1028,7 +1028,7 @@ const Founder = () => {
                   href={activeDoc.verifyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-scrim-foreground"
                 >
                   <ShieldCheck className="h-3.5 w-3.5" /> Verify
                   <ExternalLink className="h-3 w-3 opacity-80" />
@@ -1039,7 +1039,7 @@ const Founder = () => {
                 type="button"
                 onClick={closeLightbox}
                 aria-label="Close preview (Esc)"
-                className="inline-flex h-10 items-center gap-1.5 rounded-full bg-white/10 px-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                className="inline-flex h-10 items-center gap-1.5 rounded-full bg-scrim-foreground/10 px-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-scrim-foreground hover:bg-scrim-foreground/20 focus:outline-none focus:ring-2 focus:ring-scrim-foreground"
               >
                 <X className="h-4 w-4" /> Close
               </button>
@@ -1056,7 +1056,7 @@ const Founder = () => {
                 type="button"
                 onClick={() => stepLightbox(-1)}
                 aria-label="Previous document (Left arrow)"
-                className="absolute left-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-white/10 p-3 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white sm:inline-flex"
+                className="absolute left-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-scrim-foreground/10 p-3 text-scrim-foreground hover:bg-scrim-foreground/20 focus:outline-none focus:ring-2 focus:ring-scrim-foreground sm:inline-flex"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -1065,14 +1065,14 @@ const Founder = () => {
               key={activeDoc.id}
               src={activeDoc.previewImage!}
               alt={activeDoc.previewAlt ?? `${activeDoc.title} — document preview`}
-              className="max-h-full max-w-full rounded-md bg-white object-contain shadow-2xl"
+              className="max-h-full max-w-full rounded-md bg-paper object-contain shadow-2xl"
             />
             {docPreviews.length > 1 && (
               <button
                 type="button"
                 onClick={() => stepLightbox(1)}
                 aria-label="Next document (Right arrow)"
-                className="absolute right-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-white/10 p-3 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white sm:inline-flex"
+                className="absolute right-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-scrim-foreground/10 p-3 text-scrim-foreground hover:bg-scrim-foreground/20 focus:outline-none focus:ring-2 focus:ring-scrim-foreground sm:inline-flex"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
@@ -1080,8 +1080,8 @@ const Founder = () => {
           </div>
 
           {/* Footer / caption + mobile step controls */}
-          <div className="flex items-center justify-between gap-3 border-t border-white/10 px-4 py-3 text-white sm:px-6" onClick={(e) => e.stopPropagation()}>
-            <p id="lightbox-caption" className="min-w-0 flex-1 truncate text-[11px] text-white/70">
+          <div className="flex items-center justify-between gap-3 border-t border-scrim-foreground/10 px-4 py-3 text-scrim-foreground sm:px-6" onClick={(e) => e.stopPropagation()}>
+            <p id="lightbox-caption" className="min-w-0 flex-1 truncate text-[11px] text-scrim-foreground/70">
               Issued by {activeDoc.issuer} · Use ← → to navigate, Esc to close
             </p>
             {docPreviews.length > 1 && (
@@ -1090,7 +1090,7 @@ const Founder = () => {
                   type="button"
                   onClick={() => stepLightbox(-1)}
                   aria-label="Previous document"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-scrim-foreground/10 text-scrim-foreground hover:bg-scrim-foreground/20 focus:outline-none focus:ring-2 focus:ring-scrim-foreground"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -1098,7 +1098,7 @@ const Founder = () => {
                   type="button"
                   onClick={() => stepLightbox(1)}
                   aria-label="Next document"
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-scrim-foreground/10 text-scrim-foreground hover:bg-scrim-foreground/20 focus:outline-none focus:ring-2 focus:ring-scrim-foreground"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
