@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:design-system": "vitest run src/components/design-system src/test/design-system-visual-regression.test.tsx src/test/theme-tokens.test.ts",
+    "test:tokens": "vitest run src/test/no-rogue-colors.test.ts src/test/theme-tokens.test.ts src/test/contrast-audit.test.ts src/components/design-system/__tests__/tokens-mapping.test.tsx",
     "test:smoke": "vitest run --config vitest.smoke.config.ts",
     "test:visual:fingerprint": "vitest run src/test/home-visual-regression.test.tsx src/test/portfolio-highlights-visual-regression.test.tsx src/test/strategy-session-visual-regression.test.tsx src/test/design-system-visual-regression.test.tsx",
     "test:e2e": "playwright test",
