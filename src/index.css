@@ -205,6 +205,19 @@
     --sidebar-accent-foreground: 0 0% 96%;
     --sidebar-border: 0 0% 16%;
     --sidebar-ring: 0 78% 56%;
+
+    /* Fixed-semantic tokens — same values as light mode; these represent
+       physical/modal surfaces (paper, scrim) and always-dark cinematic
+       chrome, so they intentionally do NOT invert in dark mode. */
+    --paper: 0 0% 100%;
+    --scrim: 0 0% 0%;
+    --scrim-foreground: 0 0% 100%;
+    --noir: 240 20% 4%;
+    --noir-elevated: 0 0% 7%;
+    --crimson-glow: 0 68% 62%;
+    --crimson-glow-strong: 0 100% 71%;
+    --crimson-rim: 0 60% 30%;
+    --crimson-mist: 0 60% 87%;
   }
 }
 
