@@ -1,0 +1,262 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`design-system page — visual regression fingerprint > design-system structural fingerprint is stable 1`] = `
+"div
+  section.bg-[image:var(--gradient-hero)].py-16.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: Internal · v1
+      h1.font-display.font-semibold.mt-3.text-4xl.text-foreground.tracking-[-0.02em] :: TrendFlux Design System
+      p.max-w-3xl.mt-4.text-base.text-muted-foreground :: One place to see every token, wrapper component, and sub-brand preview. Compose new pages from › › instead of writing raw Tailwind color utilities.
+        code :: TfxSection
+        code :: TfxCard
+        code :: TfxButton
+      div.flex.flex-wrap.gap-2.items-center.mt-6
+        span.text-[11px].text-muted-foreground.tracking-[0.2em].uppercase :: Sub-brand preview:
+        button.bg-primary.border.border-primary.px-3.py-1.rounded-full.text-[12px].text-primary-foreground :: default
+        button.border.border-border.px-3.py-1.rounded-full.text-[12px].text-muted-foreground :: justice
+        button.border.border-border.px-3.py-1.rounded-full.text-[12px].text-muted-foreground :: marriage
+        button.border.border-border.px-3.py-1.rounded-full.text-[12px].text-muted-foreground :: brandtoki
+        button.border.border-border.px-3.py-1.rounded-full.text-[12px].text-muted-foreground :: edtech
+  section.bg-background.border-border.border-t.py-14.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: 01 · Colors
+      h2.font-display.font-semibold.mt-2.text-3xl.text-foreground.tracking-[-0.02em] :: Semantic tokens
+      p.max-w-prose.mt-2.text-[15px].text-muted-foreground :: All colors are HSL-encoded custom properties. Never hardcode hex or / . Use , , etc.
+        code :: text-white
+        code :: bg-black
+        code :: bg-primary
+        code :: text-muted-foreground
+      div.gap-3.grid.mt-6
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- background
+            p.text-[11px].text-muted-foreground.truncate :: Page background
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- foreground
+            p.text-[11px].text-muted-foreground.truncate :: Primary text
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- card
+            p.text-[11px].text-muted-foreground.truncate :: Card / surface
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- card-foreground
+            p.text-[11px].text-muted-foreground.truncate :: Text on card
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- primary
+            p.text-[11px].text-muted-foreground.truncate :: Primary CTAs, brand accents
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- primary-foreground
+            p.text-[11px].text-muted-foreground.truncate :: Text on primary
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- secondary
+            p.text-[11px].text-muted-foreground.truncate :: Soft surface bands
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- secondary-foreground
+            p.text-[11px].text-muted-foreground.truncate :: Text on secondary
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- muted
+            p.text-[11px].text-muted-foreground.truncate :: Section band bg
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- muted-foreground
+            p.text-[11px].text-muted-foreground.truncate :: Body copy / metadata
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- accent
+            p.text-[11px].text-muted-foreground.truncate :: Highlight accents
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- destructive
+            p.text-[11px].text-muted-foreground.truncate :: Errors, dangerous actions
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- border
+            p.text-[11px].text-muted-foreground.truncate :: Dividers, hairlines
+        div.border.border-border.flex.gap-3.items-center.rounded-md
+          div.border.border-border.h-10.rounded-md.w-10
+          div.flex-1.min-w-0
+            p.font-mono.font-semibold.text-[12px].text-foreground.truncate :: -- ring
+            p.text-[11px].text-muted-foreground.truncate :: Focus rings
+  section.bg-muted.border-border.border-t.py-14.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: 02 · Typography
+      h2.font-display.font-semibold.mt-2.text-3xl.text-foreground.tracking-[-0.02em] :: Heading scale
+      div.mt-6.space-y-4
+        div.border-b.border-border/60.pb-4
+          p.font-mono.mb-1.text-[11px].text-muted-foreground.tracking-widest.uppercase :: H 1 · TfxHeading level= 1
+          h1.font-display.font-semibold.text-4xl.text-foreground.tracking-[-0.02em] :: Signature outcomes, at a glance.
+        div.border-b.border-border/60.pb-4
+          p.font-mono.mb-1.text-[11px].text-muted-foreground.tracking-widest.uppercase :: H 2 · TfxHeading level= 2
+          h2.font-display.font-semibold.text-3xl.text-foreground.tracking-[-0.02em] :: Signature outcomes, at a glance.
+        div.border-b.border-border/60.pb-4
+          p.font-mono.mb-1.text-[11px].text-muted-foreground.tracking-widest.uppercase :: H 3 · TfxHeading level= 3
+          h3.font-display.font-semibold.text-2xl.text-foreground.tracking-[-0.02em] :: Signature outcomes, at a glance.
+        div.border-b.border-border/60.pb-4
+          p.font-mono.mb-1.text-[11px].text-muted-foreground.tracking-widest.uppercase :: H 4 · TfxHeading level= 4
+          h4.font-display.font-semibold.text-foreground.text-xl.tracking-[-0.02em] :: Signature outcomes, at a glance.
+        div.border-b.border-border/60.pb-4
+          p.font-mono.mb-1.text-[11px].text-muted-foreground.tracking-widest.uppercase :: H 5 · TfxHeading level= 5
+          h5.font-display.font-semibold.text-foreground.text-lg.tracking-[-0.02em] :: Signature outcomes, at a glance.
+        div.border-b.border-border/60.pb-4
+          p.font-mono.mb-1.text-[11px].text-muted-foreground.tracking-widest.uppercase :: H 6 · TfxHeading level= 6
+          h6.font-display.font-semibold.text-base.text-foreground.tracking-[-0.02em] :: Signature outcomes, at a glance.
+      div.mt-8.space-y-3
+        h5.font-display.font-semibold.text-foreground.text-lg.tracking-[-0.02em] :: Body copy
+        p.max-w-prose.text-base.text-muted-foreground :: Large — used for section leads and hero descriptions. Bangla: ট্রেন্ডফ্লাক্স ইকোসিস্টেম।
+        p.max-w-prose.text-[15px].text-muted-foreground :: Medium — default body size (15px). Sits comfortably against headings and card metadata.
+        p.max-w-prose.text-muted-foreground.text-sm :: Small — used inside cards, metadata rows, and dense grids.
+        p.max-w-prose.text-[13px].text-muted-foreground :: Extra small — captions, timestamps, tag labels.
+  section.bg-background.border-border.border-t.py-14.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: 03 · Buttons
+      h2.font-display.font-semibold.mt-2.text-3xl.text-foreground.tracking-[-0.02em] :: TfxButton
+      p.max-w-prose.mt-2.text-[15px].text-muted-foreground :: Prefer for every new CTA. Variants: primary · secondary · outline · ghost · destructive · premium.
+        code :: TfxButton
+      div.mt-6.space-y-6
+        div.flex.flex-wrap.gap-3.items-center
+          span.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase.w-24 :: primary
+          button.bg-primary.font-medium.gap-2.h-9.inline-flex.items-center.justify-center.px-4.ring-offset-background.rounded-full.shadow-sm.text-primary-foreground.text-xs.tracking-tight.whitespace-nowrap :: Small
+          button.bg-primary.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.shadow-sm.text-primary-foreground.text-sm.tracking-tight.whitespace-nowrap :: Medium
+          button.bg-primary.font-medium.gap-2.h-12.inline-flex.items-center.justify-center.px-8.ring-offset-background.rounded-full.shadow-sm.text-base.text-primary-foreground.tracking-tight.whitespace-nowrap :: Large
+          button.bg-primary.font-medium.gap-2.h-14.inline-flex.items-center.justify-center.px-10.ring-offset-background.rounded-full.shadow-sm.text-base.text-primary-foreground.tracking-tight.whitespace-nowrap :: Extra large
+        div.flex.flex-wrap.gap-3.items-center
+          span.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase.w-24 :: secondary
+          button.bg-secondary.font-medium.gap-2.h-9.inline-flex.items-center.justify-center.px-4.ring-offset-background.rounded-full.text-secondary-foreground.text-xs.tracking-tight.whitespace-nowrap :: Small
+          button.bg-secondary.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.text-secondary-foreground.text-sm.tracking-tight.whitespace-nowrap :: Medium
+          button.bg-secondary.font-medium.gap-2.h-12.inline-flex.items-center.justify-center.px-8.ring-offset-background.rounded-full.text-base.text-secondary-foreground.tracking-tight.whitespace-nowrap :: Large
+          button.bg-secondary.font-medium.gap-2.h-14.inline-flex.items-center.justify-center.px-10.ring-offset-background.rounded-full.text-base.text-secondary-foreground.tracking-tight.whitespace-nowrap :: Extra large
+        div.flex.flex-wrap.gap-3.items-center
+          span.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase.w-24 :: outline
+          button.bg-transparent.border.border-foreground/15.font-medium.gap-2.h-9.inline-flex.items-center.justify-center.px-4.ring-offset-background.rounded-full.text-foreground.text-xs.tracking-tight.whitespace-nowrap :: Small
+          button.bg-transparent.border.border-foreground/15.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.text-foreground.text-sm.tracking-tight.whitespace-nowrap :: Medium
+          button.bg-transparent.border.border-foreground/15.font-medium.gap-2.h-12.inline-flex.items-center.justify-center.px-8.ring-offset-background.rounded-full.text-base.text-foreground.tracking-tight.whitespace-nowrap :: Large
+          button.bg-transparent.border.border-foreground/15.font-medium.gap-2.h-14.inline-flex.items-center.justify-center.px-10.ring-offset-background.rounded-full.text-base.text-foreground.tracking-tight.whitespace-nowrap :: Extra large
+        div.flex.flex-wrap.gap-3.items-center
+          span.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase.w-24 :: ghost
+          button.font-medium.gap-2.h-9.inline-flex.items-center.justify-center.px-4.ring-offset-background.rounded-full.text-foreground/80.text-xs.tracking-tight.whitespace-nowrap :: Small
+          button.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.text-foreground/80.text-sm.tracking-tight.whitespace-nowrap :: Medium
+          button.font-medium.gap-2.h-12.inline-flex.items-center.justify-center.px-8.ring-offset-background.rounded-full.text-base.text-foreground/80.tracking-tight.whitespace-nowrap :: Large
+          button.font-medium.gap-2.h-14.inline-flex.items-center.justify-center.px-10.ring-offset-background.rounded-full.text-base.text-foreground/80.tracking-tight.whitespace-nowrap :: Extra large
+        div.flex.flex-wrap.gap-3.items-center
+          span.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase.w-24 :: destructive
+          button.bg-destructive.font-medium.gap-2.h-9.inline-flex.items-center.justify-center.px-4.ring-offset-background.rounded-full.shadow-sm.text-destructive-foreground.text-xs.tracking-tight.whitespace-nowrap :: Small
+          button.bg-destructive.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.shadow-sm.text-destructive-foreground.text-sm.tracking-tight.whitespace-nowrap :: Medium
+          button.bg-destructive.font-medium.gap-2.h-12.inline-flex.items-center.justify-center.px-8.ring-offset-background.rounded-full.shadow-sm.text-base.text-destructive-foreground.tracking-tight.whitespace-nowrap :: Large
+          button.bg-destructive.font-medium.gap-2.h-14.inline-flex.items-center.justify-center.px-10.ring-offset-background.rounded-full.shadow-sm.text-base.text-destructive-foreground.tracking-tight.whitespace-nowrap :: Extra large
+        div.flex.flex-wrap.gap-3.items-center
+          span.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase.w-24 :: premium
+          button.bg-gradient-cyan.font-medium.gap-2.h-9.inline-flex.items-center.justify-center.px-4.ring-offset-background.rounded-full.shadow-sm.text-primary-foreground.text-xs.tracking-tight.whitespace-nowrap :: Small
+          button.bg-gradient-cyan.font-medium.gap-2.h-11.inline-flex.items-center.justify-center.px-6.py-2.ring-offset-background.rounded-full.shadow-sm.text-primary-foreground.text-sm.tracking-tight.whitespace-nowrap :: Medium
+          button.bg-gradient-cyan.font-medium.gap-2.h-12.inline-flex.items-center.justify-center.px-8.ring-offset-background.rounded-full.shadow-sm.text-base.text-primary-foreground.tracking-tight.whitespace-nowrap :: Large
+          button.bg-gradient-cyan.font-medium.gap-2.h-14.inline-flex.items-center.justify-center.px-10.ring-offset-background.rounded-full.shadow-sm.text-base.text-primary-foreground.tracking-tight.whitespace-nowrap :: Extra large
+  section.bg-muted.border-border.border-t.py-14.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: 04 · Cards
+      h2.font-display.font-semibold.mt-2.text-3xl.text-foreground.tracking-[-0.02em] :: TfxCard variants
+      div.gap-4.grid.mt-6
+        div.bg-card.border.border-border.flex.flex-col.relative.rounded-xl.text-card-foreground
+          p.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase :: variant=" default "
+          h5.font-display.font-semibold.mt-2.text-foreground.text-lg.tracking-[-0.02em] :: Card headline
+          p.max-w-prose.mt-2.text-muted-foreground.text-sm :: Composed with tokens only. Padding scale: sm | md | lg | xl.
+        div.bg-card.flex.flex-col.relative.rounded-xl.shadow-[var(--shadow-elegant)].text-card-foreground
+          p.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase :: variant=" elevated "
+          h5.font-display.font-semibold.mt-2.text-foreground.text-lg.tracking-[-0.02em] :: Card headline
+          p.max-w-prose.mt-2.text-muted-foreground.text-sm :: Composed with tokens only. Padding scale: sm | md | lg | xl.
+        div.border.border-glass-border.flex.flex-col.relative.rounded-xl.text-foreground
+          p.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase :: variant=" glass "
+          h5.font-display.font-semibold.mt-2.text-foreground.text-lg.tracking-[-0.02em] :: Card headline
+          p.max-w-prose.mt-2.text-muted-foreground.text-sm :: Composed with tokens only. Padding scale: sm | md | lg | xl.
+        div.bg-transparent.border-2.border-foreground/15.flex.flex-col.relative.rounded-xl.text-foreground
+          p.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase :: variant=" outlined "
+          h5.font-display.font-semibold.mt-2.text-foreground.text-lg.tracking-[-0.02em] :: Card headline
+          p.max-w-prose.mt-2.text-muted-foreground.text-sm :: Composed with tokens only. Padding scale: sm | md | lg | xl.
+        div.bg-gradient-cyan.flex.flex-col.relative.rounded-xl.text-card-foreground
+          div.bg-card.h-full.rounded-[calc(theme(borderRadius.xl)-1px)].w-full
+            p.font-mono.text-[11px].text-muted-foreground.tracking-widest.uppercase :: variant=" gradient-border "
+            h5.font-display.font-semibold.mt-2.text-foreground.text-lg.tracking-[-0.02em] :: Card headline
+            p.max-w-prose.mt-2.text-muted-foreground.text-sm :: Composed with tokens only. Padding scale: sm | md | lg | xl.
+  section.bg-background.border-border.border-t.py-14.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: 05 · Spacing & Radius
+      h2.font-display.font-semibold.mt-2.text-3xl.text-foreground.tracking-[-0.02em] :: Scale preview
+      div.gap-8.grid.mt-6
+        div
+          p.font-mono.mb-3.text-[11px].text-muted-foreground.tracking-widest.uppercase :: --tfx-space-*
+          div.space-y-2
+            div.flex.gap-3.items-center
+              span.font-mono.text-[11px].text-muted-foreground.text-right.w-10 :: 4
+              div.bg-primary/80.h-3.rounded-sm
+            div.flex.gap-3.items-center
+              span.font-mono.text-[11px].text-muted-foreground.text-right.w-10 :: 8
+              div.bg-primary/80.h-3.rounded-sm
+            div.flex.gap-3.items-center
+              span.font-mono.text-[11px].text-muted-foreground.text-right.w-10 :: 12
+              div.bg-primary/80.h-3.rounded-sm
+            div.flex.gap-3.items-center
+              span.font-mono.text-[11px].text-muted-foreground.text-right.w-10 :: 16
+              div.bg-primary/80.h-3.rounded-sm
+            div.flex.gap-3.items-center
+              span.font-mono.text-[11px].text-muted-foreground.text-right.w-10 :: 24
+              div.bg-primary/80.h-3.rounded-sm
+            div.flex.gap-3.items-center
+              span.font-mono.text-[11px].text-muted-foreground.text-right.w-10 :: 32
+              div.bg-primary/80.h-3.rounded-sm
+            div.flex.gap-3.items-center
+              span.font-mono.text-[11px].text-muted-foreground.text-right.w-10 :: 48
+              div.bg-primary/80.h-3.rounded-sm
+            div.flex.gap-3.items-center
+              span.font-mono.text-[11px].text-muted-foreground.text-right.w-10 :: 64
+              div.bg-primary/80.h-3.rounded-sm
+        div
+          p.font-mono.mb-3.text-[11px].text-muted-foreground.tracking-widest.uppercase :: --tfx-radius-*
+          div.gap-3.grid.grid-cols-2
+            div.bg-card.border.border-border.flex.font-mono.h-20.items-center.justify-center.text-[12px].text-muted-foreground :: radius- sm
+            div.bg-card.border.border-border.flex.font-mono.h-20.items-center.justify-center.text-[12px].text-muted-foreground :: radius- md
+            div.bg-card.border.border-border.flex.font-mono.h-20.items-center.justify-center.text-[12px].text-muted-foreground :: radius- lg
+            div.bg-card.border.border-border.flex.font-mono.h-20.items-center.justify-center.text-[12px].text-muted-foreground :: radius- xl
+  section.bg-muted.border-border.border-t.py-14.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: 06 · Elevation
+      h2.font-display.font-semibold.mt-2.text-3xl.text-foreground.tracking-[-0.02em] :: Shadow tokens
+      div.gap-4.grid.mt-6
+        div.bg-card.rounded-xl.text-center
+          p.font-mono.text-[12px].text-foreground :: shadow-elegant
+        div.bg-card.rounded-xl.text-center
+          p.font-mono.text-[12px].text-foreground :: shadow-cyan
+        div.bg-card.rounded-xl.text-center
+          p.font-mono.text-[12px].text-foreground :: shadow-gold
+  section.bg-background.border-border.border-t.py-14.text-foreground
+    div.max-w-5xl.mx-auto.px-5
+      p.font-medium.text-[10px].text-primary.tracking-[0.3em].uppercase :: 07 · Animation
+      h2.font-display.font-semibold.mt-2.text-3xl.text-foreground.tracking-[-0.02em] :: Motion utilities
+      div.gap-4.grid.mt-6
+        div.bg-card.border.border-border.flex.flex-col.relative.rounded-xl.text-card-foreground
+          p.font-mono.text-[11px].text-muted-foreground :: animate-fade-in
+          div.bg-primary/10.mt-3.rounded-md.text-foreground.text-sm :: Fades in on mount
+        div.bg-card.border.border-border.flex.flex-col.relative.rounded-xl.text-card-foreground
+          p.font-mono.text-[11px].text-muted-foreground :: hover-scale
+          div.bg-primary/10.mt-3.rounded-md.text-foreground.text-sm :: Hover me
+        div.bg-card.border.border-border.flex.flex-col.relative.rounded-xl.text-card-foreground
+          p.font-mono.text-[11px].text-muted-foreground :: story-link
+          a.inline-block.mt-3.text-foreground.text-sm :: Underline sweep"
+`;
