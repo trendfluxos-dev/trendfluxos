@@ -10,9 +10,13 @@
  * When Storybook is installed, delete this file and change the story
  * imports from `./csf` to `@storybook/react`.
  */
-import type { ComponentProps, ComponentType, ReactElement } from "react";
+import type { ComponentProps, ReactElement } from "react";
 
-export interface Meta<TComponent extends ComponentType<never>> {
+// Accepts any React component (function, class, or forwardRef).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyComponent = (...args: any[]) => any;
+
+export interface Meta<TComponent extends AnyComponent> {
   title?: string;
   component: TComponent;
   tags?: string[];
@@ -23,11 +27,9 @@ export interface Meta<TComponent extends ComponentType<never>> {
   args?: Partial<ComponentProps<TComponent>>;
 }
 
-export interface StoryObj<TMeta extends Meta<ComponentType<never>>> {
+export interface StoryObj<TMeta extends Meta<AnyComponent>> {
   name?: string;
   args?: Partial<ComponentProps<TMeta["component"]>>;
   parameters?: Record<string, unknown>;
-  render?: (
-    args: ComponentProps<TMeta["component"]>,
-  ) => ReactElement;
+  render?: (args: ComponentProps<TMeta["component"]>) => ReactElement;
 }
