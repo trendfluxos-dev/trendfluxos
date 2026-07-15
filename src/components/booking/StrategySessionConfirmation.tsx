@@ -112,7 +112,21 @@ const StrategySessionConfirmation = ({
         <dt className="text-[10px] font-semibold uppercase tracking-[0.25em] text-foreground/50">
           Session slot
         </dt>
-        <dd className="mt-1 text-foreground/80">{confirmation.slot.label}</dd>
+        <dd className="mt-1 space-y-0.5 text-foreground/80">
+          <p>
+            <span className="text-[10px] uppercase tracking-wider text-foreground/50">Organizer</span>{" "}
+            {confirmation.slot.organizerLabel ?? confirmation.slot.label}
+          </p>
+          {confirmation.slot.userLabel &&
+            confirmation.slot.userTz !== confirmation.slot.organizerTz && (
+              <p>
+                <span className="text-[10px] uppercase tracking-wider text-foreground/50">
+                  Your time
+                </span>{" "}
+                {confirmation.slot.userLabel}
+              </p>
+            )}
+        </dd>
       </div>
       {confirmation.caseSlug && (
         <div>
