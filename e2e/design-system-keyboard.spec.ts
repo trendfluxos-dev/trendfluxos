@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
 /**
  * Keyboard-navigation guarantees for the design-system button and link
@@ -38,6 +39,30 @@ async function gotoDesignSystem(page: Page) {
 }
 
 test.describe("design-system keyboard navigation", () => {
+  test("axe: no serious/critical violations on /design-system", async ({ page }, testInfo) => {
+    await gotoDesignSystem(page);
+    // Log the resolved viewport so mobile/tablet project failures are easy
+    // to attribute in CI (each Playwright project overrides use.viewport).
+    const vp = page.viewportSize();
+    testInfo.annotations.push({
+      type: "viewport",
+      description: vp ? `${vp.width}x${vp.height}` : "unknown",
+    });
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      // Skip rules that legitimately fail on the DS surface itself (color
+      // contrast is asserted separately by our token audits).
+      .disableRules(["color-contrast"])
+      .analyze();
+    const blocking = results.violations.filter(
+      (v) => v.impact === "serious" || v.impact === "critical",
+    );
+    expect(
+      blocking,
+      `Serious/critical axe violations on /design-system:\n${JSON.stringify(blocking, null, 2)}`,
+    ).toEqual([]);
+  });
+
   test("Tab reaches TfxButton and it shows a visible focus ring", async ({ page }) => {
     await gotoDesignSystem(page);
 
