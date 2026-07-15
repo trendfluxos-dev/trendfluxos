@@ -109,6 +109,7 @@ export const routes = {
   "/admin/creator-studio": make(() => import("@/pages/CreatorStudio")),
   "/admin/task-queue": make(() => import("@/pages/TaskQueue")),
   "/admin/class-analytics": make(() => import("@/pages/ClassAnalytics")),
+  "/design-system": make(() => import("@/pages/DesignSystem")),
   "*": make(() => import("@/pages/NotFound")),
 } as const;
 
