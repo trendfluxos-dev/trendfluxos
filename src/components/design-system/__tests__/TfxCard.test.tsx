@@ -35,8 +35,8 @@ describe("TfxCard", () => {
       </TfxCard>,
     );
     const root = container.firstChild as HTMLElement;
-    // outer keeps no padding, has p-[1px] gradient rim
-    expect(root.className).toMatch(/p-\[1px\]/);
+    // outer carries the gradient rim background
+    expect(root.className).toMatch(/bg-gradient-cyan/);
     const inner = screen.getByText("inner").parentElement as HTMLElement;
     expect(inner.className).toMatch(/bg-card/);
     expect(inner.className).toMatch(/p-5/);
