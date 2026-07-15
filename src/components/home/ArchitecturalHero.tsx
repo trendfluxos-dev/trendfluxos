@@ -55,7 +55,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
         className="pointer-events-none absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
-            "linear-gradient(to right, #c11f1f 1px, transparent 1px), linear-gradient(to bottom, #c11f1f 1px, transparent 1px)",
+            "linear-gradient(to right, hsl(var(--primary)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--primary)) 1px, transparent 1px)",
           backgroundSize: "48px 48px",
           maskImage:
             "radial-gradient(ellipse at 30% 20%, black 40%, transparent 75%)",
