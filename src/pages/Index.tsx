@@ -24,6 +24,7 @@ const JusticeAppealSection  = lazy(() => import("@/components/home/JusticeAppeal
 const ProofSection          = lazy(() => import("@/components/home/ProofSection").then(m => ({ default: m.ProofSection })));
 const TestimonialsSection   = lazy(() => import("@/components/home/TestimonialsSection").then(m => ({ default: m.TestimonialsSection })));
 const TransformationStoriesSection = lazy(() => import("@/components/home/TransformationStoriesSection").then(m => ({ default: m.TransformationStoriesSection })));
+const BookProjectLeadSection = lazy(() => import("@/components/home/BookProjectLeadSection").then(m => ({ default: m.BookProjectLeadSection })));
 const ValuesSection         = lazy(() => import("@/components/home/ValuesSection").then(m => ({ default: m.ValuesSection })));
 const FinalCtaSection       = lazy(() => import("@/components/home/FinalCtaSection").then(m => ({ default: m.FinalCtaSection })));
 const TripleBridge          = lazy(() => import("@/components/ecosystem/TripleBridge"));
@@ -146,6 +147,10 @@ const Index = () => {
           <TransformationStoriesSection />
         </LazySection>
         <LazySection label="testimonials" skeleton={<SectionSkeleton variant="cards" />}><TestimonialsSection /></LazySection>
+        <SectionOrnament chapter="Chapter V·c" label="Book Direct with Project Lead" accent="amber" />
+        <LazySection label="book-project-lead" skeleton={<SectionSkeleton variant="split" />}>
+          <BookProjectLeadSection onOpenQuote={openQuote} />
+        </LazySection>
       </div>
 
       <div data-nav-section="values">
