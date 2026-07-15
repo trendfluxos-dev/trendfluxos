@@ -21,6 +21,13 @@ import {
 } from "@/data/founder";
 import "@/styles/founder-print.css";
 import { SystemsBentoSection } from "@/components/systems/SystemsBentoSection";
+import {
+  TfxSection,
+  TfxCard,
+  TfxHeading,
+  TfxProse,
+  TfxEyebrow,
+} from "@/components/design-system";
 
 // ---------- Small primitives (kept local — used only on this page) ----------
 
