@@ -1,37 +1,50 @@
 ## লক্ষ্য
-প্রোডাকশন বিল্ড (`bun run build`) চালিয়ে সমস্ত build-time warnings চিহ্নিত ও শূন্যে নামিয়ে আনা।
+`src/components/design-system/`-এর ৫টি wrapper কম্পোনেন্টের জন্য basic unit tests যোগ — কোনো নতুন test infra লাগবে না (vitest + RTL ইতিমধ্যে configured)।
 
-## ধাপ
+## Test files (একটি করে, co-located)
+`src/components/design-system/__tests__/`
 
-1. **Baseline capture** — `bun run build` চালিয়ে পুরো output `/tmp/build.log`-এ সংরক্ষণ। Warnings/notices আলাদা করে তালিকা করি (Vite, Rollup, TypeScript, PostCSS/Tailwind, plugin warnings)।
+1. **TfxButton.test.tsx**
+   - default render — text visible, `<button>` element
+   - variant prop → applies expected class token (e.g. `primary` → contains primary bg token class)
+   - size prop → applies size class
+   - `asChild` → renders as `<a>` when child is anchor
+   - `disabled` → button disabled + aria
+   - custom `className` merged (not overridden)
 
-2. **Categorize warnings** — সাধারণত যা আসতে পারে:
-   - Chunk size > 500 kB (Rollup `chunkSizeWarningLimit`)
-   - Dynamic + static import mixed for same module
-   - `/* @vite-ignore */` / unresolved dynamic imports
-   - Unused CSS/`@apply` unknown utility
-   - Source map / eval warnings
-   - Duplicate React / peer dep mismatch
-   - Circular dependency notices
+2. **TfxCard.test.tsx**
+   - default render + children
+   - variant prop → correct class
+   - `as` polymorphism (if supported) OR renders `<div>` with role
+   - custom className merged
 
-3. **Fix per category** (কোনো UI/behavior পরিবর্তন ছাড়া):
-   - **Chunk size** → `vite.config.ts`-এ `build.rollupOptions.output.manualChunks` দিয়ে vendor split (react, radix, supabase, charts, motion), এবং প্রয়োজনে `chunkSizeWarningLimit` টিউন — তবে limit বাড়ানোর আগে splitting চেষ্টা।
-   - **Mixed static+dynamic import** → হয় সব জায়গায় dynamic, নয়তো সব static (রুট lazy-load pattern অনুযায়ী সিদ্ধান্ত)।
-   - **Unknown Tailwind class / @apply** → token/utility সঠিক নামে বদল।
-   - **Circular deps** → import পুনর্বিন্যাস, barrel থেকে সরাসরি path-এ move।
-   - **Duplicate deps** → `bun pm ls` দিয়ে দেখে দরকার হলে resolutions।
+3. **TfxSection.test.tsx**
+   - renders `<section>` with children
+   - `container` + `padding` + `background` variants apply classes
+   - custom className merged
 
-4. **Re-run & verify** — প্রতিটি ফিক্সের পর `bun run build` পুনরায়; log-এ "warning" / "⚠" grep করে শূন্য নিশ্চিত।
+4. **TfxHeading.test.tsx**
+   - default `<h2>`; `as="h1"` → renders `<h1>`
+   - `level`/variant → typography class present
+   - children rendered
+   - custom className merged
 
-5. **Report** — চূড়ান্ত build output-এর summary (bundle sizes, chunk map, warning count = 0)।
+5. **TfxProse.test.tsx**
+   - `TfxProse` renders children with prose class
+   - `TfxEyebrow` renders with eyebrow class + children
+   - custom className merged
+
+## Test strategy
+- RTL `render` + `screen.getByRole`/`getByText` for structural assertions।
+- Class assertions use `toHaveClass` on token/utility strings actually present in CVA definitions (test reads variant output, not brittle full class list) — check one distinctive class per variant।
+- কোনো visual/snapshot নয় (আলাদা visual regression suite আছে)।
+- Test file পড়ে actual API (props, elements) confirm করে assertion লিখব — assume নয়।
+
+## Verification
+`bun run test src/components/design-system` — সব pass, existing suite অক্ষত।
 
 ## Out of scope
-- Behavior/UI পরিবর্তন
-- Dependency major upgrade
-- Runtime perf tuning (শুধু build warnings)
-- Lint/type-check warning (আলাদা কাজ — শুধু যদি build fail/warn করায়)
-
-## Technical notes
-- `vite.config.ts` অগ্রাধিকার; `tsconfig` পরিবর্তন এড়াবো।
-- `manualChunks` conservative — শুধু বড় বা reusable vendor libs।
-- কোনো warning suppress করবো না; মূল কারণ ফিক্স করবো। শুধু যদি upstream lib থেকে unavoidable notice আসে (e.g. sourcemap missing in external pkg), সেটা documented exception হিসেবে থাকবে।
+- Storybook / visual regression
+- Full CVA matrix (variant × size combinatorial)
+- Integration tests with routing/theme provider
+- Sub-brand token switching tests
