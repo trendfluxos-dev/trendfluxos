@@ -83,6 +83,28 @@
     --glass: 0 0% 100%;
     --glass-border: 220 13% 91%;
 
+    /* ── Fixed-semantic tokens (always the same in light and dark) ──
+       These represent physical or fixed-mode surfaces, not theme
+       chrome, so they do NOT flip with .dark:
+         paper        — a document/paper canvas (always white)
+         scrim        — modal/overlay backdrop (always near-black)
+         scrim-foreground — text/icons on scrim (always white)
+         noir         — always-dark cinematic section surface
+         noir-elevated — raised surface within a noir section
+         crimson-glow — bright accent used over noir surfaces
+         crimson-glow-strong — hover state of crimson-glow
+         crimson-rim  — deep maroon rim for noir borders
+         crimson-mist — warm reddish text on noir surfaces */
+    --paper: 0 0% 100%;
+    --scrim: 0 0% 0%;
+    --scrim-foreground: 0 0% 100%;
+    --noir: 240 20% 4%;                 /* #08080d */
+    --noir-elevated: 0 0% 7%;           /* #111 */
+    --crimson-glow: 0 68% 62%;          /* #e25a5a */
+    --crimson-glow-strong: 0 100% 71%;  /* #ff6b6b */
+    --crimson-rim: 0 60% 30%;           /* #7a1e1e */
+    --crimson-mist: 0 60% 87%;          /* #f0c9c9 */
+
     --gradient-hero:
       radial-gradient(circle at 85% -10%, hsl(0 72% 45% / 0.10), transparent 45%),
       radial-gradient(circle at -10% 110%, hsl(24 95% 53% / 0.07), transparent 45%);
