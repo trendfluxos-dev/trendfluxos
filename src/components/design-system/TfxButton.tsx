@@ -18,7 +18,7 @@ export type TfxButtonVariant =
   | "destructive"
   | "premium";
 
-export type TfxButtonSize = "sm" | "md" | "lg" | "xl";
+export type TfxButtonSize = "sm" | "md" | "lg" | "xl" | "icon";
 
 export interface TfxButtonProps
   extends Omit<ButtonProps, "variant" | "size"> {
@@ -40,6 +40,7 @@ const sizeMap: Record<TfxButtonSize, ButtonProps["size"]> = {
   md: "default",
   lg: "lg",
   xl: "xl",
+  icon: "icon",
 };
 
 export const TfxButton = React.forwardRef<HTMLButtonElement, TfxButtonProps>(
