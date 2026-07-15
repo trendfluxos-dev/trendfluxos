@@ -21,6 +21,13 @@ import {
 } from "@/data/founder";
 import "@/styles/founder-print.css";
 import { SystemsBentoSection } from "@/components/systems/SystemsBentoSection";
+import {
+  TfxSection,
+  TfxCard,
+  TfxHeading,
+  TfxProse,
+  TfxEyebrow,
+} from "@/components/design-system";
 
 // ---------- Small primitives (kept local — used only on this page) ----------
 
@@ -563,32 +570,30 @@ const Founder = () => {
       </div>
 
       {/* 07·c — Portfolio Highlights (metric-first summary) */}
-      <section
+      <TfxSection
         id="portfolio-highlights"
-        className="scroll-mt-24 border-t border-border bg-muted"
+        tone="muted"
+        padding="lg"
+        container="lg"
+        divide
       >
-        <div className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
-          <div className="mb-8 flex items-baseline justify-between gap-4 border-b border-border/60 pb-4">
-            <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-primary">
-              Chapter 07·c · Portfolio Highlights
-            </p>
-            <p className="hidden sm:block text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              Top projects · headline metrics
-            </p>
-          </div>
-          <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
-            Signature outcomes, at a glance.
-          </h2>
-          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
-            A curated slice of the portfolio — projects picked for the strength of their
-            measurable outcome, not just their category. Full case studies live in
-            <Link to="/case-studies" className="ml-1 text-primary underline-offset-4 hover:underline">
-              /case-studies
-            </Link>.
+        <div className="mb-8 flex items-baseline justify-between gap-4 border-b border-border/60 pb-4">
+          <TfxEyebrow>Chapter 07·c · Portfolio Highlights</TfxEyebrow>
+          <p className="hidden sm:block text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+            Top projects · headline metrics
           </p>
+        </div>
+        <TfxHeading level={2}>Signature outcomes, at a glance.</TfxHeading>
+        <TfxProse className="mt-3" measure="wide">
+          A curated slice of the portfolio — projects picked for the strength of their
+          measurable outcome, not just their category. Full case studies live in
+          <Link to="/case-studies" className="ml-1 text-primary underline-offset-4 hover:underline">
+            /case-studies
+          </Link>.
+        </TfxProse>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {[
               {
                 metric: "4.85L+",
                 unit: "views",
@@ -640,7 +645,7 @@ const Founder = () => {
             ].map((h) => {
               const isExternal = h.href.startsWith("http");
               const inner = (
-                <div className="group relative flex h-full flex-col rounded-xl border border-border bg-background p-5 transition hover:border-primary/40 hover:shadow-sm dark:bg-card">
+                <TfxCard variant="default" padding="md" interactive className="h-full">
                   <div className="flex items-baseline justify-between gap-3">
                     <p className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-[2.75rem]">
                       {h.metric}
@@ -654,14 +659,14 @@ const Founder = () => {
                     <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                       {h.category}
                     </p>
-                    <p className="mt-1 font-display text-[15px] font-semibold text-foreground">
+                    <TfxHeading level={6} className="mt-1 text-[15px]">
                       {h.title}
-                    </p>
-                    <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
+                    </TfxHeading>
+                    <TfxProse size="xs" measure="full" className="mt-2">
                       {h.proof}
-                    </p>
+                    </TfxProse>
                   </div>
-                </div>
+                </TfxCard>
               );
               return isExternal ? (
                 <a key={h.title} href={h.href} target="_blank" rel="noreferrer" className="block h-full">
@@ -673,9 +678,8 @@ const Founder = () => {
                 </Link>
               );
             })}
-          </div>
         </div>
-      </section>
+      </TfxSection>
 
       {/* 08 — Leadership */}
       <ChapterShell meta={FOUNDER_CHAPTERS[8]}>

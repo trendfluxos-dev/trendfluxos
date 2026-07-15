@@ -138,6 +138,7 @@ const CreatorStudio = routes["/admin/creator-studio"];
 const GrowthOsHub = routes["/growth-os/hub"];
 const TaskQueue = routes["/admin/task-queue"];
 const ClassAnalytics = routes["/admin/class-analytics"];
+const DesignSystem = routes["/design-system"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
@@ -261,6 +262,7 @@ const RoutedApp = () => {
         <Route path="/admin/lead-lifecycle" element={<RequireRole roles={["admin"]}><LeadLifecycle /></RequireRole>} />
         <Route path="/admin/outreach-logs" element={<RequireRole roles={["admin"]}><OutreachLogsAdmin /></RequireRole>} />
         <Route path="/admin/creator-studio" element={<RequireRole roles={["admin","editor","teacher","tutor"]}><CreatorStudio /></RequireRole>} />
+        <Route path="/design-system" element={<DesignSystem />} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
         {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}
         {/* Synthetic error route for Playwright error-boundary smoke tests. */}
