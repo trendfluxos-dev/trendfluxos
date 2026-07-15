@@ -100,10 +100,16 @@
     --scrim-foreground: 0 0% 100%;
     --noir: 240 20% 4%;                 /* #08080d */
     --noir-elevated: 0 0% 7%;           /* #111 */
+    --noir-rim: 349 45% 11%;            /* #2a0f14 — dark near-black rim */
     --crimson-glow: 0 68% 62%;          /* #e25a5a */
     --crimson-glow-strong: 0 100% 71%;  /* #ff6b6b */
     --crimson-rim: 0 60% 30%;           /* #7a1e1e */
     --crimson-mist: 0 60% 87%;          /* #f0c9c9 */
+    --crimson-blush: 0 60% 95%;         /* #fbeaea */
+    /* WhatsApp brand palette — external brand; kept as fixed token */
+    --wa-green: 141 71% 49%;            /* #25D366 */
+    --wa-green-glow: 141 63% 69%;       /* #7ce3a5 */
+    --wa-green-deep: 141 76% 24%;       /* #0f6b34 */
 
     --gradient-hero:
       radial-gradient(circle at 85% -10%, hsl(0 72% 45% / 0.10), transparent 45%),
