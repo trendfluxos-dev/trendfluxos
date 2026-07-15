@@ -262,6 +262,7 @@ const RoutedApp = () => {
         <Route path="/admin/lead-lifecycle" element={<RequireRole roles={["admin"]}><LeadLifecycle /></RequireRole>} />
         <Route path="/admin/outreach-logs" element={<RequireRole roles={["admin"]}><OutreachLogsAdmin /></RequireRole>} />
         <Route path="/admin/creator-studio" element={<RequireRole roles={["admin","editor","teacher","tutor"]}><CreatorStudio /></RequireRole>} />
+        <Route path="/design-system" element={<DesignSystem />} />
         {PerfCompare && <Route path="/dev/perf-compare" element={<PerfCompare />} />}
         {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}
         {/* Synthetic error route for Playwright error-boundary smoke tests. */}
