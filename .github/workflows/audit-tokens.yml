@@ -1,0 +1,40 @@
+name: Audit Design Tokens
+
+# Fail-fast gate that prevents new hardcoded colors (hex, bg-white,
+# text-white, bg-black, gray-*/slate-*/zinc-* utilities) from leaking
+# back into src/. Compares per-file counts against the committed
+# `.audit-tokens-baseline.json`; regressions or new offender files fail
+# the check. Counts going down are always allowed.
+#
+# To intentionally add a color (rare — usually you should add a token
+# instead), run `npm run audit:tokens:baseline` locally and commit the
+# refreshed baseline in the same PR.
+
+on:
+  pull_request:
+    paths:
+      - "src/**/*.ts"
+      - "src/**/*.tsx"
+      - "src/**/*.css"
+      - "tailwind.config.ts"
+      - "scripts/audit-tokens.mjs"
+      - ".audit-tokens-baseline.json"
+      - ".github/workflows/audit-tokens.yml"
+  push:
+    branches: [main]
+
+concurrency:
+  group: audit-tokens-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Ratchet hardcoded colors
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Check hardcoded-color budget
+        run: node scripts/audit-tokens.mjs --check
