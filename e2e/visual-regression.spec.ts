@@ -22,6 +22,15 @@ const ROUTES = [
 
 const THEMES = ["light", "dark"] as const;
 
+// Breakpoints used only by the /design-system matrix below. Design system
+// pages are the source of truth for tokens/components, so we want to catch
+// regressions across mobile / tablet / desktop layouts as well as themes.
+const DESIGN_SYSTEM_BREAKPOINTS = [
+  { name: "mobile",  width: 390,  height: 780  }, // iPhone 13 portrait
+  { name: "tablet",  width: 834,  height: 1112 }, // iPad Air portrait
+  { name: "desktop", width: 1280, height: 800  }, // matches visual-desktop project
+] as const;
+
 const setTheme = async (page: Page, theme: "light" | "dark") => {
   await page.evaluate((t) => {
     localStorage.setItem("tf-theme", t);
@@ -64,4 +73,35 @@ for (const theme of THEMES) {
       });
     }
   });
+}
+
+/**
+ * /design-system matrix — themes × breakpoints.
+ *
+ * The design-system page is the canonical showcase of tokens and wrapper
+ * components. Any visual regression here almost always signals a token or
+ * primitive-level change worth reviewing explicitly, so we snapshot the
+ * full page (not just the viewport) across mobile/tablet/desktop and both
+ * themes.
+ */
+for (const theme of THEMES) {
+  for (const bp of DESIGN_SYSTEM_BREAKPOINTS) {
+    test.describe(`visual-regression / design-system / ${theme} / ${bp.name}`, () => {
+      test(`design-system (${theme}, ${bp.name})`, async ({ page }) => {
+        await page.setViewportSize({ width: bp.width, height: bp.height });
+        await page.goto("/design-system", { waitUntil: "domcontentloaded" });
+        await setTheme(page, theme);
+        await stabilize(page);
+        await expect(page).toHaveScreenshot(
+          `design-system-${theme}-${bp.name}.png`,
+          {
+            fullPage: true,
+            maxDiffPixelRatio: 0.002,
+            animations: "disabled",
+            caret: "hide",
+          },
+        );
+      });
+    });
+  }
 }
