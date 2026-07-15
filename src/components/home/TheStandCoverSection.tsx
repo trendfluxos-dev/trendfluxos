@@ -45,7 +45,7 @@ export const TheStandCoverSection = () => (
             height={1080}
             loading="lazy"
             decoding="async"
-            className="block h-auto w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.012]"
+            className="block h-auto w-full object-cover transition-transform [transition-duration:1400ms] ease-out group-hover:scale-[1.012]"
           />
 
           <div
