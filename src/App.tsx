@@ -205,6 +205,7 @@ const RoutedApp = () => {
         <Route path="/luxe-veil" element={<LuxeVeil />} />
         <Route path="/brandtoki" element={<BrandToki />} />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/alternatives/bloom-growth" element={<AlternativesBloomGrowth />} />
         <Route path="/founder" element={<Founder />} />
         <Route path="/bdjobs-profile" element={<BdjobsProfile />} />
         <Route path="/bdjobs-profile/edit" element={<RequireRole roles={["admin"]}><BdjobsProfileEdit /></RequireRole>} />
