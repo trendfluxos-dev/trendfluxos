@@ -77,18 +77,85 @@ var list_my_enrollments_default = defineTool2({
   }
 });
 
+// src/lib/mcp/tools/list-strategy-bookings.ts
+import { createClient as createClient3 } from "npm:@supabase/supabase-js@^2.105.3";
+import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.24.0";
+import { z } from "npm:zod@^3.25.76";
+function supabaseForUser3(ctx) {
+  return createClient3(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_PUBLISHABLE_KEY,
+    {
+      global: { headers: { Authorization: `Bearer ${ctx.getToken()}` } },
+      auth: { persistSession: false, autoRefreshToken: false }
+    }
+  );
+}
+var isoDate = z.string().describe("ISO 8601 date or datetime, e.g. 2026-07-01 or 2026-07-01T00:00:00Z").refine((s) => !Number.isNaN(Date.parse(s)), "must be a valid ISO date");
+var list_strategy_bookings_default = defineTool3({
+  name: "list_strategy_bookings",
+  title: "List strategy bookings (admin)",
+  description: "Admin-only. List TrendFlux strategy call bookings whose scheduled slot falls between `from` and `to` (inclusive). Returns contact info, session type, status, meeting link, and timestamps \u2014 for reporting and follow-ups.",
+  inputSchema: {
+    from: isoDate,
+    to: isoDate,
+    status: z.enum(["pending", "confirmed", "cancelled", "completed", "no_show"]).optional().describe("Optional status filter."),
+    limit: z.number().int().min(1).max(500).optional().describe("Max rows (default 200).")
+  },
+  annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+  handler: async ({ from, to, status, limit }, ctx) => {
+    if (!ctx.isAuthenticated()) {
+      return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
+    }
+    const supabase = supabaseForUser3(ctx);
+    const { data: isAdmin, error: roleErr } = await supabase.rpc("current_user_has_role", {
+      _role: "admin"
+    });
+    if (roleErr) {
+      return { content: [{ type: "text", text: `Role check failed: ${roleErr.message}` }], isError: true };
+    }
+    if (!isAdmin) {
+      return { content: [{ type: "text", text: "Forbidden: admin role required." }], isError: true };
+    }
+    const fromIso = new Date(from).toISOString();
+    const toIso = new Date(to).toISOString();
+    if (fromIso > toIso) {
+      return { content: [{ type: "text", text: "`from` must be earlier than or equal to `to`." }], isError: true };
+    }
+    let query = supabase.from("strategy_bookings").select(
+      "id, name, email, phone, company, goal, session_type, status, requested_slot_iso, confirmed_slot_iso, meet_url, client_timezone, organizer_timezone, created_at, updated_at"
+    ).or(
+      `and(confirmed_slot_iso.gte.${fromIso},confirmed_slot_iso.lte.${toIso}),and(confirmed_slot_iso.is.null,requested_slot_iso.gte.${fromIso},requested_slot_iso.lte.${toIso})`
+    ).order("confirmed_slot_iso", { ascending: true, nullsFirst: false }).order("requested_slot_iso", { ascending: true }).limit(limit ?? 200);
+    if (status) query = query.eq("status", status);
+    const { data, error } = await query;
+    if (error) {
+      return { content: [{ type: "text", text: error.message }], isError: true };
+    }
+    const rows = data ?? [];
+    const summary = `${rows.length} booking(s) between ${fromIso} and ${toIso}${status ? ` (status=${status})` : ""}.`;
+    return {
+      content: [
+        { type: "text", text: summary },
+        { type: "text", text: JSON.stringify(rows, null, 2) }
+      ],
+      structuredContent: { bookings: rows, from: fromIso, to: toIso, count: rows.length }
+    };
+  }
+});
+
 // src/lib/mcp/index.ts
 var projectRef = "dnodqhwwzdqfqlndwhsf";
 var mcp_default = defineMcp({
   name: "trendflux-mcp",
   title: "TrendFlux Digital",
   version: "0.1.0",
-  instructions: "Tools for the signed-in TrendFlux user. Use `get_my_profile` to read the user's profile and `list_my_enrollments` to list their TrendFlux Academy course enrollments.",
+  instructions: "Tools for the signed-in TrendFlux user. Use `get_my_profile` to read the user's profile, `list_my_enrollments` to list their TrendFlux Academy course enrollments, and (admins only) `list_strategy_bookings` to pull strategy calls in a date range for reporting and follow-ups.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated"
   }),
-  tools: [get_my_profile_default, list_my_enrollments_default]
+  tools: [get_my_profile_default, list_my_enrollments_default, list_strategy_bookings_default]
 });
 
 // lovable-mcp-supabase-entry.ts

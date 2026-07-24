@@ -47,6 +47,52 @@
           "properties": {}
         },
         "outputSchema": null
+      },
+      {
+        "name": "list_strategy_bookings",
+        "title": "List strategy bookings (admin)",
+        "description": "Admin-only. List TrendFlux strategy call bookings whose scheduled slot falls between `from` and `to` (inclusive). Returns contact info, session type, status, meeting link, and timestamps — for reporting and follow-ups.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "type": "string",
+              "description": "ISO 8601 date or datetime, e.g. 2026-07-01 or 2026-07-01T00:00:00Z"
+            },
+            "to": {
+              "$ref": "#/properties/from"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "confirmed",
+                "cancelled",
+                "completed",
+                "no_show"
+              ],
+              "description": "Optional status filter."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500,
+              "description": "Max rows (default 200)."
+            }
+          },
+          "required": [
+            "from",
+            "to"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
       }
     ]
   }
