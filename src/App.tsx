@@ -87,6 +87,7 @@ const TrendfluxTalent = routes["/trendflux-talent"];
 const LuxeVeil = routes["/luxe-veil"];
 const BrandToki = routes["/brandtoki"];
 const Portfolio = routes["/portfolio"];
+const AlternativesBloomGrowth = routes["/alternatives/bloom-growth"];
 const Founder = routes["/founder"];
 const BdjobsProfile = routes["/bdjobs-profile"];
 const BdjobsProfileEdit = routes["/bdjobs-profile/edit"];
