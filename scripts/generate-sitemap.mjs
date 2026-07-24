@@ -61,6 +61,7 @@ const staticRoutes = [
   "/explore",
   "/showcase",
   "/portfolio",
+  "/alternatives/bloom-growth",
   "/enterprise",
   "/toolkit",
   "/masterclass",
