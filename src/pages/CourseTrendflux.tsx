@@ -95,7 +95,7 @@ export default function CourseTrendflux() {
   const refresh = async (uid: string) => {
     setLoading(true);
     const [mods, enrs, evts] = await Promise.all([
-      supabase.from("course_modules").select("*").order("module_index"),
+      supabase.from("course_modules_public" as any).select("*").order("module_index"),
       supabase.from("module_enrollments").select("id, module_index, status, bkash_trx_id").eq("user_id", uid),
       supabase.from("enrollment_events")
         .select("id, module_index, event_type, message, actor, created_at")
@@ -103,7 +103,7 @@ export default function CourseTrendflux() {
         .order("created_at", { ascending: false })
         .limit(40),
     ]);
-    if (mods.data) setModules(mods.data as Module[]);
+    if (mods.data) setModules((mods.data as any[]).map((m) => ({ ...m, content_url: null })) as Module[]);
     if (enrs.data) setEnrollments(enrs.data as Enrollment[]);
     if (evts.data) setEvents(evts.data as EnrollmentEvent[]);
     setLoading(false);
