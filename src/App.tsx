@@ -142,6 +142,7 @@ const DesignSystem = routes["/design-system"];
 const NotFound = routes["*"];
 const PerfCompare = import.meta.env.DEV ? lazy(() => import("./pages/PerfCompare")) : null;
 const DevRoutesPage = import.meta.env.DEV ? lazy(() => import("./pages/DevRoutes")) : null;
+const OAuthConsent = lazy(() => import("./pages/OAuthConsent"));
 
 const RoutedApp = () => {
   const location = useLocation();
