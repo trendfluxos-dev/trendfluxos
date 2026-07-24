@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "sdk_version": "0.24.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://dnodqhwwzdqfqlndwhsf.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "trendflux-mcp",
+      "version": "0.1.0",
+      "title": "TrendFlux Digital"
+    },
+    "tools": [
+      {
+        "name": "get_my_profile",
+        "title": "Get my TrendFlux profile",
+        "description": "Return the signed-in TrendFlux user's profile row (name, email, phone, role).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_enrollments",
+        "title": "List my course enrollments",
+        "description": "List the signed-in user's TrendFlux Academy module enrollments with status and timestamps.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
