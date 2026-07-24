@@ -268,6 +268,7 @@ const RoutedApp = () => {
         {DevRoutesPage && <Route path="/dev/routes" element={<DevRoutesPage />} />}
         {/* Synthetic error route for Playwright error-boundary smoke tests. */}
         <Route path="/__test/boom-route" element={<RouteBoom />} />
+        <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
