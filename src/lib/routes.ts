@@ -56,6 +56,7 @@ export const routes = {
   "/luxe-veil": make(() => import("@/pages/LuxeVeil")),
   "/brandtoki": make(() => import("@/pages/BrandToki")),
   "/portfolio": make(() => import("@/pages/Portfolio")),
+  "/alternatives/bloom-growth": make(() => import("@/pages/alternatives/BloomGrowth")),
   "/enterprise": make(() => import("@/pages/Enterprise")),
   "/toolkit": make(() => import("@/pages/Toolkit")),
   "/ebooks": make(() => import("@/pages/Ebooks")),
