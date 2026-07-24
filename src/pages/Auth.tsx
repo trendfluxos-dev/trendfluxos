@@ -119,8 +119,14 @@ export default function Auth() {
   const handleGoogle = async () => {
     setGoogleLoading(true);
     try {
+      // Preserve the intended post-login destination (e.g. the OAuth consent
+      // page) by encoding it into the return URL. When Supabase sends the user
+      // back to /auth, the useEffect above sees the session and navigates to
+      // `redirect` — dropping straight onto `/` would strand OAuth consent
+      // flows on the marketing home page.
+      const returnUrl = `${window.location.origin}/auth?redirect=${encodeURIComponent(redirect)}`;
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: returnUrl,
       });
       if (result.error) {
         toast.error("Google sign-in ব্যর্থ হয়েছে। আবার চেষ্টা করুন।");
@@ -140,8 +146,9 @@ export default function Auth() {
   const handleApple = async () => {
     setAppleLoading(true);
     try {
+      const returnUrl = `${window.location.origin}/auth?redirect=${encodeURIComponent(redirect)}`;
       const result = await lovable.auth.signInWithOAuth("apple", {
-        redirect_uri: window.location.origin,
+        redirect_uri: returnUrl,
       });
       if (result.error) {
         toast.error("Apple sign-in ব্যর্থ হয়েছে। আবার চেষ্টা করুন।");
