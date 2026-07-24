@@ -51,7 +51,7 @@
       {
         "name": "list_strategy_bookings",
         "title": "List strategy bookings (admin)",
-        "description": "Admin-only. List TrendFlux strategy call bookings whose scheduled slot falls between `from` and `to` (inclusive). Returns contact info, session type, status, meeting link, and timestamps — for reporting and follow-ups.",
+        "description": "Admin-only. List TrendFlux strategy call bookings whose scheduled slot falls between `from` and `to` (inclusive). Supports pagination (`limit` + `offset`) and sorting (`sort_by` + `sort_dir`) so large date ranges can be exported page-by-page without timeouts. Returns contact info, session type, status, meeting link, timestamps, and pagination metadata.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -82,7 +82,31 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 500,
-              "description": "Max rows (default 200)."
+              "description": "Page size (default 200, max 500)."
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Row offset for pagination (default 0). Use `next_offset` from the previous page."
+            },
+            "sort_by": {
+              "type": "string",
+              "enum": [
+                "scheduled_slot",
+                "confirmed_slot_iso",
+                "requested_slot_iso",
+                "created_at",
+                "updated_at"
+              ],
+              "description": "Sort column. `scheduled_slot` (default) sorts by confirmed_slot_iso and falls back to requested_slot_iso for pending rows."
+            },
+            "sort_dir": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "description": "Sort direction (default `asc`)."
             }
           },
           "required": [
