@@ -116,9 +116,18 @@ export async function deleteMaterial(material: ClassMaterial): Promise<void> {
  * an external_url (which should be used directly).
  */
 export async function signMaterialUrl(material: ClassMaterial, expiresIn = 3600): Promise<string | null> {
-  if (!material.storage_path) return material.external_url;
+  // Route through audit-logged RPC so every access to a material's storage
+  // path or external URL is recorded in access_audit_logs.
+  const { data: access, error: accessErr } = await supabase.rpc(
+    "get_class_material_access" as any,
+    { _material_id: material.id },
+  );
+  if (accessErr) throw accessErr;
+  const row = Array.isArray(access) ? (access[0] as any) : (access as any);
+  if (!row) return null;
+  if (!row.storage_path) return (row.external_url as string) ?? null;
   const { data, error } = await supabase.functions.invoke("get-signed-url", {
-    body: { bucket: BUCKET, path: material.storage_path, expiresIn },
+    body: { bucket: BUCKET, path: row.storage_path, expiresIn },
   });
   if (error) throw error;
   return (data as { signedUrl?: string })?.signedUrl ?? null;
