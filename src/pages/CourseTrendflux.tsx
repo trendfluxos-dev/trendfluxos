@@ -95,7 +95,7 @@ export default function CourseTrendflux() {
   const refresh = async (uid: string) => {
     setLoading(true);
     const [mods, enrs, evts] = await Promise.all([
-      supabase.from("course_modules").select("*").order("module_index"),
+      supabase.from("course_modules_public" as any).select("*").order("module_index"),
       supabase.from("module_enrollments").select("id, module_index, status, bkash_trx_id").eq("user_id", uid),
       supabase.from("enrollment_events")
         .select("id, module_index, event_type, message, actor, created_at")
@@ -103,7 +103,7 @@ export default function CourseTrendflux() {
         .order("created_at", { ascending: false })
         .limit(40),
     ]);
-    if (mods.data) setModules(mods.data as Module[]);
+    if (mods.data) setModules((mods.data as any[]).map((m) => ({ ...m, content_url: null })) as Module[]);
     if (enrs.data) setEnrollments(enrs.data as Enrollment[]);
     if (evts.data) setEvents(evts.data as EnrollmentEvent[]);
     setLoading(false);
@@ -252,17 +252,26 @@ export default function CourseTrendflux() {
 
                 <div className="mt-4 flex flex-wrap gap-2">
                   {s === "paid" ? (
-                    m.content_url ? (
-                      <a href={m.content_url} target="_blank" rel="noreferrer">
-                        <Button size="sm" variant="default" className="rounded-full">
-                          Open content <ExternalLink className="h-3 w-3 ml-1" />
-                        </Button>
-                      </a>
-                    ) : (
-                      <Button size="sm" variant="outline" disabled className="rounded-full">
-                        Content link coming soon
-                      </Button>
-                    )
+                    <Button
+                      size="sm"
+                      variant="default"
+                      className="rounded-full"
+                      onClick={async () => {
+                        const { data, error } = await supabase.rpc(
+                          "get_course_module_content_url" as any,
+                          { _module_index: m.module_index },
+                        );
+                        if (error || !data) {
+                          toast.error("Content unavailable", {
+                            description: "Please refresh — if this persists, contact support.",
+                          });
+                          return;
+                        }
+                        window.open(data as string, "_blank", "noopener,noreferrer");
+                      }}
+                    >
+                      Open content <ExternalLink className="h-3 w-3 ml-1" />
+                    </Button>
                   ) : s === "pending" ? (
                     <Button size="sm" variant="outline" disabled className="rounded-full">
                       <Hourglass className="h-3 w-3 mr-1.5" /> Pending approval…

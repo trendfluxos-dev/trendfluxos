@@ -323,6 +323,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "class_recordings_attached_module_id_fkey"
+            columns: ["attached_module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "class_recordings_class_id_fkey"
             columns: ["class_id"]
             isOneToOne: false
@@ -1939,6 +1946,36 @@ export type Database = {
       }
     }
     Views: {
+      course_modules_public: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string | null
+          is_published: boolean | null
+          module_index: number | null
+          price_bdt: number | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_published?: boolean | null
+          module_index?: number | null
+          price_bdt?: number | null
+          title?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          is_published?: boolean | null
+          module_index?: number | null
+          price_bdt?: number | null
+          title?: string | null
+        }
+        Relationships: []
+      }
       live_classes_public: {
         Row: {
           audience_mode: string | null
@@ -2116,6 +2153,23 @@ export type Database = {
           title: string
           whiteboard_snapshot: Json
         }[]
+      }
+      get_class_material_access: {
+        Args: { _material_id: string }
+        Returns: {
+          class_id: string
+          external_url: string
+          id: string
+          kind: string
+          mime: string
+          size_bytes: number
+          storage_path: string
+          title: string
+        }[]
+      }
+      get_course_module_content_url: {
+        Args: { _module_index: number }
+        Returns: string
       }
       get_live_class_meeting_url: {
         Args: { _class_id: string }
