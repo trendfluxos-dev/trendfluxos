@@ -262,10 +262,8 @@ export default function CourseTrendflux() {
                           { _module_index: m.module_index },
                         );
                         if (error || !data) {
-                          toast({
-                            title: "Content unavailable",
+                          toast.error("Content unavailable", {
                             description: "Please refresh — if this persists, contact support.",
-                            variant: "destructive",
                           });
                           return;
                         }
