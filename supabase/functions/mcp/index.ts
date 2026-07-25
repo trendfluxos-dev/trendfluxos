@@ -174,7 +174,7 @@ var list_strategy_bookings_default = defineTool3({
 });
 
 // src/lib/mcp/index.ts
-var projectRef = "dnodqhwwzdqfqlndwhsf";
+var projectRef = "fookbowhuffalpidskqq";
 var mcp_default = defineMcp({
   name: "trendflux-mcp",
   title: "TrendFlux Digital",
