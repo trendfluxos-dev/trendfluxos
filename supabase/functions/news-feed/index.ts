@@ -63,18 +63,23 @@ const firstImage = (block: string): string | null => {
 };
 
 const parseFeed = (xml: string): NewsItem[] => {
-  const blocks = xml.match(/<item[\s\S]*?<\/item>/gi) ?? [];
+  // RSS 2.0 (<item>) is the primary shape; Atom (<entry>) is the fallback feed.
+  const blocks =
+    xml.match(/<item[\s\S]*?<\/item>/gi) ?? xml.match(/<entry[\s\S]*?<\/entry>/gi) ?? [];
   return blocks.slice(0, MAX_ITEMS).flatMap((block) => {
     const title = pick(block, "title");
-    const link = pick(block, "link");
+    const atomLink = block.match(/<link[^>]+href=["']([^"']+)["']/i);
+    const link = pick(block, "link") || (atomLink ? atomLink[1] : "");
     if (!title || !link) return [];
-    const pub = pick(block, "pubDate");
+    const pub = pick(block, "pubDate") || pick(block, "published") || pick(block, "updated");
     const parsed = pub ? new Date(pub) : null;
-    const description = pick(block, "description") || pick(block, "content:encoded");
+    const description =
+      pick(block, "description") || pick(block, "summary") || pick(block, "content:encoded");
     const categories = (block.match(/<category[^>]*>([\s\S]*?)<\/category>/gi) ?? [])
       .map((c) => decode(c.replace(/<\/?category[^>]*>/gi, "")))
       .filter(Boolean)
       .slice(0, 4);
+
     return [{
       title,
       link,
