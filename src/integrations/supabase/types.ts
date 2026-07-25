@@ -2021,6 +2021,24 @@ export type Database = {
         }
         Relationships: []
       }
+      site_profile_data_public: {
+        Row: {
+          data: Json | null
+          slug: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          data?: Json | null
+          slug?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          data?: Json | null
+          slug?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       teacher_profiles_public: {
         Row: {
           avg_rating: number | null

@@ -25,6 +25,11 @@
       "name": "0010_security_definer_view",
       "level": "error",
       "reason": "public.live_classes_public is intentionally an owner-defined view (security_invoker=false) that projects a safe column subset of public.live_classes — it omits meeting_url and share_token. The base table's RLS is now owner/admin-only; the view is the sole public read path for class metadata."
+    },
+    {
+      "name": "0010_security_definer_view",
+      "level": "error",
+      "reason": "public.site_profile_data_public is intentionally an owner-defined view (security_invoker=false) restricted to slug='bdjobs'. It is the only public read path for the published profile page; the base table site_profile_data is admin-only."
     }
   ]
 }
