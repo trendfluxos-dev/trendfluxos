@@ -10,7 +10,9 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
+import AiPaletteSuggester from "@/components/theme/AiPaletteSuggester";
 import { cn } from "@/lib/utils";
+
 import {
   COLOR_SWATCHES,
   DEFAULT_THEME,
@@ -200,8 +202,15 @@ export default function ThemeStudio() {
               </TabsContent>
 
               <TabsContent value="color" className="mt-5 space-y-6">
+                <AiPaletteSuggester
+                  mode={config.mode}
+                  activePrimary={config.primary}
+                  onApply={(primary) => update({ primary })}
+                />
+
                 <section>
                   <SectionLabel>Brand color</SectionLabel>
+
                   <div className="grid grid-cols-3 gap-2">
                     {COLOR_SWATCHES.map((swatch) => {
                       const active = swatch.hsl.h === config.primary.h;
