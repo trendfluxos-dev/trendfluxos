@@ -28,6 +28,9 @@ import {
 } from "lucide-react";
 import portrait from "@/assets/zahid-hasan-emon.webp";
 import { FilteredSystemsBentoSection } from "@/components/systems/FilteredSystemsBentoSection";
+import { CampaignPerformanceDashboard } from "@/components/portfolio/CampaignPerformanceDashboard";
+import { AdaptabilityMatrix } from "@/components/portfolio/AdaptabilityMatrix";
+import { TechAndStrategyStack } from "@/components/portfolio/TechAndStrategyStack";
 import proofEducation from "@/assets/proof/educational-background.webp";
 import proofUniversity from "@/assets/proof/university-certificates.webp";
 import proofHsc from "@/assets/proof/hsc-credentials.webp";
@@ -559,6 +562,11 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
+
+      {/* CAMPAIGN RESULTS, SECTOR REACH & CAPABILITY STACK */}
+      <CampaignPerformanceDashboard />
+      <AdaptabilityMatrix />
+      <TechAndStrategyStack />
 
       {/* SYSTEMS */}
       <div id="systems-he-built" className="border-t border-border bg-background">

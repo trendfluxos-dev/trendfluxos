@@ -87,6 +87,7 @@ const TrendfluxTalent = routes["/trendflux-talent"];
 const LuxeVeil = routes["/luxe-veil"];
 const BrandToki = routes["/brandtoki"];
 const Portfolio = routes["/portfolio"];
+const NewsPage = routes["/news"];
 const AlternativesBloomGrowth = routes["/alternatives/bloom-growth"];
 const Founder = routes["/founder"];
 const BdjobsProfile = routes["/bdjobs-profile"];
@@ -205,6 +206,8 @@ const RoutedApp = () => {
         <Route path="/luxe-veil" element={<LuxeVeil />} />
         <Route path="/brandtoki" element={<BrandToki />} />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/news" element={<NewsPage />} />
+
         <Route path="/alternatives/bloom-growth" element={<AlternativesBloomGrowth />} />
         <Route path="/founder" element={<Founder />} />
         <Route path="/bdjobs-profile" element={<BdjobsProfile />} />

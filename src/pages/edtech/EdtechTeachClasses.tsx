@@ -6,6 +6,7 @@ import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
 import EdtechPageHeader from "@/components/edtech/EdtechPageHeader";
 import { StudioOnboardingChecklist } from "@/components/edtech/StudioOnboardingChecklist";
+import AiLessonComposer from "@/components/edtech/AiLessonComposer";
 import { EDTECH } from "@/config/edtech";
 import { supabase } from "@/integrations/supabase/client";
 import { useSeo } from "@/hooks/useSeo";
@@ -119,6 +120,10 @@ const EdtechTeachClasses = () => {
             })}
           </ul>
         )}
+
+        <div className="mt-10">
+          <AiLessonComposer />
+        </div>
       </main>
 
       {open && uid && (
