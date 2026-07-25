@@ -1,1 +1,4 @@
 project_id = "fookbowhuffalpidskqq"
+
+[functions.theme-palette-ai]
+verify_jwt = false
