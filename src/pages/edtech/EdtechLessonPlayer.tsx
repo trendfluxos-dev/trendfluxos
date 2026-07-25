@@ -11,6 +11,8 @@ import {
 import EdtechShell from "@/components/edtech/EdtechShell";
 import EdtechHeader from "@/components/edtech/EdtechHeader";
 import LessonContent from "@/components/edtech/LessonContent";
+import LessonAiSummary from "@/components/edtech/LessonAiSummary";
+import { hasAny, useCurrentRoles } from "@/lib/edtechRoles";
 import { EDTECH } from "@/config/edtech";
 import { getCourseBySlug } from "@/data/edtechCourses";
 import { useSeo } from "@/hooks/useSeo";
@@ -43,6 +45,9 @@ const EdtechLessonPlayer = () => {
 
   const [, force] = useState(0);
   useEffect(() => subscribeProgress(() => force((n) => n + 1)), []);
+
+  // Teachers/admins can draft or refresh the AI lesson summary in place.
+  const roles = useCurrentRoles();
 
   const activeN = useMemo(() => {
     if (!course) return undefined;
@@ -192,7 +197,15 @@ const EdtechLessonPlayer = () => {
                   <strong className="font-semibold text-foreground">What you'll learn:</strong>{" "}
                   {course.outcomes[idx % course.outcomes.length]}
                 </p>
-              </div>
+            </div>
+
+            <LessonAiSummary
+              courseSlug={course.slug}
+              courseTitle={course.title}
+              courseCategory={course.category}
+              lesson={lesson}
+              canGenerate={hasAny(roles, ["admin", "teacher", "tutor"])}
+            />
             </div>
 
             {/* Controls */}

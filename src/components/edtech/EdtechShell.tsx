@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LessonDraftQueue from "@/components/edtech/LessonDraftQueue";
 import { EdtechLangProvider } from "@/lib/edtechLang";
 
 /**
@@ -16,6 +17,7 @@ const EdtechShell = ({ children }: { children: ReactNode }) => (
       <Navbar />
       <main id="main-content">{children}</main>
       <Footer />
+      <LessonDraftQueue />
     </div>
   </EdtechLangProvider>
 );
