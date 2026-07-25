@@ -10,9 +10,10 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
  */
 
 const FEEDS = [
-  "https://nagarikbarta24.com/feed/",
-  "https://nagarikbarta24.com/?feed=rss2",
+  "https://nagarikbarta24.com/rss.xml",
+  "https://nagarikbarta24.com/atom.xml",
 ];
+
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const MAX_ITEMS = 24;
 
