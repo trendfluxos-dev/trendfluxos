@@ -93,10 +93,13 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["'Space Grotesk'", "Inter", "sans-serif"],
+        // The leading var() lets Theme Studio swap typography live without a
+        // rebuild; the literal stacks stay as fallbacks.
+        sans: ["var(--tfx-font-sans, Inter)", "Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--tfx-font-display, 'Space Grotesk')", "'Space Grotesk'", "Inter", "sans-serif"],
         mono: ["'JetBrains Mono'", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
+
       backgroundImage: {
         "gradient-cyan": "var(--gradient-cyan)",
         "gradient-gold": "var(--gradient-gold)",
