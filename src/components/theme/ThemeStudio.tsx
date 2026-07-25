@@ -10,7 +10,9 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
+import AiPaletteSuggester from "@/components/theme/AiPaletteSuggester";
 import { cn } from "@/lib/utils";
+
 import {
   COLOR_SWATCHES,
   DEFAULT_THEME,
