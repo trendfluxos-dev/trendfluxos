@@ -54,6 +54,11 @@
 
     --radius: 1rem;
 
+    /* Typography tokens — Theme Studio overrides these on <html>. */
+    --tfx-font-sans: Inter;
+    --tfx-font-display: 'Space Grotesk';
+
+
     /* ── Design system scale tokens (Tfx*) ────────────────────
        Optional token layer used by src/components/design-system/*.
        Values in px so they compose with Tailwind spacing utilities.

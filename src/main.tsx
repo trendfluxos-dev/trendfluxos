@@ -25,6 +25,12 @@ import {
 import { initSentry } from "./lib/sentry";
 import { installWebVitals } from "./lib/webVitals";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { bootstrapThemeStudio } from "./lib/themeStudio";
+
+// Replay the visitor's saved Theme Studio profile before the first paint so
+// there is no flash of the default palette.
+bootstrapThemeStudio();
+
 
 // Sentry is heavy (~250KB). Defer its dynamic import until the browser is
 // idle so it never blocks the initial paint. Errors thrown before Sentry

@@ -31,6 +31,10 @@ import LayerShell from "@/components/layer/LayerShell";
 import { RouteLoadingProvider } from "@/lib/routeLoading";
 import { PageFallback } from "@/components/PageFallback";
 
+// Theme Studio is user-facing but non-critical: keep it out of the initial chunk.
+const ThemeStudio = lazy(() => import("@/components/theme/ThemeStudio"));
+
+
 // Dev-only diagnostic panels. They are heavy and only ever rendered when
 // `?perf` is in the URL during development, so we code-split them out of the
 // production bundle entirely and lazy-load on demand.
@@ -342,6 +346,10 @@ const App = () => (
           <ConsentBannerGate />
           <SiteStatusBanner />
           <AccessRequestGate />
+          <Suspense fallback={null}>
+            <ThemeStudio />
+          </Suspense>
+
           {ThemeDebugPanel && PERF_FLAG && (
             <Suspense fallback={null}>
               <ThemeDebugPanel />
