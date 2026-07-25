@@ -105,7 +105,7 @@ export default function ThemeStudio() {
         onClick={() => setOpen(true)}
         aria-label="Open Theme Studio (Alt+Shift+T)"
         title="Theme Studio · Alt+Shift+T"
-        className="fixed bottom-6 left-6 z-40 hidden h-11 items-center gap-2 rounded-full border border-border/60 bg-card/85 px-4 text-[12px] font-semibold text-foreground/80 shadow-elegant backdrop-blur transition-colors hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:inline-flex"
+        className="fixed bottom-24 left-6 z-40 hidden h-11 items-center gap-2 rounded-full border border-border/60 bg-card/85 px-4 text-[12px] font-semibold text-foreground/80 shadow-elegant backdrop-blur transition-colors hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:inline-flex"
       >
         <Palette className="h-4 w-4 text-primary" />
         Theme
