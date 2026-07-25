@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "29b59b92-8f01-455f-b8da-06acec837208",
-  "project_id": "ec1d2bd9-2410-431c-96d7-0959d7084992",
-  "url": "/__l5e/assets-v1/29b59b92-8f01-455f-b8da-06acec837208/architect-of-violence.webm",
-  "r2_key": "a/v1/ec1d2bd9-2410-431c-96d7-0959d7084992/29b59b92-8f01-455f-b8da-06acec837208/architect-of-violence.webm",
-  "original_filename": "architect-of-violence.webm",
-  "size": 15302639,
   "content_type": "video/webm",
-  "created_at": "2026-06-22T05:21:42Z"
+  "created_at": "2026-06-22T05:21:42Z",
+  "original_filename": "architect-of-violence.webm",
+  "project_id": "86298bbf-8cba-4e21-8189-6f1e23223c62",
+  "r2_key": "a/v1/86298bbf-8cba-4e21-8189-6f1e23223c62/29b59b92-8f01-455f-b8da-06acec837208/architect-of-violence.webm",
+  "size": 15302639,
+  "url": "/__l5e/assets-v1/29b59b92-8f01-455f-b8da-06acec837208/architect-of-violence.webm",
+  "version": 1
 }
