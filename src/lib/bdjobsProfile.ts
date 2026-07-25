@@ -21,8 +21,10 @@ export async function fetchBdjobsProfile(): Promise<{
   // The bundled default MUST always be valid — fail loudly in dev if not.
   const validatedDefault = assertValidBdjobsProfile(DEFAULT_BDJOBS_PROFILE);
   try {
+    // Public reads go through the public-safe view (whitelisted slug only);
+    // the underlying table is admin-only.
     const { data, error } = await supabase
-      .from("site_profile_data")
+      .from("site_profile_data_public")
       .select("data, updated_at")
       .eq("slug", BDJOBS_PROFILE_SLUG)
       .maybeSingle();
