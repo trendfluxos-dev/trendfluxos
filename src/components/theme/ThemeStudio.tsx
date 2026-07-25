@@ -200,8 +200,15 @@ export default function ThemeStudio() {
               </TabsContent>
 
               <TabsContent value="color" className="mt-5 space-y-6">
+                <AiPaletteSuggester
+                  mode={config.mode}
+                  activePrimary={config.primary}
+                  onApply={(primary) => update({ primary })}
+                />
+
                 <section>
                   <SectionLabel>Brand color</SectionLabel>
+
                   <div className="grid grid-cols-3 gap-2">
                     {COLOR_SWATCHES.map((swatch) => {
                       const active = swatch.hsl.h === config.primary.h;
