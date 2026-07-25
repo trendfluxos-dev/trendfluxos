@@ -158,6 +158,11 @@ const News = () => {
                         alt={item.title}
                         loading="lazy"
                         decoding="async"
+                        // Publisher thumbnails occasionally 404 — collapse the
+                        // slot instead of leaving a blank block above the title.
+                        onError={(e) => {
+                          e.currentTarget.remove();
+                        }}
                         className="h-44 w-full object-cover"
                       />
                     )}
