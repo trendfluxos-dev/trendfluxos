@@ -35,7 +35,7 @@ All three serve the same API:
 
 Set these secrets in Lovable:
 - **`XTTS_ENDPOINT_URL`** = `https://voice.example.com` (your Caddy-fronted domain)
-- **`XTTS_API_TOKEN`** *(optional)* = bearer token (also enforce in `Caddyfile`)
+- **`XTTS_API_TOKEN`** *(required)* = bearer token. Must match `XTTS_API_TOKEN` on the VPS (systemd unit / compose env) and the `Bearer` value in the `Caddyfile`. Without it the VPS returns 503 on every protected endpoint.
 - **`XTTS_DEPLOY_WEBHOOK_URL`** *(optional)* = `https://voice.example.com/redeploy` (route `deploy-webhook.sh`)
 - **`XTTS_DEPLOY_WEBHOOK_TOKEN`** *(optional)* = bearer for the webhook
 
