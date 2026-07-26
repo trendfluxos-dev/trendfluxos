@@ -2,18 +2,14 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://trendflux.digital/sitemap-pages.xml</loc>
-    <lastmod>2026-07-26</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://trendflux.digital/sitemap-case-studies.xml</loc>
-    <lastmod>2026-07-26</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://trendflux.digital/sitemap-research.xml</loc>
-    <lastmod>2026-07-26</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://trendflux.digital/sitemap-implementations.xml</loc>
-    <lastmod>2026-07-26</lastmod>
   </sitemap>
 </sitemapindex>
