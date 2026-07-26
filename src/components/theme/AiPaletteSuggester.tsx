@@ -25,7 +25,7 @@ interface Props {
  * function guarantees each one clears WCAG AA against the current surface
  * before it ever reaches this list.
  */
-export default function AiPaletteSuggester({ mode, activePrimary, onApply }: Props) {
+export default function AiPaletteSuggester({ mode, activePrimary, onApply, onSave }: Props) {
   const [brief, setBrief] = useState("");
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<PaletteSuggestion[]>([]);
@@ -106,7 +106,13 @@ export default function AiPaletteSuggester({ mode, activePrimary, onApply }: Pro
               item.primary.l === activePrimary.l;
             const ratio = contrastRatio(item.primary, surface);
             return (
-              <li key={`${item.name}-${item.primary.h}-${item.primary.l}`}>
+              <li
+                key={`${item.name}-${item.primary.h}-${item.primary.l}`}
+                className={cn(
+                  "flex items-center gap-1 rounded-xl border transition-colors",
+                  active ? "border-primary bg-primary/10" : "border-border/60",
+                )}
+              >
                 <button
                   type="button"
                   onClick={() => {
@@ -114,10 +120,7 @@ export default function AiPaletteSuggester({ mode, activePrimary, onApply }: Pro
                     toast.success(`${item.name} applied`);
                   }}
                   aria-pressed={active}
-                  className={cn(
-                    "flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors",
-                    active ? "border-primary bg-primary/10" : "border-border/60 hover:bg-card/70",
-                  )}
+                  className="flex min-w-0 flex-1 items-center gap-3 rounded-xl px-3 py-2.5 text-left"
                 >
                   <span
                     className="h-8 w-8 shrink-0 rounded-full ring-1 ring-inset ring-foreground/10"
@@ -137,7 +140,17 @@ export default function AiPaletteSuggester({ mode, activePrimary, onApply }: Pro
                     </span>
                   </span>
                 </button>
+                <button
+                  type="button"
+                  aria-label={`Save ${item.name} to my palettes`}
+                  title="Save palette"
+                  onClick={() => onSave(item.name, item.primary)}
+                  className="mr-1.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-foreground/55 transition-colors hover:bg-muted/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <BookmarkPlus className="h-4 w-4" />
+                </button>
               </li>
+
             );
           })}
         </ul>
