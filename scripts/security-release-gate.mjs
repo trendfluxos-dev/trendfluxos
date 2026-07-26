@@ -187,33 +187,40 @@ async function phaseLiveAuth() {
 }
 
 // ---------------------------------------------------------------------------
-// phase 3 — deployed routes still resolve
+// phase 3 — deployment is still serving traffic
+//
+// Reachability only: the SPA fallback answers 200 for any path, so this cannot
+// prove a route renders. Its job is to catch the failure mode where a security
+// change locks the app down so hard the site itself breaks — a "secure" deploy
+// that serves 5xx must not pass as green.
 // ---------------------------------------------------------------------------
 async function phaseRoutes() {
-  if (!baseUrl) {
-    skipped.push({ phase: "routes", reason: "no --base-url supplied" });
+  const urls = policy.routesMustResolve?.urls ?? [];
+  if (!baseUrl || urls.length === 0) {
+    skipped.push({ phase: "reachability", reason: "no --base-url supplied" });
     return;
   }
 
   let ok = 0;
-  for (const route of policy.routesMustResolve ?? []) {
+  for (const route of urls) {
     const url = `${baseUrl}${route}`;
     try {
       const res = await fetch(url, { redirect: "follow" });
       if (!res.ok) {
-        fail("routes", "route_unavailable", route, `${url} returned HTTP ${res.status}`);
+        fail("reachability", "endpoint_unavailable", route, `${url} returned HTTP ${res.status}`);
         continue;
       }
       ok += 1;
     } catch (err) {
-      fail("routes", "route_unavailable", route, `${url} — ${String(err)}`);
+      fail("reachability", "endpoint_unavailable", route, `${url} — ${String(err)}`);
     }
   }
 
-  if (!failures.some((f) => f.phase === "routes")) {
-    passed.push(`routes — ${ok} public route(s) resolving`);
+  if (!failures.some((f) => f.phase === "reachability")) {
+    passed.push(`reachability — ${ok} endpoint(s) serving traffic`);
   }
 }
+
 
 // ---------------------------------------------------------------------------
 // reporting
