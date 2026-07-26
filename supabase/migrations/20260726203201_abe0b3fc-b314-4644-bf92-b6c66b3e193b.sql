@@ -1,0 +1,2 @@
+REVOKE ALL ON FUNCTION public.log_access_audit(text, text, text, text, text, jsonb) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.student_cancel_booking(uuid) FROM PUBLIC, anon, authenticated;
