@@ -8,8 +8,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const STATUS_ENDPOINT =
-  "https://dnodqhwwzdqfqlndwhsf.supabase.co/functions/v1/site-status";
+const STATUS_ENDPOINT = `${
+  import.meta.env.VITE_SUPABASE_URL ?? "https://fookbowhuffalpidskqq.supabase.co"
+}/functions/v1/site-status`;
 
 type Check = { label: string; ok: boolean; detail?: string };
 

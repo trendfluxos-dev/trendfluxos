@@ -85,3 +85,59 @@ Actions → Variables): `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_PROJECT_I
 Vercel means repointing DNS (A/CNAME) at Vercel **after** the Vercel deployment
 is green — otherwise the domain briefly serves nothing. Keep the Lovable
 deployment live until the Vercel production URL passes `smoke.yml`.
+
+---
+
+## Environment variables — canonical list
+
+### Vercel (Production + Preview + Development)
+
+| Name | Value | Required |
+|---|---|---|
+| `VITE_SUPABASE_URL` | `https://fookbowhuffalpidskqq.supabase.co` | yes |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | `sb_publishable_bL7imOSTj8V1Y7I2PqsQvA_3HfREH26` | yes |
+| `VITE_SUPABASE_PROJECT_ID` | `fookbowhuffalpidskqq` | yes |
+| `VITE_SENTRY_DSN` | Sentry DSN | optional |
+| `VITE_SENTRY_ENV` | `production` / `preview` | optional |
+| `VITE_BUILD_SHA` | `$VERCEL_GIT_COMMIT_SHA` | optional |
+
+All `VITE_*` values are publishable and ship in the browser bundle. No privileged
+secret ever belongs here — those live in the Supabase Edge Function environment.
+
+### GitHub Actions — repository **variables** (Settings → Secrets and variables → Actions → Variables)
+
+| Name | Value |
+|---|---|
+| `SUPABASE_URL` | `https://fookbowhuffalpidskqq.supabase.co` |
+| `SUPABASE_ANON_KEY` | publishable key (same as above) |
+| `SUPABASE_PROJECT_ID` | `fookbowhuffalpidskqq` |
+
+### GitHub Actions — repository **secrets**
+
+| Name | Used by |
+|---|---|
+| `SUPABASE_ACCESS_TOKEN` | `backend-deploy.yml` (Supabase CLI auth) |
+| `SUPABASE_DB_PASSWORD` | `backend-deploy.yml` (`supabase db push`) |
+
+## Backend deploy pipeline
+
+`.github/workflows/backend-deploy.yml` runs on every push to `main` that touches
+`supabase/migrations/**`, `supabase/functions/**`, or `supabase/config.toml`:
+
+1. Links the project with the Supabase CLI.
+2. Lists pending migrations, then applies them (`supabase db push --linked --include-all`).
+3. Deploys every function in `supabase/functions/*` (skipping `_shared`).
+
+It can also be triggered manually via **workflow_dispatch** with toggles for
+migrations and functions independently.
+
+## DNS repoint checklist (Lovable → Vercel)
+
+Only repoint `trendflux.digital` **after** all of the following pass:
+
+1. Vercel Production build is green.
+2. `Production Smoke` workflow passes against the Vercel deployment URL
+   (`workflow_dispatch` → target = the `*.vercel.app` production URL).
+3. `Security Release Gate` passes.
+4. Then add the domain in Vercel, set the A/CNAME records, and keep the Lovable
+   deployment live until Vercel reports the domain as `Valid Configuration`.
