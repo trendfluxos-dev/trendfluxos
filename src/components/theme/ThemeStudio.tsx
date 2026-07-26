@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Copy, Palette, RotateCcw, Sparkles, Type as TypeIcon } from "lucide-react";
+import { Check, Copy, Eye, Palette, RotateCcw, Sparkles, Type as TypeIcon, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import AiPaletteSuggester from "@/components/theme/AiPaletteSuggester";
 import SavedPalettes from "@/components/theme/SavedPalettes";
 import { cn } from "@/lib/utils";
