@@ -116,6 +116,7 @@ function buildRouteHtml(shell, route, seo) {
   html = setMeta(html, "property", "og:site_name", SITE_NAME);
   html = setMeta(html, "property", "og:url", canonical);
   html = setMeta(html, "property", "og:image", image);
+  html = setMeta(html, "property", "og:image:secure_url", image);
 
   html = setMeta(html, "name", "twitter:card", "summary_large_image");
   html = setMeta(html, "name", "twitter:site", TWITTER_SITE);
