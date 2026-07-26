@@ -510,6 +510,28 @@ export default function ThemeStudio() {
               <RotateCcw className="h-3.5 w-3.5" /> Reset to defaults
             </button>
           </div>
+
+          {previewMode && (
+            <div className="sticky bottom-0 z-10 mt-auto flex items-center gap-2 border-t border-border/60 bg-background/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur sm:px-6">
+              <button
+                type="button"
+                onClick={discardPreview}
+                disabled={!dirty}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border/60 px-4 py-2.5 text-[12px] font-semibold text-foreground/70 transition-colors hover:text-foreground disabled:opacity-40"
+              >
+                <Undo2 className="h-3.5 w-3.5" /> Discard
+              </button>
+              <button
+                type="button"
+                onClick={savePreview}
+                disabled={!dirty}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-[12px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
+              >
+                <Check className="h-3.5 w-3.5" /> Save theme
+              </button>
+            </div>
+          )}
+
         </SheetContent>
       </Sheet>
     </>
