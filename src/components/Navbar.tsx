@@ -169,9 +169,17 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Center: 4-layer mega-menu (Company / Founder / Brands) */}
-          <div className="relative">
+          {/* Center: 4-layer mega-menu (Company / Founder / Brands) + Newsroom */}
+          <div className="relative hidden lg:flex items-center gap-1">
             <LayerMegaMenu />
+            <Link
+              to="/news"
+              aria-current={pathname === "/news" ? "page" : undefined}
+              className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-[0.14em] text-foreground/80 hover:text-foreground hover:bg-muted transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-muted aria-[current=page]:text-foreground"
+            >
+              <Newspaper className="h-3.5 w-3.5" />
+              Newsroom
+            </Link>
           </div>
 
           {/* Right: Search + Apply Access + Login */}
