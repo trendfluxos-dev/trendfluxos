@@ -13,6 +13,8 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import AiPaletteSuggester from "@/components/theme/AiPaletteSuggester";
 import SavedPalettes from "@/components/theme/SavedPalettes";
+import RoutePreview from "@/components/theme/RoutePreview";
+
 import { cn } from "@/lib/utils";
 
 import {
