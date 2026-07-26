@@ -1,0 +1,59 @@
+name: Vercel Parity Build
+
+# Vercel builds with npm + package-lock.json, while `build-warnings.yml` builds
+# with bun. This workflow reproduces the exact Vercel install/build pipeline so a
+# lockfile drift or npm-only resolution failure is caught in CI instead of on the
+# production deploy.
+
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "vercel.json"
+      - "src/**"
+      - "scripts/**"
+      - "index.html"
+      - "vite.config.*"
+      - ".github/workflows/vercel-parity.yml"
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-parity-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: npm ci + npm run build (Vercel parity)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      # Publishable values only — identical to what ships in the browser bundle.
+      VITE_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+      VITE_SUPABASE_PROJECT_ID: ${{ vars.SUPABASE_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install (lockfile must be in sync)
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Assert SPA + prerendered output exists
+        run: |
+          test -f dist/index.html || { echo "::error::dist/index.html missing"; exit 1; }
+          test -f dist/sitemap.xml || { echo "::error::dist/sitemap.xml missing"; exit 1; }
+          test -f dist/news/index.html || echo "::warning::prerendered /news/index.html missing"
+          echo "Build output OK"
