@@ -222,12 +222,26 @@ async function processDue(db: ReturnType<typeof admin>, onlyId?: string) {
   return results;
 }
 
+/** True when the bearer is a service_role JWT (the pg_cron scheduler). */
+function isServiceRoleJwt(token: string): boolean {
+  const parts = token.split(".");
+  if (parts.length !== 3) return false;
+  try {
+    const pad = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(atob(pad + "=".repeat((4 - (pad.length % 4)) % 4)));
+    return payload?.role === "service_role";
+  } catch {
+    return false;
+  }
+}
+
 /** Callable only by the scheduler (service-role bearer) or a signed-in admin. */
 async function authorize(req: Request): Promise<boolean> {
   const header = req.headers.get("Authorization") ?? "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
   if (!token) return false;
   if (token === Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")) return true;
+  if (isServiceRoleJwt(token)) return true;
 
   const scoped = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -239,6 +253,7 @@ async function authorize(req: Request): Promise<boolean> {
   const { data: isAdmin } = await scoped.rpc("current_user_has_role", { _role: "admin" });
   return isAdmin === true;
 }
+
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
