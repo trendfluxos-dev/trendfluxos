@@ -12,7 +12,7 @@ import { describe, it, expect, beforeAll } from "vitest";
 const TARGET = process.env.SMOKE_URL ?? "https://trendflux.digital";
 const SUPABASE_URL =
   process.env.SMOKE_SUPABASE_URL ??
-  "https://dnodqhwwzdqfqlndwhsf.supabase.co";
+  "https://fookbowhuffalpidskqq.supabase.co";
 const TIMEOUT_MS = 30_000;
 
 // Primary public routes — every one of these must SPA-resolve to a 200 HTML.
