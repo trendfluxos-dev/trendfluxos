@@ -307,7 +307,7 @@ const Navbar = () => {
                     );
                   })}
 
-                  <div className="flex flex-col gap-0.5 pt-3 border-t border-primary/30 dark:border-crimson-rim/45">
+                  <div className="flex flex-col gap-0.5 pt-3 border-t border-border">
                     {BRAND_CONTACTS.trendflux.whatsapp && (
                       <a
                         href={BRAND_CONTACTS.trendflux.whatsapp}
@@ -326,20 +326,21 @@ const Navbar = () => {
                       setOpen(false);
                       openLuxeVeilGate({ source: "navbar_mobile" });
                     }}
-                    className="text-left rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-noir-rim dark:text-crimson-mist/85 hover:text-noir dark:hover:text-scrim-foreground hover:bg-crimson-blush dark:hover:bg-noir-rim/60 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/60"
+                    className="text-left rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-foreground hover:bg-accent hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     Apply Access
                   </button>
                   <Link
                     to={signedIn ? "/admin" : "/auth"}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-noir-rim dark:text-crimson-mist/85 hover:text-noir dark:hover:text-scrim-foreground hover:bg-crimson-blush dark:hover:bg-noir-rim/60 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/60"
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-foreground hover:bg-accent hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary dark:text-crimson-glow" /> : <LogIn className="h-4 w-4 text-primary dark:text-crimson-glow" />}
+                    {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary" /> : <LogIn className="h-4 w-4 text-primary" />}
                     {signedIn ? "Dashboard" : "Login"}
                   </Link>
                   </div>
-                  <div className="pt-5 border-t border-primary/30 dark:border-crimson-rim/45">
+                  <div className="pt-5 border-t border-border">
+
                     <SocialIcons variant="inline" size="sm" />
                   </div>
                 </nav>
