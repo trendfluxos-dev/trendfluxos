@@ -3,22 +3,31 @@
 YOUR_DOMAIN {
 	encode zstd gzip
 
-	# Optional: protect with a static bearer token (matches XTTS_API_TOKEN).
-	# @noauth not header Authorization "Bearer CHANGE_ME"
-	# respond @noauth 401
-
-	# Large file uploads for voice samples
-	request_body {
-		max_size 25MB
+	# Bearer-token gate (enabled by default). Replace CHANGE_ME with the same
+	# value as XTTS_API_TOKEN. The app enforces the token too (defence in
+	# depth) — do NOT remove this block, it keeps unauthenticated traffic off
+	# the model entirely. /health stays open for uptime probes.
+	@public path /health
+	@authorized header Authorization "Bearer CHANGE_ME"
+	handle @public {
+		reverse_proxy 127.0.0.1:8000
 	}
-
-	reverse_proxy 127.0.0.1:8000 {
-		# XTTS first generation can be slow on CPU
-		transport http {
-			read_timeout 5m
-			write_timeout 5m
-			dial_timeout 10s
+	handle @authorized {
+		# Large file uploads for voice samples
+		request_body {
+			max_size 25MB
 		}
+		reverse_proxy 127.0.0.1:8000 {
+			# XTTS first generation can be slow on CPU
+			transport http {
+				read_timeout 5m
+				write_timeout 5m
+				dial_timeout 10s
+			}
+		}
+	}
+	handle {
+		respond "Unauthorized" 401
 	}
 
 	log {
