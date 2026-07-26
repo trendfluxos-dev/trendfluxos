@@ -175,7 +175,9 @@ export default function ThemeStudio() {
     <>
       <button
         type="button"
+        data-theme-launcher
         onClick={() => setOpen(true)}
+
         aria-label="Open Theme Studio (Alt+Shift+T)"
         title="Theme Studio · Alt+Shift+T"
         className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 z-40 inline-flex h-11 items-center gap-2 rounded-full border border-border/60 bg-card/85 px-3.5 text-[12px] font-semibold text-foreground/80 shadow-elegant backdrop-blur transition-colors hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:bottom-24 md:left-6 md:px-4"
