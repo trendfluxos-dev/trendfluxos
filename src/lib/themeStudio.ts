@@ -332,6 +332,102 @@ export function exportThemeCss(config: ThemeConfig): string {
   return `/* TrendFlux Theme Studio export */\n${scope} {\n${entries}\n}\n`;
 }
 
+/* ── saved palettes (per browser) ───────────────────────────── */
+
+export interface SavedPalette {
+  id: string;
+  name: string;
+  createdAt: number;
+  config: ThemeConfig;
+}
+
+export const SAVED_PALETTES_KEY = "tf-theme-saved-palettes";
+const SAVED_EVENT = "tfx:theme-saved-palettes";
+const MAX_SAVED_PALETTES = 24;
+
+function emitSavedChange(): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(SAVED_EVENT));
+}
+
+export function readSavedPalettes(): SavedPalette[] {
+  if (typeof localStorage === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(SAVED_PALETTES_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.flatMap((entry) => {
+      if (typeof entry !== "object" || entry === null) return [];
+      const v = entry as Record<string, unknown>;
+      const config = parseThemeConfig(v.config);
+      if (!config || typeof v.id !== "string") return [];
+      return [
+        {
+          id: v.id,
+          name: typeof v.name === "string" && v.name.trim() ? v.name.trim().slice(0, 48) : "Untitled palette",
+          createdAt: typeof v.createdAt === "number" ? v.createdAt : Date.now(),
+          config,
+        } satisfies SavedPalette,
+      ];
+    });
+  } catch {
+    return [];
+  }
+}
+
+function writeSavedPalettes(list: SavedPalette[]): SavedPalette[] {
+  const trimmed = list.slice(0, MAX_SAVED_PALETTES);
+  try {
+    localStorage.setItem(SAVED_PALETTES_KEY, JSON.stringify(trimmed));
+  } catch {
+    /* storage unavailable */
+  }
+  emitSavedChange();
+  return trimmed;
+}
+
+/** Saves a palette (newest first). Returns the updated list. */
+export function savePalette(name: string, config: ThemeConfig): SavedPalette[] {
+  const entry: SavedPalette = {
+    id:
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `p-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    name: name.trim().slice(0, 48) || "Untitled palette",
+    createdAt: Date.now(),
+    config,
+  };
+  return writeSavedPalettes([entry, ...readSavedPalettes()]);
+}
+
+export function deleteSavedPalette(id: string): SavedPalette[] {
+  return writeSavedPalettes(readSavedPalettes().filter((p) => p.id !== id));
+}
+
+export function renameSavedPalette(id: string, name: string): SavedPalette[] {
+  return writeSavedPalettes(
+    readSavedPalettes().map((p) =>
+      p.id === id ? { ...p, name: name.trim().slice(0, 48) || p.name } : p,
+    ),
+  );
+}
+
+/** Subscribes to saved-palette changes, including edits from other tabs. */
+export function onSavedPalettesChange(handler: () => void): () => void {
+  if (typeof window === "undefined") return () => undefined;
+  const listener = () => handler();
+  const storageListener = (event: StorageEvent) => {
+    if (event.key === SAVED_PALETTES_KEY) handler();
+  };
+  window.addEventListener(SAVED_EVENT, listener);
+  window.addEventListener("storage", storageListener);
+  return () => {
+    window.removeEventListener(SAVED_EVENT, listener);
+    window.removeEventListener("storage", storageListener);
+  };
+}
+
 /* ── open/close bus so any surface can launch the studio ────── */
 
 const OPEN_EVENT = "tfx:theme-studio-open";
