@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Copy, Palette, RotateCcw, Sparkles, Type as TypeIcon } from "lucide-react";
+import { Check, Copy, Eye, Palette, RotateCcw, Sparkles, Type as TypeIcon, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Sheet,
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import AiPaletteSuggester from "@/components/theme/AiPaletteSuggester";
 import SavedPalettes from "@/components/theme/SavedPalettes";
 import { cn } from "@/lib/utils";
@@ -50,10 +51,16 @@ const RADIUS_STEPS = [
 export default function ThemeStudio() {
   const [open, setOpen] = useState(false);
   const [config, setConfig] = useState<ThemeConfig>(DEFAULT_THEME);
+  /** Last theme actually persisted for this browser — the discard target. */
+  const [baseline, setBaseline] = useState<ThemeConfig>(DEFAULT_THEME);
+  /** Live preview: apply to the page instantly, persist only on Save. */
+  const [previewMode, setPreviewMode] = useState(true);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    setConfig(currentTheme());
+    const stored = currentTheme();
+    setConfig(stored);
+    setBaseline(stored);
   }, []);
 
   useEffect(() => onOpenThemeStudio(() => setOpen(true)), []);
@@ -69,15 +76,64 @@ export default function ThemeStudio() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const commit = useCallback((next: ThemeConfig) => {
-    setConfig(next);
-    applyTheme(next);
-    persistTheme(next);
-  }, []);
+  /** Applies a theme to the page; persists only when preview mode is off. */
+  const commit = useCallback(
+    (next: ThemeConfig) => {
+      setConfig(next);
+      applyTheme(next);
+      if (!previewMode) {
+        persistTheme(next);
+        setBaseline(next);
+      }
+    },
+    [previewMode],
+  );
 
   const update = useCallback(
     (patch: Partial<ThemeConfig>) => commit({ ...config, ...patch }),
     [commit, config],
+  );
+
+  const dirty = useMemo(
+    () => JSON.stringify(config) !== JSON.stringify(baseline),
+    [config, baseline],
+  );
+
+  const savePreview = useCallback(() => {
+    persistTheme(config);
+    applyTheme(config);
+    setBaseline(config);
+    toast.success("Theme saved for this browser");
+  }, [config]);
+
+  const discardPreview = useCallback(() => {
+    setConfig(baseline);
+    applyTheme(baseline);
+  }, [baseline]);
+
+  /** Leaving preview mode with pending edits keeps them and persists once. */
+  const togglePreviewMode = useCallback(
+    (next: boolean) => {
+      setPreviewMode(next);
+      if (!next && dirty) {
+        persistTheme(config);
+        setBaseline(config);
+        toast.success("Live edits saved — auto-save is now on");
+      }
+    },
+    [config, dirty],
+  );
+
+  // Closing the sheet with unsaved preview edits rolls the page back.
+  const handleOpenChange = useCallback(
+    (next: boolean) => {
+      setOpen(next);
+      if (!next && previewMode && dirty) {
+        discardPreview();
+        toast("Preview discarded", { description: "Unsaved theme changes were reverted." });
+      }
+    },
+    [previewMode, dirty, discardPreview],
   );
 
   const saveSuggestion = useCallback(
@@ -92,6 +148,7 @@ export default function ThemeStudio() {
     clearTheme();
     const fallback: ThemeConfig = { ...DEFAULT_THEME, mode: config.mode };
     setConfig(fallback);
+    setBaseline(fallback);
     document.documentElement.classList.toggle("dark", fallback.mode === "dark");
     toast.success("Theme reset to TrendFlux defaults");
   }, [config.mode]);
@@ -125,7 +182,7 @@ export default function ThemeStudio() {
         <span className="hidden sm:inline">Theme</span>
       </button>
 
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet open={open} onOpenChange={handleOpenChange}>
         <SheetContent
           side="right"
           className="flex w-full max-w-full flex-col gap-0 overflow-y-auto overscroll-contain p-0 sm:max-w-md"
@@ -136,12 +193,44 @@ export default function ThemeStudio() {
               <Sparkles className="h-4 w-4 text-primary" /> Theme Studio
             </SheetTitle>
             <SheetDescription>
-              Live-tune the design system. Changes apply site-wide instantly and stay on this
-              browser.
+              {previewMode
+                ? "Live preview is on — every change renders instantly on the page behind this panel. Nothing is stored until you save."
+                : "Auto-save is on — every change applies site-wide and is stored on this browser."}
             </SheetDescription>
+
+            <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-card/40 px-3 py-2">
+              <label
+                htmlFor="tfx-preview-mode"
+                className="flex min-w-0 items-center gap-2 text-[12px] font-semibold text-foreground/80"
+              >
+                <Eye className="h-3.5 w-3.5 shrink-0 text-primary" />
+                <span className="truncate">Live preview mode</span>
+              </label>
+              <Switch
+                id="tfx-preview-mode"
+                checked={previewMode}
+                onCheckedChange={togglePreviewMode}
+                aria-label="Toggle live preview mode"
+              />
+            </div>
+
+            {previewMode && (
+              <p
+                className={cn(
+                  "mt-2 text-[11px]",
+                  dirty ? "text-primary" : "text-foreground/55",
+                )}
+                role="status"
+              >
+                {dirty
+                  ? "Unsaved preview — previewing changes live on the site."
+                  : "No pending changes. Tweak a palette to preview it live."}
+              </p>
+            )}
           </SheetHeader>
 
           <div className="px-4 py-5 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6">
+
             <div className="mb-5 flex items-center gap-2">
               {(["dark", "light"] as ThemeMode[]).map((mode) => (
                 <button
@@ -421,6 +510,28 @@ export default function ThemeStudio() {
               <RotateCcw className="h-3.5 w-3.5" /> Reset to defaults
             </button>
           </div>
+
+          {previewMode && (
+            <div className="sticky bottom-0 z-10 mt-auto flex items-center gap-2 border-t border-border/60 bg-background/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur sm:px-6">
+              <button
+                type="button"
+                onClick={discardPreview}
+                disabled={!dirty}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border/60 px-4 py-2.5 text-[12px] font-semibold text-foreground/70 transition-colors hover:text-foreground disabled:opacity-40"
+              >
+                <Undo2 className="h-3.5 w-3.5" /> Discard
+              </button>
+              <button
+                type="button"
+                onClick={savePreview}
+                disabled={!dirty}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-[12px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
+              >
+                <Check className="h-3.5 w-3.5" /> Save theme
+              </button>
+            </div>
+          )}
+
         </SheetContent>
       </Sheet>
     </>
