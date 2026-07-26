@@ -22,7 +22,7 @@ export default function SectionOrnament({ chapter, label, accent = "crimson" }: 
       <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${dot} shadow-[0_0_12px_currentColor]`} />
       <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-foreground/15 via-foreground/[0.07] to-transparent" />
       <span className={`font-mono text-[10px] uppercase tracking-[0.35em] ${text} whitespace-nowrap`}>
-        <span className="opacity-90">{chapter}</span>
+        <span>{chapter}</span>
         <span aria-hidden className="mx-2 opacity-60">·</span>
         {label}
       </span>

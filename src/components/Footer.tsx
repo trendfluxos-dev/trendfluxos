@@ -40,7 +40,7 @@ const Footer = () => {
               >
                 {meta.label}
               </h2>
-              <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
+              <ul className="space-y-2.5 text-[13.5px] text-foreground/80">
                 {items.map((n) => (
                   <li key={`${layer}-${n.path}`}>
                     {n.external ? (
@@ -71,7 +71,7 @@ const Footer = () => {
           >
             Newsroom
           </h2>
-          <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
+          <ul className="space-y-2.5 text-[13.5px] text-foreground/80">
             <li>
               <Link to="/news" className="story-link hover:text-foreground transition-colors inline-flex items-center gap-1.5">
                 <Newspaper className="h-3.5 w-3.5" />
