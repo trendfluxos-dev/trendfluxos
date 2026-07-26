@@ -8,7 +8,6 @@ import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
 import { openCommandPalette } from "@/lib/commandPalette";
 import SocialIcons from "@/components/social/SocialIcons";
 import { supabase } from "@/integrations/supabase/client";
-import logoAsset from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 import ThemeToggle from "@/components/ThemeToggle";
 import LayerMegaMenu from "@/components/layer/LayerMegaMenu";
 import { LAYER_META, nodesByLayer, type Layer } from "@/config/siteLayers";
@@ -145,12 +144,6 @@ const Navbar = () => {
               <span className="absolute inset-0 -m-1 rounded-full bg-crimson-glow/40 blur-md animate-pulse" />
               <span className="relative h-2.5 w-2.5 rounded-full bg-crimson-glow border border-scrim-foreground/25 shadow-[0_0_15px_rgba(226,90,90,0.65)]" />
             </span>
-            <img
-              src={logoAsset.url}
-              alt=""
-              aria-hidden
-              className="hidden lg:block h-6 w-6 rounded-md object-contain opacity-90 transition-opacity duration-300 group-hover/brand:opacity-100"
-            />
             <span className="flex flex-col leading-none">
               <span className="flex items-baseline gap-1.5">
                 <span className="uppercase tracking-[0.22em] font-bold text-noir dark:text-scrim-foreground text-[12.5px] lg:text-[13px] transition-colors duration-300">

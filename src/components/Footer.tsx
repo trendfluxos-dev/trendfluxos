@@ -36,7 +36,7 @@ const Footer = () => {
             <nav key={layer} aria-labelledby={`footer-${layer}`}>
               <h2
                 id={`footer-${layer}`}
-                className="text-[11px] uppercase tracking-[0.22em] text-foreground/40 mb-5 font-medium"
+                className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground mb-5 font-semibold"
               >
                 {meta.label}
               </h2>
@@ -50,7 +50,7 @@ const Footer = () => {
                         rel="noopener noreferrer"
                         className="story-link hover:text-foreground transition-colors"
                       >
-                        {n.title} <span className="text-foreground/40">↗</span>
+                        {n.title} <span className="text-muted-foreground">↗</span>
                       </a>
                     ) : (
                       <Link to={n.path} className="story-link hover:text-foreground transition-colors">
@@ -67,7 +67,7 @@ const Footer = () => {
         <nav aria-labelledby="footer-newsroom">
           <h2
             id="footer-newsroom"
-            className="text-[11px] uppercase tracking-[0.22em] text-foreground/40 mb-5 font-medium"
+            className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground mb-5 font-semibold"
           >
             Newsroom
           </h2>

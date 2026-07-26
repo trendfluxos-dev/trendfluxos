@@ -45,7 +45,7 @@ const LayerMegaMenu = () => {
               <NavigationMenuContent>
                 <div className="w-[min(92vw,560px)] p-4 bg-white/95 dark:bg-[#08080d]/95 backdrop-blur-2xl border border-[#c11f1f]/25 dark:border-[#7a1e1e]/55 rounded-2xl shadow-[0_24px_60px_-20px_rgba(120,20,20,0.25)] dark:shadow-[0_24px_60px_-20px_rgba(200,60,60,0.45)]">
                   <div className="mb-3 flex items-baseline justify-between gap-3">
-                    <span className="text-[10.5px] uppercase tracking-[0.24em] text-[#9a1818] dark:text-[#e25a5a]/80 font-medium">
+                    <span className="text-[10.5px] uppercase tracking-[0.24em] text-primary dark:text-crimson-glow font-semibold">
                       The {meta.label}
                     </span>
                     <span className="text-[11px] text-[#3a0d10]/65 dark:text-[#f0c9c9]/55">{meta.tagline}</span>
@@ -74,10 +74,10 @@ const LayerMegaMenu = () => {
                             <span className={`flex items-center gap-2 text-[13.5px] transition-colors ${isActive ? "text-[#1a0a0a] dark:text-white font-medium" : "text-[#3a0d10] dark:text-[#f0c9c9]/90 group-hover:text-[#1a0a0a] dark:group-hover:text-white"}`}>
                               {node.title}
                               {node.external && (
-                                <span className="ml-1.5 text-[9.5px] uppercase tracking-[0.18em] text-[#9a1818] dark:text-[#e25a5a]/80 align-middle">↗</span>
+                                <span className="ml-1.5 text-[9.5px] uppercase tracking-[0.18em] text-primary dark:text-crimson-glow align-middle">↗</span>
                               )}
                               {isActive && (
-                                <span className="ml-auto text-[9px] uppercase tracking-[0.2em] text-[#c11f1f] dark:text-[#e25a5a] font-semibold">Current</span>
+                                <span className="ml-auto text-[9px] uppercase tracking-[0.2em] text-primary dark:text-crimson-glow font-semibold">Current</span>
                               )}
                             </span>
                             {node.blurb && (
@@ -93,7 +93,7 @@ const LayerMegaMenu = () => {
                   <div className="mt-3 pt-3 border-t border-[#c11f1f]/25 dark:border-[#7a1e1e]/45">
                     <Link
                       to={meta.hubPath}
-                      className="inline-block rounded-md text-[11.5px] uppercase tracking-[0.16em] text-[#9a1818] dark:text-[#e25a5a]/85 hover:text-[#1a0a0a] dark:hover:text-white transition-colors focus:outline-none focus-visible:text-[#1a0a0a] dark:focus-visible:text-white focus-visible:ring-2 focus-visible:ring-[#e25a5a]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[#08080d]"
+                      className="inline-block rounded-md text-[11.5px] uppercase tracking-[0.16em] text-primary dark:text-crimson-glow hover:text-foreground dark:hover:text-scrim-foreground transition-colors focus:outline-none focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     >
                       View {meta.label} hub →
                     </Link>
