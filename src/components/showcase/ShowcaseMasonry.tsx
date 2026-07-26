@@ -85,7 +85,7 @@ const Card = ({
 
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-3 mb-4">
-          <span className="text-[10px] uppercase tracking-[0.25em] text-primary/80 font-medium">
+          <span className="text-[10px] uppercase tracking-[0.25em] text-primary font-medium">
             {item.category}
           </span>
           <span className="text-[10px] text-foreground/45 whitespace-nowrap">
@@ -186,7 +186,7 @@ const Card = ({
             type="button"
             onClick={() => navigate(`/showcase/${item.id}`)}
             aria-label={`View case study for ${item.title}`}
-            className={`inline-flex items-center gap-1.5 min-h-11 py-2 text-[11px] font-medium text-primary/90 hover:text-primary transition-colors ${focusRing}`}
+            className={`inline-flex items-center gap-1.5 min-h-11 py-2 text-[11px] font-medium text-primary hover:text-primary transition-colors ${focusRing}`}
           >
             <FileText className="h-3 w-3" aria-hidden="true" />
             Case study

@@ -38,7 +38,7 @@ const Contact = () => {
             <button
               type="button"
               onClick={() => setQuoteOpen(true)}
-              className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80"
+              className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary"
             >
               Book <ArrowRight className="h-3.5 w-3.5" />
             </button>
@@ -56,7 +56,7 @@ const Contact = () => {
             </p>
             <a
               href="mailto:hello@trendflux.digital"
-              className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80"
+              className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary"
             >
               hello@trendflux.digital <ArrowRight className="h-3.5 w-3.5" />
             </a>
@@ -74,7 +74,7 @@ const Contact = () => {
             </p>
             <a
               href="/project-lead"
-              className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80"
+              className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary"
             >
               Submit <ArrowRight className="h-3.5 w-3.5" />
             </a>

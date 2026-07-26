@@ -36,7 +36,7 @@ export const FacebookPageEmbed = ({
       )}
     >
       <div className="mb-2 flex items-center justify-between px-1">
-        <span className="text-[10px] uppercase tracking-[0.3em] text-primary/80">
+        <span className="text-[10px] uppercase tracking-[0.3em] text-primary">
           Official Facebook
         </span>
         <a

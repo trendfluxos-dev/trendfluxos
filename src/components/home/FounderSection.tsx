@@ -40,7 +40,7 @@ export const FounderSection = () => (
         </div>
         <Link
           to="/about"
-          className="mt-7 inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+          className="mt-7 inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary"
         >
           The full story <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
         </Link>

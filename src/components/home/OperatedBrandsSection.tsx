@@ -24,7 +24,7 @@ const BrandCard = ({ b }: { b: OperatedBrand }) => (
       </div>
     )}
     {b.tagline && <p className="mt-2 text-[10.5px] leading-snug text-muted-foreground">{b.tagline}</p>}
-    {b.paid && <span className="mt-2 text-[10px] font-medium text-primary/80">Client project</span>}
+    {b.paid && <span className="mt-2 text-[10px] font-medium text-primary">Client project</span>}
   </TfCard>
 );
 

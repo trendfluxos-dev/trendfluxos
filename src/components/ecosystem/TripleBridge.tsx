@@ -224,7 +224,7 @@ export default function TripleBridge({
                 <h3 className="mt-4 font-display text-[15px] font-semibold text-foreground">
                   {n.title}
                 </h3>
-                <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-primary/80">
+                <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.18em] text-primary">
                   {n.role}
                 </p>
                 <p className="mt-2 text-[13px] leading-relaxed text-foreground/70">

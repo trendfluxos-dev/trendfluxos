@@ -23,7 +23,7 @@
     --popover-foreground: 222 47% 11%;
 
     /* Primary = brand red */
-    --primary: 0 72% 45%;               /* #DC2626 */
+    --primary: 0 74% 39%;               /* #B01919 — AA-contrast crimson on light */
     --primary-foreground: 0 0% 100%;
     --primary-glow: 0 74% 38%;          /* #B91C1C deep-red hover */
 
@@ -37,7 +37,7 @@
     --gold-foreground: 0 0% 100%;
 
     --muted: 210 40% 98%;               /* #F8FAFC */
-    --muted-foreground: 215 16% 47%;    /* #64748B — high-contrast slate */
+    --muted-foreground: 215 20% 40%;    /* #525f70 — WCAG AA on --background */
 
     /* Accents — used sparingly */
     --accent: 0 72% 45%;                /* red accent default */
@@ -184,7 +184,7 @@
     --gold-foreground: 0 0% 100%;
 
     --muted: 240 10% 11%;
-    --muted-foreground: 240 5% 67%;     /* #a1a1aa */
+    --muted-foreground: 240 6% 75%;     /* #bdbdc4 — WCAG AA on noir */
 
     --accent: 349 77% 50%;
     --accent-foreground: 0 0% 100%;
@@ -1089,7 +1089,7 @@
     --secondary: 152 65% 92%;
     --secondary-foreground: 165 78% 18%;
     --muted: 152 30% 94%;
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 215 20% 40%;
     --accent: 152 65% 92%;
     --accent-foreground: 165 78% 20%;
     --border: 152 25% 86%;
@@ -1794,4 +1794,10 @@
   .rhythm-offset { margin-top: 0.5rem; }
   @media (min-width: 640px) { .rhythm-offset { margin-top: 0.75rem; } }
   @media (min-width: 1024px) { .rhythm-offset { margin-top: 1rem; } }
+}
+
+/* Dark-mode readability: brand crimson is too dim as small text on noir surfaces.
+   Route every primary-colored text to the lighter crimson-glow token in dark mode. */
+.dark .text-primary {
+  color: hsl(var(--crimson-glow));
 }

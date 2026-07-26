@@ -8,7 +8,6 @@ import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
 import { openCommandPalette } from "@/lib/commandPalette";
 import SocialIcons from "@/components/social/SocialIcons";
 import { supabase } from "@/integrations/supabase/client";
-import logoAsset from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 import ThemeToggle from "@/components/ThemeToggle";
 import LayerMegaMenu from "@/components/layer/LayerMegaMenu";
 import { LAYER_META, nodesByLayer, type Layer } from "@/config/siteLayers";
@@ -145,12 +144,6 @@ const Navbar = () => {
               <span className="absolute inset-0 -m-1 rounded-full bg-crimson-glow/40 blur-md animate-pulse" />
               <span className="relative h-2.5 w-2.5 rounded-full bg-crimson-glow border border-scrim-foreground/25 shadow-[0_0_15px_rgba(226,90,90,0.65)]" />
             </span>
-            <img
-              src={logoAsset.url}
-              alt=""
-              aria-hidden
-              className="hidden lg:block h-6 w-6 rounded-md object-contain opacity-90 transition-opacity duration-300 group-hover/brand:opacity-100"
-            />
             <span className="flex flex-col leading-none">
               <span className="flex items-baseline gap-1.5">
                 <span className="uppercase tracking-[0.22em] font-bold text-noir dark:text-scrim-foreground text-[12.5px] lg:text-[13px] transition-colors duration-300">
@@ -251,7 +244,7 @@ const Navbar = () => {
                 <SheetHeader className="px-5 pt-5 pb-3 border-b border-border shrink-0">
                   <SheetTitle className="text-left font-display tracking-[0.22em] uppercase text-[12.5px]">
                     <span className="text-foreground font-semibold">{BRAND.nameLead}</span>
-                    <span className="text-primary font-medium"> {BRAND.nameTrail}</span>
+                    <span className="text-primary dark:text-crimson-glow font-medium"> {BRAND.nameTrail}</span>
                   </SheetTitle>
                   <button
                     type="button"
@@ -280,7 +273,7 @@ const Navbar = () => {
                     if (items.length === 0) return null;
                     return (
                       <div key={layer} className="flex flex-col gap-0.5">
-                        <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-primary font-medium mb-1">
+                        <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-primary dark:text-crimson-glow font-semibold mb-1">
                           {meta.label}
                         </p>
                         {items.map((node) => {

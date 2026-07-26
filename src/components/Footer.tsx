@@ -15,9 +15,9 @@ const Footer = () => {
           <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-lg tracking-tight">
             <span className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-gradient">{BRAND.nameLead}</span>
-            <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
+            <span className="text-muted-foreground font-normal">{BRAND.nameTrail}</span>
           </Link>
-          <p className="text-foreground/55 mt-4 max-w-sm leading-relaxed text-[13.5px]">
+          <p className="text-muted-foreground mt-4 max-w-sm leading-relaxed text-[13.5px]">
             One ecosystem, four layers. Company, founder, brands, system —
             built to operate beyond random marketing.
           </p>
@@ -36,11 +36,11 @@ const Footer = () => {
             <nav key={layer} aria-labelledby={`footer-${layer}`}>
               <h2
                 id={`footer-${layer}`}
-                className="text-[11px] uppercase tracking-[0.22em] text-foreground/40 mb-5 font-medium"
+                className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground mb-5 font-semibold"
               >
                 {meta.label}
               </h2>
-              <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
+              <ul className="space-y-2.5 text-[13.5px] text-foreground/80">
                 {items.map((n) => (
                   <li key={`${layer}-${n.path}`}>
                     {n.external ? (
@@ -50,7 +50,7 @@ const Footer = () => {
                         rel="noopener noreferrer"
                         className="story-link hover:text-foreground transition-colors"
                       >
-                        {n.title} <span className="text-foreground/40">↗</span>
+                        {n.title} <span className="text-muted-foreground">↗</span>
                       </a>
                     ) : (
                       <Link to={n.path} className="story-link hover:text-foreground transition-colors">
@@ -67,11 +67,11 @@ const Footer = () => {
         <nav aria-labelledby="footer-newsroom">
           <h2
             id="footer-newsroom"
-            className="text-[11px] uppercase tracking-[0.22em] text-foreground/40 mb-5 font-medium"
+            className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground mb-5 font-semibold"
           >
             Newsroom
           </h2>
-          <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
+          <ul className="space-y-2.5 text-[13.5px] text-foreground/80">
             <li>
               <Link to="/news" className="story-link hover:text-foreground transition-colors inline-flex items-center gap-1.5">
                 <Newspaper className="h-3.5 w-3.5" />
@@ -82,10 +82,10 @@ const Footer = () => {
         </nav>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-foreground/45 tracking-wide">
+      <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-muted-foreground tracking-wide">
         <div className="space-y-1">
           <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</p>
-          <p className="text-foreground/55">
+          <p className="text-muted-foreground">
             Designed, built &amp; copyrighted by{" "}
             <span className="text-foreground/80 font-medium">Zahid Hasan Emon</span>
             {" "}— Founder &amp; Brand Architect, TrendFlux.

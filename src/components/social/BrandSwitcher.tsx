@@ -75,7 +75,7 @@ export const BrandSwitcher = () => {
           aria-label="Brand preview switcher"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-background/80 backdrop-blur px-3 py-2 text-[11px] uppercase tracking-[0.2em] text-gold hover:bg-gold/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-background/80 backdrop-blur px-3 py-2 text-[11px] uppercase tracking-[0.2em] text-gold dark:text-crimson-glow hover:bg-gold/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           <Eye className="w-3.5 h-3.5" />
           <span>{BRAND_CONTACTS[active].displayName}</span>
@@ -116,7 +116,7 @@ export const BrandSwitcher = () => {
                     <div className="mt-1 ml-2 border-l border-gold/20 pl-2 space-y-2">
                       {e.subgroups.map((sg) => (
                         <div key={sg.key} role="group" aria-label={sg.label}>
-                          <div className="px-2.5 pt-1 pb-1 text-[9px] uppercase tracking-[0.18em] text-foreground/45">
+                          <div className="px-2.5 pt-1 pb-1 text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
                             {sg.label}
                           </div>
                           <div className="space-y-0.5">
@@ -132,7 +132,7 @@ export const BrandSwitcher = () => {
                                   }
                                   setOpen(false);
                                 }}
-                                className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-[11px] text-foreground/75 hover:bg-foreground/5 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                                className="flex w-full items-center justify-between rounded-md px-2.5 py-1.5 text-left text-[11px] text-foreground/85 hover:bg-foreground/5 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                               >
                                 <span>{b.label}</span>
                                 {b.external && <ExternalLink className="w-3 h-3 opacity-60" />}

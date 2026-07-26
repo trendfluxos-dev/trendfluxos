@@ -143,7 +143,7 @@ export const SystemsHeBuiltSection = () => {
                   <s.icon className="h-5 w-5" aria-hidden />
                 </button>
                 <div className="min-w-0 flex-1 pt-1">
-                  <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-primary/80">{s.step} · {s.window}</p>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-primary">{s.step} · {s.window}</p>
                   <p className={cn("mt-0.5 font-display text-sm font-semibold", isActive ? "text-foreground" : "text-muted-foreground")}>{s.title}</p>
                 </div>
               </li>
@@ -183,7 +183,7 @@ export const SystemsHeBuiltSection = () => {
               <Link
                 to={`/case-studies/${current.caseSlug}`}
                 aria-label={`Read the case study behind ${current.title}`}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
               >
                 See the case study
                 <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
@@ -304,14 +304,14 @@ export const SystemsHeBuiltSection = () => {
                   {s.outcome.label}
                 </p>
               </div>
-              <TrendingUp className="h-4 w-4 text-primary/60" aria-hidden />
+              <TrendingUp className="h-4 w-4 text-primary" aria-hidden />
             </div>
 
             {s.caseSlug && (
               <Link
                 to={`/case-studies/${s.caseSlug}`}
                 aria-label={`Read the case study behind ${s.title}`}
-                className="mt-4 inline-flex items-center gap-1.5 self-start text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+                className="mt-4 inline-flex items-center gap-1.5 self-start text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
               >
                 See the case study
                 <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
@@ -338,7 +338,7 @@ export const SystemsHeBuiltSection = () => {
         Book Direct with Project Lead
         <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
       </Link>
-      <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary transition-colors hover:text-primary/80">
+      <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-medium text-primary transition-colors hover:text-primary">
         See how the OS composes <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
       </Link>
       <p className="text-xs text-muted-foreground">90-day engagement · Founder-led · You own the stack</p>

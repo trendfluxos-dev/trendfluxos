@@ -27,7 +27,7 @@ const CourseCard = ({ course }: { course: Course }) => {
       />
 
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[10px] uppercase tracking-[0.22em] text-primary/80 font-medium">
+        <span className="text-[10px] uppercase tracking-[0.22em] text-primary font-medium">
           {course.category}
         </span>
         <span className="text-[10px] text-foreground/45 whitespace-nowrap">

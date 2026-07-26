@@ -10,18 +10,23 @@ type Props = {
 };
 
 export default function SectionOrnament({ chapter, label, accent = "crimson" }: Props) {
-  const dot = accent === "amber" ? "bg-amber-400" : "bg-[#c11f1f]";
-  const text = accent === "amber" ? "text-amber-400/80" : "text-[#e25a5a]";
+  // Token-driven so the ornament stays readable in light, dark and any
+  // Theme Studio palette (no fixed hex / fixed-opacity text here).
+  const dot = accent === "amber" ? "bg-gold" : "bg-primary";
+  const text =
+    accent === "amber"
+      ? "text-amber-700 dark:text-amber-300"
+      : "text-primary dark:text-crimson-glow";
   return (
     <div className="relative mx-auto flex w-full max-w-6xl items-center gap-4 px-4 sm:px-6 py-10 sm:py-14">
       <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${dot} shadow-[0_0_12px_currentColor]`} />
-      <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-white/[0.12] via-white/[0.05] to-transparent" />
+      <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-foreground/15 via-foreground/[0.07] to-transparent" />
       <span className={`font-mono text-[10px] uppercase tracking-[0.35em] ${text} whitespace-nowrap`}>
-        <span className="opacity-60">{chapter}</span>
-        <span aria-hidden className="mx-2 opacity-40">·</span>
+        <span>{chapter}</span>
+        <span aria-hidden className="mx-2 opacity-60">·</span>
         {label}
       </span>
-      <span aria-hidden className="h-px flex-1 bg-gradient-to-l from-white/[0.12] via-white/[0.05] to-transparent" />
+      <span aria-hidden className="h-px flex-1 bg-gradient-to-l from-foreground/15 via-foreground/[0.07] to-transparent" />
       <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${dot} shadow-[0_0_12px_currentColor]`} />
     </div>
   );

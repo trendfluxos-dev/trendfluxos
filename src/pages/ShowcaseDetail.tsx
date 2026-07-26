@@ -83,7 +83,7 @@ const ShowcaseDetail = () => {
           </Link>
 
           <div className="mt-6 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.25em]">
-            <span className="text-primary/90 font-medium">{item.category}</span>
+            <span className="text-primary font-medium">{item.category}</span>
             <span className="text-foreground/40">·</span>
             <span className="text-foreground/60">{item.year}</span>
             {item.industry && (
@@ -226,7 +226,7 @@ const ShowcaseDetail = () => {
           <aside className="space-y-6">
             {item.services && item.services.length > 0 && (
               <div className="rounded-2xl border border-border/50 bg-card/40 p-5">
-                <h3 className="text-[10px] uppercase tracking-[0.25em] text-primary/80 font-medium">
+                <h3 className="text-[10px] uppercase tracking-[0.25em] text-primary font-medium">
                   Services
                 </h3>
                 <ul className="mt-3 flex flex-wrap gap-1.5">
@@ -244,7 +244,7 @@ const ShowcaseDetail = () => {
 
             {item.tech && item.tech.length > 0 && (
               <div className="rounded-2xl border border-border/50 bg-card/40 p-5">
-                <h3 className="text-[10px] uppercase tracking-[0.25em] text-primary/80 font-medium">
+                <h3 className="text-[10px] uppercase tracking-[0.25em] text-primary font-medium">
                   Stack
                 </h3>
                 <ul className="mt-3 flex flex-wrap gap-1.5">
@@ -262,7 +262,7 @@ const ShowcaseDetail = () => {
 
             {item.tags && item.tags.length > 0 && (
               <div className="rounded-2xl border border-border/50 bg-card/40 p-5">
-                <h3 className="text-[10px] uppercase tracking-[0.25em] text-primary/80 font-medium">
+                <h3 className="text-[10px] uppercase tracking-[0.25em] text-primary font-medium">
                   Tags
                 </h3>
                 <ul className="mt-3 flex flex-wrap gap-1.5">
@@ -293,7 +293,7 @@ const ShowcaseDetail = () => {
                   to={`/showcase/${r.id}`}
                   className="group rounded-2xl border border-border/50 bg-card/40 p-5 transition-all hover:-translate-y-0.5 hover:border-primary/40"
                 >
-                  <p className="text-[10px] uppercase tracking-[0.22em] text-primary/80 font-medium">
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-primary font-medium">
                     {r.category}
                   </p>
                   <h3 className="mt-2 font-display text-base font-semibold leading-tight flex items-start gap-1.5">

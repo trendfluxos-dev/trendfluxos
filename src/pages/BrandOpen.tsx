@@ -56,7 +56,7 @@ const BrandOpen = () => {
           <h1 className="mt-6 font-display text-5xl md:text-6xl font-bold tracking-tight text-[#111111]">
             Studio <span className="text-primary">BrandToki</span>
           </h1>
-          <p className="mt-4 text-sm md:text-base uppercase tracking-[0.3em] text-primary/80">
+          <p className="mt-4 text-sm md:text-base uppercase tracking-[0.3em] text-primary">
             Helping Brands Tell Their Stories
           </p>
         </div>

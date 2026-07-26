@@ -304,7 +304,7 @@ export default function EcosystemNavigator() {
                   {/* Active-state left accent bar */}
                   <span aria-hidden="true" className="pointer-events-none absolute inset-y-4 left-0 w-[3px] rounded-full bg-primary opacity-0 transition-opacity duration-300 data-[on=true]:opacity-100" data-on={isActive} />
                   <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100 data-[on=true]:opacity-100" data-on={isActive} />
-                  <span id={eyebrowId} aria-label={`Route ${eyebrow} of ${ITEMS.length.toString().padStart(2, "0")}`} className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 transition-colors duration-300 group-hover:text-primary group-focus-within:text-primary data-[on=true]:text-primary" data-on={isActive}>
+                  <span id={eyebrowId} aria-label={`Route ${eyebrow} of ${ITEMS.length.toString().padStart(2, "0")}`} className="pointer-events-none absolute right-5 top-5 flex items-center gap-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground transition-colors duration-300 group-hover:text-primary group-focus-within:text-primary data-[on=true]:text-primary" data-on={isActive}>
                     {isActive && (
                       <span aria-hidden="true" className="relative inline-flex h-2 w-2">
                         <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-60 animate-ping motion-reduce:animate-none" />

@@ -110,7 +110,7 @@ const ChapterNav = ({ chapters, onPrint }: { chapters: ChapterMeta[]; onPrint: (
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
             ].join(" ")}
           >
-            <span className="tabular-nums text-[10px] opacity-60 mr-2">{String(i).padStart(2, "0")}</span>
+            <span className="tabular-nums text-[10px] text-muted-foreground mr-2">{String(i).padStart(2, "0")}</span>
             {c.title}
           </a>
         ))}
@@ -351,7 +351,7 @@ const Founder = () => {
               { k: "Signature Result", v: "4.85 Lakh+ views · 82% organic reach — PNC digital campaign" },
             ].map((row) => (
               <div key={row.k}>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary/80">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary">
                   {row.k}
                 </p>
                 <p className="mt-2 text-[13px] leading-relaxed text-foreground/85">{row.v}</p>
@@ -376,7 +376,7 @@ const Founder = () => {
                   <p className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl">
                     {s.n}
                   </p>
-                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/90">
+                  <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
                     {s.k}
                   </p>
                   <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted-foreground">{s.d}</p>
@@ -652,7 +652,7 @@ const Founder = () => {
                     </p>
                     <ArrowUpRight className="h-4 w-4 text-muted-foreground transition group-hover:text-primary" aria-hidden />
                   </div>
-                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/90">
+                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
                     {h.unit}
                   </p>
                   <div className="mt-5 border-t border-border/60 pt-4">

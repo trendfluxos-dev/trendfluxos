@@ -163,7 +163,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
                   {...props}
                   className="p-4 border border-scrim-foreground/5 bg-noir/40 hover:border-primary/30 transition-colors rounded-lg group focus:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/70 focus-visible:ring-offset-2 focus-visible:ring-offset-noir"
                 >
-                  <span className="font-mono text-[9px] text-crimson-mist/40 block mb-2">
+                  <span className="font-mono text-[9px] text-crimson-mist/80 block mb-2">
                     {b.category}
                     {b.external && <span className="ml-1 text-crimson-glow/70">↗</span>}
                   </span>
@@ -193,7 +193,7 @@ export default function ArchitecturalHero({ onOpenQuote }: { onOpenQuote: () => 
         <div className="mt-16 lg:mt-20 pt-10 border-t border-scrim-foreground/5 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           {METRICS.map((m) => (
             <div key={m.label}>
-              <div className="font-mono text-[10px] text-crimson-mist/40 uppercase mb-2 tracking-widest">
+              <div className="font-mono text-[10px] text-crimson-mist/80 uppercase mb-2 tracking-widest">
                 {m.label}
               </div>
               <div className={`text-2xl font-bold tracking-tight ${m.accent ? "text-crimson-glow" : "text-scrim-foreground"}`}>

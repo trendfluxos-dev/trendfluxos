@@ -76,7 +76,7 @@ const FilterBar = ({ value, onChange, resultCount, onApply }: Props) => {
             </select>
           ))}
           <div className="relative col-span-2 md:col-span-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/70" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
             <input
               type="search"
               value={value.query}

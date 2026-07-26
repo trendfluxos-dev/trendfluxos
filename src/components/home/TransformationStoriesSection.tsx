@@ -61,14 +61,14 @@ export const TransformationStoriesSection = () => (
 
             <div className="flex items-center justify-center">
               <ArrowRight
-                className="h-5 w-5 rotate-90 text-primary/60 sm:rotate-0"
+                className="h-5 w-5 rotate-90 text-primary sm:rotate-0"
                 aria-hidden="true"
               />
               <span className="sr-only">transformed into</span>
             </div>
 
             <div className="rounded-xl border border-primary/20 bg-primary/[0.04] p-4">
-              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80">
+              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-primary">
                 After
               </p>
               <p className="text-sm font-semibold text-foreground">

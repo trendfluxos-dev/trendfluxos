@@ -58,7 +58,7 @@ const Ecosystem = () => {
           {LAYERS.map((l, i) => (
             <TfCard key={l.name}>
               <div className="flex items-center gap-3">
-                <span className="font-display text-3xl font-semibold text-primary/30">
+                <span className="font-display text-3xl font-semibold text-primary">
                   0{i + 1}
                 </span>
                 <h3 className="font-display text-xl font-semibold text-foreground">

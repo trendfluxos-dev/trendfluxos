@@ -96,7 +96,7 @@ const ShowcaseGrid = ({ items, onBookCall }: Props) => {
                 <div className="relative z-10 flex flex-1 flex-col">
                   {/* Header row */}
                   <div className="flex items-center justify-between gap-3 mb-3">
-                    <span className="text-[10px] uppercase tracking-[0.25em] text-primary/80 font-medium">
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-primary font-medium">
                       {item.category}
                     </span>
                     <span className="text-[10px] text-foreground/45 whitespace-nowrap">
@@ -162,7 +162,7 @@ const ShowcaseGrid = ({ items, onBookCall }: Props) => {
                         e.stopPropagation();
                         navigate(`/showcase/${item.id}`);
                       }}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary/90 hover:text-primary transition-colors"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary hover:text-primary transition-colors"
                     >
                       <FileText className="h-3 w-3" />
                       Case study
