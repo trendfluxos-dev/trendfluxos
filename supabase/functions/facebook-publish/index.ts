@@ -235,12 +235,17 @@ function isServiceRoleJwt(token: string): boolean {
   }
 }
 
-/** Callable only by the scheduler (service-role bearer) or a signed-in admin. */
+/** Callable only by the scheduler (shared cron secret) or a signed-in admin. */
 async function authorize(req: Request): Promise<boolean> {
+  const cronSecret = Deno.env.get("FACEBOOK_CRON_SECRET");
+  const presented = req.headers.get("X-Cron-Secret");
+  if (cronSecret && presented && presented === cronSecret) return true;
+
   const header = req.headers.get("Authorization") ?? "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
   if (!token) return false;
   if (token === Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")) return true;
+
   if (isServiceRoleJwt(token)) {
     // Claims alone are forgeable, so prove the signature: PostgREST rejects a
     // token it can't verify, and only a real service_role key reads this table
