@@ -111,17 +111,18 @@ export default function ThemeStudio() {
         onClick={() => setOpen(true)}
         aria-label="Open Theme Studio (Alt+Shift+T)"
         title="Theme Studio · Alt+Shift+T"
-        className="fixed bottom-24 left-6 z-40 hidden h-11 items-center gap-2 rounded-full border border-border/60 bg-card/85 px-4 text-[12px] font-semibold text-foreground/80 shadow-elegant backdrop-blur transition-colors hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:inline-flex"
+        className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 z-40 inline-flex h-11 items-center gap-2 rounded-full border border-border/60 bg-card/85 px-3.5 text-[12px] font-semibold text-foreground/80 shadow-elegant backdrop-blur transition-colors hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:bottom-24 md:left-6 md:px-4"
       >
         <Palette className="h-4 w-4 text-primary" />
-        Theme
+        <span className="hidden sm:inline">Theme</span>
       </button>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="right"
-          className="flex w-full flex-col gap-0 overflow-y-auto p-0 sm:max-w-md"
+          className="flex w-full max-w-full flex-col gap-0 overflow-y-auto overscroll-contain p-0 sm:max-w-md"
         >
+
           <SheetHeader className="border-b border-border/60 px-6 py-5 text-left">
             <SheetTitle className="flex items-center gap-2 font-display text-lg">
               <Sparkles className="h-4 w-4 text-primary" /> Theme Studio
@@ -153,12 +154,28 @@ export default function ThemeStudio() {
             </div>
 
             <Tabs defaultValue="presets">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="presets">Presets</TabsTrigger>
-                <TabsTrigger value="color">Color</TabsTrigger>
-                <TabsTrigger value="type">Type</TabsTrigger>
-                <TabsTrigger value="export">Export</TabsTrigger>
+              <TabsList className="grid h-auto w-full grid-cols-3 gap-1 sm:grid-cols-5">
+                <TabsTrigger className="px-2 text-[11px] sm:text-xs" value="presets">
+                  Presets
+                </TabsTrigger>
+                <TabsTrigger className="px-2 text-[11px] sm:text-xs" value="color">
+                  Color
+                </TabsTrigger>
+                <TabsTrigger className="px-2 text-[11px] sm:text-xs" value="saved">
+                  Saved
+                </TabsTrigger>
+                <TabsTrigger className="px-2 text-[11px] sm:text-xs" value="type">
+                  Type
+                </TabsTrigger>
+                <TabsTrigger className="px-2 text-[11px] sm:text-xs" value="export">
+                  Export
+                </TabsTrigger>
               </TabsList>
+
+              <TabsContent value="saved" className="mt-5">
+                <SavedPalettes config={config} onApply={commit} />
+              </TabsContent>
+
 
               <TabsContent value="presets" className="mt-5 space-y-2">
                 {THEME_PRESETS.map((preset) => {
@@ -210,7 +227,9 @@ export default function ThemeStudio() {
                   mode={config.mode}
                   activePrimary={config.primary}
                   onApply={(primary) => update({ primary })}
+                  onSave={saveSuggestion}
                 />
+
 
                 <section>
                   <SectionLabel>Brand color</SectionLabel>
