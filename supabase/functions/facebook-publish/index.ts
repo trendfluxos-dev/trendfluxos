@@ -89,27 +89,25 @@ async function checkToken(): Promise<Stage[]> {
     return stages;
   }
 
-  // Confirm the pages_manage_posts permission is actually granted.
+  // Page feed access proves the token can address the publishing endpoint.
+  // (`tasks` is only readable with a user token, so it can't be checked here;
+  // the definitive publish check is an actual POST.)
   try {
     const url =
-      `https://graph.facebook.com/${GRAPH_VERSION}/${PAGE_ID}?fields=tasks&access_token=${encodeURIComponent(PAGE_TOKEN)}`;
+      `https://graph.facebook.com/${GRAPH_VERSION}/${PAGE_ID}/feed?limit=1&fields=id&access_token=${encodeURIComponent(PAGE_TOKEN)}`;
     const res = await fetch(url);
     const body = await res.json().catch(() => ({}));
-    const tasks: string[] = body?.tasks ?? [];
-    if (res.ok && tasks.includes("CREATE_CONTENT")) {
-      stages.push({ stage: "graph:publish permission", status: "PASS", detail: tasks.join(", ") });
-    } else {
-      stages.push({
-        stage: "graph:publish permission",
-        status: "FAIL",
-        detail: res.ok
-          ? `token lacks CREATE_CONTENT (tasks: ${tasks.join(", ") || "none"}) — grant pages_manage_posts`
-          : `[${res.status}] ${JSON.stringify(body?.error ?? body)}`,
-      });
-    }
+    stages.push({
+      stage: "graph:page feed endpoint",
+      status: res.ok ? "PASS" : "FAIL",
+      detail: res.ok
+        ? `/${PAGE_ID}/feed reachable (${(body?.data ?? []).length} recent post(s) visible)`
+        : `[${res.status}] ${JSON.stringify(body?.error ?? body)}`,
+    });
   } catch (e) {
-    stages.push({ stage: "graph:publish permission", status: "FAIL", detail: String(e) });
+    stages.push({ stage: "graph:page feed endpoint", status: "FAIL", detail: String(e) });
   }
+
 
   return stages;
 }
