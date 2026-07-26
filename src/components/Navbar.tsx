@@ -315,6 +315,16 @@ const Navbar = () => {
                     );
                   })}
 
+                  <Link
+                    to="/news"
+                    onClick={() => setOpen(false)}
+                    aria-current={pathname === "/news" ? "page" : undefined}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-foreground hover:bg-muted hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-muted aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40"
+                  >
+                    <Newspaper className="h-4 w-4 text-primary" />
+                    Newsroom — Nagarik Barta 24
+                  </Link>
+
                   <div className="flex flex-col gap-0.5 pt-3 border-t border-border">
                     {BRAND_CONTACTS.trendflux.whatsapp && (
                       <a

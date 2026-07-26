@@ -10,7 +10,7 @@ const Footer = () => {
   return (
     <footer className="border-t border-border/60 px-6 lg:px-10 pt-16 sm:pt-20 pb-10 mt-16 relative">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/15 to-transparent" />
-      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10 md:gap-12">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-x-6 gap-y-10 md:gap-10">
         <div className="col-span-2 md:col-span-1">
           <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-lg tracking-tight">
             <span className="w-2 h-2 rounded-full bg-primary" />
@@ -63,6 +63,23 @@ const Footer = () => {
             </nav>
           );
         })}
+
+        <nav aria-labelledby="footer-newsroom">
+          <h2
+            id="footer-newsroom"
+            className="text-[11px] uppercase tracking-[0.22em] text-foreground/40 mb-5 font-medium"
+          >
+            Newsroom
+          </h2>
+          <ul className="space-y-2.5 text-[13.5px] text-foreground/65">
+            <li>
+              <Link to="/news" className="story-link hover:text-foreground transition-colors inline-flex items-center gap-1.5">
+                <Newspaper className="h-3.5 w-3.5" />
+                Nagarik Barta 24
+              </Link>
+            </li>
+          </ul>
+        </nav>
       </div>
 
       <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-foreground/45 tracking-wide">
