@@ -58,6 +58,17 @@ Deno.serve(async (req: Request) => {
     }
     const base = endpoint.replace(/\/+$/, "");
 
+    const upstreamHeaders = vpsHeaders();
+    if (!upstreamHeaders) {
+      return j(
+        {
+          error: "xtts_token_not_configured",
+          hint: "Add the XTTS_API_TOKEN secret. The VPS rejects unauthenticated requests, so we refuse to call it without a token.",
+        },
+        503,
+      );
+    }
+
     const url = new URL(req.url);
     const action = url.searchParams.get("action") ?? "";
 
@@ -71,7 +82,7 @@ Deno.serve(async (req: Request) => {
 
       const res = await fetch(`${base}/upload-voice`, {
         method: "POST",
-        headers: vpsHeaders(),
+        headers: upstreamHeaders,
         body: upstream,
       });
       const text = await res.text();
@@ -92,7 +103,7 @@ Deno.serve(async (req: Request) => {
       upstream.append("text", text);
       const res = await fetch(`${base}/generate`, {
         method: "POST",
-        headers: vpsHeaders(),
+        headers: upstreamHeaders,
         body: upstream,
       });
       if (!res.ok) {
