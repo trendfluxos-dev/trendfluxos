@@ -11,6 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import AiPaletteSuggester from "@/components/theme/AiPaletteSuggester";
+import SavedPalettes from "@/components/theme/SavedPalettes";
 import { cn } from "@/lib/utils";
 
 import {
@@ -27,9 +28,12 @@ import {
   hslCss,
   onOpenThemeStudio,
   persistTheme,
+  savePalette,
+  type Hsl,
   type ThemeConfig,
   type ThemeMode,
 } from "@/lib/themeStudio";
+
 
 const RADIUS_STEPS = [
   { label: "None", value: 0 },
