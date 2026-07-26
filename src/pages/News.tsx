@@ -50,6 +50,8 @@ const News = () => {
   });
 
   const items = data?.items ?? [];
+  const fetchedAt = data?.fetchedAt;
+  const stale = data?.stale;
 
   useJsonLd(
     items.length
