@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Newspaper } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import SocialIcons from "@/components/social/SocialIcons";
 import { LAYER_META, nodesByLayer, type Layer } from "@/config/siteLayers";

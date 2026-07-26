@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { Menu, LogIn, LayoutDashboard, Search, MessageCircle } from "lucide-react";
+import { Menu, LogIn, LayoutDashboard, Search, MessageCircle, Newspaper } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import { BRAND_CONTACTS } from "@/config/socialConfig";
 import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
