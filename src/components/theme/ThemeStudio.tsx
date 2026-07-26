@@ -482,7 +482,7 @@ export default function ThemeStudio() {
               </TabsContent>
             </Tabs>
 
-            {/* Live preview — reads the same tokens every page uses. */}
+            {/* Component preview — reads the same tokens every page uses. */}
             <section className="mt-7 rounded-2xl border border-border/60 bg-card/40 p-4">
               <SectionLabel>Live preview</SectionLabel>
               <h3 className="font-display text-lg font-semibold">Growth Execution OS</h3>
@@ -501,6 +501,10 @@ export default function ThemeStudio() {
                 </span>
               </div>
             </section>
+
+            {/* Full-page preview on a chosen route, before saving. */}
+            <RoutePreview config={config} />
+
 
             <button
               type="button"
