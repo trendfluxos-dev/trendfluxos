@@ -133,11 +133,11 @@ const News = () => {
                     <RefreshCw className="h-3.5 w-3.5" aria-hidden /> Refresh
                   </button>
                 </div>
-                {data?.fetchedAt && (
+                {fetchedAt && (
                   <p className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
                     <Clock className="h-3.5 w-3.5" aria-hidden />
-                    Last updated {new Date(data.fetchedAt).toLocaleTimeString("en-GB")}
-                    {data.stale ? " · showing cached copy" : ""}
+                    Last updated {new Date(fetchedAt).toLocaleTimeString("en-GB")}
+                    {stale ? " · showing cached copy" : ""}
                   </p>
                 )}
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
