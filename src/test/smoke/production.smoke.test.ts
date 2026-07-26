@@ -89,8 +89,9 @@ describe(`production smoke — ${TARGET}`, () => {
     const r = await fetch(new URL("/sitemap.xml", TARGET));
     expect(r.status).toBe(200);
     const xml = await r.text();
-    expect(xml).toMatch(/<urlset[\s\S]+<\/urlset>/);
-    expect(xml).toContain("<loc>");
+    // Root sitemap may be a <urlset> or a <sitemapindex> of child sitemaps.
+    expect(xml).toMatch(/<(urlset|sitemapindex)[\s\S]+<\/(urlset|sitemapindex)>/);
+    expect(xml).toMatch(/<loc>|<sitemap>/);
   }, TIMEOUT_MS);
 
   it("publishes robots.txt without a blanket disallow", async () => {
