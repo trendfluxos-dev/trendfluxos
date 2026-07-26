@@ -104,11 +104,11 @@ const News = () => {
                 )}
                 Refresh
               </button>
-              {data?.fetchedAt && (
+              {fetchedAt && (
                 <p className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <Clock className="h-3.5 w-3.5" aria-hidden />
-                  Updated {new Date(data.fetchedAt).toLocaleTimeString("en-GB")}
-                  {data.stale ? " · showing cached copy" : ""}
+                  Updated {new Date(fetchedAt).toLocaleTimeString("en-GB")}
+                  {stale ? " · showing cached copy" : ""}
                 </p>
               )}
             </div>
