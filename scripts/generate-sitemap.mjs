@@ -120,7 +120,6 @@ ${paths
   .map(
     (p) => `  <url>
     <loc>${SITE_URL}${p}</loc>
-    <lastmod>${today}</lastmod>
     <changefreq>${changefreqFor(p)}</changefreq>
     <priority>${priorityFor(p)}</priority>
   </url>`,
@@ -160,7 +159,6 @@ ${children
   .map(
     ({ file }) => `  <sitemap>
     <loc>${SITE_URL}/${file}</loc>
-    <lastmod>${today}</lastmod>
   </sitemap>`,
   )
   .join("\n")}
