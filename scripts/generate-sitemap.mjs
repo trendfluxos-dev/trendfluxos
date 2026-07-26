@@ -95,7 +95,6 @@ const noindexRoutes = [
   "/admin",
 ];
 
-const today = new Date().toISOString().split("T")[0];
 
 function priorityFor(p) {
   if (p === "/") return "1.0";
@@ -120,7 +119,6 @@ ${paths
   .map(
     (p) => `  <url>
     <loc>${SITE_URL}${p}</loc>
-    <lastmod>${today}</lastmod>
     <changefreq>${changefreqFor(p)}</changefreq>
     <priority>${priorityFor(p)}</priority>
   </url>`,
@@ -160,7 +158,6 @@ ${children
   .map(
     ({ file }) => `  <sitemap>
     <loc>${SITE_URL}/${file}</loc>
-    <lastmod>${today}</lastmod>
   </sitemap>`,
   )
   .join("\n")}

@@ -46,7 +46,7 @@ const Index = () => {
   useSeo({
     title: "Trendflux Digital — Operator portfolio of Zahid Hasan Emon",
     description:
-      "Trendflux Digital is the operator portfolio of Zahid Hasan Emon — eight brands across EdTech (Kormoshikkha), Creative (BrandToki), LuxeVeil, TrendFlux Space and more, with The Stand manifesto and Algorithm Architecture case studies.",
+      "Operator portfolio of Zahid Hasan Emon — eight brands across EdTech, creative and growth, with The Stand manifesto and Algorithm Architecture case studies.",
     canonical: "/",
     type: "website",
     imageAlt: "Trendflux Digital — operator portfolio of Zahid Hasan Emon",

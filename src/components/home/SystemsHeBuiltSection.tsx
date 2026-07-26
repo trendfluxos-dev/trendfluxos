@@ -85,6 +85,7 @@ export const SystemsHeBuiltSection = () => {
                 <li key={s.title} className="flex flex-col items-center text-center">
                   <button
                     role="tab"
+                    aria-label={`View stage ${s.step}: ${s.title}`}
                     aria-selected={isActive}
                     onMouseEnter={() => select(i)}
                     onFocus={() => select(i)}
@@ -131,6 +132,7 @@ export const SystemsHeBuiltSection = () => {
               <li key={s.title} className="relative flex items-start gap-4 py-3">
                 <button
                   role="tab"
+                  aria-label={`View stage ${s.step}: ${s.title}`}
                   aria-selected={isActive}
                   onClick={() => select(i)}
                   className={cn(
