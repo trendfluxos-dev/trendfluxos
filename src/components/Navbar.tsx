@@ -272,7 +272,7 @@ const Navbar = () => {
                     if (items.length === 0) return null;
                     return (
                       <div key={layer} className="flex flex-col gap-0.5">
-                        <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-primary dark:text-crimson-glow/75 font-medium mb-1">
+                        <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-primary font-medium mb-1">
                           {meta.label}
                         </p>
                         {items.map((node) => {
@@ -286,20 +286,21 @@ const Navbar = () => {
                             {...linkProps}
                             aria-current={pathname === node.path ? "page" : undefined}
                             onClick={() => setOpen(false)}
-                            className="group/item relative block rounded-xl px-3 py-2.5 min-h-10 hover:bg-crimson-blush dark:hover:bg-noir-rim/60 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/60 aria-[current=page]:bg-crimson-blush dark:aria-[current=page]:bg-noir-rim/70 aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40 dark:aria-[current=page]:ring-crimson-glow/40 aria-[current=page]:before:absolute aria-[current=page]:before:left-0 aria-[current=page]:before:top-1/2 aria-[current=page]:before:-translate-y-1/2 aria-[current=page]:before:h-5 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r aria-[current=page]:before:bg-primary dark:aria-[current=page]:before:bg-crimson-glow"
+                            className="group/item relative block rounded-xl px-3 py-2.5 min-h-10 hover:bg-accent hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40 aria-[current=page]:before:absolute aria-[current=page]:before:left-0 aria-[current=page]:before:top-1/2 aria-[current=page]:before:-translate-y-1/2 aria-[current=page]:before:h-5 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r aria-[current=page]:before:bg-primary"
                           >
-                            <span className="block text-[14px] text-noir-rim dark:text-crimson-mist/85 group-hover/item:text-noir dark:group-hover/item:text-scrim-foreground group-aria-[current=page]/item:text-noir dark:group-aria-[current=page]/item:text-scrim-foreground transition-colors">
+                            <span className="block text-[14px] text-foreground transition-colors">
                               {node.title}
                               {node.external && (
-                                <span className="ml-1.5 text-[10px] uppercase tracking-[0.18em] text-primary dark:text-crimson-glow/80">↗</span>
+                                <span className="ml-1.5 text-[10px] uppercase tracking-[0.18em] text-primary">↗</span>
                               )}
                             </span>
                             {node.blurb && (
-                              <span className="block text-[11.5px] text-noir-rim/65 dark:text-crimson-mist/50 mt-0.5">
+                              <span className="block text-[11.5px] text-muted-foreground mt-0.5">
                                 {node.blurb}
                               </span>
                             )}
                           </LinkTag>
+
                           );
                         })}
                       </div>
