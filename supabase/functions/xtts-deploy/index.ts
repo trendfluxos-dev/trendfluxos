@@ -24,9 +24,11 @@ const j = (b: unknown, status = 200) =>
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
-function vpsHeaders(): Record<string, string> {
+/** The VPS requires a bearer token on every protected endpoint. If the secret
+ *  is missing we must NOT call upstream unauthenticated — fail closed. */
+function vpsHeaders(): Record<string, string> | null {
   const t = Deno.env.get("XTTS_API_TOKEN");
-  return t ? { Authorization: `Bearer ${t}` } : {};
+  return t ? { Authorization: `Bearer ${t}` } : null;
 }
 
 async function timed<T>(fn: () => Promise<T>): Promise<{ ok: boolean; ms: number; value?: T; error?: string; status?: number }> {
