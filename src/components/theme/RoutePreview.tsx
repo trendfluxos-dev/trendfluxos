@@ -16,6 +16,7 @@ export const PREVIEW_ROUTES = [
   { label: "Enterprise", path: "/enterprise" },
   { label: "Dashboard", path: "/dashboard" },
   { label: "Contact", path: "/contact" },
+  { label: "Newsroom", path: "/news" },
 ] as const;
 
 const DEVICES = [
