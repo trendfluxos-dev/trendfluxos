@@ -236,12 +236,14 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[92%] max-w-sm border-l border-primary/30 dark:border-crimson-rim/55 bg-scrim-foreground/95 dark:bg-noir/95 backdrop-blur-2xl text-noir-rim dark:text-crimson-mist shadow-[0_0_60px_-10px_rgba(120,20,20,0.25)] dark:shadow-[0_0_60px_-10px_rgba(200,60,60,0.4)] flex flex-col p-0 overflow-hidden"
+                /* Token-driven surface: stays legible in light, dark and any
+                   Theme Studio palette (no fixed noir/scrim colours here). */
+                className="w-[92%] max-w-sm border-l border-border bg-background text-foreground backdrop-blur-2xl shadow-elegant flex flex-col p-0 overflow-hidden"
               >
-                <SheetHeader className="px-5 pt-5 pb-3 border-b border-primary/15 dark:border-crimson-rim/35 shrink-0">
+                <SheetHeader className="px-5 pt-5 pb-3 border-b border-border shrink-0">
                   <SheetTitle className="text-left font-display tracking-[0.22em] uppercase text-[12.5px]">
-                    <span className="text-noir dark:text-crimson-mist font-semibold">{BRAND.nameLead}</span>
-                    <span className="text-primary dark:text-crimson-glow/80 font-medium"> {BRAND.nameTrail}</span>
+                    <span className="text-foreground font-semibold">{BRAND.nameLead}</span>
+                    <span className="text-primary font-medium"> {BRAND.nameTrail}</span>
                   </SheetTitle>
                   <button
                     type="button"
@@ -249,7 +251,7 @@ const Navbar = () => {
                       setOpen(false);
                       openCommandPalette();
                     }}
-                    className="mt-3 flex w-full items-center gap-2 rounded-xl border border-primary/30 dark:border-crimson-rim/55 bg-scrim-foreground/70 dark:bg-noir/60 px-3 py-2.5 text-left text-[13px] text-crimson-rim/80 dark:text-crimson-mist/70 hover:border-primary dark:hover:border-crimson-glow transition-colors"
+                    className="mt-3 flex w-full items-center gap-2 rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-left text-[13px] text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
                   >
                     <Search className="h-4 w-4 shrink-0" />
                     <span>Search pages…</span>
@@ -260,7 +262,7 @@ const Navbar = () => {
                     to="/"
                     onClick={() => setOpen(false)}
                     aria-current={pathname === "/" ? "page" : undefined}
-                    className="rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-noir-rim dark:text-crimson-mist/90 hover:bg-crimson-blush dark:hover:bg-noir-rim/60 transition-colors aria-[current=page]:bg-crimson-blush dark:aria-[current=page]:bg-noir-rim/70"
+                    className="rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground"
                   >
                     Home
                   </Link>
