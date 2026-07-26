@@ -9,8 +9,9 @@ User=voice
 Group=voice
 WorkingDirectory=/opt/voice-clone
 Environment=PORT=8000
-# Optional: bearer token enforced by reverse proxy / app middleware
-# Environment=XTTS_API_TOKEN=change-me
+# REQUIRED: bearer token enforced by app.py AND the Caddy reverse proxy.
+# Without it every protected endpoint returns 503 (fail closed).
+Environment=XTTS_API_TOKEN=change-me
 ExecStart=/opt/voice-clone/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8000 --workers 1
 Restart=always
 RestartSec=5

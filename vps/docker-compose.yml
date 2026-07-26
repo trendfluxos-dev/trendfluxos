@@ -12,6 +12,8 @@ services:
       - xtts-cache:/root/.local/share/tts
     environment:
       - COQUI_TOS_AGREED=1
+      # REQUIRED: bearer token enforced by app.py (fail closed without it).
+      - XTTS_API_TOKEN=${XTTS_API_TOKEN:?set XTTS_API_TOKEN in .env}
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
       interval: 30s

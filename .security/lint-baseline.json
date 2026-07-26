@@ -14,7 +14,7 @@
     {
       "name": "0029_authenticated_security_definer_function_executable",
       "level": "warn",
-      "reason": "Internal helpers exposed to authenticated by design: admin_list_live_classes, get_audit_retention_days, get_live_class_meeting_url, live_class_rsvp_count, preview_purge_access_audit_logs, purge_access_audit_logs, set_audit_retention_days, student_cancel_booking, publish_recording_public, unpublish_recording_public, enqueue_email, read_email_batch, delete_email, move_to_dlq. Each enforces its own auth.uid() / has_role / ownership checks server-side; SECURITY DEFINER is required so they can write audit rows and access admin-gated tables."
+      "reason": "Internal helpers exposed to authenticated by design: admin_list_live_classes, get_audit_retention_days, get_live_class_meeting_url, get_class_material_access, get_course_module_content_url, has_confirmed_enrollment (required by RLS on class_materials), live_class_rsvp_count, preview_purge_access_audit_logs, purge_access_audit_logs, set_audit_retention_days, publish_recording_public, unpublish_recording_public, enqueue_email, read_email_batch, delete_email, move_to_dlq. Each enforces its own auth.uid() / has_role / ownership checks server-side; SECURITY DEFINER is required so they can write audit rows and access admin-gated tables. EXECUTE on log_access_audit and student_cancel_booking has been revoked from PUBLIC/anon/authenticated (internal-only)."
     },
     {
       "name": "0028_anon_security_definer_function_executable",
@@ -24,7 +24,7 @@
     {
       "name": "0010_security_definer_view",
       "level": "error",
-      "reason": "public.live_classes_public is intentionally an owner-defined view (security_invoker=false) that projects a safe column subset of public.live_classes — it omits meeting_url and share_token. The base table's RLS is now owner/admin-only; the view is the sole public read path for class metadata."
+      "reason": "public.live_classes_public is intentionally an owner-defined view (security_invoker=false) that projects a safe column subset of public.live_classes \u2014 it omits meeting_url and share_token. The base table's RLS is now owner/admin-only; the view is the sole public read path for class metadata."
     },
     {
       "name": "0010_security_definer_view",

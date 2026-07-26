@@ -24,9 +24,11 @@ const j = (b: unknown, status = 200) =>
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
-function vpsHeaders(): Record<string, string> {
+/** The VPS requires a bearer token on every protected endpoint. If the secret
+ *  is missing we must NOT call upstream unauthenticated — fail closed. */
+function vpsHeaders(): Record<string, string> | null {
   const t = Deno.env.get("XTTS_API_TOKEN");
-  return t ? { Authorization: `Bearer ${t}` } : {};
+  return t ? { Authorization: `Bearer ${t}` } : null;
 }
 
 async function timed<T>(fn: () => Promise<T>): Promise<{ ok: boolean; ms: number; value?: T; error?: string; status?: number }> {
@@ -68,16 +70,28 @@ Deno.serve(async (req: Request) => {
       }, 503);
     }
     const base = endpoint.replace(/\/+$/, "");
+
+    const upstreamHeaders = vpsHeaders();
+    if (!upstreamHeaders) {
+      return j(
+        {
+          error: "xtts_token_not_configured",
+          hint: "Add the XTTS_API_TOKEN secret. The VPS rejects unauthenticated requests, so we refuse to call it without a token.",
+        },
+        503,
+      );
+    }
+
     const url = new URL(req.url);
     const action = url.searchParams.get("action") ?? "status";
 
     if (action === "status") {
       const health = await timed(async () => {
-        const r = await fetch(`${base}/health`, { headers: vpsHeaders() });
+        const r = await fetch(`${base}/health`, { headers: upstreamHeaders });
         return { status: r.status, body: await r.text().then((t) => t.slice(0, 300)) };
       });
       const docs = await timed(async () => {
-        const r = await fetch(`${base}/docs`, { headers: vpsHeaders() });
+        const r = await fetch(`${base}/docs`, { headers: upstreamHeaders });
         return { status: r.status, ok: r.ok };
       });
       const live = health.ok && (health.value?.status ?? 0) < 500 && docs.ok && (docs.value?.ok ?? false);
@@ -111,14 +125,14 @@ Deno.serve(async (req: Request) => {
 
     if (action === "verify") {
       const health = await timed(async () => {
-        const r = await fetch(`${base}/health`, { headers: vpsHeaders() });
+        const r = await fetch(`${base}/health`, { headers: upstreamHeaders });
         if (!r.ok) throw new Error(`health ${r.status}`);
         return r.status;
       });
       const gen = await timed(async () => {
         const fd = new FormData();
         fd.append("text", "টেস্ট। test.");
-        const r = await fetch(`${base}/generate`, { method: "POST", headers: vpsHeaders(), body: fd });
+        const r = await fetch(`${base}/generate`, { method: "POST", headers: upstreamHeaders, body: fd });
         const ct = r.headers.get("content-type") ?? "";
         if (!r.ok) {
           const body = (await r.text()).slice(0, 300);
