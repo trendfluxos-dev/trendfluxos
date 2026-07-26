@@ -346,7 +346,7 @@ Deno.serve(async (req) => {
       const feedRes = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/news-feed`);
       const feed = await feedRes.json().catch(() => ({ items: [] }));
       const items: Array<{ title?: string; link?: string; excerpt?: string; publishedAt?: string | null }> =
-        Array.isArray(feed?.items) ? feed.items.slice(0, 10) : [];
+        Array.isArray(feed?.items) ? feed.items.slice(0, 5) : [];
       const rows = items
         .filter((i) => i.link && i.title)
         .map((i) => ({
