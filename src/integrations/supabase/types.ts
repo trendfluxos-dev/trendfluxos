@@ -641,6 +641,63 @@ export type Database = {
         }
         Relationships: []
       }
+      facebook_posts: {
+        Row: {
+          attempts: number
+          created_at: string
+          created_by: string | null
+          fb_post_id: string | null
+          id: string
+          image_url: string | null
+          last_error: string | null
+          last_error_code: string | null
+          link_url: string | null
+          message: string
+          published_at: string | null
+          scheduled_at: string
+          source: string
+          source_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          created_by?: string | null
+          fb_post_id?: string | null
+          id?: string
+          image_url?: string | null
+          last_error?: string | null
+          last_error_code?: string | null
+          link_url?: string | null
+          message: string
+          published_at?: string | null
+          scheduled_at?: string
+          source?: string
+          source_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          created_by?: string | null
+          fb_post_id?: string | null
+          id?: string
+          image_url?: string | null
+          last_error?: string | null
+          last_error_code?: string | null
+          link_url?: string | null
+          message?: string
+          published_at?: string | null
+          scheduled_at?: string
+          source?: string
+          source_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       growth_leads: {
         Row: {
           company: string | null
