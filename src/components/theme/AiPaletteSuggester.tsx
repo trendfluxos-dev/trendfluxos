@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Loader2, Sparkles, ShieldCheck } from "lucide-react";
+import { BookmarkPlus, Loader2, Sparkles, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,7 @@ interface Props {
   mode: ThemeMode;
   activePrimary: Hsl;
   onApply: (primary: Hsl) => void;
+  onSave: (name: string, primary: Hsl) => void;
 }
 
 /**
