@@ -241,7 +241,21 @@ async function authorize(req: Request): Promise<boolean> {
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
   if (!token) return false;
   if (token === Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")) return true;
-  if (isServiceRoleJwt(token)) return true;
+  if (isServiceRoleJwt(token)) {
+    // Claims alone are forgeable, so prove the signature: PostgREST rejects a
+    // token it can't verify, and only a real service_role key reads this table
+    // without an RLS policy match.
+    const asService = createClient(Deno.env.get("SUPABASE_URL")!, token, {
+      auth: { persistSession: false },
+    });
+    const { error } = await asService
+      .from("facebook_posts")
+      .select("id", { count: "exact", head: true });
+    if (!error) return true;
+    console.error("facebook-publish: service_role token rejected:", error.message);
+    return false;
+  }
+
 
   const scoped = createClient(
     Deno.env.get("SUPABASE_URL")!,
