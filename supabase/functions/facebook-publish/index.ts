@@ -222,9 +222,29 @@ async function processDue(db: ReturnType<typeof admin>, onlyId?: string) {
   return results;
 }
 
+/** Callable only by the scheduler (service-role bearer) or a signed-in admin. */
+async function authorize(req: Request): Promise<boolean> {
+  const header = req.headers.get("Authorization") ?? "";
+  const token = header.startsWith("Bearer ") ? header.slice(7) : "";
+  if (!token) return false;
+  if (token === Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")) return true;
+
+  const scoped = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_ANON_KEY")!,
+    { global: { headers: { Authorization: header } } },
+  );
+  const { data: userRes } = await scoped.auth.getUser();
+  if (!userRes?.user) return false;
+  const { data: isAdmin } = await scoped.rpc("current_user_has_role", { _role: "admin" });
+  return isAdmin === true;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
+  if (!(await authorize(req))) return json({ error: "unauthorized" }, 401);
+
 
   let body: { mode?: string; id?: string } = {};
   try {
