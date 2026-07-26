@@ -41,20 +41,22 @@ export default function ClassByToken() {
     if (!token) return;
 
     const load = async () => {
-      const { data: rows, error } = await supabase.rpc("get_class_by_share_token", { _token: token });
+      const { data: payload, error } = await supabase.functions.invoke("class-by-token", {
+        body: { token },
+      });
       if (cancelled) return;
       if (error) {
         setError("এই লিঙ্কটি বৈধ নয়। শিক্ষকের কাছ থেকে নতুন লিঙ্ক নিন।");
         setLoading(false);
         return;
       }
-      const row = Array.isArray(rows) ? rows[0] : rows;
+      const row = (payload as { data?: TokenClass } | null)?.data;
       if (!row) {
         setError("ক্লাস পাওয়া যায়নি।");
         setLoading(false);
         return;
       }
-      setData(row as TokenClass);
+      setData(row);
       setLoading(false);
     };
 
@@ -69,13 +71,16 @@ export default function ClassByToken() {
     const channel = supabase
       .channel(`class:${data.id}`, { config: { broadcast: { self: false } } })
       .on("broadcast", { event: "live_changed" }, async () => {
-        const { data: rows } = await supabase.rpc("get_class_by_share_token", { _token: token });
-        const row = Array.isArray(rows) ? rows[0] : rows;
-        if (row) setData(row as TokenClass);
+        const { data: payload } = await supabase.functions.invoke("class-by-token", {
+          body: { token },
+        });
+        const row = (payload as { data?: TokenClass } | null)?.data;
+        if (row) setData(row);
       })
       .subscribe();
     return () => { void supabase.removeChannel(channel); };
   }, [data?.id, token]);
+
 
   if (loading) {
     return (
