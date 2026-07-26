@@ -1795,3 +1795,9 @@
   @media (min-width: 640px) { .rhythm-offset { margin-top: 0.75rem; } }
   @media (min-width: 1024px) { .rhythm-offset { margin-top: 1rem; } }
 }
+
+/* Dark-mode readability: brand crimson is too dim as small text on noir surfaces.
+   Route every primary-colored text to the lighter crimson-glow token in dark mode. */
+.dark .text-primary {
+  color: hsl(var(--crimson-glow));
+}

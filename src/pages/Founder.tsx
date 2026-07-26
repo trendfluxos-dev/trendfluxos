@@ -110,7 +110,7 @@ const ChapterNav = ({ chapters, onPrint }: { chapters: ChapterMeta[]; onPrint: (
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
             ].join(" ")}
           >
-            <span className="tabular-nums text-[10px] opacity-60 mr-2">{String(i).padStart(2, "0")}</span>
+            <span className="tabular-nums text-[10px] text-muted-foreground mr-2">{String(i).padStart(2, "0")}</span>
             {c.title}
           </a>
         ))}
