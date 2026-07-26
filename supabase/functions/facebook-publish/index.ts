@@ -14,8 +14,11 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
  */
 
 const GRAPH_VERSION = Deno.env.get("FACEBOOK_GRAPH_VERSION") ?? "v21.0";
-const PAGE_ID = Deno.env.get("FACEBOOK_PAGE_ID") ?? "";
-const PAGE_TOKEN = Deno.env.get("FACEBOOK_PAGE_ACCESS_TOKEN") ?? "";
+/** Secret values are frequently pasted with stray quotes/whitespace — strip them. */
+const clean = (v: string | undefined) => (v ?? "").trim().replace(/^["']+|["']+$/g, "");
+
+const PAGE_ID = clean(Deno.env.get("FACEBOOK_PAGE_ID"));
+const PAGE_TOKEN = clean(Deno.env.get("FACEBOOK_PAGE_ACCESS_TOKEN"));
 const MAX_ATTEMPTS = Number(Deno.env.get("FACEBOOK_MAX_ATTEMPTS") ?? "3");
 const BATCH = 10;
 
