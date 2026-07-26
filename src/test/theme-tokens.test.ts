@@ -18,16 +18,16 @@ function tokenValue(name: string): string {
 }
 
 const expected: Record<string, string> = {
-  "background":        "0 0% 100%",
-  "foreground":        "0 0% 7%",
+  "background":        "210 20% 98%",
+  "foreground":        "222 47% 11%",
   "card":              "0 0% 100%",
   "popover":           "0 0% 100%",
   "primary":           "0 72% 45%",
   "primary-foreground":"0 0% 100%",
   "primary-glow":      "0 74% 38%",
-  "muted-foreground":  "220 9% 38%",
-  "border":            "220 13% 91%",
-  "ring":              "0 72% 45%",
+  "muted-foreground":  "215 16% 47%",
+  "border":            "214 32% 91%",
+  "ring":              "222 47% 11%",
   "accent-orange":     "21 90% 48%",
   "accent-green":      "142 71% 38%",
 };
