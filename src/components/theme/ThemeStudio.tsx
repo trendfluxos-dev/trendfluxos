@@ -50,10 +50,16 @@ const RADIUS_STEPS = [
 export default function ThemeStudio() {
   const [open, setOpen] = useState(false);
   const [config, setConfig] = useState<ThemeConfig>(DEFAULT_THEME);
+  /** Last theme actually persisted for this browser — the discard target. */
+  const [baseline, setBaseline] = useState<ThemeConfig>(DEFAULT_THEME);
+  /** Live preview: apply to the page instantly, persist only on Save. */
+  const [previewMode, setPreviewMode] = useState(true);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    setConfig(currentTheme());
+    const stored = currentTheme();
+    setConfig(stored);
+    setBaseline(stored);
   }, []);
 
   useEffect(() => onOpenThemeStudio(() => setOpen(true)), []);
@@ -69,15 +75,64 @@ export default function ThemeStudio() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const commit = useCallback((next: ThemeConfig) => {
-    setConfig(next);
-    applyTheme(next);
-    persistTheme(next);
-  }, []);
+  /** Applies a theme to the page; persists only when preview mode is off. */
+  const commit = useCallback(
+    (next: ThemeConfig) => {
+      setConfig(next);
+      applyTheme(next);
+      if (!previewMode) {
+        persistTheme(next);
+        setBaseline(next);
+      }
+    },
+    [previewMode],
+  );
 
   const update = useCallback(
     (patch: Partial<ThemeConfig>) => commit({ ...config, ...patch }),
     [commit, config],
+  );
+
+  const dirty = useMemo(
+    () => JSON.stringify(config) !== JSON.stringify(baseline),
+    [config, baseline],
+  );
+
+  const savePreview = useCallback(() => {
+    persistTheme(config);
+    applyTheme(config);
+    setBaseline(config);
+    toast.success("Theme saved for this browser");
+  }, [config]);
+
+  const discardPreview = useCallback(() => {
+    setConfig(baseline);
+    applyTheme(baseline);
+  }, [baseline]);
+
+  /** Leaving preview mode with pending edits keeps them and persists once. */
+  const togglePreviewMode = useCallback(
+    (next: boolean) => {
+      setPreviewMode(next);
+      if (!next && dirty) {
+        persistTheme(config);
+        setBaseline(config);
+        toast.success("Live edits saved — auto-save is now on");
+      }
+    },
+    [config, dirty],
+  );
+
+  // Closing the sheet with unsaved preview edits rolls the page back.
+  const handleOpenChange = useCallback(
+    (next: boolean) => {
+      setOpen(next);
+      if (!next && previewMode && dirty) {
+        discardPreview();
+        toast("Preview discarded", { description: "Unsaved theme changes were reverted." });
+      }
+    },
+    [previewMode, dirty, discardPreview],
   );
 
   const saveSuggestion = useCallback(
@@ -92,6 +147,7 @@ export default function ThemeStudio() {
     clearTheme();
     const fallback: ThemeConfig = { ...DEFAULT_THEME, mode: config.mode };
     setConfig(fallback);
+    setBaseline(fallback);
     document.documentElement.classList.toggle("dark", fallback.mode === "dark");
     toast.success("Theme reset to TrendFlux defaults");
   }, [config.mode]);
