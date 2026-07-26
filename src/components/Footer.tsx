@@ -15,9 +15,9 @@ const Footer = () => {
           <Link to="/" className="flex items-center gap-2.5 font-display font-semibold text-lg tracking-tight">
             <span className="w-2 h-2 rounded-full bg-primary" />
             <span className="text-gradient">{BRAND.nameLead}</span>
-            <span className="text-foreground/55 font-normal">{BRAND.nameTrail}</span>
+            <span className="text-muted-foreground font-normal">{BRAND.nameTrail}</span>
           </Link>
-          <p className="text-foreground/55 mt-4 max-w-sm leading-relaxed text-[13.5px]">
+          <p className="text-muted-foreground mt-4 max-w-sm leading-relaxed text-[13.5px]">
             One ecosystem, four layers. Company, founder, brands, system —
             built to operate beyond random marketing.
           </p>
@@ -82,10 +82,10 @@ const Footer = () => {
         </nav>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-foreground/45 tracking-wide">
+      <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-border/50 flex flex-col md:flex-row justify-between gap-4 text-[11px] text-muted-foreground tracking-wide">
         <div className="space-y-1">
           <p>© {new Date().getFullYear()} {BRAND.name}. All rights reserved.</p>
-          <p className="text-foreground/55">
+          <p className="text-muted-foreground">
             Designed, built &amp; copyrighted by{" "}
             <span className="text-foreground/80 font-medium">Zahid Hasan Emon</span>
             {" "}— Founder &amp; Brand Architect, TrendFlux.

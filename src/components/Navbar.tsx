@@ -244,7 +244,7 @@ const Navbar = () => {
                 <SheetHeader className="px-5 pt-5 pb-3 border-b border-border shrink-0">
                   <SheetTitle className="text-left font-display tracking-[0.22em] uppercase text-[12.5px]">
                     <span className="text-foreground font-semibold">{BRAND.nameLead}</span>
-                    <span className="text-primary font-medium"> {BRAND.nameTrail}</span>
+                    <span className="text-primary dark:text-crimson-glow font-medium"> {BRAND.nameTrail}</span>
                   </SheetTitle>
                   <button
                     type="button"
