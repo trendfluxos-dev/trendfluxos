@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Columns3, ExternalLink, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react";
+import { Columns3, ExternalLink, Monitor, RefreshCw, ScanEye, Smartphone, Tablet } from "lucide-react";
 import { applyTheme, type ThemeConfig } from "@/lib/themeStudio";
+import { auditBothModes, type A11yReport } from "@/lib/a11yAudit";
+import A11yPanel from "@/components/theme/A11yPanel";
 import { cn } from "@/lib/utils";
 
 /** Routes a visitor can sanity-check a palette against before saving. */
@@ -35,12 +37,14 @@ function PreviewFrame({
   device,
   reloadKey,
   maxWidth,
+  registerFrame,
 }: {
   config: ThemeConfig;
   path: string;
   device: Device;
   reloadKey: number;
   maxWidth?: number;
+  registerFrame?: (device: Device, frame: HTMLIFrameElement | null) => void;
 }) {
   const frameRef = useRef<HTMLIFrameElement | null>(null);
   const shellRef = useRef<HTMLDivElement | null>(null);
@@ -69,6 +73,12 @@ function PreviewFrame({
   useEffect(() => {
     setReady(false);
   }, [path, reloadKey]);
+
+  // Expose the frame so the parent can run the accessibility audit on it.
+  useEffect(() => {
+    registerFrame?.(device, frameRef.current);
+    return () => registerFrame?.(device, null);
+  }, [registerFrame, device, path, reloadKey]);
 
   // Measure available width so the device frame is scaled, never clipped.
   useLayoutEffect(() => {
@@ -125,6 +135,40 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
   const [device, setDevice] = useState<DeviceId>("mobile");
   const [compare, setCompare] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
+  const [reports, setReports] = useState<A11yReport[]>([]);
+  const [auditing, setAuditing] = useState(false);
+  const framesRef = useRef<Map<DeviceId, HTMLIFrameElement>>(new Map());
+
+  const registerFrame = useCallback((d: Device, frame: HTMLIFrameElement | null) => {
+    if (frame) framesRef.current.set(d.id, frame);
+    else framesRef.current.delete(d.id);
+  }, []);
+
+  // Results describe the previous paint; drop them when the inputs change.
+  useEffect(() => {
+    setReports([]);
+  }, [path, device, compare, reloadKey, config]);
+
+  const runAudit = useCallback(() => {
+    setAuditing(true);
+    // Let the frames finish painting the current tokens first.
+    window.setTimeout(() => {
+      const targets = compare
+        ? DEVICES.map((d) => d.id)
+        : ([device] as DeviceId[]);
+      const next: A11yReport[] = [];
+      for (const id of targets) {
+        const doc = framesRef.current.get(id)?.contentDocument;
+        if (!doc?.body) continue;
+        const label = DEVICES.find((d) => d.id === id)?.label ?? id;
+        next.push(...auditBothModes(doc, label));
+        // Restore the studio tokens after the mode toggling.
+        applyTheme(config, doc);
+      }
+      setReports(next);
+      setAuditing(false);
+    }, 250);
+  }, [compare, device, config]);
 
   const deviceMeta = DEVICES.find((d) => d.id === device) ?? DEVICES[0];
 
@@ -204,6 +248,23 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
         </div>
       </div>
 
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={runAudit}
+          disabled={auditing}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full border border-primary/50 bg-primary/10 px-3 text-[11px] font-semibold text-primary transition-colors hover:bg-primary/20 disabled:opacity-60"
+        >
+          <ScanEye className="h-4 w-4" aria-hidden />
+          {auditing ? "Checking…" : "Check contrast & a11y"}
+        </button>
+        <span className="text-[11px] text-foreground/50">
+          Audits {compare ? "all three viewports" : "this viewport"} in light and dark mode.
+        </span>
+      </div>
+
+      <A11yPanel reports={reports} running={auditing} />
+
       <div className="mt-3">
         {compare ? (
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-3">
@@ -214,11 +275,18 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
                 path={path}
                 device={d}
                 reloadKey={reloadKey}
+                registerFrame={registerFrame}
               />
             ))}
           </div>
         ) : (
-          <PreviewFrame config={config} path={path} device={deviceMeta} reloadKey={reloadKey} />
+          <PreviewFrame
+            config={config}
+            path={path}
+            device={deviceMeta}
+            reloadKey={reloadKey}
+            registerFrame={registerFrame}
+          />
         )}
       </div>
 
