@@ -14,7 +14,7 @@ export const EcosystemSection = () => (
     <div className="mt-12 text-center">
       <Link
         to="/ecosystem"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary"
       >
         View full architecture <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
       </Link>

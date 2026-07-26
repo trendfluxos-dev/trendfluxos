@@ -115,7 +115,7 @@ export function StudentLayoutPreview({
                 {isLive && hasPublishedContent ? (
                   <div className="flex h-full w-full items-center justify-center rounded-lg border border-dashed border-primary/40 bg-card/50 text-center">
                     <div>
-                      <MonitorPlay className="mx-auto mb-2 h-10 w-10 text-primary/70" />
+                      <MonitorPlay className="mx-auto mb-2 h-10 w-10 text-primary" />
                       <p className="text-sm font-semibold">
                         এখানে আপনার publish-করা content দেখাবে
                       </p>

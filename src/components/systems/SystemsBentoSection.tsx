@@ -211,7 +211,7 @@ const NarrativeCard = ({
             <Link
               to={href}
               aria-label={`View case — ${system.title}`}
-              className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary transition-colors hover:text-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
+              className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-sm"
             >
               View case
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
@@ -447,7 +447,7 @@ const BentoTile = ({
               "inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors",
               isInternal
                 ? "text-muted-foreground"
-                : "text-primary group-hover:text-primary/80",
+                : "text-primary group-hover:text-primary",
             )}
           >
             {isInternal ? (

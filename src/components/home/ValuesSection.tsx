@@ -64,7 +64,7 @@ export const ValuesSection = () => (
             <h3 className="mt-5 font-display text-lg font-semibold text-foreground">{title}</h3>
             <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">{principle}</p>
             <div className="mt-5 border-t border-border/60 pt-4">
-              <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-primary/80">Proof</p>
+              <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-primary">Proof</p>
               <p className="mt-1.5 text-[13px] leading-relaxed text-foreground/80">{proof}</p>
             </div>
           </TfCard>

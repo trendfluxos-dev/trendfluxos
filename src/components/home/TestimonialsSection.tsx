@@ -21,7 +21,7 @@ export const TestimonialsSection = ({
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
       {items.map((t) => (
         <TfCard key={`${t.company}-${t.name}`} className="flex h-full flex-col">
-          <Quote className="h-5 w-5 text-primary/70" aria-hidden="true" />
+          <Quote className="h-5 w-5 text-primary" aria-hidden="true" />
           <p className="mt-5 flex-1 text-[14.5px] leading-relaxed text-foreground/90">
             “{t.quote}”
           </p>

@@ -46,12 +46,12 @@ export const BrandShell = ({
       </div>
 
       <header className="relative max-w-6xl mx-auto px-5 pt-6 flex items-center justify-between">
-        <Link to="/" className="text-xs uppercase tracking-[0.3em] text-primary/90 hover:text-primary transition">
+        <Link to="/" className="text-xs uppercase tracking-[0.3em] text-primary hover:text-primary transition">
           ← TrendFlux Digital
         </Link>
         <div className="flex items-center gap-4">
           <div className="text-right">
-            <div className="text-[10px] uppercase tracking-[0.35em] text-primary/80">{meta.label}</div>
+            <div className="text-[10px] uppercase tracking-[0.35em] text-primary">{meta.label}</div>
             <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{meta.sub}</div>
           </div>
         </div>
@@ -114,7 +114,7 @@ const BrandFunnelFooter = ({ active }: { active: Tier }) => {
   return (
     <footer className="relative border-t border-border mt-10">
       <div className="max-w-6xl mx-auto px-5 py-8">
-        <p className="text-center text-[10px] uppercase tracking-[0.4em] text-primary/80 mb-5">
+        <p className="text-center text-[10px] uppercase tracking-[0.4em] text-primary mb-5">
           ◆ Limited partnerships open each quarter. Let's architect yours. ◆
         </p>
         <div className="grid grid-cols-3 gap-3">
@@ -134,7 +134,7 @@ const BrandFunnelFooter = ({ active }: { active: Tier }) => {
                   <span className="inline-flex items-center justify-center w-5 h-5 rounded-full border border-primary/40 text-[9px] text-primary">
                     {i + 1}
                   </span>
-                  <div className="text-[9px] tracking-[0.3em] uppercase text-primary/80">
+                  <div className="text-[9px] tracking-[0.3em] uppercase text-primary">
                     {it.tag}
                   </div>
                 </div>

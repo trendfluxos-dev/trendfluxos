@@ -185,7 +185,7 @@ const GrowthOs = () => {
           {FLOW.map((f) => (
             <li key={f.step}>
               <TfCard className="h-full">
-                <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-primary/80">
+                <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-primary">
                   <Workflow className="h-3.5 w-3.5" /> Step {f.step}
                 </div>
                 <h3 className="mt-3 font-display text-base font-semibold text-foreground">{f.title}</h3>

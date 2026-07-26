@@ -51,7 +51,7 @@ export const AcademySection = () => (
       <Link
         to={EDTECH.routes.courses}
         onClick={() => track("edtech_platform_open", { location: "academy_section_secondary" })}
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary"
       >
         Explore all masterclasses <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
       </Link>
