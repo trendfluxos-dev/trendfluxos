@@ -50,6 +50,8 @@ const News = () => {
   });
 
   const items = data?.items ?? [];
+  const fetchedAt = data?.fetchedAt;
+  const stale = data?.stale;
 
   useJsonLd(
     items.length
@@ -102,11 +104,11 @@ const News = () => {
                 )}
                 Refresh
               </button>
-              {data?.fetchedAt && (
+              {fetchedAt && (
                 <p className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
                   <Clock className="h-3.5 w-3.5" aria-hidden />
-                  Updated {new Date(data.fetchedAt).toLocaleTimeString("en-GB")}
-                  {data.stale ? " · showing cached copy" : ""}
+                  Updated {new Date(fetchedAt).toLocaleTimeString("en-GB")}
+                  {stale ? " · showing cached copy" : ""}
                 </p>
               )}
             </div>
@@ -115,33 +117,84 @@ const News = () => {
 
         <section className="py-12 md:py-16">
           <div className="mx-auto max-w-6xl px-5 md:px-8">
+            {/* Loading state — refresh disabled, timestamp shown when a cached copy exists. */}
             {isLoading && (
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-64 animate-pulse rounded-2xl border border-border bg-muted"
-                  />
-                ))}
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card/50 px-4 py-3">
+                  <p className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" aria-hidden />
+                    Fetching latest headlines…
+                  </p>
+                  <button
+                    type="button"
+                    disabled
+                    className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-1.5 text-[11px] font-semibold text-muted-foreground opacity-60"
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" aria-hidden /> Refresh
+                  </button>
+                </div>
+                {fetchedAt && (
+                  <p className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                    <Clock className="h-3.5 w-3.5" aria-hidden />
+                    Last updated {new Date(fetchedAt).toLocaleTimeString("en-GB")}
+                    {stale ? " · showing cached copy" : ""}
+                  </p>
+                )}
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-64 animate-pulse rounded-2xl border border-border bg-muted"
+                    />
+                  ))}
+                </div>
               </div>
             )}
 
+            {/* Error / empty state — always offer refresh + timestamp context. */}
             {!isLoading && (isError || items.length === 0) && (
-              <div className="rounded-2xl border border-border bg-card p-8 text-center">
-                <AlertCircle className="mx-auto h-6 w-6 text-muted-foreground" aria-hidden />
-                <h2 className="mt-3 font-display text-lg font-semibold">Feed unavailable</h2>
+              <div className="rounded-2xl border border-border bg-card p-6 text-center md:p-10">
+                <AlertCircle className="mx-auto h-7 w-7 text-muted-foreground" aria-hidden />
+                <h2 className="mt-4 font-display text-lg font-semibold">
+                  {isError ? "Feed unavailable" : "No headlines right now"}
+                </h2>
                 <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-                  We couldn't reach the publisher just now. Try refreshing, or read the latest
-                  directly on nagarikbarta24.com.
+                  {isError
+                    ? "We couldn't reach the publisher just now. Try refreshing, or read the latest directly on nagarikbarta24.com."
+                    : "The feed loaded but returned no articles. Try refreshing to check for new stories."}
                 </p>
-                <a
-                  href="https://nagarikbarta24.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-                >
-                  Open Nagarik Barta 24 <ArrowUpRight className="h-4 w-4" aria-hidden />
-                </a>
+
+                <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                  <button
+                    type="button"
+                    onClick={() => refetch()}
+                    disabled={isFetching}
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+                  >
+                    {isFetching ? (
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                    ) : (
+                      <RefreshCw className="h-4 w-4" aria-hidden />
+                    )}
+                    {isFetching ? "Refreshing…" : "Refresh feed"}
+                  </button>
+                  <a
+                    href="https://nagarikbarta24.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
+                  >
+                    Open Nagarik Barta 24 <ArrowUpRight className="h-4 w-4" aria-hidden />
+                  </a>
+                </div>
+
+                {fetchedAt && (
+                  <p className="mt-4 inline-flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
+                    <Clock className="h-3.5 w-3.5" aria-hidden />
+                    Last successful fetch: {new Date(fetchedAt).toLocaleTimeString("en-GB")}
+                    {stale ? " · stale cached copy" : ""}
+                  </p>
+                )}
               </div>
             )}
 
