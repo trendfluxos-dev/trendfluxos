@@ -349,12 +349,13 @@ Deno.serve(async (req) => {
         Array.isArray(feed?.items) ? feed.items.slice(0, 5) : [];
       const rows = items
         .filter((i) => i.link && i.title)
-        .map((i) => ({
+        // Stagger 20 minutes apart so a burst of new articles never floods the Page.
+        .map((i, idx) => ({
           source: "nagarikbarta24",
           source_id: i.link!,
           message: [i.title!.trim(), (i.excerpt ?? "").trim()].filter(Boolean).join("\n\n").slice(0, 1500),
           link_url: i.link!,
-          scheduled_at: new Date().toISOString(),
+          scheduled_at: new Date(Date.now() + idx * 20 * 60_000).toISOString(),
         }));
       if (rows.length) {
         const { error } = await db
