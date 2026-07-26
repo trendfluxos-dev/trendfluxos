@@ -95,7 +95,6 @@ const noindexRoutes = [
   "/admin",
 ];
 
-const today = new Date().toISOString().split("T")[0];
 
 function priorityFor(p) {
   if (p === "/") return "1.0";
