@@ -273,7 +273,7 @@ const Navbar = () => {
                     if (items.length === 0) return null;
                     return (
                       <div key={layer} className="flex flex-col gap-0.5">
-                        <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-primary font-medium mb-1">
+                        <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-primary dark:text-crimson-glow font-semibold mb-1">
                           {meta.label}
                         </p>
                         {items.map((node) => {

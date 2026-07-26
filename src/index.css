@@ -184,7 +184,7 @@
     --gold-foreground: 0 0% 100%;
 
     --muted: 240 10% 11%;
-    --muted-foreground: 240 5% 67%;     /* #a1a1aa */
+    --muted-foreground: 240 6% 75%;     /* #bdbdc4 — WCAG AA on noir */
 
     --accent: 349 77% 50%;
     --accent-foreground: 0 0% 100%;
