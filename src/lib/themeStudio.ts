@@ -232,9 +232,15 @@ export function buildTokenOverrides(config: ThemeConfig): Record<string, string>
   };
 }
 
-export function applyTheme(config: ThemeConfig): void {
-  if (typeof document === "undefined") return;
-  const root = document.documentElement;
+/**
+ * Applies the theme tokens to a document. `target` lets the Theme Studio
+ * paint an embedded route-preview iframe with the same tokens without
+ * touching the host page.
+ */
+export function applyTheme(config: ThemeConfig, target?: Document): void {
+  const doc = target ?? (typeof document === "undefined" ? undefined : document);
+  if (!doc) return;
+  const root = doc.documentElement;
   const overrides = buildTokenOverrides(config);
   for (const [key, value] of Object.entries(overrides)) {
     root.style.setProperty(key, value);
@@ -242,6 +248,7 @@ export function applyTheme(config: ThemeConfig): void {
   root.classList.toggle("dark", config.mode === "dark");
   root.dataset.tfxTheme = "custom";
 }
+
 
 export function clearTheme(): void {
   if (typeof document === "undefined") return;
