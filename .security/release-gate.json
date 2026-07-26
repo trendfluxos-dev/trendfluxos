@@ -1,0 +1,41 @@
+{
+  "$schema_note": "Release-gate policy for the security scan that runs on every deploy. This file is STRICTER than .security/lint-baseline.json: the lint baseline records linter findings we tolerate, while this file encodes the hard invariants that must never regress. Any drift fails the release. Update it only with a written reason and a matching @security-memory update.",
+
+  "anonExecutableFunctions": {
+    "$note": "public-schema SECURITY DEFINER functions that anon (unauthenticated visitors) may still EXECUTE. Deliberately empty: the share-token lookups get_class_by_share_token and get_recording_by_token were moved behind the class-by-token edge function and revoked from anon. Re-adding an entry here re-opens an RLS-bypassing function to the public internet.",
+    "allow": []
+  },
+
+  "requireSearchPathOnDefiner": true,
+
+  "tablesRequiringRls": {
+    "$note": "Every table in the public schema must have RLS enabled. List exceptions here only for tables that are intentionally world-readable reference data with no user content.",
+    "exempt": []
+  },
+
+  "criticalAuthChecks": {
+    "$note": "Live probes run against the deployed site with the publishable anon key. Each table must NOT return rows to an unauthenticated caller. A 200 with a non-empty array fails the release.",
+    "anonMustNotRead": [
+      "profiles",
+      "user_roles",
+      "module_enrollments",
+      "tutor_bookings",
+      "access_audit_logs",
+      "class_materials",
+      "class_recordings",
+      "site_profile_data",
+      "email_send_state"
+    ],
+    "$rpc_note": "Privileged RPCs that must reject an unauthenticated caller outright (403/404 from PostgREST once EXECUTE is revoked).",
+    "anonMustNotExecute": [
+      "get_class_by_share_token",
+      "get_recording_by_token",
+      "purge_access_audit_logs",
+      "set_audit_retention_days",
+      "admin_list_live_classes",
+      "log_access_audit"
+    ]
+  },
+
+  "routesMustResolve": ["/", "/news", "/sitemap.xml"]
+}
