@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ExternalLink, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Columns3, ExternalLink, Monitor, RefreshCw, Smartphone, Tablet } from "lucide-react";
 import { applyTheme, type ThemeConfig } from "@/lib/themeStudio";
 import { cn } from "@/lib/utils";
 
@@ -17,25 +17,35 @@ export const PREVIEW_ROUTES = [
 ] as const;
 
 const DEVICES = [
-  { id: "mobile", label: "Mobile", width: 390, icon: Smartphone },
-  { id: "tablet", label: "Tablet", width: 768, icon: Tablet },
-  { id: "desktop", label: "Desktop", width: 1280, icon: Monitor },
+  { id: "mobile", label: "Mobile", width: 390, height: 620, icon: Smartphone },
+  { id: "tablet", label: "Tablet", width: 768, height: 700, icon: Tablet },
+  { id: "desktop", label: "Desktop", width: 1280, height: 760, icon: Monitor },
 ] as const;
 
-type DeviceId = (typeof DEVICES)[number]["id"];
+type Device = (typeof DEVICES)[number];
+type DeviceId = Device["id"];
 
 /**
- * Renders the live site inside a same-origin iframe and injects the in-progress
- * theme tokens into it, so palette edits can be judged on a real page (Hero,
- * Dashboard, Landing…) before they are saved.
+ * One scaled, same-origin preview frame. The in-progress theme tokens are
+ * injected into the child document so palette edits are visible instantly.
  */
-export default function RoutePreview({ config }: { config: ThemeConfig }) {
-  const [path, setPath] = useState<string>(PREVIEW_ROUTES[0].path);
-  const [device, setDevice] = useState<DeviceId>("mobile");
-  const [ready, setReady] = useState(false);
+function PreviewFrame({
+  config,
+  path,
+  device,
+  reloadKey,
+  maxWidth,
+}: {
+  config: ThemeConfig;
+  path: string;
+  device: Device;
+  reloadKey: number;
+  maxWidth?: number;
+}) {
   const frameRef = useRef<HTMLIFrameElement | null>(null);
   const shellRef = useRef<HTMLDivElement | null>(null);
   const [shellWidth, setShellWidth] = useState(0);
+  const [ready, setReady] = useState(false);
 
   const paint = useCallback(() => {
     const doc = frameRef.current?.contentDocument;
@@ -56,8 +66,12 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
     if (ready) paint();
   }, [ready, paint]);
 
-  // Measure available width so the device frame is scaled, never clipped.
   useEffect(() => {
+    setReady(false);
+  }, [path, reloadKey]);
+
+  // Measure available width so the device frame is scaled, never clipped.
+  useLayoutEffect(() => {
     const el = shellRef.current;
     if (!el) return;
     const ro = new ResizeObserver(() => setShellWidth(el.clientWidth));
@@ -66,9 +80,53 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
     return () => ro.disconnect();
   }, []);
 
+  const available = Math.min(shellWidth || device.width, maxWidth ?? Number.POSITIVE_INFINITY);
+  const scale = available ? Math.min(1, available / device.width) : 1;
+  const Icon = device.icon;
+
+  return (
+    <div className="min-w-0 flex-1">
+      <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground/50">
+        <Icon className="h-3 w-3" aria-hidden />
+        {device.label}
+        <span className="font-normal tracking-normal normal-case text-foreground/40">
+          {device.width}px{scale < 1 ? ` · ${Math.round(scale * 100)}%` : ""}
+        </span>
+      </div>
+      <div
+        ref={shellRef}
+        className="overflow-hidden rounded-xl border border-border/60 bg-background"
+        style={{ height: device.height * scale }}
+      >
+        <iframe
+          key={`${path}-${reloadKey}`}
+          ref={frameRef}
+          title={`Theme preview — ${device.label} — ${path}`}
+          src={`${path}?tfx-preview=1`}
+          onLoad={() => {
+            setReady(true);
+            paint();
+          }}
+          className="origin-top-left border-0 bg-background"
+          style={{ width: device.width, height: device.height, transform: `scale(${scale})` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Renders the live site inside same-origin iframes and injects the in-progress
+ * theme tokens, so palette edits can be judged on a real page before saving —
+ * either on one device, or on mobile + tablet + desktop side by side.
+ */
+export default function RoutePreview({ config }: { config: ThemeConfig }) {
+  const [path, setPath] = useState<string>(PREVIEW_ROUTES[0].path);
+  const [device, setDevice] = useState<DeviceId>("mobile");
+  const [compare, setCompare] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
+
   const deviceMeta = DEVICES.find((d) => d.id === device) ?? DEVICES[0];
-  const scale = shellWidth ? Math.min(1, shellWidth / deviceMeta.width) : 1;
-  const frameHeight = device === "desktop" ? 760 : 620;
 
   return (
     <section className="mt-7 rounded-2xl border border-border/60 bg-card/40 p-3 sm:p-4">
@@ -83,10 +141,7 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
         <select
           id="tfx-preview-route"
           value={path}
-          onChange={(event) => {
-            setReady(false);
-            setPath(event.target.value);
-          }}
+          onChange={(event) => setPath(event.target.value)}
           className="h-9 w-full min-w-0 rounded-full border border-border/60 bg-background px-3 text-[12px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:flex-1"
         >
           {PREVIEW_ROUTES.map((route) => (
@@ -103,13 +158,16 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
               <button
                 key={d.id}
                 type="button"
-                onClick={() => setDevice(d.id)}
-                aria-pressed={device === d.id}
+                onClick={() => {
+                  setCompare(false);
+                  setDevice(d.id);
+                }}
+                aria-pressed={!compare && device === d.id}
                 aria-label={`${d.label} preview`}
                 title={d.label}
                 className={cn(
                   "inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors",
-                  device === d.id
+                  !compare && device === d.id
                     ? "border-primary bg-primary/10 text-primary"
                     : "border-border/60 text-foreground/60 hover:text-foreground",
                 )}
@@ -120,10 +178,23 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
           })}
           <button
             type="button"
-            onClick={() => {
-              setReady(false);
-              if (frameRef.current) frameRef.current.src = `${path}?tfx-preview=1`;
-            }}
+            onClick={() => setCompare((v) => !v)}
+            aria-pressed={compare}
+            aria-label="Compare all viewports"
+            title="Compare all viewports"
+            className={cn(
+              "inline-flex h-9 items-center gap-1.5 rounded-full border px-3 text-[11px] font-semibold transition-colors",
+              compare
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border/60 text-foreground/60 hover:text-foreground",
+            )}
+          >
+            <Columns3 className="h-4 w-4" />
+            Compare
+          </button>
+          <button
+            type="button"
+            onClick={() => setReloadKey((k) => k + 1)}
             aria-label="Reload preview"
             title="Reload preview"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border/60 text-foreground/60 transition-colors hover:text-foreground"
@@ -133,31 +204,27 @@ export default function RoutePreview({ config }: { config: ThemeConfig }) {
         </div>
       </div>
 
-      <div
-        ref={shellRef}
-        className="mt-3 overflow-hidden rounded-xl border border-border/60 bg-background"
-        style={{ height: frameHeight * scale }}
-      >
-        <iframe
-          ref={frameRef}
-          title={`Theme preview — ${path}`}
-          src={`${path}?tfx-preview=1`}
-          onLoad={() => {
-            setReady(true);
-            paint();
-          }}
-          className="origin-top-left border-0 bg-background"
-          style={{
-            width: deviceMeta.width,
-            height: frameHeight,
-            transform: `scale(${scale})`,
-          }}
-        />
+      <div className="mt-3">
+        {compare ? (
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-3">
+            {DEVICES.map((d) => (
+              <PreviewFrame
+                key={d.id}
+                config={config}
+                path={path}
+                device={d}
+                reloadKey={reloadKey}
+              />
+            ))}
+          </div>
+        ) : (
+          <PreviewFrame config={config} path={path} device={deviceMeta} reloadKey={reloadKey} />
+        )}
       </div>
 
       <div className="mt-2 flex items-center justify-between gap-2 text-[11px] text-foreground/55">
         <span>
-          {deviceMeta.label} · {deviceMeta.width}px {scale < 1 && `· ${Math.round(scale * 100)}%`}
+          {compare ? "Mobile · Tablet · Desktop side by side" : `${deviceMeta.label} · ${deviceMeta.width}px`}
         </span>
         <a
           href={path}
