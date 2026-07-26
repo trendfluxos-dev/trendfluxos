@@ -338,7 +338,38 @@ Deno.serve(async (req) => {
     );
   }
 
+  // Pull fresh Nagarik Barta 24 articles into the queue before publishing so a
+  // plain cron tick covers ingest + publish in one pass. Already-seen links are
+  // skipped by the (source, source_id) unique index.
+  if (mode === "tick" || mode === "ingest") {
+    try {
+      const feedRes = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/news-feed`);
+      const feed = await feedRes.json().catch(() => ({ items: [] }));
+      const items: Array<{ title?: string; link?: string; excerpt?: string; publishedAt?: string | null }> =
+        Array.isArray(feed?.items) ? feed.items.slice(0, 10) : [];
+      const rows = items
+        .filter((i) => i.link && i.title)
+        .map((i) => ({
+          source: "nagarikbarta24",
+          source_id: i.link!,
+          message: [i.title!.trim(), (i.excerpt ?? "").trim()].filter(Boolean).join("\n\n").slice(0, 1500),
+          link_url: i.link!,
+          scheduled_at: new Date().toISOString(),
+        }));
+      if (rows.length) {
+        const { error } = await db
+          .from("facebook_posts")
+          .upsert(rows, { onConflict: "source,source_id", ignoreDuplicates: true });
+        if (error) console.error("facebook-publish ingest failed:", error.message);
+      }
+    } catch (e) {
+      console.error("facebook-publish ingest error:", e);
+    }
+    if (mode === "ingest") return json({ ok: true, mode: "ingest" });
+  }
+
   if (mode === "publish" && !body.id) return json({ error: "id_required" }, 400);
+
 
   try {
     const results = await processDue(db, mode === "publish" ? body.id : undefined);
