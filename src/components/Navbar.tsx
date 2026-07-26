@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { Menu, LogIn, LayoutDashboard, Search, MessageCircle } from "lucide-react";
+import { Menu, LogIn, LayoutDashboard, Search, MessageCircle, Newspaper } from "lucide-react";
 import { BRAND } from "@/config/brand";
 import { BRAND_CONTACTS } from "@/config/socialConfig";
 import { openLuxeVeilGate } from "@/lib/luxeVeilGate";
@@ -169,9 +169,17 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Center: 4-layer mega-menu (Company / Founder / Brands) */}
-          <div className="relative">
+          {/* Center: 4-layer mega-menu (Company / Founder / Brands) + Newsroom */}
+          <div className="relative hidden lg:flex items-center gap-1">
             <LayerMegaMenu />
+            <Link
+              to="/news"
+              aria-current={pathname === "/news" ? "page" : undefined}
+              className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[12px] font-medium uppercase tracking-[0.14em] text-foreground/80 hover:text-foreground hover:bg-muted transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-muted aria-[current=page]:text-foreground"
+            >
+              <Newspaper className="h-3.5 w-3.5" />
+              Newsroom
+            </Link>
           </div>
 
           {/* Right: Search + Apply Access + Login */}
@@ -306,6 +314,16 @@ const Navbar = () => {
                       </div>
                     );
                   })}
+
+                  <Link
+                    to="/news"
+                    onClick={() => setOpen(false)}
+                    aria-current={pathname === "/news" ? "page" : undefined}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-foreground hover:bg-muted hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-muted aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40"
+                  >
+                    <Newspaper className="h-4 w-4 text-primary" />
+                    Newsroom — Nagarik Barta 24
+                  </Link>
 
                   <div className="flex flex-col gap-0.5 pt-3 border-t border-border">
                     {BRAND_CONTACTS.trendflux.whatsapp && (
