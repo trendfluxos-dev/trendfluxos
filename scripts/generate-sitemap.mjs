@@ -79,6 +79,7 @@ const staticRoutes = [
   "/justice-appeal",
   "/media-reports",
   "/share-kit",
+  "/news",
 ];
 
 // Public but Helmet-marked noindex. Intentionally omitted from sitemap.
@@ -102,12 +103,13 @@ function priorityFor(p) {
   if (p === "/ecosystem" || p === "/about" || p === "/contact") return "0.8";
   if (p.startsWith("/case-studies/")) return "0.8";
   if (p.startsWith("/research/") || p.startsWith("/implementations/")) return "0.7";
-  if (p === "/explore" || p === "/showcase") return "0.7";
+  if (p === "/explore" || p === "/showcase" || p === "/news") return "0.7";
   return "0.6";
 }
 
 function changefreqFor(p) {
   if (p === "/") return "weekly";
+  if (p === "/news") return "daily";
   if (p === "/showcase" || p === "/explore") return "weekly";
   return "monthly";
 }
