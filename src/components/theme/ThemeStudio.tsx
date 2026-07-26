@@ -13,6 +13,8 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import AiPaletteSuggester from "@/components/theme/AiPaletteSuggester";
 import SavedPalettes from "@/components/theme/SavedPalettes";
+import RoutePreview from "@/components/theme/RoutePreview";
+
 import { cn } from "@/lib/utils";
 
 import {
@@ -173,7 +175,9 @@ export default function ThemeStudio() {
     <>
       <button
         type="button"
+        data-theme-launcher
         onClick={() => setOpen(true)}
+
         aria-label="Open Theme Studio (Alt+Shift+T)"
         title="Theme Studio · Alt+Shift+T"
         className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 z-40 inline-flex h-11 items-center gap-2 rounded-full border border-border/60 bg-card/85 px-3.5 text-[12px] font-semibold text-foreground/80 shadow-elegant backdrop-blur transition-colors hover:border-primary/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring md:bottom-24 md:left-6 md:px-4"
@@ -482,7 +486,7 @@ export default function ThemeStudio() {
               </TabsContent>
             </Tabs>
 
-            {/* Live preview — reads the same tokens every page uses. */}
+            {/* Component preview — reads the same tokens every page uses. */}
             <section className="mt-7 rounded-2xl border border-border/60 bg-card/40 p-4">
               <SectionLabel>Live preview</SectionLabel>
               <h3 className="font-display text-lg font-semibold">Growth Execution OS</h3>
@@ -501,6 +505,10 @@ export default function ThemeStudio() {
                 </span>
               </div>
             </section>
+
+            {/* Full-page preview on a chosen route, before saving. */}
+            <RoutePreview config={config} />
+
 
             <button
               type="button"

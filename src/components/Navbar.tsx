@@ -236,12 +236,14 @@ const Navbar = () => {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[92%] max-w-sm border-l border-primary/30 dark:border-crimson-rim/55 bg-scrim-foreground/95 dark:bg-noir/95 backdrop-blur-2xl text-noir-rim dark:text-crimson-mist shadow-[0_0_60px_-10px_rgba(120,20,20,0.25)] dark:shadow-[0_0_60px_-10px_rgba(200,60,60,0.4)] flex flex-col p-0 overflow-hidden"
+                /* Token-driven surface: stays legible in light, dark and any
+                   Theme Studio palette (no fixed noir/scrim colours here). */
+                className="w-[92%] max-w-sm border-l border-border bg-background text-foreground backdrop-blur-2xl shadow-elegant flex flex-col p-0 overflow-hidden"
               >
-                <SheetHeader className="px-5 pt-5 pb-3 border-b border-primary/15 dark:border-crimson-rim/35 shrink-0">
+                <SheetHeader className="px-5 pt-5 pb-3 border-b border-border shrink-0">
                   <SheetTitle className="text-left font-display tracking-[0.22em] uppercase text-[12.5px]">
-                    <span className="text-noir dark:text-crimson-mist font-semibold">{BRAND.nameLead}</span>
-                    <span className="text-primary dark:text-crimson-glow/80 font-medium"> {BRAND.nameTrail}</span>
+                    <span className="text-foreground font-semibold">{BRAND.nameLead}</span>
+                    <span className="text-primary font-medium"> {BRAND.nameTrail}</span>
                   </SheetTitle>
                   <button
                     type="button"
@@ -249,7 +251,7 @@ const Navbar = () => {
                       setOpen(false);
                       openCommandPalette();
                     }}
-                    className="mt-3 flex w-full items-center gap-2 rounded-xl border border-primary/30 dark:border-crimson-rim/55 bg-scrim-foreground/70 dark:bg-noir/60 px-3 py-2.5 text-left text-[13px] text-crimson-rim/80 dark:text-crimson-mist/70 hover:border-primary dark:hover:border-crimson-glow transition-colors"
+                    className="mt-3 flex w-full items-center gap-2 rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-left text-[13px] text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
                   >
                     <Search className="h-4 w-4 shrink-0" />
                     <span>Search pages…</span>
@@ -260,7 +262,7 @@ const Navbar = () => {
                     to="/"
                     onClick={() => setOpen(false)}
                     aria-current={pathname === "/" ? "page" : undefined}
-                    className="rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-noir-rim dark:text-crimson-mist/90 hover:bg-crimson-blush dark:hover:bg-noir-rim/60 transition-colors aria-[current=page]:bg-crimson-blush dark:aria-[current=page]:bg-noir-rim/70"
+                    className="rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-foreground hover:bg-muted transition-colors aria-[current=page]:bg-muted aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40"
                   >
                     Home
                   </Link>
@@ -270,7 +272,7 @@ const Navbar = () => {
                     if (items.length === 0) return null;
                     return (
                       <div key={layer} className="flex flex-col gap-0.5">
-                        <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-primary dark:text-crimson-glow/75 font-medium mb-1">
+                        <p className="px-3 text-[10.5px] uppercase tracking-[0.24em] text-primary font-medium mb-1">
                           {meta.label}
                         </p>
                         {items.map((node) => {
@@ -284,27 +286,28 @@ const Navbar = () => {
                             {...linkProps}
                             aria-current={pathname === node.path ? "page" : undefined}
                             onClick={() => setOpen(false)}
-                            className="group/item relative block rounded-xl px-3 py-2.5 min-h-10 hover:bg-crimson-blush dark:hover:bg-noir-rim/60 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/60 aria-[current=page]:bg-crimson-blush dark:aria-[current=page]:bg-noir-rim/70 aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40 dark:aria-[current=page]:ring-crimson-glow/40 aria-[current=page]:before:absolute aria-[current=page]:before:left-0 aria-[current=page]:before:top-1/2 aria-[current=page]:before:-translate-y-1/2 aria-[current=page]:before:h-5 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r aria-[current=page]:before:bg-primary dark:aria-[current=page]:before:bg-crimson-glow"
+                            className="group/item relative block rounded-xl px-3 py-2.5 min-h-10 hover:bg-muted hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-muted aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40 aria-[current=page]:before:absolute aria-[current=page]:before:left-0 aria-[current=page]:before:top-1/2 aria-[current=page]:before:-translate-y-1/2 aria-[current=page]:before:h-5 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r aria-[current=page]:before:bg-primary"
                           >
-                            <span className="block text-[14px] text-noir-rim dark:text-crimson-mist/85 group-hover/item:text-noir dark:group-hover/item:text-scrim-foreground group-aria-[current=page]/item:text-noir dark:group-aria-[current=page]/item:text-scrim-foreground transition-colors">
+                            <span className="block text-[14px] text-foreground transition-colors">
                               {node.title}
                               {node.external && (
-                                <span className="ml-1.5 text-[10px] uppercase tracking-[0.18em] text-primary dark:text-crimson-glow/80">↗</span>
+                                <span className="ml-1.5 text-[10px] uppercase tracking-[0.18em] text-primary">↗</span>
                               )}
                             </span>
                             {node.blurb && (
-                              <span className="block text-[11.5px] text-noir-rim/65 dark:text-crimson-mist/50 mt-0.5">
+                              <span className="block text-[11.5px] text-muted-foreground mt-0.5">
                                 {node.blurb}
                               </span>
                             )}
                           </LinkTag>
+
                           );
                         })}
                       </div>
                     );
                   })}
 
-                  <div className="flex flex-col gap-0.5 pt-3 border-t border-primary/30 dark:border-crimson-rim/45">
+                  <div className="flex flex-col gap-0.5 pt-3 border-t border-border">
                     {BRAND_CONTACTS.trendflux.whatsapp && (
                       <a
                         href={BRAND_CONTACTS.trendflux.whatsapp}
@@ -323,20 +326,21 @@ const Navbar = () => {
                       setOpen(false);
                       openLuxeVeilGate({ source: "navbar_mobile" });
                     }}
-                    className="text-left rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-noir-rim dark:text-crimson-mist/85 hover:text-noir dark:hover:text-scrim-foreground hover:bg-crimson-blush dark:hover:bg-noir-rim/60 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/60"
+                    className="text-left rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-foreground hover:bg-muted hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     Apply Access
                   </button>
                   <Link
                     to={signedIn ? "/admin" : "/auth"}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-noir-rim dark:text-crimson-mist/85 hover:text-noir dark:hover:text-scrim-foreground hover:bg-crimson-blush dark:hover:bg-noir-rim/60 hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-glow/60"
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-foreground hover:bg-muted hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary dark:text-crimson-glow" /> : <LogIn className="h-4 w-4 text-primary dark:text-crimson-glow" />}
+                    {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary" /> : <LogIn className="h-4 w-4 text-primary" />}
                     {signedIn ? "Dashboard" : "Login"}
                   </Link>
                   </div>
-                  <div className="pt-5 border-t border-primary/30 dark:border-crimson-rim/45">
+                  <div className="pt-5 border-t border-border">
+
                     <SocialIcons variant="inline" size="sm" />
                   </div>
                 </nav>
