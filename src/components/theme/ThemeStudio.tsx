@@ -131,7 +131,7 @@ export default function ThemeStudio() {
           className="flex w-full max-w-full flex-col gap-0 overflow-y-auto overscroll-contain p-0 sm:max-w-md"
         >
 
-          <SheetHeader className="border-b border-border/60 px-6 py-5 text-left">
+          <SheetHeader className="border-b border-border/60 px-4 py-4 text-left sm:px-6 sm:py-5">
             <SheetTitle className="flex items-center gap-2 font-display text-lg">
               <Sparkles className="h-4 w-4 text-primary" /> Theme Studio
             </SheetTitle>
@@ -141,7 +141,7 @@ export default function ThemeStudio() {
             </SheetDescription>
           </SheetHeader>
 
-          <div className="px-6 py-5">
+          <div className="px-4 py-5 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6">
             <div className="mb-5 flex items-center gap-2">
               {(["dark", "light"] as ThemeMode[]).map((mode) => (
                 <button
