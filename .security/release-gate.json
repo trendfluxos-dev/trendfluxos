@@ -37,5 +37,9 @@
     ]
   },
 
-  "routesMustResolve": ["/", "/news", "/sitemap.xml"]
+  "routesMustResolve": {
+    "$note": "Reachability only. The app is a SPA behind a catch-all fallback, so any path returns 200 — these probes prove the deploy is serving traffic (i.e. a lockdown did not take the site down), NOT that a given route renders. Route-level correctness is covered by smoke.yml.",
+    "urls": ["/", "/news", "/sitemap.xml"]
+  }
 }
+
