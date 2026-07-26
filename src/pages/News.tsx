@@ -188,11 +188,11 @@ const News = () => {
                   </a>
                 </div>
 
-                {data?.fetchedAt && (
+                {fetchedAt && (
                   <p className="mt-4 inline-flex items-center justify-center gap-1.5 text-[11px] text-muted-foreground">
                     <Clock className="h-3.5 w-3.5" aria-hidden />
-                    Last successful fetch: {new Date(data.fetchedAt).toLocaleTimeString("en-GB")}
-                    {data.stale ? " · stale cached copy" : ""}
+                    Last successful fetch: {new Date(fetchedAt).toLocaleTimeString("en-GB")}
+                    {stale ? " · stale cached copy" : ""}
                   </p>
                 )}
               </div>
