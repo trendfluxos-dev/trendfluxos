@@ -80,6 +80,14 @@ export default function ThemeStudio() {
     [commit, config],
   );
 
+  const saveSuggestion = useCallback(
+    (name: string, primary: Hsl) => {
+      savePalette(name, { ...config, primary });
+      toast.success(`"${name}" saved to your palettes`);
+    },
+    [config],
+  );
+
   const reset = useCallback(() => {
     clearTheme();
     const fallback: ThemeConfig = { ...DEFAULT_THEME, mode: config.mode };
