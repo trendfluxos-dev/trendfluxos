@@ -1,0 +1,143 @@
+name: Security Release Gate
+
+# Blocks a release when a previously-fixed security finding regresses.
+#
+# Runs in two situations:
+#   * pre-merge  — on every PR that touches migrations, edge functions, or the
+#                  security policy files. Structural invariants only (a local
+#                  Supabase stack built from the committed migrations).
+#   * post-deploy — after a successful "Build & Deploy" (or Vercel
+#                  deployment_status), plus a daily sweep. Adds the live
+#                  anon-auth probes against the deployed API.
+#
+# The gate is stricter than `.github/workflows/db-security.yml`: that workflow
+# baselines *linter* findings, this one asserts the hard invariants recorded in
+# `.security/release-gate.json` and fails the build on any drift.
+
+on:
+  pull_request:
+    paths:
+      - "supabase/migrations/**"
+      - "supabase/functions/**"
+      - ".security/**"
+      - "scripts/security-release-gate.mjs"
+      - "scripts/security-invariants.sql"
+      - ".github/workflows/security-release-gate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+      - "supabase/functions/**"
+      - ".security/**"
+      - "scripts/security-release-gate.mjs"
+      - "scripts/security-invariants.sql"
+  workflow_run:
+    workflows: ["Build & Deploy"]
+    types: [completed]
+  deployment_status:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Deployed URL to probe"
+        required: false
+        default: "https://trendflux.digital"
+
+concurrency:
+  group: security-release-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    name: Security regression gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Never gate on a deploy that already failed.
+    if: >-
+      ${{
+        (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+        && (github.event_name != 'deployment_status' || github.event.deployment_status.state == 'success')
+      }}
+    env:
+      # Publishable (anon) key — safe to expose; it is the same key the browser
+      # ships. The probes assert it grants NO access to sensitive tables.
+      SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+      SECURITY_GATE_REPORT: reports/security-release-gate.json
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Resolve deploy URL
+        id: target
+        run: |
+          URL="${{ github.event.inputs.base_url }}"
+          if [ -z "$URL" ] && [ -n "${{ github.event.deployment_status.target_url }}" ]; then
+            URL="${{ github.event.deployment_status.target_url }}"
+          fi
+          if [ -z "$URL" ]; then
+            URL="https://trendflux.digital"
+          fi
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "Probing $URL"
+
+      # --- structural invariants (needs a database) --------------------------
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start local Supabase stack
+        run: supabase start --exclude studio,inbucket,imgproxy,storage-api,realtime,edge-runtime,logflare,vector
+
+      - name: Collect structural invariants
+        run: |
+          mkdir -p reports
+          DB_URL=$(supabase status --output json | node -e \
+            'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const j=JSON.parse(s);process.stdout.write(j.DB_URL||j.db_url||"")})')
+          psql "$DB_URL" -At -f scripts/security-invariants.sql > reports/invariants.json
+          cat reports/invariants.json
+
+      # --- linter baseline (same rules as db-security.yml) -------------------
+      - name: Run database linter
+        run: |
+          supabase db lint --level info --output json > reports/supabase-lint.json || true
+          cat reports/supabase-lint.json
+
+      - name: Apply lint baseline gate
+        env:
+          SUPABASE_LINT_HTML_REPORT: reports/supabase-lint.html
+        run: node scripts/check-supabase-lint.mjs reports/supabase-lint.json
+
+      # --- policy gate: structure + live auth + routes -----------------------
+      - name: Enforce security release gate
+        run: |
+          node scripts/security-release-gate.mjs \
+            --invariants reports/invariants.json \
+            --base-url "${{ steps.target.outputs.url }}"
+
+      - name: Stop local Supabase stack
+        if: always()
+        run: supabase stop --no-backup || true
+
+      - name: Upload gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-release-gate
+          path: |
+            reports/security-release-gate.json
+            reports/invariants.json
+            reports/supabase-lint.json
+            reports/supabase-lint.html
+          retention-days: 30
+          if-no-files-found: ignore
