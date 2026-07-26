@@ -262,7 +262,7 @@ const Navbar = () => {
                     to="/"
                     onClick={() => setOpen(false)}
                     aria-current={pathname === "/" ? "page" : undefined}
-                    className="rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-foreground hover:bg-accent hover:text-accent-foreground transition-colors aria-[current=page]:bg-accent aria-[current=page]:text-accent-foreground"
+                    className="rounded-xl px-3 py-2.5 min-h-11 text-[14px] font-medium text-foreground hover:bg-muted transition-colors aria-[current=page]:bg-muted aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40"
                   >
                     Home
                   </Link>
@@ -286,7 +286,7 @@ const Navbar = () => {
                             {...linkProps}
                             aria-current={pathname === node.path ? "page" : undefined}
                             onClick={() => setOpen(false)}
-                            className="group/item relative block rounded-xl px-3 py-2.5 min-h-10 hover:bg-accent hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-accent aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40 aria-[current=page]:before:absolute aria-[current=page]:before:left-0 aria-[current=page]:before:top-1/2 aria-[current=page]:before:-translate-y-1/2 aria-[current=page]:before:h-5 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r aria-[current=page]:before:bg-primary"
+                            className="group/item relative block rounded-xl px-3 py-2.5 min-h-10 hover:bg-muted hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:bg-muted aria-[current=page]:ring-1 aria-[current=page]:ring-primary/40 aria-[current=page]:before:absolute aria-[current=page]:before:left-0 aria-[current=page]:before:top-1/2 aria-[current=page]:before:-translate-y-1/2 aria-[current=page]:before:h-5 aria-[current=page]:before:w-[3px] aria-[current=page]:before:rounded-r aria-[current=page]:before:bg-primary"
                           >
                             <span className="block text-[14px] text-foreground transition-colors">
                               {node.title}
@@ -326,14 +326,14 @@ const Navbar = () => {
                       setOpen(false);
                       openLuxeVeilGate({ source: "navbar_mobile" });
                     }}
-                    className="text-left rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-foreground hover:bg-accent hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="text-left rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-foreground hover:bg-muted hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     Apply Access
                   </button>
                   <Link
                     to={signedIn ? "/admin" : "/auth"}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-foreground hover:bg-accent hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 min-h-11 text-[14px] uppercase tracking-[0.16em] font-medium text-foreground hover:bg-muted hover:translate-x-1 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
                     {signedIn ? <LayoutDashboard className="h-4 w-4 text-primary" /> : <LogIn className="h-4 w-4 text-primary" />}
                     {signedIn ? "Dashboard" : "Login"}
