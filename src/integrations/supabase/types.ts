@@ -788,6 +788,75 @@ export type Database = {
         }
         Relationships: []
       }
+      inbound_emails: {
+        Row: {
+          attachments: Json
+          cc_emails: string[] | null
+          created_at: string
+          error_message: string | null
+          from_email: string
+          from_name: string | null
+          headers: Json
+          html_body: string | null
+          id: string
+          provider: string
+          provider_message_id: string | null
+          raw_payload: Json
+          received_at: string
+          reply_to: string | null
+          spam_score: number | null
+          status: string
+          subject: string | null
+          text_body: string | null
+          to_email: string | null
+          updated_at: string
+        }
+        Insert: {
+          attachments?: Json
+          cc_emails?: string[] | null
+          created_at?: string
+          error_message?: string | null
+          from_email: string
+          from_name?: string | null
+          headers?: Json
+          html_body?: string | null
+          id?: string
+          provider?: string
+          provider_message_id?: string | null
+          raw_payload?: Json
+          received_at?: string
+          reply_to?: string | null
+          spam_score?: number | null
+          status?: string
+          subject?: string | null
+          text_body?: string | null
+          to_email?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attachments?: Json
+          cc_emails?: string[] | null
+          created_at?: string
+          error_message?: string | null
+          from_email?: string
+          from_name?: string | null
+          headers?: Json
+          html_body?: string | null
+          id?: string
+          provider?: string
+          provider_message_id?: string | null
+          raw_payload?: Json
+          received_at?: string
+          reply_to?: string | null
+          spam_score?: number | null
+          status?: string
+          subject?: string | null
+          text_body?: string | null
+          to_email?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       live_class_rsvps: {
         Row: {
           class_id: string
