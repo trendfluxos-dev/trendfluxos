@@ -81,6 +81,7 @@ const SecretsHealthAdmin = routes["/admin/secrets-health"];
 const TelegramTestLogsAdmin = routes["/admin/telegram-tests"];
 const SecurityAuditAdmin = routes["/admin/security-audit"];
 const PublishGateAdmin = routes["/admin/publish-gate"];
+const InboundEmailAdmin = routes["/admin/inbound-email"];
 const PressDetail = routes["/press/:id"];
 const TheStand = routes["/the-stand"];
 const TheStandShare = routes["/the-stand/share"];
