@@ -12,7 +12,10 @@
  * Without it the test is skipped rather than failing, so CI stays green on
  * forks and preview environments that don't hold production credentials.
  */
-import "https://deno.land/std@0.224.0/dotenv/load.ts";
+import { loadSync } from "https://deno.land/std@0.224.0/dotenv/mod.ts";
+// `export: true` merges .env into Deno.env; no examplePath so optional vars
+// listed in .env.example (e.g. VITE_SENTRY_DSN) don't hard-fail the run.
+loadSync({ export: true, allowEmptyValues: true });
 import { assert, assertEquals, assertMatch } from "https://deno.land/std@0.224.0/assert/mod.ts";
 
 const SUPABASE_URL = Deno.env.get("VITE_SUPABASE_URL") ?? Deno.env.get("SUPABASE_URL") ?? "";
