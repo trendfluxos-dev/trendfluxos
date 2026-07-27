@@ -1,5 +1,5 @@
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarCheck, CheckCircle2, Layers } from "lucide-react";
 import { useEffect, useState } from "react";
 import { caseStudies } from "@/data/caseStudies";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
 import trendfluxLogo from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 
@@ -18,6 +19,7 @@ const Section = ({ label, body }: { label: string; body: string }) => (
     <p className="mt-2 text-foreground/75 leading-relaxed">{body}</p>
   </div>
 );
+
 
 const CaseStudyPage = () => {
   const { slug } = useParams<{ slug: string }>();
