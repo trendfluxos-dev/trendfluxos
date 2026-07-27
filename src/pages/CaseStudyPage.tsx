@@ -27,6 +27,8 @@ const CaseStudyPage = () => {
   const location = useLocation();
   const study = caseStudies.find((c) => c.slug === slug);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [bookOpen, setBookOpen] = useState(false);
+
 
   const fromState = (location.state as { from?: string } | null)?.from;
   const backTarget = fromState ?? "/#cases";
