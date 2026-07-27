@@ -643,10 +643,16 @@ export type Database = {
       }
       facebook_posts: {
         Row: {
+          ai_decision: string | null
+          ai_reason: string | null
+          ai_score: number | null
           attempts: number
+          category: string | null
           created_at: string
           created_by: string | null
           fb_post_id: string | null
+          hashtags: string[] | null
+          headline: string | null
           id: string
           image_url: string | null
           last_error: string | null
@@ -661,10 +667,16 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_decision?: string | null
+          ai_reason?: string | null
+          ai_score?: number | null
           attempts?: number
+          category?: string | null
           created_at?: string
           created_by?: string | null
           fb_post_id?: string | null
+          hashtags?: string[] | null
+          headline?: string | null
           id?: string
           image_url?: string | null
           last_error?: string | null
@@ -679,10 +691,16 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_decision?: string | null
+          ai_reason?: string | null
+          ai_score?: number | null
           attempts?: number
+          category?: string | null
           created_at?: string
           created_by?: string | null
           fb_post_id?: string | null
+          hashtags?: string[] | null
+          headline?: string | null
           id?: string
           image_url?: string | null
           last_error?: string | null
