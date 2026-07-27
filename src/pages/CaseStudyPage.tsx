@@ -1,5 +1,5 @@
 import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarCheck, CheckCircle2, Layers } from "lucide-react";
 import { useEffect, useState } from "react";
 import { caseStudies } from "@/data/caseStudies";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { BRAND } from "@/config/brand";
 import { QuoteDialog } from "@/components/QuoteDialog";
+import ProjectLeadBookingDialog from "@/components/project-lead/ProjectLeadBookingDialog";
 import trendfluxLogo from "@/assets/trendflux-arrow-icon.jpeg.asset.json";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 
@@ -19,12 +20,15 @@ const Section = ({ label, body }: { label: string; body: string }) => (
   </div>
 );
 
+
 const CaseStudyPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const study = caseStudies.find((c) => c.slug === slug);
   const [quoteOpen, setQuoteOpen] = useState(false);
+  const [bookOpen, setBookOpen] = useState(false);
+
 
   const fromState = (location.state as { from?: string } | null)?.from;
   const backTarget = fromState ?? "/#cases";
@@ -224,19 +228,128 @@ const CaseStudyPage = () => {
                 </p>
                 <p className="mt-1 font-semibold text-gold">{study.map.outcome}</p>
               </div>
-              <Button
-                variant="gold"
-                className="w-full"
-                onClick={() => setQuoteOpen(true)}
-              >
-                Build something similar <ArrowRight className="h-4 w-4" />
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  variant="gold"
+                  className="w-full"
+                  onClick={() => setBookOpen(true)}
+                >
+                  <CalendarCheck className="h-4 w-4" /> Book a strategy call
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setQuoteOpen(true)}
+                >
+                  Build something similar <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
             </aside>
           </div>
+
+          {/* Outcomes */}
+          <section aria-labelledby="outcomes-heading" className="mt-16">
+            <h2
+              id="outcomes-heading"
+              className="font-display text-2xl md:text-3xl font-bold tracking-tight"
+            >
+              Outcomes
+            </h2>
+            <p className="mt-2 max-w-2xl text-foreground/60">
+              What this engagement produced, measured against the pre-build baseline.
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {study.outcomes.map((o) => (
+                <div key={o.label} className="rounded-2xl glass border-gold/20 p-6">
+                  <p className="font-display text-3xl font-black text-gradient">
+                    {o.metric}
+                  </p>
+                  <p className="mt-2 text-sm font-semibold text-foreground/90">
+                    {o.label}
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground/60">
+                    {o.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Tech stack */}
+          <section aria-labelledby="stack-heading" className="mt-16">
+            <h2
+              id="stack-heading"
+              className="font-display flex items-center gap-2 text-2xl md:text-3xl font-bold tracking-tight"
+            >
+              <Layers aria-hidden className="h-6 w-6 text-gold" /> Tech stack
+            </h2>
+            <p className="mt-2 max-w-2xl text-foreground/60">
+              The platforms and systems used to build, run and measure the work.
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {study.techStack.map((g) => (
+                <div key={g.group} className="rounded-2xl border border-border bg-foreground/[0.03] p-6">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-gold/80">
+                    {g.group}
+                  </p>
+                  <ul className="mt-3 flex flex-wrap gap-2">
+                    {g.items.map((item) => (
+                      <li
+                        key={item}
+                        className="rounded-full border border-border bg-background/60 px-3 py-1 text-xs text-foreground/75"
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm text-foreground/60">
+              <p>
+                <span className="text-foreground/40">Engagement:</span>{" "}
+                {study.engagement.duration}
+              </p>
+              <p>
+                <span className="text-foreground/40">Model:</span> {study.engagement.model}
+              </p>
+            </div>
+          </section>
+
+          {/* Booking CTA */}
+          <section
+            aria-labelledby="cta-heading"
+            className="mt-16 rounded-3xl glass-strong border-gold/30 p-8 md:p-10"
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-gold">
+              Next step
+            </p>
+            <h2
+              id="cta-heading"
+              className="font-display mt-3 text-2xl md:text-4xl font-bold tracking-tight"
+            >
+              Want this outcome for your business?
+            </h2>
+            <p className="mt-3 max-w-2xl text-foreground/70 leading-relaxed">
+              Book a 30-minute strategy call with the project lead. We map your current
+              funnel, identify the highest-leverage system to build first, and give you a
+              clear implementation plan — whether or not you work with us.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <Button variant="gold" size="lg" onClick={() => setBookOpen(true)}>
+                <CalendarCheck className="h-4 w-4" /> Book a strategy call
+              </Button>
+              <Button variant="outline" size="lg" onClick={() => setQuoteOpen(true)}>
+                Request a scoped quote <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </section>
         </div>
       </article>
 
       <QuoteDialog open={quoteOpen} onOpenChange={setQuoteOpen} />
+      <ProjectLeadBookingDialog open={bookOpen} onOpenChange={setBookOpen} />
+
 
       <div className="relative px-6 md:px-12 lg:px-20">
         <div className="mx-auto max-w-4xl border-t border-border/50 pt-8">
