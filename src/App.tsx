@@ -201,6 +201,8 @@ const RoutedApp = () => {
         <Route path="/admin/telegram-tests" element={<RequireRole roles={["admin"]}><TelegramTestLogsAdmin /></RequireRole>} />
         <Route path="/admin/security-audit" element={<RequireRole roles={["admin"]}><SecurityAuditAdmin /></RequireRole>} />
         <Route path="/admin/publish-gate" element={<RequireRole roles={["admin"]}><PublishGateAdmin /></RequireRole>} />
+        <Route path="/admin/inbound-email" element={<RequireRole roles={["admin"]}><InboundEmailAdmin /></RequireRole>} />
+
         <Route path="/press/:id" element={<PressDetail />} />
         <Route path="/the-stand" element={<TheStand />} />
         <Route path="/the-stand/share" element={<TheStandShare />} />
