@@ -14,8 +14,11 @@ import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
  */
 
 const GRAPH_VERSION = Deno.env.get("FACEBOOK_GRAPH_VERSION") ?? "v21.0";
-const PAGE_ID = Deno.env.get("FACEBOOK_PAGE_ID") ?? "";
-const PAGE_TOKEN = Deno.env.get("FACEBOOK_PAGE_ACCESS_TOKEN") ?? "";
+/** Secret values are frequently pasted with stray quotes/whitespace — strip them. */
+const clean = (v: string | undefined) => (v ?? "").trim().replace(/^["']+|["']+$/g, "");
+
+const PAGE_ID = clean(Deno.env.get("FACEBOOK_PAGE_ID"));
+const PAGE_TOKEN = clean(Deno.env.get("FACEBOOK_PAGE_ACCESS_TOKEN"));
 const MAX_ATTEMPTS = Number(Deno.env.get("FACEBOOK_MAX_ATTEMPTS") ?? "3");
 const BATCH = 10;
 
@@ -86,27 +89,25 @@ async function checkToken(): Promise<Stage[]> {
     return stages;
   }
 
-  // Confirm the pages_manage_posts permission is actually granted.
+  // Page feed access proves the token can address the publishing endpoint.
+  // (`tasks` is only readable with a user token, so it can't be checked here;
+  // the definitive publish check is an actual POST.)
   try {
     const url =
-      `https://graph.facebook.com/${GRAPH_VERSION}/${PAGE_ID}?fields=tasks&access_token=${encodeURIComponent(PAGE_TOKEN)}`;
+      `https://graph.facebook.com/${GRAPH_VERSION}/${PAGE_ID}/feed?limit=1&fields=id&access_token=${encodeURIComponent(PAGE_TOKEN)}`;
     const res = await fetch(url);
     const body = await res.json().catch(() => ({}));
-    const tasks: string[] = body?.tasks ?? [];
-    if (res.ok && tasks.includes("CREATE_CONTENT")) {
-      stages.push({ stage: "graph:publish permission", status: "PASS", detail: tasks.join(", ") });
-    } else {
-      stages.push({
-        stage: "graph:publish permission",
-        status: "FAIL",
-        detail: res.ok
-          ? `token lacks CREATE_CONTENT (tasks: ${tasks.join(", ") || "none"}) — grant pages_manage_posts`
-          : `[${res.status}] ${JSON.stringify(body?.error ?? body)}`,
-      });
-    }
+    stages.push({
+      stage: "graph:page feed endpoint",
+      status: res.ok ? "PASS" : "FAIL",
+      detail: res.ok
+        ? `/${PAGE_ID}/feed reachable (${(body?.data ?? []).length} recent post(s) visible)`
+        : `[${res.status}] ${JSON.stringify(body?.error ?? body)}`,
+    });
   } catch (e) {
-    stages.push({ stage: "graph:publish permission", status: "FAIL", detail: String(e) });
+    stages.push({ stage: "graph:page feed endpoint", status: "FAIL", detail: String(e) });
   }
+
 
   return stages;
 }
@@ -222,12 +223,45 @@ async function processDue(db: ReturnType<typeof admin>, onlyId?: string) {
   return results;
 }
 
-/** Callable only by the scheduler (service-role bearer) or a signed-in admin. */
+/** True when the bearer is a service_role JWT (the pg_cron scheduler). */
+function isServiceRoleJwt(token: string): boolean {
+  const parts = token.split(".");
+  if (parts.length !== 3) return false;
+  try {
+    const pad = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(atob(pad + "=".repeat((4 - (pad.length % 4)) % 4)));
+    return payload?.role === "service_role";
+  } catch {
+    return false;
+  }
+}
+
+/** Callable only by the scheduler (shared cron secret) or a signed-in admin. */
 async function authorize(req: Request): Promise<boolean> {
+  const cronSecret = Deno.env.get("FACEBOOK_CRON_SECRET");
+  const presented = req.headers.get("X-Cron-Secret");
+  if (cronSecret && presented && presented === cronSecret) return true;
+
   const header = req.headers.get("Authorization") ?? "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
   if (!token) return false;
   if (token === Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")) return true;
+
+  if (isServiceRoleJwt(token)) {
+    // Claims alone are forgeable, so prove the signature: PostgREST rejects a
+    // token it can't verify, and only a real service_role key reads this table
+    // without an RLS policy match.
+    const asService = createClient(Deno.env.get("SUPABASE_URL")!, token, {
+      auth: { persistSession: false },
+    });
+    const { error } = await asService
+      .from("facebook_posts")
+      .select("id", { count: "exact", head: true });
+    if (!error) return true;
+    console.error("facebook-publish: service_role token rejected:", error.message);
+    return false;
+  }
+
 
   const scoped = createClient(
     Deno.env.get("SUPABASE_URL")!,
@@ -239,6 +273,7 @@ async function authorize(req: Request): Promise<boolean> {
   const { data: isAdmin } = await scoped.rpc("current_user_has_role", { _role: "admin" });
   return isAdmin === true;
 }
+
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -303,7 +338,39 @@ Deno.serve(async (req) => {
     );
   }
 
+  // Pull fresh Nagarik Barta 24 articles into the queue before publishing so a
+  // plain cron tick covers ingest + publish in one pass. Already-seen links are
+  // skipped by the (source, source_id) unique index.
+  if (mode === "tick" || mode === "ingest") {
+    try {
+      const feedRes = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/news-feed`);
+      const feed = await feedRes.json().catch(() => ({ items: [] }));
+      const items: Array<{ title?: string; link?: string; excerpt?: string; publishedAt?: string | null }> =
+        Array.isArray(feed?.items) ? feed.items.slice(0, 5) : [];
+      const rows = items
+        .filter((i) => i.link && i.title)
+        // Stagger 20 minutes apart so a burst of new articles never floods the Page.
+        .map((i, idx) => ({
+          source: "nagarikbarta24",
+          source_id: i.link!,
+          message: [i.title!.trim(), (i.excerpt ?? "").trim()].filter(Boolean).join("\n\n").slice(0, 1500),
+          link_url: i.link!,
+          scheduled_at: new Date(Date.now() + idx * 20 * 60_000).toISOString(),
+        }));
+      if (rows.length) {
+        const { error } = await db
+          .from("facebook_posts")
+          .upsert(rows, { onConflict: "source,source_id", ignoreDuplicates: true });
+        if (error) console.error("facebook-publish ingest failed:", error.message);
+      }
+    } catch (e) {
+      console.error("facebook-publish ingest error:", e);
+    }
+    if (mode === "ingest") return json({ ok: true, mode: "ingest" });
+  }
+
   if (mode === "publish" && !body.id) return json({ error: "id_required" }, 400);
+
 
   try {
     const results = await processDue(db, mode === "publish" ? body.id : undefined);
