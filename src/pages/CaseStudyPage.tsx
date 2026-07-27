@@ -2,6 +2,7 @@ import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CalendarCheck, CheckCircle2, Layers } from "lucide-react";
 import { useEffect, useState } from "react";
 import { caseStudies } from "@/data/caseStudies";
+import { caseStudySeo } from "@/data/caseStudySeo";
 import { Button } from "@/components/ui/button";
 import { useSeo } from "@/hooks/useSeo";
 import { useJsonLd } from "@/hooks/useJsonLd";
@@ -49,13 +50,16 @@ const CaseStudyPage = () => {
     }
   };
 
+  const seo = study ? caseStudySeo[study.slug] : undefined;
+
   useSeo({
     title: study
-      ? `${study.title} — ${BRAND.name}`
+      ? (seo?.title ?? `${study.title} — Case Study | ${BRAND.legalName}`)
       : `Case Study Not Found — ${BRAND.name}`,
-    description: study?.description,
+    description: seo?.description ?? study?.description,
     type: study ? "article" : "website",
     canonical: study ? `${BRAND.url}/case-studies/${study.slug}` : undefined,
+    noindex: !study,
   });
 
   useJsonLd(
@@ -65,14 +69,28 @@ const CaseStudyPage = () => {
             "@context": "https://schema.org",
             "@type": "Article",
             headline: study.title,
-            description: study.description,
+            description: seo?.description ?? study.description,
             author: { "@type": "Organization", name: BRAND.legalName },
             publisher: {
               "@type": "Organization",
               name: BRAND.legalName,
               logo: { "@type": "ImageObject", url: `${BRAND.url}/favicon.ico` },
             },
-            mainEntityOfPage: `${BRAND.url}/case-studies/${study.slug}`,
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `${BRAND.url}/case-studies/${study.slug}`,
+            },
+            url: `${BRAND.url}/case-studies/${study.slug}`,
+            isPartOf: {
+              "@type": "CollectionPage",
+              name: "TrendFlux Case Studies",
+              url: `${BRAND.url}/#cases`,
+            },
+            about: study.outcomes.map((o) => ({
+              "@type": "Thing",
+              name: `${o.metric} ${o.label}`,
+              description: o.detail,
+            })),
             articleSection: study.category,
             keywords: [
               study.service,
