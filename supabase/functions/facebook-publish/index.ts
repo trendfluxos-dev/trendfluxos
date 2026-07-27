@@ -199,11 +199,21 @@ async function processDue(db: ReturnType<typeof admin>, onlyId?: string) {
       const attempts = row.attempts + 1;
       const err = out.error ?? {};
       const detail = typeof err === "string" ? err : JSON.stringify(err);
+      // Graph code 190 = invalid/expired token. Retrying cannot help until the
+      // FACEBOOK_PAGE_ACCESS_TOKEN secret is replaced, so park the row at once
+      // instead of burning its remaining attempts on guaranteed failures.
+      const tokenExpired = Number((err as { code?: unknown })?.code) === 190;
+      if (tokenExpired) {
+        console.error(
+          "facebook-publish: Page access token is invalid/expired (Graph code 190). " +
+            "Update the FACEBOOK_PAGE_ACCESS_TOKEN secret with a fresh long-lived Page token.",
+        );
+      }
       await db
         .from("facebook_posts")
         .update({
           // Retry until MAX_ATTEMPTS, then park as failed.
-          status: attempts >= MAX_ATTEMPTS ? "failed" : "queued",
+          status: tokenExpired || attempts >= MAX_ATTEMPTS ? "failed" : "queued",
           last_error: detail.slice(0, 2000),
           last_error_code: String(err?.code ?? out.status),
         })
