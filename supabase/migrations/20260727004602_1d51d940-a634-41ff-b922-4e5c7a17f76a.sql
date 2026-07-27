@@ -1,0 +1,1 @@
+DELETE FROM public.inbound_emails WHERE provider_message_id LIKE 'selftest-%';
