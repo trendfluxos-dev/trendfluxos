@@ -41,6 +41,7 @@ export const routes = {
   "/admin/web-vitals": make(() => import("@/pages/WebVitalsAdmin")),
   "/admin/ga4-check": make(() => import("@/pages/Ga4Check")),
   "/admin/secrets-health": make(() => import("@/pages/SecretsHealthAdmin")),
+  "/admin/inbound-email": make(() => import("@/pages/InboundEmailAdmin")),
   "/admin/telegram-tests": make(() => import("@/pages/TelegramTestLogsAdmin")),
   "/admin/security-audit": make(() => import("@/pages/SecurityAuditAdmin")),
   "/admin/publish-gate": make(() => import("@/pages/PublishGateAdmin")),
