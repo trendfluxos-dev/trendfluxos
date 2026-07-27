@@ -31,6 +31,7 @@ const SITE_URL = "https://trendflux.digital";
 
 // Mirror of caseStudies slugs in src/data/caseStudies.ts
 const caseSlugs = [
+  "kormoshikkha-edtech-platform",
   "organic-reach-485k",
   "content-engine-200",
   "global-strategy-us-uk",
