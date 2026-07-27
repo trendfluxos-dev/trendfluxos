@@ -14,6 +14,8 @@
  * crawlers; these static tags are the no-JS fallback and must match.
  */
 
+import { CASE_STUDY_SEO } from "./case-study-seo.mjs";
+
 export const SITE_URL = "https://trendflux.digital";
 export const SITE_NAME = "TrendFlux Ecosystem";
 export const TWITTER_SITE = "@TrendFlux";
@@ -162,4 +164,12 @@ export const ROUTE_SEO = {
     description:
       "Latest reporting from নাগরিক বার্তা ২৪, aggregated live into the TrendFlux newsroom.",
   },
+
+  // Narrative case-study pages — one entry per /case-studies/:slug.
+  ...Object.fromEntries(
+    Object.entries(CASE_STUDY_SEO).map(([slug, seo]) => [
+      `/case-studies/${slug}`,
+      { ...seo, type: "article" },
+    ]),
+  ),
 };
