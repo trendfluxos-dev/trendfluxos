@@ -1,0 +1,55 @@
+name: Facebook Pipeline E2E
+
+# Production-like end-to-end check of the Newsroom -> queue -> Facebook flow.
+# Runs after every backend deploy, on a daily schedule, and on demand.
+#
+# The `e2e` mode publishes a real post through the Graph API, asserts the
+# returned Post ID, then deletes the post and the queue row, so the Page
+# timeline is left unchanged.
+#
+# Required repository secrets:
+#   FACEBOOK_CRON_SECRET   - same shared secret the pg_cron scheduler presents
+# Required repository variables:
+#   VITE_SUPABASE_URL      - e.g. https://<project-ref>.supabase.co
+
+on:
+  workflow_run:
+    workflows: ["Backend Deploy (Supabase)"]
+    types: [completed]
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: facebook-pipeline-e2e
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    name: Newsroom -> queue -> Facebook
+    # Skip when the upstream deploy failed; nothing new was shipped to test.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+      FACEBOOK_CRON_SECRET: ${{ secrets.FACEBOOK_CRON_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard - required credentials present
+        run: |
+          missing=0
+          [ -n "$VITE_SUPABASE_URL" ] || { echo "::error::VITE_SUPABASE_URL variable is not set"; missing=1; }
+          [ -n "$FACEBOOK_CRON_SECRET" ] || { echo "::error::FACEBOOK_CRON_SECRET secret is not set"; missing=1; }
+          exit $missing
+
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Run pipeline end-to-end test
+        run: deno test --allow-net --allow-env --allow-read supabase/functions/facebook-publish/e2e.test.ts

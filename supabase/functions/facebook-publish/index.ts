@@ -338,6 +338,111 @@ Deno.serve(async (req) => {
     );
   }
 
+  // Production-like end-to-end check: exercises the real Newsroom feed, the real
+  // queue table and the real Graph API, then removes the post it created so the
+  // Page timeline is left untouched. Every stage is reported PASS/FAIL.
+  if (mode === "e2e") {
+    const stages: Stage[] = [];
+    const marker = `e2e-${crypto.randomUUID()}`;
+    let rowId: string | null = null;
+    let fbPostId: string | null = null;
+
+    try {
+      // 1. Newsroom feed reachable and returning articles.
+      let article: { title?: string; link?: string } | null = null;
+      try {
+        const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/news-feed`);
+        const feed = await res.json().catch(() => ({}));
+        article = Array.isArray(feed?.items) && feed.items.length ? feed.items[0] : null;
+        stages.push({
+          stage: "newsroom:feed",
+          status: article ? "PASS" : "FAIL",
+          detail: article ? `${(feed.items as unknown[]).length} article(s), newest: ${article.title}` : "no items returned",
+        });
+      } catch (e) {
+        stages.push({ stage: "newsroom:feed", status: "FAIL", detail: String(e) });
+      }
+
+      // 2. Enqueue a synthetic item derived from the real article.
+      const { data: inserted, error: insErr } = await db
+        .from("facebook_posts")
+        .insert({
+          source: "e2e-test",
+          source_id: marker,
+          message: `TrendFlux automated pipeline check (${marker}). Newest headline: ${article?.title ?? "n/a"}`,
+          link_url: article?.link ?? null,
+          scheduled_at: new Date(Date.now() - 1000).toISOString(),
+        })
+        .select("id")
+        .single();
+      rowId = inserted?.id ?? null;
+      stages.push({
+        stage: "queue:enqueue",
+        status: rowId ? "PASS" : "FAIL",
+        detail: rowId ?? insErr?.message ?? "insert returned no row",
+      });
+      if (!rowId) return json({ ok: false, mode: "e2e", stages }, 500);
+
+      // 3. Publish it through the exact production code path.
+      const [result] = await processDue(db, rowId);
+      fbPostId = (result?.fb_post_id as string | undefined) ?? null;
+      stages.push({
+        stage: "graph:publish",
+        status: result?.status === "PASS" && fbPostId ? "PASS" : "FAIL",
+        detail: fbPostId ? `post_id ${fbPostId}` : JSON.stringify(result ?? {}),
+      });
+
+      // 4. The returned Post ID must be the "<pageId>_<postId>" Graph shape.
+      const shapeOk = Boolean(fbPostId && new RegExp(`^${PAGE_ID}_\\d+$`).test(fbPostId));
+      stages.push({
+        stage: "graph:post id shape",
+        status: shapeOk ? "PASS" : "FAIL",
+        detail: shapeOk ? `${fbPostId} matches <page_id>_<post_id>` : `unexpected id: ${fbPostId}`,
+      });
+
+      // 5. Row persisted as published with that ID.
+      const { data: row } = await db
+        .from("facebook_posts")
+        .select("status,fb_post_id,published_at,last_error")
+        .eq("id", rowId)
+        .maybeSingle();
+      stages.push({
+        stage: "queue:row published",
+        status: row?.status === "published" && row?.fb_post_id === fbPostId ? "PASS" : "FAIL",
+        detail: JSON.stringify(row ?? {}),
+      });
+    } catch (e) {
+      stages.push({ stage: "e2e:unexpected", status: "FAIL", detail: String(e) });
+    } finally {
+      // Cleanup — never leave a test post on the live Page or in the queue.
+      if (fbPostId) {
+        try {
+          const del = await fetch(
+            `https://graph.facebook.com/${GRAPH_VERSION}/${fbPostId}?access_token=${encodeURIComponent(PAGE_TOKEN)}`,
+            { method: "DELETE" },
+          );
+          const body = await del.json().catch(() => ({}));
+          stages.push({
+            stage: "cleanup:delete fb post",
+            status: del.ok ? "PASS" : "FAIL",
+            detail: del.ok ? `deleted ${fbPostId}` : JSON.stringify(body?.error ?? body),
+          });
+        } catch (e) {
+          stages.push({ stage: "cleanup:delete fb post", status: "FAIL", detail: String(e) });
+        }
+      }
+      if (rowId) await db.from("facebook_posts").delete().eq("id", rowId);
+    }
+
+    return json({
+      ok: stages.every((s) => s.status !== "FAIL"),
+      mode: "e2e",
+      fb_post_id: fbPostId,
+      stages,
+    });
+  }
+
+
   // Pull fresh Nagarik Barta 24 articles into the queue before publishing so a
   // plain cron tick covers ingest + publish in one pass. Already-seen links are
   // skipped by the (source, source_id) unique index.
