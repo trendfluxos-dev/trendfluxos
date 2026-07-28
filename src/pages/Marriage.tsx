@@ -20,6 +20,13 @@ import extra2 from "@/assets/marriage/extra-2.jpeg.asset.json";
 import extra3 from "@/assets/marriage/extra-3.jpeg.asset.json";
 import extra4 from "@/assets/marriage/extra-4.jpeg.asset.json";
 import extra5 from "@/assets/marriage/extra-5.jpeg.asset.json";
+import portrait1 from "@/assets/portraits/portrait-1.jpeg.asset.json";
+import portrait2 from "@/assets/portraits/portrait-2.png.asset.json";
+import portrait3 from "@/assets/portraits/portrait-3.png.asset.json";
+import portrait4 from "@/assets/portraits/portrait-4.png.asset.json";
+import portrait5 from "@/assets/portraits/portrait-5.png.asset.json";
+import portrait6 from "@/assets/portraits/portrait-6.png.asset.json";
+import portrait7 from "@/assets/portraits/portrait-7.png.asset.json";
 import { PhotoLightbox, type LightboxPhoto } from "@/components/marriage/PhotoLightbox";
 import { caseStudies } from "@/data/caseStudies";
 import proofUniversity from "@/assets/proof/university-certificates.webp";
@@ -600,6 +607,13 @@ const Marriage = () => {
               { src: photo1, alt: "Zahid Hasan Emon portrait 1" },
               { src: photo2, alt: "Zahid Hasan Emon portrait 2" },
               { src: photo3, alt: "Zahid Hasan Emon portrait 3" },
+              { src: portrait1.url, alt: "Zahid Hasan Emon in black suit with dragonfly brooch" },
+              { src: portrait3.url, alt: "Zahid Hasan Emon in emerald green suit" },
+              { src: portrait4.url, alt: "Zahid Hasan Emon speaking on maroon blazer at podium" },
+              { src: portrait5.url, alt: "Zahid Hasan Emon in red blazer, city skyline" },
+              { src: portrait6.url, alt: "Zahid Hasan Emon reading a newspaper" },
+              { src: portrait7.url, alt: "Zahid Hasan Emon in aviator sunglasses" },
+              { src: portrait2.url, alt: "Zahid Hasan Emon at graduation" },
               { src: extra1.url, alt: "Zahid Hasan Emon speaking at podium" },
               { src: extra2.url, alt: "Zahid Hasan Emon in black suit" },
               { src: extra3.url, alt: "Zahid Hasan Emon speaking, maroon blazer" },

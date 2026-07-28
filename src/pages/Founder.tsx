@@ -12,7 +12,23 @@ import { useJsonLd } from "@/hooks/useJsonLd";
 import { usePressItems } from "@/hooks/usePressItems";
 import { BRAND } from "@/config/brand";
 import portraitAsset from "@/assets/zahid-hasan-emon-podium.png.asset.json";
+import portrait1 from "@/assets/portraits/portrait-1.jpeg.asset.json";
+import portrait2 from "@/assets/portraits/portrait-2.png.asset.json";
+import portrait3 from "@/assets/portraits/portrait-3.png.asset.json";
+import portrait4 from "@/assets/portraits/portrait-4.png.asset.json";
+import portrait5 from "@/assets/portraits/portrait-5.png.asset.json";
+import portrait6 from "@/assets/portraits/portrait-6.png.asset.json";
+import portrait7 from "@/assets/portraits/portrait-7.png.asset.json";
 const portrait = portraitAsset.url;
+const FOUNDER_GALLERY = [
+  { src: portrait1.url, alt: "Zahid Hasan Emon — black suit with dragonfly brooch" },
+  { src: portrait3.url, alt: "Zahid Hasan Emon — emerald green suit portrait" },
+  { src: portrait4.url, alt: "Zahid Hasan Emon — speaking at podium in maroon blazer" },
+  { src: portrait6.url, alt: "Zahid Hasan Emon — reading the newspaper" },
+  { src: portrait5.url, alt: "Zahid Hasan Emon — red blazer, city skyline" },
+  { src: portrait7.url, alt: "Zahid Hasan Emon — aviator sunglasses portrait" },
+  { src: portrait2.url, alt: "Zahid Hasan Emon — graduation, Jahangirnagar University" },
+];
 import {
   FOUNDER, FOUNDER_CHAPTERS, FOUNDER_PROJECTS, FOUNDER_TECH, FOUNDER_STATS,
   FOUNDER_EXPERTISE, FOUNDER_STORY_SUMMARY, FOUNDER_STORY_THEMES,
@@ -450,7 +466,30 @@ const Founder = () => {
             </Card>
           ))}
         </div>
+        <div className="mt-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+            Portrait Gallery
+          </p>
+          <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
+            {FOUNDER_GALLERY.map((p) => (
+              <figure
+                key={p.src}
+                className="group relative aspect-[3/4] overflow-hidden rounded-xl border border-border bg-muted"
+              >
+                <img
+                  src={p.src}
+                  alt={p.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+              </figure>
+            ))}
+          </div>
+        </div>
       </ChapterShell>
+
+
 
       {/* 03 — Founder story */}
       <ChapterShell meta={FOUNDER_CHAPTERS[3]} tone="muted">
