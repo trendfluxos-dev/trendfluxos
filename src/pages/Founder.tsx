@@ -466,7 +466,30 @@ const Founder = () => {
             </Card>
           ))}
         </div>
+        <div className="mt-8">
+          <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+            Portrait Gallery
+          </p>
+          <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
+            {FOUNDER_GALLERY.map((p) => (
+              <figure
+                key={p.src}
+                className="group relative aspect-[3/4] overflow-hidden rounded-xl border border-border bg-muted"
+              >
+                <img
+                  src={p.src}
+                  alt={p.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+              </figure>
+            ))}
+          </div>
+        </div>
       </ChapterShell>
+
+
 
       {/* 03 — Founder story */}
       <ChapterShell meta={FOUNDER_CHAPTERS[3]} tone="muted">
